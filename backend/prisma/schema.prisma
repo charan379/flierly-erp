@@ -14,7 +14,70 @@ datasource db {
 }
 
 model Organization {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  email     String   @unique
+  phone     String   @unique @db.VarChar(20)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@map("organization")
-  id Int @id @default(autoincrement())
-  name String
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique @db.VarChar(255)
+  password  String   @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Branch {
+  id             Int     @id @default(autoincrement())
+  name           String  @unique @db.VarChar(255)
+  isActive       Boolean @default(true)
+  email          String  @unique
+  phone          String  @unique @db.VarChar(20)
+  alternatePhone String  @db.VarChar(20)
+  address        Address @relation(fields: [addressId], references: [id])
+  addressId      BigInt
+}
+
+model Address {
+  id          BigInt        @id @default(autoincrement())
+  isActive    Boolean       @default(true)
+  line1       String
+  line2       String
+  line3       String?
+  landmark    String
+  area        String
+  city        String
+  district    String
+  state       String
+  pincode     Int
+  country     String
+  latitude    Decimal
+  longitude   Decimal
+  branches      Branch[]
+  taxIdentities TaxIdentity[]
+}
+
+model TaxIdentity {
+  id                  BigInt    @id @default(autoincrement())
+  isActive            Boolean   @default(true)
+  //GST Related fields
+  gst                 String?   @db.VarChar(55)
+  gstRegistrationDate DateTime?
+  gstVerified         Boolean   @default(false)
+  gstAddress          Address?  @relation(fields: [gstAddressId], references: [id])
+  gstAddressId        BigInt?
+  // PAN Related fields
+  pan                 String?   @db.VarChar(30)
+  panVerified         Boolean   @default(false)
+  // VAT Related fields
+  vat                 String?   @db.VarChar(55)
+  // TIN Related fields
+  tin                 String?   @db.VarChar(55)
 }
