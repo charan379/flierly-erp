@@ -44,6 +44,8 @@ model Address {
   bontact     Contact[]
   Account     Account?     @relation(fields: [accountId], references: [id])
   accountId   Int?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 
   @@map("addresses")
 }
@@ -66,6 +68,8 @@ model TaxIdentity {
   tin                 String?   @db.VarChar(55)
   Account             Account[]
   Branch              Branch[]
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
 
   @@map("tax_identities")
 }
@@ -83,36 +87,46 @@ model Branch {
   taxIdentityId  Int
   accounts       Account[]
   contacts       Contact[]
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
 
   @@map("branches")
 }
 
 model Contact {
-  id             Int     @id @default(autoincrement())
+  id             Int      @id @default(autoincrement())
   name           String
-  email          String  @unique
-  phone          String  @unique @db.VarChar(20)
-  alternatePhone String  @db.VarChar(20)
-  address        Address @relation(fields: [addressId], references: [id])
+  email          String   @unique
+  phone          String   @unique @db.VarChar(20)
+  alternatePhone String   @db.VarChar(20)
+  address        Address  @relation(fields: [addressId], references: [id])
   addressId      Int
-  branch         Branch? @relation(fields: [branchId], references: [id])
+  branch         Branch?  @relation(fields: [branchId], references: [id])
   branchId       Int?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@map("contacts")
 }
 
 model AccountType {
-  id       Int              @id @default(autoincrement())
-  name     String           @unique
-  subtypes AccountSubtype[]
-  account  Account[]
+  id        Int              @id @default(autoincrement())
+  name      String           @unique
+  subtypes  AccountSubtype[]
+  account   Account[]
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
 }
 
 model AccountSubtype {
-  id            Int          @id @default(autoincrement())
-  name          String       @unique
-  AccountType   AccountType? @relation(fields: [accountTypeId], references: [id])
-  accountTypeId Int?
+  id                   Int          @id @default(autoincrement())
+  name                 String       @unique
+  AccountType          AccountType? @relation(fields: [accountTypeId], references: [id])
+  accountTypeId        Int?
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+  lastModifiedBy       User?        @relation(fields: [lastModifiedByUserId], references: [id])
+  lastModifiedByUserId Int?
 }
 
 model Account {
@@ -133,16 +147,19 @@ model Account {
   parentId        Int?
   parent          Account?     @relation("ParentChildRelation", fields: [parentId], references: [id])
   childAccoutns   Account[]    @relation("ParentChildRelation")
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
 
   @@map("accounts")
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique @db.VarChar(255)
-  password  String   @db.VarChar(255)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                      Int              @id @default(autoincrement())
+  username                String           @unique @db.VarChar(255)
+  password                String           @db.VarChar(255)
+  createdAt               DateTime         @default(now())
+  updatedAt               DateTime         @updatedAt
+  modifiedAccountSubtypes AccountSubtype[]
 
   @@map("users")
 }
