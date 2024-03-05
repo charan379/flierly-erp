@@ -25,97 +25,114 @@ model Organization {
 }
 
 model Address {
-  id          Int          @id @default(autoincrement())
-  isActive    Boolean      @default(true)
-  line1       String
-  line2       String
-  line3       String?
-  landmark    String
-  area        String
-  city        String
-  district    String
-  state       String
-  pincode     Int
-  country     String
-  latitude    Decimal
-  longitude   Decimal
-  taxIdentity TaxIdentity?
-  branch      Branch?
-  bontact     Contact[]
-  Account     Account?     @relation(fields: [accountId], references: [id])
-  accountId   Int?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  id                   Int          @id @default(autoincrement())
+  isActive             Boolean      @default(true)
+  line1                String
+  line2                String
+  line3                String?
+  landmark             String
+  area                 String
+  city                 String
+  district             String
+  state                String
+  pincode              Int
+  country              String
+  latitude             Decimal
+  longitude            Decimal
+  taxIdentity          TaxIdentity?
+  branch               Branch?
+  bontact              Contact[]
+  Account              Account?     @relation(fields: [accountId], references: [id])
+  accountId            Int?
+  // auditing fields
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+  lastModifiedBy       User?        @relation(fields: [lastModifiedByUserId], references: [id])
+  lastModifiedByUserId Int?
 
   @@map("addresses")
 }
 
 model TaxIdentity {
-  id                  Int       @id @default(autoincrement())
-  isActive            Boolean   @default(true)
+  id                   Int       @id @default(autoincrement())
+  isActive             Boolean   @default(true)
   //GST Related fields
-  gst                 String?   @db.VarChar(55)
-  gstRegistrationDate DateTime?
-  gstVerified         Boolean   @default(false)
-  gstAddress          Address?  @relation(fields: [gstAddressId], references: [id])
-  gstAddressId        Int?      @unique
+  gst                  String?   @db.VarChar(55)
+  gstRegistrationDate  DateTime?
+  gstVerified          Boolean   @default(false)
+  gstAddress           Address?  @relation(fields: [gstAddressId], references: [id])
+  gstAddressId         Int?      @unique
   // PAN Related fields
-  pan                 String?   @db.VarChar(30)
-  panVerified         Boolean   @default(false)
+  pan                  String?   @db.VarChar(30)
+  panVerified          Boolean   @default(false)
   // VAT Related fields
-  vat                 String?   @db.VarChar(55)
+  vat                  String?   @db.VarChar(55)
   // TIN Related fields
-  tin                 String?   @db.VarChar(55)
-  Account             Account[]
-  Branch              Branch[]
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @updatedAt
+  tin                  String?   @db.VarChar(55)
+  Account              Account[]
+  Branch               Branch[]
+  // auditing fields
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  lastModifiedBy       User?     @relation(fields: [lastModifiedByUserId], references: [id])
+  lastModifiedByUserId Int?
 
   @@map("tax_identities")
 }
 
 model Branch {
-  id             Int         @id @default(autoincrement())
-  name           String      @unique @db.VarChar(255)
-  isActive       Boolean     @default(true)
-  email          String      @unique
-  phone          String      @unique @db.VarChar(20)
-  alternatePhone String      @db.VarChar(20)
-  address        Address     @relation(fields: [addressId], references: [id])
-  addressId      Int         @unique
-  taxIdentity    TaxIdentity @relation(fields: [taxIdentityId], references: [id])
-  taxIdentityId  Int
-  accounts       Account[]
-  contacts       Contact[]
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
+  id                   Int         @id @default(autoincrement())
+  name                 String      @unique @db.VarChar(255)
+  isActive             Boolean     @default(true)
+  email                String      @unique
+  phone                String      @unique @db.VarChar(20)
+  alternatePhone       String      @db.VarChar(20)
+  address              Address     @relation(fields: [addressId], references: [id])
+  addressId            Int         @unique
+  taxIdentity          TaxIdentity @relation(fields: [taxIdentityId], references: [id])
+  taxIdentityId        Int
+  accounts             Account[]
+  contacts             Contact[]
+  // auditing fields
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+  lastModifiedBy       User?       @relation(fields: [lastModifiedByUserId], references: [id])
+  lastModifiedByUserId Int?
 
   @@map("branches")
 }
 
 model Contact {
-  id             Int      @id @default(autoincrement())
-  name           String
-  email          String   @unique
-  phone          String   @unique @db.VarChar(20)
-  alternatePhone String   @db.VarChar(20)
-  address        Address  @relation(fields: [addressId], references: [id])
-  addressId      Int
-  branch         Branch?  @relation(fields: [branchId], references: [id])
-  branchId       Int?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id                   Int      @id @default(autoincrement())
+  name                 String
+  email                String   @unique
+  phone                String   @unique @db.VarChar(20)
+  alternatePhone       String   @db.VarChar(20)
+  address              Address  @relation(fields: [addressId], references: [id])
+  addressId            Int
+  branch               Branch?  @relation(fields: [branchId], references: [id])
+  branchId             Int?
+  // auditing fields
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  lastModifiedBy       User?    @relation(fields: [lastModifiedByUserId], references: [id])
+  lastModifiedByUserId Int?
 
   @@map("contacts")
 }
 
 model AccountType {
-  id        Int              @id @default(autoincrement())
-  name      String           @unique
-  subtypes  AccountSubtype[]
-  account   Account[]
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
+  id                   Int              @id @default(autoincrement())
+  name                 String           @unique
+  subtypes             AccountSubtype[]
+  account              Account[]
+  // auditing fields
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt
+  lastModifiedBy       User?            @relation(fields: [lastModifiedByUserId], references: [id])
+  lastModifiedByUserId Int?
+
+  @@map("account_types")
 }
 
 model AccountSubtype {
@@ -123,32 +140,38 @@ model AccountSubtype {
   name                 String       @unique
   AccountType          AccountType? @relation(fields: [accountTypeId], references: [id])
   accountTypeId        Int?
+  // auditing fields
   createdAt            DateTime     @default(now())
   updatedAt            DateTime     @updatedAt
   lastModifiedBy       User?        @relation(fields: [lastModifiedByUserId], references: [id])
   lastModifiedByUserId Int?
+
+  @@map("account_subtypes")
 }
 
 model Account {
-  id              Int          @id @default(autoincrement())
-  accountType     AccountType  @relation(fields: [accountTypeId], references: [id])
-  accountTypeId   Int
-  isVip           Boolean      @default(false)
-  isKey           Boolean      @default(false)
-  name            String
-  registeredPhone String       @unique @db.VarChar(20)
-  alternatePhone  String       @db.VarChar(20)
-  email           String
-  branch          Branch       @relation(fields: [branchId], references: [id])
-  branchId        Int
-  taxIdentityId   Int?
-  taxIdentity     TaxIdentity? @relation(fields: [taxIdentityId], references: [id])
-  addresses       Address[]
-  parentId        Int?
-  parent          Account?     @relation("ParentChildRelation", fields: [parentId], references: [id])
-  childAccoutns   Account[]    @relation("ParentChildRelation")
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
+  id                   Int          @id @default(autoincrement())
+  accountType          AccountType  @relation(fields: [accountTypeId], references: [id])
+  accountTypeId        Int
+  isVip                Boolean      @default(false)
+  isKey                Boolean      @default(false)
+  name                 String
+  registeredPhone      String       @unique @db.VarChar(20)
+  alternatePhone       String       @db.VarChar(20)
+  email                String
+  branch               Branch       @relation(fields: [branchId], references: [id])
+  branchId             Int
+  taxIdentityId        Int?
+  taxIdentity          TaxIdentity? @relation(fields: [taxIdentityId], references: [id])
+  addresses            Address[]
+  parentId             Int?
+  parent               Account?     @relation("ParentChildRelation", fields: [parentId], references: [id])
+  childAccoutns        Account[]    @relation("ParentChildRelation")
+  // auditing fields
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+  lastModifiedBy       User?        @relation(fields: [lastModifiedByUserId], references: [id])
+  lastModifiedByUserId Int?
 
   @@map("accounts")
 }
@@ -157,9 +180,17 @@ model User {
   id                      Int              @id @default(autoincrement())
   username                String           @unique @db.VarChar(255)
   password                String           @db.VarChar(255)
-  createdAt               DateTime         @default(now())
-  updatedAt               DateTime         @updatedAt
+  modifiedAccountTypes    AccountType[]
   modifiedAccountSubtypes AccountSubtype[]
+  modifiedAddresses       Address[]
+  modifiedtaxIdentities   TaxIdentity[]
+  modifiedBranchs         Branch[]
+  modifiedContacts        Contact[]
+  modifiedAccounts        Account[]
+
+  // auditing fields
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("users")
 }
