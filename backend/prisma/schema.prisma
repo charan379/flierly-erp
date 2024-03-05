@@ -24,30 +24,9 @@ model Organization {
   @@map("organization")
 }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique @db.VarChar(255)
-  password  String   @db.VarChar(255)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("users")
-}
-
-model Branch {
-  id             Int     @id @default(autoincrement())
-  name           String  @unique @db.VarChar(255)
-  isActive       Boolean @default(true)
-  email          String  @unique
-  phone          String  @unique @db.VarChar(20)
-  alternatePhone String  @db.VarChar(20)
-  address        Address @relation(fields: [addressId], references: [id])
-  addressId      BigInt
-}
-
 model Address {
-  id          BigInt        @id @default(autoincrement())
-  isActive    Boolean       @default(true)
+  id          Int          @id @default(autoincrement())
+  isActive    Boolean      @default(true)
   line1       String
   line2       String
   line3       String?
@@ -60,19 +39,24 @@ model Address {
   country     String
   latitude    Decimal
   longitude   Decimal
-  branches      Branch[]
-  taxIdentities TaxIdentity[]
+  taxIdentity TaxIdentity?
+  branch      Branch?
+  bontact     Contact[]
+  Account     Account?     @relation(fields: [accountId], references: [id])
+  accountId   Int?
+
+  @@map("addresses")
 }
 
 model TaxIdentity {
-  id                  BigInt    @id @default(autoincrement())
+  id                  Int       @id @default(autoincrement())
   isActive            Boolean   @default(true)
   //GST Related fields
   gst                 String?   @db.VarChar(55)
   gstRegistrationDate DateTime?
   gstVerified         Boolean   @default(false)
   gstAddress          Address?  @relation(fields: [gstAddressId], references: [id])
-  gstAddressId        BigInt?
+  gstAddressId        Int?      @unique
   // PAN Related fields
   pan                 String?   @db.VarChar(30)
   panVerified         Boolean   @default(false)
@@ -80,4 +64,85 @@ model TaxIdentity {
   vat                 String?   @db.VarChar(55)
   // TIN Related fields
   tin                 String?   @db.VarChar(55)
+  Account             Account[]
+  Branch              Branch[]
+
+  @@map("tax_identities")
+}
+
+model Branch {
+  id             Int         @id @default(autoincrement())
+  name           String      @unique @db.VarChar(255)
+  isActive       Boolean     @default(true)
+  email          String      @unique
+  phone          String      @unique @db.VarChar(20)
+  alternatePhone String      @db.VarChar(20)
+  address        Address     @relation(fields: [addressId], references: [id])
+  addressId      Int         @unique
+  taxIdentity    TaxIdentity @relation(fields: [taxIdentityId], references: [id])
+  taxIdentityId  Int
+  accounts       Account[]
+  contacts       Contact[]
+
+  @@map("branches")
+}
+
+model Contact {
+  id             Int     @id @default(autoincrement())
+  name           String
+  email          String  @unique
+  phone          String  @unique @db.VarChar(20)
+  alternatePhone String  @db.VarChar(20)
+  address        Address @relation(fields: [addressId], references: [id])
+  addressId      Int
+  branch         Branch? @relation(fields: [branchId], references: [id])
+  branchId       Int?
+
+  @@map("contacts")
+}
+
+model AccountType {
+  id       Int              @id @default(autoincrement())
+  name     String           @unique
+  subtypes AccountSubtype[]
+  account  Account[]
+}
+
+model AccountSubtype {
+  id            Int          @id @default(autoincrement())
+  name          String       @unique
+  AccountType   AccountType? @relation(fields: [accountTypeId], references: [id])
+  accountTypeId Int?
+}
+
+model Account {
+  id              Int          @id @default(autoincrement())
+  accountType     AccountType  @relation(fields: [accountTypeId], references: [id])
+  accountTypeId   Int
+  isVip           Boolean      @default(false)
+  isKey           Boolean      @default(false)
+  name            String
+  registeredPhone String       @unique @db.VarChar(20)
+  alternatePhone  String       @db.VarChar(20)
+  email           String
+  branch          Branch       @relation(fields: [branchId], references: [id])
+  branchId        Int
+  taxIdentityId   Int?
+  taxIdentity     TaxIdentity? @relation(fields: [taxIdentityId], references: [id])
+  addresses       Address[]
+  parentId        Int?
+  parent          Account?     @relation("ParentChildRelation", fields: [parentId], references: [id])
+  childAccoutns   Account[]    @relation("ParentChildRelation")
+
+  @@map("accounts")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique @db.VarChar(255)
+  password  String   @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
 }
