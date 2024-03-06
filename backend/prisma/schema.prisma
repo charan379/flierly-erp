@@ -15,6 +15,7 @@ datasource db {
 
 model Organization {
   id        Int      @id @default(autoincrement())
+  isDeleted Boolean  @default(false)
   name      String   @unique
   email     String   @unique
   phone     String   @unique @db.VarChar(20)
@@ -25,8 +26,9 @@ model Organization {
 }
 
 model Address {
-  id                   Int          @id @default(autoincrement())
-  isActive             Boolean      @default(true)
+  id                   Int           @id @default(autoincrement())
+  isDeleted            Boolean       @default(false)
+  isActive             Boolean       @default(true)
   line1                String
   line2                String
   line3                String?
@@ -39,15 +41,15 @@ model Address {
   country              String
   latitude             Decimal
   longitude            Decimal
-  taxIdentity          TaxIdentity?
-  branch               Branch?
+  taxIdentities        TaxIdentity[]
+  branchs              Branch[]
   contacts             Contact[]
-  account              Account?     @relation(fields: [accountId], references: [id])
+  account              Account?      @relation(fields: [accountId], references: [id])
   accountId            Int?
   // auditing fields
-  createdAt            DateTime     @default(now())
-  updatedAt            DateTime     @updatedAt
-  lastModifiedBy       User?        @relation(fields: [lastModifiedByUserId], references: [id])
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+  lastModifiedBy       User?         @relation(fields: [lastModifiedByUserId], references: [id])
   lastModifiedByUserId Int?
 
   @@map("addresses")
@@ -55,13 +57,14 @@ model Address {
 
 model TaxIdentity {
   id                   Int       @id @default(autoincrement())
+  isDeleted            Boolean   @default(false)
   isActive             Boolean   @default(true)
   //GST Related fields
   gst                  String?   @db.VarChar(55)
   gstRegistrationDate  DateTime?
   gstVerified          Boolean   @default(false)
   gstAddress           Address?  @relation(fields: [gstAddressId], references: [id])
-  gstAddressId         Int?      @unique
+  gstAddressId         Int?
   // PAN Related fields
   pan                  String?   @db.VarChar(30)
   panVerified          Boolean   @default(false)
@@ -82,13 +85,14 @@ model TaxIdentity {
 
 model Branch {
   id                   Int         @id @default(autoincrement())
+  isDeleted            Boolean     @default(false)
   name                 String      @unique @db.VarChar(255)
   isActive             Boolean     @default(true)
   email                String      @unique
   phone                String      @unique @db.VarChar(20)
   alternatePhone       String      @db.VarChar(20)
   address              Address     @relation(fields: [addressId], references: [id])
-  addressId            Int         @unique
+  addressId            Int
   taxIdentity          TaxIdentity @relation(fields: [taxIdentityId], references: [id])
   taxIdentityId        Int
   accounts             Account[]
@@ -104,6 +108,7 @@ model Branch {
 
 model Contact {
   id                   Int      @id @default(autoincrement())
+  isDeleted            Boolean  @default(false)
   name                 String
   email                String   @unique
   phone                String   @unique @db.VarChar(20)
@@ -123,6 +128,7 @@ model Contact {
 
 model AccountType {
   id                   Int              @id @default(autoincrement())
+  isDeleted            Boolean          @default(false)
   name                 String           @unique
   subtypes             AccountSubtype[]
   accounts             Account[]
@@ -137,6 +143,7 @@ model AccountType {
 
 model AccountSubtype {
   id                   Int          @id @default(autoincrement())
+  isDeleted            Boolean      @default(false)
   name                 String       @unique
   accountType          AccountType? @relation(fields: [accountTypeId], references: [id])
   accountTypeId        Int?
@@ -152,6 +159,7 @@ model AccountSubtype {
 
 model Account {
   id                   Int            @id @default(autoincrement())
+  isDeleted            Boolean        @default(false)
   accountType          AccountType    @relation(fields: [accountTypeId], references: [id])
   accountTypeId        Int
   accountSubtype       AccountSubtype @relation(fields: [accountSubtypeId], references: [id])
@@ -181,6 +189,7 @@ model Account {
 
 model User {
   id                      Int              @id @default(autoincrement())
+  isDeleted               Boolean          @default(false)
   username                String           @unique @db.VarChar(255)
   password                String           @db.VarChar(255)
   modifiedAccountTypes    AccountType[]
