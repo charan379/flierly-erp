@@ -117,6 +117,8 @@ model Contact {
   addressId            Int
   branch               Branch?  @relation(fields: [branchId], references: [id])
   branchId             Int?
+  account              Account? @relation(fields: [accountId], references: [id])
+  accountId            Int?
   // auditing fields
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
@@ -174,6 +176,7 @@ model Account {
   branchId             Int
   taxIdentityId        Int?
   taxIdentity          TaxIdentity?   @relation(fields: [taxIdentityId], references: [id])
+  contacts             Contact[]
   addresses            Address[]
   parentId             Int?
   parent               Account?       @relation("ParentChildRelation", fields: [parentId], references: [id])
