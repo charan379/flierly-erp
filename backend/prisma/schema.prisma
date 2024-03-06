@@ -42,7 +42,7 @@ model Address {
   taxIdentity          TaxIdentity?
   branch               Branch?
   contacts             Contact[]
-  Account              Account?     @relation(fields: [accountId], references: [id])
+  account              Account?     @relation(fields: [accountId], references: [id])
   accountId            Int?
   // auditing fields
   createdAt            DateTime     @default(now())
@@ -125,7 +125,7 @@ model AccountType {
   id                   Int              @id @default(autoincrement())
   name                 String           @unique
   subtypes             AccountSubtype[]
-  account              Account[]
+  accounts             Account[]
   // auditing fields
   createdAt            DateTime         @default(now())
   updatedAt            DateTime         @updatedAt
@@ -138,8 +138,9 @@ model AccountType {
 model AccountSubtype {
   id                   Int          @id @default(autoincrement())
   name                 String       @unique
-  AccountType          AccountType? @relation(fields: [accountTypeId], references: [id])
+  accountType          AccountType? @relation(fields: [accountTypeId], references: [id])
   accountTypeId        Int?
+  accounts             Account[]
   // auditing fields
   createdAt            DateTime     @default(now())
   updatedAt            DateTime     @updatedAt
@@ -150,27 +151,29 @@ model AccountSubtype {
 }
 
 model Account {
-  id                   Int          @id @default(autoincrement())
-  accountType          AccountType  @relation(fields: [accountTypeId], references: [id])
+  id                   Int            @id @default(autoincrement())
+  accountType          AccountType    @relation(fields: [accountTypeId], references: [id])
   accountTypeId        Int
-  isVip                Boolean      @default(false)
-  isKey                Boolean      @default(false)
+  accountSubtype       AccountSubtype @relation(fields: [accountSubtypeId], references: [id])
+  accountSubtypeId     Int
+  isVip                Boolean        @default(false)
+  isKey                Boolean        @default(false)
   name                 String
-  registeredPhone      String       @unique @db.VarChar(20)
-  alternatePhone       String       @db.VarChar(20)
+  registeredPhone      String         @unique @db.VarChar(20)
+  alternatePhone       String         @db.VarChar(20)
   email                String
-  branch               Branch       @relation(fields: [branchId], references: [id])
+  branch               Branch         @relation(fields: [branchId], references: [id])
   branchId             Int
   taxIdentityId        Int?
-  taxIdentity          TaxIdentity? @relation(fields: [taxIdentityId], references: [id])
+  taxIdentity          TaxIdentity?   @relation(fields: [taxIdentityId], references: [id])
   addresses            Address[]
   parentId             Int?
-  parent               Account?     @relation("ParentChildRelation", fields: [parentId], references: [id])
-  childAccoutns        Account[]    @relation("ParentChildRelation")
+  parent               Account?       @relation("ParentChildRelation", fields: [parentId], references: [id])
+  childAccoutns        Account[]      @relation("ParentChildRelation")
   // auditing fields
-  createdAt            DateTime     @default(now())
-  updatedAt            DateTime     @updatedAt
-  lastModifiedBy       User?        @relation(fields: [lastModifiedByUserId], references: [id])
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+  lastModifiedBy       User?          @relation(fields: [lastModifiedByUserId], references: [id])
   lastModifiedByUserId Int?
 
   @@map("accounts")
