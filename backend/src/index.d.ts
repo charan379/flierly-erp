@@ -1,5 +1,6 @@
 type Branch = {
     id: number,
+    isDeleted: boolean,
     name: string,
     email: string,
     phone: string,
@@ -18,6 +19,7 @@ type Branch = {
 
 type Address = {
     id: number,
+    isDeleted: boolean,
     isActive: boolean,
     line1: string,
     line2: string,
@@ -30,8 +32,8 @@ type Address = {
     pincode: string,
     latitude: number,
     longitude: number,
-    taxIdentity?: TaxIdentity,
-    branch?: Branch,
+    taxIdentities: TaxIdentity[],
+    branchs: Branch[],
     contacts?: Contact[],
     account?: Account,
     accountId?: number,
@@ -43,6 +45,7 @@ type Address = {
 
 type TaxIdentity = {
     id: number,
+    isDeleted: boolean,
     isActive: boolean,
     gst?: string,
     gstRegistrationDate?: Date,
@@ -63,12 +66,15 @@ type TaxIdentity = {
 
 type Contact = {
     id: number,
+    isDeleted: boolean,
     name: string,
     email: string,
     phone: string,
     alternatePhone: string,
     address?: Address,
     addressId: number,
+    account?: Account,
+    accountId?: number
     branch?: Branch,
     branchId?: number
     createdAt: Date,
@@ -79,6 +85,7 @@ type Contact = {
 
 type AccountType = {
     id: number,
+    isDeleted: boolean,
     name: string,
     subtypes?: AccountSubtype[],
     accounts?: Account[],
@@ -90,6 +97,7 @@ type AccountType = {
 
 type AccountSubtype = {
     id: number,
+    isDeleted: boolean,
     name: string,
     accountType?: AccountType,
     accountTypeId?: number,
@@ -102,6 +110,7 @@ type AccountSubtype = {
 
 type Account = {
     id: number,
+    isDeleted: boolean,
     accountType?: AccountType
     accountTypeId: number,
     accountSubtype?: AccountSubtype,
@@ -117,6 +126,7 @@ type Account = {
     taxIdentity?: TaxIdentity
     taxIdentityId: number
     addresses: Address[],
+    contacts: Contact[],
     parentId?: number,
     parent?: Account,
     childAccoutns?: Account[],
@@ -128,6 +138,7 @@ type Account = {
 
 type User = {
     id: number,
+    isDeleted: boolean,
     username: string,
     password: string,
     createdAt: Date,
