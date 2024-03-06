@@ -41,7 +41,7 @@ model Address {
   longitude            Decimal
   taxIdentity          TaxIdentity?
   branch               Branch?
-  bontact              Contact[]
+  contacts             Contact[]
   Account              Account?     @relation(fields: [accountId], references: [id])
   accountId            Int?
   // auditing fields
@@ -69,8 +69,8 @@ model TaxIdentity {
   vat                  String?   @db.VarChar(55)
   // TIN Related fields
   tin                  String?   @db.VarChar(55)
-  Account              Account[]
-  Branch               Branch[]
+  account              Account[]
+  branch               Branch[]
   // auditing fields
   createdAt            DateTime  @default(now())
   updatedAt            DateTime  @updatedAt
