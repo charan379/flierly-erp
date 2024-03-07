@@ -2,7 +2,7 @@ import express, { Express, NextFunction, Request, Response, } from "express";
 import prisma from "./lib/prisma";
 import { Prisma } from "@prisma/client";
 import createHttpError from "http-errors";
-import errorHandler from "./middlewares/errorHandler";
+import errorHandler from "./middlewares/error-handler.middleware";
 import HttpCodes from "./constants/httpCodes";
 import router from "./routes";
 

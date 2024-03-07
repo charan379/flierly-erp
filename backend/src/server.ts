@@ -2,7 +2,7 @@ import app from './app';
 import dotenv from 'dotenv';
 import http, { Server } from 'http';
 import { HttpError } from 'http-errors';
-import validateEnv from './utils/validateEnv';
+import validateEnv from './utils/env.validator';
 
 dotenv.config();
 

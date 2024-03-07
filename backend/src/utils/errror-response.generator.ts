@@ -1,6 +1,6 @@
 import { HttpError } from "http-errors";
 import HttpCodes from "../constants/httpCodes";
-import FlierlyException from "../lib/flierlyException";
+import FlierlyException from "../lib/flierly.exception";
 import { Prisma } from "@prisma/client";
 
 type ErrorResponse = {

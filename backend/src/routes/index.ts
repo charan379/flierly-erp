@@ -1,8 +1,7 @@
 import { Router } from "express";
-import branchRouter from "../controllers/branch";
 
 const router = Router();
 
-router.use('/branches', branchRouter);
+// router.use('/branches');
 
 export default router;
