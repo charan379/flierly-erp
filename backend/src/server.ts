@@ -2,8 +2,12 @@ import app from './app';
 import dotenv from 'dotenv';
 import http, { Server } from 'http';
 import { HttpError } from 'http-errors';
+import validateEnv from './utils/validateEnv';
 
 dotenv.config();
+
+// validate environment variables
+validateEnv();
 
 /**
  * Get port from environment and store in Express.
