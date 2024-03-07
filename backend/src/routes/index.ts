@@ -1,5 +1,5 @@
 import { Router } from "express";
-import branchRouter from "@/controllers/branch";
+import branchRouter from "../controllers/branch";
 
 const router = Router();
 

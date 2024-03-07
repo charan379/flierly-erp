@@ -4,6 +4,7 @@ import { Prisma } from "@prisma/client";
 import createHttpError from "http-errors";
 import errorHandler from "./middlewares/errorHandler";
 import HttpCodes from "./constants/httpCodes";
+import router from "./routes";
 
 // create express application instance
 const app: Express = express();
@@ -13,6 +14,8 @@ app.set('env', process.env.NODE_ENV);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use(router);
 
 app.post('/api/org', async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -39,7 +42,8 @@ app.get('/api/org/:id', async (req: Request, res: Response, next: NextFunction) 
     }
 });
 
-app.use((req, res, next) => {
+app.all("/*", (req, res, next) => {
+    console.log(req.path);
     next(createHttpError(HttpCodes.NOT_FOUND));
 })
 
