@@ -2,9 +2,9 @@ import { Router } from "express";
 import { create, testGet } from "./branch.controller";
 
 
-const branchRouter = Router();
+const branchModuleRouter = Router();
 
-branchRouter.get('/', testGet);
-branchRouter.post('/', create);
+branchModuleRouter.get('/', testGet);
+branchModuleRouter.post('/', create);
 
-export default branchRouter;
+export default branchModuleRouter;
