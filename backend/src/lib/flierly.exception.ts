@@ -1,4 +1,4 @@
-import HttpCodes from "../constants/httpCodes";
+import HttpCodes from "@/constants/httpCodes";
 
 /**
  * Custom exception class for flierly application
