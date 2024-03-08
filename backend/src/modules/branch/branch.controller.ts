@@ -15,6 +15,8 @@ export async function create(req: Request, res: Response, next: NextFunction): P
                 email: data.email,
                 phone: data.phone,
                 alternatePhone: data.alternatePhone,
+                address: { connect: { id: data.addressId } },
+                taxIdentity: { connect: { id: data.taxIdentityId } }
             }
         });
         console.log(branch);
