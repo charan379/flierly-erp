@@ -1,9 +1,23 @@
 import { Prisma } from "@prisma/client";
 import prisma from "@/lib/prisma";
 
-async function save(newbranch: Prisma.BranchCreateInput, includes?: Prisma.BranchInclude) {
+async function save(branch: Branch, includes?: Prisma.BranchInclude) {
+
+    const data: Prisma.BranchCreateInput = {
+        name: branch.name,
+        email: branch.email,
+        phone: branch.phone,
+        alternatePhone: branch.alternatePhone,
+        address: {
+            connect: { id: branch.addressId },
+        },
+        taxIdentity: {
+            connect: { id: branch.taxIdentityId },
+        }
+    }
+
     return prisma.branch.create({
-        data: newbranch,
+        data,
         include: includes
     });
 };
@@ -21,8 +35,8 @@ async function findOneByName(name: string, includes?: Prisma.BranchInclude) {
 async function findOneByEmail(email: string, includes?: Prisma.BranchInclude) {
     return prisma.branch.findFirst({
         where: {
+            isDeleted: false,
             email: { equals: email, mode: "insensitive" },
-            isDeleted: false
         },
         include: includes
     });
@@ -31,13 +45,20 @@ async function findOneByEmail(email: string, includes?: Prisma.BranchInclude) {
 async function findOneByPhone(phone: string, includes?: Prisma.BranchInclude) {
     return prisma.branch.findFirst({
         where: {
-            phone: { equals: phone },
             isDeleted: false,
+            phone: { equals: phone },
         },
         include: includes
     });
 };
 
-const respository = { save, findOneByName, findOneByEmail, findOneByPhone };
+async function deleteOneById(id: number) {
+    return prisma.branch.update({
+        where: { id: id },
+        data: { isDeleted: true }
+    });
+}
 
-export default respository;
+const branchRespository = { save, findOneByName, findOneByEmail, findOneByPhone, deleteOneById };
+
+export default branchRespository;

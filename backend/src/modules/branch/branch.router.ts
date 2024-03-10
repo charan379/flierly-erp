@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { create, testGet } from "./branch.controller";
+import { createBranch, deleteBranch } from "./branch.controller";
 
 
 const branchModuleRouter = Router();
 
-branchModuleRouter.get('/', testGet);
-branchModuleRouter.post('/', create);
+branchModuleRouter.post('/', createBranch);
+branchModuleRouter.delete('/:id', deleteBranch);
 
 export default branchModuleRouter;

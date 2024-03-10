@@ -6,6 +6,6 @@ export const createBranchSchema: Joi.ObjectSchema<Branch> = Joi.object({
     email: Joi.string().email().required(),
     phone: Joi.string().min(10).max(13).required(),
     alternatePhone: Joi.string().min(10).max(13).required(),
-    addressId: Joi.number().integer(),
-    taxIdentityId: Joi.number().integer(),
+    addressId: Joi.number().integer().required(),
+    taxIdentityId: Joi.number().integer().required(),
 });
