@@ -22,6 +22,16 @@ async function save(branch: Branch, includes?: Prisma.BranchInclude) {
     });
 };
 
+async function findOneById(id: number, includes?: Prisma.BranchInclude) {
+    return prisma.branch.findUniqueOrThrow({
+        where: {
+            id: id,
+            isDeleted: false
+        },
+        include: includes
+    });
+};
+
 async function findOneByName(name: string, includes?: Prisma.BranchInclude) {
     return prisma.branch.findFirst({
         where: {
@@ -54,11 +64,11 @@ async function findOneByPhone(phone: string, includes?: Prisma.BranchInclude) {
 
 async function deleteOneById(id: number) {
     return prisma.branch.update({
-        where: { id: id },
-        data: { isDeleted: true }
+        where: { id: id, isDeleted: false },
+        data: { isDeleted: true, isActive: false }
     });
 }
 
-const branchRespository = { save, findOneByName, findOneByEmail, findOneByPhone, deleteOneById };
+const branchRespository = { save, findOneById, findOneByName, findOneByEmail, findOneByPhone, deleteOneById };
 
 export default branchRespository;
