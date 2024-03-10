@@ -1,6 +1,7 @@
 type Branch = {
     id: number,
     isDeleted: boolean,
+    isActive: boolean,
     name: string,
     email: string,
     phone: string,
