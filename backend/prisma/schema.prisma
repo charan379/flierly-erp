@@ -15,20 +15,19 @@ datasource db {
 
 model Organization {
   id        Int      @id @default(autoincrement())
-  isDeleted Boolean  @default(false)
   name      String   @unique
   email     String   @unique
   phone     String   @unique @db.VarChar(20)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
 
   @@map("organization")
 }
 
 model Address {
   id                   Int           @id @default(autoincrement())
-  isDeleted            Boolean       @default(false)
-  isActive             Boolean       @default(true)
+  isDeleted            Boolean       @default(false) @map("is_deleted")
+  isActive             Boolean       @default(true) @map("is_active")
   line1                String
   line2                String
   line3                String?
@@ -45,29 +44,29 @@ model Address {
   branchs              Branch[]
   contacts             Contact[]
   account              Account?      @relation(fields: [accountId], references: [id])
-  accountId            Int?
+  accountId            Int?          @map("account_id")
   // auditing fields
-  createdAt            DateTime      @default(now())
-  updatedAt            DateTime      @updatedAt
+  createdAt            DateTime      @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt            DateTime      @updatedAt @map("updated_at") @db.Timestamptz(3)
   lastModifiedBy       User?         @relation(fields: [lastModifiedByUserId], references: [id])
-  lastModifiedByUserId Int?
+  lastModifiedByUserId Int?          @map("last_modified_by_user_id")
 
   @@map("addresses")
 }
 
 model TaxIdentity {
   id                   Int       @id @default(autoincrement())
-  isDeleted            Boolean   @default(false)
-  isActive             Boolean   @default(true)
+  isDeleted            Boolean   @default(false) @map("is_deleted")
+  isActive             Boolean   @default(true) @map("is_active")
   //GST Related fields
   gst                  String?   @db.VarChar(55)
-  gstRegistrationDate  DateTime?
-  gstVerified          Boolean   @default(false)
+  gstRegistrationDate  DateTime? @map("gst_registration_date")
+  gstVerified          Boolean   @default(false) @map("gst_verified")
   gstAddress           Address?  @relation(fields: [gstAddressId], references: [id])
-  gstAddressId         Int?
+  gstAddressId         Int?      @map("gst_address_id")
   // PAN Related fields
   pan                  String?   @db.VarChar(30)
-  panVerified          Boolean   @default(false)
+  panVerified          Boolean   @default(false) @map("pan_verified")
   // VAT Related fields
   vat                  String?   @db.VarChar(55)
   // TIN Related fields
@@ -75,117 +74,117 @@ model TaxIdentity {
   account              Account[]
   branch               Branch[]
   // auditing fields
-  createdAt            DateTime  @default(now())
-  updatedAt            DateTime  @updatedAt
+  createdAt            DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt            DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
   lastModifiedBy       User?     @relation(fields: [lastModifiedByUserId], references: [id])
-  lastModifiedByUserId Int?
+  lastModifiedByUserId Int?      @map("last_modified_by_user_id")
 
   @@map("tax_identities")
 }
 
 model Branch {
   id                   Int         @id @default(autoincrement())
-  isDeleted            Boolean     @default(false)
-  name                 String      @unique @db.VarChar(255)
-  isActive             Boolean     @default(true)
-  email                String      @unique
-  phone                String      @unique @db.VarChar(20)
-  alternatePhone       String      @db.VarChar(20)
+  isDeleted            Boolean     @default(false) @map("is_deleted")
+  name                 String      @db.VarChar(255) // CREATE UNIQUE INDEX on "branches" ("name") where "is_deleted"= false;
+  isActive             Boolean     @default(true) @map("is_active")
+  email                String      @db.VarChar(255) // CREATE UNIQUE INDEX on "branches" ("email") where "is_deleted"= false;
+  phone                String      @db.VarChar(20) // CREATE UNIQUE INDEX on "branches" ("phone") where "is_deleted"= false;
+  alternatePhone       String      @map("alternate_phone") @db.VarChar(20)
   address              Address     @relation(fields: [addressId], references: [id])
-  addressId            Int
+  addressId            Int         @map("address_id")
   taxIdentity          TaxIdentity @relation(fields: [taxIdentityId], references: [id])
-  taxIdentityId        Int
+  taxIdentityId        Int         @map("tax_identity_id")
   accounts             Account[]
   contacts             Contact[]
   // auditing fields
-  createdAt            DateTime    @default(now())
-  updatedAt            DateTime    @updatedAt
+  createdAt            DateTime    @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt            DateTime    @updatedAt @map("updated_at") @db.Timestamptz(3)
   lastModifiedBy       User?       @relation(fields: [lastModifiedByUserId], references: [id])
-  lastModifiedByUserId Int?
+  lastModifiedByUserId Int?        @map("last_modified_by_user_id")
 
   @@map("branches")
 }
 
 model Contact {
   id                   Int      @id @default(autoincrement())
-  isDeleted            Boolean  @default(false)
+  isDeleted            Boolean  @default(false) @map("is_deleted")
   name                 String
-  email                String   @unique
-  phone                String   @unique @db.VarChar(20)
-  alternatePhone       String   @db.VarChar(20)
+  email                String
+  phone                String   @db.VarChar(20)
+  alternatePhone       String   @map("alternate_phone") @db.VarChar(20)
   address              Address  @relation(fields: [addressId], references: [id])
-  addressId            Int
+  addressId            Int      @map("address_id")
   branch               Branch?  @relation(fields: [branchId], references: [id])
-  branchId             Int?
+  branchId             Int?     @map("branch_id")
   account              Account? @relation(fields: [accountId], references: [id])
-  accountId            Int?
+  accountId            Int?     @map("account_id")
   // auditing fields
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  createdAt            DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt            DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
   lastModifiedBy       User?    @relation(fields: [lastModifiedByUserId], references: [id])
-  lastModifiedByUserId Int?
+  lastModifiedByUserId Int?     @map("last_modified_by_user_id")
 
   @@map("contacts")
 }
 
 model AccountType {
   id                   Int              @id @default(autoincrement())
-  isDeleted            Boolean          @default(false)
-  name                 String           @unique
+  isDeleted            Boolean          @default(false) @map("is_deleted")
+  name                 String           @db.VarChar(255) // CREATE UNIQUE INDEX ON "account_types" ("name") WHERE "is_deleted" = false;
   subtypes             AccountSubtype[]
   accounts             Account[]
   // auditing fields
-  createdAt            DateTime         @default(now())
-  updatedAt            DateTime         @updatedAt
+  createdAt            DateTime         @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt            DateTime         @updatedAt @map("updated_at") @db.Timestamptz(3)
   lastModifiedBy       User?            @relation(fields: [lastModifiedByUserId], references: [id])
-  lastModifiedByUserId Int?
+  lastModifiedByUserId Int?             @map("last_modified_by_user_id")
 
   @@map("account_types")
 }
 
 model AccountSubtype {
   id                   Int          @id @default(autoincrement())
-  isDeleted            Boolean      @default(false)
-  name                 String       @unique
+  isDeleted            Boolean      @default(false) @map("is_deleted")
+  name                 String       @db.VarChar(255) // CREATE UNIQUE INDEX ON "account_subtypes" ("name") WHERE "is_deleted"= false
   accountType          AccountType? @relation(fields: [accountTypeId], references: [id])
-  accountTypeId        Int?
+  accountTypeId        Int?         @map("account_type_id")
   accounts             Account[]
   // auditing fields
-  createdAt            DateTime     @default(now())
-  updatedAt            DateTime     @updatedAt
+  createdAt            DateTime     @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt            DateTime     @updatedAt @map("updated_at") @db.Timestamptz(3)
   lastModifiedBy       User?        @relation(fields: [lastModifiedByUserId], references: [id])
-  lastModifiedByUserId Int?
+  lastModifiedByUserId Int?         @map("last_modified_by_user_id")
 
   @@map("account_subtypes")
 }
 
 model Account {
   id                   Int            @id @default(autoincrement())
-  isDeleted            Boolean        @default(false)
+  isDeleted            Boolean        @default(false) @map("is_deleted")
   accountType          AccountType    @relation(fields: [accountTypeId], references: [id])
-  accountTypeId        Int
+  accountTypeId        Int            @map("account_type_id")
   accountSubtype       AccountSubtype @relation(fields: [accountSubtypeId], references: [id])
-  accountSubtypeId     Int
-  isVip                Boolean        @default(false)
-  isKey                Boolean        @default(false)
+  accountSubtypeId     Int            @map("account_subtype_id")
+  isVip                Boolean        @default(false) @map("is_vip")
+  isKey                Boolean        @default(false) @map("is_key")
   name                 String
-  registeredPhone      String         @unique @db.VarChar(20)
-  alternatePhone       String         @db.VarChar(20)
-  email                String
+  registeredPhone      String         @map("registered_phone") @db.VarChar(20) // CREATE UNIQUE INDEX ON "accounts" ("registered_phone") WHERE "is_deleted"= false
+  alternatePhone       String         @map("alternate_phone") @db.VarChar(20)
+  email                String         @db.VarChar(255) // CREATE UNIQUE INDEX ON "accounts" ("email") WHERE "is_deleted"= false;
   branch               Branch         @relation(fields: [branchId], references: [id])
-  branchId             Int
-  taxIdentityId        Int?
+  branchId             Int            @map("branch_id")
+  taxIdentityId        Int?           @map("tax_identity_id")
   taxIdentity          TaxIdentity?   @relation(fields: [taxIdentityId], references: [id])
   contacts             Contact[]
   addresses            Address[]
-  parentId             Int?
+  parentId             Int?           @map("parent_id")
   parent               Account?       @relation("ParentChildRelation", fields: [parentId], references: [id])
   childAccoutns        Account[]      @relation("ParentChildRelation")
   // auditing fields
-  createdAt            DateTime       @default(now())
-  updatedAt            DateTime       @updatedAt
+  createdAt            DateTime       @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt            DateTime       @updatedAt @map("updated_at") @db.Timestamptz(3)
   lastModifiedBy       User?          @relation(fields: [lastModifiedByUserId], references: [id])
-  lastModifiedByUserId Int?
+  lastModifiedByUserId Int?           @map("last_modified_by_user_id")
 
   @@map("accounts")
 }
