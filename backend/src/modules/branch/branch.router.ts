@@ -1,10 +1,16 @@
 import { Router } from "express";
-import { createBranch, deleteBranch } from "./branch.controller";
+import branchModuleController from "./branch.controller";
 
 
 const branchModuleRouter = Router();
 
-branchModuleRouter.post('/', createBranch);
-branchModuleRouter.delete('/:id', deleteBranch);
+branchModuleRouter.post('/', branchModuleController.createBranch);
+branchModuleRouter.get('/:id', branchModuleController.getBranchById);
+branchModuleRouter.get('/status/:id', branchModuleController.getStatusById);
+branchModuleRouter.get('/exists-by-name/:name', branchModuleController.getExistenceByName);
+branchModuleRouter.get('/exists-by-email/:email', branchModuleController.getExistenceByEmail);
+branchModuleRouter.get('/exists-by-phone/:phone', branchModuleController.getExistenceByPhone);
+
+branchModuleRouter.delete('/:id', branchModuleController.deleteBranch);
 
 export default branchModuleRouter;
