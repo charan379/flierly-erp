@@ -6,7 +6,7 @@ type Branch = {
     phone: string,
     alternatePhone: string,
     address?: Address,
-    addressId?: number,
+    addressId: number,
     taxIdentity?: TaxIdentity,
     taxIdentityId: number,
     accounts?: Account[],
