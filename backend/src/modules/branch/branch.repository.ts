@@ -62,6 +62,24 @@ async function findOneByPhone(phone: string, includes?: Prisma.BranchInclude) {
     });
 };
 
+async function updateOneById(id: number, update: Branch, includes?: Prisma.BranchInclude) {
+    const data: Prisma.BranchUpdateInput = {
+        name: update.name,
+        isActive: update.isActive,
+        email: update.email,
+        phone: update.phone,
+        alternatePhone: update.alternatePhone,
+        address: { connect: { id: update.addressId } },
+        taxIdentity: { connect: { id: update.taxIdentityId } },
+    };
+
+    return prisma.branch.update({
+        where: { id: id, isDeleted: false },
+        data,
+        include: includes
+    })
+};
+
 async function deleteOneById(id: number) {
     return prisma.branch.update({
         where: { id: id, isDeleted: false },
@@ -69,6 +87,6 @@ async function deleteOneById(id: number) {
     });
 }
 
-const branchRespository = { save, findOneById, findOneByName, findOneByEmail, findOneByPhone, deleteOneById };
+const branchRespository = { save, findOneById, findOneByName, findOneByEmail, findOneByPhone, updateOneById, deleteOneById };
 
 export default branchRespository;
