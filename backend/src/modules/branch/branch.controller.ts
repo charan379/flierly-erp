@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { createBranchSchema, updateBranchSchema } from './branch-validator.schema';
 import branchService from "./branch.service";
 import Joi from "joi";
-import { NameMi5Ma50Schema, emailSchema, phoneSchema } from "@/lib/common-validator.schema";
+import { NameMi5Ma50Schema, emailSchema, pageRequestSchema, phoneSchema } from "@/lib/common-validator.schema";
 
 
 async function createBranch(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -11,6 +11,16 @@ async function createBranch(req: Request, res: Response, next: NextFunction): Pr
         const data: Branch = await JoiSchemaValidator<Branch>(createBranchSchema, req.body, {}, "");
         const branch = await branchService.create(data);
         res.status(201).json(branch);
+    } catch (error) {
+        next(error);
+    }
+};
+
+async function getBranchPage(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+        const pageRequest: PageRequest = await JoiSchemaValidator<PageRequest>(pageRequestSchema, req.body, {}, "");
+        const page: PageResult<Branch> = await branchService.page(pageRequest);
+        res.status(200).json(page);
     } catch (error) {
         next(error);
     }
@@ -106,6 +116,6 @@ async function deleteBranch(req: Request, res: Response, next: NextFunction): Pr
     }
 };
 
-const branchModuleController = { createBranch, getBranchById, getStatusById, getExistenceByName, getExistenceByEmail, getExistenceByPhone, updateBranch, updateBranchAddress, updateBranchTaxIdentity, deleteBranch };
+const branchModuleController = { createBranch, getBranchPage, getBranchById, getStatusById, getExistenceByName, getExistenceByEmail, getExistenceByPhone, updateBranch, updateBranchAddress, updateBranchTaxIdentity, deleteBranch };
 
 export default branchModuleController;

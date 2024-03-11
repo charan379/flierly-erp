@@ -7,31 +7,30 @@ async function create(branch: Branch): Promise<Branch> {
     return await branchRespository.save(branch) as Branch;
 }
 
-async function page(): Promise<PageResult<Branch>> {
+async function page(pageRequest: PageRequest): Promise<PageResult<Branch>> {
 
-    const pageRequest: PageRequest = {
-        page: 1,
-        pageSize: 3,
-    }
+    const query: Prisma.BranchWhereInput = { isDeleted: false };
 
-    const query: Prisma.BranchWhereInput = {isDeleted: false};
+    const countOfRecordsMatchingQuery = await branchRespository.countByQuery(query);
 
-    const countOfRecordsMatchingQuery = branchRespository.countByQuery(query);
-
-    const page: PageResult<Branch> = {
+    let page: PageResult<Branch> = {
         data: [],
-        page: 1,
-        pageSize: 2,
+        page: pageRequest.page,
+        pageSize: pageRequest.size,
         totalResults: countOfRecordsMatchingQuery,
-        totalPages: 10,
-        hasNextPage: true,
-        hasPreviousPage: false,
-        nextPage: 2,
-        previousPage: 0
+        totalPages: Math.ceil(countOfRecordsMatchingQuery / pageRequest.size),
     }
 
+    page = {
+        ...page,
+        hasNextPage: (page?.page < page?.totalPages),
+        hasPreviousPage: (page?.page > 1 && page?.totalPages > 0),
+        nextPage: (page?.hasNextPage) ? (page?.page + 1) : undefined,
+        previousPage: (page?.hasPreviousPage) ? (page?.page - 1) : undefined
+    }
     return page;
-}
+};
+
 async function fetchById(id: number): Promise<Branch> {
     return await branchRespository.findOneById(id) as Branch;
 }
@@ -105,6 +104,6 @@ async function deleteById(id: number): Promise<Branch> {
     return await branchRespository.deleteOneById(id) as Branch;
 };
 
-const branchService = { create, fetchById, existsByName, existsByEmail, existsByPhone, updateById, updateAddressById, updateTaxIdentityById, deleteById };
+const branchService = { create, fetchById, page, existsByName, existsByEmail, existsByPhone, updateById, updateAddressById, updateTaxIdentityById, deleteById };
 
 export default branchService;

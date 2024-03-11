@@ -22,3 +22,8 @@ export const altPhoneSchema: Joi.Schema<string> = Joi.string().min(10).max(13).e
         'string.min': 'Alternate phone must be at least 10 characters long.',
         'string.max': 'Alternate phone must not exceed 13 characters.',
     });
+
+export const pageRequestSchema: Joi.Schema<PageRequest> = Joi.object({
+    page: Joi.number().integer().min(1).required(),
+    size: Joi.number().integer().min(1).required()
+})

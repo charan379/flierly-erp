@@ -6,6 +6,7 @@ const branchModuleRouter = Router();
 
 branchModuleRouter.post('/', branchModuleController.createBranch);
 branchModuleRouter.get('/:id', branchModuleController.getBranchById);
+branchModuleRouter.post('/page', branchModuleController.getBranchPage);
 branchModuleRouter.get('/status/:id', branchModuleController.getStatusById);
 branchModuleRouter.get('/exists-by-name/:name', branchModuleController.getExistenceByName);
 branchModuleRouter.get('/exists-by-email/:email', branchModuleController.getExistenceByEmail);

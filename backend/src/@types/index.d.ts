@@ -4,15 +4,15 @@ type PageResult<T> = {
     pageSize: number;
     totalResults: number;
     totalPages: number;
-    hasNextPage: boolean;
-    hasPreviousPage: boolean;
-    nextPage: number;
-    previousPage: number;
+    hasNextPage?: boolean;
+    hasPreviousPage?: boolean;
+    nextPage?: number;
+    previousPage?: number;
 }
 
 type PageRequest = {
     page: number;
-    pageSize: number;
+    size: number;
 }
 
 type Branch = {
