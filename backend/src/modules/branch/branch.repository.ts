@@ -22,6 +22,22 @@ async function save(branch: Branch, includes?: Prisma.BranchInclude) {
     });
 };
 
+async function page(branchQuery: Prisma.BranchWhereInput, include?: Prisma.BranchInclude) {
+    return prisma.branch.findMany({
+        skip: 0,
+        take: 10,
+        where: branchQuery,
+        include: include,
+        orderBy: { id: "desc" },
+    });
+}
+
+async function countByQuery(branchQuery: Prisma.BranchWhereInput) {
+    return prisma.branch.count({
+        where: branchQuery,
+    });
+};
+
 async function findOneById(id: number, includes?: Prisma.BranchInclude) {
     return prisma.branch.findUniqueOrThrow({
         where: {
@@ -87,6 +103,6 @@ async function deleteOneById(id: number) {
     });
 }
 
-const branchRespository = { save, findOneById, findOneByName, findOneByEmail, findOneByPhone, updateOneById, deleteOneById };
+const branchRespository = { save, page, countByQuery, findOneById, findOneByName, findOneByEmail, findOneByPhone, updateOneById, deleteOneById };
 
 export default branchRespository;

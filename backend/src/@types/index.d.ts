@@ -1,3 +1,20 @@
+type PageResult<T> = {
+    data: T[];
+    page: number;
+    pageSize: number;
+    totalResults: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+    nextPage: number;
+    previousPage: number;
+}
+
+type PageRequest = {
+    page: number;
+    pageSize: number;
+}
+
 type Branch = {
     id: number,
     isDeleted: boolean,

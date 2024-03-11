@@ -1,11 +1,37 @@
 import FlierlyException from "@/lib/flierly.exception";
 import branchRespository from "./branch.repository";
 import HttpCodes from "@/constants/httpCodes";
+import { Prisma } from "@prisma/client";
 
 async function create(branch: Branch): Promise<Branch> {
     return await branchRespository.save(branch) as Branch;
 }
 
+async function page(): Promise<PageResult<Branch>> {
+
+    const pageRequest: PageRequest = {
+        page: 1,
+        pageSize: 3,
+    }
+
+    const query: Prisma.BranchWhereInput = {isDeleted: false};
+
+    const countOfRecordsMatchingQuery = branchRespository.countByQuery(query);
+
+    const page: PageResult<Branch> = {
+        data: [],
+        page: 1,
+        pageSize: 2,
+        totalResults: countOfRecordsMatchingQuery,
+        totalPages: 10,
+        hasNextPage: true,
+        hasPreviousPage: false,
+        nextPage: 2,
+        previousPage: 0
+    }
+
+    return page;
+}
 async function fetchById(id: number): Promise<Branch> {
     return await branchRespository.findOneById(id) as Branch;
 }
