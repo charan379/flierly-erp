@@ -2,6 +2,7 @@ import FlierlyException from "@/lib/flierly.exception";
 import branchRespository from "./branch.repository";
 import HttpCodes from "@/constants/httpCodes";
 import { Prisma } from "@prisma/client";
+import pageResponseBuilder from "@/utils/page-response.builder";
 
 async function create(branch: Branch): Promise<Branch> {
     return await branchRespository.save(branch) as Branch;
@@ -13,25 +14,9 @@ async function page(pageRequest: PageRequest): Promise<PageResult<Branch>> {
 
     const countOfRecordsMatchingQuery = await branchRespository.countByQuery(query);
 
-    let page: PageResult<Branch> = {
-        data: [],
-        page: pageRequest.page,
-        pageSize: pageRequest.size,
-        totalResults: countOfRecordsMatchingQuery,
-        totalPages: Math.ceil(countOfRecordsMatchingQuery / pageRequest.size),
-    }
+    const data = await branchRespository.findManyWithOffsetPagination(query, ((pageRequest.page - 1) * pageRequest.size), pageRequest.size) as Branch[];
 
-    page = {
-        ...page,
-        hasNextPage: (page?.page < page?.totalPages),
-        hasPreviousPage: (page?.page > 1 && page?.totalPages > 0),
-        nextPage: (page?.hasNextPage) ? (page?.page + 1) : undefined,
-        previousPage: (page?.hasPreviousPage) ? (page?.page - 1) : undefined
-    }
-
-    page.data = await branchRespository.findManyWithOffsetPagination(query, ((pageRequest.page - 1) * page.pageSize), pageRequest.size) as Branch[];
-
-    return page;
+    return pageResponseBuilder<Branch>(data, pageRequest.page, pageRequest.size, countOfRecordsMatchingQuery, {});
 };
 
 async function fetchById(id: number): Promise<Branch> {
