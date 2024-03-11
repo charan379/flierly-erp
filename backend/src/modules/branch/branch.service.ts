@@ -28,6 +28,9 @@ async function page(pageRequest: PageRequest): Promise<PageResult<Branch>> {
         nextPage: (page?.hasNextPage) ? (page?.page + 1) : undefined,
         previousPage: (page?.hasPreviousPage) ? (page?.page - 1) : undefined
     }
+
+    page.data = await branchRespository.findManyWithOffsetPagination(query, ((pageRequest.page - 1) * page.pageSize), pageRequest.size) as Branch[];
+
     return page;
 };
 

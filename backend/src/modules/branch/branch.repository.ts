@@ -22,10 +22,10 @@ async function save(branch: Branch, includes?: Prisma.BranchInclude) {
     });
 };
 
-async function page(branchQuery: Prisma.BranchWhereInput, include?: Prisma.BranchInclude) {
+async function findManyWithOffsetPagination(branchQuery: Prisma.BranchWhereInput, skip: number, take: number, include?: Prisma.BranchInclude) {
     return prisma.branch.findMany({
-        skip: 0,
-        take: 10,
+        skip,
+        take,
         where: branchQuery,
         include: include,
         orderBy: { id: "desc" },
@@ -103,6 +103,6 @@ async function deleteOneById(id: number) {
     });
 }
 
-const branchRespository = { save, page, countByQuery, findOneById, findOneByName, findOneByEmail, findOneByPhone, updateOneById, deleteOneById };
+const branchRespository = { save, findManyWithOffsetPagination, countByQuery, findOneById, findOneByName, findOneByEmail, findOneByPhone, updateOneById, deleteOneById };
 
 export default branchRespository;
