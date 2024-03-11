@@ -8,6 +8,7 @@ type PageResult<T> = {
     hasPreviousPage?: boolean;
     nextPage?: number;
     previousPage?: number;
+    sort?: object;
 }
 
 type PageRequest = {
