@@ -14,6 +14,7 @@ type PageResult<T> = {
 type PageRequest = {
     page: number;
     size: number;
+    sort: { [key: string]: "desc" | "asc" };
 }
 
 type Branch = {
