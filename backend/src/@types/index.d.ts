@@ -11,10 +11,18 @@ type PageResult<T> = {
     sort?: object;
 }
 
+type SortBy = {
+    [key: string]: "desc" | "asc";
+}
+
+type ModelSortBy<T> = {
+    [key: keyof T]: "desc" | "asc";
+}
+
 type PageRequest = {
     page: number;
     size: number;
-    sort: { [key: string]: "desc" | "asc" };
+    sort: SortBy;
 }
 
 type Branch = {

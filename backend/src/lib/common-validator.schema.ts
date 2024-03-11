@@ -26,4 +26,5 @@ export const altPhoneSchema: Joi.Schema<string> = Joi.string().min(10).max(13).e
 export const pageRequestSchema: Joi.Schema<PageRequest> = Joi.object({
     page: Joi.number().integer().min(1).required(),
     size: Joi.number().integer().min(1).required(),
+    sort: Joi.object(),
 })
