@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import http, { Server } from 'http';
 import { HttpError } from 'http-errors';
 import validateEnv from '@/utils/env.validator';
+import Database from './lib/database';
 
 dotenv.config();
 
@@ -52,7 +53,8 @@ server.on('error', (error: HttpError) => {
 /**
  * Event listener for HTTP server "listening" event.
  */
-server.on('listening', () => {
+server.on('listening', async () => {
+    await Database.connect();
     console.info("🚀 [server]: Server started is running on " + port);
 });
 

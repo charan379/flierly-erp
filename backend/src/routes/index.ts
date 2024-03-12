@@ -1,8 +1,9 @@
-import branchModuleRouter from "@/modules/branch/branch.router";
 import { Router } from "express";
 
 const router = Router();
 
-router.use('/branch', branchModuleRouter);
+router.use('/branch', () => {
+
+});
 
 export default router;
