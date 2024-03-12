@@ -71,45 +71,45 @@ type PageRequest = {
 //     lastModifiedByUserId?: number
 // }
 
-type TaxIdentity = {
-    id: number,
-    isDeleted: boolean,
-    isActive: boolean,
-    gst?: string,
-    gstRegistrationDate?: Date,
-    gstVerified: boolean,
-    gstAddress?: Address,
-    gstAddressId?: number,
-    pan?: string,
-    panVerified: boolean,
-    vat?: string,
-    tin?: string,
-    account?: Account[],
-    branch?: Branch[],
-    createdAt: Date,
-    updatedAt: Date,
-    lastModifiedBy?: User
-    lastModifiedByUserId?: number
-}
+// type TaxIdentity = {
+//     id: number,
+//     isDeleted: boolean,
+//     isActive: boolean,
+//     gst?: string,
+//     gstRegistrationDate?: Date,
+//     gstVerified: boolean,
+//     gstAddress?: Address,
+//     gstAddressId?: number,
+//     pan?: string,
+//     panVerified: boolean,
+//     vat?: string,
+//     tin?: string,
+//     account?: Account[],
+//     branch?: Branch[],
+//     createdAt: Date,
+//     updatedAt: Date,
+//     lastModifiedBy?: User
+//     lastModifiedByUserId?: number
+// }
 
-type Contact = {
-    id: number,
-    isDeleted: boolean,
-    name: string,
-    email: string,
-    phone: string,
-    alternatePhone: string,
-    address?: Address,
-    addressId: number,
-    account?: Account,
-    accountId?: number
-    branch?: Branch,
-    branchId?: number
-    createdAt: Date,
-    updatedAt: Date,
-    lastModifiedBy?: User
-    lastModifiedByUserId?: number
-}
+// type Contact = {
+//     id: number,
+//     isDeleted: boolean,
+//     name: string,
+//     email: string,
+//     phone: string,
+//     alternatePhone: string,
+//     address?: Address,
+//     addressId: number,
+//     account?: Account,
+//     accountId?: number
+//     branch?: Branch,
+//     branchId?: number
+//     createdAt: Date,
+//     updatedAt: Date,
+//     lastModifiedBy?: User
+//     lastModifiedByUserId?: number
+// }
 
 type AccountType = {
     id: number,
