@@ -23,7 +23,7 @@ class Database {
             // Handle initial connection errors
         } catch (error) {
             console.error("🔴 [MongoDB]: Initial connection error : ", error);
-            process.exit();
+            process.exit(1);
         }
 
         // get database connection
