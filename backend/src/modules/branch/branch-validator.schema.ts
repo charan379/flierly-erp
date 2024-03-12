@@ -1,4 +1,5 @@
 import { NameMi5Ma50Schema, altPhoneSchema, emailSchema, phoneSchema } from "@/lib/common-validator.schema";
+import { Branch } from "@/models/interfaces/branch.interface";
 import Joi from "joi";
 
 

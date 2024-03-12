@@ -25,26 +25,6 @@ type PageRequest = {
     sort: SortBy;
 }
 
-type Branch = {
-    id: number,
-    isDeleted: boolean,
-    isActive: boolean,
-    name: string,
-    email: string,
-    phone: string,
-    alternatePhone: string,
-    address?: Address,
-    addressId: number,
-    taxIdentity?: TaxIdentity,
-    taxIdentityId: number,
-    accounts?: Account[],
-    contacts?: Contact[],
-    createdAt: Date,
-    updatedAt: Date,
-    lastModifiedBy?: User
-    lastModifiedByUserId?: number,
-}
-
 type Address = {
     id: number,
     isDeleted: boolean,
