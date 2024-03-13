@@ -1,5 +1,7 @@
+import mongoose from "mongoose";
+
 export interface AccountSubtype {
-    id: number,
+    _id: mongoose.ObjectId,
     isDeleted: boolean,
     code: string,
     name: string,

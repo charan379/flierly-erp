@@ -10,8 +10,8 @@ export interface Branch {
     email: string,
     phone: string,
     alternatePhone: string,
-    address: Address,
-    taxIdentity: TaxIdentity,
+    address: Address | mongoose.ObjectId,
+    taxIdentity: TaxIdentity | mongoose.ObjectId,
     createdAt: Date,
     updatedAt: Date,
 };

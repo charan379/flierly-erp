@@ -1,13 +1,14 @@
+import mongoose from "mongoose";
 import { Address } from "./address.interface";
 
 export interface TaxIdentity {
-    id: number,
+    _id: mongoose.ObjectId,
     isDeleted: boolean,
     isActive: boolean,
     gst?: string,
     gstRegistrationDate?: Date,
     gstVerified: boolean,
-    gstAddress?: Address,
+    gstAddress?: Address | mongoose.ObjectId,
     pan?: string,
     panVerified: boolean,
     vat?: string,

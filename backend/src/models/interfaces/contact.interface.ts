@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 export interface Contact {
+    _id: mongoose.ObjectId,
     isDeleted: boolean,
     isActive: boolean,
     name: string,

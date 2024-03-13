@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 
 export interface Address {
-    id: mongoose.ObjectId,
+    _id: mongoose.ObjectId,
     isDeleted: boolean,
     isActive: boolean,
     line1: string,
