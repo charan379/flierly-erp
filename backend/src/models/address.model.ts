@@ -46,11 +46,36 @@ const schema: mongoose.Schema<Address> = new mongoose.Schema<Address>(
         pincode: {
             type: String,
             required: [true, "Address pincode is required."]
+        },
+        geoLocation: {
+            type: {
+                latitude: {
+                    type: Number,
+                    required: [true, "geoLocation.latitute is required."]
+                },
+                longitude: {
+                    type: Number,
+                    required: [true, "geoLocation.longitude is required."]
+                }
+            },
+            _id: false
+        },
+        branchId: {
+            type: mongoose.Schema.ObjectId,
+        },
+        accountId: {
+            type: mongoose.Schema.ObjectId,
+        },
+        contactId: {
+            type: mongoose.Schema.ObjectId,
         }
-
     },
     {
         timestamps: true,
         collection: "addresses"
     }
-)
+);
+
+const AddressModel: mongoose.Model<Address> = mongoose.model<Address>('Address', schema);
+
+export default AddressModel;
