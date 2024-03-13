@@ -13,21 +13,22 @@ const schema: Schema<Branch> = new Schema<Branch>(
         },
         name: {
             type: String,
-            required: true,
-            
+            required: [true, "Branch name is requried."],
         },
         email: {
             type: String,
-            required: true,
+            required: [true, "Branch email is required."],
         },
         phone: {
             type: String,
-            required: true,
+            required: [true, "Branch phone is required."],
         },
         alternatePhone: {
             type: String,
             required: false
         },
+        address: { type: Schema.ObjectId, ref: 'Branch', autopopulate: true },
+        taxIdentity: { type: Schema.ObjectId, ref: 'TaxIdentity', autopopulate: true },
     },
     {
         timestamps: {
