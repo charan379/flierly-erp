@@ -1,7 +1,7 @@
-import mongoose, { Model, Schema } from "mongoose";
+import mongoose from "mongoose";
 import { Branch } from "./interfaces/branch.interface";
 
-const schema: Schema<Branch> = new Schema<Branch>(
+const schema: mongoose.Schema<Branch> = new mongoose.Schema<Branch>(
     {
         isDeleted: {
             type: Boolean,
@@ -27,8 +27,8 @@ const schema: Schema<Branch> = new Schema<Branch>(
             type: String,
             required: false
         },
-        address: { type: Schema.ObjectId, ref: 'Branch', autopopulate: true },
-        taxIdentity: { type: Schema.ObjectId, ref: 'TaxIdentity', autopopulate: true },
+        address: { type: mongoose.Schema.ObjectId, ref: 'Branch', autopopulate: true },
+        taxIdentity: { type: mongoose.Schema.ObjectId, ref: 'TaxIdentity', autopopulate: true },
     },
     {
         timestamps: {
@@ -42,6 +42,6 @@ const schema: Schema<Branch> = new Schema<Branch>(
 
 schema.plugin(require('mongoose-autopopulate'));
 
-const BranchModel: Model<Branch> = mongoose.model<Branch>("Branch", schema);
+const BranchModel: mongoose.Model<Branch> = mongoose.model<Branch>("Branch", schema);
 
 export default BranchModel;
