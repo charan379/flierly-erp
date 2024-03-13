@@ -15,6 +15,9 @@ export interface Address {
     pincode: string,
     latitude: number,
     longitude: number,
+    branchId: mongoose.ObjectId,
+    accountId: mongoose.ObjectId,
+    contactId: mongoose.ObjectId,
     createdAt: Date,
     updatedAt: Date,
 }
