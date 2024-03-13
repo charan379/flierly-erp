@@ -35,7 +35,8 @@ const schema: mongoose.Schema<Branch> = new mongoose.Schema<Branch>(
         taxIdentity: {
             type: mongoose.Schema.ObjectId,
             ref: 'TaxIdentity',
-            autopopulate: true
+            autopopulate: true,
+            immutable: true
         },
     },
     {
