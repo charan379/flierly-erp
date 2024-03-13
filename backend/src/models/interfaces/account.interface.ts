@@ -5,6 +5,7 @@ import { TaxIdentity } from "./tax-identity.interface"
 export interface Account {
     _id: mongoose.ObjectId,
     isDeleted: boolean,
+    isActive: boolean,
     accountType: { code: string, name: string }
     accountSubtype: { code: string, name: string },
     isVip: boolean,
