@@ -15,6 +15,7 @@ const schema: mongoose.Schema<AccountType> = new mongoose.Schema<AccountType>(
             type: String,
             required: [true, "Account-type code is required."],
             unique: true,
+            uppercase: true,
             immutable: true
         },
         name: {
