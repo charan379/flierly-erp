@@ -1,4 +1,4 @@
-import { Address } from "cluster"
+import { Address } from "./address.interface";
 
 export interface TaxIdentity {
     id: number,

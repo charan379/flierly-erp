@@ -6,5 +6,4 @@ export interface Contact {
     alternatePhone: string,
     createdAt: Date,
     updatedAt: Date,
-    lastModifiedBy?: User
 }
