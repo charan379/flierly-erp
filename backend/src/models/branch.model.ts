@@ -27,8 +27,16 @@ const schema: mongoose.Schema<Branch> = new mongoose.Schema<Branch>(
             type: String,
             required: false
         },
-        address: { type: mongoose.Schema.ObjectId, ref: 'Branch', autopopulate: true },
-        taxIdentity: { type: mongoose.Schema.ObjectId, ref: 'TaxIdentity', autopopulate: true },
+        address: {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Branch',
+            autopopulate: true
+        },
+        taxIdentity: {
+            type: mongoose.Schema.ObjectId,
+            ref: 'TaxIdentity',
+            autopopulate: true
+        },
     },
     {
         timestamps: {
