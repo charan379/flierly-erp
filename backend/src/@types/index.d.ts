@@ -111,64 +111,64 @@ type PageRequest = {
 //     lastModifiedByUserId?: number
 // }
 
-type AccountType = {
-    id: number,
-    isDeleted: boolean,
-    name: string,
-    subtypes?: AccountSubtype[],
-    accounts?: Account[],
-    createdAt: Date,
-    updatedAt: Date,
-    lastModifiedBy?: User
-    lastModifiedByUserId?: number
-}
+// type AccountType = {
+//     id: number,
+//     isDeleted: boolean,
+//     name: string,
+//     subtypes?: AccountSubtype[],
+//     accounts?: Account[],
+//     createdAt: Date,
+//     updatedAt: Date,
+//     lastModifiedBy?: User
+//     lastModifiedByUserId?: number
+// }
 
-type AccountSubtype = {
-    id: number,
-    isDeleted: boolean,
-    name: string,
-    accountType?: AccountType,
-    accountTypeId?: number,
-    accounts?: Account[],
-    createdAt: Date,
-    updatedAt: Date,
-    lastModifiedBy?: User
-    lastModifiedByUserId?: number
-}
+// type AccountSubtype = {
+//     id: number,
+//     isDeleted: boolean,
+//     name: string,
+//     accountType?: AccountType,
+//     accountTypeId?: number,
+//     accounts?: Account[],
+//     createdAt: Date,
+//     updatedAt: Date,
+//     lastModifiedBy?: User
+//     lastModifiedByUserId?: number
+// }
 
-type Account = {
-    id: number,
-    isDeleted: boolean,
-    accountType?: AccountType
-    accountTypeId: number,
-    accountSubtype?: AccountSubtype,
-    accountSubtypeId: number,
-    isVip: boolean,
-    isKey: boolean,
-    name: string,
-    registeredPhone: string,
-    alternatePhone: string,
-    email: string,
-    branch?: Branch,
-    branchId: number
-    taxIdentity?: TaxIdentity
-    taxIdentityId: number
-    addresses: Address[],
-    contacts: Contact[],
-    parentId?: number,
-    parent?: Account,
-    childAccoutns?: Account[],
-    createdAt: Date,
-    updatedAt: Date,
-    lastModifiedBy?: User
-    lastModifiedByUserId?: number
-}
+// type Account = {
+//     id: number,
+//     isDeleted: boolean,
+//     accountType?: AccountType
+//     accountTypeId: number,
+//     accountSubtype?: AccountSubtype,
+//     accountSubtypeId: number,
+//     isVip: boolean,
+//     isKey: boolean,
+//     name: string,
+//     registeredPhone: string,
+//     alternatePhone: string,
+//     email: string,
+//     branch?: Branch,
+//     branchId: number
+//     taxIdentity?: TaxIdentity
+//     taxIdentityId: number
+//     addresses: Address[],
+//     contacts: Contact[],
+//     parentId?: number,
+//     parent?: Account,
+//     childAccoutns?: Account[],
+//     createdAt: Date,
+//     updatedAt: Date,
+//     lastModifiedBy?: User
+//     lastModifiedByUserId?: number
+// }
 
-type User = {
-    id: number,
-    isDeleted: boolean,
-    username: string,
-    password: string,
-    createdAt: Date,
-    updatedAt: Date,
-}
+// type User = {
+//     id: number,
+//     isDeleted: boolean,
+//     username: string,
+//     password: string,
+//     createdAt: Date,
+//     updatedAt: Date,
+// }
