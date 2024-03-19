@@ -58,7 +58,6 @@ server.on('listening', async () => {
     console.info("🚀 [server]: Server started is running on " + port);
 });
 
-
 /**
  * Normalize a port into a number, string, or false.
  * if port is not specified in environment, or if provided a string
