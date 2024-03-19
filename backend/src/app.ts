@@ -4,7 +4,6 @@ import router from "@/routes";
 import HttpCodes from "@/constants/httpCodes";
 import errorHandler from "@/middlewares/error-handler.middleware";
 
-
 // create express application instance
 const app: Express = express();
 
@@ -15,7 +14,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(router);
-
 
 app.all("/*", (req, res, next) => {
     console.log(req.path);
