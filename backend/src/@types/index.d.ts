@@ -11,6 +11,12 @@ type PageResult<T> = {
     sort?: object;
 }
 
+type ModelDetails = {
+    model: string,
+    name: string,
+    filePath: string,
+}
+
 type SortBy = {
     [key: string]: "desc" | "asc";
 }
