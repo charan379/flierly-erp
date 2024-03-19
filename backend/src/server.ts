@@ -8,9 +8,6 @@ import http, { Server } from 'http';
 import { HttpError } from 'http-errors';
 import validateEnv from '@/utils/env.validator';
 import Database from './lib/database';
-import { globSync } from 'glob';
-import mongoose from 'mongoose';
-import AccountModel from './models/account.model';
 
 dotenv.config();
 
@@ -51,13 +48,6 @@ server.on('error', (error: HttpError) => {
         default:
             throw error;
     }
-});
-
-const models = globSync(`${__dirname}/models/*.model.{ts,js}`);
-
-models.forEach((model) => {
-    const mo: mongoose.Model<any> = require(`@/models/${model.split(/[\\|/]/).slice(-1)}`);
-    console.log(mo.schema);
 });
 
 /**
