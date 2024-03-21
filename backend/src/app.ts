@@ -1,9 +1,8 @@
-import express, { Express, NextFunction, Request, Response, } from "express";
+import express, { Express } from "express";
 import createHttpError from "http-errors";
 import router from "@/routes";
 import HttpCodes from "@/constants/httpCodes";
 import errorHandler from "@/middlewares/error-handler.middleware";
-import { modelsList } from "./models";
 
 // create express application instance
 const app: Express = express();

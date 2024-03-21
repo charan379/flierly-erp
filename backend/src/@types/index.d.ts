@@ -12,7 +12,7 @@ type PageResult<T> = {
 }
 
 type ModelDetails = {
-    model: string,
+    entity: string,
     name: string,
     filePath: string,
 }
