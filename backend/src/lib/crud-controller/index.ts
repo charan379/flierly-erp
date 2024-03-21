@@ -8,16 +8,10 @@ import read from "./read";
 const CRUDController = async (modelName: string) => {
 
     const modelDetails = await getModelsList().then((models) =>
-        models.map(model => {
-            console.log(modelName)
-            if (model.entity === modelName) return model;
-        }
-        )
+        models.filter((model) => model.entity === modelName)
     );
 
-    console.log(modelDetails)
-
-    if (modelDetails === undefined) throw new Error("Empty Models !");
+    if (modelDetails === undefined) throw new Error(`Model ${modelName} does not exists!`);
 
     if (!modelDetails[0]?.entity || !modelDetails[0]?.filePath) {
         throw new Error(`Model ${modelName} does not exists!`);

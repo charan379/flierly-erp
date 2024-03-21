@@ -8,8 +8,7 @@ import http, { Server } from 'http';
 import { HttpError } from 'http-errors';
 import validateEnv from '@/utils/env.validator';
 import Database from './lib/database';
-import { getModelsList } from './models';
-import CRUDController from './lib/crud-controller';
+import controllers from './controllers';
 
 dotenv.config();
 
@@ -32,7 +31,7 @@ const server: Server = http.createServer(app);
  */
 server.listen(port);
 
-CRUDController("Account").then((re) => console.log(re));
+controllers().then(contros => console.log(contros)).catch(errors => console.log(errors));
 
 /**
  * Event listener for HTTP server "error" event.

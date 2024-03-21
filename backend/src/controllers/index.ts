@@ -1,14 +1,19 @@
 import CRUDController from "@/lib/crud-controller";
-import { modelsList } from "@/models";
+import { getModelsList } from "@/models";
 
 
-const controllers = () => {
+const controllers = async () => {
+    const modelList = await getModelsList();
 
-    const contros: any = {};
+    // Create an empty object to hold controllers before the loop
+    const controllers: Record<string, object> = {};
 
-    modelsList.forEach(({ model, name }) => {
-        contros[name] = CRUDController(model);
-    });
-}
+    // Use a loop with `await` for each iteration
+    for (const model of modelList) {
+        controllers[model.name] = await CRUDController(model.entity);
+    }
+
+    return controllers;
+};
 
 export default controllers;
