@@ -4,7 +4,6 @@ import create from "./create";
 import { Request, Response } from "express";
 import read from "./read";
 
-
 const CRUDController = async (modelName: string) => {
 
     const modelDetails = await getModelsList().then((models) =>
