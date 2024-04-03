@@ -31,7 +31,7 @@ const server: Server = http.createServer(app);
  */
 server.listen(port);
 
-controllers().then(contros => console.log(contros)).catch(errors => console.log(errors));
+// controllers().then(contros => console.log(contros)).catch(errors => console.log(errors));
 
 /**
  * Event listener for HTTP server "error" event.
