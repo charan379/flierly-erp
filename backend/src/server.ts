@@ -8,7 +8,6 @@ import http, { Server } from 'http';
 import { HttpError } from 'http-errors';
 import validateEnv from '@/utils/env.validator';
 import Database from './lib/database';
-import controllers from './controllers';
 
 dotenv.config();
 
@@ -30,8 +29,6 @@ const server: Server = http.createServer(app);
  * Start Express server on provided port
  */
 server.listen(port);
-
-// controllers().then(contros => console.log(contros)).catch(errors => console.log(errors));
 
 /**
  * Event listener for HTTP server "error" event.
