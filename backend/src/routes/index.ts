@@ -4,9 +4,10 @@ import { Router } from "express";
 
 const router = Router();
 
-controllers().then(contros => console.log(contros)).catch(errors => console.log(errors));
+const controllersList = controllers().then((controllers => controllers));
 
-getModelsList().then(() => {
-    
+getModelsList().then((models) => {
+    models.forEach(({ entity, name }) => {
+    })
 })
 export default router;
