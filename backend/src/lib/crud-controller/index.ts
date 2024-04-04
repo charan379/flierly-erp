@@ -16,12 +16,13 @@ const CRUDController = async (modelName: string) => {
         throw new Error(`Model ${modelName} does not exists!`);
     }
 
-    const model: mongoose.Model<any> = require(`@/models/${modelDetails[0].filePath.split(/\\|\//).slice(-1)}`);
+    require(`@/models/${modelDetails[0].filePath.split(/\\|\//).slice(-1)}`);
+
+    const model: mongoose.Model<any> = mongoose.model(modelName);
 
     if (!model) {
         throw new Error(`Failed to import model ${modelName}`);
     }
-
 
     let crudMethods = {
         create: (req: Request, res: Response) => create(model, req, res),
