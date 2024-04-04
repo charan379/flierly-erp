@@ -6,7 +6,7 @@ const router = Router();
 
 const routeGenerator = (entityName: string, controller: any) => {
     router.route(`/${entityName}/create`).post(controller['create']);
-    router.route(`/${entityName}/read`).post(controller['read']);
+    router.route(`/${entityName}/read/:id`).get(controller['read']);
 }
 
 getModelsList().then(async (models) => {

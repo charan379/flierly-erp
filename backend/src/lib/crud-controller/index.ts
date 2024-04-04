@@ -1,7 +1,7 @@
 import { getModelsList } from "@/models"
 import mongoose from "mongoose"
 import create from "./create";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import read from "./read";
 
 const CRUDController = async (modelName: string) => {
@@ -25,8 +25,8 @@ const CRUDController = async (modelName: string) => {
     }
 
     let crudMethods = {
-        create: (req: Request, res: Response) => create(model, req, res),
-        read: (req: Request, res: Response) => read(model, req, res),
+        create: (req: Request, res: Response, next: NextFunction) => create(model, req, res, next),
+        read: (req: Request, res: Response, next: NextFunction) => read(model, req, res, next),
         update: {},
         delete: {},
         page: {},
