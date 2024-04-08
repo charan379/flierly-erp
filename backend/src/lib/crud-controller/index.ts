@@ -6,6 +6,7 @@ import read from "./read";
 import search from "./search";
 import softDelete from "./delete";
 import update from "./update";
+import page from "./page";
 
 const CRUDController = async (modelName: string) => {
 
@@ -32,7 +33,7 @@ const CRUDController = async (modelName: string) => {
         read: (req: Request, res: Response, next: NextFunction) => read(model, req, res, next),
         update: (req: Request, res: Response, next: NextFunction) => update(model, req, res, next),
         delete: (req: Request, res: Response, next: NextFunction) => softDelete(model, req, res, next),
-        page: {},
+        page: (req: Request, res: Response, next: NextFunction) => page(model, req, res, next),
         search: (req: Request, res: Response, next: NextFunction) => search(model, req, res, next),
     }
 
