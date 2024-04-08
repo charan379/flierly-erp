@@ -3,6 +3,7 @@ import mongoose from "mongoose"
 import create from "./create";
 import { NextFunction, Request, Response } from "express";
 import read from "./read";
+import search from "./search";
 
 const CRUDController = async (modelName: string) => {
 
@@ -30,7 +31,7 @@ const CRUDController = async (modelName: string) => {
         update: {},
         delete: {},
         page: {},
-        search: {},
+        search: (req: Request, res: Response, next: NextFunction) => search(model, req, res, next),
     }
 
     return crudMethods;
