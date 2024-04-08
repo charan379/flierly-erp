@@ -7,27 +7,29 @@ const search = async (model: mongoose.Model<any>, req: Request, res: Response, n
     try {
         const keys: string | undefined = req.query?.fields ? req.query?.fields as string : 'name';
 
-        const values: string | undefined = req.query?.queries ? req.query?.queries as string : '';
+        const values: string | undefined = req.query?.queries ? req.query?.queries as string : ' ';
 
         const fieldsArray = keys.split(",");
 
         const queriesArrays = values.split(",");
 
-        const query: { $or: object[] } = { $or: [] };
+        const query: { $and: object[] } = { $and: [] };
 
         for (let index = 0; index < fieldsArray.length; index++) {
             const key = fieldsArray[index];
             const value = queriesArrays[index];
 
             if (key && value) {
-                query.$or.push({ [key]: { $regex: new RegExp(value, 'i') } })
+                query.$and.push({ [key]: { $regex: new RegExp(value, 'i') } })
             } else {
                 continue;
             }
         };
 
-
-        let result = await model.find({ ...query }).where('isDeleted', false).exec();
+        let result = await model.find({ ...query }, { __v: 0 })
+            .where('isDeleted', false)
+            .limit(20)
+            .exec();
 
         res.status(HttpCodes.OK).json(result);
 
