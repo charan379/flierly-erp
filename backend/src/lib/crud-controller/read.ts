@@ -4,7 +4,6 @@ import JoiSchemaValidator from "@/utils/joi-schema.validator";
 import { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 
-
 const read = async (model: mongoose.Model<any>, req: Request, res: Response, next: NextFunction) => {
     try {
         const result = await model.findOne({
