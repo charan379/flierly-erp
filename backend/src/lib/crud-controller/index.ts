@@ -4,6 +4,8 @@ import create from "./create";
 import { NextFunction, Request, Response } from "express";
 import read from "./read";
 import search from "./search";
+import softDelete from "./delete";
+import update from "./update";
 
 const CRUDController = async (modelName: string) => {
 
@@ -28,8 +30,8 @@ const CRUDController = async (modelName: string) => {
     let crudMethods = {
         create: (req: Request, res: Response, next: NextFunction) => create(model, req, res, next),
         read: (req: Request, res: Response, next: NextFunction) => read(model, req, res, next),
-        update: {},
-        delete: {},
+        update: (req: Request, res: Response, next: NextFunction) => update(model, req, res, next),
+        delete: (req: Request, res: Response, next: NextFunction) => softDelete(model, req, res, next),
         page: {},
         search: (req: Request, res: Response, next: NextFunction) => search(model, req, res, next),
     }
