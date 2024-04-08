@@ -1,5 +1,5 @@
-type PageResult<T> = {
-    data: T[];
+type PageResult = {
+    data: any[];
     page: number;
     pageSize: number;
     totalResults: number;

@@ -1,4 +1,5 @@
 import HttpCodes from "@/constants/httpCodes";
+import pageResponseBuilder from "@/utils/page-response.builder";
 import { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 
@@ -20,14 +21,9 @@ const page = async (model: mongoose.Model<any>, req: Request, res: Response, nex
 
         const [results, count] = await Promise.all([resultsPromise, countPromise]);
 
-        const pages = Math.ceil(count / limit);
+        const re: PageResult = await pageResponseBuilder(results, page, limit, count, {});
 
-        const pagination = { page, pages, count };
-
-        return res.status(HttpCodes.OK).json({
-            results,
-            pagination
-        });
+        return res.status(HttpCodes.OK).json(re);
 
     } catch (error) {
         next(error);
