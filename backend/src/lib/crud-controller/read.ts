@@ -1,5 +1,5 @@
 import HttpCodes from "@/constants/httpCodes";
-import { ObjectIdSchema } from "@/joi-schemas/common.joi.schemas";
+import { objectIdSchema } from "@/joi-schemas/common.joi.schemas";
 import JoiSchemaValidator from "@/utils/joi-schema.validator";
 import { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 const read = async (model: mongoose.Model<any>, req: Request, res: Response, next: NextFunction) => {
     try {
         const result = await model.findOne({
-            _id: await JoiSchemaValidator(ObjectIdSchema, req.params.id, {}, "dynamic-read"),
+            _id: await JoiSchemaValidator(objectIdSchema, req.params.id, {}, "dynamic-read"),
             isDeleted: false
         }).exec();
 

@@ -1,5 +1,5 @@
 import HttpCodes from "@/constants/httpCodes";
-import { ObjectIdSchema } from "@/joi-schemas/common.joi.schemas";
+import { objectIdSchema } from "@/joi-schemas/common.joi.schemas";
 import JoiSchemaValidator from "@/utils/joi-schema.validator";
 import { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
@@ -14,7 +14,7 @@ const softDelete = async (model: mongoose.Model<any>, req: Request, res: Respons
 
         const result = await model.findOneAndUpdate(
             {
-                _id: await JoiSchemaValidator(ObjectIdSchema, req.params.id, {}, "dynamic-delete"),
+                _id: await JoiSchemaValidator(objectIdSchema, req.params.id, {}, "dynamic-delete"),
                 isDeleted: false,
             },
             { $set: updates },
