@@ -12,7 +12,7 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
         const branch: Branch = await JoiSchemaValidator<Branch>(createBranchSchema, req.body, { abortEarly: false, allowUnknown: false }, "create-branch-custom-controller");
 
         const result = await BranchModel.create({ ...branch });
-        throw new Error("This is custom testing error...");
+
         res.status(HttpCodes.CREATED).json(result);
     } catch (error) {
         next(error);
