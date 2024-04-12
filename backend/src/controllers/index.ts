@@ -29,8 +29,6 @@ const controllers = async () => {
         }
     }
 
-    console.log(controllers);
-
     return controllers;
 };
 export default controllers;
