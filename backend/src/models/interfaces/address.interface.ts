@@ -1,4 +1,7 @@
 import mongoose from "mongoose"
+import { Branch } from "./branch.interface"
+import { Account } from "./account.interface"
+import { Contact } from "./contact.interface"
 
 export interface Address {
     _id: mongoose.ObjectId,
@@ -17,9 +20,9 @@ export interface Address {
         latitude: number,
         longitude: number,
     }
-    branchId: mongoose.ObjectId,
-    accountId: mongoose.ObjectId,
-    contactId: mongoose.ObjectId,
+    branch: Branch | mongoose.ObjectId,
+    account: Account | mongoose.ObjectId,
+    contact: Contact | mongoose.ObjectId,
     createdAt: Date,
     updatedAt: Date,
 }

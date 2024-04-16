@@ -60,14 +60,20 @@ const schema: mongoose.Schema<Address> = new mongoose.Schema<Address>(
             },
             _id: false
         },
-        branchId: {
+        branch: {
             type: mongoose.Schema.ObjectId,
+            ref: "Branch",
+            autopopulate: false,
         },
-        accountId: {
+        account: {
             type: mongoose.Schema.ObjectId,
+            ref: "Account",
+            autopopulate: false
         },
-        contactId: {
+        contact: {
             type: mongoose.Schema.ObjectId,
+            ref: "Contact",
+            autopopulate: false,
         }
     },
     {
@@ -75,6 +81,8 @@ const schema: mongoose.Schema<Address> = new mongoose.Schema<Address>(
         collection: "addresses"
     }
 );
+
+schema.plugin(require('mongoose-autopopulate'));
 
 const AddressModel: mongoose.Model<Address> = mongoose.model<Address>('Address', schema);
 

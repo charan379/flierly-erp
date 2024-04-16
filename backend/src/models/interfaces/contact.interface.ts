@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import { Branch } from "./branch.interface";
+import { Account } from "./account.interface";
 
 export interface Contact {
     _id: mongoose.ObjectId,
@@ -8,8 +10,8 @@ export interface Contact {
     email: string,
     phone: string,
     alternatePhone: string,
-    branchId: mongoose.ObjectId,
-    accountId: mongoose.ObjectId,
+    branch: Branch | mongoose.ObjectId,
+    account: Account | mongoose.ObjectId,
     createdAt: Date,
     updatedAt: Date,
 }

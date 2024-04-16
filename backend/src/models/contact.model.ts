@@ -25,11 +25,15 @@ const schema: mongoose.Schema<Contact> = new mongoose.Schema<Contact>(
         alternatePhone: {
             type: String,
         },
-        branchId: {
-            type: mongoose.Schema.ObjectId
+        branch: {
+            type: mongoose.Schema.ObjectId,
+            ref: "Branch",
+            autopopulate: false
         },
-        accountId: {
-            type: mongoose.Schema.ObjectId
+        account: {
+            type: mongoose.Schema.ObjectId,
+            ref: "Account",
+            autopopulate: false
         }
     },
     {
@@ -37,6 +41,8 @@ const schema: mongoose.Schema<Contact> = new mongoose.Schema<Contact>(
         collection: "contacts"
     }
 );
+
+schema.plugin(require('mongoose-autopopulate'));
 
 const ContactModel: mongoose.Model<Contact> = mongoose.model<Contact>('Contact', schema);
 
