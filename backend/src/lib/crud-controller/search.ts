@@ -20,7 +20,10 @@ const search = async (model: mongoose.Model<any>, req: Request, res: Response, n
             const value = queriesArrays[index];
 
             if (key && value) {
-                query.$and.push({ [key]: { $regex: new RegExp(value, 'i') } })
+                if (value.match(/^[0-9a-fA-F]{24}$/))
+                    query.$and.push({ [key]: value })
+                else
+                    query.$and.push({ [key]: { $regex: new RegExp(value, 'i') } })
             } else {
                 continue;
             }
