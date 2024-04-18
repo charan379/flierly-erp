@@ -6,5 +6,10 @@ export interface Uom {
     isDeleted: boolean,
     isActive: boolean,
     code: string,
-    name: string
+    name: string,
+    conversions: {
+        name: string,
+        toUom: Uom | mongoose.ObjectId,
+        conversionFactor: number,
+    }[]
 }

@@ -19,6 +19,26 @@ const schema: mongoose.Schema<Uom> = new mongoose.Schema<Uom>(
         name: {
             type: String,
             required: [true, 'Uom name is required.']
+        },
+        conversions: {
+            type: [
+                {
+                    name: {
+                        type: String,
+                        required: [true, "Uom Conversion name is required."]
+                    },
+                    toUom: {
+                        type: mongoose.Schema.ObjectId,
+                        ref: 'Uom',
+                        autopopulate: true,
+                        required: [true, "To Uom Id is required."]
+                    },
+                    conversionFactor: {
+                        type: Number,
+                        required: [true, "Uom Conversion factor is required."]
+                    },
+                }
+            ]
         }
     },
     {
@@ -26,6 +46,8 @@ const schema: mongoose.Schema<Uom> = new mongoose.Schema<Uom>(
         collection: 'uoms'
     }
 );
+
+schema.plugin(require('mongoose-autopopulate'));
 
 const UomModel: mongoose.Model<Uom> = mongoose.model<Uom>('Uom', schema);
 
