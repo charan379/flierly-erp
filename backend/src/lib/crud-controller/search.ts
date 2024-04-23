@@ -1,4 +1,5 @@
 import HttpCodes from "@/constants/httpCodes";
+import buildMongoSortObject, { SortObject } from "@/utils/mongo-sort.builder";
 import { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 
@@ -8,6 +9,8 @@ const search = async (model: mongoose.Model<any>, req: Request, res: Response, n
         const keys: string | undefined = req.query?.fields ? req.query?.fields as string : 'name';
 
         const values: string | undefined = req.query?.queries ? req.query?.queries as string : ' ';
+
+        const sort: SortObject = buildMongoSortObject(req.query?.sort as string)
 
         const fieldsArray = keys.split(",");
 
@@ -31,6 +34,7 @@ const search = async (model: mongoose.Model<any>, req: Request, res: Response, n
 
         let result = await model.find({ ...query }, { __v: 0 })
             .where('isDeleted', false)
+            .sort({ ...sort })
             .limit(20)
             .exec();
 
