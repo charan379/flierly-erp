@@ -1,22 +1,34 @@
 import HttpCodes from "@/constants/httpCodes";
+import JoiSchemaValidator from "@/utils/joi-schema.validator";
 import buildMongoSortObject, { SortObject } from "@/utils/mongo-sort.builder";
 import { NextFunction, Request, Response } from "express";
+import Joi from "joi";
 import mongoose from "mongoose";
 
+export interface SearchRequest {
+    fields: String,
+    queries: String,
+    sort: string,
+    limit: number
+};
+
+const searchRequestSchema: Joi.ObjectSchema<SearchRequest> = Joi.object({
+    fields: Joi.string().default('name'),
+    queries: Joi.string().default(' '),
+    sort: Joi.string().default('name.asc'),
+    limit: Joi.number().integer().default(20)
+});
 
 const search = async (model: mongoose.Model<any>, req: Request, res: Response, next: NextFunction) => {
     try {
-        const keys: string | undefined = req.query?.fields ? req.query?.fields as string : 'name';
 
-        const values: string | undefined = req.query?.queries ? req.query?.queries as string : ' ';
+        const searchRequest: SearchRequest = await JoiSchemaValidator(searchRequestSchema, req.query, { allowUnknown: false, abortEarly: false }, "Dynamic Search API");
 
-        const sort: SortObject = buildMongoSortObject(req.query?.sort as string)
+        const fieldsArray = searchRequest.fields.split(",");
 
-        const limit: number = req.query?.limit ? parseInt(req.query?.limit as string) : 20;
+        const queriesArrays = searchRequest.queries.split(",");
 
-        const fieldsArray = keys.split(",");
-
-        const queriesArrays = values.split(",");
+        const sort: SortObject = buildMongoSortObject(searchRequest.sort);
 
         const query: { $and: object[] } = { $and: [] };
 
@@ -37,7 +49,7 @@ const search = async (model: mongoose.Model<any>, req: Request, res: Response, n
         let result = await model.find({ ...query }, { __v: 0 })
             .where('isDeleted', false)
             .sort({ ...sort })
-            .limit(limit)
+            .limit(searchRequest.limit)
             .exec();
 
         res.status(HttpCodes.OK).json(result);
