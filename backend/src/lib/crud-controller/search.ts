@@ -1,5 +1,6 @@
 import HttpCodes from "@/constants/httpCodes";
 import JoiSchemaValidator from "@/utils/joi-schema.validator";
+import buildMongoQuery from "@/utils/mongo-query.builder";
 import buildMongoSortObject, { SortObject } from "@/utils/mongo-sort.builder";
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
@@ -24,27 +25,9 @@ const search = async (model: mongoose.Model<any>, req: Request, res: Response, n
 
         const searchRequest: SearchRequest = await JoiSchemaValidator(searchRequestSchema, req.query, { allowUnknown: false, abortEarly: false }, "Dynamic Search API");
 
-        const fieldsArray = searchRequest.fields.split(",");
-
-        const queriesArrays = searchRequest.queries.split(",");
-
         const sort: SortObject = buildMongoSortObject(searchRequest.sort);
 
-        const query: { $and: object[] } = { $and: [] };
-
-        for (let index = 0; index < fieldsArray.length; index++) {
-            const key = fieldsArray[index];
-            const value = queriesArrays[index];
-
-            if (key && value) {
-                if (value.match(/^[0-9a-fA-F]{24}$/))
-                    query.$and.push({ [key]: value })
-                else
-                    query.$and.push({ [key]: { $regex: new RegExp(value, 'i') } })
-            } else {
-                continue;
-            }
-        };
+        const query: { $and: object[] } = buildMongoQuery(searchRequest.fields.split(","), searchRequest.queries.split(","));
 
         let result = await model.find({ ...query }, { __v: 0 })
             .where('isDeleted', false)
