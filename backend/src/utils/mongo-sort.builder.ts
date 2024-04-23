@@ -16,7 +16,7 @@ export default function buildMongoSortObject(sort_by: string): SortObject {
 
     // If sort_by is not provided or is empty, sort by createdAt in descending order
     if (!sort_by) {
-        return { createdAt: -1 };
+        return { createdAt: "desc" };
     }
 
     const sortElementRegex = /^[a-zA-Z0-9]\w+\.(desc|asc)$/;
@@ -34,9 +34,9 @@ export default function buildMongoSortObject(sort_by: string): SortObject {
 
         // Add the sort field to the sort object with the corresponding direction
         if (direction === "desc") {
-            sortFields[key] = -1;
+            sortFields[key] = "desc";
         } else {
-            sortFields[key] = 1;
+            sortFields[key] = "asc";
         }
     });
 
