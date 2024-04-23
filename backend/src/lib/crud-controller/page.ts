@@ -33,7 +33,9 @@ const page = async (model: mongoose.Model<any>, req: Request, res: Response, nex
         const sort: SortObject = buildMongoSortObject(pageRequest.sort);
 
         const page: number = pageRequest.page;
+
         const limit: number = pageRequest.limit;
+        
         const skip: number = (page * limit) - limit;
 
         const resultsPromise = model.find({ ...query }, { __v: 0 })
