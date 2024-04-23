@@ -12,6 +12,8 @@ const search = async (model: mongoose.Model<any>, req: Request, res: Response, n
 
         const sort: SortObject = buildMongoSortObject(req.query?.sort as string)
 
+        const limit: number = req.query?.limit ? parseInt(req.query?.limit as string) : 20;
+
         const fieldsArray = keys.split(",");
 
         const queriesArrays = values.split(",");
@@ -35,7 +37,7 @@ const search = async (model: mongoose.Model<any>, req: Request, res: Response, n
         let result = await model.find({ ...query }, { __v: 0 })
             .where('isDeleted', false)
             .sort({ ...sort })
-            .limit(20)
+            .limit(limit)
             .exec();
 
         res.status(HttpCodes.OK).json(result);
