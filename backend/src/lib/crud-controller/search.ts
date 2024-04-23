@@ -7,8 +7,8 @@ import Joi from "joi";
 import mongoose from "mongoose";
 
 export interface SearchRequest {
-    fields: String,
-    queries: String,
+    fields: string,
+    queries: string,
     sort: string,
     limit: number
 };
