@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-export const NameMi5Ma50Schema: Joi.Schema<string> = Joi.string().min(5).max(50).example("Name")
+export const nameMi5Ma50Schema: Joi.Schema<string> = Joi.string().min(5).max(50).example("Name")
     .messages({
         'string.min': 'Name must be at least 5 characters long.',
         'string.max': 'Name must not exceed 50 characters.',
