@@ -7,5 +7,7 @@ export interface Organization {
     isActive: boolean,
     name: string,
     email: string,
-    phone: string
+    phone: string,
+    createdAt: Date,
+    updatedAt: Date,
 }

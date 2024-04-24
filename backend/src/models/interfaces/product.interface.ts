@@ -5,5 +5,7 @@ export interface Product {
     isDeleted: Boolean,
     isActive: Boolean,
     isSerialized: Boolean,
-    name: String
+    name: String,
+    createdAt: Date,
+    updatedAt: Date,
 }

@@ -9,4 +9,6 @@ export interface Asset {
     imei2?: string,
     serialNumber: string,
     manufacturingDate: Date;
+    createdAt: Date,
+    updatedAt: Date,
 };

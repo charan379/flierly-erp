@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-
 export interface Uom {
     _id: mongoose.ObjectId,
     isDeleted: boolean,
@@ -11,5 +10,7 @@ export interface Uom {
         name: string,
         toUom: Uom | mongoose.ObjectId,
         conversionFactor: number,
-    }[]
+    }[],
+    createdAt: Date,
+    updatedAt: Date,
 }
