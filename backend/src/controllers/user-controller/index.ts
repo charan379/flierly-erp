@@ -3,9 +3,9 @@ import create from "./create";
 
 const userController = async () => {
     const defaultController = await CRUDController('User');
-    // console.log(defaultController)
+    // console.debug(defaultController)
     const controllers = {...defaultController, create};
-    // console.log(controllers);
+    // console.debug(controllers);
     return controllers;
 }
 

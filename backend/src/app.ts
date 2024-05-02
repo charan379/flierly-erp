@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(router);
 
 app.all("/*", (req, res, next) => {
-    console.log(req.path);
+    // console.debug(req.path);
     next(createHttpError(HttpCodes.NOT_FOUND));
 })
 

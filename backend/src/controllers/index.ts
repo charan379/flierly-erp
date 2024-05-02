@@ -24,7 +24,7 @@ const controllers = async () => {
 
     // Use a loop with `await` for each iteration
     for (const model of modelList) {
-        console.debug(model);
+        // console.debug(model);
         if (customControllerNames.includes(model.name)) {
             const controller = await require(`@/controllers/${model.name}-controller`).default();
             controllers[model.name] = controller;
@@ -34,7 +34,7 @@ const controllers = async () => {
         }
     }
 
-    // console.log(controllers)
+    // console.debug(controllers)
     return controllers;
 };
 export default controllers;

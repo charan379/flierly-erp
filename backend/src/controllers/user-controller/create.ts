@@ -15,7 +15,7 @@ export const createUserSchema: Joi.ObjectSchema = Joi.object({
 
 const create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        console.log(req.path)
+        // console.debug(req.path)
         const user: User = await JoiSchemaValidator<User>(createUserSchema, req.body, { abortEarly: false, allowUnknown: false }, "create-user-custom-controller");
 
         const result = await UserModel.create({ ...user });
