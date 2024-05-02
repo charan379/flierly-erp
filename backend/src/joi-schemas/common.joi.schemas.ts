@@ -7,7 +7,7 @@ export const objectIdSchema = Joi.string()
         'string.pattern.base': "Please provied a valid Id : {#value} is not a valid id."
     });
 
-    export const nameMi5Ma50Schema: Joi.Schema<string> = Joi.string().min(5).max(50).example("Name")
+export const nameMi5Ma50Schema: Joi.Schema<string> = Joi.string().min(5).max(50).example("Name")
     .messages({
         'string.min': 'Name must be at least 5 characters long.',
         'string.max': 'Name must not exceed 50 characters.',
@@ -23,7 +23,7 @@ export const phoneSchema: Joi.Schema<string> = Joi.string().min(10).max(13).exam
         'string.min': 'Phone must be at least 10 characters long.',
         'string.max': 'Phone must not exceed 13 characters.',
     });
-    
+
 export const passwordSchema: Joi.StringSchema = Joi.string()
     .min(8)
     .max(26)
