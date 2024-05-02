@@ -1,13 +1,12 @@
 import Joi from "joi";
-import { nameMi5Ma50Schema, altPhoneSchema, emailSchema, phoneSchema } from "./common-validator.schema";
 import { Branch } from "@/models/interfaces/branch.interface";
-import { objectIdSchema } from "./common.joi.schemas";
+import { emailSchema, nameMi5Ma50Schema, objectIdSchema, phoneSchema } from "./common.joi.schemas";
 
 export const createBranchSchema: Joi.ObjectSchema<Branch> = Joi.object({
     name: nameMi5Ma50Schema.required(),
     email: emailSchema.required(),
     phone: phoneSchema.required(),
-    alternatePhone: altPhoneSchema.required(),
+    alternatePhone: phoneSchema,
     address: objectIdSchema.required(),
     taxIdentity: objectIdSchema.required(),
 });
