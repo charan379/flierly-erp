@@ -3,7 +3,10 @@ import create from "./create";
 
 const branchController = async () => {
     const defaultController = await CRUDController('Branch');
-    return { ...defaultController, create };
+    // console.log(defaultController)
+    const controllers = { ...defaultController, create };
+    // console.log(controllers);
+    return controllers;
 
 }
 
