@@ -1,5 +1,6 @@
 import HttpCodes from "@/constants/httpCodes";
 import { emailSchema, nameMi5Ma50Schema, passwordSchema, phoneSchema } from "@/joi-schemas/common.joi.schemas";
+import { generateHash } from "@/lib/bcrypt";
 import { User } from "@/models/interfaces/user.interface";
 import UserModel from "@/models/user.model";
 import JoiSchemaValidator from "@/utils/joi-schema.validator";
@@ -15,12 +16,13 @@ export const createUserSchema: Joi.ObjectSchema = Joi.object({
 
 const create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        // console.debug(req.path)
         const user: User = await JoiSchemaValidator<User>(createUserSchema, req.body, { abortEarly: false, allowUnknown: false }, "create-user-custom-controller");
 
-        const result = await UserModel.create({ ...user });
+        const user_with_hashed_password: User = { ...user, password: await generateHash(user.password) };
 
-        res.status(HttpCodes.CREATED).json(user);
+        const result = await UserModel.create({ ...user_with_hashed_password });
+
+        res.status(HttpCodes.CREATED).json(result);
     } catch (error) {
         next(error);
     }
