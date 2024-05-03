@@ -18,9 +18,9 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user: User = await JoiSchemaValidator<User>(createUserSchema, req.body, { abortEarly: false, allowUnknown: false }, "create-user-custom-controller");
 
-        const user_with_hashed_password: User = { ...user, password: await generateHash(user.password) };
+        const userWithHashedPassword: User = { ...user, password: await generateHash(user.password) };
 
-        const result = await UserModel.create({ ...user_with_hashed_password });
+        const result = await UserModel.create({ ...userWithHashedPassword });
 
         res.status(HttpCodes.CREATED).json(result);
     } catch (error) {
