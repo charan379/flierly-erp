@@ -7,7 +7,7 @@ const saltRounds = 10;
  * @param plainPassword - The plain text password to hash
  * @returns A promise that resolves to the hashed password
  */
-export async function generateHash(plainPassword: unknown): Promise<string> {
+export async function generateHash(plainPassword: string): Promise<string> {
     // Validate that the input parameter is a string
     if (typeof plainPassword !== 'string') {
         throw new Error('Plain password must be a string');
@@ -29,11 +29,12 @@ export async function generateHash(plainPassword: unknown): Promise<string> {
  * @param hashedPassword - The hashed password to compare against
  * @returns A promise that resolves to a boolean indicating whether the passwords match
  */
-export async function validateHash(plainPassword: unknown, hashedPassword: unknown): Promise<boolean> {
+export async function validateHash(plainPassword: string, hashedPassword: string): Promise<boolean> {
     // Validate that the input parameters are strings
     if (typeof plainPassword !== 'string' || typeof hashedPassword !== 'string') {
         throw new Error('Plain password and hashed password must be strings');
     }
+    
     try {
         // Compare the plain password against the hashed password
         const isMatch: boolean = await bcrypt.compare(plainPassword, hashedPassword);
