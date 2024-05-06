@@ -30,7 +30,6 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
         // Throw error with any user with same details exists
         if (existingUsers > 0) {
             throw new FlierlyException("User details already exists", HttpCodes.BAD_REQUEST, "Duplicate user creation", "create-user-custom-controller-duplicate-registration");
-
         }
         // hash/encrypt user password
         const userWithHashedPassword: User = { ...user, password: await generateHash(user.password) };
