@@ -26,8 +26,7 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
                 { email: user.email },
                 { mobile: user.mobile }
             ]
-        }).where('isDeleted', false)
-            .countDocuments();
+        }).where('isDeleted', false).countDocuments();
         // Throw error with any user with same details exists
         if (existingUsers > 0) {
             throw new FlierlyException("User details already exists", HttpCodes.BAD_REQUEST, "Duplicate user creation", "create-user-custom-controller-duplicate-registration");
