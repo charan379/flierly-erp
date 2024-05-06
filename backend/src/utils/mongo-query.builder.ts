@@ -1,8 +1,7 @@
 
+export default function buildMongoQuery(fieldsArray: string[], queriesArray: string[], withEOL?: boolean): { $and?: object[], $or?: object[] } {
 
-export default function buildMongoQuery(fieldsArray: string[], queriesArray: string[]): { $and: object[] } {
-
-    const query: { $and: object[] } = { $and: [] };
+    const query: { $and: object[], $or: object[] } = { $and: [{}], $or: [{}] };
 
     for (let i = 0; i < fieldsArray.length; i++) {
         const key = fieldsArray[i];
@@ -13,7 +12,7 @@ export default function buildMongoQuery(fieldsArray: string[], queriesArray: str
                 query.$and.push({ [key]: value })
             }
             else {
-                query.$and.push({ [key]: { $regex: new RegExp(value, 'i') } })
+                query.$and.push({ [key]: { $regex: new RegExp(`${value}${withEOL ? "$" : ""}`, 'i') } })
             }
         }
         else {

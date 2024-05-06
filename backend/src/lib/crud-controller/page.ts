@@ -28,7 +28,7 @@ const page = async (model: mongoose.Model<any>, req: Request, res: Response, nex
 
         const pageRequest: PageRequest = await JoiSchemaValidator(pageRequestSchema, req.query, { allowUnknown: false, abortEarly: false }, "Dynamic page request API.");
 
-        const query: { $and: object[] } = buildMongoQuery(pageRequest.fields.split(","), pageRequest.queries.split(","));
+        const query: { $and?: object[] } = buildMongoQuery(pageRequest.fields.split(","), pageRequest.queries.split(","));
 
         const sort: SortObject = buildMongoSortObject(pageRequest.sort);
 

@@ -27,7 +27,7 @@ const search = async (model: mongoose.Model<any>, req: Request, res: Response, n
 
         const sort: SortObject = buildMongoSortObject(searchRequest.sort);
 
-        const query: { $and: object[] } = buildMongoQuery(searchRequest.fields.split(","), searchRequest.queries.split(","));
+        const query: { $and?: object[] } = buildMongoQuery(searchRequest.fields.split(","), searchRequest.queries.split(","));
 
         let result = await model.find({ ...query }, { __v: 0 })
             .where('isDeleted', false)
