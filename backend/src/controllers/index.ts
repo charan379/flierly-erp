@@ -21,7 +21,6 @@ const controllers = async () => {
 
     const customControllerNames: string[] = customCotrollers.map((controller => controller.name));
 
-
     // Use a loop with `await` for each iteration
     for (const model of modelList) {
         // console.debug(model);
