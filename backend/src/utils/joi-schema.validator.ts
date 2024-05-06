@@ -12,9 +12,9 @@ async function JoiSchemaValidator<T>(joiSchema: AnySchema, object: any, options:
 
     if (error) {
         throw new FlierlyException(
-            "Schema validation failed",
-            HttpCodes.BAD_REQUEST,
             error.message,
+            HttpCodes.BAD_REQUEST,
+            "Schema validation failed",
             `Stack: ${error?.stack} || FunctionInput: joiSchema{${JSON.stringify(joiSchema)}}, object{${JSON.stringify(object)}},options{${JSON.stringify(options)}} , source{${source}}`,
         )
     }
