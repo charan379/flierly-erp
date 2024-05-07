@@ -28,24 +28,24 @@ const page = async (model: mongoose.Model<any>, req: Request, res: Response, nex
 
         const pageRequest: PageRequest = await JoiSchemaValidator(pageRequestSchema, req.query, { allowUnknown: false, abortEarly: false }, "Dynamic page request API.");
 
-        const query: { $and?: object[] } = buildMongoQuery(pageRequest.fields.split(","), pageRequest.queries.split(","));
+        const query: MongoQueryArray = buildMongoQuery(pageRequest.fields.split(","), pageRequest.queries.split(","));
 
         const sort: SortObject = buildMongoSortObject(pageRequest.sort);
 
         const page: number = pageRequest.page;
 
         const limit: number = pageRequest.limit;
-        
+
         const skip: number = (page * limit) - limit;
 
-        const resultsPromise = model.find({ ...query }, { __v: 0 })
+        const resultsPromise = model.find({ $and: query }, { __v: 0 })
             .where("isDeleted", false)
             .sort({ ...sort })
             .skip(skip)
             .limit(limit)
             .exec();
 
-        const countPromise = model.countDocuments({ ...query })
+        const countPromise = model.countDocuments({ $and: query })
             .where("isDeleted", false)
             .exec();
 

@@ -19,9 +19,9 @@ const exists = async (model: mongoose.Model<any>, req: Request, res: Response, n
     try {
         const existsRequest: ExistsRequest = await JoiSchemaValidator(existsRequestSchema, req.query, { allowUnknown: false, abortEarly: false }, "Dynamic Exists API");
 
-        const query: { $or?: object[] } = buildMongoQuery(existsRequest.fields.split(","), existsRequest.queries.split(","), true);
+        const query: MongoQueryArray = buildMongoQuery(existsRequest.fields.split(","), existsRequest.queries.split(","), true);
 
-        let result = await model.find({ ...query }, { __v: 0 })
+        let result = await model.find({ $or: query }, { __v: 0 })
             .where('isDeleted', false)
             .countDocuments()
             .exec();

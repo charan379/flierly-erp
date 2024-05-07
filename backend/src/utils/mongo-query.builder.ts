@@ -1,7 +1,7 @@
 
-export default function buildMongoQuery(fieldsArray: string[], queriesArray: string[], withEOL?: boolean): { $and?: object[], $or?: object[] } {
+export default function buildMongoQuery(fieldsArray: string[], queriesArray: string[], withEOL?: boolean): MongoQueryArray {
 
-    const query: { $and: object[], $or: object[] } = { $and: [{}], $or: [{}] };
+    const query: MongoQueryArray = [];
 
     for (let i = 0; i < fieldsArray.length; i++) {
         const key = fieldsArray[i];
@@ -9,10 +9,10 @@ export default function buildMongoQuery(fieldsArray: string[], queriesArray: str
 
         if (key && value) {
             if (value.match(/^[0-9a-fA-F]{24}$/)) {
-                query.$and.push({ [key]: value })
+                query.push({ [key]: value })
             }
             else {
-                query.$and.push({ [key]: { $regex: new RegExp(`${value}${withEOL ? "$" : ""}`, 'i') } })
+                query.push({ [key]: { $regex: new RegExp(`${value}${withEOL ? "$" : ""}`, 'i') } })
             }
         }
         else {
