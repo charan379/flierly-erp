@@ -42,5 +42,4 @@ const CRUDController = async (modelName: string) => {
     return crudMethods;
 }
 
-
 export default CRUDController;
