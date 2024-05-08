@@ -2,16 +2,26 @@ import moduleAlias from 'module-alias';
 moduleAlias.addAliases({
     "@": `${__dirname}`
 });
-import controllers from "./controllers";
+import Database from './lib/database';
+import dotenv from 'dotenv';
+import validateEnv from './utils/env.validator';
 
-const st: string[] = [];
+dotenv.config();
 
-controllers().then((controllers) => {
-    Object.keys(controllers).forEach((key) => {
-        st.push(key + `.create`);
-        st.push(key + `.read`);
-        st.push(key + `.update`);
-        st.push(key + `.delete`);
-    });
-    console.log(st.sort());
-});
+// validate environment variables
+validateEnv();
+
+async function setup() {
+    try {
+        console.log("⚙️     [Setup]: Starting Flierly application setup...");
+        await Database.connect();
+
+    } catch (error) {
+        console.error("🔴 [Setup]: Flierly application setup failed: ", error);
+        console.log(error)
+    } finally {
+        await Database.disconnect();
+    }
+}
+
+setup();
