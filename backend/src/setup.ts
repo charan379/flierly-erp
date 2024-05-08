@@ -5,6 +5,9 @@ moduleAlias.addAliases({
 import Database from '@/lib/database';
 import dotenv from 'dotenv';
 import validateEnv from '@/utils/env.validator';
+import generatePermissions from '@/setup/generate-permissions';
+import { Permission } from './models/interfaces/permission.interface';
+import PermissionModel from './models/permission.model';
 
 dotenv.config();
 
@@ -15,7 +18,9 @@ async function setup() {
     try {
         console.log("⚙️     [Setup]: Starting Flierly application setup...");
         await Database.connect();
-
+        const permissions: Partial<Permission>[] = await generatePermissions();
+        const savedPermissions = await PermissionModel.insertMany(permissions);
+        console.log(`⚙️     [Setup]: Generated ${savedPermissions.length} permissions.`)
     } catch (error) {
         console.error("🔴   [Setup]: Flierly application setup failed: ", error);
         console.log(error)
