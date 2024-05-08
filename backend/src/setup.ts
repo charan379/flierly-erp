@@ -19,6 +19,9 @@ async function setup() {
         console.log("⚙️     [Setup]: Starting Flierly application setup...");
         await Database.connect();
         const permissions: Partial<Permission>[] = await generatePermissions();
+        PermissionModel.deleteMany({}).then((result) => {
+            console.log(result);
+        });
         const savedPermissions = await PermissionModel.insertMany(permissions);
         console.log(`⚙️     [Setup]: Generated ${savedPermissions.length} permissions.`)
     } catch (error) {
