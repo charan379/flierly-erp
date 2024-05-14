@@ -19,5 +19,6 @@ getModelsList().then(async (models) => {
     models.forEach(({ name }) => {
         routeGenerator(name, controllersList[name])
     });
-})
+});
+
 export default router;

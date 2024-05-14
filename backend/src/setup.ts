@@ -17,6 +17,7 @@ validateEnv();
 async function setup() {
     try {
         console.log("⚙️     [Setup]: Starting Flierly application setup...");
+        // Establish Database 
         await Database.connect();
         const permissions: Partial<Permission>[] = await generatePermissions();
         PermissionModel.deleteMany({}).then((result) => {
