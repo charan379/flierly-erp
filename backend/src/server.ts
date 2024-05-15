@@ -55,7 +55,7 @@ server.on('error', (error: HttpError) => {
  */
 server.on('listening', async () => {
     await Database.connect();
-    console.info("🚀    [server]: Server started is running on " + port);
+    console.info("🚀 [server]: Server started is running on " + port);
 });
 
 /**

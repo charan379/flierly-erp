@@ -14,7 +14,7 @@ validateEnv();
 
 async function setup() {
     try {
-        console.log("⚙️     [Setup]: Starting Flierly application setup...");
+        console.log("⚙️  [Setup]: Starting Flierly application setup...");
         // Establish Database 
         await Database.connect();
 
@@ -23,7 +23,7 @@ async function setup() {
 
     } catch (error) {
 
-        console.error("🔴   [Setup]: Flierly application setup failed: ", error);
+        console.error("⚙️ 🔴 [Setup]: Flierly application setup failed: ", error);
         console.log(error)
 
 
