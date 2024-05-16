@@ -15,7 +15,7 @@ const schema: mongoose.Schema<AccessGroup> = new mongoose.Schema<AccessGroup>(
             unique: true
         },
         permissions: {
-            type: [String],
+            type: [{ type: mongoose.Schema.ObjectId, ref: 'Permission', autopopulate: { select: ['name', 'accessType', 'model', 'code'] } }],
             default: []
         }
     },
@@ -27,6 +27,8 @@ const schema: mongoose.Schema<AccessGroup> = new mongoose.Schema<AccessGroup>(
 
 schema.index({ code: 1 });
 schema.index({ name: 1 });
+
+schema.plugin(require('mongoose-autopopulate'));
 
 const AccessGroupModel: mongoose.Model<AccessGroup> = mongoose.model<AccessGroup>('AccessGroup', schema);
 

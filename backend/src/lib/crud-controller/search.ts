@@ -10,18 +10,22 @@ export interface SearchRequest {
     fields: string,
     queries: string,
     sort: string,
-    limit: number
+    limit: number,
+    autopopulate: boolean,
 };
 
 const searchRequestSchema: Joi.ObjectSchema<SearchRequest> = Joi.object({
     fields: Joi.string().default('name'),
     queries: Joi.string().default(' '),
     sort: Joi.string().default('name.asc'),
-    limit: Joi.number().integer().default(20)
+    limit: Joi.number().integer().default(20),
+    autopopulate: Joi.boolean().default(false)
 });
 
 const search = async (model: mongoose.Model<any>, req: Request, res: Response, next: NextFunction) => {
     try {
+
+        const modelKeys: string[] = Object.keys(model.schema.obj);
 
         const searchRequest: SearchRequest = await JoiSchemaValidator(searchRequestSchema, req.query, { allowUnknown: false, abortEarly: false }, "Dynamic Search API");
 
@@ -29,8 +33,10 @@ const search = async (model: mongoose.Model<any>, req: Request, res: Response, n
 
         const query: MongoQueryArray = buildMongoQuery(searchRequest.fields.split(","), searchRequest.queries.split(","));
 
-        let result = await model.find({ $and: query }, { __v: 0 })
-            .where('isDeleted', false)
+        if (modelKeys.includes('isDeleted'))
+            query.push({ isDeleted: false })
+
+        let result = await model.find({ $and: query }, { __v: 0 }, { autopopulate: searchRequest.autopopulate })
             .sort({ ...sort })
             .limit(searchRequest.limit)
             .exec();

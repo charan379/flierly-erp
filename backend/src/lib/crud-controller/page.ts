@@ -12,7 +12,8 @@ export interface PageRequest {
     queries: string,
     sort: string,
     page: number,
-    limit: number
+    limit: number,
+    autopopulate: boolean,
 }
 
 const pageRequestSchema: Joi.ObjectSchema<PageRequest> = Joi.object({
@@ -21,14 +22,17 @@ const pageRequestSchema: Joi.ObjectSchema<PageRequest> = Joi.object({
     sort: Joi.string().default('createdAt.asc'),
     page: Joi.number().integer().min(1).default(1),
     limit: Joi.number().integer().min(1).default(20),
+    autopopulate: Joi.boolean().default(false)
 });
 
 const page = async (model: mongoose.Model<any>, req: Request, res: Response, next: NextFunction) => {
     try {
 
+        const modelKeys: string[] = Object.keys(model.schema.obj);
+
         const pageRequest: PageRequest = await JoiSchemaValidator(pageRequestSchema, req.query, { allowUnknown: false, abortEarly: false }, "Dynamic page request API.");
 
-        const query: MongoQueryArray = buildMongoQuery(pageRequest.fields.split(","), pageRequest.queries.split(","));
+        let query: MongoQueryArray = buildMongoQuery(pageRequest.fields.split(","), pageRequest.queries.split(","));
 
         const sort: SortObject = buildMongoSortObject(pageRequest.sort);
 
@@ -38,15 +42,16 @@ const page = async (model: mongoose.Model<any>, req: Request, res: Response, nex
 
         const skip: number = (page * limit) - limit;
 
-        const resultsPromise = model.find({ $and: query }, { __v: 0 })
-            .where("isDeleted", false)
+        if (modelKeys.includes('isDeleted'))
+            query.push({ isDeleted: false })
+
+        const resultsPromise = model.find({ $and: query }, { __v: 0 }, { autopopulate: pageRequest.autopopulate })
             .sort({ ...sort })
             .skip(skip)
             .limit(limit)
             .exec();
 
         const countPromise = model.countDocuments({ $and: query })
-            .where("isDeleted", false)
             .exec();
 
         const [results, count] = await Promise.all([resultsPromise, countPromise]);

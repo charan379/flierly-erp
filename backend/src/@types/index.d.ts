@@ -31,4 +31,4 @@ type PageRequest = {
     sort: SortBy;
 }
 
-type MongoQueryArray = { [x: string]: string | { $regex: RegExp } }[];
+type MongoQueryArray = { [x: string]: string | { $regex: RegExp } | boolean | number }[];
