@@ -6,6 +6,7 @@ import Database from '@/lib/database';
 import dotenv from 'dotenv';
 import validateEnv from '@/utils/env.validator';
 import generatePermissions from '@/setup/generate-permissions';
+import generateSuperAdmin from './setup/generate-super-admin';
 
 dotenv.config();
 
@@ -20,6 +21,9 @@ async function setup() {
 
         // Generate Permissions
         await generatePermissions();
+
+        // Generate Super Admin
+        await generateSuperAdmin();
 
     } catch (error) {
 
