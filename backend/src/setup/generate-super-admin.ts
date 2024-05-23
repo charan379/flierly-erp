@@ -3,6 +3,9 @@ import AccessGroupModel from "@/models/access-group.model";
 import { AccessGroup } from "@/models/interfaces/access-group.interface";
 import PermissionModel from "@/models/permission.model";
 import mongoose from "mongoose";
+import { User } from "@/models/interfaces/user.interface";
+import UserModel from "@/models/user.model";
+import { generateHash } from "@/lib/bcrypt";
 
 async function generateSuperAdmin(): Promise<void> {
     let superAdminGroup: AccessGroup | null = await AccessGroupModel.findOne({ code: 'super-admin' }).exec();
@@ -13,7 +16,15 @@ async function generateSuperAdmin(): Promise<void> {
 
     const credsPrompt = await userDetailsPrompt();
 
-    console.log(credsPrompt);
+    const superAdmin: User = await UserModel.create({
+        username: credsPrompt.username,
+        password: await generateHash(credsPrompt.password),
+        email: credsPrompt.email,
+        mobile: credsPrompt.mobile,
+        accecesGroups: [superAdminGroup._id],
+    });
+
+    console.log(`🔑 [Super-Admin]: Super Admin created and activated sucessfully with username: ${superAdmin.username}`);
 }
 
 async function generateSuperAdminGroup(): Promise<AccessGroup> {
