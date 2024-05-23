@@ -27,6 +27,18 @@ const schema: mongoose.Schema<User> = new mongoose.Schema<User>(
         mobile: {
             type: String,
             required: [true, "User mobile number is required."]
+        },
+        permissions: {
+            type: [{ type: mongoose.Schema.ObjectId, ref: 'Permission', autopopulate: { select: ['name', 'accessType', 'model', 'code'] } }],
+            default: []
+        },
+        excludedPermissions: {
+            type: [{ type: mongoose.Schema.ObjectId, ref: 'Permission', autopopulate: { select: ['name', 'accessType', 'model', 'code'] } }],
+            default: []
+        },
+        accecesGroups: {
+            type: [{ type: mongoose.Schema.ObjectId, ref: 'AccessGroup', autopopulate: { select: ['name', 'code'] } }],
+            default: []
         }
     },
     {
