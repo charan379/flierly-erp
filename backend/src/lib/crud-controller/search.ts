@@ -23,7 +23,6 @@ const searchRequestSchema: Joi.ObjectSchema<SearchRequest> = Joi.object({
 });
 
 const search = async (model: mongoose.Model<any>, req: Request, res: Response, next: NextFunction) => {
-    try {
 
         const modelKeys: string[] = Object.keys(model.schema.obj);
 
@@ -42,10 +41,6 @@ const search = async (model: mongoose.Model<any>, req: Request, res: Response, n
             .exec();
 
         res.status(HttpCodes.OK).json(result);
-
-    } catch (error) {
-        next(error);
-    }
 };
 
 export default search;
