@@ -1,12 +1,10 @@
 import HttpCodes from "@/constants/httpCodes";
 import { objectIdSchema } from "@/joi-schemas/common.joi.schemas";
 import JoiSchemaValidator from "@/utils/joi-schema.validator";
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import mongoose from "mongoose";
 
-const read = async (model: mongoose.Model<any>, req: Request, res: Response, next: NextFunction) => {
-    try {
-
+const read = async (model: mongoose.Model<any>, req: Request, res: Response) => {
         const modelKeys: string[] = Object.keys(model.schema.obj);
 
         let query: { _id: mongoose.ObjectId, isDeleted?: boolean } = {
@@ -23,9 +21,6 @@ const read = async (model: mongoose.Model<any>, req: Request, res: Response, nex
         } else {
             res.status(HttpCodes.OK).json(result);
         }
-    } catch (error) {
-        next(error);
-    }
 }
 
 

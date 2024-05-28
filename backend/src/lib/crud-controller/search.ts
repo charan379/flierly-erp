@@ -2,7 +2,7 @@ import HttpCodes from "@/constants/httpCodes";
 import JoiSchemaValidator from "@/utils/joi-schema.validator";
 import buildMongoQuery from "@/utils/mongo-query.builder";
 import buildMongoSortObject, { SortObject } from "@/utils/mongo-sort.builder";
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import Joi from "joi";
 import mongoose from "mongoose";
 
@@ -22,7 +22,7 @@ const searchRequestSchema: Joi.ObjectSchema<SearchRequest> = Joi.object({
     autopopulate: Joi.boolean().default(false)
 });
 
-const search = async (model: mongoose.Model<any>, req: Request, res: Response, next: NextFunction) => {
+const search = async (model: mongoose.Model<any>, req: Request, res: Response) => {
 
         const modelKeys: string[] = Object.keys(model.schema.obj);
 

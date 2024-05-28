@@ -1,7 +1,7 @@
 import { getModelsList } from "@/models"
 import mongoose from "mongoose"
 import create from "./create";
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import read from "./read";
 import search from "./search";
 import softDelete from "./delete";
@@ -30,13 +30,13 @@ const CRUDController = async (modelName: string) => {
     }
 
     let crudMethods = {
-        create: (req: Request, res: Response, next: NextFunction) => create(model, req, res, next),
-        read: (req: Request, res: Response, next: NextFunction) => read(model, req, res, next),
-        update: (req: Request, res: Response, next: NextFunction) => update(model, req, res, next),
-        delete: (req: Request, res: Response, next: NextFunction) => softDelete(model, req, res, next),
-        page: (req: Request, res: Response, next: NextFunction) => page(model, req, res, next),
-        search: (req: Request, res: Response, next: NextFunction) => search(model, req, res, next),
-        exists: (req: Request, res: Response, next: NextFunction) => exists(model, req, res, next),
+        create: (req: Request, res: Response) => create(model, req, res),
+        read: (req: Request, res: Response) => read(model, req, res),
+        update: (req: Request, res: Response) => update(model, req, res),
+        delete: (req: Request, res: Response) => softDelete(model, req, res),
+        page: (req: Request, res: Response) => page(model, req, res),
+        search: (req: Request, res: Response) => search(model, req, res),
+        exists: (req: Request, res: Response) => exists(model, req, res),
     }
 
     return crudMethods;

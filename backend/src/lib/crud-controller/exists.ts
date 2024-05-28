@@ -1,7 +1,7 @@
 import HttpCodes from "@/constants/httpCodes";
 import JoiSchemaValidator from "@/utils/joi-schema.validator";
 import buildMongoQuery from "@/utils/mongo-query.builder";
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import Joi from "joi";
 import mongoose from "mongoose";
 
@@ -15,8 +15,7 @@ const existsRequestSchema: Joi.ObjectSchema<ExistsRequest> = Joi.object({
     queries: Joi.string().default(' '),
 })
 
-const exists = async (model: mongoose.Model<any>, req: Request, res: Response, next: NextFunction) => {
-    try {
+const exists = async (model: mongoose.Model<any>, req: Request, res: Response) => {
         const existsRequest: ExistsRequest = await JoiSchemaValidator(existsRequestSchema, req.query, { allowUnknown: false, abortEarly: false }, "Dynamic Exists API");
 
         const query: MongoQueryArray = buildMongoQuery(existsRequest.fields.split(","), existsRequest.queries.split(","), true);
@@ -29,10 +28,6 @@ const exists = async (model: mongoose.Model<any>, req: Request, res: Response, n
         res.status(HttpCodes.OK).json({
             exists: result > 0 ? true : false
         });
-
-    } catch (error) {
-        next(error);
-    }
 }
 
 export default exists;

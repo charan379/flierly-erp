@@ -3,7 +3,7 @@ import JoiSchemaValidator from "@/utils/joi-schema.validator";
 import buildMongoQuery from "@/utils/mongo-query.builder";
 import buildMongoSortObject, { SortObject } from "@/utils/mongo-sort.builder";
 import pageResponseBuilder from "@/utils/page-response.builder";
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import Joi from "joi";
 import mongoose from "mongoose";
 
@@ -25,8 +25,7 @@ const pageRequestSchema: Joi.ObjectSchema<PageRequest> = Joi.object({
     autopopulate: Joi.boolean().default(false)
 });
 
-const page = async (model: mongoose.Model<any>, req: Request, res: Response, next: NextFunction) => {
-    try {
+const page = async (model: mongoose.Model<any>, req: Request, res: Response) => {
 
         const modelKeys: string[] = Object.keys(model.schema.obj);
 
@@ -59,10 +58,6 @@ const page = async (model: mongoose.Model<any>, req: Request, res: Response, nex
         const re: PageResult = await pageResponseBuilder(results, page, limit, count, sort);
 
         return res.status(HttpCodes.OK).json(re);
-
-    } catch (error) {
-        next(error);
-    }
 };
 
 export default page;

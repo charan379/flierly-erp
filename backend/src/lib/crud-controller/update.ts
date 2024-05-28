@@ -1,12 +1,11 @@
 import HttpCodes from "@/constants/httpCodes";
 import { objectIdSchema } from "@/joi-schemas/common.joi.schemas";
 import JoiSchemaValidator from "@/utils/joi-schema.validator";
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import mongoose from "mongoose";
 
 
-const update = async (model: mongoose.Model<any>, req: Request, res: Response, next: NextFunction) => {
-    try {
+const update = async (model: mongoose.Model<any>, req: Request, res: Response) => {
         let updates = req.body;
 
         delete updates.isDeleted;
@@ -31,10 +30,6 @@ const update = async (model: mongoose.Model<any>, req: Request, res: Response, n
         if (!result) {
             return res.status(HttpCodes.BAD_REQUEST).json({ message: `No results found by given id.` });
         };
-
-    } catch (error) {
-        next(error);
-    }
 }
 
 export default update;
