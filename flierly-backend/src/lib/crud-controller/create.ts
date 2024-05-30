@@ -3,7 +3,15 @@ import { Request, Response } from "express";
 import mongoose from "mongoose";
 
 
-const create = async (model: mongoose.Model<any>, req: Request, res: Response) => {
+/**
+ * Creates a new document in the specified Mongoose model.
+ *
+ * @param {mongoose.Model<any>} model The Mongoose model representing the collection to create in.
+ * @param {Request} req The Express request object containing the request body.
+ * @param {Response} res The Express response object for sending the response.
+ * @returns {Promise<Response>} A promise that resolves when a http response.
+ */
+const create = async (model: mongoose.Model<any>, req: Request, res: Response): Promise<Response> => {
     const result = await model.create({ ...req.body });
     return res.status(HttpCodes.CREATED).json(result);
 }
