@@ -24,23 +24,23 @@ const searchRequestSchema: Joi.ObjectSchema<SearchRequest> = Joi.object({
 
 const search = async (model: mongoose.Model<any>, req: Request, res: Response) => {
 
-        const modelKeys: string[] = Object.keys(model.schema.obj);
+    const modelKeys: string[] = Object.keys(model.schema.obj);
 
-        const searchRequest: SearchRequest = await JoiSchemaValidator(searchRequestSchema, req.query, { allowUnknown: false, abortEarly: false }, "Dynamic Search API");
+    const searchRequest: SearchRequest = await JoiSchemaValidator(searchRequestSchema, req.query, { allowUnknown: false, abortEarly: false }, "Dynamic Search API");
 
-        const sort: SortObject = buildMongoSortObject(searchRequest.sort);
+    const sort: SortObject = buildMongoSortObject(searchRequest.sort);
 
-        const query: MongoQueryArray = buildMongoQuery(searchRequest.fields.split(","), searchRequest.queries.split(","));
+    const query: MongoQueryArray = buildMongoQuery(searchRequest.fields.split(","), searchRequest.queries.split(","));
 
-        if (modelKeys.includes('isDeleted'))
-            query.push({ isDeleted: false })
+    if (modelKeys.includes('isDeleted'))
+        query.push({ isDeleted: false })
 
-        let result = await model.find({ $and: query }, { __v: 0 }, { autopopulate: searchRequest.autopopulate })
-            .sort({ ...sort })
-            .limit(searchRequest.limit)
-            .exec();
+    let result = await model.find({ $and: query }, { __v: 0 }, { autopopulate: searchRequest.autopopulate })
+        .sort({ ...sort })
+        .limit(searchRequest.limit)
+        .exec();
 
-        res.status(HttpCodes.OK).json(result);
+    res.status(HttpCodes.OK).json(result);
 };
 
 export default search;
