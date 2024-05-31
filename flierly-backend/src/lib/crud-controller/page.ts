@@ -49,7 +49,7 @@ const pageRequestSchema: Joi.ObjectSchema<PageRequest> = Joi.object({
  * @param {Response} res The Express response object for sending the response.
  * @returns {Promise<Response>} A promise that resolves when the page retrieval is complete.
  */
-const page = async (model: mongoose.Model<any>, req: Request, res: Response): Promise<void> => {
+const page = async (model: mongoose.Model<any>, req: Request, res: Response): Promise<Response> => {
     // Get all schema field names for filtering (used later to exclude soft-deleted documents)
     const modelKeys: string[] = Object.keys(model.schema.obj);
     // Validate the request parameters using the defined schema
@@ -86,7 +86,7 @@ const page = async (model: mongoose.Model<any>, req: Request, res: Response): Pr
     const re: PageResult = await pageResponseBuilder(results, page, limit, count, sort);
 
     // Return the paginated response with status code 200 (OK)
-    res.status(HttpCodes.OK).json(re);
+    return res.status(HttpCodes.OK).json(re);
 };
 
 export default page;
