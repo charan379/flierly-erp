@@ -18,7 +18,7 @@ export function catchErrors(
                 });
             } else {
                 // Server Error
-                return res.status(500).json({
+                return res.status(error?.httpCode ?? 500).json({
                     success: false,
                     result: null,
                     message: error.message,
