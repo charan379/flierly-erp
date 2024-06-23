@@ -1,17 +1,17 @@
 import userDetailsPrompt from "@/setup/prompts/user-details.prompt";
-import AccessGroupModel from "@/models/access-group.model";
-import { AccessGroup } from "@/models/interfaces/access-group.interface";
-import PermissionModel from "@/models/permission.model";
+import UserRoleModel from "@/models/user-role.model";
+import { UserRole } from "@/models/interfaces/user-role.interface";
+import UserPermissionModel from "@/models/user-permission.model";
 import mongoose from "mongoose";
 import { User } from "@/models/interfaces/user.interface";
 import UserModel from "@/models/user.model";
 import { generateHash } from "@/lib/bcrypt";
 
 async function generateSuperAdmin(): Promise<void> {
-    let superAdminGroup: AccessGroup | null = await AccessGroupModel.findOne({ code: 'super-admin' }).exec();
+    let superAdminRole: UserRole | null = await UserRoleModel.findOne({ code: 'super-admin' }).exec();
 
-    if (superAdminGroup === null) {
-        superAdminGroup = await generateSuperAdminGroup();
+    if (superAdminRole === null) {
+        superAdminRole = await generateSuperAdminRole();
     };
 
     const credsPrompt = await userDetailsPrompt();
@@ -21,21 +21,21 @@ async function generateSuperAdmin(): Promise<void> {
         password: await generateHash(credsPrompt.password),
         email: credsPrompt.email,
         mobile: credsPrompt.mobile,
-        accecesGroups: [superAdminGroup._id],
+        roles: [superAdminRole._id],
     });
 
     console.log(`🔑 [Super-Admin]: Super Admin created and activated sucessfully with username: ${superAdmin.username}`);
 }
 
-async function generateSuperAdminGroup(): Promise<AccessGroup> {
-    const permissionIds: mongoose.ObjectId[] = (await PermissionModel.find({}).exec()).map(permission => permission._id);
+async function generateSuperAdminRole(): Promise<UserRole> {
+    const permissionIds: mongoose.ObjectId[] = (await UserPermissionModel.find({}).exec()).map(permission => permission._id);
 
-    const superAdminGroup: AccessGroup = await AccessGroupModel.create({
+    const superAdminRole: UserRole = await UserRoleModel.create({
         code: 'super-admin',
-        name: 'Super Admin access group',
+        name: 'Super Admin role',
         permissions: permissionIds,
     });
-    return superAdminGroup;
+    return superAdminRole;
 }
 
 

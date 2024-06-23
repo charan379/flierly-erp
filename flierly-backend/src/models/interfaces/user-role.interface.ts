@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
-import { Permission } from "./permission.interface";
+import { UserPermission } from "./user-permission.interface";
 
-export interface AccessGroup {
+export interface UserRole {
     _id: mongoose.ObjectId;
     name: String,
     code: String,
-    permissions: String[] | Permission[],
+    permissions: String[] | UserPermission[],
     createdAt: Date,
     updatedAt: Date,
 }

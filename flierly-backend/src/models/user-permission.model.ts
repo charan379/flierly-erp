@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-import { Permission } from "./interfaces/permission.interface";
+import { UserPermission } from "./interfaces/user-permission.interface";
 import AccessType from "@/constants/accessTypes";
 
-const schema: mongoose.Schema<Permission> = new mongoose.Schema<Permission>(
+const schema: mongoose.Schema<UserPermission> = new mongoose.Schema<UserPermission>(
     {
         name: {
             type: String,
@@ -29,13 +29,13 @@ const schema: mongoose.Schema<Permission> = new mongoose.Schema<Permission>(
     },
     {
         timestamps: true,
-        collection: "permissions"
+        collection: "user-permissions"
     }
 );
 
 schema.index({ code: 1 });
 schema.index({ name: 1 });
 
-const PermissionModel: mongoose.Model<Permission> = mongoose.model<Permission>('Permission', schema);
+const UserPermissionModel: mongoose.Model<UserPermission> = mongoose.model<UserPermission>('UserPermission', schema);
 
-export default PermissionModel;
+export default UserPermissionModel;

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { AccessGroup } from "./access-group.interface";
-import { Permission } from "./permission.interface";
+import { UserRole } from "./user-role.interface";
+import { UserPermission } from "./user-permission.interface";
 
 export interface User {
     _id: mongoose.ObjectId,
@@ -10,9 +10,9 @@ export interface User {
     password: string,
     email: string,
     mobile: string,
-    permissions: mongoose.ObjectId[] | Permission[],
-    excludedPermissions: mongoose.ObjectId[] | Permission[],
-    accecesGroups: mongoose.ObjectId[] | AccessGroup[],
+    permissions: mongoose.ObjectId[] | UserPermission[],
+    excludedPermissions: mongoose.ObjectId[] | UserPermission[],
+    roles: mongoose.ObjectId[] | UserRole[],
     createdAt: Date,
     updatedAt: Date,
 }
