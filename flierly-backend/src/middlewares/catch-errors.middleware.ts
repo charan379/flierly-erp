@@ -1,9 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 
-export function catchErrors(
-    fn: (req: Request, res: Response, next: NextFunction) => Promise<any>
-): (req: Request, res: Response, next: NextFunction) => Promise<void | Response> {
+export function catchErrors(fn: (req: Request, res: Response, next: NextFunction) => Promise<any>, modelName: string): (req: Request, res: Response, next: NextFunction) => Promise<void | Response> {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
             await fn(req, res, next);
@@ -13,7 +11,7 @@ export function catchErrors(
                     success: false,
                     result: null,
                     message: 'Required fields are not supplied',
-                    controller: fn.name,
+                    controller: `${modelName}.${fn.name}`,
                     error,
                 });
             } else {
@@ -22,7 +20,7 @@ export function catchErrors(
                     success: false,
                     result: null,
                     message: error.message,
-                    controller: fn.name,
+                    controller: `${modelName}.${fn.name}`,
                     error,
                 });
             }

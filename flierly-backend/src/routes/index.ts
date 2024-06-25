@@ -5,20 +5,20 @@ import { Router } from "express";
 
 const router = Router();
 
-const routeGenerator = (entityName: string, controller: any) => {
-    router.route(`/${entityName}/create`).post(catchErrors(controller['create']));
-    router.route(`/${entityName}/read/:id`).get(catchErrors(controller['read']));
-    router.route(`/${entityName}/search`).get(catchErrors(controller['search']));
-    router.route(`/${entityName}/exists`).get(catchErrors(controller['exists']));
-    router.route(`/${entityName}/page`).get(catchErrors(controller['page']));
-    router.route(`/${entityName}/update/:id`).patch(catchErrors(controller['update']));
-    router.route(`/${entityName}/delete/:id`).delete(catchErrors(controller['delete']));
+const routeGenerator = (model: string, controller: any) => {
+    router.route(`/${model}/create`).post(catchErrors(controller['create'], model));
+    router.route(`/${model}/read/:id`).get(catchErrors(controller['read'], model));
+    router.route(`/${model}/search`).get(catchErrors(controller['search'], model));
+    router.route(`/${model}/exists`).get(catchErrors(controller['exists'], model));
+    router.route(`/${model}/page`).get(catchErrors(controller['page'], model));
+    router.route(`/${model}/update/:id`).patch(catchErrors(controller['update'], model));
+    router.route(`/${model}/delete/:id`).delete(catchErrors(controller['delete'], model));
 }
 
 getModelsList().then(async (models) => {
     const controllersList = await controllers();
-    models.forEach(({ name }) => {
-        routeGenerator(name, controllersList[name])
+    models.forEach(({ name: modelName }) => {
+        routeGenerator(modelName, controllersList[modelName])
     });
 });
 
