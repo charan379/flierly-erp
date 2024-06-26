@@ -5,7 +5,7 @@ import FlierlyException from "@/lib/flierly.exception";
 import { User } from "@/models/interfaces/user.interface";
 import UserModel from "@/models/user.model";
 import JoiSchemaValidator from "@/utils/joi-schema.validator";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 
 export const createUserSchema: Joi.ObjectSchema = Joi.object({
@@ -15,7 +15,7 @@ export const createUserSchema: Joi.ObjectSchema = Joi.object({
     mobile: phoneSchema.required(),
 });
 
-const create = async (req: Request, res: Response) => {
+const create = async (req: Request, res: Response, next: NextFunction) => {
     // validate new user
     const user: User = await JoiSchemaValidator<User>(createUserSchema, req.body, { abortEarly: false, allowUnknown: false }, "create-user-custom-controller");
     // check if any users exists with same details
@@ -36,6 +36,7 @@ const create = async (req: Request, res: Response) => {
     const result = await UserModel.create({ ...userWithHashedPassword });
     // responde with newly registered user details.
     res.status(HttpCodes.CREATED).json(result);
+    // next(result);
 }
 
 export default create;

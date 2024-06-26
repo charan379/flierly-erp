@@ -2,21 +2,13 @@ import { HttpError } from "http-errors";
 import HttpCodes from "@/constants/httpCodes";
 import FlierlyException from "@/lib/flierly.exception";
 
-type ErrorResponse = {
-    name: String;
-    message: string,
-    httpCode: HttpCodes,
-    reason: string,
-    stack?: string
-}
-
-function errrorResponseGenerator(error:
+function errrorMessageGenerator(error:
     Error |
     HttpError |
     FlierlyException
-): ErrorResponse {
+): ErrorMessage {
 
-    let response: ErrorResponse =
+    let message: ErrorMessage =
     {
         name: error.name,
         httpCode: HttpCodes.INTERNAL_SERVER_ERROR,
@@ -26,11 +18,11 @@ function errrorResponseGenerator(error:
     };
 
     if (error instanceof FlierlyException) {
-        response.httpCode = error.httpCode;
-        response.reason = error.reason;
+        message.httpCode = error.httpCode;
+        message.reason = error.reason;
     }
 
-    return response;
+    return message;
 }
 
-export default errrorResponseGenerator;
+export default errrorMessageGenerator;

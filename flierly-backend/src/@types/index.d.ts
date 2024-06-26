@@ -31,4 +31,21 @@ type PageRequest = {
     sort: SortBy;
 }
 
+type ApiResponse = {
+    success: boolean,
+    result: string | number | null | object | [],
+    message: string,
+    controller: string,
+    error: string | object | null,
+    httpCode: number
+}
+
+type ErrorMessage = {
+    name: String;
+    message: string,
+    httpCode: HttpCodes,
+    reason: string,
+    stack?: string
+}
+
 type MongoQueryArray = { [x: string]: string | { $regex: RegExp } | boolean | number }[];

@@ -5,7 +5,17 @@ export function catchErrors(fn: (req: Request, res: Response, next: NextFunction
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
             await fn(req, res, next);
+            console.log(next)
         } catch (error: any) {
+            console.log(next.name)
+            const apiResponse: ApiResponse = {
+                success: false,
+                controller: `${modelName}.${fn.name}`,
+                message: '',
+                result: null,
+                error: null,
+                httpCode: 200,
+            }
             if (error?.name === 'ValidationError') {
                 return res.status(400).json({
                     success: false,
