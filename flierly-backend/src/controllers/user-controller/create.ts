@@ -4,6 +4,7 @@ import { generateHash } from "@/lib/bcrypt";
 import FlierlyException from "@/lib/flierly.exception";
 import { User } from "@/models/interfaces/user.interface";
 import UserModel from "@/models/user.model";
+import apiResponse from "@/utils/api-response.generator";
 import JoiSchemaValidator from "@/utils/joi-schema.validator";
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
@@ -35,8 +36,7 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
     // save new user
     const result = await UserModel.create({ ...userWithHashedPassword });
     // responde with newly registered user details.
-    res.status(HttpCodes.CREATED).json(result);
-    // next(result);
+    res.status(HttpCodes.CREATED).json(apiResponse(true, result, "User Created Successfully", "user.create", null, HttpCodes.CREATED));
 }
 
 export default create;

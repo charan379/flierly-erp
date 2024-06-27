@@ -1,4 +1,5 @@
 import HttpCodes from "@/constants/httpCodes";
+import apiResponse from "@/utils/api-response.generator";
 import JoiSchemaValidator from "@/utils/joi-schema.validator";
 import buildMongoQuery from "@/utils/mongo-query.builder";
 import buildMongoSortObject, { SortObject } from "@/utils/mongo-sort.builder";
@@ -51,7 +52,7 @@ const search = async (model: mongoose.Model<any>, req: Request, res: Response) =
         .limit(searchRequest.limit)
         .exec();
     // Send successful response with search results
-    res.status(HttpCodes.OK).json(result);
+    return res.status(HttpCodes.OK).json(apiResponse(true, result, `Data fetched successfully`, `${model.modelName.toLowerCase()}.search`, null, HttpCodes.OK));
 };
 
 export default search;

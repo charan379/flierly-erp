@@ -1,4 +1,5 @@
 import HttpCodes from "@/constants/httpCodes";
+import apiResponse from "@/utils/api-response.generator";
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 
@@ -13,7 +14,7 @@ import mongoose from "mongoose";
  */
 const create = async (model: mongoose.Model<any>, req: Request, res: Response): Promise<Response> => {
     const result = await model.create({ ...req.body });
-    return res.status(HttpCodes.CREATED).json(result);
+    return res.status(HttpCodes.CREATED).json(apiResponse(true, result, `Data inserted successfully`, `${model.modelName.toLowerCase()}.create`, null, HttpCodes.CREATED));
 }
 
 export default create;

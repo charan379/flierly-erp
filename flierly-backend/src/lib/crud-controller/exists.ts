@@ -1,4 +1,5 @@
 import HttpCodes from "@/constants/httpCodes";
+import apiResponse from "@/utils/api-response.generator";
 import JoiSchemaValidator from "@/utils/joi-schema.validator";
 import buildMongoQuery from "@/utils/mongo-query.builder";
 import { Request, Response } from "express";
@@ -53,7 +54,8 @@ const exists = async (model: mongoose.Model<any>, req: Request, res: Response): 
         .exec();
 
     // Respond with an object indicating document existence
-    return res.status(HttpCodes.OK).json({ exists: result > 0 ? true : false });
+    return res.status(HttpCodes.OK).json(apiResponse(true, { exists: result > 0 ? true : false }, `Data fetched successfully`, `${model.modelName.toLowerCase()}.exists`, null, HttpCodes.OK));
+
 };
 
 export default exists;

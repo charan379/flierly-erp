@@ -32,11 +32,17 @@ type PageRequest = {
 }
 
 type ApiResponse = {
+    // Indicates if the request was successful
     success: boolean,
-    result: string | number | null | object | [],
+    // The result of the API call, can be various types
+    result: any,
+    // A message providing more details about the result
     message: string,
+    // The name of the controller that handled the request
     controller: string,
-    error: string | object | null,
+    // Error details if the request was unsuccessful
+    error: string | ErrorObject | null | ErrorMessage,
+    // The HTTP status code of the response
     httpCode: number
 }
 

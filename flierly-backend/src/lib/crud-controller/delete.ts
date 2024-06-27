@@ -1,8 +1,10 @@
 import HttpCodes from "@/constants/httpCodes";
 import { objectIdSchema } from "@/joi-schemas/common.joi.schemas";
+import apiResponse from "@/utils/api-response.generator";
 import JoiSchemaValidator from "@/utils/joi-schema.validator";
 import { Request, Response } from "express";
 import mongoose from "mongoose";
+import FlierlyException from "../flierly.exception";
 
 /**
  * Performs a soft delete on a document in the specified Mongoose model.
@@ -24,11 +26,11 @@ const softDelete = async (model: mongoose.Model<any>, req: Request, res: Respons
     ).exec();
 
     if (updatedDocument) {
-        return res.status(HttpCodes.OK).json(updatedDocument);
+        return res.status(HttpCodes.OK).json(apiResponse(true, updatedDocument, `Data removed successfully`, `${model.modelName.toLowerCase()}.delete`, null, HttpCodes.OK));
     }
 
     // No document found, return not found response
-    return res.status(HttpCodes.NOT_FOUND).json({ message: "Document not found" });
+    throw new FlierlyException('No documents found with given id', HttpCodes.BAD_REQUEST, '', '');
 };
 
 export default softDelete;

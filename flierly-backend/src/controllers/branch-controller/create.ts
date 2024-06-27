@@ -2,6 +2,7 @@ import HttpCodes from "@/constants/httpCodes";
 import { createBranchSchema } from "@/joi-schemas/branch.joi.schema";
 import BranchModel from "@/models/branch.model";
 import { Branch } from "@/models/interfaces/branch.interface";
+import apiResponse from "@/utils/api-response.generator";
 import JoiSchemaValidator from "@/utils/joi-schema.validator";
 import { Request, Response } from "express";
 
@@ -12,7 +13,8 @@ const create = async (req: Request, res: Response) => {
 
     const result = await BranchModel.create({ ...branch });
 
-    res.status(HttpCodes.CREATED).json(result);
+    res.status(HttpCodes.CREATED).json(apiResponse(true, result, "Branch Created Successfully", "branch.create", null, HttpCodes.CREATED));
+
 }
 
 export default create;

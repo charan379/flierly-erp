@@ -1,8 +1,10 @@
 import HttpCodes from "@/constants/httpCodes";
 import { objectIdSchema } from "@/joi-schemas/common.joi.schemas";
+import apiResponse from "@/utils/api-response.generator";
 import JoiSchemaValidator from "@/utils/joi-schema.validator";
 import { Request, Response } from "express";
 import mongoose from "mongoose";
+import FlierlyException from "../flierly.exception";
 
 /**
  * Updates a document in the specified Mongoose model based on the provided ID and request body.
@@ -38,11 +40,12 @@ const update = async (model: mongoose.Model<any>, req: Request, res: Response): 
 
     if (result) {
         // Update successful, send the updated document
-        return res.status(HttpCodes.OK).json(result);
+        return res.status(HttpCodes.OK).json(apiResponse(true, result, `Data updated successfully`, `${model.modelName.toLowerCase()}.update`, null, HttpCodes.OK));
+
     }
 
     // No document found with the given ID
-    return res.status(HttpCodes.BAD_REQUEST).json({ message: `No results found by given id.` });
+    throw new FlierlyException('No documents found with given id', HttpCodes.BAD_REQUEST, '', '');
 };
 
 export default update;
