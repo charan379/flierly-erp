@@ -1,18 +1,18 @@
 import controllers from "@/controllers";
-import { catchErrors } from "@/middlewares/catch-errors.middleware";
+import { errorBoundary } from "@/middlewares/error-boundary.middleware";
 import { getModelsList } from "@/models";
 import { Router } from "express";
 
 const router = Router();
 
 const routeGenerator = (model: string, controller: any) => {
-    router.route(`/${model}/create`).post(catchErrors(controller['create'], model));
-    router.route(`/${model}/read/:id`).get(catchErrors(controller['read'], model));
-    router.route(`/${model}/search`).get(catchErrors(controller['search'], model));
-    router.route(`/${model}/exists`).get(catchErrors(controller['exists'], model));
-    router.route(`/${model}/page`).get(catchErrors(controller['page'], model));
-    router.route(`/${model}/update/:id`).patch(catchErrors(controller['update'], model));
-    router.route(`/${model}/delete/:id`).delete(catchErrors(controller['delete'], model));
+    router.post(`/${model}/create`, errorBoundary(controller['create'], model));
+    router.get(`/${model}/read/:id`, errorBoundary(controller['read'], model));
+    router.get(`/${model}/search`, errorBoundary(controller['search'], model));
+    router.get(`/${model}/exists`, errorBoundary(controller['exists'], model));
+    router.get(`/${model}/page`, errorBoundary(controller['page'], model));
+    router.patch(`/${model}/update/:id`, errorBoundary(controller['update'], model));
+    router.delete(`/${model}/delete/:id`, errorBoundary(controller['delete'], model));
 }
 
 getModelsList().then(async (models) => {

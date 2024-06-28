@@ -54,7 +54,16 @@ const exists = async (model: mongoose.Model<any>, req: Request, res: Response): 
         .exec();
 
     // Respond with an object indicating document existence
-    return res.status(HttpCodes.OK).json(apiResponse(true, { exists: result > 0 ? true : false }, `Data fetched successfully`, `${model.modelName.toLowerCase()}.exists`, null, HttpCodes.OK));
+    return res.status(HttpCodes.OK).json(
+        apiResponse(
+            true,
+            { exists: result > 0 ? true : false },
+            `Data fetched successfully`,
+            `${model.modelName.toLowerCase()}.exists`,
+            req.url,
+            null,
+            HttpCodes.OK)
+    );
 
 };
 

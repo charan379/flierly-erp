@@ -14,7 +14,16 @@ import mongoose from "mongoose";
  */
 const create = async (model: mongoose.Model<any>, req: Request, res: Response): Promise<Response> => {
     const result = await model.create({ ...req.body });
-    return res.status(HttpCodes.CREATED).json(apiResponse(true, result, `Data inserted successfully`, `${model.modelName.toLowerCase()}.create`, null, HttpCodes.CREATED));
+    return res.status(HttpCodes.CREATED).json(
+        apiResponse(
+            true,
+            result,
+            `Data inserted successfully`,
+            `${model.modelName.toLowerCase()}.create`,
+            req.url,
+            null,
+            HttpCodes.CREATED)
+    );
 }
 
 export default create;

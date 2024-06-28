@@ -40,6 +40,8 @@ type ApiResponse = {
     message: string,
     // The name of the controller that handled the request
     controller: string,
+    // URL of the request
+    requestUrl: string,
     // Error details if the request was unsuccessful
     error: string | ErrorObject | null | ErrorMessage,
     // The HTTP status code of the response

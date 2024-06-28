@@ -3,6 +3,7 @@ function apiResponse(
     result: string | number | null | object | any[],
     message: string,
     controller: string,
+    requestUrl: string,
     error: string | Error | null | ErrorMessage,
     httpCode: number
 ): ApiResponse {
@@ -11,8 +12,9 @@ function apiResponse(
         result,
         message,
         controller,
+        requestUrl,
         error,
-        httpCode
+        httpCode,
     };
 }
 

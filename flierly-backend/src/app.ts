@@ -3,6 +3,9 @@ import createHttpError from "http-errors";
 import router from "@/routes";
 import HttpCodes from "@/constants/httpCodes";
 import errorHandler from "@/middlewares/error-handler.middleware";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // create express application instance
 const app: Express = express();

@@ -13,7 +13,16 @@ const create = async (req: Request, res: Response) => {
 
     const result = await BranchModel.create({ ...branch });
 
-    res.status(HttpCodes.CREATED).json(apiResponse(true, result, "Branch Created Successfully", "branch.create", null, HttpCodes.CREATED));
+    res.status(HttpCodes.CREATED).json(
+        apiResponse(
+            true,
+            result,
+            "Branch Created Successfully",
+            "branch.create",
+            req.url,
+            null,
+            HttpCodes.CREATED)
+    );
 
 }
 

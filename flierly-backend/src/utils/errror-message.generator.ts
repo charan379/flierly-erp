@@ -22,6 +22,10 @@ function errrorMessageGenerator(error:
         message.reason = error.reason;
     }
 
+    if (error instanceof HttpError) {
+        message.httpCode = error.statusCode;
+    }
+
     return message;
 }
 

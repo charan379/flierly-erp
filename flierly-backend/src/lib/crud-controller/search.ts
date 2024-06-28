@@ -52,7 +52,16 @@ const search = async (model: mongoose.Model<any>, req: Request, res: Response) =
         .limit(searchRequest.limit)
         .exec();
     // Send successful response with search results
-    return res.status(HttpCodes.OK).json(apiResponse(true, result, `Data fetched successfully`, `${model.modelName.toLowerCase()}.search`, null, HttpCodes.OK));
+    return res.status(HttpCodes.OK).json(
+        apiResponse(
+            true,
+            result,
+            `Data fetched successfully`,
+            `${model.modelName.toLowerCase()}.search`,
+            req.url,
+            null,
+            HttpCodes.OK)
+    );
 };
 
 export default search;

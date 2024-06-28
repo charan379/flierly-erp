@@ -4,6 +4,7 @@ import apiResponse from "@/utils/api-response.generator";
 import JoiSchemaValidator from "@/utils/joi-schema.validator";
 import { Request, Response } from "express";
 import mongoose from "mongoose";
+import FlierlyException from "../flierly.exception";
 
 /**
  * Fetches a single document from a Mongoose model based on the provided ID.
@@ -33,10 +34,18 @@ const read = async (model: mongoose.Model<any>, req: Request, res: Response): Pr
   // 5. Document found, return it with status code 200 (OK)
   if (result) {
     // return res.status(HttpCodes.OK).json(result);
-    return res.status(HttpCodes.OK).json(apiResponse(true, result, `Data fetched successfully`, `${model.modelName.toLowerCase()}.read`, null, HttpCodes.OK));
+    return res.status(HttpCodes.OK).json(
+      apiResponse(
+        true, result,
+        `Data fetched successfully`,
+        `${model.modelName.toLowerCase()}.read`,
+        req.url,
+        null,
+        HttpCodes.OK)
+    );
   }
   // 6. Handle document not found scenario
-  return res.status(HttpCodes.BAD_REQUEST).json({ message: `No results found by given id.` });
+  throw new FlierlyException('No documents found with given id', HttpCodes.BAD_REQUEST, '', '');
 };
 
 export default read;

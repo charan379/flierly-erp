@@ -26,7 +26,16 @@ const softDelete = async (model: mongoose.Model<any>, req: Request, res: Respons
     ).exec();
 
     if (updatedDocument) {
-        return res.status(HttpCodes.OK).json(apiResponse(true, updatedDocument, `Data removed successfully`, `${model.modelName.toLowerCase()}.delete`, null, HttpCodes.OK));
+        return res.status(HttpCodes.OK).json(
+            apiResponse(
+                true,
+                updatedDocument,
+                `Data removed successfully`,
+                `${model.modelName.toLowerCase()}.delete`,
+                req.url,
+                null,
+                HttpCodes.OK)
+        );
     }
 
     // No document found, return not found response

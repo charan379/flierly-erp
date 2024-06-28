@@ -40,7 +40,16 @@ const update = async (model: mongoose.Model<any>, req: Request, res: Response): 
 
     if (result) {
         // Update successful, send the updated document
-        return res.status(HttpCodes.OK).json(apiResponse(true, result, `Data updated successfully`, `${model.modelName.toLowerCase()}.update`, null, HttpCodes.OK));
+        return res.status(HttpCodes.OK).json(
+            apiResponse(
+                true,
+                result,
+                `Data updated successfully`,
+                `${model.modelName.toLowerCase()}.update`,
+                req.url,
+                null,
+                HttpCodes.OK)
+        );
 
     }
 

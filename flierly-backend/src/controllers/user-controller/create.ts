@@ -36,7 +36,15 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
     // save new user
     const result = await UserModel.create({ ...userWithHashedPassword });
     // responde with newly registered user details.
-    res.status(HttpCodes.CREATED).json(apiResponse(true, result, "User Created Successfully", "user.create", null, HttpCodes.CREATED));
+    res.status(HttpCodes.CREATED).json(
+        apiResponse(
+            true,
+            result,
+            "User Created Successfully",
+            "user.create", req.url,
+            null,
+            HttpCodes.CREATED)
+    );
 }
 
 export default create;

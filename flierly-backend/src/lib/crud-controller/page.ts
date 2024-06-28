@@ -87,7 +87,16 @@ const page = async (model: mongoose.Model<any>, req: Request, res: Response): Pr
     const re: PageResult = await pageResponseBuilder(results, page, limit, count, sort);
 
     // Return the paginated response with status code 200 (OK)
-    return res.status(HttpCodes.OK).json(apiResponse(true, re, `Data fetched successfully`, `${model.modelName.toLowerCase()}.page`, null, HttpCodes.OK));
+    return res.status(HttpCodes.OK).json(
+        apiResponse(
+            true,
+            re,
+            `Data fetched successfully`,
+            `${model.modelName.toLowerCase()}.page`,
+            req.url,
+            null,
+            HttpCodes.OK)
+    );
 
 };
 
