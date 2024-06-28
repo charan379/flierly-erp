@@ -5,6 +5,7 @@ const validateEnv = () => {
         NODE_ENV: str(),
         PORT: port(),
         MONGODB_SERVER_STRING: str(),
+        JWT_SECRET: str(),
     });
 };
 
