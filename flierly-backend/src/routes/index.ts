@@ -1,4 +1,5 @@
 import controllers from "@/controllers";
+import authenticate from "@/controllers/user-controller/authenticate";
 import { errorBoundary } from "@/middlewares/error-boundary.middleware";
 import { getModelsList } from "@/models";
 import { Router } from "express";
@@ -13,6 +14,10 @@ const routeGenerator = (model: string, controller: any) => {
     router.get(`/${model}/page`, errorBoundary(controller['page'], model));
     router.patch(`/${model}/update/:id`, errorBoundary(controller['update'], model));
     router.delete(`/${model}/delete/:id`, errorBoundary(controller['delete'], model));
+
+    if (model === 'user') {
+        router.post(`/${model}/authenticate`, errorBoundary(authenticate, model));
+    }
 }
 
 getModelsList().then(async (models) => {
