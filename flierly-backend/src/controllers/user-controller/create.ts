@@ -41,7 +41,8 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
             true,
             result,
             "User Created Successfully",
-            "user.create", req.url,
+            "user.create", 
+            req.url,
             null,
             HttpCodes.CREATED)
     );
