@@ -18,7 +18,7 @@ const ERROR_MESSAGES = {
 
 const jwtSecret: string = process.env.JWT_SECRET ?? ''
 
-export async function generateJwtToken(username: string, password: string): Promise<String> {
+export async function generateJwtToken(username: string): Promise<String> {
 
     try {
         const signOptions: jwt.SignOptions = {
