@@ -47,6 +47,8 @@ const schema: mongoose.Schema<User> = new mongoose.Schema<User>(
     }
 );
 
+schema.plugin(require('mongoose-autopopulate'));
+
 const UserModel: mongoose.Model<User> = mongoose.model<User>('User', schema);
 
 export default UserModel;
