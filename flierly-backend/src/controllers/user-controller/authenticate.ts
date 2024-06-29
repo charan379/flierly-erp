@@ -29,6 +29,9 @@ const authenticate = async (req: Request, res: Response) => {
     // Throw error if provided password does not match with password stored in database
     if (!isPasswordValid)
         throw new FlierlyException("Invalid password", HttpCodes.BAD_REQUEST, "Password does not match", "authenticate-user-controller-invalid-password");
+    // Throw error if user is inactive
+    if (!user.isActive)
+        throw new FlierlyException("Inactive user", HttpCodes.BAD_REQUEST, "User is not activated", "authenticate-user-controller-inactive-user");
     // generate jwt token for further authentication with username
     const token = await generateJwtToken(user.username);
     // tokenExpiresAt
