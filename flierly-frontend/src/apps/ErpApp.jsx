@@ -1,5 +1,5 @@
 import React from 'react'
-import { Suspense, useState } from 'react'
+import { useState } from 'react'
 import reactLogo from '@/assets/react.svg'
 
 export default function ErpApp() {

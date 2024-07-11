@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react'
 import ErpApp from './ErpApp';
-import PageLoader from '../components/PageLoader';
+import PageLoader from '@/components/PageLoader';
 
 const DefaultApp = () => {
   return (
