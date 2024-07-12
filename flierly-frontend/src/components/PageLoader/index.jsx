@@ -4,7 +4,7 @@ import { Spin } from 'antd';
 const PageLoader = () => {
     return (
         <div>
-            <Spin size='large' tip='Loading...' />
+            <Spin size='large' />
         </div>
     )
 }
