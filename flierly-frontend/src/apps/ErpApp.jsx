@@ -6,9 +6,7 @@ import useLocale from "@/redux/locale/useLocale";
 export default function ErpApp() {
   const [count, setCount] = useState(0);
 
-  const { locale } = useLocale();
-
-  console.log(locale);
+  const { locale, resetLocale, changeLanguage } = useLocale();
 
   return (
     <>
@@ -25,9 +23,20 @@ export default function ErpApp() {
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
+        <button onClick={() => resetLocale()}>Reset Language</button>
+        <button onClick={() => changeLanguage({ langCode: "TE", isLoading: false, isSuccess: true, sdfdf:"sdf" })}>Change Language</button>
         <p>
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
+        <ul>
+          {Object.entries(locale).map(entry => {
+            return (
+              <li key={entry[0]}>
+                <b>{entry[0]}</b> : {typeof entry[1] !== 'object' ? entry[1].toString() : "object"}
+              </li>
+            );
+          })}
+        </ul>
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more

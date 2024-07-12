@@ -1,3 +1,3 @@
 import slice from "./slice";
 
-export const {} = slice.actions;
+export const { RESET, CHANGE_LANGUAGE } = slice.actions;
