@@ -6,7 +6,7 @@ import useLocale from "@/redux/locale/useLocale";
 export default function ErpApp() {
   const [count, setCount] = useState(0);
 
-  const { locale, resetLocale, changeLanguage } = useLocale();
+  const { locale, translate, resetLocale, changeLanguage } = useLocale();
 
   return (
     <>
@@ -24,15 +24,15 @@ export default function ErpApp() {
           count is {count}
         </button>
         <button onClick={() => resetLocale()}>Reset Language</button>
-        <button onClick={() => changeLanguage({ langCode: "TE", isLoading: false, isSuccess: true, sdfdf:"sdf" })}>Change Language</button>
+        <button onClick={() => changeLanguage("te_in")}>Change Language</button>
         <p>
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
         <ul>
-          {Object.entries(locale).map(entry => {
+          {Object.entries(locale.result).map(entry => {
             return (
               <li key={entry[0]}>
-                <b>{entry[0]}</b> : {typeof entry[1] !== 'object' ? entry[1].toString() : "object"}
+                <b>{entry[0]}</b> : {translate(entry[0])}
               </li>
             );
           })}

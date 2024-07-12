@@ -1,9 +1,9 @@
-import lang from "@/locale/languages/en_us";
 import statePersist from "../statePersist";
 import { createSlice } from "@reduxjs/toolkit";
+import languages from "@/locale/languages";
 
 const INITIAL_STATE = {
-  result: lang,
+  result: languages['en_us'],
   langCode: "en_us",
   isLoading: false,
   isSuccess: false,
@@ -12,17 +12,25 @@ const INITIAL_STATE = {
 const PERSISTING_STATE = statePersist.get("locale");
 
 const slice = createSlice({
+  // 
   name: "locale",
+  // 
   initialState: PERSISTING_STATE ? PERSISTING_STATE : INITIAL_STATE,
+  // 
   reducers: {
     // Reducer to change locale language
     CHANGE_LANGUAGE: (state, action) => {
-      const NEW_LANG = action.payload;
-      for (let [key, value] of Object.entries(NEW_LANG)) {
-        if (state.hasOwnProperty(key)) {
-          state[key] = value;
-        }
+      const LANG_CODE = action.payload.toLowerCase();
+      // Change Language
+      if (languages.hasOwnProperty(LANG_CODE)) {
+        state['result'] = languages[LANG_CODE];
+        state['langCode'] = LANG_CODE;
+        state['isSuccess'] = true;
+      } else {
+        state['isSuccess'] = false;
       }
+      // 
+      window.localStorage.setItem('locale', JSON.stringify(state))
     },
     // Reducer to reset locale state to en_US
     RESET: (state) => {
@@ -32,6 +40,7 @@ const slice = createSlice({
         }
       }
       state['isSuccess'] = true
+      window.localStorage.setItem('locale', JSON.stringify(state))
     },
     // 
   },
