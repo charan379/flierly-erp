@@ -1,0 +1,45 @@
+import Loading from "@/components/Loading";
+import LoginForm from "@/forms/LoginForm";
+import AuthModule from "@/modules/Auth/AuthModule";
+import useLocale from "@/redux/locale/useLocale";
+import { Form } from "antd";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
+const Login = () => {
+  const { translate } = useLocale();
+  const navigate = useNavigate();
+
+  return <AuthModule authForm={<FormContainer />} AUTH_TITLE="sign_in" />;
+};
+
+const FormContainer = () => {
+  return (
+    <Loading isLoading={false}>
+      <Form
+        layout="vertical"
+        name="login_form"
+        className="login-form"
+        initialValues={{
+          remember: true,
+        }}
+        onFinish={() => console.log("onFinish completed")}
+      >
+        <LoginForm />
+        <Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="login-form-button"
+            loading={false}
+            size="large"
+          >
+            {translate("sign_in")}
+          </Button>
+        </Form.Item>
+      </Form>
+    </Loading>
+  );
+};
+
+export default Login;
