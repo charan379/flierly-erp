@@ -1,5 +1,5 @@
 import useLocale from "@/redux/locale/useLocale";
-import { Layout } from "antd";
+import { Col, Layout, Row } from "antd";
 import React from "react";
 
 /**

@@ -2,18 +2,19 @@ import Loading from "@/components/Loading";
 import LoginForm from "@/forms/LoginForm";
 import AuthModule from "@/modules/Auth/AuthModule";
 import useLocale from "@/redux/locale/useLocale";
-import { Form } from "antd";
+import { Button, Form } from "antd";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const { translate } = useLocale();
   const navigate = useNavigate();
 
   return <AuthModule authForm={<FormContainer />} AUTH_TITLE="sign_in" />;
 };
 
 const FormContainer = () => {
+  const { translate } = useLocale();
+
   return (
     <Loading isLoading={false}>
       <Form

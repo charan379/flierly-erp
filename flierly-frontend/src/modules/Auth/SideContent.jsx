@@ -1,5 +1,5 @@
 import useLocale from "@/redux/locale/useLocale";
-import { Layout, Space, Typography } from "antd";
+import { Divider, Layout, Space, Typography } from "antd";
 import React from "react";
 
 const { Content } = Layout;
