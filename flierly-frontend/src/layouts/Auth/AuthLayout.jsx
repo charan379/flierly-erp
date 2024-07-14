@@ -6,11 +6,11 @@ import React from "react";
  * AuthLayout component to create a layout for authentication related pages.
  *
  * @param {Object} props - Props passed to the component.
- * @param {React.ReactNode} props.sideContent - Content to be displayed on the side (e.g., an image or promotional content).
+ * @param {React.ReactNode} props.rightSideContent - Content to be displayed on the right side (e.g., an image or promotional content).
  * @param {React.ReactNode} props.children - Main content to be displayed (e.g., a form or main text).
  * @returns {JSX.Element} The rendered component.
  */
-const AuthLayout = ({ sideContent, children }) => {
+const AuthLayout = ({ rightSideContent, children }) => {
   // Using the useLocale hook to get the current language direction (ltr or rtl)
   const { langDirection } = useLocale();
 
@@ -24,7 +24,7 @@ const AuthLayout = ({ sideContent, children }) => {
     >
       {/* Using Row and Col components to define a responsive layout */}
       <Row>
-        {/* Column for side content, hidden on extra small and small screens */}
+        {/* Column for right side content, hidden on extra small and small screens */}
         <Col
           xs={{ span: 0, order: 2 }}
           sm={{ span: 0, order: 2 }}
@@ -34,7 +34,7 @@ const AuthLayout = ({ sideContent, children }) => {
             minHeight: "100vh",
           }}
         >
-          {sideContent}
+          {rightSideContent}
         </Col>
         {/* Column for main content, takes full width on extra small and small screens */}
         <Col
