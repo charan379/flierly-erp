@@ -13,7 +13,7 @@ const Login = () => {
 };
 
 const FormContainer = () => {
-  const { translate } = useLocale();
+  const { translate, langDirection } = useLocale();
 
   return (
     <Loading isLoading={false}>
@@ -37,6 +37,7 @@ const FormContainer = () => {
           >
             {translate("sign_in")}
           </Button>
+          {translate('or')} <a href="/register"> {translate('register_now')} </a>
         </Form.Item>
       </Form>
     </Loading>
