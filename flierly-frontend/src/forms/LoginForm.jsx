@@ -36,7 +36,7 @@ const LoginForm = () => {
 
       <Form.Item
         label={translate("password")} // Translated label for password field
-        name={"password"} // Name of the form field
+        name="password" // Name of the form field
         rules={[{ required: true }]} // Validation rules
         tooltip={{
           title: "Password is required", // Tooltip text
@@ -51,9 +51,10 @@ const LoginForm = () => {
       </Form.Item>
 
       <Form.Item>
-        <Form.Item name="remember" valuePropName="checked" noStyle> {/* Remember me checkbox */}
-          <Checkbox>{translate("remember_me")}</Checkbox> {/* Translated checkbox label */}
+        <Form.Item name="remember" valuePropName="checked" noStyle  /* Remember me checkbox */> 
+          <Checkbox>{translate("remember_me")}</Checkbox> 
         </Form.Item>
+        {/*  */}
         <a
           className="login-form-forgot" // CSS class for the forgot password link
           href="/forgetpassword" // Link to forgot password page
@@ -61,6 +62,7 @@ const LoginForm = () => {
         >
           {translate("forgot_password")} {/* Translated link text */}
         </a>
+        {/*  */}
       </Form.Item>
     </div>
   );
