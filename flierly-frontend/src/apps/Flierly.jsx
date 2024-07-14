@@ -1,7 +1,8 @@
-import React, { Suspense } from 'react'
-import ErpApp from './ErpApp';
-import PageLoader from '@/components/PageLoader';
-import AntdConfigProvider from '@/locale/AntdConfigProvider';
+import React, { Suspense } from "react";
+import ErpApp from "./ErpApp";
+import PageLoader from "@/components/PageLoader";
+import AntdConfigProvider from "@/locale/AntdConfigProvider";
+import AuthRouter from "@/router/AuthRouter";
 
 const DefaultApp = () => {
   return (
@@ -10,16 +11,17 @@ const DefaultApp = () => {
         <ErpApp />
       </Suspense>
     </AntdConfigProvider>
-  )
+  );
 };
 
 function Flierly() {
-
-  return <DefaultApp />;
+  // return <DefaultApp />;
 
   return (
-    <div>FlierlyApp</div>
-  )
-};
+    <AntdConfigProvider>
+      <AuthRouter />
+    </AntdConfigProvider>
+  );
+}
 
-export default Flierly
+export default Flierly;
