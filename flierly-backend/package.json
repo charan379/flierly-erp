@@ -1,7 +1,7 @@
 {
   "name": "flierly-backend",
   "version": "1.0.0",
-  "description": "Flexible Lean Integrated Enterprise Resource Planning",
+  "description": "Flexible Lean Integrated Enterprise Resource Planning Leveraging Yield",
   "main": "src/server.js",
   "scripts": {
     "start": "node dist/server.js",
