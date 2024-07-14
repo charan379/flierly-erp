@@ -22,7 +22,7 @@ const LoginForm = () => {
         name="email" // Name of the form field
         rules={[{ required: true }, { type: "email" }]} // Validation rules
         tooltip={{
-          title: "Email is required", // Tooltip text
+          title: translate("email_is_required"), // Tooltip text
           icon: <InfoCircleOutlined />, // Tooltip icon
         }}
       >
@@ -39,7 +39,7 @@ const LoginForm = () => {
         name="password" // Name of the form field
         rules={[{ required: true }]} // Validation rules
         tooltip={{
-          title: "Password is required", // Tooltip text
+          title: translate('password_is_required'), // Tooltip text
           icon: <InfoCircleOutlined />, // Tooltip icon
         }}
       >
