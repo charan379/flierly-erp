@@ -5,7 +5,7 @@
   src:
     local('Nunito Bold'),
     local('Nunito-Bold'),
-    url(https://fonts.gstatic.com/s/nunito/v26/XRXI3I6Li01BKofiOc5wtlZ2di8HDFwmdTQ3j6zbXWjgeg.woff2)
+    url('https://fonts.gstatic.com/s/nunito/v26/XRXI3I6Li01BKofiOc5wtlZ2di8HDFwmdTQ3j6zbXWjgeg.woff2')
       format('woff2');
   font-display: swap;
 }
