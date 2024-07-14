@@ -1,5 +1,5 @@
 // Importing ConfigProvider from Ant Design to configure global settings for components
-import { ConfigProvider } from "antd";
+import { ConfigProvider, theme } from "antd";
 
 /**
  * AntdConfigProvider component wraps the entire application with Ant Design's ConfigProvider.
@@ -11,7 +11,11 @@ import { ConfigProvider } from "antd";
 export default function AntdConfigProvider({ children }) {
   return (
     // ConfigProvider component from Ant Design to provide global configuration
-    <ConfigProvider>
+    <ConfigProvider
+      theme={{
+        algorithm: [theme.defaultAlgorithm, theme.compactAlgorithm]
+      }}
+    >
       {children} {/* Rendering child components wrapped by ConfigProvider */}
     </ConfigProvider>
   );
