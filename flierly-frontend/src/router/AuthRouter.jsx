@@ -1,4 +1,5 @@
 import Login from "@/pages/Login";
+import PageNotFound from "@/pages/PageNotFound";
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 
@@ -16,6 +17,8 @@ const AuthRouter = () => {
       <Route element={<Login />} path="/login" />
       {/* Route for the /logout path, redirecting to the /login path */}
       <Route element={<Navigate to="/login" replace />} path="/logout" />
+      {/* Route for any undefined paths, rendering the NotFound component */}
+      <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
 };
