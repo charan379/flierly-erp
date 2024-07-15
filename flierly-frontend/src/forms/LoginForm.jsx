@@ -21,7 +21,7 @@ const LoginForm = () => {
     <Loading isLoading={false}>
       <Form
         layout="vertical"
-        name="login_form"
+        name="login"
         className="login-form"
         initialValues={{
           remember: true,
