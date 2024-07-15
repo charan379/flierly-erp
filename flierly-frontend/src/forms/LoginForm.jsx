@@ -2,7 +2,7 @@ import useLocale from "@/redux/locale/useLocale";
 import {
   InfoCircleOutlined,
   LockOutlined,
-  UserOutlined,
+  MailOutlined,
 } from "@ant-design/icons";
 import { Checkbox, Form, Input } from "antd";
 import React from "react";
@@ -27,7 +27,7 @@ const LoginForm = () => {
         }}
       >
         <Input
-          prefix={<UserOutlined className="site-form-item-icon" />} // Prefix icon for the input field
+          prefix={<MailOutlined className="site-form-item-icon" />} // Prefix icon for the input field
           placeholder={translate("email")} // Translated placeholder text
           type="email" // Input type
           size="large" // Size of the input field
@@ -51,8 +51,8 @@ const LoginForm = () => {
       </Form.Item>
 
       <Form.Item>
-        <Form.Item name="remember" valuePropName="checked" noStyle  /* Remember me checkbox */> 
-          <Checkbox>{translate("remember_me")}</Checkbox> 
+        <Form.Item name="remember" valuePropName="checked" noStyle  /* Remember me checkbox */>
+          <Checkbox>{translate("remember_me")}</Checkbox>
         </Form.Item>
         {/*  */}
         <a
