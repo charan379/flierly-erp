@@ -23,7 +23,8 @@ const LoginForm = () => {
       <Form
         layout="vertical"
         name="login"
-        className="login-form"
+        className="auth-form"
+        id="login-form"
         initialValues={{
           remember: true,
         }}
@@ -76,7 +77,8 @@ const LoginForm = () => {
             </Form.Item>
             {/*  */}
             <a
-              className="login-form-forgot" // CSS class for the forgot password link
+              className="float-right-line-normal-pt-2" // CSS class for the forgot password link
+              id="login-form-forgot"
               href="/forgetpassword" // Link to forgot password page
               style={{ marginLeft: langDirection === "rtl" ? "220px" : "0px" }} // Conditional margin based on language direction
             >
@@ -90,7 +92,7 @@ const LoginForm = () => {
           <Button
             type="primary"
             htmlType="submit"
-            className="login-form-button"
+            className="auth-form-button"
             loading={false}
             size="large"
           >
