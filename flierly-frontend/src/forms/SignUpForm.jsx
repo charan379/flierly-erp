@@ -41,6 +41,7 @@ const SignUpForm = () => {
                             title: translate("username_is_required"), // Tooltip text
                             icon: <InfoCircleOutlined />, // Tooltip icon
                         }}
+                        hasFeedback
                     >
                         <Input
                             prefix={<UserOutlined className='site-form-item-icon' />} // Prefix icon for the input field
@@ -60,6 +61,7 @@ const SignUpForm = () => {
                             title: translate("email_is_required"), // Tooltip text
                             icon: <InfoCircleOutlined />, // Tooltip icon
                         }}
+                        hasFeedback
                     >
                         <Input
                             prefix={<MailOutlined className="site-form-item-icon" />} // Prefix icon for the input field
@@ -79,6 +81,7 @@ const SignUpForm = () => {
                             title: translate('password_is_required'), // Tooltip text
                             icon: <InfoCircleOutlined />, // Tooltip icon
                         }}
+                        hasFeedback
                     >
                         <Input.Password
                             prefix={<LockOutlined className="site-form-item-icon" />} // Prefix icon for the password field
@@ -93,6 +96,18 @@ const SignUpForm = () => {
                             name="terms"
                             valuePropName="checked"
                             noStyle
+                            rules={[
+                                {
+                                    validator: async (_, checked) => {
+                                        if (checked)
+                                            return Promise.resolve();
+                                        else
+                                            return Promise.reject(
+                                                new Error(translate('treams_and_conditions_must_be_accepted'))
+                                            )
+                                    }
+                                }
+                            ]}
                         >
                             <Checkbox>{translate("accept_terms_conditions")}</Checkbox>
                         </Form.Item>
