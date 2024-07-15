@@ -57,10 +57,6 @@ const SignUpForm = () => {
                             { required: true, message: translate("email_is_required") },
                             { type: "email" }
                         ]}
-                        tooltip={{
-                            title: translate("email_is_required"), // Tooltip text
-                            icon: <InfoCircleOutlined />, // Tooltip icon
-                        }}
                         hasFeedback
                     >
                         <Input
@@ -89,6 +85,27 @@ const SignUpForm = () => {
                             size="large" // Size of the input field
                         />
                     </Form.Item>
+                    {/* confirm password */}
+                    <Form.Item
+                        label={translate("confirm_password")} // Translated label for confirm password field
+                        name="confirm_password" // Name of the form field
+                        dependencies={['password']}
+                        rules={[ // Validation rules
+                            { required: true, message: translate('confirm_password_is_required') },
+                            ({ getFieldValue }) => ({
+                                async validator(_, value) {
+                                    return (!value || getFieldValue('password') === value) ? Promise.resolve() : Promise.reject(new Error(translate('passwords_doesnt_match')))
+                                }
+                            })
+                        ]}
+                        hasFeedback
+                    >
+                        <Input.Password
+                            prefix={<LockOutlined className="site-form-item-icon" />} // Prefix icon for the confirm password field
+                            placeholder={translate("confirm_password")} // Translated placeholder text
+                            size="large" // Size of the input field
+                        />
+                    </Form.Item>
                     {/* accept terms and conditions */}
                     <Form.Item>
                         {/* Terms checkbox */}
@@ -98,14 +115,7 @@ const SignUpForm = () => {
                             noStyle
                             rules={[
                                 {
-                                    validator: async (_, checked) => {
-                                        if (checked)
-                                            return Promise.resolve();
-                                        else
-                                            return Promise.reject(
-                                                new Error(translate('treams_and_conditions_must_be_accepted'))
-                                            )
-                                    }
+                                    validator: async (_, value) => value ? Promise.resolve() : Promise.reject(new Error(translate('treams_and_conditions_must_be_accepted')))
                                 }
                             ]}
                         >
