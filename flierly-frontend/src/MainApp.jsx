@@ -10,7 +10,7 @@ import store from '@/redux/store';
 const Flierly = lazy(
   () =>
     new Promise((resolve) => {
-      setTimeout(() => resolve(import("@/apps/Flierly")), 3000);
+      setTimeout(() => resolve(import("@/apps/Flierly")), 500);
     })
 );
 
