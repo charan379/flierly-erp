@@ -23,7 +23,7 @@ const SignUpForm = () => {
                 name='sign_up'
                 className='auth-form sign-up-form'
                 initialValues={{
-                    terms: true
+                    terms: false
                 }}
                 onFinish={() => console.log("onFinish completed")}
             >
