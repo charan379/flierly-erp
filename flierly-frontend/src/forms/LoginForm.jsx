@@ -19,6 +19,7 @@ const LoginForm = () => {
   const navigate = useNavigate();
   return (
     <Loading isLoading={false}>
+      {/* form */}
       <Form
         layout="vertical"
         name="login"
@@ -28,6 +29,7 @@ const LoginForm = () => {
         }}
         onFinish={() => console.log("onFinish completed")}
       >
+        {/* form fields */}
         <div style={{ direction: langDirection }}> {/* Setting text direction based on language */}
           {/* Email */}
           <Form.Item
@@ -67,9 +69,9 @@ const LoginForm = () => {
               size="large" // Size of the input field
             />
           </Form.Item>
-
+          {/* remember me with password reset link */}
           <Form.Item>
-            <Form.Item name="remember" valuePropName="checked" noStyle  /* Remember me checkbox */>
+            <Form.Item name="remember" valuePropName="checked" noStyle required  /* Remember me checkbox */>
               <Checkbox>{translate("remember_me")}</Checkbox>
             </Form.Item>
             {/*  */}
@@ -83,6 +85,7 @@ const LoginForm = () => {
             {/*  */}
           </Form.Item>
         </div>
+        {/* form submission */}
         <Form.Item>
           <Button
             type="primary"
