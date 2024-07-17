@@ -13,15 +13,18 @@ export default function useLocale() {
 
   // Accessing dispatch function to dispatch actions
   const dispatch = useDispatch();
-  
+
   // Return an object with relevant locale information and actions
   return {
     // Current locale state
     locale,
-    
+
+    // Current language code
+    langCode: locale.langCode,
+
     // Current language direction
     langDirection: locale.langDirection,
-    
+
     /**
      * Translates a given key using the current locale's language translation data.
      * 
@@ -29,19 +32,19 @@ export default function useLocale() {
      * @returns {string} The translated string if available, otherwise returns the key itself wrapped in curly braces.
      */
     translate: (value) => getTranslation(locale.result, value),
-    
+
     /**
      * Resets the locale state to its initial values.
      */
     resetLocale: () => dispatch(RESET()),
-    
+
     /**
      * Changes the language to the specified language code.
      * 
      * @param {string} langCode - The language code to change to.
      */
     changeLanguage: (langCode) => dispatch(CHANGE_LANGUAGE(langCode)),
-    
+
     /**
      * Changes the language direction (ltr or rtl).
      * 
