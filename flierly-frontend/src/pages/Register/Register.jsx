@@ -3,7 +3,7 @@ import AuthModule from '@/modules/Auth/AuthModule';
 import React from 'react'
 
 const Register = () => {
-  return <AuthModule authForm={<SignUpForm />} AUTH_TITLE="sign_up" />;
+  return <AuthModule authForm={<SignUpForm />} AUTH_TITLE="sign_up" isForSignUp />;
 
 }
 
