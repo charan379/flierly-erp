@@ -19,7 +19,7 @@ function Flierly() {
 
   return (
     <AntdConfigProvider>
-      <AuthRouter />
+        <AuthRouter />
     </AntdConfigProvider>
   );
 }
