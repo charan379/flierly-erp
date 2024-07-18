@@ -1,3 +1,4 @@
+import LangSelector from "@/features/Language/LangSelector";
 import useLocale from "@/redux/locale/useLocale";
 import { Col, Layout, Row } from "antd";
 import React from "react";
@@ -44,6 +45,21 @@ const AuthLayout = ({ rightSideContent, children }) => {
           lg={{ span: 12, order: 2 }}
           style={{ background: "#FFF", minHeight: "100vh" }}
         >
+          {/* Header */}
+          <Layout.Header
+            style={{
+              padding: '15px',
+              background: '#FFF',
+              display: 'flex',
+              flexDirection: langDirection === 'rtl' ? 'row' : 'row-reverse',
+              justifyContent: 'flex-start',
+              alignItems: 'center',
+              gap: ' 15px',
+            }}>
+            {/* Lang selector */}
+            <LangSelector />
+          </Layout.Header>
+          {/* Auth forms / Children */}
           {children}
         </Col>
       </Row>
