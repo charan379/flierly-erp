@@ -26,16 +26,23 @@ export function useTheme() {
     // 
     function sysPreferenceListner(event) {
         setIsDarkSystem(event?.matches);
+        if (theme !== 'system') return;
         if (event?.matches)
             changeCssRootVariables('dark');
         else
             changeCssRootVariables('light');
     }
 
-    function changeCssRootVariables(theme) {
+    function changeCssRootVariables(themePref) {
         // 
-        if (!['dark', 'light', 'system'].includes(theme))
+        if (!['dark', 'light', 'system'].includes(themePref))
             return;
+
+        const theme = () => {
+            if (themePref === 'system' && isDarkSystem) return 'dark';
+            if (themePref === 'system' && !isDarkSystem) return 'light';
+            return themePref;
+        }
 
         // 
         const cssRoot = document.querySelector(':root');
@@ -76,17 +83,23 @@ export function useTheme() {
             '--tooltip-font-color': '#020d1a',
         }
 
-
-        // Update the CSS variables
-        if (theme === 'dark') {
-            for (const variable in darkRootVariables) {
-                cssRoot.style.setProperty(variable, darkRootVariables[variable]);
-            }
-        } else {
-            for (const variable in lightRootVariables) {
-                cssRoot.style.setProperty(variable, lightRootVariables[variable]);
-            }
+        switch (theme()) {
+            case 'dark':
+                // Update the CSS variables for dark theme
+                for (const variable in darkRootVariables) {
+                    cssRoot.style.setProperty(variable, darkRootVariables[variable]);
+                }
+                break;
+            case 'light':
+                // Update the CSS variables for light theme
+                for (const variable in lightRootVariables) {
+                    cssRoot.style.setProperty(variable, lightRootVariables[variable]);
+                }
+                break;
+            default:
+                break;
         }
+
     }
 
     useEffect(() => {
@@ -103,7 +116,7 @@ export function useTheme() {
         return () => {
             darkThemeMq.removeEventListener('change', sysPreferenceListner)
         }
-    }, [theme?.mode])
+    }, [theme])
 
     return {
         theme: theme,
