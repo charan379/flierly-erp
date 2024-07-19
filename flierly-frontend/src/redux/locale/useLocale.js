@@ -31,7 +31,7 @@ export default function useLocale() {
      * @param {string} value - The key to translate.
      * @returns {string} The translated string if available, otherwise returns the key itself wrapped in curly braces.
      */
-    translate: (value) => getTranslation(locale.result, value),
+    translate: (value) => getTranslation(locale.translation, value),
 
     /**
      * Resets the locale state to its initial values.

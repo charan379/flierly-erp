@@ -4,7 +4,7 @@ import languages from "@/locale/languages";
 
 // Initial state for the locale slice
 const INITIAL_STATE = {
-  result: languages["en_us"], // Default language is English (US)
+  translation: languages["en_us"], // Default language is English (US)
   langCode: "en_us", // Default language code
   langDirection: "ltr", // Default language direction is left-to-right
   isLoading: false, // Loading state
@@ -35,7 +35,7 @@ const slice = createSlice({
       const LANG_CODE = action.payload.toLowerCase();
       // Change Language
       if (languages.hasOwnProperty(LANG_CODE)) {
-        state["result"] = languages[LANG_CODE];
+        state["translation"] = languages[LANG_CODE];
         state["langCode"] = LANG_CODE;
         state["isSuccess"] = true;
       } else {
