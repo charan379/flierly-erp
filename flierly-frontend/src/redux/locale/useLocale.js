@@ -25,6 +25,9 @@ export default function useLocale() {
     // Current language direction
     langDirection: locale.langDirection,
 
+    // Current theme 
+    themeMode: locale.theme,
+
     /**
      * Translates a given key using the current locale's language translation data.
      * 

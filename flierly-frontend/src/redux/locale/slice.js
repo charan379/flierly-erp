@@ -7,6 +7,7 @@ const INITIAL_STATE = {
   translation: languages["en_us"], // Default language is English (US)
   langCode: "en_us", // Default language code
   langDirection: "ltr", // Default language direction is left-to-right
+  theme: 'system', // Default theme is system based
   isLoading: false, // Loading state
   isSuccess: false, // Success state
 };
@@ -40,6 +41,23 @@ const slice = createSlice({
         state["isSuccess"] = true;
       } else {
         state["isSuccess"] = false;
+      }
+      // Persisting the state in localStorage
+      window.localStorage.setItem("locale", JSON.stringify(state));
+    },
+
+    /**
+     * Reducer to change the theme mode
+     * 
+     * @param {Object} state - The current state of the slice.
+     * @param {Object} action - The action object.
+     * @param {string} action.payload "light" | "dark" | "system" - The new theme code to switch to.
+     */
+    CHANGE_THEME: (state, action) => {
+      const NEW_THEME = action.payload.toLowerCase();
+      // Change theme
+      if (['light', 'dark', 'system'].includes(NEW_THEME)) {
+        state['theme'] = NEW_THEME;
       }
       // Persisting the state in localStorage
       window.localStorage.setItem("locale", JSON.stringify(state));
