@@ -1,9 +1,19 @@
-import { BulbFilled, BulbOutlined, BulbTwoTone, SunFilled, } from '@ant-design/icons'
+import { useTheme } from '@/theme/useTheme';
+import { BulbFilled, MoonFilled, SunFilled, } from '@ant-design/icons'
 import Icon from '@ant-design/icons';
 import { Button, Tooltip } from 'antd'
 import React from 'react'
 
 const ThemeToggler = () => {
+    const { theme, setTheme } = useTheme();
+
+    const themeIcon = () => {
+        if (theme === 'system') return <Icon component={A} />;
+        if (theme === 'dark') return <MoonFilled />;
+        if (theme === 'light') return <SunFilled />;
+        return <BulbFilled />
+    }
+
     return (
         <Tooltip title="Toggle Theme">
             <Button
@@ -13,7 +23,22 @@ const ThemeToggler = () => {
                 style={{
                     marginTop: '5px',
                 }}
-                icon={<Icon component={A} />}
+                icon={themeIcon()}
+                onClick={() => {
+                    switch (theme) {
+                        case 'system':
+                            setTheme('light');
+                            break;
+                        case 'light':
+                            setTheme('dark');
+                            break;
+                        case 'dark':
+                            setTheme('system');
+                            break;
+                        default:
+                            break;
+                    }
+                }}
             />
         </Tooltip>
     )

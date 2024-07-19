@@ -1,6 +1,7 @@
 import LangSelector from "@/features/Language/LangSelector";
+import ThemeToggler from "@/features/Theme/ThemeToggler";
 import useLocale from "@/redux/locale/useLocale";
-import { Col, Layout, Row } from "antd";
+import { Button, Col, Layout, Row } from "antd";
 import React from "react";
 
 /**
@@ -58,6 +59,8 @@ const AuthLayout = ({ rightSideContent, children }) => {
             }}>
             {/* Lang selector */}
             <LangSelector />
+            <ThemeToggler />
+            <Button style={{backgroundColor:'var(--bg-color)'}}>Test Theme</Button>
           </Layout.Header>
           {/* Auth forms / Children */}
           {children}
