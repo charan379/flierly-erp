@@ -42,17 +42,17 @@ export default function useLocale() {
     resetLocale: () => dispatch(RESET()),
 
     /**
-     * Changes the language to the specified language code.
+     * Sets the language to the specified language code.
      * 
      * @param {string} langCode - The language code to change to.
      */
-    changeLanguage: (langCode) => dispatch(CHANGE_LANGUAGE(langCode)),
+    setLanguage: (langCode) => dispatch(CHANGE_LANGUAGE(langCode)),
 
     /**
-     * Changes the language direction (ltr or rtl).
+     * Sets the language direction (ltr or rtl).
      * 
      * @param {string} direction - The new language direction.
      */
-    changeLangDirection: (direction) => dispatch(CHANGE_LANG_DIRECTION(direction)),
+    setLangDirection: (direction) => dispatch(CHANGE_LANG_DIRECTION(direction)),
   };
 }

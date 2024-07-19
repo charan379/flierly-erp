@@ -7,14 +7,14 @@ import useLocale from '@/redux/locale/useLocale';
 const LangSelector = () => {
 
     const { isMobile } = useResponsive();
-    const { langCode, changeLanguage } = useLocale();
+    const { langCode, setLanguage } = useLocale();
     return (
         <Select
             showSearch
             defaultValue={langCode}
             loading={false}
             options={languageOptions()}
-            onChange={(newLangCode) => changeLanguage(newLangCode)}
+            onChange={(newLangCode) => setLanguage(newLangCode)}
             filterOption={(input, option) =>
                 (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
             }

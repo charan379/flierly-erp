@@ -6,7 +6,7 @@ import useLocale from "@/redux/locale/useLocale";
 export default function ErpApp() {
   const [count, setCount] = useState(0);
 
-  const { locale, translate, resetLocale, changeLanguage } = useLocale();
+  const { locale, translate, resetLocale, setLanguage } = useLocale();
 
   return (
     <>
@@ -24,7 +24,7 @@ export default function ErpApp() {
           count is {count}
         </button>
         <button onClick={() => resetLocale()}>Reset Language</button>
-        <button onClick={() => changeLanguage("te_in")}>Change Language</button>
+        <button onClick={() => setLanguage("te_in")}>Change Language</button>
         <p>
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>

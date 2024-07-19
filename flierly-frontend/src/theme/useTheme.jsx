@@ -12,30 +12,32 @@ export function useTheme() {
 
     const [isDarkSystem, setIsDarkSystem] = useState(getSysPreference());
 
+    const memoizedCssRootChangeHandler = useMemo(() => changeCssRootVariables(theme), [theme])
+
+    // 
     function initTheme() {
-        if (isDarkSystem && theme?.mode === "") {
-            dispatch(setTheme('dark'))
-        } else if (!isDarkSystem && theme?.mode === "") {
-            dispatch(setTheme('light'))
+        if (theme === "system") {
+            isDarkSystem ? changeCssRootVariables('dark') : changeCssRootVariables('light');
+        } else {
+            changeCssRootVariables(theme);
         }
-    }
+    };
 
-    function initTheme2() {
-        i(theme === "system") {
-            isDarkSystem ? changeCssRootVariables('dark') : "";
-        }
-    }
-
+    // 
     function sysPreferenceListner(event) {
         setIsDarkSystem(event?.matches);
-        if (event?.matches) {
-            dispatch(setTheme('dark'))
-        } else {
-            dispatch(setTheme('light'))
-        }
+        if (event?.matches)
+            changeCssRootVariables('dark');
+        else
+            changeCssRootVariables('light');
     }
 
     function changeCssRootVariables(theme) {
+        // 
+        if (!['dark', 'light', 'system'].includes(theme))
+            return;
+
+        // 
         const cssRoot = document.querySelector(':root');
 
         /* light theme */
@@ -87,8 +89,6 @@ export function useTheme() {
         }
     }
 
-    const memoizedCssRootChangeHandler = useMemo(() => changeCssRootVariables(theme), [theme])
-
     useEffect(() => {
         initTheme();
 
@@ -106,7 +106,7 @@ export function useTheme() {
     }, [theme?.mode])
 
     return {
-        theme: theme?.mode,
-        toogleTheme: () => dispatch(switchTheme())
+        theme: theme,
+        setTheme: (preference) => dispatch(CHANGE_THEME(preference)),
     }
 }
