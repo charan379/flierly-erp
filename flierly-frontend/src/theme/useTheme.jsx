@@ -1,125 +1,86 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { useEffect, useMemo, useState } from 'react';
-import { CHANGE_THEME } from '@/redux/locale/actions';
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState, useCallback } from "react";
+import {
+  CHANGE_THEME_MODE,
+  CHANGE_THEME_PREFERENCE,
+} from "@/redux/theme/actions";
+import throttle from "@/utils/throttle";
+import darkTheme from "./themes/dark";
+import lightTheme from "./themes/light";
 
 export function useTheme() {
+  // Combined selector to get theme-related state from Redux store
+  const {
+    preference,
+    mode: theme,
+    compact,
+  } = useSelector((state) => state.theme);
 
-    const theme = useSelector((state) => state.locale.theme)
+  const dispatch = useDispatch();
 
-    const dispatch = useDispatch();
+  // Function to get system preference for dark mode
+  const getSysPreference = () =>
+    window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-    const getSysPreference = () => window.matchMedia("(prefers-color-scheme: dark)").matches;
+  // State to track if the system prefers dark mode
+  const [isDarkSystem, setIsDarkSystem] = useState(getSysPreference);
 
-    const [isDarkSystem, setIsDarkSystem] = useState(getSysPreference());
+  // Memoize the function to change CSS root variables based on theme
+  const changeCssRootVariables = useCallback((theme) => {
+    if (!["dark", "light"].includes(theme)) return;
 
-    const memoizedCssRootChangeHandler = useMemo(() => changeCssRootVariables(theme), [theme])
+    const cssRoot = document.querySelector(":root");
 
-    // 
-    function initTheme() {
-        if (theme === "system") {
-            isDarkSystem ? changeCssRootVariables('dark') : changeCssRootVariables('light');
-        } else {
-            changeCssRootVariables(theme);
-        }
+    // Define CSS variables for light and dark themes
+    const variables = theme === "dark" ? darkTheme : lightTheme;
+
+    // Update the CSS variables in the root element
+    for (const variable in variables) {
+      cssRoot.style.setProperty(variable, variables[variable]);
+    }
+  }, []);
+
+  // Initialize theme based on user preference or system preference
+  const initTheme = useCallback(() => {
+    if (preference === "system") {
+      dispatch(CHANGE_THEME_MODE(isDarkSystem ? "dark" : "light"));
+    } else if (["dark", "light"].includes(preference)) {
+      dispatch(CHANGE_THEME_MODE(preference));
+    }
+  }, [preference, isDarkSystem, dispatch]);
+
+  // Event listener for system preference changes, throttled to limit frequency
+  const sysPreferenceListener = useCallback(
+    throttle((event) => {
+      setIsDarkSystem(event.matches);
+      if (preference === "system") {
+        dispatch(CHANGE_THEME_MODE(event.matches ? "dark" : "light"));
+      }
+    }, 200),
+    [preference, dispatch]
+  );
+
+  useEffect(() => {
+    initTheme(); // Initialize theme on component mount
+
+    const darkThemeMq = window.matchMedia("(prefers-color-scheme: dark)");
+    darkThemeMq.addEventListener("change", sysPreferenceListener); // Add event listener for system preference changes
+
+    return () => {
+      darkThemeMq.removeEventListener("change", sysPreferenceListener); // Clean up event listener on component unmount
     };
+  }, [initTheme, sysPreferenceListener]);
 
-    // 
-    function sysPreferenceListner(event) {
-        setIsDarkSystem(event?.matches);
-        if (theme !== 'system') return;
-        if (event?.matches)
-            changeCssRootVariables('dark');
-        else
-            changeCssRootVariables('light');
-    }
+  useEffect(() => {
+    changeCssRootVariables(theme); // Apply CSS root variables based on theme
+    document.body.setAttribute("data-theme", theme); // Set data-theme attribute on body element
+  }, [theme, changeCssRootVariables]);
 
-    function changeCssRootVariables(themePref) {
-        // 
-        if (!['dark', 'light', 'system'].includes(themePref))
-            return;
-
-        const theme = () => {
-            if (themePref === 'system' && isDarkSystem) return 'dark';
-            if (themePref === 'system' && !isDarkSystem) return 'light';
-            return themePref;
-        }
-
-        // 
-        const cssRoot = document.querySelector(':root');
-
-        /* light theme */
-        const lightRootVariables = {
-            '--bg-color': '#e9f1fa',
-            '--font-color': '#020d1a',
-            '--font-color-opacity-half': 'rgba(2, 13, 26, 0.5)',
-            '--ui-element-color': '#c8d9ec',
-            '--ui-element-hover-color': '#22303c',
-            '--ui-element-hover-font-color': '#ffffff',
-            '--button-bg-color': '#4182cb',
-            '--button-font-color': '#fafafa',
-            '--title-box-title-color': '#15202b',
-            '--title-box-title-bg-color': '#d5e1ed',
-            '--movie-modal-bg-color': 'rgb(255, 255, 255)',
-            '--seasons-bg-color': 'rgba(255, 255, 255, 0)',
-            '--tooltip-background-color': 'rgb(7, 52, 88)',
-            '--tooltip-font-color': '#ffffff',
-        }
-
-        /* dark theme */
-        const darkRootVariables = {
-            '--bg-color': '#15202b',
-            '--font-color': '#ffffff',
-            '--font-color-opacity-half': 'rgba(255, 255, 255, 0.5)',
-            '--ui-element-color': '#22303c',
-            '--ui-element-hover-color': '#c8d9ec',
-            '--ui-element-hover-font-color': '#020d1a',
-            '--button-bg-color': '#9400d3',
-            '--button-font-color': '#fafafa',
-            '--title-box-title-color': '#ffffff',
-            '--title-box-title-bg-color': '#192734',
-            '--movie-modal-bg-color': 'rgb(255, 255, 255)',
-            '--seasons-bg-color': 'rgba(255, 255, 255, 0)',
-            '--tooltip-background-color': 'rgb(236 238 240)',
-            '--tooltip-font-color': '#020d1a',
-        }
-
-        switch (theme()) {
-            case 'dark':
-                // Update the CSS variables for dark theme
-                for (const variable in darkRootVariables) {
-                    cssRoot.style.setProperty(variable, darkRootVariables[variable]);
-                }
-                break;
-            case 'light':
-                // Update the CSS variables for light theme
-                for (const variable in lightRootVariables) {
-                    cssRoot.style.setProperty(variable, lightRootVariables[variable]);
-                }
-                break;
-            default:
-                break;
-        }
-
-    }
-
-    useEffect(() => {
-        initTheme();
-
-        memoizedCssRootChangeHandler;
-
-        document.body.setAttribute('data-theme', theme)
-
-        const darkThemeMq = window.matchMedia("(prefers-color-scheme: dark)");
-
-        darkThemeMq.addEventListener('change', sysPreferenceListner)
-
-        return () => {
-            darkThemeMq.removeEventListener('change', sysPreferenceListner)
-        }
-    }, [theme])
-
-    return {
-        theme: theme,
-        setTheme: (preference) => dispatch(CHANGE_THEME(preference)),
-    }
+  return {
+    theme,
+    themePreference: preference,
+    isCompactTheme: compact,
+    setThemePreference: (preference) =>
+      dispatch(CHANGE_THEME_PREFERENCE(preference)), // Function to change theme preference
+  };
 }

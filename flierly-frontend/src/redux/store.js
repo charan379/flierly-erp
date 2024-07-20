@@ -1,16 +1,17 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { localStorageHealthCheck } from "./statePersist";
 import localeReducer from "./locale/reducer";
+import themeReducer from "./theme/reducer";
 
 // Performing a health check for localStorage state persistence
 localStorageHealthCheck();
 
 /**
  * Combines all the reducers into a single root reducer.
- * Currently, it only combines the locale reducer.
  */
 const rootReducer = combineReducers({
   locale: localeReducer,
+  theme: themeReducer,
 });
 
 /**
