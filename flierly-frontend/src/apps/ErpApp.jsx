@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import reactLogo from "@/assets/react.svg";
-import useLocale from "@/redux/locale/useLocale";
+import useLocale from "@/locale/useLocale";
 
 export default function ErpApp() {
   const [count, setCount] = useState(0);

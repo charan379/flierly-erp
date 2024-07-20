@@ -1,5 +1,5 @@
 import React from "react";
-import useLocale from "@/redux/locale/useLocale";
+import useLocale from "@/locale/useLocale";
 import {
   InfoCircleOutlined,
   LockOutlined,

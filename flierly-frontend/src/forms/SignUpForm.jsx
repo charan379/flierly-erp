@@ -1,5 +1,5 @@
 import Loading from '@/components/Loading';
-import useLocale from '@/redux/locale/useLocale'
+import useLocale from "@/locale/useLocale";
 import { InfoCircleOutlined, LockOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input } from 'antd';
 import React from 'react'

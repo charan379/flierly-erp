@@ -1,6 +1,6 @@
 import LangSelector from "@/features/Language/LangSelector";
 import ThemeToggler from "@/features/Theme/ThemeToggler";
-import useLocale from "@/redux/locale/useLocale";
+import useLocale from "@/locale/useLocale";
 import { Button, Col, Layout, Row } from "antd";
 import React from "react";
 

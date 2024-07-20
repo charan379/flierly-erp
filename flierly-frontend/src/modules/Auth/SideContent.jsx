@@ -1,4 +1,4 @@
-import useLocale from "@/redux/locale/useLocale";
+import useLocale from "@/locale/useLocale";
 import { Divider, Layout, Space, Typography } from "antd";
 import React from "react";
 

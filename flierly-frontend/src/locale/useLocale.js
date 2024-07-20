@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { RESET, CHANGE_LANGUAGE, CHANGE_LANG_DIRECTION } from "./actions";
+import { RESET, CHANGE_LANGUAGE, CHANGE_LANG_DIRECTION } from "@/redux/locale/actions";
 import getTranslation from "@/utils/getTranslation";
 
 /**
