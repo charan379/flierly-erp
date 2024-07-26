@@ -50,7 +50,6 @@ const slice = createAsyncSlice({
           state.tokenExpiresAt = "";
           state.isLoggedIn = false;
           state.loading = loadingTypes.FAILED;
-
         },
         // Handle success when the async thunk is fulfilled
         fulfilled: (state, action) => {
@@ -63,6 +62,10 @@ const slice = createAsyncSlice({
           state.loggedInAt = loggedInAt;
           state.tokenExpiresAt = tokenExpiresAt;
           state.isLoggedIn = true;
+        },
+        settled: (state) => {
+          // Persisting the state in localStorage
+          window.localStorage.setItem("auth", JSON.stringify(state));
         },
       }
     ),
