@@ -7,9 +7,7 @@ const INITIAL_STATE = {
   translation: languages["en_us"], // Default language is English (US)
   langCode: "en_us", // Default language code
   langDirection: "ltr", // Default language direction is left-to-right
-  theme: 'system', // Default theme is system based
-  isLoading: false, // Loading state
-  isSuccess: false, // Success state
+  theme: "system", // Default theme is system based
 };
 
 // Fetching the persisted state from localStorage if available
@@ -27,7 +25,7 @@ const slice = createSlice({
   reducers: {
     /**
      * Reducer to change the language.
-     * 
+     *
      * @param {Object} state - The current state of the slice.
      * @param {Object} action - The action object.
      * @param {string} action.payload - The new language code to switch to.
@@ -38,9 +36,6 @@ const slice = createSlice({
       if (languages.hasOwnProperty(LANG_CODE)) {
         state["translation"] = languages[LANG_CODE];
         state["langCode"] = LANG_CODE;
-        state["isSuccess"] = true;
-      } else {
-        state["isSuccess"] = false;
       }
       // Persisting the state in localStorage
       window.localStorage.setItem("locale", JSON.stringify(state));
@@ -48,7 +43,7 @@ const slice = createSlice({
 
     /**
      * Reducer to change the theme mode
-     * 
+     *
      * @param {Object} state - The current state of the slice.
      * @param {Object} action - The action object.
      * @param {string} action.payload "light" | "dark" | "system" - The new theme code to switch to.
@@ -56,8 +51,8 @@ const slice = createSlice({
     CHANGE_THEME: (state, action) => {
       const NEW_THEME = action.payload.toLowerCase();
       // Change theme
-      if (['light', 'dark', 'system'].includes(NEW_THEME)) {
-        state['theme'] = NEW_THEME;
+      if (["light", "dark", "system"].includes(NEW_THEME)) {
+        state["theme"] = NEW_THEME;
       }
       // Persisting the state in localStorage
       window.localStorage.setItem("locale", JSON.stringify(state));
@@ -65,7 +60,7 @@ const slice = createSlice({
 
     /**
      * Reducer to change the language direction.
-     * 
+     *
      * @param {Object} state - The current state of the slice.
      * @param {Object} action - The action object.
      * @param {string} action.payload - The new language direction (ltr or rtl).
@@ -75,9 +70,6 @@ const slice = createSlice({
       // Change language direction
       if (["ltr", "rtl"].includes(langDir)) {
         state["langDirection"] = langDir;
-        state["isSuccess"] = true;
-      } else {
-        state["isSuccess"] = false;
       }
       // Persisting the state in localStorage
       window.localStorage.setItem("locale", JSON.stringify(state));
@@ -85,7 +77,7 @@ const slice = createSlice({
 
     /**
      * Reducer to reset the locale state to the initial state.
-     * 
+     *
      * @param {Object} state - The current state of the slice.
      */
     RESET: (state) => {
@@ -95,7 +87,6 @@ const slice = createSlice({
           state[key] = value;
         }
       }
-      state["isSuccess"] = true;
       // Persisting the state in localStorage
       window.localStorage.setItem("locale", JSON.stringify(state));
     },

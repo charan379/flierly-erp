@@ -6,8 +6,6 @@ const INITIAL_STATE = {
   mode: "", // Mode of theme 'dark' or 'light
   preference: "system", // Preference of theme 'light', 'dark' or 'system'-> defaults to 'system'
   compact: false, // boolean flag indicating whether the ant-compact mode is enabled
-  isLoading: false, // Loading state
-  isSuccess: false, // Success state
 };
 
 // Fetcing the persiste state from local storage if available
