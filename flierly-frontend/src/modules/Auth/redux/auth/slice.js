@@ -11,6 +11,7 @@ const INITIAL_STATE = {
   tokenExpiresAt: "", // Timestamp when the token expires
   isLoggedIn: false, // Indicates if the user is logged in
   loading: loadingTypes.IDLE, // Indicates the current loading state
+  error: {}, // Holds error information
 };
 
 // Retrieve persisted state from localStorage if available
@@ -41,14 +42,16 @@ const slice = createAsyncSlice({
         // Handle the loading state while the async thunk is pending
         pending: (state) => {
           state.loading = loadingTypes.PENDING;
+          state.error = {};
         },
         // Handle errors when the async thunk is rejected
-        rejected: (state) => {
+        rejected: (state, action) => {
           state.user = {};
           state.token = "";
           state.loggedInAt = "";
           state.tokenExpiresAt = "";
           state.isLoggedIn = false;
+          state.error = action.payload.error;
           state.loading = loadingTypes.FAILED;
         },
         // Handle success when the async thunk is fulfilled
