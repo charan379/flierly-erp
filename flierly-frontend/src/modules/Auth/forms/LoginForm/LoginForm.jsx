@@ -9,8 +9,8 @@ import {
 import { Button, Checkbox, Form, Input } from "antd";
 import Loading from "@/components/Loading";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { LOGIN } from "../../redux/auth/actions";
+import { useAuth } from "../../hooks/useAuth";
+import { loadingTypes } from "@/types/loading";
 
 /**
  * LoginForm component to display a login form with email and password fields.
@@ -20,9 +20,10 @@ import { LOGIN } from "../../redux/auth/actions";
 const LoginForm = () => {
   const { translate, langDirection } = useLocale(); // Using the custom hook to get translation function and language direction
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const { loading, login } = useAuth();
+
   return (
-    <Loading isLoading={false}>
+    <Loading isLoading={loading === loadingTypes.PENDING}>
       {/* form */}
       <Form
         layout="vertical"
@@ -32,7 +33,7 @@ const LoginForm = () => {
         initialValues={{
           remember: true,
         }}
-        onFinish={(values) => dispatch(LOGIN(values))}
+        onFinish={(values) => login(values)}
       >
         {/* form fields */}
         <div style={{ direction: langDirection }}>
@@ -125,7 +126,7 @@ const LoginForm = () => {
             type="primary"
             htmlType="submit"
             className="auth-form-button"
-            loading={false}
+            loading={loading === loadingTypes.PENDING}
             size="large"
           >
             {translate("sign_in")}
