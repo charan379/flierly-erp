@@ -46,8 +46,15 @@ const ThemeToggler = () => {
 
 const A = () => {
   return (
-    <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-      <text x="10" y="28" fontFamily="Verdana" fontSize="25" fill="black">
+    <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg" color="inherit">
+      <text
+        x="12"
+        y="27"
+        fontFamily="Verdana"
+        fontSize="20"
+        fill="currentColor"
+        color="inherit"
+      >
         A
       </text>
     </svg>

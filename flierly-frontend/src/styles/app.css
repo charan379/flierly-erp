@@ -1,14 +1,13 @@
 @import "./css/core.css";
 @import "./css/auth.css";
 @import "./css/rest.css";
-@import './css/customAntd.css';
-@import './css/layout.css';
+@import "./css/customAntd.css";
+@import "./css/layout.css";
 @import "./css/navigation.css";
 @import "./css/header.css";
 @import "./css/sidePanel.css";
 @import "./css/collapseBox.css";
 @import "./css/erp.css";
-
 
 /* #root {
   max-width: 1280px;

@@ -1,6 +1,6 @@
 .hiddenLabel {
   opacity: 0;
-  color: #fff;
+  color: var(--bg-color-primary-flierly);
 }
 .centerAbsolute {
   position: absolute;
@@ -12,7 +12,7 @@
   margin-top: -19px;
 }
 .whiteBox {
-  background: #fff;
+  background: var(--bg-color-primary-flierly);
   border-radius: 6px;
   width: 100%;
   min-height: 100px;
@@ -20,13 +20,13 @@
   transition: all 0.3s ease-in-out;
 }
 .shadow {
-  box-shadow: 0px 0px 20px 3px rgba(150, 190, 238, 0.15);
+  box-shadow: 0px 0px 20px 3px var(--box-shadow-primary-15-flierly);
 }
 .shadow:hover {
-  box-shadow: 0px 0px 30px 8px rgba(150, 190, 238, 0.25);
+  box-shadow: 0px 0px 30px 8px var(--box-shadow-primary-25-flierly);
 }
 .line {
-  border-top: 1px solid #edf0f5;
+  border-top: 1px solid var(--border-color-primary-flierly);
   width: 100%;
   margin: 5px auto;
 }

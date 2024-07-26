@@ -6,8 +6,8 @@
   top: 0;
   left: 0;
   z-index: 1000;
-  background: #fff;
-  border-right: 1px solid #edf0f5;
+  background: var(--bg-color-primary-flierly);
+  border-right: 1px solid var(--border-color-primary-flierly);
 }
 
 .logo {
@@ -19,7 +19,7 @@
 }
 
 .sidebar-wraper {
-  background: #fff;
+  background: var(--bg-color-primary-flierly);
   display: block;
 }
 
@@ -40,7 +40,7 @@
 }
 
 .tabsNavigation:hover span {
-  box-shadow: 0px 0px 30px 8px rgba(0, 115, 255, 0.15);
+  box-shadow: 0px 0px 30px 8px var(--box-shadow-secondary-15-flierly);
   background-color: transparent;
 }
 
