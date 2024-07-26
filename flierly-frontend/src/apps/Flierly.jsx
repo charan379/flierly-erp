@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import ErpApp from "./ErpApp";
 import PageLoader from "@/components/PageLoader";
 import AntdConfigProvider from "@/theme/AntdConfigProvider";
-import AuthRouter from "@/router/AuthRouter";
+import AuthRouter from "@/modules/auth/router/AuthRouter";
 
 const DefaultApp = () => {
   return (

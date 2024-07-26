@@ -1,8 +1,8 @@
-import Login from "@/pages/Login";
 import PageNotFound from "@/pages/PageNotFound";
-import Register from "@/pages/Register";
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
+import Login from "../pages/Login";
+import Register from "../pages/Register";
 
 /**
  * AuthRouter component to define the routes for authentication-related pages.

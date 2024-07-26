@@ -1,6 +1,6 @@
-import AuthModule from "@/modules/Auth/AuthModule";
+import AuthModule from "@/modules/auth/AuthModule";
 import React from "react";
-import LoginForm from "@/forms/LoginForm";
+import LoginForm from "@/modules/auth/forms/LoginForm";
 
 const Login = () => {
   return <AuthModule authForm={<LoginForm />} AUTH_TITLE="sign_in" />;

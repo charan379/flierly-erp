@@ -1,6 +1,6 @@
-import AuthLayout from "@/layouts/Auth"; // Importing AuthLayout component
+import AuthLayout from "./layouts/AuthLayout"; // Importing AuthLayout component
 import React from "react"; // Importing React
-import SideContent from "./SideContent"; // Importing SideContent component
+import SideContent from "./components/SideContent"; // Importing SideContent component
 import { Layout, Typography, Col, Divider } from "antd"; // Importing Ant Design components
 import useLocale from "@/locale/useLocale"; // Importing custom hook for locale management
 

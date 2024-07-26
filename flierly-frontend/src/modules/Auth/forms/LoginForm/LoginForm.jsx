@@ -4,19 +4,23 @@ import {
   InfoCircleOutlined,
   LockOutlined,
   MailOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input } from "antd";
 import Loading from "@/components/Loading";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { LOGIN } from "../../redux/auth/actions";
 
 /**
  * LoginForm component to display a login form with email and password fields.
- * 
+ *
  * @returns {JSX.Element} The rendered LoginForm component.
  */
 const LoginForm = () => {
   const { translate, langDirection } = useLocale(); // Using the custom hook to get translation function and language direction
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   return (
     <Loading isLoading={false}>
       {/* form */}
@@ -28,13 +32,15 @@ const LoginForm = () => {
         initialValues={{
           remember: true,
         }}
-        onFinish={() => console.log("onFinish completed")}
+        onFinish={(values) => dispatch(LOGIN(values))}
       >
         {/* form fields */}
-        <div style={{ direction: langDirection }}> {/* Setting text direction based on language */}
+        <div style={{ direction: langDirection }}>
+          {" "}
+          {/* Setting text direction based on language */}
           {/* Email */}
-          <Form.Item
-            label={translate("email")} // Translated label for email field
+          {/* <Form.Item
+            label={translate("username")} // Translated label for email field
             name="email" // Name of the form field
             rules={[ // Validation rules
               { required: true, message: translate("email_is_required") },
@@ -51,16 +57,37 @@ const LoginForm = () => {
               type="email" // Input type
               size="large" // Size of the input field
             />
+          </Form.Item> */}
+          {/* Username */}
+          <Form.Item
+            label={translate("username")} // Translated label for username filed
+            name="username" // Name of the form field
+            rules={[
+              // Validation rules
+              { required: true, message: translate("username_is_required") },
+              { type: "string" },
+            ]}
+            tooltip={{
+              title: translate("username_is_required"), // Tooltip text
+              icon: <InfoCircleOutlined />, // Tooltip icon
+            }}
+          >
+            <Input
+              prefix={<UserOutlined className="site-form-item-icon" />} // Prefix icon for the input field
+              placeholder={translate("username")}
+              size="large" // Size of the input field
+            />
           </Form.Item>
           {/* password */}
           <Form.Item
             label={translate("password")} // Translated label for password field
             name="password" // Name of the form field
-            rules={[ // Validation rules
-              { required: true, message: translate('password_is_required') }
+            rules={[
+              // Validation rules
+              { required: true, message: translate("password_is_required") },
             ]}
             tooltip={{
-              title: translate('password_is_required'), // Tooltip text
+              title: translate("password_is_required"), // Tooltip text
               icon: <InfoCircleOutlined />, // Tooltip icon
             }}
           >
@@ -72,7 +99,12 @@ const LoginForm = () => {
           </Form.Item>
           {/* remember me with password reset link */}
           <Form.Item>
-            <Form.Item name="remember" valuePropName="checked" noStyle required  /* Remember me checkbox */>
+            <Form.Item
+              name="remember"
+              valuePropName="checked"
+              noStyle
+              required /* Remember me checkbox */
+            >
               <Checkbox>{translate("remember_me")}</Checkbox>
             </Form.Item>
             {/*  */}
@@ -98,7 +130,8 @@ const LoginForm = () => {
           >
             {translate("sign_in")}
           </Button>
-          {translate('or')} <a href="/register"> {translate('register_now')} </a>
+          {translate("or")}{" "}
+          <a href="/register"> {translate("register_now")} </a>
         </Form.Item>
       </Form>
     </Loading>
