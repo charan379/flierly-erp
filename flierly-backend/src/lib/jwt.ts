@@ -2,6 +2,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import FlierlyException from './flierly.exception';
 import HttpCodes from '@/constants/httpCodes';
+import Config from '@/config';
 
 dotenv.config();
 
@@ -16,7 +17,7 @@ const ERROR_MESSAGES = {
     UNKNOWN_ERROR: 'Unknown Error Occurred while decoding token',
 };
 
-const jwtSecret: string = process.env.JWT_SECRET ?? ''
+const jwtSecret: string = Config.JWT_SECRET ?? ''
 
 export async function generateJwtToken(username: string): Promise<String> {
 

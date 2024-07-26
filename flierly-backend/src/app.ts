@@ -4,6 +4,9 @@ import router from "@/routes";
 import HttpCodes from "@/constants/httpCodes";
 import errorHandler from "@/middlewares/error-handler.middleware";
 import dotenv from 'dotenv';
+import cors from "cors";
+import CorsOptions from "@/utils/cors.options";
+import Config from "./config";
 
 dotenv.config();
 
@@ -11,7 +14,10 @@ dotenv.config();
 const app: Express = express();
 
 // set app environment
-app.set('env', process.env.NODE_ENV);
+app.set('env', Config.NODE_ENV);
+
+// Cros
+app.use(cors(CorsOptions));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

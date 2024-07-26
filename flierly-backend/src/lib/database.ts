@@ -1,12 +1,13 @@
 import HttpCodes from "@/constants/httpCodes";
 import FlierlyException from "./flierly.exception";
 import mongoose from "mongoose";
+import Config from "@/config";
 
 class Database {
     public static async connect(): Promise<void> {
         console.log("🍃 [MongoDB]: waiting for MongoDB Connection to be established... ");
 
-        const connectionUri: string | undefined = process.env.MONGODB_SERVER_STRING;
+        const connectionUri: string | undefined = Config.MONGODB_SERVER_STRING;
 
         // throw error if connection string is undefined
         if (connectionUri === undefined) {

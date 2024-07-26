@@ -8,6 +8,7 @@ import http, { Server } from 'http';
 import { HttpError } from 'http-errors';
 import validateEnv from '@/utils/env.validator';
 import Database from './lib/database';
+import Config from './config';
 
 dotenv.config();
 
@@ -17,7 +18,7 @@ validateEnv();
 /**
  * Get port from environment and store in Express.
  */
-const port = normalizePort(process.env.PORT);
+const port = normalizePort(Config.PORT);
 app.set('port', port);
 
 /**

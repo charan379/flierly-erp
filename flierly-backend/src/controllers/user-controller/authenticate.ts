@@ -13,6 +13,7 @@ import Joi from "joi";
 export const credentialsSchema: Joi.ObjectSchema = Joi.object({
     username: nameMi5Ma50Schema.required(),
     password: passwordSchema.required(),
+    remember: Joi.boolean().default(false),
 });
 
 const authenticate = async (req: Request, res: Response) => {
