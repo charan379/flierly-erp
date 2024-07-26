@@ -3,57 +3,70 @@ import statePersist from "@/redux/statePersist";
 import { loadingTypes } from "@/types/loading";
 import * as authService from "../../service";
 
-// Initial state for the auth slice
+// Define the initial state for the authentication slice
 const INITIAL_STATE = {
-  user: {},
-  token: "",
-  loggedInAt: "",
-  tokenExpiresAt: "",
-  isLoggedIn: false,
-  loading: loadingTypes.IDLE,
+  user: {}, // Holds user details
+  token: "", // Authentication token
+  loggedInAt: "", // Timestamp when the user logged in
+  tokenExpiresAt: "", // Timestamp when the token expires
+  isLoggedIn: false, // Indicates if the user is logged in
+  loading: loadingTypes.IDLE, // Indicates the current loading state
 };
 
-// Fetching the persisted state from localStorage if available
+// Retrieve persisted state from localStorage if available
 const PERSISTING_STATE = statePersist.get("auth");
 
 /**
- * Slice for managing authentication state
+ * Creates and exports the authentication slice
  */
 const slice = createAsyncSlice({
   name: "auth",
   initialState: PERSISTING_STATE ? PERSISTING_STATE : INITIAL_STATE,
   reducers: (create) => ({
-    // LOGIN
+    // LOGIN async thunk to handle user login
     LOGIN: create.asyncThunk(
       async (credentials, thunkApi) => {
+        // Call the login service with credentials
         const res = await authService.login(credentials);
-        if (res?.success === false) throw thunkApi.rejectWithValue(res);
+
+        // Check if the response indicates failure
+        if (res?.success === false) {
+          throw thunkApi.rejectWithValue(res); // Reject the thunk with the response payload
+        }
+
+        // Return the response on success
         return res;
       },
       {
+        // Handle the loading state while the async thunk is pending
         pending: (state) => {
-          state["loading"] = loadingTypes.PENDING;
+          state.loading = loadingTypes.PENDING;
         },
+        // Handle errors when the async thunk is rejected
         rejected: (state) => {
-          state["loading"] = loadingTypes.FAILED;
-          state["user"] = {};
-          state["token"] = "";
-          state["loggedInAt"] = "";
-          state["tokenExpiresAt"] = "";
-          state["isLoggedIn"] = false;
+          state.user = {};
+          state.token = "";
+          state.loggedInAt = "";
+          state.tokenExpiresAt = "";
+          state.isLoggedIn = false;
+          state.loading = loadingTypes.FAILED;
+
         },
+        // Handle success when the async thunk is fulfilled
         fulfilled: (state, action) => {
-          state["loading"] = loadingTypes.SUCCEEDED;
-          state["user"] = action.payload.result.user;
-          state["token"] = action.payload.result.token;
-          state["loggedInAt"] = action.payload.result.loggedInAt;
-          state["tokenExpiresAt"] = action.payload.result.tokenExpiresAt;
-          state["isLoggedIn"] = true;
+          const { user, token, loggedInAt, tokenExpiresAt } =
+            action.payload.result;
+
+          state.loading = loadingTypes.SUCCEEDED;
+          state.user = user;
+          state.token = token;
+          state.loggedInAt = loggedInAt;
+          state.tokenExpiresAt = tokenExpiresAt;
+          state.isLoggedIn = true;
         },
       }
     ),
   }),
 });
 
-// Exporting the auth slice as the default export
 export default slice;
