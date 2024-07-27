@@ -51,7 +51,7 @@ const AuthLayout = ({ rightSideContent, children }) => {
           <Layout.Header
             style={{
               padding: "15px",
-              background: "#FFF",
+              background: "var(--bg-color-primary-flierly)",
               display: "flex",
               flexDirection: langDirection === "rtl" ? "row" : "row-reverse",
               justifyContent: "flex-start",

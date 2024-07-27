@@ -62,7 +62,7 @@ export function configResponsive(config) {
 
 /**
  * React hook to get the current screen size information.
- * @returns {Object} The current screen size information.
+ * returns {Object} The current screen size information.
  */
 export default function useResponsive() {
     // Start listening for resize events if we are in a browser environment and not already listening

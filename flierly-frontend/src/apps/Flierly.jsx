@@ -5,7 +5,7 @@ import AntdConfigProvider from "@/theme/AntdConfigProvider";
 import AuthRouter from "@/modules/auth/router/AuthRouter";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 
-const DefaultApp = () => {
+const App = () => {
   return (
     <AntdConfigProvider>
       <Suspense fallback={<PageLoader />}>
@@ -19,7 +19,7 @@ function Flierly() {
   const { isLoggedIn } = useAuth();
 
   if (isLoggedIn) {
-    return <DefaultApp />;
+    return <App />;
   } else {
     return (
       <AntdConfigProvider>

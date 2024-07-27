@@ -61,16 +61,20 @@
   border: none !important;
 }
 
-.headerIcon .ant-dropdown-menu {
+.header-icon .ant-dropdown-menu {
   border-radius: 6px;
   background: none;
   padding: 0;
   box-shadow: none;
 }
 
-.headerIcon .ant-dropdown-menu-item:hover,
-.headerIcon .ant-dropdown-menu-item.ant-dropdown-menu-item-active {
+.header-icon .ant-dropdown-menu-item:hover,
+.header-icon .ant-dropdown-menu-item.ant-dropdown-menu-item-active {
   background: none;
+}
+
+.ant-dropdown {
+  inset: 66px 18px auto auto !important;
 }
 
 .App {
