@@ -1,5 +1,6 @@
 const lightTheme = {
   "--bg-color-primary-flierly": "#ffffff",
+  "--bg-color-secondary-flierly": "#f4f6fa",
   "--bg-color-primary-lite-flierly": "#f9fafc",
   "--bg-color-nofication-scroll-bar": "#1b98f5",
   "--font-color-primary-flierly": "#020202",

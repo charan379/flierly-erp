@@ -1,5 +1,6 @@
 const darkTheme = {
   "--bg-color-primary-flierly": "#141414",
+  "--bg-color-secondary-flierly": "#0b0905",
   "--bg-color-primary-lite-flierly": "#060503",
   "--bg-color-nofication-scroll-bar": "#E4670A",
   "--font-color-primary-flierly": "rgba(255, 255, 255, 0.85)",
