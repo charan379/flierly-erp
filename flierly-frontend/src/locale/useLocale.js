@@ -5,7 +5,7 @@ import getTranslation from "@/utils/getTranslation";
 /**
  * Custom hook to handle locale-related functionality using Redux.
  * 
- * @returns {Object} An object containing locale state, language direction, translation function, and action dispatchers.
+ * returns {Object} An object containing locale state, language direction, translation function, and action dispatchers.
  */
 export default function useLocale() {
   // Accessing locale state from Redux store
