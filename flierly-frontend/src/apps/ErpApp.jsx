@@ -29,7 +29,7 @@ export default function ErpApp() {
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
         <ul>
-          {Object.entries(locale.result).map(entry => {
+          {Object.entries(locale.translation).map(entry => {
             return (
               <li key={entry[0]}>
                 <b>{entry[0]}</b> : {translate(entry[0])}
