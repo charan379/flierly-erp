@@ -3,6 +3,7 @@ import ErpApp from "./ErpApp";
 import PageLoader from "@/components/PageLoader";
 import AntdConfigProvider from "@/theme/AntdConfigProvider";
 import AuthRouter from "@/modules/auth/router/AuthRouter";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
 
 const DefaultApp = () => {
   return (
@@ -15,13 +16,17 @@ const DefaultApp = () => {
 };
 
 function Flierly() {
-  // return <DefaultApp />;
+  const { isLoggedIn } = useAuth();
 
-  return (
-    <AntdConfigProvider>
+  if (isLoggedIn) {
+    return <DefaultApp />;
+  } else {
+    return (
+      <AntdConfigProvider>
         <AuthRouter />
-    </AntdConfigProvider>
-  );
+      </AntdConfigProvider>
+    );
+  }
 }
 
 export default Flierly;
