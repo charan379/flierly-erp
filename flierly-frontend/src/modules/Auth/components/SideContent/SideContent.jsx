@@ -16,9 +16,9 @@ const SideContent = () => {
   return (
     <Content
       style={{
-        padding: "150px 30px 30px", // Padding around the content
+        padding: "100px 15px 15px", // Padding around the content
         width: "100%", // Full width
-        maxWidth: "400px", // Maximum width of 400px
+        maxWidth: "580px", // Maximum width of 400px
         margin: "0 auto", // Centering the content
       }}
       className="side-content" // Custom CSS class
