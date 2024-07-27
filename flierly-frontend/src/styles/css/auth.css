@@ -35,6 +35,7 @@
   left: 0;
 }
 
-.sideContent * {
+.side-content * {
   color: var(--font-color-secondary-flierly) !important;
+  background-color: var(--bg-color-secondary-flierly) !important;
 }

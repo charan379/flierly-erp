@@ -34,6 +34,7 @@ const AuthLayout = ({ rightSideContent, children }) => {
           lg={{ span: 12, order: 1 }}
           style={{
             minHeight: "100vh",
+            background: "var(--bg-color-secondary-flierly) !important",
           }}
         >
           {rightSideContent}
@@ -44,23 +45,23 @@ const AuthLayout = ({ rightSideContent, children }) => {
           sm={{ span: 24, order: 1 }}
           md={{ span: 13, order: 2 }}
           lg={{ span: 12, order: 2 }}
-          style={{ background: "#FFF", minHeight: "100vh" }}
+          style={{ minHeight: "100vh" }}
         >
           {/* Header */}
           <Layout.Header
             style={{
-              padding: '15px',
-              background: '#FFF',
-              display: 'flex',
-              flexDirection: langDirection === 'rtl' ? 'row' : 'row-reverse',
-              justifyContent: 'flex-start',
-              alignItems: 'center',
-              gap: ' 15px',
-            }}>
+              padding: "15px",
+              background: "#FFF",
+              display: "flex",
+              flexDirection: langDirection === "rtl" ? "row" : "row-reverse",
+              justifyContent: "flex-start",
+              alignItems: "center",
+              gap: " 15px",
+            }}
+          >
             {/* Lang selector */}
             <LangSelector />
             <ThemeToggler />
-            <Button style={{backgroundColor:'var(--bg-color)'}}>Test Theme</Button>
           </Layout.Header>
           {/* Auth forms / Children */}
           {children}

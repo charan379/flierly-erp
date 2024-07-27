@@ -21,9 +21,9 @@ const SideContent = () => {
         maxWidth: "400px", // Maximum width of 400px
         margin: "0 auto", // Centering the content
       }}
-      className="sideContent" // Custom CSS class
+      className="side-content" // Custom CSS class
     >
-      <div style={{ width: "100%" }}>
+      <div style={{ width: "100%", background: "inherit" }}>
         <img
           src="/vite.svg" // Source of the image
           alt="Flierly" // Alt text for the image
