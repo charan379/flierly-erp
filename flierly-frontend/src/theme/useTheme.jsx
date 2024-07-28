@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback } from "react";
 import {
   CHANGE_THEME_MODE,
   CHANGE_THEME_PREFERENCE,
+  TOGGLE_THEME_COMPACTIBILITY,
 } from "@/redux/theme/actions";
 import throttle from "@/utils/throttle";
 import darkTheme from "./themes/dark";
@@ -80,6 +81,7 @@ export function useTheme() {
     theme,
     themePreference: preference,
     isCompactTheme: compact,
+    toggleCompactTheme: () => dispatch(TOGGLE_THEME_COMPACTIBILITY()),
     setThemePreference: (preference) =>
       dispatch(CHANGE_THEME_PREFERENCE(preference)), // Function to change theme preference
   };
