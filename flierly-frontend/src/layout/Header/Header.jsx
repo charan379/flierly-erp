@@ -3,7 +3,6 @@ import { Layout } from "antd";
 import React from "react";
 import DropdownMenu from "./components/DropdownMenu/DropdownMenu";
 import LangSelector from "@/features/Language/LangSelector";
-import ThemeToggler from "@/features/Theme/ThemeToggler";
 import ThemeDropdown from "@/features/Theme/ThemeDropdown";
 
 const AntHeader = Layout.Header;
