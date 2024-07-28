@@ -1,15 +1,15 @@
 import useLocale from "@/locale/useLocale";
 import { useTheme } from "@/theme/useTheme";
 import { MoonFilled, SunFilled } from "@ant-design/icons";
-import { Avatar, Form, Segmented } from "antd";
+import { Avatar, Segmented, theme } from "antd";
 import React from "react";
 
 const ThemeSwitcher = () => {
   const { themePreference, setThemePreference } = useTheme();
   const { translate } = useLocale();
 
-  const onValuesChange = ({ themePreference }) => {
-    setThemePreference(themePreference);
+  const onValueChange = (value) => {
+    setThemePreference(value);
   };
 
   const options = [
@@ -68,20 +68,14 @@ const ThemeSwitcher = () => {
   ];
 
   return (
-    <Form
-      layout="vertical"
-      name="theme-switcher"
-      initialValues={{
-        themePreference: themePreference,
-      }}
-      onValuesChange={onValuesChange}
-      style={{}}
-    >
-      {/* Theme Preference */}
-      <Form.Item name="themePreference">
-        <Segmented options={options} />
-      </Form.Item>
-    </Form>
+    <Segmented
+      defaultValue={"light"}
+      options={options}
+      size="small"
+      onChange={onValueChange}
+      block
+      value={themePreference}
+    />
   );
 };
 
