@@ -1,7 +1,7 @@
 import { useTheme } from "@/theme/useTheme";
 import { BulbFilled, MoonFilled, SunFilled } from "@ant-design/icons";
 import Icon from "@ant-design/icons";
-import { Button, Tooltip } from "antd";
+import { Avatar, Button, Tooltip } from "antd";
 import React from "react";
 
 const ThemeToggler = () => {
@@ -46,18 +46,15 @@ const ThemeToggler = () => {
 
 const A = () => {
   return (
-    <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg" color="inherit">
-      <text
-        x="12"
-        y="27"
-        fontFamily="Verdana"
-        fontSize="20"
-        fill="currentColor"
-        color="inherit"
-      >
-        A
-      </text>
-    </svg>
+    <Avatar
+      style={{
+        backgroundColor: "var(--bg-color-primary-flierly)",
+        color: "var(--font-color-primary-flierly)",
+        fontSize: "20px",
+      }}
+    >
+      A
+    </Avatar>
   );
 };
 
