@@ -41,7 +41,7 @@ export default function DropdownMenu() {
       arrow
       autoAdjustOverflow
       menu={{ items }}
-      trigger={["click"]}
+      trigger={["click", "contextMenu"]}
       placement="bottomRight"
       stye={{ width: "280px", float: "right" }}
     >
