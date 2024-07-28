@@ -1,7 +1,7 @@
 import useResponsive from '@/hooks/useResponsive';
 import { Select } from 'antd';
 import React from 'react';
-import languageOptions from './languageOptions';
+import languageOptions from '../languageOptions';
 import useLocale from '@/locale/useLocale';
 
 const LangSelector = () => {
