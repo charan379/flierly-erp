@@ -7,9 +7,17 @@ import React from "react";
 const ThemeCompactSwitch = () => {
   const { translate } = useLocale();
   const { toggleCompactTheme, isCompactTheme } = useTheme();
-
+  const onClick = (event) => {
+    event.stopPropagation();
+    toggleCompactTheme();
+  };
   return (
-    <Flex component="div" justify="space-between" vertical={false}>
+    <Flex
+      component="div"
+      justify="space-between"
+      vertical={false}
+      onClick={onClick}
+    >
       <Space direction="horizontal" size="small" style={{ display: "flex" }}>
         <span>{translate("compact_theme")}</span>
         <CompressOutlined rotate="0" style={{ fontSize: "18px" }} />
@@ -17,7 +25,7 @@ const ThemeCompactSwitch = () => {
       <Switch
         value={isCompactTheme}
         defaultValue={false}
-        onChange={toggleCompactTheme}
+        onClick={onClick}
       />
     </Flex>
   );
