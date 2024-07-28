@@ -24,7 +24,7 @@ const LangSelector = () => {
             style={{
                 width: isMobile ? '90px' : '130px',
                 float: 'right',
-                marginTop: '5px',
+                // marginTop: '5px',
                 cursor: 'pointer',
                 direction: 'ltr',
             }}

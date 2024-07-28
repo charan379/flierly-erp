@@ -21,7 +21,7 @@ const ThemeToggler = () => {
         shape="circle"
         size="large"
         style={{
-          marginTop: "5px",
+          // marginTop: "5px",
         }}
         icon={themeIcon()}
         onClick={() => {
