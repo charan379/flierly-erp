@@ -14,6 +14,7 @@ export default function UserAvatar() {
         backgroundColor: user?.photo ? "none" : "#fde3cf",
         float: "right",
         cursor: "pointer",
+        fontSize: "18px"
       }}
     >
       {user?.name?.charAt(0)?.toUpperCase()}

@@ -15,6 +15,7 @@ export default function UserDetails() {
           color: "#f56a00",
           boxShadow: "rgba(150, 190, 238, 0.35) 0px 0px 6px 1px",
           backgroundColor: user?.photo ? "none" : "#fde3cf",
+          fontSize: "18px"
         }}
       >
         {user?.name?.charAt(0)?.toUpperCase()}
