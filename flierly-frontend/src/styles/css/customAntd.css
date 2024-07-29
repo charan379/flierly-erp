@@ -1,8 +1,6 @@
 .ant-layout,
-.ant-layout-sider,
 .ant-row,
-.ant-col,
-.ant-layout-header {
+.ant-col {
   background: var(--bg-color-primary-lite-flierly) !important;
 }
 
@@ -42,10 +40,14 @@
 }
 
 .ant-layout-sider-trigger {
-  background: var(--bg-color-primary-flierly);
-  border-top: 1px solid var(--border-color-primary-flierly);
-  border-right: 1px solid var(--border-color-primary-flierly);
-  color: var(--font-color-secondary-flierly);
+  background: var(--color-two-flierly) !important;
+  border-top: 2px solid var(--color-one-flierly);
+  color: var(--bg-color-secondary-flierly) !important;
+  bottom: 10px !important;
+  border-radius: 0 0 10px 10px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
 }
 
 .ant-layout-sider-zero-width-trigger {

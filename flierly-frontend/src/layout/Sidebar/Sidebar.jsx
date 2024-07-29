@@ -1,6 +1,7 @@
 import { Layout } from "antd";
 import React, { useState } from "react";
 import SidebarMenu from "./SidebarMenu";
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 
 const { Sider } = Layout;
 
@@ -9,8 +10,7 @@ const Sidebar = () => {
 
   return (
     <Sider
-      className={"custom-scrollbar-display"}
-    //   trigger={null}
+      className={"no-scrollbar"}
       collapsible
       collapsed={collapsed}
       onCollapse={(value) => setCollapsed(value)}
@@ -20,7 +20,9 @@ const Sidebar = () => {
         height: "95vh",
         borderRadius: "10px",
         boxShadow: "var(--floating-section-box-shadow)",
+        background: "var(--bg-color-primary-flierly)",
         margin: "10px",
+        zIndex: "2",
       }}
       collapsedWidth={60}
       trigger={

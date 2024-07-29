@@ -24,7 +24,7 @@ const SidebarMenu = ({ sidebarClosed }) => {
   const { theme } = useTheme();
   const { translate } = useLocale();
 
-  const menuIconStyle = {fontSize: "16px"};
+  const menuIconStyle = { fontSize: "16px", color: "var(--font-color-primary-flierly)" };
 
   const items = [
     {
@@ -120,6 +120,7 @@ const SidebarMenu = ({ sidebarClosed }) => {
       children: [
         {
           key: "generalSettings",
+          icon: <ReconciliationOutlined style={menuIconStyle} />,
           label: <Link to={"/settings"}>{translate("settings")}</Link>,
         },
 
@@ -148,8 +149,9 @@ const SidebarMenu = ({ sidebarClosed }) => {
       style={{
         overflow: "auto",
         borderRadius: "10px",
-        boxShadow: "var(--floating-section-box-shadow)",
         height: "95dvh",
+        paddingBottom: "40px",
+        background: "none",
       }}
     />
   );
