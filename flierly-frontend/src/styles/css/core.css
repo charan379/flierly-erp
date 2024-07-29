@@ -1,3 +1,43 @@
+* {
+  --sb-track-color: #00000000;
+  --sb-thumb-color: currentColor;
+  --sb-size: 5px;
+}
+
+*::-webkit-scrollbar {
+  width: var(--sb-size);
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 20px;
+}
+
+.custom-scrollbar-display::-webkit-scrollbar-thumb {
+  background: #00000000;
+}
+
+.custom-scrollbar-display:hover::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+}
+
+.no-scrollbar {
+  overflow: auto; /* Enable scrolling */
+  scrollbar-width: none; /* Hide scrollbar in Firefox */
+  -ms-overflow-style: none; /* Hide scrollbar in IE and Edge */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Hide scrollbar */
+}
+
 .hiddenLabel {
   opacity: 0;
   color: var(--bg-color-primary-flierly);
@@ -159,6 +199,12 @@
 .dashboardSpacing {
   padding: 30px 40px;
   margin: 70px auto;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+  }
 }
 
 @media only screen and (min-width: 1100px) {

@@ -3,6 +3,7 @@ import useLocale from "@/locale/useLocale";
 import { Layout } from "antd";
 import Header from "./Header";
 import { Outlet } from "react-router-dom";
+import Sidebar from "./Sidebar";
 
 export default function AppLayout() {
   const { langDirection } = useLocale();
@@ -31,6 +32,7 @@ export default function AppLayout() {
       hasSider
       style={{ flexDirection: langDirection === "rtl" ? "row-reverse" : "row" }}
     >
+      <Sidebar />
       <Layout style={layoutStyle}>
         <Header />
         <Layout.Content style={contentStyle}>
