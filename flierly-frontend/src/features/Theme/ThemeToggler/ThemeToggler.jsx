@@ -15,32 +15,32 @@ const ThemeToggler = () => {
   };
 
   return (
-    <Tooltip title="Toggle Theme">
-      <Button
-        type="default"
-        shape="circle"
-        size="large"
-        style={{
+    <Button
+      type="default"
+      shape="circle"
+      size="large"
+      style={
+        {
           // marginTop: "5px",
-        }}
-        icon={themeIcon()}
-        onClick={() => {
-          switch (themePreference) {
-            case "system":
-              setThemePreference("light");
-              break;
-            case "light":
-              setThemePreference("dark");
-              break;
-            case "dark":
-              setThemePreference("system");
-              break;
-            default:
-              break;
-          }
-        }}
-      />
-    </Tooltip>
+        }
+      }
+      icon={themeIcon()}
+      onClick={() => {
+        switch (themePreference) {
+          case "system":
+            setThemePreference("light");
+            break;
+          case "light":
+            setThemePreference("dark");
+            break;
+          case "dark":
+            setThemePreference("system");
+            break;
+          default:
+            break;
+        }
+      }}
+    />
   );
 };
 
