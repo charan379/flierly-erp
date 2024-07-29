@@ -23,6 +23,13 @@ const Sidebar = () => {
         margin: "10px",
       }}
       collapsedWidth={60}
+      trigger={
+        collapsed ? (
+          <MenuUnfoldOutlined style={{ fontSize: "28px" }} />
+        ) : (
+          <MenuFoldOutlined style={{ fontSize: "28px" }} />
+        )
+      }
     >
       <SidebarMenu sidebarClosed={collapsed} />
     </Sider>
