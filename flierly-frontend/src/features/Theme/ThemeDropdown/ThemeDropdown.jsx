@@ -29,11 +29,10 @@ const ThemeDropdown = () => {
 
   return (
     <Dropdown
-      arrow
       trigger={["contextMenu"]}
       autoAdjustOverflow
       menu={{ items }}
-      placement="bottom"
+      placement="bottomCenter"
       stye={{ width: "280px" }}
       onOpenChange={handleOpenChange}
       open={open}
