@@ -22,7 +22,7 @@ const Header = () => {
         justifyContent: "flex-start",
         gap: "15px",
         borderRadius: "10px",
-        height: "60px",
+        height: "55px",
         boxShadow: "var(--floating-section-box-shadow)",
         margin: "10px",
       }}
