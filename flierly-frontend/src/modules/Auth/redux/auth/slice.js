@@ -51,13 +51,13 @@ const slice = createAsyncSlice({
           state.loggedInAt = "";
           state.tokenExpiresAt = "";
           state.isLoggedIn = false;
-          state.error = action.payload.error;
+          state.error = action.payload?.error;
           state.loading = loadingTypes.FAILED;
         },
         // Handle success when the async thunk is fulfilled
         fulfilled: (state, action) => {
           const { user, token, loggedInAt, tokenExpiresAt } =
-            action.payload.result;
+            action.payload?.result;
 
           state.loading = loadingTypes.SUCCEEDED;
           state.user = user;
