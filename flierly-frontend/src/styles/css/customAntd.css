@@ -7,7 +7,7 @@
 
 .ant-notification-notice-wrapper,
 .ant-notification-notice {
-  background: var(--bg-color-primary-lite-flierly) !important;
+  background: var(--bg-color-primary-flierly) !important;
   color: var(--font-color-primary-flierly) !important;
   border-radius: 10px !important;
 }
