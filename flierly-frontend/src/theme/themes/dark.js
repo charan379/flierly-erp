@@ -13,8 +13,9 @@ const darkTheme = {
   "--box-shadow-secondary-15-flierly": "rgba(255, 140, 0, 0.15)",
   "--box-shadow-primary-25-flierly": "rgba(105, 65, 17, 0.25)",
   "--box-shadow-primary-30-flierly": "rgba(105, 65, 17, 0.3)",
+  "--floating-section-box-shadow": "rgb(59 58 58 / 15%) 0px 1px 8px",
   "--antd-box-shadow-one":
-    "0 2px 8px 0 rgba(255, 255, 255, 0.08),0 3px 6px -4px rgba(255, 255, 255, 0.12),0 9px 28px 8px rgba(255, 255, 255, 0.05)",
+    "0 2px 8px 0 rgb(0 0 0), 0 3px 6px -4px rgb(0 0 0), 0 9px 28px 8px rgb(86 54 243 / 0%)",
 };
 
 export default darkTheme;

@@ -13,6 +13,7 @@ const lightTheme = {
   "--box-shadow-secondary-15-flierly": "rgba(0, 115, 255, 0.15)",
   "--box-shadow-primary-25-flierly": "rgba(150, 190, 238, 0.25)",
   "--box-shadow-primary-30-flierly": "rgba(150, 190, 238, 0.3)",
+  "--floating-section-box-shadow": "rgba(0, 0, 0, 0.15) 0px 1px 8px",
   "--antd-box-shadow-one":
     "0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05)",
 };
