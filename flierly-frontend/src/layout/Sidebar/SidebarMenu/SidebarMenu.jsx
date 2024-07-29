@@ -24,7 +24,7 @@ const SidebarMenu = ({ sidebarClosed }) => {
   const { theme } = useTheme();
   const { translate } = useLocale();
 
-  const menuIconStyle = {};
+  const menuIconStyle = {fontSize: "16px"};
 
   const items = [
     {

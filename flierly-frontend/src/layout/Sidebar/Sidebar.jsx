@@ -22,6 +22,7 @@ const Sidebar = () => {
         boxShadow: "var(--floating-section-box-shadow)",
         margin: "10px",
       }}
+      collapsedWidth={60}
     >
       <SidebarMenu sidebarClosed={collapsed} />
     </Sider>
