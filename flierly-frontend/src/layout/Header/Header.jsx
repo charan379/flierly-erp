@@ -13,12 +13,18 @@ const Header = () => {
   return (
     <AntHeader
       style={{
-        padding: "20px",
-        background: "#f9fafc",
+        position: "relative",
+        padding: "5px 20px 5px 10px",
+        background: "var(--bg-color-primary-flierly) !important",
         display: "flex",
+        alignItems: "center",
         flexDirection: langDirection === "rtl" ? "row" : "row-reverse",
         justifyContent: "flex-start",
-        gap: " 15px",
+        gap: "15px",
+        borderRadius: "10px",
+        height: "60px",
+        boxShadow: "var(--floating-section-box-shadow)",
+        margin: "10px",
       }}
     >
       <DropdownMenu />
