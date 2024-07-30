@@ -42,6 +42,7 @@
   opacity: 0;
   color: var(--bg-color-primary-flierly);
 }
+
 .centerAbsolute {
   position: absolute;
   left: 50%;
