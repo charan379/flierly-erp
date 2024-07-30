@@ -149,8 +149,9 @@ const SidebarMenu = ({ sidebarClosed }) => {
       style={{
         overflow: "auto",
         borderRadius: "10px",
-        height: "95dvh",
-        paddingBottom: "40px",
+        height: "78dvh",
+        paddingBottom: "30px",
+        paddingTop: "5px",
         background: "none",
       }}
     />
