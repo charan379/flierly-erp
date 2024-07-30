@@ -1,6 +1,6 @@
 import { Layout } from "antd";
 import React, { useState } from "react";
-import SidebarMenu from "./SidebarMenu";
+import SidebarMenu from "./components/SidebarMenu";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 
 const { Sider } = Layout;
