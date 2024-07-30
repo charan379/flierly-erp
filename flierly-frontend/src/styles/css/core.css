@@ -6,13 +6,13 @@
 
 *::-webkit-scrollbar {
   width: var(--sb-size);
+  height: var(--sb-size);
 }
 
 *::-webkit-scrollbar-track {
   background: var(--sb-track-color);
   border-radius: 20px;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin: 10px 0px 10px 5px;
 }
 
 *::-webkit-scrollbar-thumb {
