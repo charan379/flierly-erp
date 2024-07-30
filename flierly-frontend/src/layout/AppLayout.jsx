@@ -28,13 +28,16 @@ export default function AppLayout() {
   const layoutStyle = isMobile ? { marginLeft: 0 } : {};
 
   return (
-    <Layout
-      hasSider
-      style={{ flexDirection: langDirection === "rtl" ? "row-reverse" : "row" }}
-    >
-      <Sidebar />
-      <Layout style={layoutStyle}>
-        <Header />
+    <Layout>
+      <Header />
+      <Layout
+        hasSider
+        style={{
+          ...layoutStyle,
+          flexDirection: langDirection === "rtl" ? "row-reverse" : "row",
+        }}
+      >
+        <Sidebar />
         <Layout.Content style={contentStyle}>
           <Outlet />
         </Layout.Content>
