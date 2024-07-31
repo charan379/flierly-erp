@@ -1,7 +1,8 @@
 import AppLayout from "@/layout";
-import WithSuspense from "@/utils/WithSuspense";
+import WithSuspense from "@/components/WithSuspense";
 import React from "react";
 import { useRoutes } from "react-router-dom";
+
 const Routes = () => {
   return useRoutes([
     {
