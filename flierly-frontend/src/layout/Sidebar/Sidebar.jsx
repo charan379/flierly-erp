@@ -25,6 +25,7 @@ const Sidebar = () => {
         zIndex: "2",
       }}
       collapsedWidth={60}
+      width={240}
       trigger={
         collapsed ? (
           <MenuUnfoldOutlined style={{ fontSize: "28px" }} />

@@ -24,7 +24,7 @@ const SidebarMenu = ({ sidebarClosed }) => {
   const { theme } = useTheme();
   const { translate } = useLocale();
 
-  const menuIconStyle = { fontSize: "16px", color: "var(--font-color-primary-flierly)" };
+  const menuIconStyle = { fontSize: "18px" };
 
   const items = [
     {
@@ -151,7 +151,7 @@ const SidebarMenu = ({ sidebarClosed }) => {
         borderRadius: "10px",
         height: "78dvh",
         paddingBottom: "30px",
-        paddingTop: "5px",
+        paddingTop: "10px",
         background: "none",
       }}
     />
