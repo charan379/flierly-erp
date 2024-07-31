@@ -6,7 +6,7 @@ const Routes = () => {
   return useRoutes([
     {
       path: "/",
-      element: <WithSuspense importPath={import("@/layout")} />,
+      element: <AppLayout />,
       shouldRevalidate: false,
       children: [
         {
