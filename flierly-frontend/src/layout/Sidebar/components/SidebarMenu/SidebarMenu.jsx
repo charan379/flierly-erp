@@ -28,21 +28,6 @@ const SidebarMenu = ({ sidebarClosed }) => {
 
   const items = [
     {
-      key: "dashboard-1",
-      icon: <DashboardOutlined style={menuIconStyle} />,
-      label: <Link to={"/"}>{translate("dashboard")}</Link>,
-    },
-    {
-      key: "dashboard-2",
-      icon: <DashboardOutlined style={menuIconStyle} />,
-      label: <Link to={"/"}>{translate("dashboard")}</Link>,
-    },
-    {
-      key: "dashboard-3",
-      icon: <DashboardOutlined style={menuIconStyle} />,
-      label: <Link to={"/"}>{translate("dashboard")}</Link>,
-    },
-    {
       key: "dashboard",
       icon: <DashboardOutlined style={menuIconStyle} />,
       label: <Link to={"/"}>{translate("dashboard")}</Link>,
