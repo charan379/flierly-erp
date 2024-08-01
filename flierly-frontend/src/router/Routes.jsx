@@ -12,7 +12,7 @@ const Routes = () => {
       children: [
         {
           path: "customer",
-          element: <WithSuspense importPath={import("@/pages/TestPage")} />,
+          element: <WithSuspense importPath={import("@/modules/customer/pages/Customers")} />,
         },
         {
           path: "*",
