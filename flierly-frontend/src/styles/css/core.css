@@ -1,6 +1,6 @@
 * {
   --sb-track-color: #00000000;
-  --sb-thumb-color: currentColor;
+  --sb-thumb-color: var(--font-color-secondary-flierly);
   --sb-size: 5px;
 }
 
@@ -26,6 +26,16 @@
 
 .custom-scrollbar-display:hover::-webkit-scrollbar-thumb {
   background: var(--sb-thumb-color);
+}
+
+.sb-thumb-md::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.sb-thumb-lg::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
 }
 
 .no-scrollbar {
