@@ -1,6 +1,7 @@
 import { ConfigProvider, theme } from "antd";
 import { useTheme } from "./useTheme";
 import React, { useMemo } from "react";
+import enUS from "antd/locale/en_US";
 
 /**
  * AntdConfigProvider component wraps the entire application with Ant Design's ConfigProvider.
@@ -31,6 +32,7 @@ const AntdConfigProvider = React.memo(({ children }) => {
 
   return (
     <ConfigProvider
+      locale={enUS}
       theme={{
         algorithm: antThemeAlgorithms, // Set the theme algorithms based on the configuration
       }}
