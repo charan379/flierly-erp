@@ -14,26 +14,36 @@ import enUs from "antd/locale/en_US";
 import { calc } from "antd/es/theme/internal";
 
 const Customers = () => {
+  const { langDirection, translate } = useLocale();
+
   const columns = [
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
+      copyable: true,
+      width: 100,
       render: (text) => <a>{text}</a>,
     },
     {
       title: "Age",
       dataIndex: "age",
       key: "age",
+      width: 30,
+      fixed: true,
+      align: "center",
     },
     {
       title: "Address",
       dataIndex: "address",
       key: "address",
+      width: 100,
     },
     {
+      width: 100,
       title: "Action",
       key: "action",
+      fixed: "right",
       render: (_, record) => (
         <Space size="middle">
           <a>Invite {record.name}</a>
@@ -42,6 +52,7 @@ const Customers = () => {
       ),
     },
     {
+      width: 100,
       title: "Tags",
       key: "tags",
       dataIndex: "tags",
@@ -280,12 +291,24 @@ const Customers = () => {
     <CustomerLayout header={<Header />}>
       {/* https://procomponents.ant.design/en-US/components/table */}
       <ProTable
+
+        toolBarRender={(action) => [
+          <Input
+            key={`searchFilterDataTable}`}
+            placeholder={translate("search")}
+            allowClear
+          />,
+          <Button key={`${uniqueId()}`} icon={<RedoOutlined />}>
+            {translate("refresh")}
+          </Button>,
+        ]}
+        bordered={true}
         style={{
           width: "100%",
         }}
         scroll={{
           scrollToFirstRowOnChange: true,
-          x: 150,
+          x: 1300,
           y: 250,
         }}
         search={false}
@@ -293,7 +316,7 @@ const Customers = () => {
           persistenceType: "localStorage",
           persistenceKey: "cusla",
         }}
-        pagination={{pageSize: 20}}
+        pagination={{ pageSize: 20 }}
         size="large"
         columns={columns}
         dataSource={data}
@@ -304,6 +327,7 @@ const Customers = () => {
           setting: true,
         }}
         key={"key"}
+        tableLayout="fixed"
       />
     </CustomerLayout>
   );
