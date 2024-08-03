@@ -29,7 +29,7 @@ const schema: mongoose.Schema<Branch> = new mongoose.Schema<Branch>(
         },
         address: {
             type: mongoose.Schema.ObjectId,
-            ref: 'Branch',
+            ref: 'Address',
             autopopulate: true
         },
         taxIdentity: {
