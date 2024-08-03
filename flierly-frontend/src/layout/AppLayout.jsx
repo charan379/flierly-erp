@@ -22,15 +22,17 @@ export default function AppLayout() {
             width: "100%",
             // background: "var(--bg-color-primary-flierly)",
             // boxShadow: "var(--floating-section-box-shadow)",
-            height: "84dvh",
-            margin: "5px 10px 5px 5px",
-            // borderRadius: "10px",
+            padding: "5px 10px 5px 5px",
+            height: "85dvh",
+            margin: "0",
+            borderRadius: "10px",
             display: "flex",
-            // flexDirection: "row",
+            flexDirection: "row",
             alignItems: "center",
             justifyContent: "center",
             flexWrap: "wrap",
-            overflow: "visible",
+            overflow: "scroll",
+            opacity: "1",
           }}
         >
           <Outlet />

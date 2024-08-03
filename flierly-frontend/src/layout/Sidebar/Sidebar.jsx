@@ -17,7 +17,7 @@ const Sidebar = () => {
       style={{
         position: "relative",
         overflow: "auto",
-        height: "80dvh",
+        height: "84dvh",
         borderRadius: "10px",
         boxShadow: "var(--floating-section-box-shadow)",
         background: "var(--bg-color-primary-flierly)",

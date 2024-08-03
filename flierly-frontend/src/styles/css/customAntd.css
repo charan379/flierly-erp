@@ -41,9 +41,10 @@
 
 .ant-layout-sider-trigger {
   background: var(--color-two-flierly) !important;
-  border-top: 2px solid var(--color-one-flierly);
+  border-top: 5px solid var(--color-one-flierly);
   color: var(--bg-color-secondary-flierly) !important;
-  bottom: 10px !important;
+  box-shadow: "var(--floating-section-box-shadow)";
+  bottom: 18px !important;
   border-radius: 0 0 10px 10px;
   align-items: center;
   justify-content: center;
