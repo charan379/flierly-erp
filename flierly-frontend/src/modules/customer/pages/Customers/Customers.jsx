@@ -1,17 +1,21 @@
-import React from "react";
+import React, { useRef } from "react";
 import CustomerLayout from "../../layout/CustomerLayout";
 import TestPage from "@/pages/TestPage";
 import useLocale from "@/locale/useLocale";
 import {
   ArrowLeftOutlined,
   ArrowRightOutlined,
+  CustomerServiceOutlined,
+  DashboardOutlined,
   RedoOutlined,
 } from "@ant-design/icons";
-import { Button, Input, Space, Table, Tag } from "antd";
+import { Button, Input, InputNumber, Space, Table, Tag } from "antd";
 import { generate as uniqueId } from "shortid";
 import { PageHeader, ProTable } from "@ant-design/pro-components";
 import enUs from "antd/locale/en_US";
 import { calc } from "antd/es/theme/internal";
+import DropdownMenu from "@/layout/Header/components/DropdownMenu/DropdownMenu";
+import { Link } from "react-router-dom";
 
 const Customers = () => {
   const { langDirection, translate } = useLocale();
@@ -32,6 +36,7 @@ const Customers = () => {
       width: 30,
       fixed: true,
       align: "center",
+      valueType: "date"
     },
     {
       title: "Address",
@@ -287,19 +292,36 @@ const Customers = () => {
     },
   ];
 
+  const ref = useRef();
   return (
     <CustomerLayout header={<Header />}>
       {/* https://procomponents.ant.design/en-US/components/table */}
       <ProTable
-
+        formRef={ref}
+        toolbar={{
+          title: "Customer 2",
+          tooltip: "Customer",
+          search: <InputNumber />,
+          filter: [<Input />],
+          menu: {
+            type: "tab",
+            items: [
+              {
+                key: "dashboard",
+                icon: <DashboardOutlined />,
+                label: <Link to={"/"}>{translate("dashboard")}</Link>,
+              },
+              {
+                key: "customer",
+                icon: <CustomerServiceOutlined />,
+                label: <Link to={"/customer"}>{translate("customers")}</Link>,
+              },
+            ],
+          },
+        }}
         toolBarRender={(action) => [
-          <Input
-            key={`searchFilterDataTable}`}
-            placeholder={translate("search")}
-            allowClear
-          />,
-          <Button key={`${uniqueId()}`} icon={<RedoOutlined />}>
-            {translate("refresh")}
+          <Button key={`${uniqueId()}`} icon={<RedoOutlined />} onClick={() => console.log(ref.current)}>
+            {translate("form")}
           </Button>,
         ]}
         bordered={true}
@@ -311,7 +333,7 @@ const Customers = () => {
           x: 1300,
           y: 250,
         }}
-        search={false}
+        // search={false}
         columnsState={{
           persistenceType: "localStorage",
           persistenceKey: "cusla",
@@ -327,7 +349,7 @@ const Customers = () => {
           setting: true,
         }}
         key={"key"}
-        tableLayout="fixed"
+        // tableLayout="fixed"
       />
     </CustomerLayout>
   );
