@@ -36,13 +36,28 @@ const Customers = () => {
       width: 30,
       fixed: true,
       align: "center",
-      valueType: "date"
+      showSorterTooltip: {
+        target: 'full-header',
+      },
+      // valueType: "date",
+      defaultSortOrder: "descend",
+      sorter: true,
     },
     {
       title: "Address",
       dataIndex: "address",
       key: "address",
       width: 100,
+      filters: [
+        {
+          text: "London",
+          value: "London",
+        },
+        {
+          text: "New York",
+          value: "New York",
+        },
+      ],
     },
     {
       width: 100,
@@ -293,11 +308,25 @@ const Customers = () => {
   ];
 
   const ref = useRef();
+  console.log(ref);
   return (
     <CustomerLayout header={<Header />}>
       {/* https://procomponents.ant.design/en-US/components/table */}
       <ProTable
-        formRef={ref}
+        showSorterTooltip={{
+          target: "sorter-icon",
+        }}
+        actionRef={ref}
+        request={(params, sort, filter) => {
+          console.log({ params, sort, filter });
+          return {
+            data: data.map((row) => {
+              return { ...row, name: `fq ${row.name}` };
+            }),
+            success: true,
+            total: data.length,
+          };
+        }}
         toolbar={{
           title: "Customer 2",
           tooltip: "Customer",
@@ -320,7 +349,11 @@ const Customers = () => {
           },
         }}
         toolBarRender={(action) => [
-          <Button key={`${uniqueId()}`} icon={<RedoOutlined />} onClick={() => console.log(ref.current)}>
+          <Button
+            key={`${uniqueId()}`}
+            icon={<RedoOutlined />}
+            onClick={() => console.log(ref.current)}
+          >
             {translate("form")}
           </Button>,
         ]}
