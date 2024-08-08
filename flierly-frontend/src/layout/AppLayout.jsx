@@ -22,7 +22,7 @@ export default function AppLayout() {
             width: "100%",
             // background: "var(--bg-color-primary-flierly)",
             // boxShadow: "var(--floating-section-box-shadow)",
-            padding: "5px 10px 5px 5px",
+            padding: "5px 10px 10px 5px",
             height: "85dvh",
             margin: "0",
             borderRadius: "10px",
