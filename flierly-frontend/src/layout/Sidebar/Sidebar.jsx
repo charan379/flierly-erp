@@ -22,7 +22,7 @@ const Sidebar = () => {
         boxShadow: "var(--floating-section-box-shadow)",
         background: "var(--bg-color-primary-flierly)",
         margin: "2px 5px 10px 10px",
-        zIndex: "2",
+        zIndex: "1",
       }}
       collapsedWidth={60}
       width={240}
