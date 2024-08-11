@@ -1,85 +1,14 @@
-import React, { useRef } from "react";
+import React from "react";
 import CustomerLayout from "../../layout/CustomerLayout";
 import useLocale from "@/locale/useLocale";
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
-import { Space, Tag } from "antd";
 import { PageHeader } from "@ant-design/pro-components";
 import SignUpForm from "@/modules/auth/forms/SignUpForm";
-import useElementHeight from "@/hooks/useElementHeight";
 import { CrudTable } from "@/components/CrudTable";
+import columns from "../../config/customerColumns";
 
 const Customers = () => {
   const { langDirection, translate } = useLocale();
-
-  const tableHeight = useElementHeight("pro-table-non-editable-1");
-
-  const columns = [
-    {
-      title: "Name",
-      dataIndex: "name",
-      copyable: true,
-      width: 50,
-      render: (text) => <a>{text}</a>,
-    },
-    {
-      title: "Age",
-      dataIndex: "age",
-      width: 30,
-      fixed: true,
-      align: "center",
-      showSorterTooltip: {
-        target: "full-header",
-      },
-      defaultSortOrder: "descend",
-      sorter: true,
-    },
-    {
-      title: "Address",
-      dataIndex: "address",
-      width: 100,
-      filters: [
-        {
-          text: "London",
-          value: "London",
-        },
-        {
-          text: "New York",
-          value: "New York",
-        },
-      ],
-    },
-    {
-      width: 100,
-      title: "Action",
-      key: "action",
-      render: (_, record) => (
-        <Space size="middle">
-          <a>Invite {record.name}</a>
-          <a>Delete</a>
-        </Space>
-      ),
-    },
-    {
-      width: 100,
-      title: "Tags",
-      dataIndex: "tags",
-      render: (tags) => (
-        <span>
-          {tags.map((tag) => {
-            let color = tag.length > 5 ? "geekblue" : "green";
-            if (tag === "loser") {
-              color = "volcano";
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </span>
-      ),
-    },
-  ];
 
   const data = [
     {
@@ -293,8 +222,6 @@ const Customers = () => {
       tags: ["creative", "graphic designer"],
     },
   ];
-
-  const ref = useRef();
 
   return (
     <CustomerLayout header={<Header />}>
