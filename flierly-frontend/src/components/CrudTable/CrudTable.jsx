@@ -1,8 +1,12 @@
 import useElementHeight from "@/hooks/useElementHeight";
 import useLocale from "@/locale/useLocale";
-import { ClearOutlined, DeleteOutlined } from "@ant-design/icons";
+import {
+  ClearOutlined,
+  DeleteOutlined,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
 import { ProTable } from "@ant-design/pro-components";
-import { Button } from "antd";
+import { Button, message, Popconfirm } from "antd";
 import React, { useRef } from "react";
 import DrawerForm from "./componenets/DrawerFrom/DrawerForm";
 
@@ -85,17 +89,27 @@ const CrudTable = ({
         // add from
         <DrawerForm form={addFrom} title={translate("add_from")} />,
         // delete the selected items
-        <Button
-          type="primary"
-          danger
-          key={`delete-selected-rows-trigger`}
-          icon={<DeleteOutlined />}
-          disabled={rows.selectedRowKeys.length <= 0}
+        <Popconfirm
+          title={translate("delete_selected")}
+          description={`${translate("delete_selected_items")} ${rows.selectedRowKeys.length}`}
+          icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+          okButtonProps={{danger: true, icon: <DeleteOutlined />}}
+          okText={translate("delete")}
+          cancelText={translate("cancel")}
+          cancelButtonProps={{type: "primary"}}
+          onCancel={() => message.warning(translate("request_cancelled"))}
+          onConfirm={() => message.success(`${rows.selectedRowKeys.length} rows ${translate("deleted_sucessfully")}`)}
         >
-          {`${translate("delete")} ${
-            rows.selectedRowKeys.length > 0 ? rows.selectedRowKeys.length : ""
-          }`}
-        </Button>,
+          <Button
+            type="primary"
+            danger
+            key={`delete-selected-rows-trigger`}
+            icon={<DeleteOutlined />}
+            disabled={rows.selectedRowKeys.length <= 0}
+          >
+            {`${translate("delete")} ${rows.selectedRowKeys.length > 0 ? rows.selectedRowKeys.length : ""}`}
+          </Button>
+        </Popconfirm>,
         // clear the selection
         <Button
           type="primary"
@@ -104,9 +118,7 @@ const CrudTable = ({
           disabled={rows.selectedRowKeys.length <= 0}
           onClick={() => actionRef.current.clearSelected()}
         >
-          {`${translate("clear")} ${
-            rows.selectedRowKeys.length > 0 ? rows.selectedRowKeys.length : ""
-          }`}
+          {`${translate("clear")} ${rows.selectedRowKeys.length > 0 ? rows.selectedRowKeys.length : ""}`}
         </Button>,
       ]}
     />
