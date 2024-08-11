@@ -17,30 +17,25 @@ const Customers = () => {
     {
       title: "Name",
       dataIndex: "name",
-      key: "name",
       copyable: true,
       width: 50,
-      dataIndex: "name",
       render: (text) => <a>{text}</a>,
     },
     {
       title: "Age",
       dataIndex: "age",
-      key: "age",
       width: 30,
       fixed: true,
       align: "center",
       showSorterTooltip: {
         target: "full-header",
       },
-      // valueType: "date",
       defaultSortOrder: "descend",
       sorter: true,
     },
     {
       title: "Address",
       dataIndex: "address",
-      key: "address",
       width: 100,
       filters: [
         {
@@ -67,7 +62,6 @@ const Customers = () => {
     {
       width: 100,
       title: "Tags",
-      key: "tags",
       dataIndex: "tags",
       render: (tags) => (
         <span>
