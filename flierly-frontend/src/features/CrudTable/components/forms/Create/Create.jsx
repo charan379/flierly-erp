@@ -9,6 +9,10 @@ const Create = ({ formFields, title = "add", initialValues }) => {
   return (
     <DrawerForm
       title={title}
+      onFinish={(values) => {
+        console.log(values);
+        return true;
+      }}
       initialValues={initialValues}
       trigger={
         <Button
