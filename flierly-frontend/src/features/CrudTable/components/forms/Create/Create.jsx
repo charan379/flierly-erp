@@ -21,7 +21,7 @@ const Create = ({ formFields, title = "add" }) => {
       }
       resize={{
         maxWidth: "window.innerWidth * 0.8",
-        minWidth: 300,
+        minWidth: 450,
       }}
       drawerProps={{
         destroyOnClose: true,
