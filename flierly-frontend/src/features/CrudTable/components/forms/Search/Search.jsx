@@ -4,11 +4,18 @@ import { ModalForm } from '@ant-design/pro-components'
 import { Button } from 'antd';
 import React from 'react'
 
-const Search = ({ formFields, title = "search" }) => {
+const Search = ({ formFields, title = "search", initialValues }) => {
 
     const { langDirection, translate } = useLocale();
     return (
         <ModalForm
+            // initial values
+            initialValues={initialValues}
+            // on finish
+            onFinish={(values) => {
+                console.log(values);
+                return true;
+            }}
             // Title of modal
             title={title}
             // trigger button to toggle form

@@ -19,6 +19,7 @@ const CrudTable = ({
   createFormFields,
   createFormInitialValues,
   searchFormFields,
+  searchFormInitialValues,
 }) => {
   const tableHeight = useElementHeight("pro-table-filerly-1");
 
@@ -105,7 +106,7 @@ const CrudTable = ({
       // toolbar controls configuration
       toolBarRender={(action, rows) => [
         // search from
-        <Search formFields={searchFormFields} title={translate("search_from")} />,
+        <Search formFields={searchFormFields} initialValues={searchFormInitialValues} title={translate("search_from")} />,
         // create from
         <Create formFields={createFormFields} initialValues={createFormInitialValues} title={translate("add_from")} />,
         // delete the selected items

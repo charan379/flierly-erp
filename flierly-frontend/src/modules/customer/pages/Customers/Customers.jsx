@@ -3,10 +3,10 @@ import CustomerLayout from "../../layout/CustomerLayout";
 import useLocale from "@/locale/useLocale";
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import { PageHeader } from "@ant-design/pro-components";
-import SignUpForm from "@/modules/auth/forms/SignUpForm";
 import { CrudTable } from "@/features/CrudTable";
 import columns from "../../config/customerColumns";
 import AddCustomer from "../../forms/AddCustomer";
+import SearchCustomer from "../../forms/SearchCustomer";
 
 const Customers = () => {
   const { langDirection, translate } = useLocale();
@@ -234,7 +234,7 @@ const Customers = () => {
         rowKey="_id"
         createFormFields={<AddCustomer />}
         createFormInitialValues={{ tags: ["gold"] }}
-        searchFormFields={<SignUpForm />}
+        searchFormFields={<SearchCustomer />}
         searchFormInitialValues={{ tags: ["gold"] }}
       />
     </CustomerLayout>
