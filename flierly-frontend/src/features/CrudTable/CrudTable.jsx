@@ -8,8 +8,8 @@ import {
 import { ProTable } from "@ant-design/pro-components";
 import { Button, message, Popconfirm } from "antd";
 import React, { useRef, useState } from "react";
-import Create from "./componenets/forms/Create";
-import Search from "./componenets/forms/Search";
+import Create from "./components/forms/Create";
+import Search from "./components/forms/Search";
 
 const CrudTable = ({
   tableKey,
