@@ -34,6 +34,8 @@ const columns = [
         value: "New York",
       },
     ],
+    filterMode: 'menu',
+    filterSearch: true,
   },
   {
     width: 100,

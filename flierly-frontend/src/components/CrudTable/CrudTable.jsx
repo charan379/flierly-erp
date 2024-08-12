@@ -7,7 +7,7 @@ import {
 } from "@ant-design/icons";
 import { ProTable } from "@ant-design/pro-components";
 import { Button, message, Popconfirm } from "antd";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import DrawerForm from "./componenets/DrawerFrom/DrawerForm";
 
 const CrudTable = ({
@@ -20,6 +20,8 @@ const CrudTable = ({
   const tableHeight = useElementHeight("pro-table-filerly-1");
 
   const { langDirection, translate } = useLocale();
+
+  const [data, setData] = useState(dataSource);
 
   const actionRef = useRef();
 
@@ -69,21 +71,34 @@ const CrudTable = ({
       actionRef={actionRef}
       // pagination configuration
       pagination={{ pageSize: 20 }}
-      // datasource
-      dataSource={dataSource}
       // columns
       columns={columns}
+      // datasource
+      dataSource={data}
       // data request
-      request={(params, sort, filter) => {
+      request={async (params, sort, filter) => {
         console.log({ params, sort, filter });
         return {
-          data: dataSource.map((row) => {
-            return row;
-          }),
+          data: [{
+            _id: "1",
+            name: "John Brown",
+            age: 32,
+            address: "New York No. 1 Lake Park",
+            tags: ["nice", "developer"],
+          },
+          {
+            _id: "2",
+            name: "Jim Green",
+            age: 42,
+            address: "London No. 1 Lake Park",
+            tags: ["loser"],
+          },],
           success: true,
-          total: data.length,
+          total: 2,
         };
       }}
+      // post data came from request 
+      postData={(data) => setData(data)}
       // toolbar controls configuration
       toolBarRender={(action, rows) => [
         // add from
@@ -93,10 +108,10 @@ const CrudTable = ({
           title={translate("delete_selected")}
           description={`${translate("delete_selected_items")} ${rows.selectedRowKeys.length}`}
           icon={<QuestionCircleOutlined style={{ color: "red" }} />}
-          okButtonProps={{danger: true, icon: <DeleteOutlined />}}
+          okButtonProps={{ danger: true, icon: <DeleteOutlined /> }}
           okText={translate("delete")}
           cancelText={translate("cancel")}
-          cancelButtonProps={{type: "primary"}}
+          cancelButtonProps={{ type: "primary" }}
           onCancel={() => message.warning(translate("request_cancelled"))}
           onConfirm={() => message.success(`${rows.selectedRowKeys.length} rows ${translate("deleted_sucessfully")}`)}
         >
