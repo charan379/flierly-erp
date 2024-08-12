@@ -1,7 +1,7 @@
 import LangSelector from "@/features/Language/LangSelector";
 import ThemeToggler from "@/features/Theme/ThemeToggler";
 import useLocale from "@/locale/useLocale";
-import { Button, Col, Layout, Row } from "antd";
+import { Col, Layout, Row } from "antd";
 import React from "react";
 
 /**
@@ -45,7 +45,10 @@ const AuthLayout = ({ rightSideContent, children }) => {
           sm={{ span: 24, order: 1 }}
           md={{ span: 13, order: 2 }}
           lg={{ span: 12, order: 2 }}
-          style={{ minHeight: "100vh" }}
+          style={{
+            minHeight: "100vh",
+            background: "var(--bg-color-primary-lite-flierly) !important",
+          }}
         >
           {/* Header */}
           <Layout.Header

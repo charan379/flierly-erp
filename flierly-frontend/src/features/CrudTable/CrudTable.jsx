@@ -8,14 +8,16 @@ import {
 import { ProTable } from "@ant-design/pro-components";
 import { Button, message, Popconfirm } from "antd";
 import React, { useRef, useState } from "react";
-import DrawerForm from "./componenets/DrawerFrom/DrawerForm";
+import Create from "./componenets/forms/Create";
+import Search from "./componenets/forms/Search";
 
 const CrudTable = ({
   tableKey,
   rowKey = "_id",
   columns,
   dataSource,
-  addFrom,
+  createFormFields,
+  searchFormFields,
 }) => {
   const tableHeight = useElementHeight("pro-table-filerly-1");
 
@@ -64,7 +66,7 @@ const CrudTable = ({
       options={{
         density: true,
         fullScreen: true,
-        search: true,
+        search: false,
         setting: true,
       }}
       // action ref to trigger actions
@@ -101,8 +103,10 @@ const CrudTable = ({
       postData={(data) => setData(data)}
       // toolbar controls configuration
       toolBarRender={(action, rows) => [
-        // add from
-        <DrawerForm form={addFrom} title={translate("add_from")} />,
+        // search from
+        <Search formFields={searchFormFields} title={translate("search_from")} />,
+        // create from
+        <Create formFields={createFormFields} title={translate("add_from")} />,
         // delete the selected items
         <Popconfirm
           title={translate("delete_selected")}

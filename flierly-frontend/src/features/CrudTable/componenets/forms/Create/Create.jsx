@@ -1,18 +1,18 @@
 import useLocale from "@/locale/useLocale";
 import { PlusOutlined } from "@ant-design/icons";
-import { DrawerForm as From } from "@ant-design/pro-components";
+import { DrawerForm } from "@ant-design/pro-components";
 import { Button } from "antd";
 import React from "react";
 
-const DrawerForm = ({ form, title = "add" }) => {
+const Create = ({ formFields, title = "add" }) => {
   const { langDirection, translate } = useLocale();
   return (
-    <From
+    <DrawerForm
       title={title}
       trigger={
         <Button
           type="primary"
-          key={`drawer-form-trigger`}
+          key={`drawer-create-form-trigger`}
           icon={<PlusOutlined />}
           style={{ backgroundColor: "teal" }}
         >
@@ -30,11 +30,11 @@ const DrawerForm = ({ form, title = "add" }) => {
           header: { padding: "10px 5px 5px 5px" },
         },
       }}
-      submitter={{ searchConfig: { resetText: "Cancel", submitText: "Save" } }}
+      submitter={{ searchConfig: { resetText: translate("cancel"), submitText: translate("save") } }}
     >
-      {form}
-    </From>
+      {formFields}
+    </DrawerForm>
   );
 };
 
-export default DrawerForm;
+export default Create;

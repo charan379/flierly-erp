@@ -4,7 +4,7 @@ import useLocale from "@/locale/useLocale";
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import { PageHeader } from "@ant-design/pro-components";
 import SignUpForm from "@/modules/auth/forms/SignUpForm";
-import { CrudTable } from "@/components/CrudTable";
+import { CrudTable } from "@/features/CrudTable";
 import columns from "../../config/customerColumns";
 
 const Customers = () => {
@@ -231,7 +231,8 @@ const Customers = () => {
         dataSource={data}
         tableKey={"customer-table"}
         rowKey="_id"
-        addFrom={<SignUpForm />}
+        createFormFields={<SignUpForm />}
+        searchFormFields={<SignUpForm />}
       />
     </CustomerLayout>
   );
