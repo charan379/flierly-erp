@@ -6,6 +6,7 @@ import { PageHeader } from "@ant-design/pro-components";
 import SignUpForm from "@/modules/auth/forms/SignUpForm";
 import { CrudTable } from "@/features/CrudTable";
 import columns from "../../config/customerColumns";
+import AddCustomer from "../../forms/AddCustomer";
 
 const Customers = () => {
   const { langDirection, translate } = useLocale();
@@ -231,7 +232,7 @@ const Customers = () => {
         dataSource={data}
         tableKey={"customer-table"}
         rowKey="_id"
-        createFormFields={<SignUpForm />}
+        createFormFields={<AddCustomer />}
         searchFormFields={<SignUpForm />}
       />
     </CustomerLayout>
