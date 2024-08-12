@@ -233,7 +233,9 @@ const Customers = () => {
         tableKey={"customer-table"}
         rowKey="_id"
         createFormFields={<AddCustomer />}
+        createFormInitialValues={{ tags: ["gold"] }}
         searchFormFields={<SignUpForm />}
+        searchFormInitialValues={{ tags: ["gold"] }}
       />
     </CustomerLayout>
   );

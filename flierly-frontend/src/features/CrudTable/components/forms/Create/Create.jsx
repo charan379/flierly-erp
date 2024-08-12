@@ -4,11 +4,12 @@ import { DrawerForm } from "@ant-design/pro-components";
 import { Button } from "antd";
 import React from "react";
 
-const Create = ({ formFields, title = "add" }) => {
+const Create = ({ formFields, title = "add", initialValues }) => {
   const { langDirection, translate } = useLocale();
   return (
     <DrawerForm
       title={title}
+      initialValues={initialValues}
       trigger={
         <Button
           type="primary"

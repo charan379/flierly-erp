@@ -41,7 +41,7 @@ const AddCustomer = () => {
                 rules={[
                     // Validation rules
                     { required: true, message: translate("age_is_required") },
-                    { min: 4, message: translate("age_should_be_greater_then_12"), warningOnly: true, type: 'number' },
+                    { min: 12, message: translate("age_should_be_greater_then_12"), warningOnly: true, type: 'number' },
                     { type: "number" },
                 ]}
                 tooltip={{
@@ -116,9 +116,6 @@ const AddCustomer = () => {
                             </Tag>
                         );
                     }}
-                    defaultValue={["gold"]}
-                    value={["gold"]}
-                    
                 />
             </Form.Item>
         </div>)

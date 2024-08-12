@@ -17,6 +17,7 @@ const CrudTable = ({
   columns,
   dataSource,
   createFormFields,
+  createFormInitialValues,
   searchFormFields,
 }) => {
   const tableHeight = useElementHeight("pro-table-filerly-1");
@@ -106,7 +107,7 @@ const CrudTable = ({
         // search from
         <Search formFields={searchFormFields} title={translate("search_from")} />,
         // create from
-        <Create formFields={createFormFields} title={translate("add_from")} />,
+        <Create formFields={createFormFields} initialValues={createFormInitialValues} title={translate("add_from")} />,
         // delete the selected items
         <Popconfirm
           title={translate("delete_selected")}
