@@ -228,6 +228,7 @@ const Customers = () => {
     <CustomerLayout header={<Header />}>
       {/* https://procomponents.ant.design/en-US/components/table */}
       <CrudTable
+        entity="customer"
         columns={columns}
         dataSource={data}
         tableKey={"customer-table"}

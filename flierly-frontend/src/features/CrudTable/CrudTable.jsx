@@ -12,6 +12,7 @@ import Create from "./components/forms/Create";
 import Search from "./components/forms/Search";
 
 const CrudTable = ({
+  entity,
   tableKey,
   rowKey = "_id",
   columns,
