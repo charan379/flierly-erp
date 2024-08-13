@@ -7,6 +7,9 @@ import React from 'react'
 const Search = ({ formFields, title = "search", initialValues }) => {
 
     const { langDirection, translate } = useLocale();
+
+    if (!formFields) return;
+    
     return (
         <ModalForm
             // initial values

@@ -6,6 +6,8 @@ import React from "react";
 
 const Create = ({ formFields, title = "add", initialValues }) => {
   const { langDirection, translate } = useLocale();
+
+  if (!formFields) return;
   return (
     <DrawerForm
       title={title}
