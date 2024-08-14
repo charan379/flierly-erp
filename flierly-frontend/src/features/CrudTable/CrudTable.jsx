@@ -10,6 +10,7 @@ import { Button, message, Popconfirm } from "antd";
 import React, { useRef, useState } from "react";
 import Create from "./components/forms/Create";
 import Search from "./components/forms/Search";
+import { useTheme } from "@/theme/useTheme";
 
 const CrudTable = ({
   entity,
@@ -22,6 +23,9 @@ const CrudTable = ({
   searchFormFields,
   searchFormInitialValues,
 }) => {
+
+  const { isCompactTheme } = useTheme();
+
   const tableHeight = useElementHeight("pro-table-filerly-1");
 
   const { langDirection, translate } = useLocale();
@@ -42,9 +46,8 @@ const CrudTable = ({
       scroll={{
         scrollToFirstRowOnChange: true,
         x: 1300,
-        y: tableHeight * 0.7,
+        y: tableHeight * (isCompactTheme ? 0.7 : 0.58),
       }}
-      //   size="large"
       // columns state configuration
       columnsState={{
         persistenceType: "localStorage",
@@ -84,20 +87,7 @@ const CrudTable = ({
       request={async (params, sort, filter) => {
         console.log({ params, sort, filter });
         return {
-          data: [{
-            _id: "1",
-            name: "John Brown",
-            age: 32,
-            address: "New York No. 1 Lake Park",
-            tags: ["nice", "developer"],
-          },
-          {
-            _id: "2",
-            name: "Jim Green",
-            age: 42,
-            address: "London No. 1 Lake Park",
-            tags: ["loser"],
-          },],
+          data: data,
           success: true,
           total: 2,
         };
