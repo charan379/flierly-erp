@@ -19,7 +19,9 @@ async function getModelsList(): Promise<ModelDetails[]> {
         };
     })
 
-    return modelsList;
+    const igonredModels = [''];
+
+    return modelsList.filter(model => !igonredModels.includes(model.name));
 };
 
 export { getModelsList };
