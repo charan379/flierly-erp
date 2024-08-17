@@ -21,7 +21,7 @@ const CRUDController = async (modelName: string) => {
         throw new Error(`Model ${modelName} does not exists!`);
     }
 
-    require(`@/models/${modelDetails[0].filePath.split(/\\|\//).slice(-1)}`);
+    require(`@/models/${modelDetails[0].filePath.split(/\\|\//).slice(2).join('/')}`);
 
     const model: mongoose.Model<any> = mongoose.model(modelName);
 

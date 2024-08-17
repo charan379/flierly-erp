@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { AccountType } from "./interfaces/account-type.interface";
+import { AccountType } from "../interfaces/account-type.interface";
 
 const schema: mongoose.Schema<AccountType> = new mongoose.Schema<AccountType>(
     {

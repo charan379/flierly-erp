@@ -9,6 +9,7 @@ import { HttpError } from 'http-errors';
 import validateEnv from '@/utils/env.validator';
 import Database from './lib/database';
 import Config from './config';
+import { getModelsList } from './models';
 
 dotenv.config();
 
@@ -58,6 +59,8 @@ server.on('listening', async () => {
     await Database.connect();
     console.info("🚀 [server]: Server started is running on " + port);
 });
+
+// getModelsList().then((models) => {console.log(models)})
 
 /**
  * Normalize a port into a number, string, or false.

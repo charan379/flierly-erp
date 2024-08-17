@@ -4,7 +4,7 @@ import { validateHash } from "@/lib/bcrypt";
 import FlierlyException from "@/lib/flierly.exception";
 import { generateJwtToken } from "@/lib/jwt";
 import { User } from "@/models/interfaces/user.interface";
-import UserModel from "@/models/user.model";
+import UserModel from "@/models/user/user.model";
 import apiResponse from "@/utils/api-response.generator";
 import JoiSchemaValidator from "@/utils/joi-schema.validator";
 import { Request, Response } from "express";

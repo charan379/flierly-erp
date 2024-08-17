@@ -1,7 +1,7 @@
 import AccessType from "@/constants/accessTypes";
 import { getModelsList } from "@/models";
 import { UserPermission } from "@/models/interfaces/user-permission.interface";
-import UserPermissionModel from "@/models/user-permission.model";
+import UserPermissionModel from "@/models/user/user-permission.model";
 import getDifferenceFromArrayOfObjects from "@/utils/get-difference-from-arary-of-objects.util";
 
 

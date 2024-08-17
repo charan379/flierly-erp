@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Account } from "./interfaces/account.interface";
+import { Account } from "../interfaces/account.interface";
 
 
 const schema: mongoose.Schema<Account> = new mongoose.Schema<Account>(

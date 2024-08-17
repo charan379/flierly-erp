@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { AccountSubtype } from "./interfaces/account-subtype.interface";
+import { AccountSubtype } from "../interfaces/account-subtype.interface";
 
 
 const schema: mongoose.Schema<AccountSubtype> = new mongoose.Schema<AccountSubtype>(

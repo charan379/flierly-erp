@@ -2,7 +2,7 @@ import HttpCodes from "@/constants/httpCodes";
 import FlierlyException from "@/lib/flierly.exception";
 import { verifyJwtToken } from "@/lib/jwt";
 import { User } from "@/models/interfaces/user.interface";
-import UserModel from "@/models/user.model";
+import UserModel from "@/models/user/user.model";
 import collectUserPermissions from "@/utils/collect-user-permissions";
 import { NextFunction, Request, Response } from "express";
 import { JwtPayload } from "jsonwebtoken";

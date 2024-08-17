@@ -3,7 +3,7 @@ import { emailSchema, nameMi5Ma50Schema, passwordSchema, phoneSchema } from "@/j
 import { generateHash } from "@/lib/bcrypt";
 import FlierlyException from "@/lib/flierly.exception";
 import { User } from "@/models/interfaces/user.interface";
-import UserModel from "@/models/user.model";
+import UserModel from "@/models/user/user.model";
 import apiResponse from "@/utils/api-response.generator";
 import JoiSchemaValidator from "@/utils/joi-schema.validator";
 import { NextFunction, Request, Response } from "express";

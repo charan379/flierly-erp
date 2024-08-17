@@ -1,10 +1,10 @@
 import userDetailsPrompt from "@/setup/prompts/user-details.prompt";
-import UserRoleModel from "@/models/user-role.model";
+import UserRoleModel from "@/models/user/user-role.model";
 import { UserRole } from "@/models/interfaces/user-role.interface";
-import UserPermissionModel from "@/models/user-permission.model";
+import UserPermissionModel from "@/models/user/user-permission.model";
 import mongoose from "mongoose";
 import { User } from "@/models/interfaces/user.interface";
-import UserModel from "@/models/user.model";
+import UserModel from "@/models/user/user.model";
 import { generateHash } from "@/lib/bcrypt";
 
 async function generateSuperAdmin(): Promise<void> {

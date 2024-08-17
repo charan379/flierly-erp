@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { UserPermission } from "./interfaces/user-permission.interface";
+import { UserPermission } from "../interfaces/user-permission.interface";
 import AccessType from "@/constants/accessTypes";
 
 const schema: mongoose.Schema<UserPermission> = new mongoose.Schema<UserPermission>(
