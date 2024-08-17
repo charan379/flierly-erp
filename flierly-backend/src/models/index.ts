@@ -19,7 +19,7 @@ async function getModelsList(): Promise<ModelDetails[]> {
         };
     })
 
-    const igonredModels = [''];
+    const igonredModels = ['user-password'];
 
     return modelsList.filter(model => !igonredModels.includes(model.name));
 };

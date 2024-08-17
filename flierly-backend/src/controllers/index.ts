@@ -34,6 +34,7 @@ const controllers = async () => {
     }
 
     // console.debug(controllers)
+    
     return controllers;
 };
 export default controllers;
