@@ -22,6 +22,8 @@ const schema: mongoose.Schema<User> = new mongoose.Schema<User>(
         },
         email: {
             type: String,
+            lowercase: true,
+            trim: true,
             required: [true, "User email is required."]
         },
         mobile: {
