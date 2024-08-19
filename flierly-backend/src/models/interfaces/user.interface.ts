@@ -7,7 +7,6 @@ export interface User {
     isDeleted: boolean,
     isActive: boolean,
     username: string,
-    password: string,
     email: string,
     mobile: string,
     permissions: mongoose.ObjectId[] | UserPermission[],

@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-import { UserPassowrd } from '../interfaces/user-password.interface';
+import { UserPassword as UserPassword } from '../interfaces/user-password.interface';
 
 
-const schema: mongoose.Schema<UserPassowrd> = new mongoose.Schema<UserPassowrd>(
+const schema: mongoose.Schema<UserPassword> = new mongoose.Schema<UserPassword>(
     {
         userId: {
             type: mongoose.Schema.ObjectId,
@@ -21,6 +21,6 @@ const schema: mongoose.Schema<UserPassowrd> = new mongoose.Schema<UserPassowrd>(
 
 schema.index({ userId: 1 });
 
-const UserPassowrdModel: mongoose.Model<UserPassowrd> = mongoose.model<UserPassowrd>('UserPassword', schema);
+const UserPasswordModel: mongoose.Model<UserPassword> = mongoose.model<UserPassword>('UserPassword', schema);
 
-export default UserPassowrdModel;
+export default UserPasswordModel;

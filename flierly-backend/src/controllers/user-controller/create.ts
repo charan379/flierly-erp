@@ -1,6 +1,5 @@
 import HttpCodes from "@/constants/httpCodes";
-import { emailSchema, nameMi5Ma50Schema, passwordSchema, phoneSchema } from "@/joi-schemas/common.joi.schemas";
-import { generateHash } from "@/lib/bcrypt";
+import { emailSchema, nameMi5Ma50Schema, phoneSchema } from "@/joi-schemas/common.joi.schemas";
 import FlierlyException from "@/lib/flierly.exception";
 import { User } from "@/models/interfaces/user.interface";
 import UserModel from "@/models/user/user.model";
@@ -11,7 +10,6 @@ import Joi from "joi";
 
 export const createUserSchema: Joi.ObjectSchema = Joi.object({
     username: nameMi5Ma50Schema.required(),
-    password: passwordSchema.required(),
     email: emailSchema.required(),
     mobile: phoneSchema.required(),
 });
@@ -31,17 +29,15 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
     if (existingUsers > 0) {
         throw new FlierlyException("User details already exists", HttpCodes.BAD_REQUEST, "Duplicate user creation", "create-user-custom-controller-duplicate-registration");
     }
-    // hash/encrypt user password
-    const userWithHashedPassword: User = { ...user, password: await generateHash(user.password) };
     // save new user
-    const result = await UserModel.create({ ...userWithHashedPassword });
+    const result = await UserModel.create(user);
     // responde with newly registered user details.
     res.status(HttpCodes.CREATED).json(
         apiResponse(
             true,
             result,
             "User Created Successfully",
-            "user.create", 
+            "user.create",
             req.url,
             null,
             HttpCodes.CREATED)

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export interface UserPassowrd {
+export interface UserPassword {
     _id: mongoose.ObjectId,
     userId: mongoose.ObjectId,
     password: string,
