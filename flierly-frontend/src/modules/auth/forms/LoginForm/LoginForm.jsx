@@ -1,14 +1,12 @@
-import React from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import useLocale from "@/locale/useLocale";
 import {
   InfoCircleOutlined,
   LockOutlined,
-  MailOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input } from "antd";
 import Loading from "@/components/Loading";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { loadingTypes } from "@/types/loading";
 
@@ -19,7 +17,6 @@ import { loadingTypes } from "@/types/loading";
  */
 const LoginForm = () => {
   const { translate, langDirection } = useLocale(); // Using the custom hook to get translation function and language direction
-  const navigate = useNavigate();
   const { loading, login } = useAuth();
 
   return (
@@ -39,26 +36,6 @@ const LoginForm = () => {
         <div style={{ direction: langDirection }}>
           {" "}
           {/* Setting text direction based on language */}
-          {/* Email */}
-          {/* <Form.Item
-            label={translate("username")} // Translated label for email field
-            name="email" // Name of the form field
-            rules={[ // Validation rules
-              { required: true, message: translate("email_is_required") },
-              { type: "email" }
-            ]}
-            tooltip={{
-              title: translate("email_is_required"), // Tooltip text
-              icon: <InfoCircleOutlined />, // Tooltip icon
-            }}
-          >
-            <Input
-              prefix={<MailOutlined className="site-form-item-icon" />} // Prefix icon for the input field
-              placeholder={translate("email")} // Translated placeholder text
-              type="email" // Input type
-              size="large" // Size of the input field
-            />
-          </Form.Item> */}
           {/* Username */}
           <Form.Item
             label={translate("username")} // Translated label for username filed

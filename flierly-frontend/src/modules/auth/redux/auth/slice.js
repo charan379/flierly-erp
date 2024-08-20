@@ -72,6 +72,17 @@ const slice = createAsyncSlice({
         },
       }
     ),
+    LOGOUT: (state) => {
+      state.user = {};
+      state.token = "";
+      state.loggedInAt = "";
+      state.tokenExpiresAt = "";
+      state.isLoggedIn = false;
+      state.error = {};
+      state.loading = loadingTypes.IDLE;
+      // Persisting the state in localStorage
+      window.localStorage.setItem("auth", JSON.stringify(state));
+    },
   }),
 });
 

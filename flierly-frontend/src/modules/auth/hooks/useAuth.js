@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { LOGIN } from "../redux/auth/actions";
+import { LOGIN, LOGOUT } from "../redux/auth/actions";
 
 export function useAuth() {
   //
@@ -17,5 +17,6 @@ export function useAuth() {
     loading,
     error,
     login: (credentials) => dispatch(LOGIN(credentials)),
+    logout: () => dispatch(LOGOUT()),
   };
 }

@@ -4,9 +4,12 @@ import useLocale from "@/locale/useLocale";
 import { Link } from "react-router-dom";
 import { LogoutOutlined, ToolOutlined, UserOutlined } from "@ant-design/icons";
 import UserDetails from "../UserDetails/UserDetails";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
 
 export default function DropdownMenu() {
   const { translate } = useLocale();
+
+  const { logout } = useAuth();
 
   const items = [
     {
@@ -32,7 +35,7 @@ export default function DropdownMenu() {
     {
       icon: <LogoutOutlined />,
       key: "logout",
-      label: <Link to={"/logout"}>{translate("logout")}</Link>,
+      label: <Link onClick={() => logout()}>{translate("logout")}</Link>,
     },
   ];
 
@@ -43,7 +46,7 @@ export default function DropdownMenu() {
       menu={{ items }}
       trigger={["click", "contextMenu"]}
       placement="bottomLeft"
-      stye={{ width: "280px"}}
+      stye={{ width: "280px" }}
     >
       <Badge>
         <UserAvatar />
