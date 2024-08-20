@@ -7,7 +7,7 @@ import AppRouter from "@/router/Router";
 function Flierly() {
   const { isLoggedIn } = useAuth();
 
-  if (!isLoggedIn) {
+  if (isLoggedIn) {
     return (
       <AntdConfigProvider>
         <AppRouter />

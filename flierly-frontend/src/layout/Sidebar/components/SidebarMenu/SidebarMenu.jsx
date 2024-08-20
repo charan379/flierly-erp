@@ -1,6 +1,8 @@
 import useLocale from "@/locale/useLocale";
 import { useTheme } from "@/theme/useTheme";
 import {
+  AreaChartOutlined,
+  ClusterOutlined,
   ContainerOutlined,
   CreditCardOutlined,
   CustomerServiceOutlined,
@@ -11,10 +13,12 @@ import {
   ReconciliationOutlined,
   SettingOutlined,
   ShopOutlined,
+  TableOutlined,
   TagOutlined,
   TagsOutlined,
   UserOutlined,
   WalletOutlined,
+  OrderedListOutlined
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import React from "react";
@@ -33,9 +37,38 @@ const SidebarMenu = ({ sidebarClosed }) => {
       label: <Link to={"/"}>{translate("dashboard")}</Link>,
     },
     {
+      key: "branch",
+      icon: <ClusterOutlined style={menuIconStyle} />,
+      label: translate("branchs"),
+      children: [
+        {
+          key: "branchHome",
+          icon: <AreaChartOutlined style={menuIconStyle} />,
+          label: <Link to={"/branch"}>{translate("statistics")}</Link>,
+        },
+        {
+          key: "branchlist",
+          icon: <TableOutlined style={menuIconStyle} />,
+          label: <Link to={"/branch/list"}>{translate("list_branchs")}</Link>,
+        },
+      ],
+    },
+    {
       key: "customer",
       icon: <CustomerServiceOutlined style={menuIconStyle} />,
-      label: <Link to={"/customer"}>{translate("customers")}</Link>,
+      label: translate("customers"),
+      children: [
+        {
+          key: "customerHome",
+          icon: <AreaChartOutlined style={menuIconStyle} />,
+          label: <Link to={"/customer"}>{translate("statistics")}</Link>,
+        },
+        {
+          key: "customerlist",
+          icon: <TableOutlined style={menuIconStyle} />,
+          label: <Link to={"/customer/list"}>{translate("list_customers")}</Link>,
+        },
+      ],
     },
     {
       key: "people",

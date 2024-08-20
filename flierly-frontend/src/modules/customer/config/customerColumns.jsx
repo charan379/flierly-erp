@@ -2,6 +2,12 @@ import { Space, Tag } from "antd";
 
 const columns = [
   {
+    title: "Index",
+    dataIndex: "index",
+    valueType: "indexBorder",
+    width: 15,
+  },
+  {
     title: "Name",
     dataIndex: "name",
     copyable: true,
@@ -34,7 +40,7 @@ const columns = [
         value: "New York",
       },
     ],
-    filterMode: 'menu',
+    filterMode: "menu",
     filterSearch: true,
   },
   {
