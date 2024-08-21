@@ -45,7 +45,7 @@ const CrudTable = ({
       }}
       scroll={{
         scrollToFirstRowOnChange: true,
-        x: 1300,
+        x: 1100,
         y: tableHeight * (isCompactTheme ? 0.7 : 0.58),
       }}
       // columns state configuration
