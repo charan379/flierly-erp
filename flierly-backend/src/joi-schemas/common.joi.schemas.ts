@@ -1,4 +1,5 @@
 import Joi from "joi";
+import mongoose from "mongoose";
 
 export const objectIdSchema = Joi.string()
     .pattern(/^[0-9a-fA-F]{24}$/)
@@ -6,6 +7,40 @@ export const objectIdSchema = Joi.string()
     .messages({
         'string.pattern.base': "Please provied a valid Id : {#value} is not a valid id."
     });
+
+export const objectIdArraySchema: Joi.Schema<mongoose.ObjectId[]> = Joi.array().items(
+    Joi.string()
+        .pattern(/^[0-9a-fA-F]{24}$/)
+        .required()
+        .messages({
+            'string.pattern.base': "Please provide a valid Id: {#value} is not a valid id."
+        })
+);
+
+export const updateManyActions: Joi.Schema<string> = Joi.string()
+    .valid('activate', 'inactivate').example('activate')
+    .messages({
+        'any.only': 'Value must be one of [delete, activate, inactivate].',
+    });
+
+
+export const updateManyBodySchema: Joi.Schema<{ ids: mongoose.ObjectId[], action: 'delete' | 'activate' | 'inactivate' }> = Joi.object({
+    ids: Joi.array().items(
+        Joi.string()
+            .pattern(/^[0-9a-fA-F]{24}$/)
+            .required()
+            .messages({
+                'string.pattern.base': "Please provide a valid Id: {#value} is not a valid id."
+            })
+    ),
+    action: Joi.string()
+        .valid('activate', 'inactivate')
+        .example('activate')
+        .messages({
+            'any.only': 'Value must be one of [activate, inactivate].',
+        }).required()
+});
+
 
 export const nameMi5Ma50Schema: Joi.Schema<string> = Joi.string().min(5).max(50).example("Name")
     .messages({

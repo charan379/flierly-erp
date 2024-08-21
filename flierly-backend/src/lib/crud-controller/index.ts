@@ -8,6 +8,8 @@ import softDelete from "./delete";
 import update from "./update";
 import page from "./page";
 import exists from "./exists";
+import activateMany from "./activateMany";
+import softDeleteMany from "./deleteMany";
 
 const CRUDController = async (modelName: string) => {
 
@@ -37,6 +39,8 @@ const CRUDController = async (modelName: string) => {
         page: (req: Request, res: Response) => page(model, req, res),
         search: (req: Request, res: Response) => search(model, req, res),
         exists: (req: Request, res: Response) => exists(model, req, res),
+        activateMany: (req: Request, res: Response) => activateMany(model, req, res),
+        deleteMany: (req: Request, res: Response) => softDeleteMany(model, req, res),
     }
 
     return crudMethods;
