@@ -3,27 +3,41 @@ import errorHandler from "@/handlers/errorHandler";
 import successHandler from "@/handlers/successHandler";
 import axios from "axios";
 
-const BASE_API_URL = serverConfig.BASE_API_URL;
+// Create an axios instance with the base URL from server configuration
+const api = axios.create({
+  baseURL: serverConfig.BASE_API_URL,
+});
 
-export const login = async (credentials) => {
-  try {
-    const response = await axios.post(
-      BASE_API_URL + `user/authenticate`,
-      credentials
-    );
+const authService = {
+  /**
+   * Function to handle user login
+   * @param {Object} credentials - User login credentials
+   * @returns {Object} - Response data or error
+   */
+  login: async (credentials) => {
+    try {
+      // Sending POST request to authenticate user
+      const response = await api.post(`/user/authenticate`, credentials);
 
-    const { data, status } = response;
+      // Destructuring data and status from response
+      const { data, status } = response;
 
-    successHandler(
-      { data, status },
-      {
-        notifyOnSuccess: true,
-        notifyOnFailed: true,
-      }
-    );
+      // Handling success response
+      successHandler(
+        { data, status },
+        {
+          notifyOnSuccess: false, // Disable success notification
+          notifyOnFailed: true,   // Enable failure notification
+        }
+      );
 
-    return data;
-  } catch (error) {
-    return errorHandler(error);
-  }
+      // Returning response data
+      return data;
+    } catch (error) {
+      // Handling error response
+      return errorHandler(error);
+    }
+  },
 };
+
+export default authService;

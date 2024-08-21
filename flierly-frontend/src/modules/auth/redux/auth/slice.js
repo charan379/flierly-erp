@@ -1,7 +1,7 @@
 import { createAsyncSlice } from "@/redux/createAsyncSlice";
 import statePersist from "@/redux/statePersist";
 import { loadingTypes } from "@/types/loading";
-import * as authService from "../../service";
+import authService from "../../service/auth.service";
 
 // Define the initial state for the authentication slice
 const INITIAL_STATE = {
