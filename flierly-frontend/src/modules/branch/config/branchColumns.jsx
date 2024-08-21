@@ -29,6 +29,7 @@ const columns = [
     title: "Active",
     dataIndex: "isActive",
     width: 10,
+    align: 'center',
     render: (text, record, index, action) => {
       return text === false ? (
         <Tag color="red">InActive</Tag>
