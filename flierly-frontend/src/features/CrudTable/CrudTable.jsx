@@ -45,7 +45,7 @@ const CrudTable = ({
       }}
       scroll={{
         scrollToFirstRowOnChange: true,
-        x: 1100,
+        x: 1300,
         y: tableHeight * (isCompactTheme ? 0.7 : 0.58),
       }}
       // columns state configuration
@@ -82,6 +82,7 @@ const CrudTable = ({
       pagination={{
         showSizeChanger: true,
         pageSizeOptions: [5, 10, 20, 30, 50, 100],
+        defaultPageSize: 10,
       }}
       // columns
       columns={columns}
