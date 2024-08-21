@@ -32,7 +32,7 @@ const ThemeDropdown = () => {
       trigger={["contextMenu"]}
       autoAdjustOverflow
       menu={{ items }}
-      placement="bottomCenter"
+      placement="bottom"
       stye={{ width: "280px" }}
       onOpenChange={handleOpenChange}
       open={open}
