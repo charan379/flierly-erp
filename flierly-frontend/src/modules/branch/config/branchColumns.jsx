@@ -1,6 +1,4 @@
-import useLocale from "@/locale/useLocale";
 import { Tag } from "antd";
-import { useState } from "react";
 
 const columns = [
   // {
