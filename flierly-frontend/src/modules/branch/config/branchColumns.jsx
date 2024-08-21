@@ -1,10 +1,14 @@
+import useLocale from "@/locale/useLocale";
+import { Tag } from "antd";
+import { useState } from "react";
+
 const columns = [
-  {
-    title: "index",
-    dataIndex: "index",
-    valueType: "indexBorder",
-    width: 15,
-  },
+  // {
+  //   title: "index",
+  //   dataIndex: "index",
+  //   valueType: "indexBorder",
+  //   width: 15,
+  // },
   {
     title: "DocId",
     dataIndex: "_id",
@@ -26,7 +30,14 @@ const columns = [
   {
     title: "Active",
     dataIndex: "isActive",
-    width: 15,
+    width: 10,
+    render: (text, record, index, action) => {
+      return text === false ? (
+        <Tag color="red">InActive</Tag>
+      ) : (
+        <Tag color="green">Active</Tag>
+      );
+    },
   },
   {
     title: "Email",
@@ -60,11 +71,13 @@ const columns = [
     title: "Created",
     dataIndex: "createdAt",
     width: 20,
+    valueType: "dateTime",
   },
   {
     title: "Updated",
     dataIndex: "updatedAt",
     width: 20,
+    valueType: "dateTime",
   },
 ];
 
