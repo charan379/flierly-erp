@@ -60,6 +60,7 @@ const CrudTable = ({
         columnWidth: "10px",
         fixed: true,
         type: "checkbox",
+        preserveSelectedRowKeys: true,
       }}
       rowKey={rowKey}
       // Configuration for table alert section
@@ -147,6 +148,7 @@ const CrudTable = ({
             key={`delete-selected-rows-trigger`}
             icon={<DeleteOutlined />}
             disabled={rows.selectedRowKeys.length <= 0}
+            onClick={() => console.log(rows)}
           >
             {`${translate("delete")} ${
               rows.selectedRowKeys.length > 0 ? rows.selectedRowKeys.length : ""
