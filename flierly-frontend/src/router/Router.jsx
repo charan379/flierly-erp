@@ -3,7 +3,6 @@ import Routes from "./Routes";
 import { Route } from "react-router-dom";
 
 const AppRouter = () => {
-  console.log(Routes)
   return (
     <Routes>
       <Routes>

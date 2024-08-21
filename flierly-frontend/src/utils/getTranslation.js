@@ -26,7 +26,7 @@ export default function getTranslation(translation, key) {
     }
   } catch (error) {
     // Log the error message
-    console.log(error.message);
+    // console.log(error.message);
 
     // Return the key wrapped in curly braces as a fallback
     return `{${key}}`;
