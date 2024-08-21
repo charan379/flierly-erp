@@ -11,19 +11,19 @@ import React, { useRef, useState } from "react";
 import Create from "./components/forms/Create";
 import Search from "./components/forms/Search";
 import { useTheme } from "@/theme/useTheme";
+import crudService from "./service/crud.service";
 
 const CrudTable = ({
   entity,
   tableKey,
   rowKey = "_id",
   columns,
-  dataSource,
+  dataSource = [],
   createFormFields,
   createFormInitialValues,
   searchFormFields,
   searchFormInitialValues,
 }) => {
-
   const { isCompactTheme } = useTheme();
 
   const tableHeight = useElementHeight("pro-table-filerly-1");
@@ -78,39 +78,68 @@ const CrudTable = ({
       // action ref to trigger actions
       actionRef={actionRef}
       // pagination configuration
-      pagination={{ pageSize: 20 }}
+      pagination={{
+        showSizeChanger: true,
+        pageSizeOptions: [5, 10, 20, 30, 50, 100],
+      }}
       // columns
       columns={columns}
       // datasource
       dataSource={data}
       // data request
       request={async (params, sort, filter) => {
-        console.log({ params, sort, filter });
+        // console.log({ params, sort, filter });
+
+        const { result, success } = await crudService.page({
+          entity,
+          pagination: { limit: params.pageSize, page: params.current },
+        });
+
+        // console.log({ result, success });
+
         return {
-          data: data,
-          success: true,
-          total: 2,
+          data: result?.data,
+          success: success,
+          total: result?.totalResults,
         };
       }}
-      // post data came from request 
-      postData={(data) => setData(data)}
+      // post data came from request
+      postData={(data) => {
+        setData(data);
+      }}
       // toolbar controls configuration
       toolBarRender={(action, rows) => [
         // search from
-        <Search formFields={searchFormFields} initialValues={searchFormInitialValues} title={translate("search_from")} />,
+        <Search
+          formFields={searchFormFields}
+          initialValues={searchFormInitialValues}
+          title={translate("search_from")}
+        />,
         // create from
-        <Create formFields={createFormFields} initialValues={createFormInitialValues} title={translate("add_from")} />,
+        <Create
+          formFields={createFormFields}
+          initialValues={createFormInitialValues}
+          title={translate("add_from")}
+        />,
         // delete the selected items
         <Popconfirm
           title={translate("delete_selected")}
-          description={`${translate("delete_selected_items")} ${rows.selectedRowKeys.length}`}
+          description={`${translate("delete_selected_items")} ${
+            rows.selectedRowKeys.length
+          }`}
           icon={<QuestionCircleOutlined style={{ color: "red" }} />}
           okButtonProps={{ danger: true, icon: <DeleteOutlined /> }}
           okText={translate("delete")}
           cancelText={translate("cancel")}
           cancelButtonProps={{ type: "primary" }}
           onCancel={() => message.warning(translate("request_cancelled"))}
-          onConfirm={() => message.success(`${rows.selectedRowKeys.length} rows ${translate("deleted_sucessfully")}`)}
+          onConfirm={() =>
+            message.success(
+              `${rows.selectedRowKeys.length} rows ${translate(
+                "deleted_sucessfully"
+              )}`
+            )
+          }
         >
           <Button
             type="primary"
@@ -119,7 +148,9 @@ const CrudTable = ({
             icon={<DeleteOutlined />}
             disabled={rows.selectedRowKeys.length <= 0}
           >
-            {`${translate("delete")} ${rows.selectedRowKeys.length > 0 ? rows.selectedRowKeys.length : ""}`}
+            {`${translate("delete")} ${
+              rows.selectedRowKeys.length > 0 ? rows.selectedRowKeys.length : ""
+            }`}
           </Button>
         </Popconfirm>,
         // clear the selection
@@ -130,7 +161,9 @@ const CrudTable = ({
           disabled={rows.selectedRowKeys.length <= 0}
           onClick={() => actionRef.current.clearSelected()}
         >
-          {`${translate("clear")} ${rows.selectedRowKeys.length > 0 ? rows.selectedRowKeys.length : ""}`}
+          {`${translate("clear")} ${
+            rows.selectedRowKeys.length > 0 ? rows.selectedRowKeys.length : ""
+          }`}
         </Button>,
       ]}
     />
