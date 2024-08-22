@@ -58,8 +58,9 @@ const crudService = {
       successHandler(
         { data, status },
         {
-          notifyOnSuccess: false, // Disable success notification
+          notifyOnSuccess: true, // Disable success notification
           notifyOnFailed: true, // Enable failure notification
+          notifyType: "message"
         }
       );
 
@@ -88,6 +89,7 @@ const crudService = {
         {
           notifyOnSuccess: true, // Disable success notification
           notifyOnFailed: true, // Enable failure notification
+          notifyType: "message"
         }
       );
 
