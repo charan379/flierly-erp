@@ -12,8 +12,9 @@ const api = axios.create({
 });
 
 const crudService = {
+  // page
   page: async ({
-    entity = "",
+    entity,
     autopopulate = false,
     pagination = { limit: 10, page: 1 },
   }) => {
@@ -31,6 +32,61 @@ const crudService = {
         { data, status },
         {
           notifyOnSuccess: false, // Disable success notification
+          notifyOnFailed: true, // Enable failure notification
+        }
+      );
+
+      // Returning response data
+      return data;
+    } catch (error) {
+      // Handling error response
+      return errorHandler(error);
+    }
+  },
+  // delete many
+  deleteMany: async ({ entity, docIds = [] }) => {
+    try {
+      // Sending POST request to authenticate user
+      const response = await api.delete(`/${entity}/delete-many`, {
+        data: [...docIds],
+      });
+
+      // Destructuring data and status from response
+      const { data, status } = response;
+
+      // Handling success response
+      successHandler(
+        { data, status },
+        {
+          notifyOnSuccess: false, // Disable success notification
+          notifyOnFailed: true, // Enable failure notification
+        }
+      );
+
+      // Returning response data
+      return data;
+    } catch (error) {
+      // Handling error response
+      return errorHandler(error);
+    }
+  },
+  // activate many
+  activateMany: async ({ entity, docIds = [], action = "activate" }) => {
+    try {
+      // Sending POST request to authenticate user
+      const response = await api.put(`/${entity}/activate-many`, {
+        ids: docIds,
+        action,
+      });
+
+      // Destructuring data and status from response
+      const { data, status } = response;
+
+      // Handling success response
+      successHandler(
+        { data, status },
+        {
+          notifyOnSuccess: true, // Disable success notification
           notifyOnFailed: true, // Enable failure notification
         }
       );
