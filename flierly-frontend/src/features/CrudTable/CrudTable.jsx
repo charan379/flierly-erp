@@ -2,16 +2,16 @@ import useElementHeight from "@/hooks/useElementHeight";
 import useLocale from "@/locale/useLocale";
 import {
   ClearOutlined,
-  DeleteOutlined,
-  QuestionCircleOutlined,
 } from "@ant-design/icons";
 import { ProTable } from "@ant-design/pro-components";
-import { Button, message, Popconfirm } from "antd";
+import { Button } from "antd";
 import React, { useRef, useState } from "react";
-import Create from "./components/forms/Create";
-import Search from "./components/forms/Search";
+import Create from "./forms/Create";
+import Search from "./forms/Search";
 import { useTheme } from "@/theme/useTheme";
 import crudService from "./service/crud.service";
+import DeleteMany from "./actions/DeleteMany";
+import ActivateMany from "./actions/ActivateMany";
 
 const CrudTable = ({
   entity,
@@ -112,50 +112,13 @@ const CrudTable = ({
       // toolbar controls configuration
       toolBarRender={(action, rows) => [
         // search from
-        <Search
-          formFields={searchFormFields}
-          initialValues={searchFormInitialValues}
-          title={translate("search_from")}
-        />,
+        <Search formFields={searchFormFields} initialValues={searchFormInitialValues} title={translate("search_from")} />,
         // create from
-        <Create
-          formFields={createFormFields}
-          initialValues={createFormInitialValues}
-          title={translate("add_from")}
-        />,
+        <Create formFields={createFormFields} initialValues={createFormInitialValues} title={translate("add_from")} />,
         // delete the selected items
-        <Popconfirm
-          title={translate("delete_selected")}
-          description={`${translate("delete_selected_items")} ${
-            rows.selectedRowKeys.length
-          }`}
-          icon={<QuestionCircleOutlined style={{ color: "red" }} />}
-          okButtonProps={{ danger: true, icon: <DeleteOutlined /> }}
-          okText={translate("delete")}
-          cancelText={translate("cancel")}
-          cancelButtonProps={{ type: "primary" }}
-          onCancel={() => message.warning(translate("request_cancelled"))}
-          onConfirm={() =>
-            message.success(
-              `${rows.selectedRowKeys.length} rows ${translate(
-                "deleted_sucessfully"
-              )}`
-            )
-          }
-        >
-          <Button
-            type="primary"
-            danger
-            key={`delete-selected-rows-trigger`}
-            icon={<DeleteOutlined />}
-            disabled={rows.selectedRowKeys.length <= 0}
-            onClick={() => console.log(rows)}
-          >
-            {`${translate("delete")} ${
-              rows.selectedRowKeys.length > 0 ? rows.selectedRowKeys.length : ""
-            }`}
-          </Button>
-        </Popconfirm>,
+        <DeleteMany entity={entity} action={action} rows={rows} key={"delete_selected"} />,
+        // activate | inactivate the selected items
+        <ActivateMany entity={entity} action={action} rows={rows} key={"activate_selected"} />,
         // clear the selection
         <Button
           type="primary"
