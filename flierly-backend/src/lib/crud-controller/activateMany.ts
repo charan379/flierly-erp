@@ -18,7 +18,7 @@ const activateMany = async (model: mongoose.Model<any>, req: Request, res: Respo
     // Validate the request body
     const reqBody: { ids: mongoose.ObjectId[], action: 'activate' | 'inactivate' } = await JoiSchemaValidator(updateManyBodySchema, req.body, { abortEarly: false }, "dynamic-activate-many");
 
-    let updates = {};
+    let updates = { isActive: true };
 
     switch (reqBody.action) {
         case 'inactivate': {
@@ -30,13 +30,13 @@ const activateMany = async (model: mongoose.Model<any>, req: Request, res: Respo
             break;
         };
         default: {
-            updates = {};
+            updates = { isActive: true };
             break;
         }
     }
     // Update the documents with soft delete flags
     const result = await model.updateMany(
-        { _id: { $in: reqBody.ids }, isDeleted: false },
+        { _id: { $in: reqBody.ids }, isDeleted: false, isActive: !updates.isActive },
         { $set: updates },
         { new: true }
     ).exec();
@@ -46,7 +46,7 @@ const activateMany = async (model: mongoose.Model<any>, req: Request, res: Respo
             apiResponse(
                 true,
                 result,
-                `Documents updated successfully`,
+                `${result.modifiedCount} ${model.modelName}'s ${reqBody.action}d successfully !`,
                 `${model.modelName.toLowerCase()}.activateMany`,
                 req.url,
                 null,
