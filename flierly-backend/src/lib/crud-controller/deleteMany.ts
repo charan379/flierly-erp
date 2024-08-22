@@ -19,18 +19,18 @@ const softDeleteMany = async (model: mongoose.Model<any>, req: Request, res: Res
     const validatedIds = await JoiSchemaValidator(objectIdArraySchema, req.body, {}, "dynamic-delete-many");
 
     // Find and update the documents with soft delete flags
-    const updatedDocuments = await model.updateMany(
+    const result = await model.updateMany(
         { _id: { $in: validatedIds }, isDeleted: false },
         { $set: { isDeleted: true, isActive: false } },
         { new: true }
     ).exec();
 
-    if (updatedDocuments.matchedCount > 0) {
+    if (result.modifiedCount > 0) {
         return res.status(HttpCodes.OK).json(
             apiResponse(
                 true,
-                updatedDocuments,
-                `Data removed successfully`,
+                result,
+                `${result.modifiedCount} ${model.modelName}'s deleted successfully !`,
                 `${model.modelName.toLowerCase()}.deleteMany`,
                 req.url,
                 null,
