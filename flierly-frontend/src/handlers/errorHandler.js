@@ -2,6 +2,94 @@ import { notification } from 'antd';
 import codeMessage from './codeMessage';
 
 /**
+ * Displays an error notification with the specified message and description.
+ *
+ * @param {string} message - The title of the error notification.
+ * @param {string} description - The description of the error notification.
+ * @param {number} duration - Duration the notification will be displayed.
+ * @param {number} maxCount - Maximum number of notifications displayed at once.
+ */
+const showErrorNotification = (message, description, duration, maxCount) => {
+  notification.config({
+    duration,
+    maxCount,
+  });
+  notification.error({
+    message,
+    description,
+  });
+};
+
+/**
+ * Handles the case when the user is offline.
+ *
+ * @returns {Object} - An object representing the offline error state.
+ */
+const handleOfflineError = () => {
+  showErrorNotification(
+    'No internet connection',
+    'Cannot connect to the Internet. Check your internet network.',
+    15,
+    1
+  );
+  return {
+    success: false,
+    result: null,
+    message: 'Cannot connect to the server. Check your internet network.',
+  };
+};
+
+/**
+ * Handles the case when there is no response from the server.
+ *
+ * @returns {Object} - An object representing the server connection error state.
+ */
+const handleNoResponseError = () => {
+  showErrorNotification(
+    'Problem connecting to server',
+    'Cannot connect to the server. Try again later.',
+    20,
+    1
+  );
+  return {
+    success: false,
+    result: null,
+    message: 'Cannot connect to the server. Contact your account administrator.',
+  };
+};
+
+/**
+ * Handles JWT expiration by clearing auth data and redirecting to logout.
+ */
+const handleJwtExpiration = () => {
+  const auth = window.localStorage.getItem('auth');
+  const isLogout = JSON.parse(window.localStorage.getItem('isLogout')) || false;
+  window.localStorage.removeItem('auth');
+  window.localStorage.removeItem('isLogout');
+  if (auth || isLogout) {
+    window.location.href = '/logout';
+  }
+};
+
+/**
+ * Handles response errors based on the status code.
+ *
+ * @param {Object} response - The response object from the server.
+ * @returns {Object} - The response data.
+ */
+const handleResponseError = (response) => {
+  const message = response.data?.message || codeMessage[response.status];
+  const { status } = response;
+  showErrorNotification(
+    `Request error ${status}`,
+    message,
+    20,
+    2
+  );
+  return response.data;
+};
+
+/**
  * Handles errors and displays appropriate notifications.
  *
  * @param {Object} error - The error object from the failed request.
@@ -10,99 +98,30 @@ import codeMessage from './codeMessage';
 const errorHandler = (error) => {
   // Check if the user is offline
   if (!navigator.onLine) {
-    // Configure notification settings for offline error
-    notification.config({
-      duration: 15,
-      maxCount: 1,
-    });
-    // Show offline error notification
-    notification.error({
-      message: 'No internet connection',
-      description: 'Cannot connect to the Internet. Check your internet network.',
-    });
-    return {
-      success: false,
-      result: null,
-      message: 'Cannot connect to the server. Check your internet network.',
-    };
+    return handleOfflineError();
   }
 
   const { response } = error;
 
   // Handle case when there is no response from the server
   if (!response) {
-    // Configure notification settings for server connection error
-    notification.config({
-      duration: 20,
-      maxCount: 1,
-    });
-    // Show server connection error notification
-    notification.error({
-      message: 'Problem connecting to server',
-      description: 'Cannot connect to the server. Try again later.',
-    });
-    return {
-      success: false,
-      result: null,
-      message: 'Cannot connect to the server. Contact your account administrator.',
-    };
+    return handleNoResponseError();
   }
 
   // Handle JWT expiration
   if (response.data?.jwtExpired) {
-    const auth = window.localStorage.getItem('auth');
-    const isLogout = JSON.parse(window.localStorage.getItem('isLogout')) || false;
-    window.localStorage.removeItem('auth');
-    window.localStorage.removeItem('isLogout');
-    if (auth || isLogout) {
-      window.location.href = '/logout';
-    }
+    handleJwtExpiration();
   }
 
   // Handle response errors with status codes
   if (response.status) {
-    const message = response.data?.message || codeMessage[response.status];
-    const { status } = response;
-    // Configure notification settings for response error
-    notification.config({
-      duration: 20,
-      maxCount: 2,
-    });
-    // Show response error notification
-    notification.error({
-      message: `Request error ${status}`,
-      description: message,
-    });
-    return response.data;
+    return handleResponseError(response);
   } else {
-    // Default error handling
-    notification.config({
-      duration: 15,
-      maxCount: 1,
-    });
-
+    // Default error handling based on online/offline status
     if (navigator.onLine) {
-      // Show server connection error notification if online
-      notification.error({
-        message: 'Problem connecting to server',
-        description: 'Cannot connect to the server. Try again later.',
-      });
-      return {
-        success: false,
-        result: null,
-        message: 'Cannot connect to the server. Contact your account administrator.',
-      };
+      return handleNoResponseError();
     } else {
-      // Show offline error notification if offline
-      notification.error({
-        message: 'No internet connection',
-        description: 'Cannot connect to the Internet. Check your internet network.',
-      });
-      return {
-        success: false,
-        result: null,
-        message: 'Cannot connect to the server. Check your internet network.',
-      };
+      return handleOfflineError();
     }
   }
 };
