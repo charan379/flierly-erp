@@ -4,7 +4,7 @@ import { Button, message, Popconfirm } from "antd";
 import React, { useMemo } from "react";
 import crudService from "../../service/crud.service";
 
-const ActivateMany = ({ entity, action, rows }) => {
+const ActivateMany = ({ entity, actions, rows }) => {
 
   const { translate } = useLocale();
 
@@ -31,8 +31,8 @@ const ActivateMany = ({ entity, action, rows }) => {
         });
         // 
         if (success) {
-            action.clearSelected();
-            await action.reload();
+            actions.clearSelected();
+            await actions.reload();
         };
       }}
     >
