@@ -1,8 +1,6 @@
 import useElementHeight from "@/hooks/useElementHeight";
 import useLocale from "@/locale/useLocale";
-import {
-  ClearOutlined,
-} from "@ant-design/icons";
+import { ClearOutlined } from "@ant-design/icons";
 import { ProTable } from "@ant-design/pro-components";
 import { Button } from "antd";
 import React, { useRef, useState } from "react";
@@ -12,6 +10,7 @@ import { useTheme } from "@/theme/useTheme";
 import crudService from "./service/crud.service";
 import DeleteMany from "./actions/DeleteMany";
 import ActivateMany from "./actions/ActivateMany";
+import RowContextMenu from "./components/RowContextMenu/RowContextMenu";
 
 const CrudTable = ({
   entity,
@@ -34,6 +33,19 @@ const CrudTable = ({
 
   const actionRef = useRef();
 
+  const [rowMenuVisible, setRowMenuVisible] = useState(false);
+
+  const [rowMenuPosition, setRowMenuPosition] = useState({ x: 0, y: 0 });
+
+  const [rowMenuRecord, setRowMenuRecord] = useState();
+
+  const handleRowContextMenu = (record, event) => {
+    event.preventDefault(); // Prevent default context menu
+    setRowMenuRecord(record);
+    setRowMenuVisible(true);
+    setRowMenuPosition({ x: event.clientX, y: event.clientY });
+  };
+
   return (
     <ProTable
       // classname
@@ -43,6 +55,7 @@ const CrudTable = ({
       style={{
         width: "100%",
       }}
+      // scroll configuration
       scroll={{
         scrollToFirstRowOnChange: true,
         x: 1300,
@@ -109,16 +122,40 @@ const CrudTable = ({
       postData={(data) => {
         setData(data);
       }}
+      // on row configuration
+      onRow={(record, index) => {
+        return {
+          onContextMenu: (event) => handleRowContextMenu(record, event),
+        };
+      }}
       // toolbar controls configuration
       toolBarRender={(action, rows) => [
         // search from
-        <Search formFields={searchFormFields} initialValues={searchFormInitialValues} title={translate("search_from")} />,
+        <Search
+          formFields={searchFormFields}
+          initialValues={searchFormInitialValues}
+          title={translate("search_from")}
+        />,
         // create from
-        <Create formFields={createFormFields} initialValues={createFormInitialValues} title={translate("add_from")} />,
+        <Create
+          formFields={createFormFields}
+          initialValues={createFormInitialValues}
+          title={translate("add_from")}
+        />,
         // delete the selected items
-        <DeleteMany entity={entity} action={action} rows={rows} key={"delete_selected"} />,
+        <DeleteMany
+          entity={entity}
+          actions={action}
+          rows={rows}
+          key={"delete_selected"}
+        />,
         // activate | inactivate the selected items
-        <ActivateMany entity={entity} action={action} rows={rows} key={"activate_selected"} />,
+        <ActivateMany
+          entity={entity}
+          actions={action}
+          rows={rows}
+          key={"activate_selected"}
+        />,
         // clear the selection
         <Button
           type="primary"
@@ -126,12 +163,26 @@ const CrudTable = ({
           icon={<ClearOutlined />}
           disabled={rows.selectedRowKeys.length <= 0}
           onClick={() => actionRef.current.clearSelected()}
+          // onClick={() => console.log(actionRef)}
         >
           {`${translate("clear")} ${
             rows.selectedRowKeys.length > 0 ? rows.selectedRowKeys.length : ""
           }`}
         </Button>,
       ]}
+      // table extra render components
+      tableExtraRender={() => {
+        return (
+          <RowContextMenu
+            entity={entity}
+            actions={actionRef.current}
+            record={rowMenuRecord}
+            open={rowMenuVisible}
+            position={rowMenuPosition}
+            close={() => setRowMenuVisible(false)}
+          />
+        );
+      }}
     />
   );
 };
