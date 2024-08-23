@@ -35,6 +35,13 @@ const AntdConfigProvider = React.memo(({ children }) => {
       locale={enUS}
       theme={{
         algorithm: antThemeAlgorithms, // Set the theme algorithms based on the configuration
+        components: {
+          Menu: {
+            darkSubMenuItemBg: "inherit",
+            darkItemBg: "inherit",
+            darkPopupBg: "var(--bg-color-primary-flierly)",
+          },
+        },
       }}
     >
       {children} {/* Render child components wrapped by ConfigProvider */}
