@@ -18,7 +18,7 @@ import {
   TagsOutlined,
   UserOutlined,
   WalletOutlined,
-  OrderedListOutlined
+  OrderedListOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import React from "react";
@@ -66,7 +66,9 @@ const SidebarMenu = ({ sidebarClosed }) => {
         {
           key: "customerlist",
           icon: <TableOutlined style={menuIconStyle} />,
-          label: <Link to={"/customer/list"}>{translate("list_customers")}</Link>,
+          label: (
+            <Link to={"/customer/list"}>{translate("list_customers")}</Link>
+          ),
         },
       ],
     },
@@ -170,7 +172,7 @@ const SidebarMenu = ({ sidebarClosed }) => {
         height: "78dvh",
         paddingBottom: "30px",
         paddingTop: "10px",
-        background: "none",
+        background: "inherit",
       }}
     />
   );
