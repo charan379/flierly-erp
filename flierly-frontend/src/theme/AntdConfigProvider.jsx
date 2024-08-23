@@ -39,7 +39,7 @@ const AntdConfigProvider = React.memo(({ children }) => {
           Menu: {
             darkSubMenuItemBg: "inherit",
             darkItemBg: "inherit",
-            darkPopupBg: "var(--bg-color-primary-flierly)",
+            darkPopupBg: "var(--bg-color-secondary-flierly)",
           },
         },
       }}
