@@ -8,8 +8,8 @@ import Create from "./forms/Create";
 import Search from "./forms/Search";
 import { useTheme } from "@/theme/useTheme";
 import crudService from "./service/crud.service";
-import DeleteMany from "./actions/DeleteMany";
-import ActivateMany from "./actions/ActivateMany";
+import Delete from "./actions/Delete";
+import Activate from "./actions/Activate";
 import RowContextMenu from "./features/RowContextMenu";
 
 const CrudTable = ({
@@ -143,14 +143,14 @@ const CrudTable = ({
           title={translate("add_from")}
         />,
         // delete the selected items
-        <DeleteMany
+        <Delete
           entity={entity}
           actions={action}
           rows={rows}
           key={"delete_selected"}
         />,
         // activate | inactivate the selected items
-        <ActivateMany
+        <Activate
           entity={entity}
           actions={action}
           rows={rows}

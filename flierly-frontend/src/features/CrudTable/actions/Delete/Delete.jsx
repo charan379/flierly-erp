@@ -4,7 +4,7 @@ import { Button, message, Popconfirm } from "antd";
 import React from "react";
 import crudService from "../../service/crud.service";
 
-const DeleteMany = ({ entity, actions, rows }) => {
+const Delete = ({ entity, actions, rows }) => {
 
   const { translate } = useLocale();
 
@@ -43,4 +43,4 @@ const DeleteMany = ({ entity, actions, rows }) => {
   );
 };
 
-export default DeleteMany;
+export default Delete;

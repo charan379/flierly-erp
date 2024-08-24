@@ -4,7 +4,7 @@ import { Button, message, Popconfirm } from "antd";
 import React, { useMemo } from "react";
 import crudService from "../../service/crud.service";
 
-const ActivateMany = ({ entity, actions, rows }) => {
+const Activate = ({ entity, actions, rows }) => {
 
   const { translate } = useLocale();
 
@@ -65,4 +65,4 @@ const checkActiveStatus = (rows) => {
   return inactiveCount >= activeCount;
 };
 
-export default ActivateMany;
+export default Activate;
