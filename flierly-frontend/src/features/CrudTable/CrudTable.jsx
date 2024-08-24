@@ -11,6 +11,7 @@ import crudService from "./service/crud.service";
 import Delete from "./actions/Delete";
 import Activate from "./actions/Activate";
 import RowContextMenu from "./features/RowContextMenu";
+import Restore from "./actions/Restore";
 
 const CrudTable = ({
   entity,
@@ -141,6 +142,13 @@ const CrudTable = ({
           formFields={createFormFields}
           initialValues={createFormInitialValues}
           title={translate("add_from")}
+        />,
+        // restore the selected items
+        <Restore
+          entity={entity}
+          actions={action}
+          rows={rows}
+          key={"restore_selected"}
         />,
         // delete the selected items
         <Delete
