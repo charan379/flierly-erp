@@ -14,7 +14,7 @@ import FlierlyException from "../flierly.exception";
  * @param {Response} res The Express response object for sending the response.
  * @returns {Promise<Response>} A promise resolving with a successful updated response or a not found response.
  */
-const activateMany = async (model: mongoose.Model<any>, req: Request, res: Response): Promise<Response> => {
+const activate = async (model: mongoose.Model<any>, req: Request, res: Response): Promise<Response> => {
     // Validate the request body
     const reqBody: { ids: mongoose.ObjectId[], action: 'activate' | 'inactivate' } = await JoiSchemaValidator(updateManyBodySchema, req.body, { abortEarly: false }, "dynamic-activate-many");
 
@@ -47,7 +47,7 @@ const activateMany = async (model: mongoose.Model<any>, req: Request, res: Respo
                 true,
                 result,
                 `${result.modifiedCount} ${model.modelName}'s ${reqBody.action}d successfully !`,
-                `${model.modelName.toLowerCase()}.activateMany`,
+                `${model.modelName.toLowerCase()}.activate`,
                 req.url,
                 null,
                 HttpCodes.OK)
@@ -58,4 +58,4 @@ const activateMany = async (model: mongoose.Model<any>, req: Request, res: Respo
     throw new FlierlyException('No documents found with given ids', HttpCodes.BAD_REQUEST, '', '');
 };
 
-export default activateMany;
+export default activate;
