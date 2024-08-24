@@ -44,11 +44,11 @@ const crudService = {
     }
   },
 
-  // delete many
-  deleteMany: async ({ entity, docIds = [] }) => {
+  // delete
+  delete: async ({ entity, docIds = [] }) => {
     try {
       // Sending DELETE request to authenticate user
-      const response = await api.delete(`/${entity}/delete-many`, {
+      const response = await api.delete(`/${entity}/delete`, {
         data: [...docIds],
       });
 
@@ -73,41 +73,14 @@ const crudService = {
     }
   },
 
-  // activate many
-  activateMany: async ({ entity, docIds = [], action = "activate" }) => {
+  // activate
+  activate: async ({ entity, docIds = [], action = "activate" }) => {
     try {
       // Sending PUT request to authenticate user
-      const response = await api.put(`/${entity}/activate-many`, {
+      const response = await api.put(`/${entity}/activate`, {
         ids: docIds,
         action,
       });
-
-      // Destructuring data and status from response
-      const { data, status } = response;
-
-      // Handling success response
-      successHandler(
-        { data, status },
-        {
-          notifyOnSuccess: true, // Disable success notification
-          notifyOnFailed: true, // Enable failure notification
-          notifyType: "message",
-        }
-      );
-
-      // Returning response data
-      return data;
-    } catch (error) {
-      // Handling error response
-      return errorHandler(error);
-    }
-  },
-
-  // delete one
-  deleteOne: async ({ entity, docId }) => {
-    try {
-      // Sending DELETE request to authenticate user
-      const response = await api.delete(`/${entity}/delete/${docId}`);
 
       // Destructuring data and status from response
       const { data, status } = response;

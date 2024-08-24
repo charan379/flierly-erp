@@ -19,7 +19,7 @@ const DeleteMany = ({ entity, actions, rows }) => {
       cancelButtonProps={{ type: "primary" }}
       onCancel={() => message.warning(translate("request_cancelled"))}
       onConfirm={async () => {
-       const { success } = await crudService.deleteMany({
+       const { success } = await crudService.delete({
           entity: entity,
           docIds: rows.selectedRowKeys,
         });

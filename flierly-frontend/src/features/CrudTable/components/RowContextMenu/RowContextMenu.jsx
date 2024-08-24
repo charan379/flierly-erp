@@ -77,23 +77,23 @@ const RowContextMenu = ({ entity, actions, record, open, position, close }) => {
     let result = {};
     switch (key) {
       case "activate":
-        result = await crudService.activateMany({
+        result = await crudService.activate({
           entity: entity,
           action: "activate",
           docIds: [record?._id],
         });
         break;
       case "inactivate":
-        result = await crudService.activateMany({
+        result = await crudService.activate({
           entity: entity,
           action: "inactivate",
           docIds: [record?._id],
         });
         break;
       case "delete":
-        result = await crudService.deleteOne({
+        result = await crudService.delete({
           entity: entity,
-          docId: record?._id,
+          docIds: [record?._id]
         });
         break;
       default:

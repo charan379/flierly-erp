@@ -24,7 +24,7 @@ const ActivateMany = ({ entity, actions, rows }) => {
       cancelButtonProps={{ type: "primary" }}
       onCancel={() => message.warning(translate("request_cancelled"))}
       onConfirm={async () => {
-        const { success } =  await crudService.activateMany({
+        const { success } =  await crudService.activate({
           entity: entity,
           action: activate ? "activate" : "inactivate",
           docIds: rows.selectedRowKeys,
