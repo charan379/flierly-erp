@@ -15,8 +15,7 @@ const routeGenerator = (model: string, controller: any) => {
     router.get(`/${model}/page`, authorize(`${model}.read`), errorBoundary(controller['page'], model));
     router.patch(`/${model}/update/:id`, authorize(`${model}.update`), errorBoundary(controller['update'], model));
     router.put(`/${model}/activate`, authorize(`${model}.update`), errorBoundary(controller['activate'], model));
-    router.delete(`/${model}/delete/:id`, authorize(`${model}.delete`), errorBoundary(controller['delete'], model));
-    router.delete(`/${model}/delete-many`, authorize(`${model}.delete`), errorBoundary(controller['deleteMany'], model));
+    router.delete(`/${model}/delete`, authorize(`${model}.delete`), errorBoundary(controller['delete'], model));
 
     if (model === 'user') {
         router.post(`/${model}/authenticate`, errorBoundary(authenticate, model));
