@@ -11,14 +11,14 @@ const ActivateMany = ({ entity, actions, rows }) => {
   // Memoize the activate state calculation
   const activate = useMemo(() => checkActiveStatus(rows.selectedRows), [rows.selectedRows]);
 
-  const buttonStyle = rows.selectedRowKeys.length <= 0 ? {} : { backgroundColor: activate ? "green" : "orange", borderColor: activate ? "green" : "orange" };
+  const buttonStyle = rows.selectedRowKeys.length <= 0 ? {} : { backgroundColor: activate ? "#4CAF50" : "#9E9E9E", borderColor: activate ? "#4CAF50" : "#9E9E9E" };
 
   return (
     <Popconfirm
       title={`${translate(`${activate ? 'activate' : 'inactivate'}_selected`)} : ${rows.selectedRowKeys.length}`}
       description={translate(`on_confirming_selected_items_will_be_${activate ? 'activated' : 'inactivated'}`)}
-      icon={<QuestionCircleOutlined style={{ color: `${activate ? "green" : "orange"}` }} />}
-      okButtonProps={{ style: { backgroundColor: activate ? "green" : "orange" } }}
+      icon={<QuestionCircleOutlined style={{ color: `${activate ? "#4CAF50" : "#9E9E9E"}` }} />}
+      okButtonProps={{ style: { backgroundColor: activate ? "#4CAF50" : "#9E9E9E" } }}
       okText={translate("confirm")}
       cancelText={translate("cancel")}
       cancelButtonProps={{ type: "primary" }}
