@@ -9,6 +9,7 @@ import page from "./page";
 import exists from "./exists";
 import activate from "./activate";
 import softDelete from "./delete";
+import restore from "./restore";
 
 const CRUDController = async (modelName: string) => {
 
@@ -39,6 +40,7 @@ const CRUDController = async (modelName: string) => {
         search: (req: Request, res: Response) => search(model, req, res),
         exists: (req: Request, res: Response) => exists(model, req, res),
         activate: (req: Request, res: Response) => activate(model, req, res),
+        restore: (req: Request, res: Response) => restore(model, req, res),
     }
 
     return crudMethods;

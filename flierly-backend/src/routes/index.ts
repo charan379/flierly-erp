@@ -16,6 +16,8 @@ const routeGenerator = (model: string, controller: any) => {
     router.patch(`/${model}/update/:id`, authorize(`${model}.update`), errorBoundary(controller['update'], model));
     router.put(`/${model}/activate`, authorize(`${model}.update`), errorBoundary(controller['activate'], model));
     router.delete(`/${model}/delete`, authorize(`${model}.delete`), errorBoundary(controller['delete'], model));
+    router.put(`/${model}/restore`, authorize(`${model}.delete`), errorBoundary(controller['restore'], model));
+
 
     if (model === 'user') {
         router.post(`/${model}/authenticate`, errorBoundary(authenticate, model));
