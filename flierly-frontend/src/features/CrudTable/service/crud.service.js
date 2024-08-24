@@ -107,9 +107,7 @@ const crudService = {
   restore: async ({ entity, docIds = [] }) => {
     try {
       // Sending PUT request to restore documents
-      const response = await api.put(`/${entity}/restore`, {
-        data: [...docIds],
-      });
+      const response = await api.put(`/${entity}/restore`, [...docIds], {});
 
       // Destructuring data and status from response
       const { data, status } = response;
