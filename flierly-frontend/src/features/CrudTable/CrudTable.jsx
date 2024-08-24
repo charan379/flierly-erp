@@ -10,7 +10,7 @@ import { useTheme } from "@/theme/useTheme";
 import crudService from "./service/crud.service";
 import DeleteMany from "./actions/DeleteMany";
 import ActivateMany from "./actions/ActivateMany";
-import RowContextMenu from "./components/RowContextMenu/RowContextMenu";
+import RowContextMenu from "./features/RowContextMenu";
 
 const CrudTable = ({
   entity,
