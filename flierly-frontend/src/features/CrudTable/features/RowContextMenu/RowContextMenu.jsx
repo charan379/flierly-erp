@@ -8,6 +8,7 @@ import {
   EditOutlined,
   EyeOutlined,
   StopOutlined,
+  UndoOutlined,
 } from "@ant-design/icons";
 import { Menu, Popover } from "antd";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -27,8 +28,9 @@ const RowContextMenu = ({ entity, actions, record, open, position, close }) => {
     {
       label: translate("view"),
       key: "view",
-      disabled: true,
+      // disabled: true,
       icon: <EyeOutlined />,
+      style: {color: '#2196F3'},
     },
   ];
 
@@ -37,9 +39,9 @@ const RowContextMenu = ({ entity, actions, record, open, position, close }) => {
     items.push({
       label: translate("edit"),
       key: "edit",
-      disabled: true,
+      // disabled: true,
       icon: <EditOutlined />,
-      style: { color: "blueviolet" },
+      style: { color: "#FF9800" },
     });
   }
 
@@ -49,7 +51,7 @@ const RowContextMenu = ({ entity, actions, record, open, position, close }) => {
       label: translate("inactivate"),
       key: "inactivate",
       icon: <StopOutlined />,
-      style: { color: "orange" },
+      style: { color: "#9E9E9E" },
     });
   }
 
@@ -59,7 +61,7 @@ const RowContextMenu = ({ entity, actions, record, open, position, close }) => {
       label: translate("activate"),
       key: "activate",
       icon: <CheckCircleOutlined />,
-      style: { color: "green" },
+      style: { color: "#4CAF50" },
     });
   }
 
@@ -70,6 +72,16 @@ const RowContextMenu = ({ entity, actions, record, open, position, close }) => {
       key: "delete",
       icon: <DeleteOutlined />,
       danger: true,
+    });
+  }
+
+  //   restore
+  if (true) {
+    items.push({
+      label: translate("restore"),
+      key: "restore",
+      icon: <UndoOutlined />,
+      style: {color: "#009688"}
     });
   }
 
@@ -93,7 +105,13 @@ const RowContextMenu = ({ entity, actions, record, open, position, close }) => {
       case "delete":
         result = await crudService.delete({
           entity: entity,
-          docIds: [record?._id]
+          docIds: [record?._id],
+        });
+        break;
+      case "restore":
+        result = await crudService.restore({
+          entity: entity,
+          docIds: [record?._id],
         });
         break;
       default:
@@ -160,27 +178,27 @@ const RowContextMenu = ({ entity, actions, record, open, position, close }) => {
   }, [open, position]);
 
   return (
-      <Popover
-        id="row-popover-menu"
-        open={open}
-        autoAdjustOverflow
-        placement=""
-        showArrow={false}
-        zIndex={1}
-        content={
-          <Menu
-            theme={theme}
-            items={items}
-            onClick={onMenuItemClick}
-            selectable={false}
-          />
-        }
-        overlayStyle={{
-          position: "fixed",
-          top: popoverPosition.y,
-          left: popoverPosition.x,
-        }}
-      />
+    <Popover
+      id="row-popover-menu"
+      open={open}
+      autoAdjustOverflow
+      placement=""
+      showArrow={false}
+      zIndex={1}
+      content={
+        <Menu
+          theme={theme}
+          items={items}
+          onClick={onMenuItemClick}
+          selectable={false}
+        />
+      }
+      overlayStyle={{
+        position: "fixed",
+        top: popoverPosition.y,
+        left: popoverPosition.x,
+      }}
+    />
   );
 };
 
