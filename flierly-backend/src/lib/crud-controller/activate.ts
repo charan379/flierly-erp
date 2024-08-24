@@ -16,7 +16,7 @@ import FlierlyException from "../flierly.exception";
  */
 const activate = async (model: mongoose.Model<any>, req: Request, res: Response): Promise<Response> => {
     // Validate the request body
-    const reqBody: { ids: mongoose.ObjectId[], action: 'activate' | 'inactivate' } = await JoiSchemaValidator(updateManyBodySchema, req.body, { abortEarly: false }, "dynamic-activate-many");
+    const reqBody: { ids: mongoose.ObjectId[], action: 'activate' | 'inactivate' } = await JoiSchemaValidator(updateManyBodySchema, req.body, { abortEarly: false }, "dynamic-activate");
 
     let updates = { isActive: true };
 
@@ -46,7 +46,7 @@ const activate = async (model: mongoose.Model<any>, req: Request, res: Response)
             apiResponse(
                 true,
                 result,
-                `${result.modifiedCount} ${model.modelName}'s ${reqBody.action}d successfully !`,
+                `${result.modifiedCount} ${model.modelName}${result.modifiedCount > 1 ? "'s" : ""} ${reqBody.action}d successfully !`,
                 `${model.modelName.toLowerCase()}.activate`,
                 req.url,
                 null,
@@ -55,7 +55,7 @@ const activate = async (model: mongoose.Model<any>, req: Request, res: Response)
     }
 
     // No documents found, return not found response
-    throw new FlierlyException('No documents found with given ids', HttpCodes.BAD_REQUEST, '', '');
+    throw new FlierlyException(`No documents found with given id${reqBody.ids.length > 1 ? "'s" : ""}`, HttpCodes.BAD_REQUEST, '', '');
 };
 
 export default activate;
