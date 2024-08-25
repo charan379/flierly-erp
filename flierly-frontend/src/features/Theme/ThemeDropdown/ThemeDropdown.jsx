@@ -29,7 +29,7 @@ const ThemeDropdown = () => {
 
   return (
     <Dropdown
-      trigger={["contextMenu"]}
+      trigger={["click"]}
       autoAdjustOverflow
       menu={{ items }}
       placement="bottom"
@@ -40,7 +40,7 @@ const ThemeDropdown = () => {
       destroyPopupOnHide={true}
     >
       <Button shape="circle" size="large">
-        <ThemeToggler />
+        <ThemeToggler functional={false} />
       </Button>
     </Dropdown>
   );
