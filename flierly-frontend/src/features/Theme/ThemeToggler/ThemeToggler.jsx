@@ -1,10 +1,10 @@
 import { useTheme } from "@/theme/useTheme";
 import { BulbFilled, MoonFilled, SunFilled } from "@ant-design/icons";
 import Icon from "@ant-design/icons";
-import { Avatar, Button, Tooltip } from "antd";
+import { Avatar, Button } from "antd";
 import React from "react";
 
-const ThemeToggler = () => {
+const ThemeToggler = ({ functional = true }) => {
   const { themePreference, setThemePreference } = useTheme();
 
   const themeIcon = () => {
@@ -26,6 +26,7 @@ const ThemeToggler = () => {
       }
       icon={themeIcon()}
       onClick={() => {
+        if (!functional) return;
         switch (themePreference) {
           case "system":
             setThemePreference("light");
