@@ -29,7 +29,7 @@ const ThemeDropdown = () => {
 
   return (
     <Dropdown
-      trigger={["click"]}
+      trigger={["contextMenu"]}
       autoAdjustOverflow
       menu={{ items }}
       placement="bottom"
