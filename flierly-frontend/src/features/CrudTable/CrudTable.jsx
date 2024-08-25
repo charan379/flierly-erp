@@ -55,6 +55,7 @@ const CrudTable = ({
       bordered={true}
       style={{
         width: "100%",
+        height: "240px"
       }}
       // scroll configuration
       scroll={{
@@ -178,6 +179,27 @@ const CrudTable = ({
           }`}
         </Button>,
       ]}
+      // toobar
+      toolbar={{
+        // search: true,
+        menu: {
+          type: "tab",
+          items: [
+            {
+              label: "Normal",
+              key: "1",
+            },
+            {
+              label: "Bin",
+              key: "2",
+              disabled: true,
+            },
+          ],
+          onChange: (activeKey) => {
+            console.log("activeKey", activeKey);
+          },
+        },
+      }}
       // table extra render components
       tableExtraRender={() => {
         return (
