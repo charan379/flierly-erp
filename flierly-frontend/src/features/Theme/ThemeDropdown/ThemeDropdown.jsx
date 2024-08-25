@@ -40,7 +40,7 @@ const ThemeDropdown = () => {
       destroyPopupOnHide={true}
     >
       <Button shape="circle" size="large">
-        {/* <ThemeToggler /> */}
+        <ThemeToggler />
       </Button>
     </Dropdown>
   );
