@@ -1,4 +1,4 @@
-import { Badge, Dropdown } from "antd";
+import { Badge, Button, Dropdown } from "antd";
 import React, { useState } from "react";
 import ThemeToggler from "../ThemeToggler";
 import ThemeSwitcher from "../ThemeSwitcher";
@@ -29,17 +29,19 @@ const ThemeDropdown = () => {
 
   return (
     <Dropdown
-      trigger={["contextMenu"]}
+      trigger={["click"]}
       autoAdjustOverflow
       menu={{ items }}
       placement="bottom"
-      stye={{ width: "280px" }}
+      stye={{ width: "max-content" }}
       onOpenChange={handleOpenChange}
       open={open}
+      arrow={true}
+      destroyPopupOnHide={true}
     >
-      <Badge>
-        <ThemeToggler />
-      </Badge>
+      <Button shape="circle" size="large">
+        {/* <ThemeToggler /> */}
+      </Button>
     </Dropdown>
   );
 };
