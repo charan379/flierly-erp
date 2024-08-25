@@ -44,9 +44,9 @@ export default function DropdownMenu() {
       arrow
       autoAdjustOverflow
       menu={{ items }}
-      trigger={["click", "contextMenu"]}
+      trigger={["click"]}
       placement="bottomLeft"
-      stye={{ width: "280px" }}
+      stye={{ width: "max-content" }}
     >
       <Badge>
         <UserAvatar />
