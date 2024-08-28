@@ -10,7 +10,7 @@ const schema: mongoose.Schema<Privilege> = new mongoose.Schema<Privilege>(
             immutable: true,
             unique: true
         },
-        accessType: {
+        access: {
             type: String,
             enum: Object.values(AccessType),
             required: [true, "Access type is required."],

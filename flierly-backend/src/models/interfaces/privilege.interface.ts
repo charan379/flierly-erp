@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 export interface Privilege {
     _id: mongoose.ObjectId,
     name: string,
-    accessType: AccessType,
+    access: AccessType,
     model: string,
     code: string,
     createdAt: Date,
