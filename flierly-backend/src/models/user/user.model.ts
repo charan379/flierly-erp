@@ -37,6 +37,18 @@ const schema: mongoose.Schema<User> = new mongoose.Schema<User>(
         roles: {
             type: [{ type: mongoose.Schema.ObjectId, ref: 'UserRole', autopopulate: { select: ['name', 'code'] } }],
             default: []
+        },
+        additionalPrivileges: {
+            type: [{ type: mongoose.Schema.ObjectId, ref: 'Privilege', autopopulate: { select: ['name', 'access', 'model', 'code'] } }],
+            default: []
+        },
+        restrictedPrivileges: {
+            type: [{ type: mongoose.Schema.ObjectId, ref: 'Privilege', autopopulate: { select: ['name', 'access', 'model', 'code'] } }],
+            default: []
+        },
+        role: {
+            type: [{ type: mongoose.Schema.ObjectId, ref: 'Role', autopopulate: { select: ['name', 'code', 'description'] } }],
+            default: []
         }
     },
     {

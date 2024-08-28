@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import { UserRole } from "./user-role.interface";
 import { UserPermission } from "./user-permission.interface";
+import { Role } from "./role.interface";
+import { Privilege } from "./privilege.interface";
 
 export interface User {
     _id: mongoose.ObjectId,
@@ -11,7 +13,10 @@ export interface User {
     mobile: string,
     permissions: mongoose.ObjectId[] | UserPermission[],
     excludedPermissions: mongoose.ObjectId[] | UserPermission[],
+    additionalPrivileges: mongoose.ObjectId[] | Privilege[],
+    restrictedPrivileges: mongoose.ObjectId[] | Privilege[],
     roles: mongoose.ObjectId[] | UserRole[],
+    role: mongoose.ObjectId[] | Role[],
     createdAt: Date,
     updatedAt: Date,
 }

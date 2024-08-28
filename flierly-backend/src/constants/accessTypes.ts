@@ -7,6 +7,7 @@ enum AccessType {
     READ = "Read",
     UPDATE = "Update",
     DELETE = "Delete",
+    MANAGE= 'Manage',
 }
 
 export default AccessType;
