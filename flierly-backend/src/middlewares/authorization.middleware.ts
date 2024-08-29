@@ -16,12 +16,12 @@ export function authorize(permissionCode: string): (req: Request, res: Response,
             const authHeader: string =
                 req?.headers?.authorization || req?.signedCookies?.auth;
             // if authorization header not present throw exception
-            if (!authHeader) throw new FlierlyException('Invalid request headers', HttpCodes.BAD_REQUEST, 'Token Not Provided at headers or cookies', 'Invalid-authorization-header-authorization-middleware');
+            if (!authHeader) throw new FlierlyException('Invalid request headers', HttpCodes.UNAUTHORIZED, 'Token Not Provided at headers or cookies', 'Invalid-authorization-header-authorization-middleware');
             // bearer authorization header value regex
             const bearerTokenRegex: RegExp = new RegExp('^Bearer [A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+$');
             // if bearer token not present | or not in format then throw exception
             if (!authHeader.match(bearerTokenRegex))
-                throw new FlierlyException('Invalid Authorization token', HttpCodes.BAD_REQUEST, 'Authorization headers are not in bearer format', 'Invalid-authorization-header-authorization-middleware');
+                throw new FlierlyException('Invalid Authorization token', HttpCodes.UNAUTHORIZED, 'Authorization headers are not in bearer format', 'Invalid-authorization-header-authorization-middleware');
             // extract bearer token from authorization header
             const bearerToken: string = authHeader.split(" ")[1];
             // verifyJwtToken and de-code token details
@@ -38,10 +38,10 @@ export function authorize(permissionCode: string): (req: Request, res: Response,
                 .where('isDeleted', false).exec();
             // Throw error if user does not exist
             if (user === null)
-                throw new FlierlyException("Invalid username", HttpCodes.BAD_REQUEST, "Can't find user with provided username", "authorization-middleware-invalid-username");
+                throw new FlierlyException("Invalid username", HttpCodes.UNAUTHORIZED, "Can't find user with provided username", "authorization-middleware-invalid-username");
             // Throw error if user is inactive
             if (!user.isActive)
-                throw new FlierlyException("Inactive user", HttpCodes.BAD_REQUEST, "User is not activated", "authorization-middleware-inactive-user");
+                throw new FlierlyException("Inactive user", HttpCodes.UNAUTHORIZED, "User is not activated", "authorization-middleware-inactive-user");
             // extract permissions from user permissions, user roles and remove excluded permissions of user from extracted permissions
             const userPermissions = await getUserPrivileges(user._id);
             // if permissions contain required permission code then continue to next function
