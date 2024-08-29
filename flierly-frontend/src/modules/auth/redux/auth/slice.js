@@ -6,6 +6,7 @@ import authService from "../../service/auth.service";
 // Define the initial state for the authentication slice
 const INITIAL_STATE = {
   user: {}, // Holds user details
+  allowedAccess: [], // array of privileges
   token: "", // Authentication token
   loggedInAt: "", // Timestamp when the user logged in
   tokenExpiresAt: "", // Timestamp when the token expires
@@ -47,6 +48,7 @@ const slice = createAsyncSlice({
         // Handle errors when the async thunk is rejected
         rejected: (state, action) => {
           state.user = {};
+          state.allowedAccess = [];
           state.token = "";
           state.loggedInAt = "";
           state.tokenExpiresAt = "";
@@ -56,11 +58,12 @@ const slice = createAsyncSlice({
         },
         // Handle success when the async thunk is fulfilled
         fulfilled: (state, action) => {
-          const { user, token, loggedInAt, tokenExpiresAt } =
+          const { user, allowedAccess, token, loggedInAt, tokenExpiresAt } =
             action.payload?.result;
 
           state.loading = loadingTypes.SUCCEEDED;
           state.user = user;
+          state.allowedAccess = allowedAccess;
           state.token = token;
           state.loggedInAt = loggedInAt;
           state.tokenExpiresAt = tokenExpiresAt;
@@ -74,6 +77,7 @@ const slice = createAsyncSlice({
     ),
     LOGOUT: (state) => {
       state.user = {};
+      state.allowedAccess = [];
       state.token = "";
       state.loggedInAt = "";
       state.tokenExpiresAt = "";
