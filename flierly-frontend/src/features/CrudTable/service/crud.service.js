@@ -1,13 +1,13 @@
 import { serverConfig } from "@/config/serverConfig";
 import errorHandler from "@/handlers/errorHandler";
 import successHandler from "@/handlers/successHandler";
-import statePersist from "@/redux/statePersist";
+import { getToken, listenToAuthChanges } from "@/modules/auth/utility/authState";
 import axios from "axios";
 
 const api = axios.create({
   baseURL: serverConfig.BASE_API_URL,
   headers: {
-    Authorization: `Bearer ${statePersist.get("auth")?.token}`,
+    Authorization: `Bearer ${getToken()}`,
   },
 });
 
@@ -67,3 +67,12 @@ const crudService = {
 };
 
 export default crudService;
+
+
+listenToAuthChanges((newState) => {
+  console.log(newState)
+  const oldToken = `Bearer ${api.defaults.headers['Authorization']}`;
+  const newToken = `Bearer ${newState?.token}`;
+  if (oldToken && newToken && oldToken !== newState)
+    api.defaults.headers['Authorization'] = newToken;
+});
