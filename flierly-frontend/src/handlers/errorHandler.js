@@ -1,5 +1,6 @@
 import { notification } from 'antd';
 import codeMessage from './codeMessage';
+import { logout } from '@/modules/auth/utility/authState';
 
 /**
  * Displays an error notification with the specified message and description.
@@ -59,16 +60,16 @@ const handleNoResponseError = () => {
 };
 
 /**
- * Handles JWT expiration by clearing auth data and redirecting to logout.
+ * Handles JWT expiration by clearing auth data and redirecting to login.
  */
 const handleJwtExpiration = () => {
-  const auth = window.localStorage.getItem('auth');
-  const isLogout = JSON.parse(window.localStorage.getItem('isLogout')) || false;
-  window.localStorage.removeItem('auth');
-  window.localStorage.removeItem('isLogout');
-  if (auth || isLogout) {
-    window.location.href = '/logout';
-  }
+  logout();
+  const callback = {
+    pathname: window.location.pathname,
+    search: window.location.search,
+    url: window.location.href
+  };
+  window.location.href = `/login?callback=${encodeURIComponent(JSON.stringify(callback))}`;
 };
 
 /**
@@ -109,7 +110,8 @@ const errorHandler = (error) => {
   }
 
   // Handle JWT expiration
-  if (response.data?.jwtExpired) {
+  if (response.data?.error?.reason === 'Token Expired Re-authenticate') {
+    handleResponseError(response);
     handleJwtExpiration();
   }
 
