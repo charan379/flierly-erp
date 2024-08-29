@@ -11,12 +11,9 @@ export interface User {
     username: string,
     email: string,
     mobile: string,
-    permissions: mongoose.ObjectId[] | UserPermission[],
-    excludedPermissions: mongoose.ObjectId[] | UserPermission[],
     additionalPrivileges: mongoose.ObjectId[] | Privilege[],
     restrictedPrivileges: mongoose.ObjectId[] | Privilege[],
-    roles: mongoose.ObjectId[] | UserRole[],
-    role: mongoose.ObjectId[] | Role[],
+    roles: mongoose.ObjectId[] | Role[],
     createdAt: Date,
     updatedAt: Date,
 }

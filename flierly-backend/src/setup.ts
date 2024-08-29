@@ -5,8 +5,8 @@ moduleAlias.addAliases({
 import Database from '@/lib/database';
 import dotenv from 'dotenv';
 import validateEnv from '@/utils/env.validator';
-import generatePermissions from '@/setup/generate-permissions';
 import generateSuperAdmin from './setup/generate-super-admin';
+import generatePrivileges from './setup/generate-privileges';
 
 dotenv.config();
 
@@ -20,7 +20,7 @@ async function setup() {
         await Database.connect();
 
         // Generate Permissions
-        await generatePermissions();
+        await generatePrivileges();
 
         // Generate Super Admin
         await generateSuperAdmin();

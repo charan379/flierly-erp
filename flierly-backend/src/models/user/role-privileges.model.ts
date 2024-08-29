@@ -24,6 +24,6 @@ schema.index({ roleId: 1 })
 
 schema.plugin(require('mongoose-autopopulate'));
 
-const RoleModel: mongoose.Model<RolePrivileges> = mongoose.model<RolePrivileges>('RolePrivileges', schema);
+const RolePrivilegesModel: mongoose.Model<RolePrivileges> = mongoose.model<RolePrivileges>('RolePrivileges', schema);
 
-export default RoleModel;
+export default RolePrivilegesModel;

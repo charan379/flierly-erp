@@ -26,18 +26,6 @@ const schema: mongoose.Schema<User> = new mongoose.Schema<User>(
             type: String,
             required: [true, "User mobile number is required."]
         },
-        permissions: {
-            type: [{ type: mongoose.Schema.ObjectId, ref: 'UserPermission', autopopulate: { select: ['name', 'accessType', 'model', 'code'] } }],
-            default: []
-        },
-        excludedPermissions: {
-            type: [{ type: mongoose.Schema.ObjectId, ref: 'UserPermission', autopopulate: { select: ['name', 'accessType', 'model', 'code'] } }],
-            default: []
-        },
-        roles: {
-            type: [{ type: mongoose.Schema.ObjectId, ref: 'UserRole', autopopulate: { select: ['name', 'code'] } }],
-            default: []
-        },
         additionalPrivileges: {
             type: [{ type: mongoose.Schema.ObjectId, ref: 'Privilege', autopopulate: { select: ['name', 'access', 'model', 'code'] } }],
             default: []
@@ -46,7 +34,7 @@ const schema: mongoose.Schema<User> = new mongoose.Schema<User>(
             type: [{ type: mongoose.Schema.ObjectId, ref: 'Privilege', autopopulate: { select: ['name', 'access', 'model', 'code'] } }],
             default: []
         },
-        role: {
+        roles: {
             type: [{ type: mongoose.Schema.ObjectId, ref: 'Role', autopopulate: { select: ['name', 'code', 'description'] } }],
             default: []
         }

@@ -1,9 +1,9 @@
 import HttpCodes from "@/constants/httpCodes";
+import { getUserPrivileges } from "@/lib/aggregation-pipelines/get-user-privileges.pipeline";
 import FlierlyException from "@/lib/flierly.exception";
 import { verifyJwtToken } from "@/lib/jwt";
 import { User } from "@/models/interfaces/user.interface";
 import UserModel from "@/models/user/user.model";
-import collectUserPermissions from "@/utils/collect-user-permissions";
 import { NextFunction, Request, Response } from "express";
 import { JwtPayload } from "jsonwebtoken";
 
@@ -43,9 +43,9 @@ export function authorize(permissionCode: string): (req: Request, res: Response,
             if (!user.isActive)
                 throw new FlierlyException("Inactive user", HttpCodes.BAD_REQUEST, "User is not activated", "authorization-middleware-inactive-user");
             // extract permissions from user permissions, user roles and remove excluded permissions of user from extracted permissions
-            const userPermissions = collectUserPermissions(user);
+            const userPermissions = await getUserPrivileges(user._id);
             // if permissions contain required permission code then continue to next function
-            if (userPermissions.has(permissionCode))
+            if (userPermissions.privilegeCodes.has(permissionCode))
                 next();
             else
                 // if permissions does not contain required permission code then throw exception

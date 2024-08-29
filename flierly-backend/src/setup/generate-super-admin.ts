@@ -1,16 +1,18 @@
 import userDetailsPrompt from "@/setup/prompts/user-details.prompt";
-import UserRoleModel from "@/models/user/user-role.model";
-import { UserRole } from "@/models/interfaces/user-role.interface";
-import UserPermissionModel from "@/models/user/user-permission.model";
 import mongoose from "mongoose";
 import { User } from "@/models/interfaces/user.interface";
 import UserModel from "@/models/user/user.model";
 import { generateHash } from "@/lib/bcrypt";
 import { UserPassword } from '@/models/interfaces/user-password.interface';
 import UserPasswordModel from "@/models/user/user-password.model";
+import { Role } from "@/models/interfaces/role.interface";
+import RoleModel from "@/models/user/role.model";
+import PrivilegeModel from "@/models/user/privilege.model";
+import { RolePrivileges } from "@/models/interfaces/role-privileges.interface";
+import RolePrivilegesModel from "@/models/user/role-privileges.model";
 
 async function generateSuperAdmin(): Promise<void> {
-    let superAdminRole: UserRole | null = await UserRoleModel.findOne({ code: 'super-admin' }).exec();
+    let superAdminRole: Role | null = await RoleModel.findOne({ code: 'super-admin' }).exec();
 
     if (superAdminRole === null) {
         superAdminRole = await generateSuperAdminRole();
@@ -56,15 +58,41 @@ async function updateUserPassword(userId: mongoose.ObjectId, password: string): 
 
 }
 
-async function generateSuperAdminRole(): Promise<UserRole> {
-    const permissionIds: mongoose.ObjectId[] = (await UserPermissionModel.find({}).exec()).map(permission => permission._id);
+async function generateSuperAdminRole(): Promise<Role> {
+    const privilegeIds: mongoose.ObjectId[] = (await PrivilegeModel.find({}).exec()).map(privilege => privilege._id);
 
-    const superAdminRole: UserRole = await UserRoleModel.create({
+    const superAdminRole: Role = await RoleModel.create({
         code: 'super-admin',
-        name: 'Super Admin role',
-        permissions: permissionIds,
+        name: 'Super Admin Role',
+        description: "Account Owner / Super Admin"
     });
+
+    await assignRolePrivileges(superAdminRole._id, privilegeIds);
+
     return superAdminRole;
+}
+
+async function assignRolePrivileges(roleId: mongoose.ObjectId, privilegIds: mongoose.ObjectId[]) {
+    const updatedExistingRolePrivileges: RolePrivileges | null = await RolePrivilegesModel.findOneAndUpdate(
+        { roleId: roleId },
+        { $addToSet: { privileges: { $each: privilegIds } }, },
+        {
+            new: true, // Return the updated document
+            runValidators: true, // Apply validation before saving
+        },
+    ).exec()
+
+
+    if (updatedExistingRolePrivileges !== null) {
+        return updatedExistingRolePrivileges;
+    }
+    else {
+        return await RolePrivilegesModel.create({
+            roleId: roleId,
+            privileges: privilegIds
+        });
+    }
+
 }
 
 

@@ -1,5 +1,6 @@
 import HttpCodes from "@/constants/httpCodes";
 import { nameMi5Ma50Schema, passwordSchema } from "@/joi-schemas/common.joi.schemas";
+import { getUserPrivileges } from "@/lib/aggregation-pipelines/get-user-privileges.pipeline";
 import { validateHash } from "@/lib/bcrypt";
 import FlierlyException from "@/lib/flierly.exception";
 import { generateJwtToken } from "@/lib/jwt";
@@ -48,9 +49,10 @@ const authenticate = async (req: Request, res: Response) => {
     // response object
     const response = {
         user,
+        allowedAccess: (await getUserPrivileges(user._id)).privilegeCodes,
         token,
         loggedInAt: new Date(),
-        tokenExpiresAt
+        tokenExpiresAt,
     }
 
     // responde with newly registered user details.
