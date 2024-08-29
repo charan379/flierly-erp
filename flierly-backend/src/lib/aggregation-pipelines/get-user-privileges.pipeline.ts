@@ -106,7 +106,7 @@ export const getUserPrivileges = async (userId: mongoose.ObjectId): Promise<{ pr
     const userPrivileges = await UserModel.aggregate(getUserPrivilegesPipeline(userId));
     return userPrivileges.length > 0 ? {
         privileges: userPrivileges[0].privileges,
-        privilegeCodes: userPrivileges[0].privilegeCodes
+        privilegeCodes: new Set(userPrivileges[0].privilegeCodes)
     } : { privileges: [], privilegeCodes: new Set<string> };
 };
 

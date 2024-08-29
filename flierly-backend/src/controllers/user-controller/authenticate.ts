@@ -49,7 +49,7 @@ const authenticate = async (req: Request, res: Response) => {
     // response object
     const response = {
         user,
-        allowedAccess: (await getUserPrivileges(user._id)).privilegeCodes,
+        allowedAccess: [...(await getUserPrivileges(user._id)).privilegeCodes],
         token,
         loggedInAt: new Date(),
         tokenExpiresAt,
