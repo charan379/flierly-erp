@@ -1,11 +1,15 @@
 import controllers from "@/controllers";
 import authenticate from "@/controllers/user-controller/authenticate";
+import refreshAccessToken from "@/controllers/user-controller/refreshAccessToken";
 import { authorize } from "@/middlewares/authorization.middleware";
 import { errorBoundary } from "@/middlewares/error-boundary.middleware";
 import { getModelsList } from "@/models";
 import { Router } from "express";
 
 const router = Router();
+
+router.post(`/user/authenticate`, errorBoundary(authenticate, 'user'));
+router.get(`/user/refresh-access-token`, authorize(), errorBoundary(refreshAccessToken, 'user'));
 
 const routeGenerator = (model: string, controller: any) => {
     router.post(`/${model}/create`, authorize(`${model}.create`), errorBoundary(controller['create'], model));
@@ -17,11 +21,6 @@ const routeGenerator = (model: string, controller: any) => {
     router.put(`/${model}/activate`, authorize(`${model}.manage`), errorBoundary(controller['activate'], model));
     router.delete(`/${model}/delete`, authorize(`${model}.delete`), errorBoundary(controller['delete'], model));
     router.put(`/${model}/restore`, authorize(`${model}.delete`), errorBoundary(controller['restore'], model));
-
-
-    if (model === 'user') {
-        router.post(`/${model}/authenticate`, errorBoundary(authenticate, model));
-    }
 }
 
 getModelsList().then(async (models) => {
