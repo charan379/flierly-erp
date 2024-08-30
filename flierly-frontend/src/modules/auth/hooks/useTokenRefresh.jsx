@@ -1,35 +1,41 @@
+import { useEffect, useRef, useCallback } from 'react';
 import useSessionActivity from '@/hooks/useSessionActivity';
 import { useAuth } from './useAuth';
-import { useEffect, useState } from 'react';
 
 const useTokenRefresh = () => {
+    const { tokenExpiresAt, refreshToken } = useAuth();
+    const lastActivityRef = useRef(Date.now());
+    const intervalIdRef = useRef(null);
 
-    const [lastActivity, setLastActivity] = useState(Date.now());
+    const handleActivity = useCallback(() => {
+        lastActivityRef.current = Date.now();
+    }, []);
 
-    const { tokenExpiresAt } = useAuth();
-
-
-    useSessionActivity(() => {
-        setLastActivity(Date.now());
-    });
+    useSessionActivity(handleActivity);
 
     useEffect(() => {
-        const interval = setInterval(() => {
+        const checkTokenRefresh = () => {
             if (tokenExpiresAt) {
                 const expiresAt = new Date(tokenExpiresAt).getTime();
                 const currentTime = Date.now();
                 const timeToExpire = expiresAt - currentTime;
 
-                if (Date.now() - lastActivity < 5 * 60 * 1000 && timeToExpire < 10 * 60 * 1000) { // Check if user was active in the last 5 minutes and token expires in the next 10 minutes
+                if (Date.now() - lastActivityRef.current < 5 * 60 * 1000 && timeToExpire < 10 * 60 * 1000) {
                     refreshToken();
                 }
             }
-        }, 15 * 60 * 1000); // Check every 15 minutes
+        };
 
-        return () => clearInterval(interval);
-    }, [lastActivity, tokenExpiresAt]);
+        intervalIdRef.current = setInterval(checkTokenRefresh, 15 * 60 * 1000); // Check every 15 minutes
+
+        return () => {
+            if (intervalIdRef.current) {
+                clearInterval(intervalIdRef.current);
+            }
+        };
+    }, [tokenExpiresAt, refreshToken]);
 
     return null;
-}
+};
 
 export default useTokenRefresh;

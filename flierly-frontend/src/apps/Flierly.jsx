@@ -24,11 +24,11 @@ function Flierly() {
     return () => {
 
     }
-  }, [isLoggedIn, loading, callback]);
+  }, [isLoggedIn, loading]);
 
-  useInactivityLogout(5 * 60 * 1000); // 5 mins
+  // useInactivityLogout(1 * 60 * 1000); // 5 mins
 
-  useTokenRefresh();
+  // useTokenRefresh();
 
   return (
     <AntdConfigProvider>
