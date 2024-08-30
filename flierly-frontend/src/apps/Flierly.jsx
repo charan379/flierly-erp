@@ -5,6 +5,8 @@ import { useAuth } from "@/modules/auth/hooks/useAuth";
 import AppRouter from "@/router/Router";
 import { useNavigate } from "react-router-dom";
 import { loadingTypes } from "@/types/loading";
+import useInactivityLogout from "@/modules/auth/hooks/useInactivityLogout";
+import useTokenRefresh from "@/modules/auth/hooks/useTokenRefresh";
 
 function Flierly() {
   const { loading, isLoggedIn } = useAuth();
@@ -23,6 +25,10 @@ function Flierly() {
 
     }
   }, [isLoggedIn, loading, callback]);
+
+  useInactivityLogout(5 * 60 * 1000); // 5 mins
+
+  useTokenRefresh();
 
   return (
     <AntdConfigProvider>
