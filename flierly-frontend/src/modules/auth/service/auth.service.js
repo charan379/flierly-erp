@@ -38,6 +38,32 @@ const authService = {
       return errorHandler(error);
     }
   },
+
+  refreshToken: async ({ currentToken }) => {
+    try {
+      api.defaults.headers['Authorization'] = `Bearer ${currentToken}`;
+      // Sending GET request to refresh user access token
+      const response = await api.get(`/user/refresh-access-token`);
+
+      // Destructuring data and status from response
+      const { data, status } = response;
+
+      // Handling success response
+      successHandler(
+        { data, status },
+        {
+          notifyOnSuccess: false, // Disable success notification
+          notifyOnFailed: true,   // Enable failure notification
+        }
+      );
+
+      // Returning response data
+      return data;
+    } catch (error) {
+      // Handling error response
+      return errorHandler(error);
+    }
+  },
 };
 
 export default authService;
