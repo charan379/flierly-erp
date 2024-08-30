@@ -7,7 +7,7 @@ import UserModel from "@/models/user/user.model";
 import { NextFunction, Request, Response } from "express";
 import { JwtPayload } from "jsonwebtoken";
 
-export function authorize(permissionCode: string): (req: Request, res: Response, next: NextFunction) =>
+export function authorize(permissionCode: string = ""): (req: Request, res: Response, next: NextFunction) =>
     Promise<void | Response> {
 
     return async (req: Request, res: Response, next: NextFunction) => {
@@ -42,15 +42,20 @@ export function authorize(permissionCode: string): (req: Request, res: Response,
             // Throw error if user is inactive
             if (!user.isActive)
                 throw new FlierlyException("Inactive user", HttpCodes.UNAUTHORIZED, "User is not activated", "authorization-middleware-inactive-user");
-            // extract permissions from user permissions, user roles and remove excluded permissions of user from extracted permissions
-            const userPermissions = await getUserPrivileges(user._id);
-            // if permissions contain required permission code then continue to next function
-            if (userPermissions.privilegeCodes.has(permissionCode))
+            // Check if permissions to be checked
+            if (permissionCode === "") {
                 next();
-            else
-                // if permissions does not contain required permission code then throw exception
-                throw new FlierlyException("Insufficient Permissions, Access Blocked !", HttpCodes.UNAUTHORIZED, "User doen't contain the required permissions", "authorization-middleware-insufficient-permissions");
+            } else {
+                // extract permissions from user permissions, user roles and remove excluded permissions of user from extracted permissions
+                const userPermissions = await getUserPrivileges(user._id);
+                // if permissions contain required permission code then continue to next function
+                if (userPermissions.privilegeCodes.has(permissionCode))
+                    next();
+                else
+                    // if permissions does not contain required permission code then throw exception
+                    throw new FlierlyException("Insufficient Permissions, Access Blocked !", HttpCodes.UNAUTHORIZED, "User doen't contain the required permissions", "authorization-middleware-insufficient-permissions");
 
+            }
         } catch (error) {
             // if any error happens pass it to next function
             next(error);
