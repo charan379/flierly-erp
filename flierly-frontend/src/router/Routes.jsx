@@ -17,10 +17,8 @@ const Routes = () => {
           element: <CustomerRoutes />,
         },
         { path: "branch/*", element: <BranchRoutes /> },
-        {
-          path: "*",
-          element: <WithSuspense importPath={import("@/pages/PageNotFound")} />,
-        },
+        { path: '/unauthorized', element: <WithSuspense importPath={import("@/pages/PageUnAuthorized")} /> },
+        { path: "*", element: <WithSuspense importPath={import("@/pages/PageNotFound")} /> },
       ],
     },
   ]);
