@@ -15,9 +15,14 @@ const useInactivityLogout = (timeout) => {
     useEffect(() => {
         const interval = setInterval(() => {
             if (isLoggedIn && (Date.now() - lastActivity > timeout)) {
+                const callback = {
+                    pathname: window.location.pathname,
+                    search: window.location.search,
+                    url: window.location.href
+                };
                 // Log out the user
                 logout();
-                navigate('/login')
+                navigate(`/login?callback=${encodeURIComponent(JSON.stringify(callback))}`);
             }
         }, 1 * 60 * 1000); // Check every 1 miniutes
 
