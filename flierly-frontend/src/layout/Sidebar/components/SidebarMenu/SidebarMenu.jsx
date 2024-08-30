@@ -44,7 +44,7 @@ const SidebarMenu = () => {
     {
       key: "dashboard",
       icon: <DashboardOutlined style={menuIconStyle} />,
-      label: <Link to={"/"}>{translate("dashboard")}</Link>,
+      label: <Link to={"/app-portal"}>{translate("dashboard")}</Link>,
     },
     {
       key: "branch",
@@ -55,13 +55,13 @@ const SidebarMenu = () => {
         {
           key: "branchHome",
           icon: <AreaChartOutlined style={menuIconStyle} />,
-          label: <Link to={"/branch"} style={getLinkStyle(allowedAccess, 'branch.read')}>{translate("statistics")}</Link>,
+          label: <Link to={"/app-portal/branch"} style={getLinkStyle(allowedAccess, 'branch.read')}>{translate("statistics")}</Link>,
           disabled: !allowedAccess.includes('branch.read')
         },
         {
           key: "branchlist",
           icon: <TableOutlined style={menuIconStyle} />,
-          label: <Link to={"/branch/list"} style={getLinkStyle(allowedAccess, 'branch.read')}>{translate("list_branchs")}</Link>,
+          label: <Link to={"/app-portal/branch/list"} style={getLinkStyle(allowedAccess, 'branch.read')}>{translate("list_branchs")}</Link>,
           disabled: !allowedAccess.includes('branch.read')
         },
       ],

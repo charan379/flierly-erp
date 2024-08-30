@@ -6,11 +6,11 @@ import { useRoutes } from "react-router-dom";
 const BranchRoutes = () => {
   return useRoutes([
     {
-      path: "/",
-      element: <ProtectedRoute element={<WithSuspense importPath={import("@/pages/PageNotFound")} />} requiredPermission='branch.read' />,
+      path: "",
+      element: <ProtectedRoute element={<WithSuspense importPath={import("@/pages/PageUnderConstruction")} />} requiredPermission='branch.read' />,
     },
     {
-      path: "/list",
+      path: "list",
       element: <ProtectedRoute element={<WithSuspense importPath={import("../pages/Branch")} />} requiredPermission='branch.read' />,
     },
   ]);

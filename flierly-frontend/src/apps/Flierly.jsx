@@ -13,18 +13,18 @@ function Flierly() {
   const callback = JSON.parse(new URLSearchParams(window.location.search).get('callback'));
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (loading === loadingTypes.SUCCEEDED && isLoggedIn) {
-      if (callback?.pathname)
-        navigate({ pathname: callback?.pathname, search: callback?.search })
-      else
-        navigate('/')
-    }
+  // useEffect(() => {
+  //   if (loading === loadingTypes.SUCCEEDED && isLoggedIn) {
+  //     if (callback?.pathname)
+  //       navigate({ pathname: callback?.pathname, search: callback?.search })
+  //     else
+  //       navigate('/')
+  //   }
 
-    return () => {
+  //   return () => {
 
-    }
-  }, [isLoggedIn, loading]);
+  //   }
+  // }, [isLoggedIn, loading]);
 
   // useInactivityLogout(1 * 60 * 1000); // 5 mins
 
