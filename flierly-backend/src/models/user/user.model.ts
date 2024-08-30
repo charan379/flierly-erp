@@ -45,6 +45,10 @@ const schema: mongoose.Schema<User> = new mongoose.Schema<User>(
     }
 );
 
+schema.index({ username: 1 });
+schema.index({ email: 1 });
+schema.index({ mobile: 1 })
+
 schema.plugin(require('mongoose-autopopulate'));
 
 const UserModel: mongoose.Model<User> = mongoose.model<User>('User', schema);
