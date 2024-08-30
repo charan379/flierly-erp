@@ -1,9 +1,17 @@
 import { useDispatch, useSelector } from "react-redux";
-import { LOGIN, LOGOUT } from "../redux/auth/actions";
+import { LOGIN, LOGOUT, REFRESH } from "../redux/auth/actions";
 
 export function useAuth() {
   //
-  const { user, token, loggedInAt, tokenExpiresAt, isLoggedIn, loading, error } =
+  const {
+    user,
+    allowedAccess,
+    token,
+    loggedInAt,
+    tokenExpiresAt,
+    isLoggedIn,
+    loading,
+    error } =
     useSelector((state) => state.auth);
   //
   const dispatch = useDispatch();
@@ -16,7 +24,9 @@ export function useAuth() {
     isLoggedIn,
     loading,
     error,
+    allowedAccess,
     login: (credentials) => dispatch(LOGIN(credentials)),
     logout: () => dispatch(LOGOUT()),
+    refresh: () => dispatch(REFRESH()),
   };
 }

@@ -75,6 +75,51 @@ const slice = createAsyncSlice({
         },
       }
     ),
+    // REFRESH async thunk to handle user token refresh
+    REFRESH: create.asyncThunk(
+      async (currentToken, thunkApi) => {
+
+        let token = currentToken;
+
+        if (!token) token = thunkApi.getState().auth.token;
+
+        // Call the auth service refreshToken function with current token
+        const res = await authService.refreshToken({ currentToken: token });
+
+        // Check if the response indicates failure
+        if (res?.success === false) {
+          throw thunkApi.rejectWithValue(res); // Reject the thunk with the response payload
+        }
+
+        // Return the response on success
+        return res;
+      },
+      {
+        // Handle the loading state while the async thunk is pending
+        pending: (state) => {
+          state.loading = loadingTypes.REFRESHING;
+          state.error = {};
+        },
+        // Handle errors when the async thunk is rejected
+        rejected: (state, action) => {
+          state.error = action.payload?.error;
+          state.loading = loadingTypes.FAILED;
+        },
+        // Handle success when the async thunk is fulfilled
+        fulfilled: (state, action) => {
+          const { user, allowedAccess, token, tokenExpiresAt } = action.payload?.result;
+          state.loading = loadingTypes.SUCCEEDED;
+          state.user = user;
+          state.allowedAccess = allowedAccess;
+          state.token = token;
+          state.tokenExpiresAt = tokenExpiresAt;
+        },
+        settled: (state) => {
+          // Persisting the state in localStorage
+          window.localStorage.setItem("auth", JSON.stringify(state));
+        },
+      }
+    ),
     LOGOUT: (state) => {
       state.user = {};
       state.allowedAccess = [];

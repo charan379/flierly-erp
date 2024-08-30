@@ -1,3 +1,3 @@
 import slice from "./slice";
 
-export const { LOGIN, LOGOUT } = slice.actions;
+export const { LOGIN, LOGOUT, REFRESH } = slice.actions;
