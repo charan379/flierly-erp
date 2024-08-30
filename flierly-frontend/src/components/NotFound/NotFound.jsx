@@ -22,7 +22,7 @@ const NotFound = () => {
         <Button
           type="primary" // Primary type button
           onClick={() => {
-            navigate("/"); // Navigate to the homepage on button click
+            navigate(-1); // Navigate back on button click
           }}
         >
           {translate("back")} {/* Translated button text */}
