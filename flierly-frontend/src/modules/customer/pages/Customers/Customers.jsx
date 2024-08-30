@@ -9,8 +9,6 @@ import AddCustomer from "../../forms/AddCustomer";
 import SearchCustomer from "../../forms/SearchCustomer";
 
 const Customers = () => {
-  const { langDirection, translate } = useLocale();
-
   const data = [
     {
       _id: "1",
@@ -225,7 +223,7 @@ const Customers = () => {
   ];
 
   return (
-    <CustomerLayout header={<Header />}>
+    <CustomerLayout>
       {/* https://procomponents.ant.design/en-US/components/table */}
       <CrudTable
         entity="customer"
