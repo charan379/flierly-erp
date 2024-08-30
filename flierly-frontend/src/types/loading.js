@@ -3,4 +3,5 @@ export const loadingTypes = {
   PENDING: "pending",
   SUCCEEDED: "succeded",
   FAILED: "failed",
+  REFRESHING: "refreshing",
 };
