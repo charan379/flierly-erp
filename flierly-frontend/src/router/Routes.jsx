@@ -1,11 +1,11 @@
 import React from "react";
 import { useRoutes, Navigate } from "react-router-dom";
-import AppLayout from "@/layout";
 import WithSuspense from "@/components/WithSuspense";
 import BranchRoutes from "@/modules/branch/router/BranchRoutes";
 import CustomerRoutes from "@/modules/customer/router/CustomerRoutes";
 import Login from "@/modules/auth/pages/Login";
 import Register from "@/modules/auth/pages/Register";
+import AppLayout from "@/app/layout";
 
 const Routes = () => {
   return useRoutes([

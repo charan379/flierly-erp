@@ -1,8 +1,8 @@
-import useLocale from "@/features/Language/hooks/useLocale";
 import { Layout } from "antd";
-import Header from "./Header";
 import { Outlet } from "react-router-dom";
+import Header from "./Header";
 import Sidebar from "./Sidebar";
+import useLocale from "@/features/Language/hooks/useLocale";
 
 export default function AppLayout() {
   const { langDirection } = useLocale();
