@@ -5,16 +5,14 @@ import BranchRoutes from "@/modules/branch/router/BranchRoutes";
 import CustomerRoutes from "@/modules/customer/router/CustomerRoutes";
 import Login from "@/modules/auth/pages/Login";
 import Register from "@/modules/auth/pages/Register";
-import AppLayout from "@/app/layout";
+import Dashboard from "@/components/Dashboard";
 
 const Routes = () => {
   return useRoutes([
     {
       index: true,
       element: (
-        <WithSuspense
-          importPath={import("@/pages/PageUnderConstruction")}
-        />
+        <WithSuspense importPath={import("@/pages/PageUnderConstruction")} />
       ),
     },
     {
@@ -26,8 +24,8 @@ const Routes = () => {
       element: <Register />,
     },
     {
-      path: "app-portal",
-      element: <AppLayout />,
+      path: "dashboard",
+      element: <Dashboard />,
       children: [
         {
           path: "",
@@ -48,9 +46,7 @@ const Routes = () => {
         },
         {
           path: "*",
-          element: (
-            <WithSuspense importPath={import("@/pages/PageNotFound")} />
-          ),
+          element: <WithSuspense importPath={import("@/pages/PageNotFound")} />,
         },
       ],
     },

@@ -44,7 +44,7 @@ const SidebarMenu = () => {
     {
       key: "dashboard",
       icon: <DashboardOutlined style={menuIconStyle} />,
-      label: <Link to={"/app-portal"}>{translate("dashboard")}</Link>,
+      label: <Link to={"/dashboard"}>{translate("dashboard")}</Link>,
     },
     {
       key: "branch",
@@ -55,13 +55,13 @@ const SidebarMenu = () => {
         {
           key: "branchHome",
           icon: <AreaChartOutlined style={menuIconStyle} />,
-          label: <Link to={"/app-portal/branch"} style={getLinkStyle(allowedAccess, 'branch.read')}>{translate("statistics")}</Link>,
+          label: <Link to={"/dashboard/branch"} style={getLinkStyle(allowedAccess, 'branch.read')}>{translate("statistics")}</Link>,
           disabled: !allowedAccess.includes('branch.read')
         },
         {
           key: "branchlist",
           icon: <TableOutlined style={menuIconStyle} />,
-          label: <Link to={"/app-portal/branch/list"} style={getLinkStyle(allowedAccess, 'branch.read')}>{translate("list_branchs")}</Link>,
+          label: <Link to={"/dashboard/branch/list"} style={getLinkStyle(allowedAccess, 'branch.read')}>{translate("list_branchs")}</Link>,
           disabled: !allowedAccess.includes('branch.read')
         },
       ],
@@ -75,13 +75,13 @@ const SidebarMenu = () => {
         {
           key: "customerHome",
           icon: <AreaChartOutlined style={menuIconStyle} />,
-          label: <Link to={"/customer"} style={getLinkStyle(allowedAccess, 'customer.read')}>{translate("statistics")}</Link>,
+          label: <Link to={"/dashboard/customer"} style={getLinkStyle(allowedAccess, 'customer.read')}>{translate("statistics")}</Link>,
           disabled: !allowedAccess.includes('customer.read')
         },
         {
           key: "customerlist",
           icon: <TableOutlined style={menuIconStyle} />,
-          label: <Link to={"/customer/list"} style={getLinkStyle(allowedAccess, 'customer.read')}>{translate("list_customers")}</Link>,
+          label: <Link to={"/dashboard/customer/list"} style={getLinkStyle(allowedAccess, 'customer.read')}>{translate("list_customers")}</Link>,
           disabled: !allowedAccess.includes('customer.read')
         },
       ],

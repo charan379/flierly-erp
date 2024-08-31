@@ -4,7 +4,7 @@ import Header from "./Header";
 import Sidebar from "./Sidebar";
 import useLocale from "@/features/Language/hooks/useLocale";
 
-export default function AppLayout() {
+export default function Dashboard() {
   const { langDirection } = useLocale();
 
   return (
