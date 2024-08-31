@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import useLocale from "@/features/Language/hooks/useLocale";
 import {
   InfoCircleOutlined,
@@ -9,15 +9,31 @@ import { Button, Checkbox, Form, Input } from "antd";
 import Loading from "@/components/Loading";
 import { useAuth } from "../../hooks/useAuth";
 import { loadingTypes } from "@/types/loading";
+import { useNavigate } from "react-router-dom";
 
 /**
  * LoginForm component to display a login form with email and password fields.
  *
  * @returns {JSX.Element} The rendered LoginForm component.
  */
-const LoginForm = () => {
+const LoginForm = ({ redirectOnLogin = false }) => {
   const { translate, langDirection } = useLocale(); // Using the custom hook to get translation function and language direction
-  const { loading, login } = useAuth();
+  const { loading, login, isLoggedIn } = useAuth();
+
+  const navigate = useNavigate();
+
+  let callback = new URLSearchParams(window.location.search).get("callback");
+  if (callback) callback = JSON.parse(callback);
+
+  useEffect(() => {
+    if (redirectOnLogin && loading === loadingTypes.SUCCEEDED && isLoggedIn) {
+      if (callback?.pathname)
+        navigate({ pathname: callback?.pathname, search: callback?.search });
+      else navigate("/dashboard");
+    }
+
+    return () => {};
+  }, [isLoggedIn, loading]);
 
   return (
     <Loading isLoading={loading === loadingTypes.PENDING}>

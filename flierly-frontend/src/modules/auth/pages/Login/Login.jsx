@@ -3,7 +3,9 @@ import React from "react";
 import LoginForm from "@/modules/auth/forms/LoginForm";
 
 const Login = () => {
-  return <AuthModule authForm={<LoginForm />} AUTH_TITLE="sign_in" />;
+  return (
+    <AuthModule authForm={<LoginForm redirectOnLogin />} AUTH_TITLE="sign_in" />
+  );
 };
 
 export default Login;
