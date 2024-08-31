@@ -1,5 +1,5 @@
 import WithSuspense from "@/components/WithSuspense";
-import ProtectedRoute from "@/router/ProtectedRoute";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import React from "react";
 import { useRoutes } from "react-router-dom";
 
