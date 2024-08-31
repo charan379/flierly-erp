@@ -1,8 +1,8 @@
-import useLocale from "@/locale/useLocale";
+import useLocale from "@/features/Language/hooks/useLocale";
 import { Layout } from "antd";
 import React from "react";
 import DropdownMenu from "./components/DropdownMenu";
-import LangSelector from "@/features/Language/LangSelector";
+import LangSelector from "@/features/Language/components/LangSelector";
 import { ThemeDropdown } from "@/features/Theme";
 
 const AntHeader = Layout.Header;

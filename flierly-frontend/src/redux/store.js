@@ -1,6 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { localStorageHealthCheck } from "./statePersist";
-import localeReducer from "./locale/reducer";
+import localeReducer from "@/features/Language/redux/reducer";
 import themeReducer from "@/features/Theme/redux/reducer";
 import authReducer from "@/modules/auth/redux/auth/reducer";
 

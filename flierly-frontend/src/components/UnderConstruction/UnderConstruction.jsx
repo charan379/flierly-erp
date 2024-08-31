@@ -1,5 +1,5 @@
 import React from 'react'
-import useLocale from "@/locale/useLocale";
+import useLocale from "@/features/Language/hooks/useLocale";
 import { Button, Result } from "antd";
 import { useNavigate } from "react-router-dom";
 import { LayoutFilled } from '@ant-design/icons';

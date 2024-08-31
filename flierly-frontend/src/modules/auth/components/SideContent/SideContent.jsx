@@ -1,4 +1,4 @@
-import useLocale from "@/locale/useLocale";
+import useLocale from "@/features/Language/hooks/useLocale";
 import { Divider, Layout, Space, Typography } from "antd";
 import React from "react";
 

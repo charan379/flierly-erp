@@ -1,4 +1,4 @@
-import useLocale from "@/locale/useLocale";
+import useLocale from "@/features/Language/hooks/useLocale";
 import { CompressOutlined } from "@ant-design/icons";
 import { Flex, Space, Switch, Typography } from "antd";
 import React from "react";

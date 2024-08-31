@@ -1,4 +1,4 @@
-import useLocale from '@/locale/useLocale';
+import useLocale from '@/features/Language/hooks/useLocale';
 import { SearchOutlined } from '@ant-design/icons';
 import { ModalForm } from '@ant-design/pro-components'
 import { Button } from 'antd';

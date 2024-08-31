@@ -1,4 +1,4 @@
-import useLocale from "@/locale/useLocale";
+import useLocale from "@/features/Language/hooks/useLocale";
 import { MoonFilled, SunFilled } from "@ant-design/icons";
 import { Avatar, Segmented } from "antd";
 import React from "react";

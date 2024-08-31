@@ -1,6 +1,6 @@
 import { useEscapeKey } from "@/hooks/useEscapeKey";
 import { useOnOutsideScroll } from "@/hooks/useOnOutsideScroll";
-import useLocale from "@/locale/useLocale";
+import useLocale from "@/features/Language/hooks/useLocale";
 import {
   CheckCircleOutlined,
   DeleteOutlined,

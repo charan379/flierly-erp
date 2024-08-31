@@ -1,6 +1,6 @@
 import { Badge, Dropdown } from "antd";
 import UserAvatar from "../UserAvatar/UserAvatar";
-import useLocale from "@/locale/useLocale";
+import useLocale from "@/features/Language/hooks/useLocale";
 import { Link } from "react-router-dom";
 import { LogoutOutlined, ToolOutlined, UserOutlined } from "@ant-design/icons";
 import UserDetails from "../UserDetails/UserDetails";

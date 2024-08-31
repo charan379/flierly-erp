@@ -1,4 +1,4 @@
-import useLocale from "@/locale/useLocale";
+import useLocale from "@/features/Language/hooks/useLocale";
 import { Button, Result } from "antd";
 import React from "react";
 import { useNavigate } from "react-router-dom";

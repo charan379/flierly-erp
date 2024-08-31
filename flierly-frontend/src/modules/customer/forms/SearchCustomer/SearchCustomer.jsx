@@ -1,4 +1,4 @@
-import useLocale from '@/locale/useLocale';
+import useLocale from '@/features/Language/hooks/useLocale';
 import { GlobalOutlined, InfoCircleOutlined, NumberOutlined } from '@ant-design/icons';
 import { Form, Input, InputNumber, Select, Tag } from 'antd';
 import React from 'react'

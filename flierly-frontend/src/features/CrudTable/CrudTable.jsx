@@ -1,5 +1,5 @@
 import useElementHeight from "@/hooks/useElementHeight";
-import useLocale from "@/locale/useLocale";
+import useLocale from "@/features/Language/hooks/useLocale";
 import { ClearOutlined } from "@ant-design/icons";
 import { ProTable } from "@ant-design/pro-components";
 import { Button } from "antd";

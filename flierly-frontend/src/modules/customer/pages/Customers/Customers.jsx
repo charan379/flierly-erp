@@ -1,6 +1,6 @@
 import React from "react";
 import CustomerLayout from "../../layout/CustomerLayout";
-import useLocale from "@/locale/useLocale";
+import useLocale from "@/features/Language/hooks/useLocale";
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import { PageHeader } from "@ant-design/pro-components";
 import { CrudTable } from "@/features/CrudTable";

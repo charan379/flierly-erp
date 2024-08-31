@@ -1,6 +1,6 @@
-import LangSelector from "@/features/Language/LangSelector";
+import LangSelector from "@/features/Language/components/LangSelector";
 import { ThemeToggler } from "@/features/Theme";
-import useLocale from "@/locale/useLocale";
+import useLocale from "@/features/Language/hooks/useLocale";
 import { Col, Layout, Row } from "antd";
 import React from "react";
 

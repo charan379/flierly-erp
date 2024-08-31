@@ -1,4 +1,4 @@
-import useLocale from "@/locale/useLocale";
+import useLocale from "@/features/Language/hooks/useLocale";
 import { CheckCircleOutlined, QuestionCircleOutlined, StopOutlined } from "@ant-design/icons";
 import { Button, message, Popconfirm } from "antd";
 import React, { useMemo } from "react";

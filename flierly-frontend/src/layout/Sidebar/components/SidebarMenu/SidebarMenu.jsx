@@ -1,5 +1,5 @@
 import useTheme from "@/features/Theme/hooks/useTheme";
-import useLocale from "@/locale/useLocale";
+import useLocale from "@/features/Language/hooks/useLocale";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import {
   AreaChartOutlined,

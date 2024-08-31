@@ -2,7 +2,7 @@ import AuthLayout from "./layouts/AuthLayout"; // Importing AuthLayout component
 import React from "react"; // Importing React
 import SideContent from "./components/SideContent"; // Importing SideContent component
 import { Layout, Typography, Col, Divider } from "antd"; // Importing Ant Design components
-import useLocale from "@/locale/useLocale"; // Importing custom hook for locale management
+import useLocale from "@/features/Language/hooks/useLocale"; // Importing custom hook for locale management
 
 const { Content } = Layout; // Destructuring Content from Layout
 const { Title } = Typography; // Destructuring Title from Typography

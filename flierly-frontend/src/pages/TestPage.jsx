@@ -1,4 +1,4 @@
-import useLocale from "@/locale/useLocale";
+import useLocale from "@/features/Language/hooks/useLocale";
 import { useState } from "react";
 import reactLogo from "@/assets/react.svg";
 

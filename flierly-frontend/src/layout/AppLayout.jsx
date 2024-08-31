@@ -1,4 +1,4 @@
-import useLocale from "@/locale/useLocale";
+import useLocale from "@/features/Language/hooks/useLocale";
 import { Layout } from "antd";
 import Header from "./Header";
 import { Outlet } from "react-router-dom";
