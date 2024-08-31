@@ -1,13 +1,13 @@
-@import "./css/core.css";
-@import "./css/auth.css";
-@import "./css/rest.css";
-@import "./css/customAntd.css";
-@import "./css/layout.css";
-@import "./css/navigation.css";
-@import "./css/header.css";
-@import "./css/sidePanel.css";
-@import "./css/collapseBox.css";
-@import "./css/erp.css";
+@import "./core.css";
+@import "./auth.css";
+@import "./rest.css";
+@import "./customAntd.css";
+@import "./layout.css";
+@import "./navigation.css";
+@import "./header.css";
+@import "./sidePanel.css";
+@import "./collapseBox.css";
+@import "./erp.css";
 
 /* #root {
   max-width: 1280px;
