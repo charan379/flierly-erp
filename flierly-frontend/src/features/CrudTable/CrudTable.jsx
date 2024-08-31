@@ -7,10 +7,10 @@ import React, { useRef, useState } from "react";
 import Create from "./forms/Create";
 import Search from "./forms/Search";
 import crudService from "./service/crud.service";
-import Delete from "./actions/Delete";
-import Activate from "./actions/Activate";
+import Delete from "./features/Delete";
+import Activate from "./features/Activate";
 import RowContextMenu from "./features/RowContextMenu";
-import Restore from "./actions/Restore";
+import Restore from "./features/Restore";
 import useTheme from "../Theme/hooks/useTheme";
 
 const CrudTable = ({
