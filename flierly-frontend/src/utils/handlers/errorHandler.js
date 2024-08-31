@@ -1,5 +1,5 @@
 import { notification } from 'antd';
-import codeMessage from './codeMessage';
+import codeMessage from './config/codeMessage';
 import { logout } from '@/modules/auth/utility/authState';
 
 /**

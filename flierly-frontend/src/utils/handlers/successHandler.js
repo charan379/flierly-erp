@@ -1,5 +1,5 @@
 import { notification } from "antd";
-import codeMessage from "./codeMessage";
+import codeMessage from "./config/codeMessage";
 import { message as antdMessage } from "antd";
 
 /**

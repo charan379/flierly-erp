@@ -1,6 +1,6 @@
 import { serverConfig } from "@/config/serverConfig";
-import errorHandler from "@/handlers/errorHandler";
-import successHandler from "@/handlers/successHandler";
+import errorHandler from "@/utils/handlers/errorHandler";
+import successHandler from "@/utils/handlers/successHandler";
 import axios from "axios";
 
 // Create an axios instance with the base URL from server configuration
