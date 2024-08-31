@@ -1,38 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import AntdConfigProvider from "@/features/Theme/AntdConfigProvider";
-import AuthRouter from "@/modules/auth/router/AuthRouter";
-import { useAuth } from "@/modules/auth/hooks/useAuth";
-import AppRouter from "@/router/Router";
-import { useNavigate } from "react-router-dom";
-import { loadingTypes } from "@/types/loading";
-import useInactivityLogout from "@/modules/auth/hooks/useInactivityLogout";
-import useTokenRefresh from "@/modules/auth/hooks/useTokenRefresh";
+import Routes from "@/router/Routes";
 
 function Flierly() {
-  const { loading, isLoggedIn } = useAuth();
-  const callback = JSON.parse(new URLSearchParams(window.location.search).get('callback'));
-  const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   if (loading === loadingTypes.SUCCEEDED && isLoggedIn) {
-  //     if (callback?.pathname)
-  //       navigate({ pathname: callback?.pathname, search: callback?.search })
-  //     else
-  //       navigate('/')
-  //   }
-
-  //   return () => {
-
-  //   }
-  // }, [isLoggedIn, loading]);
-
-  // useInactivityLogout(1 * 60 * 1000); // 5 mins
-
-  // useTokenRefresh();
-
   return (
     <AntdConfigProvider>
-      {isLoggedIn ? <AppRouter /> : <AuthRouter />}
+      <Routes />
     </AntdConfigProvider>
   );
 }

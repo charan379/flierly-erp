@@ -1,5 +1,5 @@
 import React from "react";
-import { useRoutes, Navigate } from "react-router-dom";
+import { useRoutes } from "react-router-dom";
 import WithSuspense from "@/components/WithSuspense";
 import BranchRoutes from "@/modules/branch/router/BranchRoutes";
 import CustomerRoutes from "@/modules/customer/router/CustomerRoutes";
@@ -11,7 +11,11 @@ const Routes = () => {
   return useRoutes([
     {
       index: true,
-      element: <WithSuspense importPath={import("@/pages/PageUnderConstruction")} />,
+      element: (
+        <WithSuspense
+          importPath={import("@/pages/PageUnderConstruction")}
+        />
+      ),
     },
     {
       path: "login",
@@ -25,17 +29,28 @@ const Routes = () => {
       path: "app-portal",
       element: <AppLayout />,
       children: [
-        { path: "", element: <WithSuspense importPath={import("@/pages/PageUnderConstruction")} /> },
+        {
+          path: "",
+          element: (
+            <WithSuspense
+              importPath={import("@/pages/PageUnderConstruction")}
+            />
+          ),
+        },
         /* Protected routes using BranchRoutes and CustomerRoutes components */
         { path: "customer/*", element: <CustomerRoutes /> }, // Handle customer routes within CustomerRoutes component
         { path: "branch/*", element: <BranchRoutes /> }, // Handle branch routes within BranchRoutes component
         {
           path: "unauthorized",
-          element: <WithSuspense importPath={import("@/pages/PageUnAuthorized")} />,
+          element: (
+            <WithSuspense importPath={import("@/pages/PageUnAuthorized")} />
+          ),
         },
         {
           path: "*",
-          element: <WithSuspense importPath={import("@/pages/PageNotFound")} />,
+          element: (
+            <WithSuspense importPath={import("@/pages/PageNotFound")} />
+          ),
         },
       ],
     },
