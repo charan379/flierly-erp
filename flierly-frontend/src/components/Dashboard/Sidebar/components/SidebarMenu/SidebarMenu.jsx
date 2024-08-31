@@ -190,6 +190,7 @@ const SidebarMenu = () => {
       items={items}
       mode="inline"
       theme={theme}
+      defaultSelectedKeys={"dashboard"}
       style={{
         overflow: "auto",
         borderRadius: "10px",
