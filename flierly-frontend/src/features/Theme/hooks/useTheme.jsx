@@ -4,12 +4,12 @@ import {
   CHANGE_THEME_MODE,
   CHANGE_THEME_PREFERENCE,
   TOGGLE_THEME_COMPACTIBILITY,
-} from "@/redux/theme/actions";
+} from "@/features/Theme/redux/actions";
 import throttle from "@/utils/throttle";
-import darkTheme from "./themes/dark";
-import lightTheme from "./themes/light";
+import darkTheme from "../config/dark";
+import lightTheme from "../config/light";
 
-export function useTheme() {
+function useTheme() {
   // Combined selector to get theme-related state from Redux store
   const {
     preference,
@@ -86,3 +86,5 @@ export function useTheme() {
       dispatch(CHANGE_THEME_PREFERENCE(preference)), // Function to change theme preference
   };
 }
+
+export default useTheme;

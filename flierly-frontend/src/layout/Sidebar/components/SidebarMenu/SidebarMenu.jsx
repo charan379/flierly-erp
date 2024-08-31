@@ -1,6 +1,6 @@
+import useTheme from "@/features/Theme/hooks/useTheme";
 import useLocale from "@/locale/useLocale";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
-import { useTheme } from "@/theme/useTheme";
 import {
   AreaChartOutlined,
   ClusterOutlined,

@@ -1,8 +1,8 @@
 import useLocale from "@/locale/useLocale";
-import { useTheme } from "@/theme/useTheme";
 import { MoonFilled, SunFilled } from "@ant-design/icons";
-import { Avatar, Segmented, theme } from "antd";
+import { Avatar, Segmented } from "antd";
 import React from "react";
+import useTheme from "../../hooks/useTheme";
 
 const ThemeSwitcher = () => {
   const { themePreference, setThemePreference } = useTheme();

@@ -1,8 +1,8 @@
 import useLocale from "@/locale/useLocale";
-import { useTheme } from "@/theme/useTheme";
 import { CompressOutlined } from "@ant-design/icons";
 import { Flex, Space, Switch, Typography } from "antd";
 import React from "react";
+import useTheme from "../../hooks/useTheme";
 
 const ThemeCompactSwitch = () => {
   const { translate } = useLocale();
@@ -21,7 +21,7 @@ const ThemeCompactSwitch = () => {
     >
       <Space direction="horizontal" size="large" style={{ display: "flex" }}>
         <Typography.Title level={5} style={{ marginTop: "0.2em" }}>
-          {"Compact Theme"}
+          {translate("compact_theme")}
         </Typography.Title>
         <CompressOutlined rotate="16" style={{ fontSize: "16px" }} />
       </Space>

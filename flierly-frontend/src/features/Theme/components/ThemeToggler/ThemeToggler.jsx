@@ -1,8 +1,8 @@
-import { useTheme } from "@/theme/useTheme";
 import { BulbFilled, MoonFilled, SunFilled } from "@ant-design/icons";
 import Icon from "@ant-design/icons";
 import { Avatar, Button } from "antd";
 import React from "react";
+import useTheme from "../../hooks/useTheme";
 
 const ThemeToggler = ({ functional = true }) => {
   const { themePreference, setThemePreference } = useTheme();

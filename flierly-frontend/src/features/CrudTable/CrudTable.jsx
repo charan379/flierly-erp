@@ -6,12 +6,12 @@ import { Button } from "antd";
 import React, { useRef, useState } from "react";
 import Create from "./forms/Create";
 import Search from "./forms/Search";
-import { useTheme } from "@/theme/useTheme";
 import crudService from "./service/crud.service";
 import Delete from "./actions/Delete";
 import Activate from "./actions/Activate";
 import RowContextMenu from "./features/RowContextMenu";
 import Restore from "./actions/Restore";
+import useTheme from "../Theme/hooks/useTheme";
 
 const CrudTable = ({
   entity,

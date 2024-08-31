@@ -1,7 +1,6 @@
 import { useEscapeKey } from "@/hooks/useEscapeKey";
 import { useOnOutsideScroll } from "@/hooks/useOnOutsideScroll";
 import useLocale from "@/locale/useLocale";
-import { useTheme } from "@/theme/useTheme";
 import {
   CheckCircleOutlined,
   DeleteOutlined,
@@ -14,6 +13,7 @@ import { Menu, Popover } from "antd";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import crudService from "../../service/crud.service";
 import { useOnOutsideClick } from "@/hooks/useOnOutSideClick";
+import useTheme from "@/features/Theme/hooks/useTheme";
 
 const RowContextMenu = ({ entity, actions, record, open, position, close }) => {
   const { theme } = useTheme();

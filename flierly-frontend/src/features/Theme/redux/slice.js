@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import statePersist from "../statePersist";
+import statePersist from "../../../redux/statePersist";
 
 // Initial state for the locale slice.
 const INITIAL_STATE = {

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import AntdConfigProvider from "@/theme/AntdConfigProvider";
+import AntdConfigProvider from "@/features/Theme/AntdConfigProvider";
 import AuthRouter from "@/modules/auth/router/AuthRouter";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import AppRouter from "@/router/Router";
