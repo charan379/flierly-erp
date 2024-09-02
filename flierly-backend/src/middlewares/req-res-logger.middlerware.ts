@@ -18,7 +18,7 @@ const logger = pino({
                 options: {
                     colorize: true,
                     colorizeObjects: true,
-                    messageFormat: '{httpMethod} | {url} | {statusCode} {statusMessage} | {success} | {timeTaken}ms | {controller} | {message} | {username} | {reqId}',
+                    messageFormat: '{httpMethod} | {url} | {statusCode} {statusMessage} | {success} | {timeTaken}ms | {controller} | {message} | {username} |  | {reqId}',
                     hideObject: true,
                     singleLine: false,
                     translateTime: true,
@@ -38,6 +38,7 @@ const logger = pino({
 const ReqResLogger = pinoHttp({
     // Reuse an existing logger instance
     logger: logger,
+
 
     quietReqLogger: true, // turn off the default logging output
 
