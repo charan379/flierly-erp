@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import cors from "cors";
 import CorsOptions from "@/utils/cors.options";
 import Config from "./config";
+import ReqResLogger from "./middlewares/req-res-logger.middlerware";
 
 dotenv.config();
 
@@ -21,6 +22,8 @@ app.use(cors(CorsOptions));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use(ReqResLogger);
 
 app.use(router);
 
