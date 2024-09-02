@@ -34,7 +34,7 @@ const restore = async (model: mongoose.Model<any>, req: Request, res: Response):
                 `${model.modelName.toLowerCase()}.restore`,
                 req.url,
                 null,
-                HttpCodes.OK
+                HttpCodes.OK, req, res
             )
         );
     }

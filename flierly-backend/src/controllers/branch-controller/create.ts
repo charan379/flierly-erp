@@ -21,7 +21,7 @@ const create = async (req: Request, res: Response) => {
             "branch.create",
             req.url,
             null,
-            HttpCodes.CREATED)
+            HttpCodes.OK, req, res)
     );
 
 }

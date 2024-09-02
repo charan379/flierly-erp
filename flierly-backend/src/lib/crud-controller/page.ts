@@ -95,7 +95,7 @@ const page = async (model: mongoose.Model<any>, req: Request, res: Response): Pr
             `${model.modelName.toLowerCase()}.page`,
             req.url,
             null,
-            HttpCodes.OK)
+            HttpCodes.OK, req, res)
     );
 
 };

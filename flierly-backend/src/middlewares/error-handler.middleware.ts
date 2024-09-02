@@ -5,7 +5,6 @@ import apiResponse from "@/utils/api-response.generator";
 const errorHandler: ErrorRequestHandler = (error: Error, req: Request, res: Response, next: NextFunction) => {
 
     // set locals, only in development
-    res.locals.message = req.app.get('env') === 'development' ? error.message : "";
     res.locals.error = req.app.get('env') === 'development' ? error : {};
 
     const response = errrorMessageGenerator(error);
@@ -21,7 +20,7 @@ const errorHandler: ErrorRequestHandler = (error: Error, req: Request, res: Resp
             ``,
             req.url,
             response,
-            response.httpCode));
+            response.httpCode, req, res));
 }
 
 export default errorHandler;

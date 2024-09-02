@@ -48,7 +48,7 @@ const update = async (model: mongoose.Model<any>, req: Request, res: Response): 
                 `${model.modelName.toLowerCase()}.update`,
                 req.url,
                 null,
-                HttpCodes.OK)
+                HttpCodes.OK, req, res)
         );
 
     }

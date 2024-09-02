@@ -34,7 +34,7 @@ const softDelete = async (model: mongoose.Model<any>, req: Request, res: Respons
                 `${model.modelName.toLowerCase()}.delete`,
                 req.url,
                 null,
-                HttpCodes.OK)
+                HttpCodes.OK, req, res)
         );
     }
 

@@ -41,7 +41,7 @@ const read = async (model: mongoose.Model<any>, req: Request, res: Response): Pr
         `${model.modelName.toLowerCase()}.read`,
         req.url,
         null,
-        HttpCodes.OK)
+        HttpCodes.OK, req, res)
     );
   }
   // 6. Handle document not found scenario

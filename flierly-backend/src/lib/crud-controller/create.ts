@@ -22,7 +22,7 @@ const create = async (model: mongoose.Model<any>, req: Request, res: Response): 
             `${model.modelName.toLowerCase()}.create`,
             req.url,
             null,
-            HttpCodes.CREATED)
+            HttpCodes.OK, req, res)
     );
 }
 

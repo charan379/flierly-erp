@@ -57,3 +57,5 @@ type ErrorMessage = {
 }
 
 type MongoQueryArray = { [x: string]: string | { $regex: RegExp } | boolean | number }[];
+
+type ResLocals = { success: boolean, message: string, controller: string }

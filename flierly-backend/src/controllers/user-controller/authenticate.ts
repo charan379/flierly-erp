@@ -64,8 +64,8 @@ const authenticate = async (req: Request, res: Response) => {
             "user.authenticate",
             req.url,
             null,
-            HttpCodes.OK)
-    );
+            HttpCodes.OK, req, res)
+        );
 };
 
 export default authenticate;

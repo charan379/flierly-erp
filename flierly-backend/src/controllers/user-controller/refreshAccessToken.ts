@@ -43,8 +43,8 @@ const refreshAccessToken = async (req: Request, res: Response) => {
             "user.refresh-access-token",
             req.url,
             null,
-            HttpCodes.OK)
-    );
+            HttpCodes.OK, req, res)
+        );
 };
 
 export default refreshAccessToken;

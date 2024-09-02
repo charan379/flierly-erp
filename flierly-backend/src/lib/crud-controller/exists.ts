@@ -62,7 +62,7 @@ const exists = async (model: mongoose.Model<any>, req: Request, res: Response): 
             `${model.modelName.toLowerCase()}.exists`,
             req.url,
             null,
-            HttpCodes.OK)
+            HttpCodes.OK, req, res)
     );
 
 };

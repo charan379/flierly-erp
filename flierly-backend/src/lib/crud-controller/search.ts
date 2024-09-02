@@ -60,7 +60,7 @@ const search = async (model: mongoose.Model<any>, req: Request, res: Response) =
             `${model.modelName.toLowerCase()}.search`,
             req.url,
             null,
-            HttpCodes.OK)
+            HttpCodes.OK, req, res)
     );
 };
 

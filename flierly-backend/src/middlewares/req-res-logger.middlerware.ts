@@ -6,21 +6,10 @@ import pinoHttp from "pino-http";
 const logger = pino({
     level: 'info',
     timestamp: pino.stdTimeFunctions.isoTime,
-    // formatters: {
-    //     level(label) {
-    //         return { level: label };
-    //     },
-    //     log(object) {
-    //         return {
-    //             username: object.username,
-    //             timestamp: object.timestamp,
-    //             httpMethod: object.httpMethod,
-    //             url: object.url,
-    //             statusCode: object.statusCode,
-    //             // responseTime: object.responseTime
-    //         };
-    //     }
-    // },
+    redact: {
+        paths: ['request.headers.authorization'],
+        censor: '**GDPR COMPLIANT**'
+    },
     transport: {
         targets: [
             {
@@ -29,8 +18,10 @@ const logger = pino({
                 options: {
                     colorize: true,
                     colorizeObjects: true,
-                    messageFormat: '{httpMethod} {url} {statusCode} {timeTaken}ms | reqId: {reqId} | username: {username}',
-                    translateTime: '',
+                    messageFormat: '{httpMethod} | {url} | {statusCode} {statusMessage} | {success} | {timeTaken}ms | {controller} | {message} | {username} | {reqId}',
+                    hideObject: true,
+                    singleLine: false,
+                    translateTime: true,
                     timestampKey: 'timestamp',
                 },
             },
@@ -38,6 +29,7 @@ const logger = pino({
                 level: 'trace',
                 target: 'pino/file',
                 options: { destination: './pino-logger.log' }
+
             }
         ],
     },
@@ -97,12 +89,12 @@ const ReqResLogger = pinoHttp({
         if (res.statusCode === 404) {
             return 'resource not found'
         }
-        return `${req.method} completed`
+        return `${res.json} completed`
     },
 
     // Define a custom receive message
     customReceivedMessage: function (req: Request, res: Response) {
-        return 'request received: ' + req.method
+        return 'request received: ' + req.method;
     },
 
     // Define a custom error message
@@ -122,11 +114,14 @@ const ReqResLogger = pinoHttp({
     customProps: function (req: Request, res: Response) {
         return {
             username: req?.username,
-            timestamp: new Date().toISOString(),
+            timestamp: new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata', dateStyle: 'long', timeStyle: 'medium' }),
             httpMethod: req.method,
             url: req.url,
             statusCode: res.statusCode,
-            customProp2: res.locals.myCustomData
+            statusMessage: res.statusMessage,
+            success: res.locals.success,
+            message: res.locals.message,
+            controller: res.locals.controller,
         }
     }
 })

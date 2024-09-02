@@ -50,7 +50,7 @@ const activate = async (model: mongoose.Model<any>, req: Request, res: Response)
                 `${model.modelName.toLowerCase()}.activate`,
                 req.url,
                 null,
-                HttpCodes.OK)
+                HttpCodes.OK, req, res)
         );
     }
 

@@ -40,8 +40,8 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
             "user.create",
             req.url,
             null,
-            HttpCodes.CREATED)
-    );
+            HttpCodes.OK, req, res)
+        );
 }
 
 export default create;
