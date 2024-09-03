@@ -24,6 +24,7 @@ import { Menu } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFingerprint, faGauge, faKey, faUser, faUserGear, faUsersGear, faUserTag } from "@fortawesome/free-solid-svg-icons";
 import filterEnabledItems from "@/utils/filterEnabledItems";
 
 const SidebarMenu = () => {
@@ -45,8 +46,8 @@ const SidebarMenu = () => {
   const items = [
     {
       key: "dashboard",
-      icon: <DashboardOutlined style={menuIconStyle} />,
-      label: <Link to={"/dashboard"}>{translate("dashboard")}</Link>,
+      icon: <FontAwesomeIcon icon={faGauge} style={menuIconStyle} />,
+      label: <Link to={"/erp"}>{translate("dashboard")}</Link>,
     },
     {
       key: "branch",
@@ -57,13 +58,13 @@ const SidebarMenu = () => {
         {
           key: "branchHome",
           icon: <AreaChartOutlined style={menuIconStyle} />,
-          label: <Link to={"/dashboard/branch"} style={getLinkStyle(allowedAccess, 'branch.read')}>{translate("statistics")}</Link>,
+          label: <Link to={"/erp/branch"} style={getLinkStyle(allowedAccess, 'branch.read')}>{translate("statistics")}</Link>,
           disabled: !allowedAccess.includes('branch.read')
         },
         {
           key: "branchlist",
           icon: <TableOutlined style={menuIconStyle} />,
-          label: <Link to={"/dashboard/branch/list"} style={getLinkStyle(allowedAccess, 'branch.read')}>{translate("list_branchs")}</Link>,
+          label: <Link to={"/erp/branch/list"} style={getLinkStyle(allowedAccess, 'branch.read')}>{translate("list_branchs")}</Link>,
           disabled: !allowedAccess.includes('branch.read')
         },
       ],
@@ -77,13 +78,13 @@ const SidebarMenu = () => {
         {
           key: "customerHome",
           icon: <AreaChartOutlined style={menuIconStyle} />,
-          label: <Link to={"/dashboard/customer"} style={getLinkStyle(allowedAccess, 'customer.read')}>{translate("statistics")}</Link>,
+          label: <Link to={"/erp/customer"} style={getLinkStyle(allowedAccess, 'customer.read')}>{translate("statistics")}</Link>,
           disabled: !allowedAccess.includes('customer.read')
         },
         {
           key: "customerlist",
           icon: <TableOutlined style={menuIconStyle} />,
-          label: <Link to={"/dashboard/customer/list"} style={getLinkStyle(allowedAccess, 'customer.read')}>{translate("list_customers")}</Link>,
+          label: <Link to={"/erp/customer/list"} style={getLinkStyle(allowedAccess, 'customer.read')}>{translate("list_customers")}</Link>,
           disabled: !allowedAccess.includes('customer.read')
         },
       ],
@@ -157,25 +158,25 @@ const SidebarMenu = () => {
     {
       key: "iam",
       icon: <FontAwesomeIcon icon={faFingerprint} style={menuIconStyle} />,
-      label: <Link to={"/dashboard/iam"} style={getLinkStyle(allowedAccess, 'user.read')}>{translate("iam")}</Link>,
+      label: <Link to={"/erp/iam"} style={getLinkStyle(allowedAccess, 'user.read')}>{translate("iam")}</Link>,
       disabled: !allowedAccess.includes('user.read'),
       children: [
         {
           key: "users",
           icon: <FontAwesomeIcon icon={faUsersGear} style={menuIconStyle} />,
-          label: <Link to={"/dashboard/iam/users"} style={getLinkStyle(allowedAccess, 'user.read')}>{translate("users")}</Link>,
+          label: <Link to={"/erp/iam/users"} style={getLinkStyle(allowedAccess, 'user.read')}>{translate("users")}</Link>,
           disabled: !allowedAccess.includes('user.read')
         },
         {
           key: "roles",
           icon: <FontAwesomeIcon icon={faUserTag} style={menuIconStyle} />,
-          label: <Link to={"/dashboard/iam/users"} style={getLinkStyle(allowedAccess, 'role.read')}>{translate("roles")}</Link>,
+          label: <Link to={"/erp/iam/users"} style={getLinkStyle(allowedAccess, 'role.read')}>{translate("roles")}</Link>,
           disabled: !allowedAccess.includes('role.read')
         },
         {
           key: "privileges",
-          icon: <FontAwesomeIcon icon={faKey} />,
-          label: <Link to={"/dashboard/iam/privileges"} style={getLinkStyle(allowedAccess, 'privilege.read')}>{translate("privileges")}</Link>,
+          icon: <FontAwesomeIcon icon={faKey} style={menuIconStyle} />,
+          label: <Link to={"/erp/iam/privileges"} style={getLinkStyle(allowedAccess, 'privilege.read')}>{translate("privileges")}</Link>,
           disabled: !allowedAccess.includes('privilege.read')
         },
       ]
