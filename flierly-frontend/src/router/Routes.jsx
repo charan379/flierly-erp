@@ -6,6 +6,7 @@ import CustomerRoutes from "@/modules/customer/router/CustomerRoutes";
 import Login from "@/modules/auth/pages/Login";
 import Register from "@/modules/auth/pages/Register";
 import Dashboard from "@/components/Dashboard";
+import IamRoutes from "@/modules/iam/router/IamRoutes";
 
 const Routes = () => {
   return useRoutes([
@@ -38,6 +39,7 @@ const Routes = () => {
         /* Protected routes using BranchRoutes and CustomerRoutes components */
         { path: "customer/*", element: <CustomerRoutes /> }, // Handle customer routes within CustomerRoutes component
         { path: "branch/*", element: <BranchRoutes /> }, // Handle branch routes within BranchRoutes component
+        { path: "iam/*", element: <IamRoutes /> }, // Handle iam routes within IamRoutes module
         {
           path: "unauthorized",
           element: (
