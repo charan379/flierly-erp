@@ -23,6 +23,8 @@ import {
 import { Menu } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFingerprint, faKey, faUser, faUserGear, faUsersGear, faUserTag } from "@fortawesome/free-solid-svg-icons";
 
 const SidebarMenu = () => {
   const { theme } = useTheme();
@@ -151,6 +153,32 @@ const SidebarMenu = () => {
       icon: <ReconciliationOutlined style={menuIconStyle} />,
       label: <Link to={"/category/expenses"} style={getLinkStyle(allowedAccess, 'expensesCategory.read')}>{translate("expenses_Category")}</Link>,
       disabled: !allowedAccess.includes('expensesCategory.read')
+    },
+    {
+      key: "iam",
+      icon: <FontAwesomeIcon icon={faFingerprint} style={menuIconStyle} />,
+      label: <Link to={"/dashboard/iam"} style={getLinkStyle(allowedAccess, 'user.read')}>{translate("iam")}</Link>,
+      disabled: !allowedAccess.includes('user.read'),
+      children: [
+        {
+          key: "users",
+          icon: <FontAwesomeIcon icon={faUsersGear} style={menuIconStyle} />,
+          label: <Link to={"/dashboard/iam/users"} style={getLinkStyle(allowedAccess, 'user.read')}>{translate("users")}</Link>,
+          disabled: !allowedAccess.includes('user.read')
+        },
+        {
+          key: "roles",
+          icon: <FontAwesomeIcon icon={faUserTag} style={menuIconStyle} />,
+          label: <Link to={"/dashboard/iam/users"} style={getLinkStyle(allowedAccess, 'role.read')}>{translate("roles")}</Link>,
+          disabled: !allowedAccess.includes('role.read')
+        },
+        {
+          key: "privileges",
+          icon: <FontAwesomeIcon icon={faKey} />,
+          label: <Link to={"/dashboard/iam/privileges"} style={getLinkStyle(allowedAccess, 'privilege.read')}>{translate("privileges")}</Link>,
+          disabled: !allowedAccess.includes('privilege.read')
+        },
+      ]
     },
     {
       label: translate("Settings"),
