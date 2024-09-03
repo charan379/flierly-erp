@@ -18,7 +18,7 @@ const logger = pino({
                 options: {
                     colorize: true,
                     colorizeObjects: true,
-                    messageFormat: '{httpMethod} | {url} | {statusCode} {statusMessage} | {success} | {timeTaken}ms | {controller} | {message} | {username} | {reqId}',
+                    messageFormat: '{httpMethod} | {url} | {statusCode} {statusMessage} | {success} | {timeTaken}ms | {controller} | {msg} | {username} | {reqId}',
                     hideObject: true,
                     singleLine: false,
                     translateTime: true,
