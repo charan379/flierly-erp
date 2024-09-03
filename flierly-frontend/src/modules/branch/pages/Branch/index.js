@@ -1,3 +1,3 @@
-import Branch from "./Branch";
+import Branchs from "./Branchs";
 
-export default Branch;
+export default Branchs;

@@ -3,7 +3,7 @@ import BranchLayout from "../../layout/BranchLayout";
 import { CrudTable } from "@/features/CrudTable";
 import columns from "../../config/branchColumns";
 
-function Branch() {
+function Branchs() {
   return (
     <BranchLayout>
       <CrudTable
@@ -21,4 +21,4 @@ function Branch() {
   );
 }
 
-export default Branch;
+export default Branchs;
