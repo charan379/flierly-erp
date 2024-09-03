@@ -170,7 +170,7 @@ const SidebarMenu = () => {
         {
           key: "roles",
           icon: <FontAwesomeIcon icon={faUserTag} style={menuIconStyle} />,
-          label: <Link to={"/erp/iam/users"} style={getLinkStyle(allowedAccess, 'role.read')}>{translate("roles")}</Link>,
+          label: <Link to={"/erp/iam/roles"} style={getLinkStyle(allowedAccess, 'role.read')}>{translate("roles")}</Link>,
           disabled: !allowedAccess.includes('role.read')
         },
         {
