@@ -3,6 +3,13 @@ import dotenv from 'dotenv';
 import FlierlyException from './flierly.exception';
 import HttpCodes from '@/constants/httpCodes';
 import Config from '@/config';
+import mongoose from 'mongoose';
+
+// Create a type alias that combines JwtPayload with custom properties
+export type CustomJwtPayload = JwtPayload & {
+    username?: string;
+    userId?: mongoose.ObjectId;
+};
 
 dotenv.config();
 
@@ -19,7 +26,7 @@ const ERROR_MESSAGES = {
 
 const jwtSecret: string = Config.JWT_SECRET ?? ''
 
-export async function generateJwtToken(username: string): Promise<String> {
+export async function generateJwtToken(userId: mongoose.ObjectId, username: string): Promise<String> {
 
     try {
         const signOptions: jwt.SignOptions = {
@@ -27,8 +34,9 @@ export async function generateJwtToken(username: string): Promise<String> {
             algorithm: 'HS256'
         };
 
-        const payload: JwtPayload = {
-            sub: username
+        const payload: CustomJwtPayload = {
+            userId: userId,
+            username: username,
         };
 
         return jwt.sign(payload, jwtSecret, signOptions);
@@ -43,10 +51,10 @@ export async function generateJwtToken(username: string): Promise<String> {
     };
 };
 
-export async function verifyJwtToken(jwtToken: string): Promise<JwtPayload> {
+export async function verifyJwtToken(jwtToken: string): Promise<CustomJwtPayload> {
 
     try {
-        const decodedToken = jwt.verify(jwtToken, jwtSecret) as JwtPayload;
+        const decodedToken = jwt.verify(jwtToken, jwtSecret) as CustomJwtPayload;
         return decodedToken;
     } catch (error: any) {
         handleJwtError(error);

@@ -41,8 +41,8 @@ const authenticate = async (req: Request, res: Response) => {
     // Throw error if user is inactive
     if (!user.isActive)
         throw new FlierlyException("Inactive user", HttpCodes.BAD_REQUEST, "User is not activated", "authenticate-user-controller-inactive-user");
-    // generate jwt token for further authentication with username
-    const token = await generateJwtToken(user.username);
+    // generate jwt token for further authentication with username and userId
+    const token = await generateJwtToken(user._id, user.username);
     // tokenExpiresAt
     const tokenExpiresAt = new Date();
     tokenExpiresAt.setHours(tokenExpiresAt.getHours() + 7, tokenExpiresAt.getMinutes() + 30);
@@ -65,7 +65,7 @@ const authenticate = async (req: Request, res: Response) => {
             req.url,
             null,
             HttpCodes.OK, req, res)
-        );
+    );
 };
 
 export default authenticate;
