@@ -14,17 +14,20 @@ const schema: mongoose.Schema<User> = new mongoose.Schema<User>(
         },
         username: {
             type: String,
-            required: [true, "Username is required."]
+            required: [true, "Username is required."],
+            unique: true
         },
         email: {
             type: String,
             lowercase: true,
             trim: true,
-            required: [true, "User email is required."]
+            required: [true, "User email is required."],
+            unique: true
         },
         mobile: {
             type: String,
-            required: [true, "User mobile number is required."]
+            required: [true, "User mobile number is required."],
+            unique: true
         },
         additionalPrivileges: {
             type: [{ type: mongoose.Schema.ObjectId, ref: 'Privilege', autopopulate: { select: ['name', 'access', 'model', 'code'] } }],

@@ -7,6 +7,7 @@ const schema: mongoose.Schema<UserPassword> = new mongoose.Schema<UserPassword>(
         userId: {
             type: mongoose.Schema.ObjectId,
             required: [true, "UserId is required for storing passwords"],
+            unique: true,
         },
         password: {
             type: String,
@@ -18,8 +19,6 @@ const schema: mongoose.Schema<UserPassword> = new mongoose.Schema<UserPassword>(
         collection: "user-passowrds"
     }
 );
-
-schema.index({ userId: 1 });
 
 const UserPasswordModel: mongoose.Model<UserPassword> = mongoose.model<UserPassword>('UserPassword', schema);
 
