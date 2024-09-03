@@ -18,7 +18,7 @@ const logger = pino({
                 options: {
                     colorize: true,
                     colorizeObjects: true,
-                    messageFormat: '{httpMethod} | {url} | {statusCode} {statusMessage} | {success} | {timeTaken}ms | {controller} | {message} | {username} |  | {reqId}',
+                    messageFormat: '{httpMethod} | {url} | {statusCode} {statusMessage} | {success} | {timeTaken}ms | {controller} | {message} | {username} | {reqId}',
                     hideObject: true,
                     singleLine: false,
                     translateTime: true,
@@ -39,17 +39,7 @@ const ReqResLogger = pinoHttp({
     // Reuse an existing logger instance
     logger: logger,
 
-
     quietReqLogger: true, // turn off the default logging output
-
-    // transport: {
-    //     target: 'pino-http-print', // use the pino-http-print transport and its formatting output
-    //     options: {
-    //         destination: 1,
-    //         all: false,
-    //         translateTime: true,
-    //     }
-    // },
 
     // Define a custom request id function
     genReqId: function (req: Request, res: Response) {
@@ -90,7 +80,7 @@ const ReqResLogger = pinoHttp({
         if (res.statusCode === 404) {
             return 'resource not found'
         }
-        return `${res.json} completed`
+        return res.locals.message
     },
 
     // Define a custom receive message
@@ -118,6 +108,9 @@ const ReqResLogger = pinoHttp({
             timestamp: new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata', dateStyle: 'long', timeStyle: 'medium' }),
             httpMethod: req.method,
             url: req.url,
+            remoteAddress: req.socket.remoteAddress,
+            remotePort: req.socket.remotePort,
+            remoteFamily: req.socket.remoteFamily,
             statusCode: res.statusCode,
             statusMessage: res.statusMessage,
             success: res.locals.success,
