@@ -44,7 +44,7 @@ const refreshAccessToken = async (req: Request, res: Response) => {
             req.url,
             null,
             HttpCodes.OK, req, res)
-        );
+    );
 };
 
 export default refreshAccessToken;
