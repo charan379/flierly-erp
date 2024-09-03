@@ -24,7 +24,7 @@ import { Menu } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFingerprint, faKey, faUser, faUserGear, faUsersGear, faUserTag } from "@fortawesome/free-solid-svg-icons";
+import filterEnabledItems from "@/utils/filterEnabledItems";
 
 const SidebarMenu = () => {
   const { theme } = useTheme();
@@ -215,7 +215,7 @@ const SidebarMenu = () => {
   return (
     <Menu
       className={"custom-scrollbar-display"}
-      items={items}
+      items={filterEnabledItems(items)}
       mode="inline"
       theme={theme}
       defaultSelectedKeys={"dashboard"}
