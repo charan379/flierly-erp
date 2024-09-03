@@ -24,7 +24,7 @@ const Routes = () => {
       element: <Register />,
     },
     {
-      path: "dashboard",
+      path: "erp",
       element: <Dashboard />,
       children: [
         {

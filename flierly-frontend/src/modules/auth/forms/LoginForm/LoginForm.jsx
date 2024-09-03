@@ -29,7 +29,7 @@ const LoginForm = ({ redirectOnLogin = false }) => {
     if (redirectOnLogin && loading === loadingTypes.SUCCEEDED && isLoggedIn) {
       if (callback?.pathname)
         navigate({ pathname: callback?.pathname, search: callback?.search });
-      else navigate("/dashboard");
+      else navigate("/erp");
     }
 
     return () => {};
