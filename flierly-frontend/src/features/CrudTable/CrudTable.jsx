@@ -55,7 +55,7 @@ const CrudTable = ({
       bordered={true}
       style={{
         width: "100%",
-        height: "240px"
+        height: "100%"
       }}
       // scroll configuration
       scroll={{
