@@ -6,7 +6,7 @@ import buildMongoSortObject, { SortObject } from "@/utils/mongo-sort.builder";
 import pageResponseBuilder from "@/utils/page-response.builder";
 import { Request, Response } from "express";
 import Joi from "joi";
-import mongoose from "mongoose";
+import mongoose, { FilterQuery } from "mongoose";
 
 /**
  * Interface representing the structure of a page request.
@@ -34,8 +34,8 @@ export interface PageRequest {
  * @type {Joi.ObjectSchema<PageRequest>}
  */
 const pageRequestSchema: Joi.ObjectSchema<PageRequest> = Joi.object({
-    fields: Joi.string().default("name"),
-    queries: Joi.string().default(" "),
+    fields: Joi.string().default(""),
+    queries: Joi.string().default(""),
     sort: Joi.string().default("createdAt.asc"),
     page: Joi.number().integer().min(1).default(1),
     limit: Joi.number().integer().min(1).default(20),
@@ -64,28 +64,28 @@ const page = async (model: mongoose.Model<any>, req: Request, res: Response): Pr
     const limit: number = pageRequest.limit;
     // Calculate the skip value based on page and limit for pagination
     const skip: number = (page * limit) - limit;
-
+    // mongoDB filter query
+    const filter: FilterQuery<any> = {}
     // If the schema includes the 'isDeleted' field, exclude soft-deleted documents from the query
     if (modelKeys.includes('isDeleted'))
         query.push({ isDeleted: false })
-
+    // if query array length is greater than 0 then add $and to  mongo filter
+    if (query.length > 0)
+        filter.$and = query;
     // Create separate promises for fetching documents and total count for efficiency
     const resultsPromise = model
-        .find({ $and: query }, { __v: 0 }, { autopopulate: pageRequest.autopopulate }) // Find documents with specific fields, exclude `__v`, and optionally autopopulate
+        .find(filter, { __v: 0 }, { autopopulate: pageRequest.autopopulate }) // Find documents with specific fields, exclude `__v`, and optionally autopopulate
         .sort({ ...sort }) // Apply the sorting criteria
         .skip(skip) // Skip documents based on calculated skip value
         .limit(limit) // Limit the number of documents returned
         .exec();
-
-    const countPromise = model.countDocuments({ $and: query }) // Count total documents matching the query
+    const countPromise = model.countDocuments(filter) // Count total documents matching the query
         .exec();
 
     // Wait for both promises to resolve concurrently
     const [results, count] = await Promise.all([resultsPromise, countPromise]);
-
     // Build the page response object using a separate utility function
     const re: PageResult = await pageResponseBuilder(results, page, limit, count, sort);
-
     // Return the paginated response with status code 200 (OK)
     return res.status(HttpCodes.OK).json(
         apiResponse(
