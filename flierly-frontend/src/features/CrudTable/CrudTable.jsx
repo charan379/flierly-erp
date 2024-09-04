@@ -72,7 +72,7 @@ const CrudTable = ({
       search={false}
       // row selection configuration
       rowSelection={{
-        columnWidth: "5px",
+        columnWidth: "3%",
         fixed: true,
         type: "checkbox",
         preserveSelectedRowKeys: true,

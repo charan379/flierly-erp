@@ -15,19 +15,46 @@ const privilegeColumns = [
     title: "Name",
     dataIndex: "name",
     copyable: false,
-    width: 20,
+    width: 10,
   },
   {
     title: "Access",
     dataIndex: "access",
     copyable: false,
-    width: 10,
+    width: 5,
+    filters: true,
+    filterSearch: true,
+    filterMode: "menu",
+    onFilter: false,
+    valueType: "select",
+    valueEnum: {
+      Create: {
+        text: "Create",
+        status: "Success",
+      },
+      Read: {
+        text: "Read",
+        status: "Default",
+      },
+      Manage: {
+        text: "Manage",
+        status: "Warning",
+      },
+      Delete: {
+        text: "Delete",
+        status: "Error",
+      },
+      Update: {
+        text: "Update",
+        status: "Processing",
+      },
+    },
   },
   {
     title: "Model",
     dataIndex: "model",
     copyable: false,
-    width: 10,
+    width: 7,
   },
   {
     title: "Code",
@@ -38,13 +65,13 @@ const privilegeColumns = [
   {
     title: "Created",
     dataIndex: "createdAt",
-    width: 20,
+    width: 10,
     valueType: "dateTime",
   },
   {
     title: "Updated",
     dataIndex: "updatedAt",
-    width: 20,
+    width: 10,
     valueType: "dateTime",
   },
 ];
