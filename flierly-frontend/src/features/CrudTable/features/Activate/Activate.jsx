@@ -4,8 +4,8 @@ import { Button, message, Popconfirm } from "antd";
 import React, { useMemo } from "react";
 import crudService from "../../service/crud.service";
 
-const Activate = ({ entity, actions, rows }) => {
-
+const Activate = ({ entity, actions, rows, render }) => {
+  if(!render) return;
   const { translate } = useLocale();
 
   // Memoize the activate state calculation

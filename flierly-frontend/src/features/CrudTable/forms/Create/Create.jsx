@@ -4,10 +4,12 @@ import { DrawerForm } from "@ant-design/pro-components";
 import { Button } from "antd";
 import React from "react";
 
-const Create = ({ formFields, title = "add", initialValues }) => {
+const Create = ({ formFields, title = "add", initialValues, render }) => {
+  if (!render) return;
+  if (!formFields) return;
+  
   const { langDirection, translate } = useLocale();
 
-  if (!formFields) return;
   return (
     <DrawerForm
       title={title}
@@ -37,7 +39,12 @@ const Create = ({ formFields, title = "add", initialValues }) => {
           header: { padding: "10px 5px 5px 5px" },
         },
       }}
-      submitter={{ searchConfig: { resetText: translate("cancel"), submitText: translate("save") } }}
+      submitter={{
+        searchConfig: {
+          resetText: translate("cancel"),
+          submitText: translate("save"),
+        },
+      }}
     >
       {formFields}
     </DrawerForm>

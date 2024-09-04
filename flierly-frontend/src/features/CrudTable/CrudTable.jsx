@@ -23,6 +23,17 @@ const CrudTable = ({
   createFormInitialValues,
   searchFormFields,
   searchFormInitialValues,
+  render = {
+    restore: true,
+    delete: true,
+    activate: true,
+    clear: true,
+    builtIn: true,
+    bin: true,
+    search: true,
+    create: true,
+    view: true,
+  },
 }) => {
   const { isCompactTheme } = useTheme();
 
@@ -55,7 +66,7 @@ const CrudTable = ({
       bordered={true}
       style={{
         width: "100%",
-        height: "100%"
+        height: "100%",
       }}
       // scroll configuration
       scroll={{
@@ -137,12 +148,14 @@ const CrudTable = ({
           formFields={searchFormFields}
           initialValues={searchFormInitialValues}
           title={translate("search_from")}
+          render={render.search}
         />,
         // create from
         <Create
           formFields={createFormFields}
           initialValues={createFormInitialValues}
           title={translate("add_from")}
+          render={render.create}
         />,
         // restore the selected items
         <Restore
@@ -150,6 +163,7 @@ const CrudTable = ({
           actions={action}
           rows={rows}
           key={"restore_selected"}
+          render={render.restore}
         />,
         // delete the selected items
         <Delete
@@ -157,6 +171,7 @@ const CrudTable = ({
           actions={action}
           rows={rows}
           key={"delete_selected"}
+          render={render.delete}
         />,
         // activate | inactivate the selected items
         <Activate
@@ -164,6 +179,7 @@ const CrudTable = ({
           actions={action}
           rows={rows}
           key={"activate_selected"}
+          render={render.activate}
         />,
         // clear the selection
         <Button

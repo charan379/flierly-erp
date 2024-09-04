@@ -4,7 +4,8 @@ import { Button, message, Popconfirm } from "antd";
 import React from "react";
 import crudService from "../../service/crud.service";
 
-const Restore = ({ entity, actions, rows }) => {
+const Restore = ({ entity, actions, rows, render }) => {
+  if(!render) return;
   const { translate } = useLocale();
 
   const buttonStyle = rows.selectedRowKeys.length <= 0 ? {} : { backgroundColor: "#009688", borderColor: "#009688" };
