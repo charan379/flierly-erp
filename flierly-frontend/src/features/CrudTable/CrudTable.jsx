@@ -3,7 +3,7 @@ import useLocale from "@/features/Language/hooks/useLocale";
 import { ClearOutlined } from "@ant-design/icons";
 import { ProTable } from "@ant-design/pro-components";
 import { Button } from "antd";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Create from "./forms/Create";
 import Search from "./forms/Search";
 import crudService from "./service/crud.service";
@@ -54,6 +54,13 @@ const CrudTable = ({
     crudTableContextHandler.rowMenu.setPosition({ x: event.clientX, y: event.clientY })
     crudTableContextHandler.rowMenu.open()
   };
+
+  useEffect(() => {
+
+    return () => {
+      crudTableContextHandler.reset()
+    }
+  }, [])
 
   return (
     <ProTable

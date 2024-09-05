@@ -9,7 +9,7 @@ const Search = ({ formFields, title = "search", initialValues, render, actions }
   if (!render) return;
   if (!formFields) return;
   const { langDirection, translate } = useLocale();
-  const { crudTableContextHandler: ctCh } = useCrudTableContext();
+  const { crudTableContextHandler } = useCrudTableContext();
 
   return (
     <ModalForm

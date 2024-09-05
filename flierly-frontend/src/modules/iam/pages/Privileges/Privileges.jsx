@@ -3,7 +3,7 @@ import IamLayout from "../../layout/IamLayout";
 import { CrudTable } from "@/features/CrudTable";
 import privilegeColumns from "../../config/privilegeColumns";
 import QueryPrivilege from "../../forms/QueryPrivilege";
-import CrudTableContextProvider from "@/features/CrudTable/context/Provider";
+import CrudTableContextProvider from "@/features/CrudTable/components/CrudTableContextProvider";
 
 export default function Privileges() {
   return (

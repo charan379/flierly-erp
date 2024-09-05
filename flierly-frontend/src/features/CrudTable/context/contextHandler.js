@@ -1,39 +1,20 @@
-import actionTypes from "./actionTypes";
+import actionTypes from './actionTypes';
 
-const contextHandler = (state, dispatcher) => {
-    return {
-        filters: {
-            set: (data) => {
-                dispatcher({ type: actionTypes.UPDATE_FILTERS, payload: data })
-            },
-            get: () => {
-                return state?.filters;
-            }
-        },
-        rowMenu: {
-            open: () => {
-                dispatcher({ type: actionTypes.OPEN_ROW_MENU })
-            },
-            close: () => {
-                dispatcher({ type: actionTypes.CLOSE_ROW_MENU })
-            },
-            isOpen: () => {
-                return state?.rowMenu?.open
-            },
-            setPosition: (position = { x: 0, y: 0 }) => {
-                dispatcher({ type: actionTypes.UPDATE_ROW_MEUN_POSITION, payload: position })
-            },
-            getPosition: () => {
-                return state?.rowMenu?.position
-            },
-            setCurrentRecord: (record = {}) => {
-                dispatcher({ type: actionTypes.UPDATE_ROW_MENU_CURRENT_RECORD, payload: record })
-            },
-            getCurrentRecord: () => {
-                return state?.rowMenu?.currentRecord
-            }
-        }
-    }
-}
+const contextHandler = (state, dispatcher) => ({
+    reset: () => dispatcher({ type: actionTypes.RESET_STATE }),
+    filters: {
+        set: (data) => dispatcher({ type: actionTypes.UPDATE_FILTERS, payload: data }),
+        get: () => state?.filters,
+    },
+    rowMenu: {
+        open: () => dispatcher({ type: actionTypes.OPEN_ROW_MENU }),
+        close: () => dispatcher({ type: actionTypes.CLOSE_ROW_MENU }),
+        isOpen: () => state?.rowMenu?.open,
+        setPosition: (position = { x: 0, y: 0 }) => dispatcher({ type: actionTypes.UPDATE_ROW_MENU_POSITION, payload: position }),
+        getPosition: () => state?.rowMenu?.position,
+        setCurrentRecord: (record = {}) => dispatcher({ type: actionTypes.UPDATE_ROW_MENU_CURRENT_RECORD, payload: record }),
+        getCurrentRecord: () => state?.rowMenu?.currentRecord,
+    },
+});
 
 export default contextHandler;

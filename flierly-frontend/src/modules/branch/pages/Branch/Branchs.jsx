@@ -2,7 +2,7 @@ import React from "react";
 import BranchLayout from "../../layout/BranchLayout";
 import { CrudTable } from "@/features/CrudTable";
 import columns from "../../config/branchColumns";
-import CrudTableContextProvider from "@/features/CrudTable/context/Provider";
+import CrudTableContextProvider from "@/features/CrudTable/components/CrudTableContextProvider";
 
 function Branchs() {
   return (
