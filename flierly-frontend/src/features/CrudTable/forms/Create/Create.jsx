@@ -1,13 +1,13 @@
 import useLocale from "@/features/Language/hooks/useLocale";
 import { PlusOutlined } from "@ant-design/icons";
 import { DrawerForm } from "@ant-design/pro-components";
-import { Button } from "antd";
+import { Button, Tooltip } from "antd";
 import React from "react";
 
 const Create = ({ formFields, title = "add", initialValues, render }) => {
   if (!render) return;
   if (!formFields) return;
-  
+
   const { langDirection, translate } = useLocale();
 
   return (
@@ -19,14 +19,16 @@ const Create = ({ formFields, title = "add", initialValues, render }) => {
       }}
       initialValues={initialValues}
       trigger={
-        <Button
-          type="primary"
-          key={`drawer-create-form-trigger`}
-          icon={<PlusOutlined />}
-          style={{ backgroundColor: "teal" }}
-        >
-          {translate("add")}
-        </Button>
+        <Tooltip title={translate("add_data")}>
+          <Button
+            type="primary"
+            key={`drawer-create-form-trigger`}
+            icon={<PlusOutlined />}
+            shape="circle"
+            size="middle"
+            style={{ backgroundColor: "teal" }}
+          />
+        </Tooltip>
       }
       resize={{
         maxWidth: "window.innerWidth * 0.8",

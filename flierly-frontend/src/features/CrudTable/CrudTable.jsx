@@ -2,7 +2,7 @@ import useElementHeight from "@/hooks/useElementHeight";
 import useLocale from "@/features/Language/hooks/useLocale";
 import { ClearOutlined } from "@ant-design/icons";
 import { ProTable } from "@ant-design/pro-components";
-import { Button } from "antd";
+import { Button, Space } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import Create from "./forms/Create";
 import Search from "./forms/Search";
@@ -157,6 +157,7 @@ const CrudTable = ({
           render={render.search}
           actions={action}
         />,
+        <div></div>,
         // create from
         <Create
           formFields={createFormFields}
@@ -164,6 +165,7 @@ const CrudTable = ({
           title={translate("add_from")}
           render={render.create}
         />,
+        <div></div>,
         // restore the selected items
         <Restore
           entity={entity}
@@ -172,6 +174,7 @@ const CrudTable = ({
           key={"restore_selected"}
           render={render.restore}
         />,
+        <div></div>,
         // delete the selected items
         <Delete
           entity={entity}
@@ -180,6 +183,7 @@ const CrudTable = ({
           key={"delete_selected"}
           render={render.delete}
         />,
+        <div></div>,
         // activate | inactivate the selected items
         <Activate
           entity={entity}
@@ -188,6 +192,7 @@ const CrudTable = ({
           key={"activate_selected"}
           render={render.activate}
         />,
+        <div></div>,
         // clear the selection
         <Clear
           actions={action}

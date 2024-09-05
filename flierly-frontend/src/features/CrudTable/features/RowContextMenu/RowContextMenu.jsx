@@ -3,17 +3,15 @@ import { useOnOutsideScroll } from "@/hooks/useOnOutsideScroll";
 import useLocale from "@/features/Language/hooks/useLocale";
 import {
   CheckCircleOutlined,
-  DeleteOutlined,
-  EditOutlined,
-  EyeOutlined,
   StopOutlined,
-  UndoOutlined,
 } from "@ant-design/icons";
 import { Menu, Popover } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import crudService from "../../service/crud.service";
 import { useOnOutsideClick } from "@/hooks/useOnOutSideClick";
 import useTheme from "@/features/Theme/hooks/useTheme";
+import { faEye, faPenToSquare, faTrashCan, faTrashCanArrowUp } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const RowContextMenu = ({ entity, actions, record, open, position, close }) => {
   const { theme } = useTheme();
@@ -27,8 +25,8 @@ const RowContextMenu = ({ entity, actions, record, open, position, close }) => {
       label: translate("view"),
       key: "view",
       // disabled: true,
-      icon: <EyeOutlined />,
-      style: {color: '#2196F3'},
+      icon: <FontAwesomeIcon icon={faEye} />,
+      style: { color: "#2196F3" },
     },
   ];
 
@@ -38,7 +36,7 @@ const RowContextMenu = ({ entity, actions, record, open, position, close }) => {
       label: translate("edit"),
       key: "edit",
       // disabled: true,
-      icon: <EditOutlined />,
+      icon: <FontAwesomeIcon icon={faPenToSquare} />,
       style: { color: "#FF9800" },
     });
   }
@@ -68,7 +66,7 @@ const RowContextMenu = ({ entity, actions, record, open, position, close }) => {
     items.push({
       label: translate("delete"),
       key: "delete",
-      icon: <DeleteOutlined />,
+      icon: <FontAwesomeIcon icon={faTrashCan} />,
       danger: true,
     });
   }
@@ -78,8 +76,8 @@ const RowContextMenu = ({ entity, actions, record, open, position, close }) => {
     items.push({
       label: translate("restore"),
       key: "restore",
-      icon: <UndoOutlined />,
-      style: {color: "#009688"}
+      icon: <FontAwesomeIcon icon={faTrashCanArrowUp} />,
+      style: { color: "#009688" },
     });
   }
 

@@ -16,6 +16,7 @@ export default function Privileges() {
           tableKey={"privilege-table"}
           rowKey="_id"
           searchFormFields={<QueryPrivilege />}
+          createFormFields={<QueryPrivilege />}
         />
       </CrudTableContextProvider>
     </IamLayout>

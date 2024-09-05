@@ -1,6 +1,6 @@
 import useLocale from "@/features/Language/hooks/useLocale";
 import { ClearOutlined } from "@ant-design/icons";
-import { Button } from "antd";
+import { Badge, Button, Tooltip } from "antd";
 import React from "react";
 
 const Clear = ({ render, rows, actions }) => {
@@ -9,17 +9,23 @@ const Clear = ({ render, rows, actions }) => {
   const { translate } = useLocale();
 
   return (
-    <Button
-      type="primary"
-      key={`clear-selected-rows-trigger`}
-      icon={<ClearOutlined />}
-      disabled={rows.selectedRowKeys.length <= 0}
-      onClick={() => actions.clearSelected()}
-    >
-      {`${translate("clear")} ${
-        rows.selectedRowKeys.length > 0 ? rows.selectedRowKeys.length : ""
-      }`}
-    </Button>
+    <Tooltip title={`${translate("clear_selected")}`}>
+      <Badge
+        color="pink"
+        overflowCount={99}
+        count={rows.selectedRowKeys.length}
+      >
+        <Button
+          type="primary"
+          key={`clear-selected-rows-trigger`}
+          icon={<ClearOutlined />}
+          shape="circle"
+          size="middle"
+          disabled={rows.selectedRowKeys.length <= 0}
+          onClick={() => actions.clearSelected()}
+        />
+      </Badge>
+    </Tooltip>
   );
 };
 
