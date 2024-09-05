@@ -11,6 +11,7 @@ const Search = ({ formFields, title = "search", initialValues, render }) => {
 
   return (
     <ModalForm
+      grid={true}
       // initial values
       initialValues={initialValues}
       // on finish
@@ -19,7 +20,7 @@ const Search = ({ formFields, title = "search", initialValues, render }) => {
         return true;
       }}
       // Title of modal
-      title={title}
+      // title={title}
       // trigger button to toggle form
       trigger={
         <Button
@@ -39,7 +40,7 @@ const Search = ({ formFields, title = "search", initialValues, render }) => {
       // submitter configuration
       submitter={{
         searchConfig: {
-          resetText: translate("cancel"),
+          resetText: translate("rest"),
           submitText: translate("search"),
         },
       }}
