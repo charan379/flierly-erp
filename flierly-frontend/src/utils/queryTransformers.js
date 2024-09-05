@@ -1,5 +1,5 @@
 
-export default queryTransformers = {
+const queryTransformers = {
     textWithRegex: (value, namePath, allValues) => {
         if (value)
             return `/${value}/i`;
@@ -19,3 +19,5 @@ export default queryTransformers = {
             return null
     }
 }
+
+export default queryTransformers;
