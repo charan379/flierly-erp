@@ -12,6 +12,7 @@ import Activate from "./features/Activate";
 import RowContextMenu from "./features/RowContextMenu";
 import Restore from "./features/Restore";
 import useTheme from "../Theme/hooks/useTheme";
+import useCrudTableContext from "./hooks/useCrudTableContext";
 
 const CrudTable = ({
   entity,
@@ -43,19 +44,15 @@ const CrudTable = ({
 
   const [data, setData] = useState(dataSource);
 
+  const { crudTableContextHandler } = useCrudTableContext();
+
   const actionRef = useRef();
-
-  const [rowMenuVisible, setRowMenuVisible] = useState(false);
-
-  const [rowMenuPosition, setRowMenuPosition] = useState({ x: 0, y: 0 });
-
-  const [rowMenuRecord, setRowMenuRecord] = useState();
 
   const handleRowContextMenu = (record, event) => {
     event.preventDefault(); // Prevent default context menu
-    setRowMenuRecord(record);
-    setRowMenuVisible(true);
-    setRowMenuPosition({ x: event.clientX, y: event.clientY });
+    crudTableContextHandler.rowMenu.setCurrentRecord(record);
+    crudTableContextHandler.rowMenu.setPosition({ x: event.clientX, y: event.clientY })
+    crudTableContextHandler.rowMenu.open()
   };
 
   return (
@@ -116,14 +113,13 @@ const CrudTable = ({
       dataSource={data}
       // data request
       request={async (params, sort, filter) => {
-        // console.log({ params, sort, filter });
+        console.log({ params, sort });
+        console.log(crudTableContextHandler.filters.get())
 
         const { result, success } = await crudService.page({
           entity,
           pagination: { limit: params.pageSize, page: params.current },
         });
-
-        // console.log({ result, success });
 
         return {
           data: result?.data,
@@ -149,6 +145,8 @@ const CrudTable = ({
           initialValues={searchFormInitialValues}
           title={translate("search_from")}
           render={render.search}
+          actions={action}
+
         />,
         // create from
         <Create
@@ -188,11 +186,10 @@ const CrudTable = ({
           icon={<ClearOutlined />}
           disabled={rows.selectedRowKeys.length <= 0}
           onClick={() => actionRef.current.clearSelected()}
-          // onClick={() => console.log(actionRef)}
+        // onClick={() => console.log(actionRef)}
         >
-          {`${translate("clear")} ${
-            rows.selectedRowKeys.length > 0 ? rows.selectedRowKeys.length : ""
-          }`}
+          {`${translate("clear")} ${rows.selectedRowKeys.length > 0 ? rows.selectedRowKeys.length : ""
+            }`}
         </Button>,
       ]}
       // toobar
@@ -222,10 +219,10 @@ const CrudTable = ({
           <RowContextMenu
             entity={entity}
             actions={actionRef.current}
-            record={rowMenuRecord}
-            open={rowMenuVisible}
-            position={rowMenuPosition}
-            close={() => setRowMenuVisible(false)}
+            record={crudTableContextHandler.rowMenu.getCurrentRecord()}
+            open={crudTableContextHandler.rowMenu.isOpen()}
+            position={crudTableContextHandler.rowMenu.getPosition()}
+            close={() => crudTableContextHandler.rowMenu.close()}
           />
         );
       }}

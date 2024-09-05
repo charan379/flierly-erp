@@ -195,8 +195,8 @@ const RowContextMenu = ({ entity, actions, record, open, position, close }) => {
       }
       overlayStyle={{
         position: "fixed",
-        top: popoverPosition.y,
-        left: popoverPosition.x,
+        top: popoverPosition?.y,
+        left: popoverPosition?.x,
       }}
     />
   );
