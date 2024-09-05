@@ -187,17 +187,7 @@ const CrudTable = ({
           render={render.activate}
         />,
         // clear the selection
-        <Button
-          type="primary"
-          key={`clear-selected-rows-trigger`}
-          icon={<ClearOutlined />}
-          disabled={rows.selectedRowKeys.length <= 0}
-          onClick={() => actionRef.current.clearSelected()}
-        // onClick={() => console.log(actionRef)}
-        >
-          {`${translate("clear")} ${rows.selectedRowKeys.length > 0 ? rows.selectedRowKeys.length : ""
-            }`}
-        </Button>,
+          actions={action}
       ]}
       // toobar
       toolbar={{
