@@ -200,6 +200,7 @@ const CrudTable = ({
           render={render.clear}
           key={"clear_selected"}
         />,
+        <div></div>,
       ]}
       // toobar
       toolbar={{
