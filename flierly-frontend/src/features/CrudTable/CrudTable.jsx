@@ -41,15 +41,17 @@ const CrudTable = ({
 
   const { langDirection, translate } = useLocale();
 
-  const [data, setData] = useState(dataSource);
-
   const actionRef = useRef();
+
+  const [data, setData] = useState(dataSource);
 
   const [rowMenuVisible, setRowMenuVisible] = useState(false);
 
   const [rowMenuPosition, setRowMenuPosition] = useState({ x: 0, y: 0 });
 
   const [rowMenuRecord, setRowMenuRecord] = useState();
+
+  const [filters, setFilters] = useState({});
 
   const handleRowContextMenu = (record, event) => {
     event.preventDefault(); // Prevent default context menu
@@ -117,7 +119,7 @@ const CrudTable = ({
       // data request
       request={async (params, sort, filter) => {
         // console.log({ params, sort, filter });
-
+        console.log(filters)
         const { result, success } = await crudService.page({
           entity,
           pagination: { limit: params.pageSize, page: params.current },
@@ -149,6 +151,8 @@ const CrudTable = ({
           initialValues={searchFormInitialValues}
           title={translate("search_from")}
           render={render.search}
+          actionRef={action}
+          onQuerySubmit={(values) => setFilters(values)}
         />,
         // create from
         <Create
@@ -188,11 +192,10 @@ const CrudTable = ({
           icon={<ClearOutlined />}
           disabled={rows.selectedRowKeys.length <= 0}
           onClick={() => actionRef.current.clearSelected()}
-          // onClick={() => console.log(actionRef)}
+        // onClick={() => console.log(actionRef)}
         >
-          {`${translate("clear")} ${
-            rows.selectedRowKeys.length > 0 ? rows.selectedRowKeys.length : ""
-          }`}
+          {`${translate("clear")} ${rows.selectedRowKeys.length > 0 ? rows.selectedRowKeys.length : ""
+            }`}
         </Button>,
       ]}
       // toobar

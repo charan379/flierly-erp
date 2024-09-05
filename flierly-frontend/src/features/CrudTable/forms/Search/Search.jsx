@@ -4,7 +4,7 @@ import { ModalForm } from "@ant-design/pro-components";
 import { Button } from "antd";
 import React from "react";
 
-const Search = ({ formFields, title = "search", initialValues, render }) => {
+const Search = ({ formFields, title = "search", initialValues, render, onQuerySubmit, actionRef }) => {
   if (!render) return;
   if (!formFields) return;
   const { langDirection, translate } = useLocale();
@@ -17,6 +17,9 @@ const Search = ({ formFields, title = "search", initialValues, render }) => {
       // on finish
       onFinish={(values) => {
         console.log(values);
+        onQuerySubmit(values);
+        actionRef.reload();
+        // actionRef.reset()
         return true;
       }}
       // Title of modal
