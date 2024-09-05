@@ -10,7 +10,7 @@ import {
   UndoOutlined,
 } from "@ant-design/icons";
 import { Menu, Popover } from "antd";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import crudService from "../../service/crud.service";
 import { useOnOutsideClick } from "@/hooks/useOnOutSideClick";
 import useTheme from "@/features/Theme/hooks/useTheme";
@@ -19,8 +19,6 @@ const RowContextMenu = ({ entity, actions, record, open, position, close }) => {
   const { theme } = useTheme();
 
   const { translate } = useLocale();
-
-  const ref = useRef(null);
 
   const [popoverPosition, setPopoverPosition] = useState(position);
 

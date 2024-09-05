@@ -13,6 +13,7 @@ import RowContextMenu from "./features/RowContextMenu";
 import Restore from "./features/Restore";
 import useTheme from "../Theme/hooks/useTheme";
 import useCrudTableContext from "./hooks/useCrudTableContext";
+import Clear from "./features/Clear";
 
 const CrudTable = ({
   entity,
@@ -51,16 +52,18 @@ const CrudTable = ({
   const handleRowContextMenu = (record, event) => {
     event.preventDefault(); // Prevent default context menu
     crudTableContextHandler.rowMenu.setCurrentRecord(record);
-    crudTableContextHandler.rowMenu.setPosition({ x: event.clientX, y: event.clientY })
-    crudTableContextHandler.rowMenu.open()
+    crudTableContextHandler.rowMenu.setPosition({
+      x: event.clientX,
+      y: event.clientY,
+    });
+    crudTableContextHandler.rowMenu.open();
   };
 
-  useEffect(() => {
-
-    return () => {
-      crudTableContextHandler.reset()
-    }
-  }, [])
+  // useEffect(() => {
+  //   return () => {
+  //     crudTableContextHandler.reset()
+  //   }
+  // }, [])
 
   return (
     <ProTable
@@ -121,7 +124,7 @@ const CrudTable = ({
       // data request
       request={async (params, sort, filter) => {
         console.log({ params, sort });
-        console.log(crudTableContextHandler.filters.get())
+        console.log(crudTableContextHandler.filters.get());
 
         const { result, success } = await crudService.page({
           entity,
@@ -153,7 +156,6 @@ const CrudTable = ({
           title={translate("search_from")}
           render={render.search}
           actions={action}
-
         />,
         // create from
         <Create
@@ -187,7 +189,12 @@ const CrudTable = ({
           render={render.activate}
         />,
         // clear the selection
+        <Clear
           actions={action}
+          rows={rows}
+          render={render.clear}
+          key={"clear_selected"}
+        />,
       ]}
       // toobar
       toolbar={{
