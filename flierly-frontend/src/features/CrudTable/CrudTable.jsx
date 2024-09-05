@@ -2,7 +2,7 @@ import useElementHeight from "@/hooks/useElementHeight";
 import useLocale from "@/features/Language/hooks/useLocale";
 import { ClearOutlined } from "@ant-design/icons";
 import { ProTable } from "@ant-design/pro-components";
-import { Button, Space } from "antd";
+import { Button, Space, Switch } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import Create from "./forms/Create";
 import Search from "./forms/Search";
@@ -206,16 +206,11 @@ const CrudTable = ({
       toolbar={{
         // search: true,
         menu: {
-          type: "tab",
+          type: "inline",
           items: [
             {
-              label: "Normal",
+              label: <Switch />,
               key: "1",
-            },
-            {
-              label: "Bin",
-              key: "2",
-              disabled: true,
             },
           ],
           onChange: (activeKey) => {
