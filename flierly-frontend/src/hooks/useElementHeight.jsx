@@ -4,27 +4,36 @@ function useElementHeight(className) {
   const [height, setHeight] = useState(0);
 
   useEffect(() => {
-    const element = document.getElementsByClassName(className)[0];
-    if (element) {
-      const updateHeight = () => {
-        setHeight(element.offsetHeight);
-      };
+    let observer = null;
+    let retryTimeout = null;
 
-      // Set initial height
-      updateHeight();
+    const updateHeight = (element) => {
+      setHeight(element.offsetHeight);
+    };
 
-      // Create a ResizeObserver to listen for changes in size
-      const resizeObserver = new ResizeObserver(() => {
-        updateHeight();
-      });
+    const observeElement = () => {
+      const element = document.getElementsByClassName(className)[0];
+      if (element) {
+        // Set initial height
+        updateHeight(element);
 
-      resizeObserver.observe(element);
+        // Create a ResizeObserver to listen for changes in size
+        observer = new ResizeObserver(() => {
+          updateHeight(element);
+        });
+        observer.observe(element);
+      } else {
+        // Retry after 500ms if the element is not found
+        retryTimeout = setTimeout(observeElement, 50);
+      }
+    };
 
-      // Cleanup observer on component unmount
-      return () => {
-        resizeObserver.disconnect();
-      };
-    }
+    observeElement();
+    // Cleanup observer and timeout on component unmount
+    return () => {
+      if (observer) observer.disconnect();
+      if (retryTimeout) clearTimeout(retryTimeout);
+    };
   }, [className]);
 
   return height;
