@@ -1,8 +1,7 @@
 import useElementHeight from "@/hooks/useElementHeight";
 import useLocale from "@/features/Language/hooks/useLocale";
-import { ClearOutlined } from "@ant-design/icons";
 import { ProTable } from "@ant-design/pro-components";
-import { Button, Space, Switch } from "antd";
+import { Switch } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import Create from "./forms/Create";
 import Search from "./forms/Search";
@@ -19,6 +18,7 @@ const CrudTable = ({
   entity,
   tableKey,
   rowKey = "_id",
+  rowTitleKey = "name",
   columns,
   dataSource = [],
   createFormFields,
@@ -221,6 +221,7 @@ const CrudTable = ({
         return (
           <RowContextMenu
             entity={entity}
+            recordTitleKey={rowTitleKey}
             actions={actionRef.current}
             record={crudTableContextHandler.rowMenu.getCurrentRecord()}
             open={crudTableContextHandler.rowMenu.isOpen()}
