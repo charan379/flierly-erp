@@ -13,6 +13,7 @@ import Restore from "./features/Restore";
 import useTheme from "../Theme/hooks/useTheme";
 import useCrudTableContext from "./hooks/useCrudTableContext";
 import Clear from "./features/Clear";
+import useResponsive from "@/hooks/useResponsive";
 
 const CrudTable = ({
   entity,
@@ -39,7 +40,9 @@ const CrudTable = ({
 }) => {
   const { isCompactTheme } = useTheme();
 
-  const tableHeight = useElementHeight("pro-table-filerly-1");
+  const { isMobile, screenSize } = useResponsive();
+
+  const tableHeight = useElementHeight("crud-data-table-flierly-1");
 
   const { langDirection, translate } = useLocale();
 
@@ -61,14 +64,14 @@ const CrudTable = ({
 
   useEffect(() => {
     return () => {
-      crudTableContextHandler.reset()
-    }
-  }, [])
+      crudTableContextHandler.reset();
+    };
+  }, [isCompactTheme, isMobile, screenSize, tableHeight]);
 
   return (
     <ProTable
       // classname
-      className="pro-table-filerly-1"
+      className="crud-data-table-flierly-1"
       // table design configuration
       bordered={true}
       style={{
@@ -115,7 +118,7 @@ const CrudTable = ({
       pagination={{
         showSizeChanger: true,
         pageSizeOptions: [5, 10, 20, 30, 50, 100],
-        defaultPageSize: 10,
+        defaultPageSize: isMobile ? 5 : 10,
       }}
       // columns
       columns={columns}
@@ -123,7 +126,6 @@ const CrudTable = ({
       dataSource={data}
       // data request
       request={async (params, sort, filter) => {
-        console.log({ params, sort });
         const { result, success } = await crudService.page({
           entity,
           pagination: { limit: params.pageSize, page: params.current },
