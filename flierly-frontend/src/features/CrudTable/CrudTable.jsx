@@ -10,7 +10,6 @@ import Delete from "./features/Delete";
 import Activate from "./features/Activate";
 import RowContextMenu from "./features/RowContextMenu";
 import Restore from "./features/Restore";
-import useTheme from "../Theme/hooks/useTheme";
 import useCrudTableContext from "./hooks/useCrudTableContext";
 import Clear from "./features/Clear";
 import useResponsive from "@/hooks/useResponsive";
@@ -38,11 +37,12 @@ const CrudTable = ({
     view: true,
   },
 }) => {
-  const { isCompactTheme } = useTheme();
-
   const { isMobile, screenSize } = useResponsive();
 
   const tableHeight = useElementHeight("crud-data-table-flierly-1");
+  const tableHeadHeight = useElementHeight("ant-table-thead");
+  const tableToolbarHeight = useElementHeight("ant-pro-table-list-toolbar");
+  const tablePaginationHeight = useElementHeight("ant-table-pagination");
 
   const { langDirection, translate } = useLocale();
 
@@ -66,7 +66,7 @@ const CrudTable = ({
     return () => {
       crudTableContextHandler.reset();
     };
-  }, [isCompactTheme, isMobile, screenSize, tableHeight]);
+  }, [isMobile, screenSize, tableHeight]);
 
   return (
     <ProTable
@@ -82,7 +82,12 @@ const CrudTable = ({
       scroll={{
         scrollToFirstRowOnChange: true,
         x: 1300,
-        y: tableHeight * (isCompactTheme ? 0.7 : 0.58),
+        y:
+          tableHeight -
+          tableToolbarHeight -
+          tableHeadHeight -
+          tablePaginationHeight -
+          25,
       }}
       // columns state configuration
       columnsState={{
@@ -118,7 +123,7 @@ const CrudTable = ({
       pagination={{
         showSizeChanger: true,
         pageSizeOptions: [5, 10, 20, 30, 50, 100],
-        defaultPageSize: isMobile ? 5 : 10,
+        defaultPageSize: 10,
       }}
       // columns
       columns={columns}
