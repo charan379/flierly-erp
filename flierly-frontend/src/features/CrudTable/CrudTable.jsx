@@ -59,11 +59,11 @@ const CrudTable = ({
     crudTableContextHandler.rowMenu.open();
   };
 
-  // useEffect(() => {
-  //   return () => {
-  //     crudTableContextHandler.reset()
-  //   }
-  // }, [])
+  useEffect(() => {
+    return () => {
+      crudTableContextHandler.reset()
+    }
+  }, [])
 
   return (
     <ProTable
@@ -124,8 +124,6 @@ const CrudTable = ({
       // data request
       request={async (params, sort, filter) => {
         console.log({ params, sort });
-        console.log(crudTableContextHandler.filters.get());
-
         const { result, success } = await crudService.page({
           entity,
           pagination: { limit: params.pageSize, page: params.current },
