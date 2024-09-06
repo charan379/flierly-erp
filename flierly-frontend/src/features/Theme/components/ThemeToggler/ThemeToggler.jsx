@@ -19,11 +19,6 @@ const ThemeToggler = ({ functional = true }) => {
       type="default"
       shape="circle"
       size="large"
-      style={
-        {
-          // marginTop: "5px",
-        }
-      }
       icon={themeIcon()}
       onClick={() => {
         if (!functional) return;

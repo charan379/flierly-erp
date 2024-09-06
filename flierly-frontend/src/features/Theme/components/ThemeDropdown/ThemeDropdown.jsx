@@ -39,9 +39,9 @@ const ThemeDropdown = () => {
       arrow={true}
       destroyPopupOnHide={true}
     >
-      <Button shape="circle" size="large">
+      <Badge>
         <ThemeToggler functional={false} />
-      </Button>
+      </Badge>
     </Dropdown>
   );
 };
