@@ -5,27 +5,28 @@ import {
   CheckCircleOutlined,
   StopOutlined,
 } from "@ant-design/icons";
-import { Menu, Popover } from "antd";
+import { Button, Flex, Menu, Popover, Tooltip, Typography } from "antd";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import crudService from "../../service/crud.service";
 import { useOnOutsideClick } from "@/hooks/useOnOutSideClick";
 import useTheme from "@/features/Theme/hooks/useTheme";
-import { faEye, faPenToSquare, faTrashCan, faTrashCanArrowUp } from "@fortawesome/free-solid-svg-icons";
+import { faCircleXmark, faEye, faPenToSquare, faTrashCan, faTrashCanArrowUp, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const RowContextMenu = ({ entity, actions, record, open, position, close }) => {
+const RowContextMenu = ({ entity, actions, record, recordTitleKey, open, position, close }) => {
   if (!open) return;
   const { theme } = useTheme();
   const { translate } = useLocale();
   const [popoverPosition, setPopoverPosition] = useState(position);
 
+  const menuItemStyle = { fontSize: "12px" }
   const items = useMemo(() => {
     const baseItems = [
       {
         label: translate("view"),
         key: "view",
-        icon: <FontAwesomeIcon icon={faEye} />,
-        style: { color: "#2196F3" },
+        icon: <FontAwesomeIcon icon={faEye} style={menuItemStyle} />,
+        style: { color: "#2196F3", ...menuItemStyle },
       },
     ];
 
@@ -33,8 +34,8 @@ const RowContextMenu = ({ entity, actions, record, open, position, close }) => {
       baseItems.push({
         label: translate("edit"),
         key: "edit",
-        icon: <FontAwesomeIcon icon={faPenToSquare} />,
-        style: { color: "#FF9800" },
+        icon: <FontAwesomeIcon icon={faPenToSquare} style={menuItemStyle} />,
+        style: { color: "#FF9800", ...menuItemStyle },
       });
     }
 
@@ -42,8 +43,8 @@ const RowContextMenu = ({ entity, actions, record, open, position, close }) => {
       baseItems.push({
         label: translate("inactivate"),
         key: "inactivate",
-        icon: <StopOutlined />,
-        style: { color: "#9E9E9E" },
+        icon: <StopOutlined style={menuItemStyle} />,
+        style: { color: "#9E9E9E", ...menuItemStyle },
       });
     }
 
@@ -51,8 +52,8 @@ const RowContextMenu = ({ entity, actions, record, open, position, close }) => {
       baseItems.push({
         label: translate("activate"),
         key: "activate",
-        icon: <CheckCircleOutlined />,
-        style: { color: "#4CAF50" },
+        icon: <CheckCircleOutlined style={menuItemStyle} />,
+        style: { color: "#4CAF50", ...menuItemStyle },
       });
     }
 
@@ -60,8 +61,9 @@ const RowContextMenu = ({ entity, actions, record, open, position, close }) => {
       baseItems.push({
         label: translate("delete"),
         key: "delete",
-        icon: <FontAwesomeIcon icon={faTrashCan} />,
+        icon: <FontAwesomeIcon icon={faTrashCan} style={menuItemStyle} />,
         danger: true,
+        style: { ...menuItemStyle }
       });
     }
 
@@ -69,8 +71,18 @@ const RowContextMenu = ({ entity, actions, record, open, position, close }) => {
       baseItems.push({
         label: translate("restore"),
         key: "restore",
-        icon: <FontAwesomeIcon icon={faTrashCanArrowUp} />,
-        style: { color: "#009688" },
+        icon: <FontAwesomeIcon icon={faTrashCanArrowUp} style={menuItemStyle} />,
+        style: { color: "#009688", ...menuItemStyle },
+      });
+    }
+
+    if (true) {
+      baseItems.push({
+        label: translate("close"),
+        key: "close",
+        icon: <FontAwesomeIcon icon={faCircleXmark} style={menuItemStyle} />,
+        danger: true,
+        style: { ...menuItemStyle },
       });
     }
 
@@ -172,6 +184,16 @@ const RowContextMenu = ({ entity, actions, record, open, position, close }) => {
   return (
     <Popover
       id="row-popover-menu"
+      title={
+        <Flex justify="space-between" align="center" wrap="nowrap" gap="large">
+          <Typography.Text>
+            {record[recordTitleKey] ?? translate('row_menu')}
+          </Typography.Text>
+          <Tooltip title={translate('close_menu')}>
+            <Button shape="default" danger icon={<FontAwesomeIcon icon={faXmark} size="2xl" />} onClick={close} />
+          </Tooltip>
+        </Flex>
+      }
       open={open}
       autoAdjustOverflow
       placement=""
