@@ -6,7 +6,7 @@ import {
   StopOutlined,
 } from "@ant-design/icons";
 import { Menu, Popover } from "antd";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import crudService from "../../service/crud.service";
 import { useOnOutsideClick } from "@/hooks/useOnOutSideClick";
 import useTheme from "@/features/Theme/hooks/useTheme";
@@ -14,74 +14,70 @@ import { faEye, faPenToSquare, faTrashCan, faTrashCanArrowUp } from "@fortawesom
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const RowContextMenu = ({ entity, actions, record, open, position, close }) => {
+  if (!open) return;
   const { theme } = useTheme();
-
   const { translate } = useLocale();
-
   const [popoverPosition, setPopoverPosition] = useState(position);
 
-  const items = [
-    {
-      label: translate("view"),
-      key: "view",
-      // disabled: true,
-      icon: <FontAwesomeIcon icon={faEye} />,
-      style: { color: "#2196F3" },
-    },
-  ];
+  const items = useMemo(() => {
+    const baseItems = [
+      {
+        label: translate("view"),
+        key: "view",
+        icon: <FontAwesomeIcon icon={faEye} />,
+        style: { color: "#2196F3" },
+      },
+    ];
 
-  //   edit
-  if (true) {
-    items.push({
-      label: translate("edit"),
-      key: "edit",
-      // disabled: true,
-      icon: <FontAwesomeIcon icon={faPenToSquare} />,
-      style: { color: "#FF9800" },
-    });
-  }
+    if (true) {
+      baseItems.push({
+        label: translate("edit"),
+        key: "edit",
+        icon: <FontAwesomeIcon icon={faPenToSquare} />,
+        style: { color: "#FF9800" },
+      });
+    }
 
-  // inactivate
-  if (record?.isActive) {
-    items.push({
-      label: translate("inactivate"),
-      key: "inactivate",
-      icon: <StopOutlined />,
-      style: { color: "#9E9E9E" },
-    });
-  }
+    if (record?.isActive) {
+      baseItems.push({
+        label: translate("inactivate"),
+        key: "inactivate",
+        icon: <StopOutlined />,
+        style: { color: "#9E9E9E" },
+      });
+    }
 
-  // activate
-  if (!record?.isActive) {
-    items.push({
-      label: translate("activate"),
-      key: "activate",
-      icon: <CheckCircleOutlined />,
-      style: { color: "#4CAF50" },
-    });
-  }
+    if (!record?.isActive) {
+      baseItems.push({
+        label: translate("activate"),
+        key: "activate",
+        icon: <CheckCircleOutlined />,
+        style: { color: "#4CAF50" },
+      });
+    }
 
-  //   delete
-  if (true) {
-    items.push({
-      label: translate("delete"),
-      key: "delete",
-      icon: <FontAwesomeIcon icon={faTrashCan} />,
-      danger: true,
-    });
-  }
+    if (true) {
+      baseItems.push({
+        label: translate("delete"),
+        key: "delete",
+        icon: <FontAwesomeIcon icon={faTrashCan} />,
+        danger: true,
+      });
+    }
 
-  //   restore
-  if (true) {
-    items.push({
-      label: translate("restore"),
-      key: "restore",
-      icon: <FontAwesomeIcon icon={faTrashCanArrowUp} />,
-      style: { color: "#009688" },
-    });
-  }
+    if (true) {
+      baseItems.push({
+        label: translate("restore"),
+        key: "restore",
+        icon: <FontAwesomeIcon icon={faTrashCanArrowUp} />,
+        style: { color: "#009688" },
+      });
+    }
 
-  const onMenuItemClick = async ({ item, key, keyPath, domEvent }) => {
+    return baseItems;
+  }, [record]);
+
+  const onMenuItemClick = useCallback(async ({ key }) => {
     let result = {};
     switch (key) {
       case "activate":
@@ -119,9 +115,9 @@ const RowContextMenu = ({ entity, actions, record, open, position, close }) => {
       actions.reload();
       close();
     }
-  };
+  }, [entity, record, actions, close]);
 
-  useEscapeKey(() => close());
+  useEscapeKey(close);
 
   useOnOutsideClick(
     "row-popover-menu",

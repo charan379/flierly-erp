@@ -1,29 +1,32 @@
+import debounce from "@/utils/debounce";
 import { useEffect } from "react";
 
-function useOnOutsideScroll(elementId, callbackFunc) {
+function useOnOutsideScroll(elementId, callbackFunc, delay = 100) {
   useEffect(() => {
-    const handleScroll = (event) => {
-      // Get the element by ID
-      const element = document.getElementById(elementId);
+    console.log('useOnOutsideScroll executed');
 
-      // Do nothing if scrolling inside the element or its descendant elements
+    let element = document.getElementById(elementId);
+
+    const handleScroll = (event) => {
+      if (!element) {
+        element = document.getElementById(elementId);
+      }
+
       if (element && element.contains(event.target)) {
         return;
       }
 
-      // Trigger the callback function on scroll outside the element
       callbackFunc();
     };
 
-    // Listen for scroll events (using capture phase to listen for scroll events on all elements)
-    document.addEventListener("scroll", handleScroll, true);
+    const debouncedHandleScroll = debounce(handleScroll, delay);
 
-    // Cleanup event listener on component unmount
+    document.addEventListener("scroll", debouncedHandleScroll, { capture: true, passive: true });
+
     return () => {
-      document.removeEventListener("scroll", handleScroll, true);
+      document.removeEventListener("scroll", debouncedHandleScroll, { capture: true });
     };
   }, [elementId, callbackFunc]);
-
 }
 
 export { useOnOutsideScroll };
