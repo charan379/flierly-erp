@@ -1,5 +1,5 @@
 import { useEscapeKey } from "@/hooks/useEscapeKey";
-import { useOnOutsideScroll } from "@/hooks/useOnOutsideScroll";
+// import { useOnOutsideScroll } from "@/hooks/useOnOutsideScroll";
 import useLocale from "@/features/Language/hooks/useLocale";
 import {
   CheckCircleOutlined,
@@ -130,12 +130,12 @@ const RowContextMenu = ({ entity, actions, record, open, position, close }) => {
     }, [close])
   );
 
-  useOnOutsideScroll(
-    "row-popover-menu",
-    useCallback(() => {
-      close();
-    }, [close])
-  );
+  // useOnOutsideScroll(
+  //   "row-popover-menu",
+  //   useCallback(() => {
+  //     close();
+  //   }, [close])
+  // );
 
   useEffect(() => {
     if (open) {
