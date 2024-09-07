@@ -59,17 +59,15 @@ const page = async (model: mongoose.Model<any>, req: Request, res: Response): Pr
         filterQuery.$and?.push({ isDeleted: false })
 
     // convert requestFilters object (key, value) pairs into array of objects {key: value}[] and assign it to $and query
-    filterQuery.$and = Object.keys(requestFilters).map(key => {
+    filterQuery.$and = Object.entries(requestFilters).map(([key, value]) => {
         return {
-            [key]: requestFilters[key],
+            [key]: value,
         }
     });
 
     if (filterQuery.$and.length <= 0) {
         delete filterQuery.$and
     };
-
-    console.log(requestSort);
 
     // Create separate promises for fetching documents and total count for efficiency
     const resultsPromise = model
