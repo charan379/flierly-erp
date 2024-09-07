@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import {
   Button,
-  Divider,
   Flex,
   Menu,
   Popover,
@@ -33,12 +32,10 @@ const RowContextMenu = ({
   position,
   close,
 }) => {
-  if (!open) return null;
-
   const { theme } = useTheme();
   const { translate } = useLocale();
   const [popoverPosition, setPopoverPosition] = useState(position);
-  const [countdown, setCountdown] = useState(30); // Start with 10 seconds
+  const [countdown, setCountdown] = useState(30); // Start with 30 seconds
 
   const menuItemStyle = { fontSize: "12px" };
 
@@ -91,7 +88,7 @@ const RowContextMenu = ({
       },
     ];
     return baseItems;
-  }, [record, translate]);
+  }, [record, translate, countdown]);
 
   const onMenuItemClick = useCallback(
     async ({ key }) => {
@@ -148,7 +145,7 @@ const RowContextMenu = ({
     useCallback(() => close(), [close])
   );
 
-  // Timer countdown logic
+  // Timer countdown logic with cleanup
   useEffect(() => {
     if (open) {
       const timer = setInterval(() => {
@@ -162,7 +159,7 @@ const RowContextMenu = ({
         });
       }, 1000);
 
-      return () => clearInterval(timer);
+      return () => clearInterval(timer); // Cleanup the timer
     }
   }, [open, close]);
 
@@ -197,7 +194,7 @@ const RowContextMenu = ({
       requestAnimationFrame(handlePositioning);
       window.addEventListener("resize", handlePositioning);
 
-      return () => window.removeEventListener("resize", handlePositioning);
+      return () => window.removeEventListener("resize", handlePositioning); // Cleanup the event listener
     }
   }, [open, position]);
 
