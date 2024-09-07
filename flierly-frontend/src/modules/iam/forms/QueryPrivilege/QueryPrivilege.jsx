@@ -56,16 +56,16 @@ const QueryPrivilege = () => {
         mode="multiple"
         options={[
           {
-            label: "UOM", value: "uom"
+            label: "Uom", value: "Uom"
           },
           {
-            label: "TaxIdentity", value: "tax-identiy"
+            label: "TaxIdentity", value: "TaxIdentity"
           }, {
-            label: "User", value: "user"
+            label: "User", value: "User"
           }, {
-            label: "Role", value: "role"
+            label: "Role", value: "Role"
           }, {
-            label: "Customer", value: "customer"
+            label: "Customer", value: "Customer"
           }]} />
     </ProFormItem>
     <ProFormText
