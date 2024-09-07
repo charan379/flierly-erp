@@ -1,45 +1,35 @@
 import HttpCodes from "@/constants/httpCodes";
 import apiResponse from "@/utils/api-response.generator";
 import JoiSchemaValidator from "@/utils/joi-schema.validator";
-import buildMongoQuery from "@/utils/mongo-query.builder";
-import buildMongoSortObject, { SortObject } from "@/utils/mongo-sort.builder";
+import transformMongoQueryFilter from "@/utils/mongo-query-filters.transformer";
+import transformMongoQuerySort from "@/utils/mongo-query-sort.transformer";
 import pageResponseBuilder from "@/utils/page-response.builder";
 import { Request, Response } from "express";
 import Joi from "joi";
 import mongoose, { FilterQuery } from "mongoose";
 
-/**
- * Interface representing the structure of a page request.
- * 
- * @type {Object} PageRequest
- * @property {string} fields - Comma-separated list of fields to search on.
- * @property {string} queries - Comma-separated list of queries to match against the fields.
- * @property {string} sort - Sorting criteria in the format "field.direction" (e.g., "createdAt.asc").
- * @property {number} page - The requested page number (defaults to 1).
- * @property {number} limit - The number of documents to retrieve per page (defaults to 20).
- * @property {boolean} autopopulate - Whether to automatically populate referenced documents (defaults to false).
- */
-export interface PageRequest {
-    fields: string;
-    queries: string;
-    sort: string;
-    page: number;
-    limit: number;
+interface PageRequestBody {
     autopopulate: boolean;
+    pagination: { page: number, limit: number };
+    sort: { [key: string]: 'ascend' | 'descend' }
+    filters: FilterObject
 }
 
-/**
- * Joi schema for validating the `PageRequest` object.
- * 
- * @type {Joi.ObjectSchema<PageRequest>}
- */
-const pageRequestSchema: Joi.ObjectSchema<PageRequest> = Joi.object({
-    fields: Joi.string().default(""),
-    queries: Joi.string().default(""),
-    sort: Joi.string().default("createdAt.asc"),
-    page: Joi.number().integer().min(1).default(1),
-    limit: Joi.number().integer().min(1).default(20),
-    autopopulate: Joi.boolean().default(false),
+// Joi schema for PageRequestBody with defaults
+const pageRequestBodySchema: Joi.ObjectSchema<PageRequestBody> = Joi.object({
+    autopopulate: Joi.boolean().default(false), // Default: false
+
+    pagination: Joi.object({
+        page: Joi.number().integer().min(1).default(1), // Default: 1
+        limit: Joi.number().integer().min(1).default(20), // Default: 20
+    }).default({ page: 1, limit: 20 }), // Default pagination object
+
+    sort: Joi.object().pattern(
+        Joi.string(), // Any key allowed
+        Joi.string().valid('ascend', 'descend') // Values: 'ascend' or 'descend'
+    ).default({ createdAt: 'ascend' }), // Default sort by 'createdAt' ascending
+
+    filters: Joi.object().default({}) // Default: empty filter object
 });
 
 /**
@@ -51,47 +41,57 @@ const pageRequestSchema: Joi.ObjectSchema<PageRequest> = Joi.object({
  * @returns {Promise<Response>} A promise that resolves when the page retrieval is complete.
  */
 const page = async (model: mongoose.Model<any>, req: Request, res: Response): Promise<Response> => {
-    // Get all schema field names for filtering (used later to exclude soft-deleted documents)
-    const modelKeys: string[] = Object.keys(model.schema.obj);
-    // Validate the request parameters using the defined schema
-    const pageRequest: PageRequest = await JoiSchemaValidator(pageRequestSchema, req.query, { allowUnknown: false, abortEarly: false }, "Dynamic page request API.");
-    // Build the MongoDB query using provided fields and queries
-    let query: MongoQueryArray = buildMongoQuery(pageRequest.fields.split(","), pageRequest.queries.split(","));
-    // Build the sort object from the request parameter
-    const sort: SortObject = buildMongoSortObject(pageRequest.sort);
-    // Extract page number and limit from request
-    const page: number = pageRequest.page;
-    const limit: number = pageRequest.limit;
-    // Calculate the skip value based on page and limit for pagination
-    const skip: number = (page * limit) - limit;
-    // mongoDB filter query
-    const filter: FilterQuery<any> = {}
+
+    const modelKeys: string[] = Object.keys(model.schema.obj); // Get all schema field names for filtering (used later to exclude soft-deleted documents)
+
+    const { autopopulate, filters, sort, pagination }: PageRequestBody = await JoiSchemaValidator(pageRequestBodySchema, req.body, { allowUnknown: false, abortEarly: false }, "Dynamic page request API.");
+
+    const skip: number = (pagination.page * pagination.limit) - pagination.limit; // Calculate the skip value based on page and limit for pagination
+
+    const requestFilters = transformMongoQueryFilter(filters); // transform filters object from request as per mongoDb requirements
+
+    const requestSort = transformMongoQuerySort(sort); // transform sort object from request as per mongoDb requirements
+
+    const filterQuery: FilterQuery<any> = {} // mongoDB filter query
+
     // If the schema includes the 'isDeleted' field, exclude soft-deleted documents from the query
     if (modelKeys.includes('isDeleted'))
-        query.push({ isDeleted: false })
-    // if query array length is greater than 0 then add $and to  mongo filter
-    if (query.length > 0)
-        filter.$and = query;
+        filterQuery.$and?.push({ isDeleted: false })
+
+    // convert requestFilters object (key, value) pairs into array of objects {key: value}[] and assign it to $and query
+    filterQuery.$and = Object.keys(requestFilters).map(key => {
+        return {
+            [key]: requestFilters[key],
+        }
+    });
+
+    if (filterQuery.$and.length <= 0) {
+        delete filterQuery.$and
+    };
+
+    console.log(requestSort);
+
     // Create separate promises for fetching documents and total count for efficiency
     const resultsPromise = model
-        .find(filter, { __v: 0 }, { autopopulate: pageRequest.autopopulate }) // Find documents with specific fields, exclude `__v`, and optionally autopopulate
-        .sort({ ...sort }) // Apply the sorting criteria
+        .find(filterQuery, { __v: 0 }, { autopopulate: autopopulate }) // Find documents with specific fields, exclude `__v`, and optionally autopopulate
+        .sort(requestSort) // Apply the sorting criteria
         .skip(skip) // Skip documents based on calculated skip value
-        .limit(limit) // Limit the number of documents returned
+        .limit(pagination.limit) // Limit the number of documents returned
         .exec();
-    const countPromise = model.countDocuments(filter) // Count total documents matching the query
-        .exec();
+
+    // Count total documents matching the query
+    const countPromise = model.countDocuments(filterQuery).exec();
 
     // Wait for both promises to resolve concurrently
     const [results, count] = await Promise.all([resultsPromise, countPromise]);
     // Build the page response object using a separate utility function
-    const re: PageResult = await pageResponseBuilder(results, page, limit, count, sort);
+    const page: PageResult = await pageResponseBuilder(results, pagination.page, pagination.limit, count, sort);
     // Return the paginated response with status code 200 (OK)
     return res.status(HttpCodes.OK).json(
         apiResponse(
             true,
-            re,
-            `Data fetched successfully`,
+            page,
+            `Page fetched successfully`,
             `${model.modelName.toLowerCase()}.page`,
             req.url,
             null,

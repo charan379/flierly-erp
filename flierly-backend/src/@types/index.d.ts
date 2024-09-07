@@ -59,3 +59,9 @@ type ErrorMessage = {
 type MongoQueryArray = { [x: string]: string | { $regex: RegExp } | boolean | number }[];
 
 type ResLocals = { success: boolean, message: string, controller: string }
+
+type FilterValue = string | number | boolean | Date | FilterObject | FilterArray;
+
+type FilterObject = { [key: string]: FilterValue };
+
+type FilterArray = FilterValue[];
