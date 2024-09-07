@@ -106,10 +106,11 @@ const CrudTable = ({
       rowKey={rowKey}
       // Configuration for table alert section
       tableAlertRender={false}
-      //  Sorter tooltip configuration
+      //  Sorter configuration
       showSorterTooltip={{
         target: "sorter-icon",
       }}
+      sortDirections={["ascend", "descend"]}
       // options configuration
       options={{
         density: true,

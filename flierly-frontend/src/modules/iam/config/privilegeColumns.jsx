@@ -16,6 +16,7 @@ const privilegeColumns = [
     dataIndex: "name",
     copyable: false,
     width: 10,
+    sorter: true,
   },
   {
     title: "Access",
@@ -55,6 +56,7 @@ const privilegeColumns = [
     dataIndex: "model",
     copyable: false,
     width: 7,
+    sorter: true,
   },
   {
     title: "Code",
@@ -67,12 +69,15 @@ const privilegeColumns = [
     dataIndex: "createdAt",
     width: 10,
     valueType: "dateTime",
+    sorter: true,
+    defaultSortOrder: "descend",
   },
   {
     title: "Updated",
     dataIndex: "updatedAt",
     width: 10,
     valueType: "dateTime",
+    sorter: true,
   },
 ];
 
