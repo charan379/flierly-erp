@@ -62,12 +62,6 @@ const CrudTable = ({
     crudTableContextHandler.rowMenu.open();
   };
 
-  useEffect(() => {
-    return () => {
-      crudTableContextHandler.reset();
-    };
-  }, [isMobile, screenSize, tableHeight]);
-
   return (
     <ProTable
       // classname
@@ -160,7 +154,7 @@ const CrudTable = ({
         // search from
         <Search
           formFields={searchFormFields}
-          initialValues={searchFormInitialValues}
+          initialQuery={crudTableContextHandler.filters.get()}
           title={translate("search_from")}
           render={render.search}
           actions={action}

@@ -5,11 +5,12 @@ import React from "react";
 import useCrudTableContext from "../../hooks/useCrudTableContext";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import reverseTransformQuery from "@/utils/reverseTransformQuery";
 
 const Search = ({
   formFields,
   title = "filter_data",
-  initialValues,
+  initialQuery,
   render,
   actions,
 }) => {
@@ -22,7 +23,7 @@ const Search = ({
     <DrawerForm
       title={title}
       grid={true}
-      initialValues={initialValues}
+      initialValues={reverseTransformQuery(initialQuery)}
       onFinish={(values) => {
         crudTableContextHandler.filters.set(values);
         actions.reload();
