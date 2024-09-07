@@ -1,17 +1,21 @@
+import ErrorFallback from "@/components/ErrorFallback";
 import { Layout } from "antd";
 import React from "react";
+import { ErrorBoundary } from "react-error-boundary";
 
 const { Header, Content, Footer } = Layout;
 
 const IamLayout = ({ header, footer, children }) => {
   return (
-    <Layout style={{ ...styles.layout }}>
-      {header ? <Header style={{ ...styles.header }}>{header}</Header> : <></>}
-      <Content className="sb-thumb-md" style={{ ...styles.content }}>
-        {children}
-      </Content>
-      {footer ? <Footer style={{ ...styles.footer }}>{footer}</Footer> : <></>}
-    </Layout>
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <Layout style={{ ...styles.layout }}>
+        {header ? <Header style={{ ...styles.header }}>{header}</Header> : <></>}
+        <Content className="sb-thumb-md" style={{ ...styles.content }}>
+          {children}
+        </Content>
+        {footer ? <Footer style={{ ...styles.footer }}>{footer}</Footer> : <></>}
+      </Layout>
+    </ErrorBoundary>
   );
 };
 
