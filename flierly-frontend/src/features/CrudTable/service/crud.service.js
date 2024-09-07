@@ -1,7 +1,10 @@
 import { serverConfig } from "@/config/serverConfig";
 import errorHandler from "@/utils/handlers/errorHandler";
 import successHandler from "@/utils/handlers/successHandler";
-import { getToken, listenToAuthChanges } from "@/modules/auth/utility/authState";
+import {
+  getToken,
+  listenToAuthChanges,
+} from "@/modules/auth/utility/authState";
 import axios from "axios";
 
 const api = axios.create({
@@ -31,14 +34,12 @@ const handleResponse = async (promise, notifyOnSuccess, notifyOnFailed) => {
 
 const crudService = {
   // Fetch paginated documents
-  page: async ({
-    entity,
-    autopopulate = false,
-    pagination = { limit: 10, page: 1 },
-  }) => {
-    const promise = api.get(`/${entity}/page`, {
-      params: { autopopulate, ...pagination },
-    });
+  page: async ({entity, autopopulate = false, pagination = { limit: 10, page: 1 }, filters = {}, sort = {}, }) => {
+    const promise = api.post(
+      `/${entity}/page`,
+      { filters, pagination, sort, autopopulate },
+      {}
+    );
     return handleResponse(promise, false, true);
   },
 
@@ -68,11 +69,10 @@ const crudService = {
 
 export default crudService;
 
-
 listenToAuthChanges((newState) => {
-  console.log(newState)
-  const oldToken = `Bearer ${api.defaults.headers['Authorization']}`;
+  console.log(newState);
+  const oldToken = `Bearer ${api.defaults.headers["Authorization"]}`;
   const newToken = `Bearer ${newState?.token}`;
   if (oldToken && newToken && oldToken !== newState)
-    api.defaults.headers['Authorization'] = newToken;
+    api.defaults.headers["Authorization"] = newToken;
 });

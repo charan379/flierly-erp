@@ -134,7 +134,9 @@ const CrudTable = ({
       request={async (params, sort, filter) => {
         const { result, success } = await crudService.page({
           entity,
+          filters: crudTableContextHandler.filters.get(),
           pagination: { limit: params.pageSize, page: params.current },
+          sort: sort,
         });
 
         return {
