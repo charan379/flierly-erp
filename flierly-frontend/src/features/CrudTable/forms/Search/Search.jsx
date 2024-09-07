@@ -1,24 +1,28 @@
 import useLocale from "@/features/Language/hooks/useLocale";
-import { SearchOutlined } from "@ant-design/icons";
-import { ModalForm } from "@ant-design/pro-components";
+import { DrawerForm } from "@ant-design/pro-components";
 import { Badge, Button, Tooltip } from "antd";
 import React from "react";
 import useCrudTableContext from "../../hooks/useCrudTableContext";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const Search = ({ formFields, initialValues, render, actions }) => {
+const Search = ({
+  formFields,
+  title = "filter_data",
+  initialValues,
+  render,
+  actions,
+}) => {
   if (!render) return;
   if (!formFields) return;
   const { langDirection, translate } = useLocale();
   const { crudTableContextHandler } = useCrudTableContext();
 
   return (
-    <ModalForm
+    <DrawerForm
+      title={title}
       grid={true}
-      // initial values
       initialValues={initialValues}
-      // on finish
       onFinish={(values) => {
         crudTableContextHandler.filters.set(values);
         actions.reload();
@@ -28,9 +32,6 @@ const Search = ({ formFields, initialValues, render, actions }) => {
       onReset={() => {
         crudTableContextHandler.filters.set({});
       }}
-      // Title of modal
-      // title={title}
-      // trigger button to toggle form
       trigger={
         <Tooltip title={translate("apply_filters")}>
           <Badge
@@ -48,12 +49,17 @@ const Search = ({ formFields, initialValues, render, actions }) => {
           </Badge>
         </Tooltip>
       }
-      // modal props
-      modalProps={{
-        destroyOnClose: true,
-        centered: true,
+      resize={{
+        maxWidth: window.innerWidth * 0.9,
+        minWidth: window.innerWidth * 0.5,
       }}
-      // submitter configuration
+      drawerProps={{
+        destroyOnClose: true,
+        styles: {
+          footer: { padding: "15px 15px 15px 15px" },
+          header: { padding: "10px 5px 5px 5px" },
+        },
+      }}
       submitter={{
         searchConfig: {
           resetText: translate("rest"),
@@ -62,7 +68,7 @@ const Search = ({ formFields, initialValues, render, actions }) => {
       }}
     >
       {formFields}
-    </ModalForm>
+    </DrawerForm>
   );
 };
 
