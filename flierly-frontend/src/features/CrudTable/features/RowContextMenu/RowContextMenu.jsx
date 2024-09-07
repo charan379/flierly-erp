@@ -1,12 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
-import {
-  Button,
-  Flex,
-  Menu,
-  Popover,
-  Tooltip,
-  Typography,
-} from "antd";
+import { Button, Flex, Menu, Popover, Tooltip, Typography } from "antd";
 import { CheckCircleOutlined, StopOutlined } from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -147,8 +140,10 @@ const RowContextMenu = ({
 
   // Timer countdown logic with cleanup
   useEffect(() => {
+    let timer;
+
     if (open) {
-      const timer = setInterval(() => {
+      timer = setInterval(() => {
         setCountdown((prev) => {
           if (prev <= 1) {
             close();
@@ -158,44 +153,50 @@ const RowContextMenu = ({
           return prev - 1;
         });
       }, 1000);
-
-      return () => clearInterval(timer); // Cleanup the timer
     }
-  }, [open, close]);
+    return () => {
+      if (timer) {
+        clearInterval(timer);
+        setCountdown(30);
+      } // Cleanup the timer
+    };
+  }, [open]);
 
-  // Adjust position logic
+  // Adjust position logic with cleanup
   useEffect(() => {
-    if (open) {
-      const handlePositioning = () => {
-        const popoverElement = document.getElementById("row-popover-menu");
-        if (popoverElement) {
-          const popoverRect = popoverElement.getBoundingClientRect();
-          const viewportWidth = window.innerWidth;
-          const viewportHeight = window.innerHeight;
+    const handlePositioning = () => {
+      const popoverElement = document.getElementById("row-popover-menu");
+      if (popoverElement) {
+        const popoverRect = popoverElement.getBoundingClientRect();
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
 
-          let newX = position.x;
-          let newY = position.y;
+        let newX = position.x;
+        let newY = position.y;
 
-          // Adjust X position
-          if (newX + popoverRect.width > viewportWidth) {
-            newX = viewportWidth - popoverRect.width - 25;
-          }
-
-          // Adjust Y position
-          if (newY + popoverRect.height > viewportHeight) {
-            newY = viewportHeight - popoverRect.height - 25;
-          }
-
-          // Set the adjusted position
-          setPopoverPosition({ x: newX, y: newY });
+        // Adjust X position
+        if (newX + popoverRect.width > viewportWidth) {
+          newX = viewportWidth - popoverRect.width - 25;
         }
-      };
 
+        // Adjust Y position
+        if (newY + popoverRect.height > viewportHeight) {
+          newY = viewportHeight - popoverRect.height - 25;
+        }
+
+        // Set the adjusted position
+        setPopoverPosition({ x: newX, y: newY });
+      }
+    };
+
+    if (open) {
       requestAnimationFrame(handlePositioning);
       window.addEventListener("resize", handlePositioning);
-
-      return () => window.removeEventListener("resize", handlePositioning); // Cleanup the event listener
     }
+
+    return () => {
+      window.removeEventListener("resize", handlePositioning); // Cleanup the event listener
+    };
   }, [open, position]);
 
   return (
@@ -220,6 +221,8 @@ const RowContextMenu = ({
       autoAdjustOverflow
       showArrow={false}
       zIndex={1}
+      arrow={false}
+      destroyTooltipOnHide={true}
       content={
         <div>
           <Menu
