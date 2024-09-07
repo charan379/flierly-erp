@@ -1,4 +1,10 @@
-
+/**
+ * @deprecated
+ * @param fieldsArray 
+ * @param queriesArray 
+ * @param withEOL 
+ * @returns 
+ */
 export default function buildMongoQuery(fieldsArray: string[], queriesArray: string[], withEOL?: boolean): MongoQueryArray {
 
     const query: MongoQueryArray = [];

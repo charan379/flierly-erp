@@ -6,7 +6,8 @@ export interface SortObject {
 
 /**
  * Builds a MongoDB sort object based on the provided `sort_by` string.
- *
+ * 
+ * @deprecated
  * @param {string} sort_by - The string containing the sort fields and directions.
  * @returns {SortObject} - The MongoDB sort object.
  * @throws {Error} - If any of the sort elements are invalid.
