@@ -1,5 +1,13 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { Button, Divider, Flex, Menu, Popover, Tooltip, Typography } from "antd";
+import {
+  Button,
+  Divider,
+  Flex,
+  Menu,
+  Popover,
+  Tooltip,
+  Typography,
+} from "antd";
 import { CheckCircleOutlined, StopOutlined } from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -115,15 +123,9 @@ const RowContextMenu = ({
             docIds: [record?._id],
           });
           break;
-          case "restore":
-            result = await crudService.restore({
-              entity,
-              docIds: [record?._id],
-            });
-            break;
-          case "close":
-            close();
-            break;
+        case "close":
+          close();
+          break;
         default:
           result = {};
           break;
