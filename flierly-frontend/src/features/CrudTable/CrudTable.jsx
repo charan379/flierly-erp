@@ -2,7 +2,7 @@ import useElementHeight from "@/hooks/useElementHeight";
 import useLocale from "@/features/Language/hooks/useLocale";
 import { ProTable } from "@ant-design/pro-components";
 import { Switch } from "antd";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import Create from "./forms/Create";
 import Search from "./forms/Search";
 import crudService from "./service/crud.service";
@@ -24,7 +24,6 @@ const CrudTable = ({
   createFormFields,
   createFormInitialValues,
   searchFormFields,
-  searchFormInitialValues,
   render = {
     restore: true,
     delete: true,
@@ -61,7 +60,7 @@ const CrudTable = ({
     });
     crudTableContextHandler.rowMenu.open();
   };
-
+  
   return (
     <ProTable
       // classname
