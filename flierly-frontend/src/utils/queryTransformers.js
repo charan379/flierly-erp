@@ -43,11 +43,19 @@ const queryTransformers = {
    */
   dateRange: (value, namePath, allValues) => {
     if (Array.isArray(value) && value.length === 2) {
+      // Create a new Date object for the start date and set it to the beginning of the day
+      const startDate = new Date(value[0]);
+      startDate.setHours(0, 0, 0, 0); // Start of the day
+
+      // Create a new Date object for the end date and set it to the end of the day
+      const endDate = new Date(value[1]);
+      endDate.setHours(23, 59, 59, 999); // End of the day
+
       // Create a query object with `$gte` and `$lte` operators for date range
       return {
         [namePath]: {
-          $gte: new Date(value[0]).toISOString(),
-          $lte: new Date(value[1]).toISOString(),
+          $gte: startDate.toISOString(),
+          $lte: endDate.toISOString(),
         },
       };
     } else {
