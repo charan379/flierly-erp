@@ -1,5 +1,22 @@
 const queryTransformers = {
   /**
+   * Transforms a plain text value by trimming whitespace.
+   *
+   * @param {string} value - The text value to be trimmed.
+   * @param {string} namePath - The path of the field in the query (used as the key in the query object).
+   * @param {Object} allValues - The complete set of values (not used in this transformer).
+   * @returns {Object|null} - The trimmed text as an object with the field namePath or null if the input is not provided.
+   */
+  trimTextValue: (value, namePath, allValues) => {
+    if (typeof value === "string") {
+      // Trim the input text and return it as an object
+      return { [namePath]: value.trim() };
+    } else {
+      return null; // Return null if the input is empty or not a string
+    }
+  },
+
+  /**
    * Transforms a plain text value into a regular expression string for queries.
    *
    * @param {string} value - The text value to be transformed into a regex pattern.
@@ -8,9 +25,9 @@ const queryTransformers = {
    * @returns {string|null} - The regex pattern string (e.g., '/value/i') or null if the input is not provided.
    */
   textWithRegex: (value, namePath, allValues) => {
-    if (value) {
+    if (typeof value === "string") {
       // Create a regex pattern string for case-insensitive search
-      return `/${value}/i`;
+      return { [namePath]: `/${value}/i` };
     } else {
       return null; // Return null if no value is provided
     }
