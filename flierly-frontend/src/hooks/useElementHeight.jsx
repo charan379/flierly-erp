@@ -57,8 +57,6 @@ function useElementHeight(className, maxRetries = 20, delay = 500) {
     };
   }, [className, maxRetries, delay]);
 
-  if (className === 'ant-table-pagination') console.log(height);
-
   return height;
 }
 
