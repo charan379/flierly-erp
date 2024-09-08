@@ -8,7 +8,7 @@ const queryTransformers = {
    * @returns {Object|null} - The trimmed text as an object with the field namePath or null if the input is not provided.
    */
   trimTextValue: (value, namePath, allValues) => {
-    if (typeof value === "string") {
+    if (typeof value === "string" && value.trim().length > 0) {
       // Trim the input text and return it as an object
       return { [namePath]: value.trim() };
     } else {
@@ -25,7 +25,7 @@ const queryTransformers = {
    * @returns {string|null} - The regex pattern string (e.g., '/value/i') or null if the input is not provided.
    */
   textWithRegex: (value, namePath, allValues) => {
-    if (typeof value === "string") {
+    if (typeof value === "string" && value.trim().length > 0) {
       // Create a regex pattern string for case-insensitive search
       return { [namePath]: `/${value}/i` };
     } else {
