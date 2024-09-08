@@ -1,107 +1,27 @@
 import useLocale from "@/features/Language/hooks/useLocale";
-import queryTransformers from "@/utils/queryTransformers";
-import {
-  ProForm,
-  ProFormDateRangePicker,
-  ProFormSelect,
-  ProFormText,
-} from "@ant-design/pro-components";
+import { ProForm } from "@ant-design/pro-components";
 import React from "react";
+import privilegeColumns from "../../config/privilegeColumns";
+import { generate as uniqueId } from "shortid";
+import FormField from "@/components/FormField";
+import hasOwnProperty from "@/utils/hasOwnProperty";
 
 const QueryPrivilege = () => {
-  const { translate, langDirection } = useLocale(); // Using the custom hook to get translation function and language direction
+  const { langDirection } = useLocale();
 
   return (
-    <div style={{ direction: langDirection, width: "80%" }}>
+    <div style={{ direction: langDirection }}>
       <ProForm.Group>
-        {/* name */}
-        <ProFormText
-          name={"name"}
-          label={translate("name")}
-          rules={[{ type: "string" }]}
-          placeholder={translate("name")}
-          transform={queryTransformers.textWithRegex}
-        />
-        {/* access  */}
-        <ProFormSelect
-          allowClear
-          mode="multiple"
-          label={translate("access")}
-          name="access"
-          rules={[{ type: "array" }]}
-          placeholder={translate("choose_access")}
-          options={[
-            {
-              label: "Create",
-              value: "Create",
-            },
-            {
-              label: "Read",
-              value: "Read",
-            },
-            {
-              label: "Update",
-              value: "Update",
-            },
-            {
-              label: "Delete",
-              value: "Delete",
-            },
-            {
-              label: "Manage",
-              value: "Manage",
-            },
-          ]}
-          transform={queryTransformers.inArray}
-        />
-        <ProFormSelect
-          allowClear
-          rules={[{ type: "array" }]}
-          name={"model"}
-          mode="multiple"
-          label={translate("model")}
-          transform={queryTransformers.inArray}
-          options={[
-            {
-              label: "Uom",
-              value: "Uom",
-            },
-            {
-              label: "TaxIdentity",
-              value: "TaxIdentity",
-            },
-            {
-              label: "User",
-              value: "User",
-            },
-            {
-              label: "Role",
-              value: "Role",
-            },
-            {
-              label: "Customer",
-              value: "Customer",
-            },
-          ]}
-        />
-        <ProFormText
-          name={"code"}
-          label={translate("code")}
-          rules={[{ type: "string" }]}
-          placeholder={translate("code")}
-        />
-        <ProForm.Group>
-          <ProFormDateRangePicker
-            name={"createdAt"}
-            label={translate("created_at")}
-            transform={queryTransformers.dateRange}
-          />
-          <ProFormDateRangePicker
-            name={"updatedAt"}
-            label={translate("updated_at")}
-            transform={queryTransformers.dateRange}
-          />
-        </ProForm.Group>
+        {privilegeColumns.map((column) => {
+          if (hasOwnProperty(column, "queryFormConfig")) {
+            return (
+              <FormField
+                key={`${uniqueId()}`}
+                config={column["queryFormConfig"]}
+              />
+            );
+          } else return;
+        })}
       </ProForm.Group>
     </div>
   );
