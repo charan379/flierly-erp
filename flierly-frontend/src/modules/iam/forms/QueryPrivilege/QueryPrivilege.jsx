@@ -3,11 +3,9 @@ import queryTransformers from "@/utils/queryTransformers";
 import {
   ProForm,
   ProFormDateRangePicker,
-  ProFormItem,
   ProFormSelect,
   ProFormText,
 } from "@ant-design/pro-components";
-import { Select } from "antd";
 import React from "react";
 
 const QueryPrivilege = () => {
@@ -56,41 +54,36 @@ const QueryPrivilege = () => {
           ]}
           transform={queryTransformers.inArray}
         />
-        <ProFormItem
+        <ProFormSelect
+          allowClear
           rules={[{ type: "array" }]}
           name={"model"}
-          style={{ width: "100%" }}
+          mode="multiple"
           label={translate("model")}
           transform={queryTransformers.inArray}
-        >
-          <Select
-            placeholder={translate("choose_model")}
-            allowClear
-            mode="multiple"
-            options={[
-              {
-                label: "Uom",
-                value: "Uom",
-              },
-              {
-                label: "TaxIdentity",
-                value: "TaxIdentity",
-              },
-              {
-                label: "User",
-                value: "User",
-              },
-              {
-                label: "Role",
-                value: "Role",
-              },
-              {
-                label: "Customer",
-                value: "Customer",
-              },
-            ]}
-          />
-        </ProFormItem>
+          options={[
+            {
+              label: "Uom",
+              value: "Uom",
+            },
+            {
+              label: "TaxIdentity",
+              value: "TaxIdentity",
+            },
+            {
+              label: "User",
+              value: "User",
+            },
+            {
+              label: "Role",
+              value: "Role",
+            },
+            {
+              label: "Customer",
+              value: "Customer",
+            },
+          ]}
+        />
         <ProFormText
           name={"code"}
           label={translate("code")}
