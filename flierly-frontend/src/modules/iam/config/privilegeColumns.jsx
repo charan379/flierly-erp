@@ -17,6 +17,16 @@ const privilegeColumns = [
     copyable: false,
     width: 10,
     sorter: true,
+    queryFormConfig: {
+      name: "name",
+      label: "name",
+      rules: [{ type: "string" }],
+      transformer: "textWithRegex",
+      order: 1,
+      input: {
+        type: "Text",
+      },
+    },
   },
   {
     title: "Access",
@@ -50,6 +60,41 @@ const privilegeColumns = [
         status: "Processing",
       },
     },
+    queryFormConfig: {
+      name: "access",
+      label: "access",
+      rules: [{ type: "array" }],
+      transformer: "inArray",
+      order: 2,
+      input: {
+        type: "Select",
+        select: {
+          mode: "multiple",
+          options: [
+            {
+              label: "Create",
+              value: "Create",
+            },
+            {
+              label: "Read",
+              value: "Read",
+            },
+            {
+              label: "Update",
+              value: "Update",
+            },
+            {
+              label: "Delete",
+              value: "Delete",
+            },
+            {
+              label: "Manage",
+              value: "Manage",
+            },
+          ],
+        },
+      },
+    },
   },
   {
     title: "Model",
@@ -57,12 +102,57 @@ const privilegeColumns = [
     copyable: false,
     width: 7,
     sorter: true,
+    queryFormConfig: {
+      name: "model",
+      label: "model",
+      order: 3,
+      rules: [{ type: "array" }],
+      transformer: "inArray",
+      input: {
+        type: "Select",
+        select: {
+          mode: "multiple",
+          options: [
+            {
+              label: "Uom",
+              value: "Uom",
+            },
+            {
+              label: "TaxIdentity",
+              value: "TaxIdentity",
+            },
+            {
+              label: "User",
+              value: "User",
+            },
+            {
+              label: "Role",
+              value: "Role",
+            },
+            {
+              label: "Customer",
+              value: "Customer",
+            },
+          ],
+        },
+      },
+    },
   },
   {
     title: "Code",
     dataIndex: "code",
     copyable: true,
     width: 10,
+    queryFormConfig: {
+      name: "code",
+      label: "code",
+      rules: [{ type: "string" }],
+      transformer: "trimTextValue",
+      order: 4,
+      input: {
+        type: "Text",
+      },
+    },
   },
   {
     title: "Created",
@@ -71,6 +161,16 @@ const privilegeColumns = [
     valueType: "dateTime",
     sorter: true,
     defaultSortOrder: "descend",
+    queryFormConfig: {
+      name: "createdAt",
+      label: "created_at",
+      rules: [],
+      transformer: "dateRange",
+      order: 5,
+      input: {
+        type: "DateRange",
+      },
+    },
   },
   {
     title: "Updated",
@@ -78,6 +178,16 @@ const privilegeColumns = [
     width: 10,
     valueType: "dateTime",
     sorter: true,
+    queryFormConfig: {
+      name: "updatedAt",
+      label: "updated_at",
+      rules: [],
+      transformer: "dateRange",
+      order: 6,
+      input: {
+        type: "DateRange",
+      },
+    },
   },
 ];
 
