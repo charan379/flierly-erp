@@ -22,9 +22,9 @@ const Header = () => {
         justifyContent: "flex-start",
         gap: "15px",
         borderRadius: "10px",
-        height: "55px",
+        height: "45px",
         boxShadow: "var(--floating-section-box-shadow)",
-        margin: "10px",
+        margin: "5px",
       }}
     >
       <DropdownMenu />

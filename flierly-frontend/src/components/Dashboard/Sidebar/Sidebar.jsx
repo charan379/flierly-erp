@@ -17,14 +17,14 @@ const Sidebar = () => {
       style={{
         position: "relative",
         overflow: "auto",
-        height: "84dvh",
+        height: "89dvh",
         borderRadius: "10px",
         boxShadow: "var(--floating-section-box-shadow)",
         background: "var(--bg-color-primary-flierly)",
-        margin: "2px 5px 10px 10px",
+        margin: "0px 0px 0px 5px",
         zIndex: "1",
       }}
-      collapsedWidth={60}
+      collapsedWidth={45}
       width={240}
       trigger={
         collapsed ? (
