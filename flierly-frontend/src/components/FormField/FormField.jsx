@@ -1,7 +1,9 @@
 import useLocale from "@/features/Language/hooks/useLocale";
+import SelectRemoteOptions from "@/features/SelectRemoteOptions";
 import hasOwnProperty from "@/utils/hasOwnProperty";
 import queryTransformers from "@/utils/queryTransformers";
 import {
+  ProForm,
   ProFormDateRangePicker,
   ProFormSelect,
   ProFormText,
@@ -85,5 +87,29 @@ const FormItems = {
       rules={rules}
       transform={transformer}
     />
+  ),
+  SelectRemoteOptions: ({
+    name,
+    label,
+    rules = [],
+    mode = "single",
+    transformer,
+    debounceTimeout,
+    asyncOptionsFetcher,
+  }) => (
+    <ProForm.Item
+      name={name}
+      label={label}
+      rules={rules}
+      style={{ width: "100%" }}
+      transform={transformer}
+    >
+      <SelectRemoteOptions
+        mode={mode}
+        placeholder={"Please enter"}
+        asyncOptionsFetcher={asyncOptionsFetcher}
+        debounceTimeout={debounceTimeout}
+      />
+    </ProForm.Item>
   ),
 };
