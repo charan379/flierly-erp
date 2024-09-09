@@ -65,3 +65,10 @@ type FilterValue = string | number | boolean | Date | FilterObject | FilterArray
 type FilterObject = { [key: string]: FilterValue };
 
 type FilterArray = FilterValue[];
+
+type FilterAndLimitArgs<T> = {
+    matcher: RegExp; // Regular expression used for filtering items based on the value of queryKey
+    limit: number;   // Maximum number of items to return
+    data: T[];       // Array of items to be filtered
+    queryKey: keyof T; // Key of the property in the item to be used for filtering
+}
