@@ -1,3 +1,5 @@
+import selectRemoteOptionsService from "@/features/SelectRemoteOptions/service";
+
 const privilegeColumns = [
   // {
   //   title: "index",
@@ -109,31 +111,24 @@ const privilegeColumns = [
       rules: [{ type: "array" }],
       transformer: "inArray",
       input: {
-        type: "Select",
+        type: "SelectRemoteOptions",
         select: {
           mode: "multiple",
-          options: [
-            {
-              label: "Uom",
-              value: "Uom",
-            },
-            {
-              label: "TaxIdentity",
-              value: "TaxIdentity",
-            },
-            {
-              label: "User",
-              value: "User",
-            },
-            {
-              label: "Role",
-              value: "Role",
-            },
-            {
-              label: "Customer",
-              value: "Customer",
-            },
-          ],
+          asyncOptionsFetcher: async (value) => {
+            const response = await selectRemoteOptionsService.models({
+              keyword: value,
+            });
+            if (
+              response?.success &&
+              response?.result &&
+              Array.isArray(response.result)
+            ) {
+              return response.result.map((model) => {
+                return { label: model.entity, value: model.entity };
+              });
+            }
+          },
+          debounceTimeout: 300,
         },
       },
     },
