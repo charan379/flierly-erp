@@ -57,7 +57,6 @@ const crudService = {
 export default crudService;
 
 listenToAuthChanges((newState) => {
-  console.log(newState);
   const oldToken = `Bearer ${api.defaults.headers["Authorization"]}`;
   const newToken = `Bearer ${newState?.token}`;
   if (oldToken && newToken && oldToken !== newState)
