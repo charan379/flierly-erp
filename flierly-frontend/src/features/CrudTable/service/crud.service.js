@@ -1,11 +1,10 @@
 import { serverConfig } from "@/config/serverConfig";
-import errorHandler from "@/utils/handlers/errorHandler";
-import successHandler from "@/utils/handlers/successHandler";
 import {
   getToken,
   listenToAuthChanges,
 } from "@/modules/auth/utility/authState";
 import axios from "axios";
+import handleResponse from "@/utils/handlers/handleResponse";
 
 const api = axios.create({
   baseURL: serverConfig.BASE_API_URL,
@@ -14,33 +13,21 @@ const api = axios.create({
   },
 });
 
-// Function to handle API responses
-const handleResponse = async (promise, notifyOnSuccess, notifyOnFailed) => {
-  try {
-    const { data, status } = await promise;
-    successHandler(
-      { data, status },
-      {
-        notifyOnSuccess,
-        notifyOnFailed,
-        notifyType: "message",
-      }
-    );
-    return data;
-  } catch (error) {
-    return errorHandler(error);
-  }
-};
-
 const crudService = {
   // Fetch paginated documents
-  page: async ({entity, autopopulate = false, pagination = { limit: 10, page: 1 }, filters = {}, sort = {}, }) => {
+  page: async ({
+    entity,
+    autopopulate = false,
+    pagination = { limit: 10, page: 1 },
+    filters = {},
+    sort = {},
+  }) => {
     const promise = api.post(
       `/${entity}/page`,
       { filters, pagination, sort, autopopulate },
       {}
     );
-    return handleResponse(promise, false, true);
+    return handleResponse({ promise });
   },
 
   // Soft delete documents
@@ -48,7 +35,7 @@ const crudService = {
     const promise = api.delete(`/${entity}/delete`, {
       data: docIds,
     });
-    return handleResponse(promise, true, true);
+    return handleResponse({ promise, notifyOnSuccess: true });
   },
 
   // Activate or inactivate documents
@@ -57,13 +44,13 @@ const crudService = {
       ids: docIds,
       action,
     });
-    return handleResponse(promise, true, true);
+    return handleResponse({ promise, notifyOnSuccess: true });
   },
 
   // Restore documents
   restore: async ({ entity, docIds = [] }) => {
     const promise = api.put(`/${entity}/restore`, docIds);
-    return handleResponse(promise, true, true);
+    return handleResponse({ promise, notifyOnSuccess: true });
   },
 };
 
