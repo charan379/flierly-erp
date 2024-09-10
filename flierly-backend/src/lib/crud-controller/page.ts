@@ -10,6 +10,7 @@ import mongoose, { FilterQuery } from "mongoose";
 
 interface PageRequestBody {
     autopopulate: boolean;
+    binMode: boolean;
     pagination: { page: number, limit: number };
     sort: { [key: string]: 'ascend' | 'descend' }
     filters: FilterObject
@@ -17,7 +18,9 @@ interface PageRequestBody {
 
 // Joi schema for PageRequestBody with defaults
 const pageRequestBodySchema: Joi.ObjectSchema<PageRequestBody> = Joi.object({
-    autopopulate: Joi.boolean().default(false), // Default: false
+    autopopulate: Joi.boolean().default(true), // Default: false
+
+    binMode: Joi.boolean().default(false), // Default: false
 
     pagination: Joi.object({
         page: Joi.number().integer().min(1).default(1), // Default: 1
@@ -44,7 +47,7 @@ const page = async (model: mongoose.Model<any>, req: Request, res: Response): Pr
 
     const modelKeys: string[] = Object.keys(model.schema.obj); // Get all schema field names for filtering (used later to exclude soft-deleted documents)
 
-    const { autopopulate, filters, sort, pagination }: PageRequestBody = await JoiSchemaValidator(pageRequestBodySchema, req.body, { allowUnknown: false, abortEarly: false }, "Dynamic page request API.");
+    const { autopopulate, binMode, filters, sort, pagination }: PageRequestBody = await JoiSchemaValidator(pageRequestBodySchema, req.body, { allowUnknown: false, abortEarly: false }, "Dynamic page request API.");
 
     const skip: number = (pagination.page * pagination.limit) - pagination.limit; // Calculate the skip value based on page and limit for pagination
 
@@ -52,23 +55,21 @@ const page = async (model: mongoose.Model<any>, req: Request, res: Response): Pr
 
     const requestSort = transformMongoQuerySort(sort); // transform sort object from request as per mongoDb requirements
 
-    const filterQuery: FilterQuery<any> = {} // mongoDB filter query
+    const filterQuery: FilterQuery<any> = { $and: [] } // mongoDB filter query initalizes with $and empty array
 
     // If the schema includes the 'isDeleted' field, exclude soft-deleted documents from the query
-    if (modelKeys.includes('isDeleted'))
-        filterQuery.$and?.push({ isDeleted: false })
+    if (modelKeys.includes('isDeleted') && filterQuery?.$and)
+        filterQuery.$and.push({ isDeleted: binMode })
 
-    // convert requestFilters object (key, value) pairs into array of objects {key: value}[] and assign it to $and query
-    filterQuery.$and = Object.entries(requestFilters).map(([key, value]) => {
-        return {
-            [key]: value,
-        }
+    // convert requestFilters object (key, value) pairs into array of objects {key: value}[] and push it to $and query
+    Object.entries(requestFilters).map(([key, value]) => {
+        filterQuery.$and?.push({ [key]: value, })
     });
 
-    if (filterQuery.$and.length <= 0) {
+    if (filterQuery?.$and && filterQuery.$and?.length <= 0) {
         delete filterQuery.$and
     };
-
+    
     // Create separate promises for fetching documents and total count for efficiency
     const resultsPromise = model
         .find(filterQuery, { __v: 0 }, { autopopulate: autopopulate }) // Find documents with specific fields, exclude `__v`, and optionally autopopulate
