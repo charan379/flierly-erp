@@ -19,6 +19,28 @@ const selectRemoteOptionsService = {
     const promise = api.get(`models`, { params: { keyword, limit } });
     return handleResponse({ promise });
   },
+  // Fetch remote entities
+  entities: async ({ entity, keyword, queryField, limit = 50 }) => {
+    // query
+    const sort = `${queryField}.asc`;
+    const fields = [];
+    const queries = [];
+
+    // assign query fields
+    fields.push(queryField);
+    queries.push(keyword);
+
+    const promise = api.get(`${entity}/search`, {
+      params: {
+        fields: fields.join(","),
+        queries: queries.join(","),
+        sort,
+        limit,
+      },
+    });
+
+    return handleResponse({ promise });
+  },
 };
 
 export default selectRemoteOptionsService;
