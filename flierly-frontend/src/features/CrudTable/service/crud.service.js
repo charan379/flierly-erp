@@ -17,14 +17,15 @@ const crudService = {
   // Fetch paginated documents
   page: async ({
     entity,
-    autopopulate = false,
+    autopopulate = true,
+    binMode = false,
     pagination = { limit: 10, page: 1 },
     filters = {},
     sort = {},
   }) => {
     const promise = api.post(
       `/${entity}/page`,
-      { filters, pagination, sort, autopopulate },
+      { filters, pagination, sort, autopopulate, binMode },
       {}
     );
     return handleResponse({ promise });

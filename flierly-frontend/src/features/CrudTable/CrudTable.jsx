@@ -1,7 +1,6 @@
 import useElementHeight from "@/hooks/useElementHeight";
 import useLocale from "@/features/Language/hooks/useLocale";
 import { ProTable } from "@ant-design/pro-components";
-import { Switch } from "antd";
 import React, { useRef, useState } from "react";
 import Create from "./forms/Create";
 import Search from "./forms/Search";
@@ -13,6 +12,7 @@ import Restore from "./features/Restore";
 import useCrudTableContext from "./hooks/useCrudTableContext";
 import Clear from "./features/Clear";
 import useResponsive from "@/hooks/useResponsive";
+import BinModeToggle from "./features/BinModeToggle";
 
 const CrudTable = ({
   entity,
@@ -60,7 +60,7 @@ const CrudTable = ({
     });
     crudTableContextHandler.rowMenu.open();
   };
-  
+
   return (
     <ProTable
       // classname
@@ -130,6 +130,8 @@ const CrudTable = ({
           filters: crudTableContextHandler.filters.get(),
           pagination: { limit: params.pageSize, page: params.current },
           sort: sort,
+          autopopulate: true,
+          binMode: crudTableContextHandler.binMode.isActive(),
         });
 
         return {
@@ -210,13 +212,22 @@ const CrudTable = ({
           type: "inline",
           items: [
             {
-              label: <Switch />,
+              label: (
+                <BinModeToggle
+                  actions={actionRef.current}
+                  isActive={crudTableContextHandler.binMode.isActive()}
+                  activate={() => crudTableContextHandler.binMode.activate()}
+                  deactivate={() =>
+                    crudTableContextHandler.binMode.deactivate()
+                  }
+                />
+              ),
               key: "1",
             },
           ],
-          onChange: (activeKey) => {
-            console.log("activeKey", activeKey);
-          },
+          // onChange: (activeKey) => {
+          //   console.log("activeKey", activeKey);
+          // },
         },
       }}
       // table extra render components

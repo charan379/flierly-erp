@@ -6,6 +6,11 @@ const contextHandler = (state, dispatcher) => ({
         set: (data) => dispatcher({ type: actionTypes.UPDATE_FILTERS, payload: data }),
         get: () => state?.filters,
     },
+    binMode: {
+        isActive: () => state?.binMode,
+        activate: () => dispatcher({type: actionTypes.ACTIVATE_BIN_MODE}),
+        deactivate: () => dispatcher({type: actionTypes.DEACTIVATE_BIN_MODE}),
+    },
     rowMenu: {
         open: () => dispatcher({ type: actionTypes.OPEN_ROW_MENU }),
         close: () => dispatcher({ type: actionTypes.CLOSE_ROW_MENU }),
