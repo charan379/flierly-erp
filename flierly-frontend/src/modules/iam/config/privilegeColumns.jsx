@@ -1,4 +1,5 @@
 import selectRemoteOptionsService from "@/features/SelectRemoteOptions/service";
+import { Tag } from "antd";
 
 const privilegeColumns = [
   // {
@@ -129,6 +130,14 @@ const privilegeColumns = [
             }
           },
           debounceTimeout: 300,
+          // labelRender: (props) => {
+          //   console.log(props);
+          //   return <Tag>sdfsdf</Tag>;
+          // },
+          // optionRender: (option, info) => {
+          //   console.log(JSON.stringify(option), info);
+          //   return <Tag>sdfsdf</Tag>;
+          // },
         },
       },
     },
