@@ -96,20 +96,26 @@ const FormItems = {
     transformer,
     debounceTimeout,
     asyncOptionsFetcher,
-  }) => (
-    <ProForm.Item
-      name={name}
-      label={label}
-      rules={rules}
-      style={{ width: "100%" }}
-      transform={transformer}
-    >
-      <SelectRemoteOptions
-        mode={mode}
-        placeholder={"Please enter"}
-        asyncOptionsFetcher={asyncOptionsFetcher}
-        debounceTimeout={debounceTimeout}
-      />
-    </ProForm.Item>
-  ),
+    labelRender,
+    optionRender,
+  }) => {
+    return (
+      <ProForm.Item
+        name={name}
+        label={label}
+        rules={rules}
+        style={{ width: "100%" }}
+        transform={transformer}
+      >
+        <SelectRemoteOptions
+          mode={mode}
+          placeholder={"Please enter"}
+          asyncOptionsFetcher={asyncOptionsFetcher}
+          debounceTimeout={debounceTimeout}
+          labelRender={labelRender}
+          optionRender={optionRender}
+        />
+      </ProForm.Item>
+    );
+  },
 };
