@@ -1,4 +1,5 @@
-import { Tag } from "antd";
+import hasOwnProperty from "@/utils/hasOwnProperty";
+import { Badge, Button, Tag } from "antd";
 
 const userColumns = [
   // {
@@ -23,12 +24,23 @@ const userColumns = [
     title: "Username",
     dataIndex: "username",
     copyable: true,
-    width: 20,
+    width: 10,
+    sorter: true,
+    queryFormConfig: {
+      name: "username",
+      label: "username",
+      rules: [{ type: "regexp" }],
+      transformer: "textWithRegex",
+      order: 1,
+      input: {
+        type: "Text",
+      },
+    },
   },
   {
     title: "Active",
     dataIndex: "isActive",
-    width: 10,
+    width: 5,
     align: "center",
     render: (text, record, index, action) => {
       return text === false ? (
@@ -37,48 +49,140 @@ const userColumns = [
         <Tag color="green">Active</Tag>
       );
     },
+    queryFormConfig: {
+      name: "isActive",
+      label: "status",
+      rules: [{ type: "boolean" }],
+      order: 2,
+      input: {
+        type: "Select",
+        select: {
+          mode: "single",
+          options: [
+            { label: "Active", value: true },
+            { label: "In Active", value: false },
+          ],
+        },
+      },
+    },
   },
   {
     title: "Email",
     dataIndex: "email",
     copyable: true,
-    width: 20,
+    width: 15,
+    queryFormConfig: {
+      name: "email",
+      label: "email",
+      rules: [{ type: "email" }],
+      transformer: "trimTextValue",
+      order: 3,
+      input: {
+        type: "Text",
+      },
+    },
   },
   {
     title: "Phone",
     dataIndex: "mobile",
     copyable: true,
-    width: 20,
+    width: 10,
+    queryFormConfig: {
+      name: "mobile",
+      label: "Phone",
+      rules: [{ type: "string" }],
+      transformer: "trimTextValue",
+      order: 4,
+      input: {
+        type: "Text",
+      },
+    },
   },
   {
     title: "Roles",
     dataIndex: "roles",
     copyable: true,
-    width: 20,
+    width: 7,
+    hideInTable: false,
+    render: (text, record, index, action) => {
+      if (hasOwnProperty(record, "roles") && Array.isArray(record.roles)) {
+        return (
+          <Badge count={record.roles.length}>
+            <Button type="link">User Roels</Button>
+          </Badge>
+        );
+      } else {
+        return null;
+      }
+    },
   },
   {
     title: "Additional Access",
     dataIndex: "additionalPrivileges",
     copyable: true,
-    width: 20,
+    width: 10,
+    hideInTable: false,
+    render: (text, record, index, action) => {
+      if (hasOwnProperty(record, "additionalPrivileges") && Array.isArray(record.additionalPrivileges)) {
+        return (
+          <Badge count={record.additionalPrivileges.length}>
+            <Button type="link">Additional Privileges</Button>
+          </Badge>
+        );
+      } else {
+        return null;
+      }
+    },
   },
   {
     title: "Restricted Access",
     dataIndex: "restrictedPrivileges",
     copyable: true,
-    width: 20,
+    width: 10,
+    hideInTable: false,
+    render: (text, record, index, action) => {
+      if (hasOwnProperty(record, "restrictedPrivileges") && Array.isArray(record.restrictedPrivileges)) {
+        return (
+          <Badge count={record.restrictedPrivileges.length}>
+            <Button type="link">Restricted Privileges</Button>
+          </Badge>
+        );
+      } else {
+        return null;
+      }
+    },
   },
   {
     title: "Created",
     dataIndex: "createdAt",
-    width: 20,
+    width: 10,
     valueType: "dateTime",
+    queryFormConfig: {
+      name: "createdAt",
+      label: "created_at",
+      rules: [],
+      transformer: "dateRange",
+      order: 8,
+      input: {
+        type: "DateRange",
+      },
+    },
   },
   {
     title: "Updated",
     dataIndex: "updatedAt",
-    width: 20,
+    width: 10,
     valueType: "dateTime",
+    queryFormConfig: {
+      name: "updatedAt",
+      label: "updated_at",
+      rules: [],
+      transformer: "dateRange",
+      order: 9,
+      input: {
+        type: "DateRange",
+      },
+    },
   },
 ];
 
