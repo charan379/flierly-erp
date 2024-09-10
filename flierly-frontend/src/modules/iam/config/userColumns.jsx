@@ -1,3 +1,4 @@
+import selectRemoteOptionsService from "@/features/SelectRemoteOptions/service";
 import hasOwnProperty from "@/utils/hasOwnProperty";
 import { Badge, Button, Tag } from "antd";
 
@@ -115,6 +116,47 @@ const userColumns = [
         return null;
       }
     },
+    queryFormConfig: {
+      name: "roles",
+      label: "roles",
+      order: 5,
+      rules: [{ type: "array" }],
+      // transformer: "inArray",
+      input: {
+        type: "SelectRemoteOptions",
+        select: {
+          mode: "multiple",
+          asyncOptionsFetcher: async (value) => {
+            const response = await selectRemoteOptionsService.entities({
+              entity: "role",
+              queryField: "name",
+              keyword: value,
+              limit: 20,
+            });
+
+            if (
+              response?.success &&
+              response?.result &&
+              Array.isArray(response.result)
+            ) {
+              return response.result.map((role) => {
+                return { label: role, value: role?._id };
+              });
+            }
+          },
+          debounceTimeout: 300,
+          // labelRender: (props) => {
+          //   console.log(props);
+          //   return <Tag>sdfsdf</Tag>;
+          // },
+          optionRender: (option, info) => {
+            // console.log(JSON.stringify(option), info);
+            console.log(option?.label);
+            return `${option?.label?.name} | ${option?.label?.code}`;
+          },
+        },
+      },
+    },
   },
   {
     title: "Additional Access",
@@ -123,7 +165,10 @@ const userColumns = [
     width: 10,
     hideInTable: false,
     render: (text, record, index, action) => {
-      if (hasOwnProperty(record, "additionalPrivileges") && Array.isArray(record.additionalPrivileges)) {
+      if (
+        hasOwnProperty(record, "additionalPrivileges") &&
+        Array.isArray(record.additionalPrivileges)
+      ) {
         return (
           <Badge count={record.additionalPrivileges.length}>
             <Button type="link">Additional Privileges</Button>
@@ -141,7 +186,10 @@ const userColumns = [
     width: 10,
     hideInTable: false,
     render: (text, record, index, action) => {
-      if (hasOwnProperty(record, "restrictedPrivileges") && Array.isArray(record.restrictedPrivileges)) {
+      if (
+        hasOwnProperty(record, "restrictedPrivileges") &&
+        Array.isArray(record.restrictedPrivileges)
+      ) {
         return (
           <Badge count={record.restrictedPrivileges.length}>
             <Button type="link">Restricted Privileges</Button>
