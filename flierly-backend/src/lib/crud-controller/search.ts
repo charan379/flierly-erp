@@ -5,7 +5,7 @@ import buildMongoQuery from "@/utils/mongo-query.builder";
 import buildMongoSortObject, { SortObject } from "@/utils/mongo-sort.builder";
 import { Request, Response } from "express";
 import Joi from "joi";
-import mongoose from "mongoose";
+import mongoose, { FilterQuery } from "mongoose";
 
 // Interface for search request parameters
 export interface SearchRequest {
@@ -19,7 +19,7 @@ export interface SearchRequest {
 // Joi schema for validating search request
 const searchRequestSchema: Joi.ObjectSchema<SearchRequest> = Joi.object({
     fields: Joi.string().default('name'),
-    queries: Joi.string().default(' '),
+    queries: Joi.string().allow('').default(''),
     sort: Joi.string().default('name.asc'),
     limit: Joi.number().integer().default(20),
     autopopulate: Joi.boolean().default(false),
@@ -43,11 +43,23 @@ const search = async (model: mongoose.Model<any>, req: Request, res: Response) =
     const sort: SortObject = buildMongoSortObject(searchRequest.sort);
     // Build a MongoDB query based on the requested fields and search terms
     const query: MongoQueryArray = buildMongoQuery(searchRequest.fields.split(","), searchRequest.queries.split(","));
-    // Exclude documents marked as deleted, if the 'isDeleted' field exists
-    if (modelKeys.includes('isDeleted'))
-        query.push({ isDeleted: false })
+
+    const filterQuery: FilterQuery<any> = { $and: [] } // mongoDB filter query initalizes with $and empty array
+
+    // If the schema includes the 'isDeleted' field, exclude soft-deleted documents from the query
+    if (modelKeys.includes('isDeleted') && filterQuery?.$and)
+        filterQuery.$and.push({ isDeleted: false })
+
+    if (query.length > 0 && filterQuery?.$and) {
+        query.map(q => filterQuery?.$and?.push(q))
+    };
+
+    if (filterQuery?.$and && filterQuery.$and?.length <= 0) {
+        delete filterQuery.$and
+    };
+
     // Execute the search using Mongoose's find method
-    let result = await model.find({ $and: query }, { __v: 0 }, { autopopulate: searchRequest.autopopulate })
+    let result = await model.find(filterQuery, { __v: 0 }, { autopopulate: searchRequest.autopopulate })
         .sort({ ...sort })
         .limit(searchRequest.limit)
         .exec();
