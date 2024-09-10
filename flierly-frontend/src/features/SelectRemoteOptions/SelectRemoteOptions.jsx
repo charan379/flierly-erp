@@ -1,6 +1,7 @@
 import debounce from "@/utils/debounce";
 import { Empty, Flex, Select, Spin } from "antd";
 import React, { useMemo, useRef, useState } from "react";
+import CustomAntDSelectTag from "./components/CustomAntDSelectTag";
 
 const SelectRemoteOptions = ({
   asyncOptionsFetcher,
@@ -40,9 +41,21 @@ const SelectRemoteOptions = ({
       onSearch={debounceFetcher}
       onFocus={() => debounceFetcher("")}
       options={options}
-      notFoundContent={fetching 
-        ? <Flex align="center" justify="center"> <Spin size="small" /> </Flex> 
-        : <Empty />}
+      labelInValue
+      tagRender={(props) => {
+        console.log(props);
+        return <CustomAntDSelectTag title={props.label} onClose={props.onClose} />;
+      }}
+      notFoundContent={
+        fetching ? (
+          <Flex align="center" justify="center">
+            {" "}
+            <Spin size="small" />{" "}
+          </Flex>
+        ) : (
+          <Empty />
+        )
+      }
       {...props}
     />
   );
