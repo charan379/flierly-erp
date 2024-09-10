@@ -22,7 +22,7 @@ const privilegeColumns = [
     queryFormConfig: {
       name: "name",
       label: "name",
-      rules: [{ type: "string" }],
+      rules: [{ type: "regexp" }],
       transformer: "textWithRegex",
       order: 1,
       input: {
