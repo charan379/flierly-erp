@@ -14,7 +14,6 @@ type SortOrder = 'ascend' | 'descend' | 'asc' | 'desc' | 'ascending' | 'descendi
  *   - MongoDB-compatible values are either 1 (ascending) or -1 (descending).
  */
 function transformMongoQuerySort(sort: { [key: string]: SortOrder }): { [key: string]: mongoose.SortOrder } {
-   console.log(sort)
     return Object.fromEntries(
         Object.entries(sort).map(([key, value]) => {
             let order: mongoose.SortOrder;
