@@ -109,8 +109,8 @@ const userColumns = [
     render: (text, record, index, action) => {
       if (hasOwnProperty(record, "roles") && Array.isArray(record.roles)) {
         return (
-          <Badge count={record.roles.length}>
-            <Button type="link">User Roels</Button>
+          <Badge count={record.roles.length} showZero size="small" color="gold" overflowCount={99}>
+            <Button type="link" size="small">User Roels</Button>
           </Badge>
         );
       } else {
