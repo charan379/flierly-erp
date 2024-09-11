@@ -24,7 +24,10 @@ const RowContextMenu = ({
   open,
   position,
   close,
+  render,
 }) => {
+  if (!render) return;
+  
   const { theme } = useTheme();
   const { translate } = useLocale();
   const [popoverPosition, setPopoverPosition] = useState(position);
@@ -74,7 +77,9 @@ const RowContextMenu = ({
         style: { color: "#009688", ...menuItemStyle },
       },
       {
-        label: `${translate("close")} (${translate("auto_close_in")} ${countdown}s)`,
+        label: `${translate("close")} (${translate(
+          "auto_close_in"
+        )} ${countdown}s)`,
         key: "close",
         icon: <FontAwesomeIcon icon={faCircleXmark} style={menuItemStyle} />,
         danger: true,

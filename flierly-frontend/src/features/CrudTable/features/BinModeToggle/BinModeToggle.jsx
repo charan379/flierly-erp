@@ -2,7 +2,9 @@ import debounce from "@/utils/debounce";
 import { Switch, Tooltip } from "antd";
 import React, { useEffect, useCallback } from "react";
 
-const BinModeToggle = ({ actions, isActive, activate, deactivate }) => {
+const BinModeToggle = ({ actions, isActive, activate, deactivate, render }) => {
+  if (!render) return;
+  
   const handleChange = useCallback(
     (checked) => (checked ? activate() : deactivate()),
     [activate, deactivate]

@@ -29,21 +29,29 @@ const CrudTable = ({
     delete: true,
     activate: true,
     clear: true,
-    builtIn: true,
+    builtIn: {
+      options: {
+        density: true,
+        fullScreen: true,
+        search: false,
+        setting: true,
+        reload: true,
+      },
+    },
     bin: true,
     search: true,
     create: true,
     view: true,
+    menu: true,
   },
 }) => {
-  const { isMobile, screenSize } = useResponsive();
 
   const tableHeight = useElementHeight("crud-data-table-flierly-1");
   const tableHeadHeight = useElementHeight("ant-table-thead");
   const tableToolbarHeight = useElementHeight("ant-pro-table-list-toolbar");
   const tablePaginationHeight = useElementHeight("ant-table-pagination");
 
-  const { langDirection, translate } = useLocale();
+  const {  translate } = useLocale();
 
   const [data, setData] = useState(dataSource);
 
@@ -106,10 +114,7 @@ const CrudTable = ({
       sortDirections={["ascend", "descend"]}
       // options configuration
       options={{
-        density: true,
-        fullScreen: true,
-        search: false,
-        setting: true,
+        ...render.builtIn.options,
       }}
       // action ref to trigger actions
       actionRef={actionRef}
@@ -214,6 +219,7 @@ const CrudTable = ({
             {
               label: (
                 <BinModeToggle
+                  render={render.bin}
                   actions={actionRef.current}
                   isActive={crudTableContextHandler.binMode.isActive()}
                   activate={() => crudTableContextHandler.binMode.activate()}
@@ -234,6 +240,7 @@ const CrudTable = ({
       tableExtraRender={() => {
         return (
           <RowContextMenu
+            render={render.menu}
             entity={entity}
             recordTitleKey={rowTitleKey}
             actions={actionRef.current}
