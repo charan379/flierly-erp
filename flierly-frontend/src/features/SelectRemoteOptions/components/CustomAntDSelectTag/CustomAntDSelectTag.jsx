@@ -6,7 +6,6 @@ const CustomAntDSelectTag = ({ title, onClose }) => {
     <span
       title={title}
       className="ant-select-selection-item"
-      style={{ color: "red" }}
     >
       <span className="ant-select-selection-item-content">{title}</span>
       <span
@@ -15,7 +14,7 @@ const CustomAntDSelectTag = ({ title, onClose }) => {
         aria-hidden="true"
         style={{ userSelect: "none" }}
       >
-        <CloseOutlined onClick={onClose} />
+        <CloseOutlined onClick={onClose}/>
       </span>
     </span>
   );

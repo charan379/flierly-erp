@@ -1,3 +1,4 @@
+import CustomAntDSelectTag from "@/features/SelectRemoteOptions/components/CustomAntDSelectTag";
 import selectRemoteOptionsService from "@/features/SelectRemoteOptions/service";
 import hasOwnProperty from "@/utils/hasOwnProperty";
 import { Badge, Button, Tag } from "antd";
@@ -121,11 +122,12 @@ const userColumns = [
       label: "roles",
       order: 5,
       rules: [{ type: "array" }],
-      // transformer: "inArray",
+      transformer: "inArray",
       input: {
         type: "SelectRemoteOptions",
         select: {
           mode: "multiple",
+          // labelInValue: true,
           asyncOptionsFetcher: async (value) => {
             const response = await selectRemoteOptionsService.entities({
               entity: "role",
@@ -145,14 +147,16 @@ const userColumns = [
             }
           },
           debounceTimeout: 300,
-          // labelRender: (props) => {
-          //   console.log(props);
-          //   return <Tag>sdfsdf</Tag>;
-          // },
           optionRender: (option, info) => {
-            // console.log(JSON.stringify(option), info);
-            console.log(option?.label);
             return `${option?.label?.name} | ${option?.label?.code}`;
+          },
+          tagRender: (props) => {
+            return (
+              <CustomAntDSelectTag
+                title={props.label.name}
+                onClose={props.onClose}
+              />
+            );
           },
         },
       },
