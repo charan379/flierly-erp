@@ -11,7 +11,6 @@ import RowContextMenu from "./features/RowContextMenu";
 import Restore from "./features/Restore";
 import useCrudTableContext from "./hooks/useCrudTableContext";
 import Clear from "./features/Clear";
-import useResponsive from "@/hooks/useResponsive";
 import BinModeToggle from "./features/BinModeToggle";
 
 const CrudTable = ({
