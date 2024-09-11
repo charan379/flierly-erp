@@ -98,6 +98,8 @@ const FormItems = {
     asyncOptionsFetcher,
     labelRender,
     optionRender,
+    tagRender,
+    labelInValue = false,
   }) => {
     return (
       <ProForm.Item
@@ -108,12 +110,14 @@ const FormItems = {
         transform={transformer}
       >
         <SelectRemoteOptions
+          labelInValue={labelInValue === true ? true : false}
           mode={mode}
           placeholder={"Please enter"}
           asyncOptionsFetcher={asyncOptionsFetcher}
           debounceTimeout={debounceTimeout}
           labelRender={labelRender}
           optionRender={optionRender}
+          tagRender={tagRender}
         />
       </ProForm.Item>
     );
