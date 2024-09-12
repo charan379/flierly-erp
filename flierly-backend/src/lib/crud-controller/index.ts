@@ -10,6 +10,7 @@ import exists from "./exists";
 import activate from "./activate";
 import softDelete from "./delete";
 import restore from "./restore";
+import updateArrayField from "./update-array-field";
 
 const CRUDController = async (modelName: string) => {
 
@@ -41,6 +42,7 @@ const CRUDController = async (modelName: string) => {
         exists: (req: Request, res: Response) => exists(model, req, res),
         activate: (req: Request, res: Response) => activate(model, req, res),
         restore: (req: Request, res: Response) => restore(model, req, res),
+        updateArrayField: (req: Request, res: Response) => updateArrayField(model, req, res),
     }
 
     return crudMethods;
