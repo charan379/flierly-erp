@@ -18,7 +18,7 @@ interface PageRequestBody {
 
 // Joi schema for PageRequestBody with defaults
 const pageRequestBodySchema: Joi.ObjectSchema<PageRequestBody> = Joi.object({
-    autopopulate: Joi.boolean().default(true), // Default: false
+    autopopulate: Joi.boolean().default(false), // Default: false
 
     binMode: Joi.boolean().default(false), // Default: false
 
