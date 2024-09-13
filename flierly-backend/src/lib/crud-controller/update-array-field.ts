@@ -6,6 +6,7 @@ import { Request, Response } from "express";
 import Joi from "joi";
 import mongoose from "mongoose";
 import FlierlyException from "../flierly.exception";
+import compareObjectIdArrays from "@/utils/compare-objectid-arrays.util";
 
 interface UpdateArrayFieldRequestBody {
     id: mongoose.ObjectId;
@@ -34,17 +35,9 @@ const updateArrayFieldRequestBodySchema: Joi.ObjectSchema<UpdateArrayFieldReques
     }),
 });
 
-// Utility function to handle ObjectId and strings
-const processItem = (item: any) => {
-    if (mongoose.isValidObjectId(item)) {
-        return new mongoose.Types.ObjectId(item as string); // Convert to ObjectId if valid
-    } else if (typeof item === 'object' && item._id) {
-        return mongoose.isValidObjectId(item._id) ? new mongoose.Types.ObjectId(item._id as string) : item._id; // Use ObjectId or string _id
-    }
-    return item; // Return as string if not an object or ObjectId
-};
-
 const updateArrayField = async (model: mongoose.Model<any>, req: Request, res: Response): Promise<Response> => {
+    // console.time('updateArrayField');
+
     // Validate request body
     const { id, fieldPath, dataType, newArray }: UpdateArrayFieldRequestBody = await JoiSchemaValidator(
         updateArrayFieldRequestBodySchema,
@@ -53,70 +46,94 @@ const updateArrayField = async (model: mongoose.Model<any>, req: Request, res: R
         "Dynamic update array field controller"
     );
 
-    const schemaPaths = model.schema.paths;
+    // Ensure fieldPath exists in schema
+    if (!model.schema.paths[fieldPath]) {
+        throw new FlierlyException(`${fieldPath} does not exist in ${model.modelName.toLowerCase()}`, HttpCodes.BAD_REQUEST);
+    }
 
-    if (!schemaPaths[fieldPath])
-        throw new FlierlyException(`${fieldPath} does not exist in ${model.modelName.toLowerCase()}`, HttpCodes.BAD_REQUEST, '', '');
+    // Fetch the existing document
+    const existingDocument = await model.findById(id, { _v: 0 }, { autopopulate: false })
+        .where("isDeleted", false)
+        .select(fieldPath)
+        .exec();
 
-    const session = await mongoose.startSession();
-    session.startTransaction();
+    if (!existingDocument) {
+        throw new FlierlyException('No documents found with given id', HttpCodes.BAD_REQUEST);
+    }
 
-    try {
-        // Fetch the existing document
-        const existingDocument = await model.findById(id, { _v: 0 }, { session, autopopulate: false })
-            .where("isDeleted", false)
-            .select(fieldPath)
-            .exec();
+    const existingArray: any[] = existingDocument[fieldPath] || [];
 
-        if (!existingDocument)
-            throw new FlierlyException('No documents found with given id', HttpCodes.BAD_REQUEST, '', '');
+    // Ensure only objectId is processed
+    if (dataType !== 'objectId') {
+        throw new FlierlyException('Update of non-objectId fields is not supported', HttpCodes.BAD_REQUEST);
+    }
 
-        const existingArray: any[] = existingDocument[fieldPath] || [];
+    // Process arrays for comparison
+    const { newEntries: itemsToAdd, removedEntries: itemsToRemove } = compareObjectIdArrays(existingArray, newArray);
 
-        // Process newArray items to ensure they are ObjectId or strings
-        const processedNewArray = Array.isArray(newArray) ? newArray.map(processItem).filter(Boolean) : [];
-
-        // Calculate items to add (new items not in existing array)
-        const itemsToAdd = processedNewArray.filter(item => !existingArray.includes(item));
-
-        // Calculate items to remove (items in existing array but not in the new array)
-        const itemsToRemove = existingArray.filter(item => !processedNewArray.includes(item));
-
-        // Perform $pull operation separately if needed
-        if (itemsToRemove.length > 0) {
-            await model.findByIdAndUpdate(id, {
-                $pull: { [fieldPath]: { $in: itemsToRemove } }
-            }, { session, autopopulate: false });
-        }
-
-        // Perform $addToSet operation separately if needed
-        if (itemsToAdd.length > 0) {
-            await model.findByIdAndUpdate(id, {
-                $addToSet: { [fieldPath]: { $each: itemsToAdd } }
-            }, { session, autopopulate: false });
-        }
-
-        const result = await model.findById(id, {}, { session, autopopulate: false }).exec();
-
-        await session.commitTransaction();
-        session.endSession();
-
+    // Determine if there are any updates to perform
+    if (itemsToAdd.length === 0 && itemsToRemove.length === 0) {
+        // console.timeEnd('updateArrayField');
         return res.status(HttpCodes.OK).json(
             apiResponse(
                 true,
-                result,
-                `Added ${itemsToAdd.length} and removed ${itemsToRemove.length} ${fieldPath}.`,
+                existingDocument,
+                'No changes to update.',
                 `${model.modelName.toLowerCase()}.updateArrayField`,
                 req.url,
                 null,
                 HttpCodes.OK, req, res
             )
         );
+    }
+
+    // Start session and transaction if there are updates
+    // console.time('updateDB');
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+        if (itemsToRemove.length > 0) {
+            await model.updateOne(
+                { _id: id },
+                { $pull: { [fieldPath]: { $in: itemsToRemove } } },
+                { session }
+            );
+        }
+
+        if (itemsToAdd.length > 0) {
+            await model.updateOne(
+                { _id: id },
+                { $addToSet: { [fieldPath]: { $each: itemsToAdd } } },
+                { session }
+            );
+        }
+
+        await session.commitTransaction();
     } catch (error) {
         await session.abortTransaction();
-        session.endSession();
         throw error;
+    } finally {
+        session.endSession();
+        // console.timeEnd('updateDB');
     }
+
+    // Fetch updated document
+    const result = await model.findById(id, {}, { autopopulate: false }).exec();
+
+    // console.timeEnd('updateArrayField');
+
+    return res.status(HttpCodes.OK).json(
+        apiResponse(
+            true,
+            result,
+            `Added ${itemsToAdd.length} and removed ${itemsToRemove.length} from ${fieldPath}.`,
+            `${model.modelName.toLowerCase()}.updateArrayField`,
+            req.url,
+            null,
+            HttpCodes.OK, req, res
+        )
+    );
 };
 
 export default updateArrayField;
