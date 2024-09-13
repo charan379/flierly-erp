@@ -17,8 +17,8 @@ class FlierlyException extends Error {
     constructor(
         message: string,
         httpCode: HttpCodes,
-        reason: string,
-        stack: string
+        reason: string = "",
+        stack: string = ""
 
     ) {
         // Call the base Error class constructor with the message
