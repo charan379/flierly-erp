@@ -13,7 +13,22 @@ const api = axios.create({
   },
 });
 
-const tableTransferService = {};
+const tableTransferService = {
+  // Fetch paginated documents
+  entityPage: async ({
+    entity,
+    pagination = { limit: 10, page: 1 },
+    filters = {},
+    sort = {},
+  }) => {
+    const promise = api.post(
+      `/${entity}/page`,
+      { filters, pagination, sort },
+      {}
+    );
+    return handleResponse({ promise });
+  },
+};
 
 export default tableTransferService;
 
