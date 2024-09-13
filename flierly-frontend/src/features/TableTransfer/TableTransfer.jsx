@@ -1,61 +1,45 @@
-import handleResponse from "@/utils/handlers/handleResponse";
-import { Table, Transfer } from "antd";
-import axios from "axios";
+import { ProTable } from "@ant-design/pro-components";
+import { Transfer } from "antd";
 import { difference, uniqBy } from "lodash";
 import React, { useEffect, useState } from "react";
+import tableTransferService from "./service";
+import privilegeColumns from "@/modules/iam/config/privilegeColumns";
+import Search from "./forms/Search";
 
 const TableTransfer = () => {
   const [targetKeys, setTargetKeys] = useState([]);
-
   const [dataSource, setDataSource] = useState([]);
   const [totalDataSource, setTotalDataSource] = useState([]);
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
+    total: 0,
   });
   const [loading, setLoading] = useState(false);
 
-  const fetch = async (params = pagination) => {
-    setLoading(true);
-    const request = axios.get("https://jsonplaceholder.typicode.com/posts", {
-      params: {
-        _start: (params.current - 1) * params.pageSize,
-        _limit: params.pageSize,
-      },
-    });
-
-    const responseData = await handleResponse({
-      promise: request,
-      notifyOnFailed: false,
-    });
-    // const responseData = await request;
-    setLoading(false);
-    setPagination((prev) => {
-      return { ...prev, total: 100 };
-    });
-
-    if (responseData && Array.isArray(responseData)) {
-      setDataSource(uniqBy(responseData, "id"));
-      setTotalDataSource(uniqBy(totalDataSource.concat(responseData), "id"));
-    }
-  };
-
-  const onChange = (keys) => {
-    setTargetKeys(keys);
-  };
-
   useEffect(() => {
-    fetch();
-
-    return () => {};
+    fetchData(
+      pagination,
+      setLoading,
+      setDataSource,
+      setTotalDataSource,
+      totalDataSource
+    );
   }, []);
+
+  const columnsToInclude = ["name", "code", "model", "access"];
+  const columns = privilegeColumns.filter((column) =>
+    columnsToInclude.includes(column.dataIndex)
+  );
 
   return (
     <Transfer
       dataSource={dataSource}
       targetKeys={targetKeys}
-      onChange={onChange}
-      rowKey={(record) => record.id}
+      onChange={setTargetKeys}
+      showSearch={false}
+      rowKey={(record) => record._id}
+      showSelectAll={false}
     >
       {({
         direction,
@@ -64,37 +48,13 @@ const TableTransfer = () => {
         selectedKeys: listSelectedKeys,
         disabled: listDisabled,
       }) => {
-        const rowSelection = {
-          getCheckboxProps: (item) => ({
-            disabled: listDisabled || item.disabled,
-          }),
-          onSelectAll(selected, selectedRows) {
-            const treeSelectedKeys = selectedRows
-              .filter((item) => !item.disabled)
-              .map(({ id }) => id);
-            const diffKeys = selected
-              ? difference(treeSelectedKeys, listSelectedKeys)
-              : difference(listSelectedKeys, treeSelectedKeys);
-            onItemSelectAll(diffKeys, selected);
-          },
-          onSelect({ id }, selected) {
-            onItemSelect(id, selected);
-          },
-          selectedRowKeys: listSelectedKeys,
-          selections: [
-            Table.SELECTION_ALL,
-            Table.SELECTION_INVERT,
-            Table.SELECTION_NONE,
-          ],
-        };
-
-        const handleTableChange = (paginationObj) => {
-          if (direction === "left") {
-            const pager = { ...pagination, current: paginationObj.current };
-            setPagination(pager);
-            fetch(paginationObj);
-          }
-        };
+        const rowSelection = getRowSelection(
+          direction,
+          listDisabled,
+          listSelectedKeys,
+          onItemSelectAll,
+          onItemSelect
+        );
 
         const rightDataSource = totalDataSource.filter((item) =>
           targetKeys.includes(item.id)
@@ -106,41 +66,61 @@ const TableTransfer = () => {
         }));
 
         return (
-          <Table
+          <ProTable
             rowSelection={{
               ...rowSelection,
-              columnWidth: "5px",
+              columnWidth: "8%",
               fixed: true,
               type: "checkbox",
+              alwaysShowAlert: false,
             }}
-            columns={[
-              {
-                dataIndex: "id",
-                title: "ID",
-                width: "10px",
-              },
-              {
-                dataIndex: "title",
-                title: "Title",
-                width: "10px",
-              },
-            ]}
-            scroll={{
-              scrollToFirstRowOnChange: true,
-              y: 300,
+            options={{
+              density: false,
+              fullScreen: false,
+              reload: false,
+              setting: false,
+              search: false,
             }}
+            tableAlertRender={false}
+            columns={columns}
+            scroll={{ scrollToFirstRowOnChange: true, y: 250 }}
+            showSorterTooltip={{ target: "sorter-icon" }}
+            sortDirections={["ascend", "descend"]}
+            search={false}
             loading={direction === "left" && loading}
             dataSource={direction === "left" ? leftDataSource : rightDataSource}
             size="small"
-            rowKey={"id"}
+            rowKey={"_id"}
             onRow={({ id, disabled: itemDisabled }) => ({
               onClick: () => {
                 if (itemDisabled) return;
                 onItemSelect(id, !listSelectedKeys.includes(id));
               },
             })}
-            onChange={handleTableChange}
-            pagination={direction === "left" ? pagination : true}
+            onChange={(paginationObj) =>
+              handleTableChange(
+                paginationObj,
+                direction,
+                pagination,
+                setPagination,
+                fetchData
+              )
+            }
+            pagination={
+              direction === "left"
+                ? {
+                    ...pagination,
+                    showSizeChanger: true,
+                    pageSizeOptions: [5, 10, 20, 30, 50, 100],
+                    defaultPageSize: 10,
+                  }
+                : {
+                    showSizeChanger: true,
+                    pageSizeOptions: [5, 10, 20, 30, 50, 100],
+                    defaultPageSize: 10,
+                  }
+            }
+            tableExtraRender={() => <Search />}
           />
         );
       }}
@@ -149,3 +129,73 @@ const TableTransfer = () => {
 };
 
 export default TableTransfer;
+
+// Fetch data from the service
+const fetchData = async (
+  params,
+  setLoading,
+  setPagination,
+  setDataSource,
+  setTotalDataSource,
+  totalDataSource
+) => {
+  setLoading(true);
+  const response = await tableTransferService.entityPage({
+    entity: "privilege",
+    pagination: {
+      page: params.current,
+      limit: params.pageSize,
+    },
+  });
+
+  if (Array.isArray(response?.result?.data)) {
+    setDataSource(uniqBy(response.result.data, "_id"));
+    setTotalDataSource(
+      uniqBy(totalDataSource.concat(response.result.data), "_id")
+    );
+  }
+
+
+  setLoading(false);
+};
+
+// Handle row selection logic
+const getRowSelection = (
+  direction,
+  listDisabled,
+  listSelectedKeys,
+  onItemSelectAll,
+  onItemSelect
+) => ({
+  getCheckboxProps: (item) => ({
+    disabled: direction === "left" ? listDisabled || item.disabled : false,
+  }),
+  onSelectAll(selected, selectedRows) {
+    const treeSelectedKeys = selectedRows
+      .filter((item) => !item.disabled)
+      .map(({ id }) => id);
+    const diffKeys = selected
+      ? difference(treeSelectedKeys, listSelectedKeys)
+      : difference(listSelectedKeys, treeSelectedKeys);
+    onItemSelectAll(diffKeys, selected);
+  },
+  onSelect({ id }, selected) {
+    onItemSelect(id, selected);
+  },
+  selectedRowKeys: listSelectedKeys,
+});
+
+// Handle table pagination and re-fetch data
+const handleTableChange = (
+  paginationObj,
+  direction,
+  pagination,
+  setPagination,
+  fetch
+) => {
+  if (direction === "left") {
+    const pager = { ...pagination, current: paginationObj.current };
+    setPagination(pager);
+    fetch(paginationObj);
+  }
+};
