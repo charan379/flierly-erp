@@ -3,14 +3,19 @@ import { Transfer } from "antd";
 import { difference, uniqBy } from "lodash";
 import React, { useEffect, useState } from "react";
 import tableTransferService from "./service";
-import privilegeColumns from "@/modules/iam/config/privilegeColumns";
 import Search from "./forms/Search";
-import useTableTransferContext from "./hooks/useTableTransferContext";
 
-const TableTransfer = () => {
-  const [targetKeys, setTargetKeys] = useState([]);
+const TableTransfer = ({
+  entity,
+  entityColumns,
+  columnsToInclude,
+  existingRightDataSource,
+  targetKeys,
+  onTargetKeysChange
+}) => {
+  // State variables for managing data, pagination, and loading state
   const [dataSource, setDataSource] = useState([]);
-  const [totalDataSource, setTotalDataSource] = useState([]);
+  const [totalDataSource, setTotalDataSource] = useState(existingRightDataSource);
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -18,52 +23,55 @@ const TableTransfer = () => {
   });
   const [loading, setLoading] = useState(false);
 
-  // const { tableTransferContextHandler: context } = useTableTransferContext();
-
-  // Fetch data from the service
-  const fetchleftData = async ({ pager } = { pager: pagination }) => {
-    // context.startLoading();
+  // Fetch data for the left table
+  const fetchLeftData = async ({ pager } = { pager: pagination }) => {
     setLoading(true);
-    console.log(pager);
+    
     const response = await tableTransferService.entityPage({
-      entity: "privilege",
+      entity,
       pagination: {
         page: pager.current,
         limit: pager.pageSize,
       },
     });
 
-    // context.pagination.setTotal(response?.result?.totalResults);
-    setPagination((prev) => ({ ...prev, total: response.result.totalResults }));
+    // Update pagination total count and append fetched data to the total data source
+    setPagination((prev) => ({ ...prev, total: response?.result?.totalResults ?? 0 }));
 
     if (Array.isArray(response?.result?.data)) {
       setDataSource(response.result.data);
-      setTotalDataSource(
-        uniqBy(totalDataSource.concat(response.result.data), "_id")
-      );
+      setTotalDataSource((prev) => uniqBy(prev.concat(response.result.data), "_id"));
     }
 
-    // context.stopLoading();
     setLoading(false);
   };
 
+  // Initial data fetch on component mount
   useEffect(() => {
-    fetchleftData();
+    fetchLeftData();
   }, []);
 
-  const columnsToInclude = ["name", "model", "access"];
-  const columns = privilegeColumns.filter((column) =>
+  // Filter columns to include in the ProTable
+  const columns = entityColumns.filter((column) =>
     columnsToInclude.includes(column.dataIndex)
   );
 
   return (
     <Transfer
-      dataSource={dataSource}
+      dataSource={totalDataSource}
       targetKeys={targetKeys}
-      onChange={setTargetKeys}
+      onChange={onTargetKeysChange}
       showSearch={false}
       rowKey={(record) => record._id}
-      showSelectAll={true}
+      showSelectAll={false}
+      titles={["Left Data", "Right Data"]}
+      selectAllLabels={[
+        ({ selectedCount }) => (
+          <span>
+            {selectedCount > 0 ? `${selectedCount} items selected` : ""}
+          </span>
+        ),
+      ]}
     >
       {({
         direction,
@@ -72,14 +80,14 @@ const TableTransfer = () => {
         selectedKeys: listSelectedKeys,
         disabled: listDisabled,
       }) => {
+        // Row selection configuration for the ProTable
         const rowSelection = {
           getCheckboxProps: (item) => ({
-            disabled:
-              direction === "left" ? listDisabled || item.disabled : false,
+            disabled: direction === "left" ? listDisabled || item.disabled : false,
           }),
           onSelectAll(selected, selectedRows) {
             const treeSelectedKeys = selectedRows
-              .filter((item) => !item.disabled)
+              .filter((item) => item && !item.disabled)
               .map(({ _id }) => _id);
             const diffKeys = selected
               ? difference(treeSelectedKeys, listSelectedKeys)
@@ -92,10 +100,12 @@ const TableTransfer = () => {
           selectedRowKeys: listSelectedKeys,
         };
 
+        // Filter the data for the right table (selected items)
         const rightDataSource = totalDataSource.filter((item) =>
           targetKeys.includes(item._id)
         );
 
+        // Disable items in the left table that are already selected
         const leftDataSource = dataSource.map((item) => ({
           ...item,
           disabled: targetKeys.includes(item._id),
@@ -103,6 +113,7 @@ const TableTransfer = () => {
 
         return (
           <ProTable
+            className="table-transfer-flierly-1"
             rowSelection={{
               ...rowSelection,
               columnWidth: "8%",
@@ -119,7 +130,10 @@ const TableTransfer = () => {
             }}
             tableAlertRender={false}
             columns={columns}
-            scroll={{ scrollToFirstRowOnChange: true, y: direction === "left" ? 250 : 300 }}
+            scroll={{
+              scrollToFirstRowOnChange: true,
+              y: direction === "left" ? 250 : 300,
+            }}
             showSorterTooltip={{ target: "sorter-icon" }}
             sortDirections={["ascend", "descend"]}
             search={false}
@@ -129,20 +143,18 @@ const TableTransfer = () => {
             rowKey={"_id"}
             onRow={({ _id, disabled: itemDisabled }) => ({
               onClick: () => {
-                if (itemDisabled) return;
+                if (direction === "left" && itemDisabled) return;
                 onItemSelect(_id, !listSelectedKeys.includes(_id));
               },
             })}
-            onChange={(pagination, filters, sorter, extra) => {
-              // console.log({ pagination, filters, sorter, extra });
-              // context.pagination.setCurrent(pagination.current);
-              // context.pagination.setSize(pagination.pageSize);
+            onChange={(pagination) => {
+              // Update pagination state and refetch data on page change
               setPagination((prev) => ({
                 ...prev,
                 current: pagination.current,
                 pageSize: pagination.pageSize,
               }));
-              fetchleftData({ pager: pagination });
+              fetchLeftData({ pager: pagination });
             }}
             pagination={
               direction === "left"
@@ -154,7 +166,9 @@ const TableTransfer = () => {
                   }
                 : false
             }
-            tableExtraRender={direction === "left" ? () => <Search /> : () => {}}
+            tableExtraRender={
+              direction === "left" ? () => <Search /> : null
+            }
           />
         );
       }}
