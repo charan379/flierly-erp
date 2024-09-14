@@ -13,7 +13,7 @@ const handleSuccessNotification = (notifyType, httpCode, message) => {
   switch (notifyType) {
     case "toast":
       notification.config({
-        duration: 2, // Duration the notification will be displayed
+        duration: 3, // Duration the notification will be displayed
         maxCount: 3, // Maximum number of notifications displayed at once
       });
       notification.success({
