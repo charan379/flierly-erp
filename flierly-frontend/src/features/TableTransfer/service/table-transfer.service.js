@@ -28,6 +28,21 @@ const tableTransferService = {
     );
     return handleResponse({ promise });
   },
+
+  // Update Array field
+  updateArrayField: async ({ entity, id, fieldPath, dataType, newArray }) => {
+    const promise = api.put(
+      `${entity}/update-array-field`,
+      {
+        id,
+        fieldPath,
+        dataType,
+        newArray,
+      },
+      {}
+    );
+    return handleResponse({ promise, notifyOnSuccess: true });
+  },
 };
 
 export default tableTransferService;
