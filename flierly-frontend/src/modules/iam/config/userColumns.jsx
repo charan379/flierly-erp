@@ -2,9 +2,9 @@ import ShuttleModal from "@/components/ShuttleModal";
 import CustomAntDSelectTag from "@/features/SelectRemoteOptions/components/CustomAntDSelectTag";
 import selectRemoteOptionsService from "@/features/SelectRemoteOptions/service";
 import TableTransfer from "@/features/TableTransfer";
+import TableTransferContextProvider from "@/features/TableTransfer/components/TableTransferContextProvider/TableTransferContextProvider";
 import hasOwnProperty from "@/utils/hasOwnProperty";
 import { Badge, Button, Tag } from "antd";
-import { useState } from "react";
 
 const userColumns = [
   // {
@@ -180,11 +180,13 @@ const userColumns = [
     width: 10,
     hideInTable: false,
     render: (text, record, index, action) => {
-      if ( hasOwnProperty(record, "additionalPrivileges") && Array.isArray(record.additionalPrivileges) ) {
+      if (hasOwnProperty(record, "additionalPrivileges") && Array.isArray(record.additionalPrivileges)) {
         return (
           <Badge count={record.additionalPrivileges.length}>
             <ShuttleModal>
-              <TableTransfer />
+              <TableTransferContextProvider>
+                <TableTransfer />
+              </TableTransferContextProvider>
             </ShuttleModal>
           </Badge>
         );

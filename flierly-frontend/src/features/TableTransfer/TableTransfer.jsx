@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import tableTransferService from "./service";
 import privilegeColumns from "@/modules/iam/config/privilegeColumns";
 import Search from "./forms/Search";
+import useTableTransferContext from "./hooks/useTableTransferContext";
 
 const TableTransfer = () => {
   const [targetKeys, setTargetKeys] = useState([]);
@@ -17,17 +18,40 @@ const TableTransfer = () => {
   });
   const [loading, setLoading] = useState(false);
 
+  // const { tableTransferContextHandler: context } = useTableTransferContext();
+
+  // Fetch data from the service
+  const fetchleftData = async ({ pager } = { pager: pagination }) => {
+    // context.startLoading();
+    setLoading(true);
+    console.log(pager);
+    const response = await tableTransferService.entityPage({
+      entity: "privilege",
+      pagination: {
+        page: pager.current,
+        limit: pager.pageSize,
+      },
+    });
+
+    // context.pagination.setTotal(response?.result?.totalResults);
+    setPagination((prev) => ({ ...prev, total: response.result.totalResults }));
+
+    if (Array.isArray(response?.result?.data)) {
+      setDataSource(response.result.data);
+      setTotalDataSource(
+        uniqBy(totalDataSource.concat(response.result.data), "_id")
+      );
+    }
+
+    // context.stopLoading();
+    setLoading(false);
+  };
+
   useEffect(() => {
-    fetchData(
-      pagination,
-      setLoading,
-      setDataSource,
-      setTotalDataSource,
-      totalDataSource
-    );
+    fetchleftData();
   }, []);
 
-  const columnsToInclude = ["name", "code", "model", "access"];
+  const columnsToInclude = ["name", "model", "access"];
   const columns = privilegeColumns.filter((column) =>
     columnsToInclude.includes(column.dataIndex)
   );
@@ -39,7 +63,7 @@ const TableTransfer = () => {
       onChange={setTargetKeys}
       showSearch={false}
       rowKey={(record) => record._id}
-      showSelectAll={false}
+      showSelectAll={true}
     >
       {({
         direction,
@@ -48,21 +72,33 @@ const TableTransfer = () => {
         selectedKeys: listSelectedKeys,
         disabled: listDisabled,
       }) => {
-        const rowSelection = getRowSelection(
-          direction,
-          listDisabled,
-          listSelectedKeys,
-          onItemSelectAll,
-          onItemSelect
-        );
+        const rowSelection = {
+          getCheckboxProps: (item) => ({
+            disabled:
+              direction === "left" ? listDisabled || item.disabled : false,
+          }),
+          onSelectAll(selected, selectedRows) {
+            const treeSelectedKeys = selectedRows
+              .filter((item) => !item.disabled)
+              .map(({ _id }) => _id);
+            const diffKeys = selected
+              ? difference(treeSelectedKeys, listSelectedKeys)
+              : difference(listSelectedKeys, treeSelectedKeys);
+            onItemSelectAll(diffKeys, selected);
+          },
+          onSelect({ _id }, selected) {
+            onItemSelect(_id, selected);
+          },
+          selectedRowKeys: listSelectedKeys,
+        };
 
         const rightDataSource = totalDataSource.filter((item) =>
-          targetKeys.includes(item.id)
+          targetKeys.includes(item._id)
         );
 
         const leftDataSource = dataSource.map((item) => ({
           ...item,
-          disabled: targetKeys.includes(item.id),
+          disabled: targetKeys.includes(item._id),
         }));
 
         return (
@@ -83,7 +119,7 @@ const TableTransfer = () => {
             }}
             tableAlertRender={false}
             columns={columns}
-            scroll={{ scrollToFirstRowOnChange: true, y: 250 }}
+            scroll={{ scrollToFirstRowOnChange: true, y: direction === "left" ? 250 : 300 }}
             showSorterTooltip={{ target: "sorter-icon" }}
             sortDirections={["ascend", "descend"]}
             search={false}
@@ -91,21 +127,23 @@ const TableTransfer = () => {
             dataSource={direction === "left" ? leftDataSource : rightDataSource}
             size="small"
             rowKey={"_id"}
-            onRow={({ id, disabled: itemDisabled }) => ({
+            onRow={({ _id, disabled: itemDisabled }) => ({
               onClick: () => {
                 if (itemDisabled) return;
-                onItemSelect(id, !listSelectedKeys.includes(id));
+                onItemSelect(_id, !listSelectedKeys.includes(_id));
               },
             })}
-            onChange={(paginationObj) =>
-              handleTableChange(
-                paginationObj,
-                direction,
-                pagination,
-                setPagination,
-                fetchData
-              )
-            }
+            onChange={(pagination, filters, sorter, extra) => {
+              // console.log({ pagination, filters, sorter, extra });
+              // context.pagination.setCurrent(pagination.current);
+              // context.pagination.setSize(pagination.pageSize);
+              setPagination((prev) => ({
+                ...prev,
+                current: pagination.current,
+                pageSize: pagination.pageSize,
+              }));
+              fetchleftData({ pager: pagination });
+            }}
             pagination={
               direction === "left"
                 ? {
@@ -114,13 +152,9 @@ const TableTransfer = () => {
                     pageSizeOptions: [5, 10, 20, 30, 50, 100],
                     defaultPageSize: 10,
                   }
-                : {
-                    showSizeChanger: true,
-                    pageSizeOptions: [5, 10, 20, 30, 50, 100],
-                    defaultPageSize: 10,
-                  }
+                : false
             }
-            tableExtraRender={() => <Search />}
+            tableExtraRender={direction === "left" ? () => <Search /> : () => {}}
           />
         );
       }}
@@ -129,73 +163,3 @@ const TableTransfer = () => {
 };
 
 export default TableTransfer;
-
-// Fetch data from the service
-const fetchData = async (
-  params,
-  setLoading,
-  setPagination,
-  setDataSource,
-  setTotalDataSource,
-  totalDataSource
-) => {
-  setLoading(true);
-  const response = await tableTransferService.entityPage({
-    entity: "privilege",
-    pagination: {
-      page: params.current,
-      limit: params.pageSize,
-    },
-  });
-
-  if (Array.isArray(response?.result?.data)) {
-    setDataSource(uniqBy(response.result.data, "_id"));
-    setTotalDataSource(
-      uniqBy(totalDataSource.concat(response.result.data), "_id")
-    );
-  }
-
-
-  setLoading(false);
-};
-
-// Handle row selection logic
-const getRowSelection = (
-  direction,
-  listDisabled,
-  listSelectedKeys,
-  onItemSelectAll,
-  onItemSelect
-) => ({
-  getCheckboxProps: (item) => ({
-    disabled: direction === "left" ? listDisabled || item.disabled : false,
-  }),
-  onSelectAll(selected, selectedRows) {
-    const treeSelectedKeys = selectedRows
-      .filter((item) => !item.disabled)
-      .map(({ id }) => id);
-    const diffKeys = selected
-      ? difference(treeSelectedKeys, listSelectedKeys)
-      : difference(listSelectedKeys, treeSelectedKeys);
-    onItemSelectAll(diffKeys, selected);
-  },
-  onSelect({ id }, selected) {
-    onItemSelect(id, selected);
-  },
-  selectedRowKeys: listSelectedKeys,
-});
-
-// Handle table pagination and re-fetch data
-const handleTableChange = (
-  paginationObj,
-  direction,
-  pagination,
-  setPagination,
-  fetch
-) => {
-  if (direction === "left") {
-    const pager = { ...pagination, current: paginationObj.current };
-    setPagination(pager);
-    fetch(paginationObj);
-  }
-};
