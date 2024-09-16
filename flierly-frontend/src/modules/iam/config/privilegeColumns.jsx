@@ -36,33 +36,6 @@ const privilegeColumns = [
     dataIndex: "access",
     copyable: false,
     width: 5,
-    filters: true,
-    filterSearch: true,
-    filterMode: "menu",
-    onFilter: false,
-    valueType: "select",
-    valueEnum: {
-      Create: {
-        text: "Create",
-        status: "Success",
-      },
-      Read: {
-        text: "Read",
-        status: "Default",
-      },
-      Manage: {
-        text: "Manage",
-        status: "Warning",
-      },
-      Delete: {
-        text: "Delete",
-        status: "Error",
-      },
-      Update: {
-        text: "Update",
-        status: "Processing",
-      },
-    },
     queryFormConfig: {
       name: "access",
       label: "access",
@@ -130,14 +103,6 @@ const privilegeColumns = [
             }
           },
           debounceTimeout: 300,
-          // labelRender: (props) => {
-          //   console.log(props);
-          //   return <Tag>sdfsdf</Tag>;
-          // },
-          // optionRender: (option, info) => {
-          //   console.log(JSON.stringify(option), info);
-          //   return <Tag>sdfsdf</Tag>;
-          // },
         },
       },
     },
