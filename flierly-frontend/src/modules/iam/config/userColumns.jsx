@@ -179,20 +179,30 @@ const userColumns = [
     width: 10,
     hideInTable: false,
     render: (text, record, index, action) => {
-      console.log(action);
-      if ( hasOwnProperty(record, "additionalPrivileges") && Array.isArray(record.additionalPrivileges)) {
+      if (hasOwnProperty(record, "additionalPrivileges") && Array.isArray(record.additionalPrivileges)) {
         return (
           <TableTransferShuttle
-            entity="privilege"
-            entityColumns={privilegeColumns}
-            columnsToInclude={["name", "access", "model"]}
-            existingRightDataSource={record.additionalPrivileges}
-            targetKeys={record.additionalPrivileges.map((privilege) => privilege?._id)}
-            fieldName="additionalPrivileges"
-            recordId={record?._id}
-            parentTableEntity="user"
-            onSuccess={() => action.reload()}
-            targetKeysDataType="objectId"
+            title="user_additional_privileges"
+            triggerConfig={{ buttonType: "link", text: "additional_privileges" }}
+            requestConfig={{
+              recordId: record?._id,
+              entityName: "user",
+              fieldDataType: "objectId",
+              fieldName: "additionalPrivileges",
+              onSuccess: () => {
+                setTimeout(() => {
+                  action.reload()
+                }, 300);
+              },
+            }}
+            tableConfig={{
+              entityName: "privilege",
+              columns: privilegeColumns,
+              columnsToDisplay: ["name", "access", "model"],
+              targetKeys: record.additionalPrivileges.map((privilege) => privilege?._id),
+              existingDataSource: record.additionalPrivileges,
+              rowKey: '_id'
+            }}
           />
         );
       } else {

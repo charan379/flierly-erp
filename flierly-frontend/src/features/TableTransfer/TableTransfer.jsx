@@ -4,18 +4,20 @@ import { difference, uniqBy } from "lodash";
 import React, { useEffect, useState } from "react";
 import tableTransferService from "./service";
 import Search from "./forms/Search";
+import hasOwnProperty from "@/utils/hasOwnProperty";
 
 const TableTransfer = ({
-  entity,
-  entityColumns,
-  columnsToInclude,
-  existingRightDataSource,
-  targetKeys,
+  entityName,
+  columns,
+  columnsToDisplay,
+  existingDataSource = [],
+  rowKey = '_id',
+  targetKeys = [],
   onTargetKeysChange
 }) => {
   // State variables for managing data, pagination, and loading state
   const [dataSource, setDataSource] = useState([]);
-  const [totalDataSource, setTotalDataSource] = useState(existingRightDataSource);
+  const [totalDataSource, setTotalDataSource] = useState(existingDataSource);
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -26,9 +28,9 @@ const TableTransfer = ({
   // Fetch data for the left table
   const fetchLeftData = async ({ pager } = { pager: pagination }) => {
     setLoading(true);
-    
+
     const response = await tableTransferService.entityPage({
-      entity,
+      entity: entityName,
       pagination: {
         page: pager.current,
         limit: pager.pageSize,
@@ -52,9 +54,9 @@ const TableTransfer = ({
   }, []);
 
   // Filter columns to include in the ProTable
-  const columns = entityColumns.filter((column) =>
-    columnsToInclude.includes(column.dataIndex)
-  );
+  const leftColumns = columns.filter((column) => columnsToDisplay.includes(column.dataIndex));
+
+  const rightColumns = leftColumns.map((column) => hasOwnProperty(column, 'sorter') ? { ...column, sorter: false } : column);
 
   return (
     <Transfer
@@ -62,9 +64,9 @@ const TableTransfer = ({
       targetKeys={targetKeys}
       onChange={onTargetKeysChange}
       showSearch={false}
-      rowKey={(record) => record._id}
+      rowKey={(record) => record[rowKey]}
       showSelectAll={false}
-      titles={["Left Data", "Right Data"]}
+      titles={["Available Data", "Selected Data"]}
       selectAllLabels={[
         ({ selectedCount }) => (
           <span>
@@ -88,27 +90,27 @@ const TableTransfer = ({
           onSelectAll(selected, selectedRows) {
             const treeSelectedKeys = selectedRows
               .filter((item) => item && !item.disabled)
-              .map(({ _id }) => _id);
+              .map(({ [rowKey]: key }) => key);
             const diffKeys = selected
               ? difference(treeSelectedKeys, listSelectedKeys)
               : difference(listSelectedKeys, treeSelectedKeys);
             onItemSelectAll(diffKeys, selected);
           },
-          onSelect({ _id }, selected) {
-            onItemSelect(_id, selected);
+          onSelect({ [rowKey]: key }, selected) {
+            onItemSelect(key, selected);
           },
           selectedRowKeys: listSelectedKeys,
         };
 
         // Filter the data for the right table (selected items)
         const rightDataSource = totalDataSource.filter((item) =>
-          targetKeys.includes(item._id)
+          targetKeys.includes(item[rowKey])
         );
 
         // Disable items in the left table that are already selected
         const leftDataSource = dataSource.map((item) => ({
           ...item,
-          disabled: targetKeys.includes(item._id),
+          disabled: targetKeys.includes(item[rowKey]),
         }));
 
         return (
@@ -129,7 +131,7 @@ const TableTransfer = ({
               search: false,
             }}
             tableAlertRender={false}
-            columns={columns}
+            columns={direction === 'left' ? leftColumns : rightColumns}
             scroll={{
               scrollToFirstRowOnChange: true,
               y: direction === "left" ? 250 : 300,
@@ -140,11 +142,11 @@ const TableTransfer = ({
             loading={direction === "left" && loading}
             dataSource={direction === "left" ? leftDataSource : rightDataSource}
             size="small"
-            rowKey={"_id"}
-            onRow={({ _id, disabled: itemDisabled }) => ({
+            rowKey={rowKey}
+            onRow={({ [rowKey]: key, disabled: itemDisabled }) => ({
               onClick: () => {
                 if (direction === "left" && itemDisabled) return;
-                onItemSelect(_id, !listSelectedKeys.includes(_id));
+                onItemSelect(key, !listSelectedKeys.includes(key));
               },
             })}
             onChange={(pagination) => {
@@ -159,11 +161,11 @@ const TableTransfer = ({
             pagination={
               direction === "left"
                 ? {
-                    ...pagination,
-                    showSizeChanger: true,
-                    pageSizeOptions: [5, 10, 20, 30, 50, 100],
-                    defaultPageSize: 10,
-                  }
+                  ...pagination,
+                  showSizeChanger: true,
+                  pageSizeOptions: [5, 10, 20, 30, 50, 100],
+                  defaultPageSize: 10,
+                }
                 : false
             }
             tableExtraRender={
