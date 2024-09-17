@@ -10,7 +10,7 @@ import {
 } from "@ant-design/pro-components";
 import React from "react";
 
-const FormField = ({ key, config }) => {
+const FormField = ({ key, config, showLabel = true }) => {
   const { translate } = useLocale();
   const { name, label, rules = [], input } = config;
 
@@ -43,7 +43,7 @@ const FormField = ({ key, config }) => {
     <FormComponent
       key={key ?? name}
       name={name}
-      label={translate(label)}
+      label={showLabel ? translate(label) : null}
       rules={rules}
       {...(select || {})}
       transformer={transformer}
