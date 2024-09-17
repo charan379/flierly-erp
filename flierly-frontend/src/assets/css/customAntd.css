@@ -162,6 +162,22 @@ h6 {
   margin-block-end: 5px;
 }
 
+#table-transfer-search-form {
+  padding: 5px 5px 0px 5px;
+  margin-bottom: -10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+#table-transfer-search-form > .ant-space-compact > .ant-form-item:not(:last-child) {
+  margin-inline-end: 0px;
+}
+
 @media only screen and (max-width: 576px) {
   .crud-data-table-flierly-1 .ant-pagination .ant-pagination-options {
     display: block;
