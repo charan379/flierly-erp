@@ -20,8 +20,9 @@ const SelectRemoteOptions = ({
       asyncOptionsFetcher(value).then((newOptions) => {
         if (fetchId !== fetchRef.current) return;
         setOptions(newOptions);
+      }).finally(() => {
         setFetching(false);
-      });
+      })
     };
     return debounce(loadOptions, debounceTimeout);
   }, [asyncOptionsFetcher, debounceTimeout]);
@@ -45,11 +46,13 @@ const SelectRemoteOptions = ({
         }
       }}
       options={options}
-      loading={true}
+      loading={fetching}
       dropdownRender={(menu) => {
         return fetching ? <Loader /> : menu;
       }}
+      style={{ width: "100%" }}
       notFoundContent={<Empty />}
+      maxTagCount='responsive'
       {...props}
     />
   );
