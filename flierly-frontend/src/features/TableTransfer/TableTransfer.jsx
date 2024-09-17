@@ -1,7 +1,7 @@
 import { ProTable } from "@ant-design/pro-components";
 import { Transfer } from "antd";
 import { difference, uniqBy } from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import tableTransferService from "./service";
 import Search from "./forms/Search";
 import hasOwnProperty from "@/utils/hasOwnProperty";
@@ -11,9 +11,9 @@ const TableTransfer = ({
   columns,
   columnsToDisplay,
   existingDataSource = [],
-  rowKey = '_id',
+  rowKey = "_id",
   targetKeys = [],
-  onTargetKeysChange
+  onTargetKeysChange,
 }) => {
   // State variables for managing data, pagination, and loading state
   const [dataSource, setDataSource] = useState([]);
@@ -24,29 +24,43 @@ const TableTransfer = ({
     total: 0,
   });
   const [loading, setLoading] = useState(false);
+  const [sorter, setSorter] = useState({});
+  const [filters, setFilters] = useState({});
+  const actionRef = useRef();
 
   // Fetch data for the left table
-  const fetchLeftData = async ({ pager } = { pager: pagination }) => {
+  async function fetchLeftData({ pager, sort, filter } = {pager: pagination, sort: sorter, filter: filters}) {
     setLoading(true);
-
+    console.log({pager, sort, filter})
     const response = await tableTransferService.entityPage({
       entity: entityName,
+      sort: sort,
+      filters: filter,
       pagination: {
-        page: pager.current,
-        limit: pager.pageSize,
+        page: pager?.current ?? pagination.current,
+        limit: pager?.pageSize ?? pagination.pageSize,
       },
     });
 
     // Update pagination total count and append fetched data to the total data source
-    setPagination((prev) => ({ ...prev, total: response?.result?.totalResults ?? 0 }));
+    setPagination((prev) => ({
+      ...prev,
+      total: response?.result?.totalResults ?? 0,
+    }));
+
+    if (sort) setSorter(sort);
+
+    if (filter) setFilters(filter);
 
     if (Array.isArray(response?.result?.data)) {
       setDataSource(response.result.data);
-      setTotalDataSource((prev) => uniqBy(prev.concat(response.result.data), "_id"));
+      setTotalDataSource((prev) =>
+        uniqBy(prev.concat(response.result.data), "_id")
+      );
     }
 
     setLoading(false);
-  };
+  }
 
   // Initial data fetch on component mount
   useEffect(() => {
@@ -54,10 +68,17 @@ const TableTransfer = ({
   }, []);
 
   // Filter columns to include in the ProTable
-  const leftColumns = columns.filter((column) => columnsToDisplay.includes(column.dataIndex));
+  const leftColumns = columns.filter((column) =>
+    columnsToDisplay.includes(column.dataIndex)
+  );
 
-  const rightColumns = leftColumns.map((column) => hasOwnProperty(column, 'sorter') ? { ...column, sorter: false } : column);
+  const rightColumns = leftColumns.map((column) =>
+    hasOwnProperty(column, "sorter") ? { ...column, sorter: false } : column
+  );
 
+  const handleFiltersChange = (filters) => {
+    if(filters?.field !== undefined) fetchLeftData({filter: {[filters.field]: filters[filters.field]}})
+  };
   return (
     <Transfer
       dataSource={totalDataSource}
@@ -85,7 +106,8 @@ const TableTransfer = ({
         // Row selection configuration for the ProTable
         const rowSelection = {
           getCheckboxProps: (item) => ({
-            disabled: direction === "left" ? listDisabled || item.disabled : false,
+            disabled:
+              direction === "left" ? listDisabled || item.disabled : false,
           }),
           onSelectAll(selected, selectedRows) {
             const treeSelectedKeys = selectedRows
@@ -115,6 +137,7 @@ const TableTransfer = ({
 
         return (
           <ProTable
+            actionRef={actionRef}
             className="table-transfer-flierly-1"
             rowSelection={{
               ...rowSelection,
@@ -131,7 +154,7 @@ const TableTransfer = ({
               search: false,
             }}
             tableAlertRender={false}
-            columns={direction === 'left' ? leftColumns : rightColumns}
+            columns={direction === "left" ? leftColumns : rightColumns}
             scroll={{
               scrollToFirstRowOnChange: true,
               y: direction === "left" ? 250 : 300,
@@ -149,27 +172,44 @@ const TableTransfer = ({
                 onItemSelect(key, !listSelectedKeys.includes(key));
               },
             })}
-            onChange={(pagination) => {
+            onChange={(pagination, filters, sort, extra) => {
               // Update pagination state and refetch data on page change
-              setPagination((prev) => ({
-                ...prev,
-                current: pagination.current,
-                pageSize: pagination.pageSize,
-              }));
-              fetchLeftData({ pager: pagination });
+              switch (extra.action) {
+                case "paginate":
+                  setPagination((prev) => ({
+                    ...prev,
+                    current: pagination.current,
+                    pageSize: pagination.pageSize,
+                  }));
+                  fetchLeftData({ pager: pagination });
+                  break;
+                case "sort":
+                  const srt =
+                    sort.order !== undefined && sort.field !== undefined
+                      ? { [sort.field]: sort.order }
+                      : {};
+                  fetchLeftData({ sort: srt });
+                  break;
+                default:
+                  break;
+              }
             }}
             pagination={
               direction === "left"
                 ? {
-                  ...pagination,
-                  showSizeChanger: true,
-                  pageSizeOptions: [5, 10, 20, 30, 50, 100],
-                  defaultPageSize: 10,
-                }
+                    ...pagination,
+                    showSizeChanger: true,
+                    pageSizeOptions: [5, 10, 20, 30, 50, 100],
+                    defaultPageSize: 10,
+                  }
                 : false
             }
             tableExtraRender={
-              direction === "left" ? () => <Search columns={columns} /> : null
+              direction === "left"
+                ? () => (
+                    <Search columns={columns} onSearch={handleFiltersChange} />
+                  )
+                : null
             }
           />
         );
