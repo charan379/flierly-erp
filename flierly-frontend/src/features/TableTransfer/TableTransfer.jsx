@@ -169,7 +169,7 @@ const TableTransfer = ({
                 : false
             }
             tableExtraRender={
-              direction === "left" ? () => <Search /> : null
+              direction === "left" ? () => <Search columns={columns} /> : null
             }
           />
         );

@@ -1,38 +1,47 @@
-import { ProForm, ProFormSelect, ProFormText } from "@ant-design/pro-components";
-import { Flex, Space } from "antd";
+import { ProForm, ProFormDependency, ProFormSelect, ProFormText } from "@ant-design/pro-components";
+import { Space } from "antd";
 import React from "react";
+import FormField from "@/components/FormField";
+import hasOwnProperty from "@/utils/hasOwnProperty";
+import getColumnQueryConfig from "@/utils/getColumnQueryConfig";
 
-const Search = () => {
+const Search = ({ columns }) => {
+
+  const fieldFormItemOptions = columns
+    .filter((column) => hasOwnProperty(column, "queryFormConfig"))
+    .map((column) => {
+      return { label: column.title, value: column.dataIndex }
+    });
+
   return (
-    <Flex
-      justify="center"
-      align="center"
-      style={{
-        paddingTop: "5px",
-        paddingBottom: "-15px",
-        marginBottom: "-10px",
-      }}
-    >
-      <ProForm layout="inline">
-        <ProForm.Item>
-          <Space.Compact>
-            <ProFormSelect
-              name={["serach", "field"]}
-              rules={[{ required: true, message: "Search field is required" }]}
-              options={[
-                { label: "Option1", value: "option-1" },
-                { label: "Option2", value: "option-2" },
-                { label: "Option3", value: "option-3" },
-              ]}
-            />
-            <ProFormText
-              name={["serach", "value"]}
-              rules={[{ required: true, message: "Search value is required" }]}
-            />
-          </Space.Compact>
-        </ProForm.Item>
-      </ProForm>
-    </Flex>
+    <ProForm
+      id="table-transfer-search-form"
+      layout="inline"
+      onFinish={(values) => {
+        console.log(values)
+      }}>
+      <Space.Compact id="table-transfer-search-form-spc" style={{ maxWidth: "50%", width: "50%" }}>
+        <ProFormSelect
+          name={["field"]}
+          rules={[{ required: true, message: "Search field is required" }]}
+          options={fieldFormItemOptions}
+        />
+        <ProFormDependency name={["field"]}>
+          {({ field }) => {
+
+            if (field === undefined) {
+              return (<ProFormText
+                name={["serach", "value"]}
+                rules={[{ required: true, message: "Search value is required" }]}
+              />)
+            }
+
+            return (
+              <FormField showLabel={false} config={getColumnQueryConfig({ field, columns, required: true })} />)
+          }}
+        </ProFormDependency>
+      </Space.Compact>
+    </ProForm>
   );
 };
 
