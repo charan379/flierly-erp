@@ -5,9 +5,9 @@ import queryTransformers from "@/utils/queryTransformers";
 import {
   ProForm,
   ProFormDateRangePicker,
-  ProFormSelect,
   ProFormText,
 } from "@ant-design/pro-components";
+import { Select } from "antd";
 import React from "react";
 
 const FormField = ({ key, config, showLabel = true }) => {
@@ -70,15 +70,21 @@ const FormItems = {
     options,
     transformer,
   }) => (
-    <ProFormSelect
+    <ProForm.Item
       name={name}
       label={label}
-      mode={mode}
       rules={rules}
-      options={options}
-      allowClear
+      style={{ width: "100%" }}
       transform={transformer}
-    />
+    >
+      <Select
+        mode={mode}
+        placeholder={"Please enter"}
+        maxTagCount='responsive'
+        options={options}
+        allowClear
+      />
+    </ProForm.Item>
   ),
   DateRange: ({ name, label, rules = [], transformer }) => (
     <ProFormDateRangePicker
