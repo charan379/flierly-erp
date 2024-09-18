@@ -31,7 +31,7 @@ const TableTransfer = ({
   // Fetch data for the left table
   async function fetchLeftData({ pager, sort, filter } = {pager: pagination, sort: sorter, filter: filters}) {
     setLoading(true);
-    console.log({pager, sort, filter})
+    // console.log({pager, sort, filter})
     const response = await tableTransferService.entityPage({
       entity: entityName,
       sort: sort,

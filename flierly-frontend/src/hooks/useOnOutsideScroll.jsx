@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 function useOnOutsideScroll(elementId, callbackFunc, delay = 100) {
   useEffect(() => {
-    console.log('useOnOutsideScroll executed');
+    // console.log('useOnOutsideScroll executed');
 
     let element = document.getElementById(elementId);
 
