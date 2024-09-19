@@ -1,99 +1,81 @@
-import userDetailsPrompt from "@/setup/prompts/user-details.prompt";
-import mongoose from "mongoose";
-import { User } from "@/models/interfaces/user.interface";
-import UserModel from "@/models/user/user.model";
-import { generateHash } from "@/lib/bcrypt";
-import { UserPassword } from '@/models/interfaces/user-password.interface';
-import UserPasswordModel from "@/models/user/user-password.model";
-import { Role } from "@/models/interfaces/role.interface";
-import RoleModel from "@/models/user/role.model";
-import PrivilegeModel from "@/models/user/privilege.model";
-import { RolePrivileges } from "@/models/interfaces/role-privileges.interface";
-import RolePrivilegesModel from "@/models/user/role-privileges.model";
+import userDetailsPrompt from '@/setup/prompts/user-details.prompt';
+import { generateHash } from '@/lib/bcrypt';
+import { AppDataSource } from '../lib/app-data-source';
+import { Role } from '@/entities/iam/Role.entity';
+import { User } from '@/entities/iam/User.entity';
+import { UserPassword } from '@/entities/iam/UserPassword.entity';
+import { Privilege } from '@/entities/iam/Privilege.entity';
 
 async function generateSuperAdmin(): Promise<void> {
-    let superAdminRole: Role | null = await RoleModel.findOne({ code: 'super-admin' }).exec();
+    const roleRepository = AppDataSource.getRepository(Role);
+    const userRepository = AppDataSource.getRepository(User);
+    const userPasswordRepository = AppDataSource.getRepository(UserPassword);
 
-    if (superAdminRole === null) {
+    // Check if Super Admin role exists
+    let superAdminRole = await roleRepository.findOne({ where: { code: 'super-admin' }, relations: ['privileges'] });
+
+    if (!superAdminRole) {
         superAdminRole = await generateSuperAdminRole();
-    };
+    }
 
     const credsPrompt = await userDetailsPrompt();
 
-    const superAdmin: User = await UserModel.create({
+    // Create Super Admin user
+    const superAdmin = userRepository.create({
         username: credsPrompt.username,
         email: credsPrompt.email,
         mobile: credsPrompt.mobile,
-        roles: [superAdminRole._id],
+        roles: [superAdminRole]
     });
+    await userRepository.save(superAdmin);
 
-    await updateUserPassword(superAdmin._id, credsPrompt.password);
+    // Update or create password for Super Admin
+    await updateUserPassword(superAdmin.id, credsPrompt.password);
 
-    console.log(`🔑 [Super-Admin]: Super Admin created and activated sucessfully with \n 
+    console.log(`🔑 [Super-Admin]: Super Admin created and activated successfully with \n 
         username: ${superAdmin.username} \n
-        passowrd: ${credsPrompt.password}
-        `);
+        password: ${credsPrompt.password}
+    `);
 }
 
-async function updateUserPassword(userId: mongoose.ObjectId, password: string): Promise<UserPassword> {
+async function updateUserPassword(userId: number, password: string): Promise<void> {
+    const userPasswordRepository = AppDataSource.getRepository(UserPassword);
 
-    const updatedExistingPassword: UserPassword | null = await UserPasswordModel.findOneAndUpdate(
-        { userId: userId },
-        { $set: { password: await generateHash(password) }, },
-        {
-            new: true, // Return the updated document
-            runValidators: true, // Apply validation before saving
-        },
-    ).exec()
+    const hashedPassword = await generateHash(password);
 
+    // Check if password entry exists
+    let userPassword = await userPasswordRepository.findOne({ where: { userId } });
 
-    if (updatedExistingPassword !== null) {
-        return updatedExistingPassword;
-    }
-    else {
-        return await UserPasswordModel.create({
-            userId, password: await generateHash(password)
+    if (userPassword) {
+        userPassword.password = hashedPassword;
+        await userPasswordRepository.save(userPassword);
+    } else {
+        userPassword = userPasswordRepository.create({
+            userId,
+            password: hashedPassword
         });
+        await userPasswordRepository.save(userPassword);
     }
-
 }
 
 async function generateSuperAdminRole(): Promise<Role> {
-    const privilegeIds: mongoose.ObjectId[] = (await PrivilegeModel.find({}).exec()).map(privilege => privilege._id);
+    const privilegeRepository = AppDataSource.getRepository(Privilege);
+    const roleRepository = AppDataSource.getRepository(Role);
 
-    const superAdminRole: Role = await RoleModel.create({
+    // Fetch all privileges
+    const privileges = await privilegeRepository.find();
+    const privilegeIds = privileges.map(privilege => privilege.id);
+
+    // Create Super Admin role
+    const superAdminRole = roleRepository.create({
         code: 'super-admin',
         name: 'Super Admin Role',
-        description: "Account Owner / Super Admin"
+        description: 'Account Owner / Super Admin',
+        privileges: privileges // Assign all privileges to this role
     });
-
-    await assignRolePrivileges(superAdminRole._id, privilegeIds);
+    await roleRepository.save(superAdminRole);
 
     return superAdminRole;
 }
-
-async function assignRolePrivileges(roleId: mongoose.ObjectId, privilegIds: mongoose.ObjectId[]) {
-    const updatedExistingRolePrivileges: RolePrivileges | null = await RolePrivilegesModel.findOneAndUpdate(
-        { roleId: roleId },
-        { $addToSet: { privileges: { $each: privilegIds } }, },
-        {
-            new: true, // Return the updated document
-            runValidators: true, // Apply validation before saving
-        },
-    ).exec()
-
-
-    if (updatedExistingRolePrivileges !== null) {
-        return updatedExistingRolePrivileges;
-    }
-    else {
-        return await RolePrivilegesModel.create({
-            roleId: roleId,
-            privileges: privilegIds
-        });
-    }
-
-}
-
 
 export default generateSuperAdmin;

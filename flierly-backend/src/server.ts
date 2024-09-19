@@ -2,6 +2,7 @@ import moduleAlias from 'module-alias';
 moduleAlias.addAliases({
     "@": `${__dirname}`
 })
+import 'reflect-metadata'
 import app from '@/app';
 import dotenv from 'dotenv';
 import http, { Server } from 'http';
@@ -9,7 +10,7 @@ import { HttpError } from 'http-errors';
 import validateEnv from '@/utils/env.validator';
 import Database from './lib/database';
 import Config from './config';
-import { getModelsList } from './models';
+import { AppDataSource } from './lib/app-data-source';
 
 dotenv.config();
 
@@ -57,6 +58,14 @@ server.on('error', (error: HttpError) => {
  */
 server.on('listening', async () => {
     await Database.connect();
+    // establish database connection
+
+    await AppDataSource.initialize();
+
+    if (AppDataSource.isInitialized) {
+        console.info("🚀 [postgres]: Database is initialized successfully");
+    }
+
     console.info("🚀 [server]: Server started is running on " + port);
 });
 
