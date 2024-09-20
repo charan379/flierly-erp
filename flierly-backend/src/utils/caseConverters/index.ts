@@ -1,4 +1,5 @@
-import toKebabCase from "./convertors/toKebabCase";
-import toSnakeCase from "./convertors/toSnakeCase";
+import kebabToPascalCase from './convertors/kebabToPascalCase';
+import camelToSnakeCase from './convertors/camelToSnakeCase';
+import camelToKebabCase from './convertors/camelToKebabCase';
 
-export { toSnakeCase, toKebabCase };
+export { camelToSnakeCase, camelToKebabCase, kebabToPascalCase };

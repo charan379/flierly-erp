@@ -1,4 +1,4 @@
-import { toKebabCase } from '@/utils/caseConverters';
+import { camelToKebabCase } from '@/utils/caseConverters';
 import { glob } from 'glob';
 import { basename } from 'path';
 
@@ -14,7 +14,7 @@ async function getEntityList(): Promise<EntityDetails[]> {
             // path
             filePath: file,
             // code
-            code: toKebabCase(entityFileNameWithoutExtension),
+            code: camelToKebabCase(entityFileNameWithoutExtension),
         };
     });
 
