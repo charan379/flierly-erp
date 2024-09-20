@@ -18,7 +18,17 @@ const Config = Object.freeze({
         ? process.env.CORS_ORIGINS.split(",").map((origin) => origin)
         : ["http://localhost:3000"],
     //  
-    NODE_ENV: process.env?.NODE_ENV ?? "development"
+    NODE_ENV: process.env?.NODE_ENV ?? "development",
+    // 
+    DB_HOST: process.env.DB_HOST ?? "localhost",
+    // 
+    DB_PORT: process.env.DB_PORT ?? 5432,
+    // 
+    DB_NAME: process.env.DB_NAME ?? "flierly",
+    // 
+    DB_USERNAME: process.env.DB_USERNAME ?? "postgres",
+    // 
+    DB_PASSWORD: process.env.DB_PASSWORD ?? "postgres",
 });
 
 export default Config;

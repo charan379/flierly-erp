@@ -57,14 +57,8 @@ server.on('error', (error: HttpError) => {
  * Event listener for HTTP server "listening" event.
  */
 server.on('listening', async () => {
-    await Database.connect();
     // establish database connection
-
-    await AppDataSource.initialize();
-
-    if (AppDataSource.isInitialized) {
-        console.info("🚀 [postgres]: Database is initialized successfully");
-    }
+    await Database.connect();
 
     console.info("🚀 [server]: Server started is running on " + port);
 });
