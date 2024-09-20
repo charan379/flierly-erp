@@ -17,6 +17,12 @@ type ModelDetails = {
     filePath: string,
 }
 
+type EntityDetails = {
+    entity: string,
+    code: string,
+    filePath: string,
+}
+
 type SortBy = {
     [key: string]: "desc" | "asc";
 }
