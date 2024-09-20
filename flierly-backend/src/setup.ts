@@ -5,9 +5,9 @@ moduleAlias.addAliases({
 import 'reflect-metadata'
 import Database from '@/lib/database';
 import dotenv from 'dotenv';
-import validateEnv from '@/utils/env.validator';
 import generateSuperAdmin from './setup/generate-super-admin';
 import generatePrivileges from './setup/generate-privileges';
+import validateEnv from '@/utils/envValidator';
 
 dotenv.config();
 

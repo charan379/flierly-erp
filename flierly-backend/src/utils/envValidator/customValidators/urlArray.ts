@@ -18,4 +18,4 @@ const urlArray = makeValidator<string[]>((input) => {
     return urls;
 });
 
-export { urlArray };
+export default urlArray;

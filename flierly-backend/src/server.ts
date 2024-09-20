@@ -7,9 +7,9 @@ import app from '@/app';
 import dotenv from 'dotenv';
 import http, { Server } from 'http';
 import { HttpError } from 'http-errors';
-import validateEnv from '@/utils/env.validator';
 import Database from './lib/database';
 import Config from './config';
+import validateEnv from '@/utils/envValidator';
 
 dotenv.config();
 
