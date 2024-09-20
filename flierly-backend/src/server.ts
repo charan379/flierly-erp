@@ -10,7 +10,6 @@ import { HttpError } from 'http-errors';
 import validateEnv from '@/utils/env.validator';
 import Database from './lib/database';
 import Config from './config';
-import { AppDataSource } from './lib/app-data-source';
 
 dotenv.config();
 
@@ -62,8 +61,6 @@ server.on('listening', async () => {
 
     console.info("🚀 [server]: Server started is running on " + port);
 });
-
-// getModelsList().then((models) => {console.log(models)})
 
 /**
  * Normalize a port into a number, string, or false.
