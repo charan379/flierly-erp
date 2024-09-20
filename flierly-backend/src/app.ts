@@ -5,9 +5,9 @@ import HttpCodes from "@/constants/httpCodes";
 import errorHandler from "@/middlewares/error-handler.middleware";
 import dotenv from 'dotenv';
 import cors from "cors";
-import CorsOptions from "@/utils/cors.options";
-import Config from "./config";
 import ReqResLogger from "./middlewares/req-res-logger.middlerware";
+import { EnvConfig } from "@/config/env";
+import { CorsConfig } from "./config/cors";
 
 dotenv.config();
 
@@ -15,10 +15,10 @@ dotenv.config();
 const app: Express = express();
 
 // set app environment
-app.set('env', Config.NODE_ENV);
+app.set('env', EnvConfig.NODE_ENV);
 
 // Cros
-app.use(cors(CorsOptions));
+app.use(cors(CorsConfig));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

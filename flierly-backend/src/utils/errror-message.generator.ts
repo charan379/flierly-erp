@@ -1,7 +1,7 @@
 import { HttpError } from "http-errors";
 import HttpCodes from "@/constants/httpCodes";
 import FlierlyException from "@/lib/flierly.exception";
-import Config from "@/config";
+import { EnvConfig } from "@/config/env";
 
 function errrorMessageGenerator(error:
     Error |
@@ -14,7 +14,7 @@ function errrorMessageGenerator(error:
         name: error.name,
         httpCode: HttpCodes.INTERNAL_SERVER_ERROR,
         reason: "",
-        stack: (Config.NODE_ENV === 'development') ? error.stack : "",
+        stack: (EnvConfig.NODE_ENV === 'development') ? error.stack : "",
         message: error.message ?? 'INTERNAL SERVER ERROR'
     };
 

@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-const Config = Object.freeze({
+const EnvConfig = Object.freeze({
     // 
     PORT: process.env.PORT || 3000,
     //   
@@ -31,4 +31,4 @@ const Config = Object.freeze({
     DB_PASSWORD: process.env.DB_PASSWORD ?? "postgres",
 });
 
-export default Config;
+export default EnvConfig;

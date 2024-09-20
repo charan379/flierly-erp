@@ -2,8 +2,8 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import FlierlyException from './flierly.exception';
 import HttpCodes from '@/constants/httpCodes';
-import Config from '@/config';
 import mongoose from 'mongoose';
+import { EnvConfig } from '@/config/env';
 
 // Create a type alias that combines JwtPayload with custom properties
 export type CustomJwtPayload = JwtPayload & {
@@ -24,7 +24,7 @@ const ERROR_MESSAGES = {
     UNKNOWN_ERROR: 'Unknown Error Occurred while decoding token',
 };
 
-const jwtSecret: string = Config.JWT_SECRET ?? ''
+const jwtSecret: string = EnvConfig.JWT_SECRET ?? ''
 
 export async function generateJwtToken(userId: mongoose.ObjectId, username: string): Promise<String> {
 

@@ -1,15 +1,15 @@
-import Config from "@/config"
+import { EnvConfig } from "@/config/env";
 import { DataSource } from "typeorm"
 
-const isProduction = Config.NODE_ENV === "production";
+const isProduction = EnvConfig.NODE_ENV === "production";
 
 export const AppDataSource = new DataSource({
     type: "postgres",
-    host: Config.DB_HOST,
-    port: Config.DB_PORT as number,
-    username: Config.DB_USERNAME,
-    password: Config.DB_PASSWORD,
-    database: Config.DB_NAME,
+    host: EnvConfig.DB_HOST,
+    port: EnvConfig.DB_PORT as number,
+    username: EnvConfig.DB_USERNAME,
+    password: EnvConfig.DB_PASSWORD,
+    database: EnvConfig.DB_NAME,
     synchronize: true,
     logging: !isProduction,
     entities: isProduction ? ['dist/**/*.entity.js'] : ['src/**/*.entity.ts'],
