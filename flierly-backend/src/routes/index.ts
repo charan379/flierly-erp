@@ -1,5 +1,6 @@
 import controllers from "@/controllers";
 import models from "@/controllers/misc-controller/models";
+import testTypeORMPage from "@/controllers/misc-controller/testTypeORMPage";
 import authenticate from "@/controllers/user-controller/authenticate";
 import refreshAccessToken from "@/controllers/user-controller/refreshAccessToken";
 import { authorize } from "@/middlewares/authorization.middleware";
@@ -12,6 +13,7 @@ const router = Router();
 router.post(`/user/authenticate`, errorBoundary(authenticate, 'user'));
 router.get(`/user/refresh-access-token`, authorize(), errorBoundary(refreshAccessToken, 'user'));
 router.get(`/models`, authorize(), errorBoundary(models, "misc"));
+router.post('/test/type-orm-page', errorBoundary(testTypeORMPage, 'privilege'))
 
 const routeGenerator = (model: string, controller: any) => {
     router.post(`/${model}/create`, authorize(`${model}.create`), errorBoundary(controller['create'], model));
