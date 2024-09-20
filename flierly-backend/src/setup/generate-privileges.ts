@@ -1,24 +1,21 @@
 import AccessType from '@/constants/accessTypes';
+import getEntityList from '@/entities';
 import { Privilege } from '@/entities/iam/Privilege.entity';
 import { AppDataSource } from '@/lib/app-data-source';
-import { getModelsList } from '@/models';
 import getDifferenceFromArrayOfObjects from '@/utils/get-difference-from-arary-of-objects.util';
 
-// Function to generate privilege array based on models and access types
+// Function to generate privilege array based on entities and access types
 async function generatePrivilegesArray(): Promise<Partial<Privilege>[]> {
     const privileges: Partial<Privilege>[] = [];
-    const models = await getModelsList();
+    const entities = await getEntityList();
 
-    for (let model = 0; model < models.length; model++) {
+    for (let index = 0; index < entities.length; index++) {
         Object.values(AccessType).forEach((access) => {
             const privilege: Partial<Privilege> = {
-                name: models[model].name
-                    .split("-")
-                    .map(str => str[0].toUpperCase() + str.slice(1))
-                    .join(" ") + ` - ${access}`,
+                name: `${entities[index].entity} - ${access}`,
                 access: access,
-                entity: models[model].entity,
-                code: `${models[model].name}.${access.toLowerCase()}`,
+                entity: entities[index].entity,
+                code: `${entities[index].code}.${access.toLowerCase()}`,
             };
             privileges.push(privilege);
         });
