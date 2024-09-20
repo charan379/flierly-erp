@@ -16,16 +16,16 @@ export class Branch {
     @Column({ default: true, name: 'is_active' })
     isActive: boolean;
 
-    @Column({ nullable: false })
+    @Column()
     @IsNotEmpty()
     name: string;
 
-    @Column({ nullable: false })
+    @Column({ unique: true })
     @IsEmail()
     @IsNotEmpty()
     email: string;
 
-    @Column({ nullable: false })
+    @Column({ unique: true })
     @IsNotEmpty()
     phone: string;
 

@@ -19,11 +19,11 @@ export class Account {
     @Column({ type: 'boolean', default: true, name: 'is_active' })
     isActive: boolean;
 
-    @ManyToOne(() => AccountType, { eager: true })
+    @ManyToOne(() => AccountType, { eager: true, nullable: false })
     @JoinColumn({ name: 'account_type_id' })
     accountType: AccountType;
 
-    @ManyToOne(() => AccountSubtype, { eager: true })
+    @ManyToOne(() => AccountSubtype, { eager: true, nullable: false })
     @JoinColumn({ name: 'account_subtype_id' })
     accountSubtype: AccountSubtype;
 
@@ -37,19 +37,19 @@ export class Account {
     @IsNotEmpty({ message: 'Account name is required.' })
     name: string;
 
-    @Column({ name: 'registered_phone' })
+    @Column({ name: 'registered_phone', unique: true })
     @IsNotEmpty({ message: 'Account registered phone is required.' })
     registeredPhone: string;
 
     @Column({ nullable: true, name: 'alternate_phone' })
     alternatePhone: string;
 
-    @Column()
+    @Column({ unique: true, })
     @IsEmail({}, { message: 'Invalid email format.' })
     @IsNotEmpty({ message: 'Account email is required.' })
     email: string;
 
-    @ManyToOne(() => TaxIdentity, { eager: true })
+    @ManyToOne(() => TaxIdentity, { eager: true, nullable: false })
     @JoinColumn({ name: 'tax_identity_id' })
     taxIdentity: TaxIdentity;
 
@@ -57,11 +57,11 @@ export class Account {
     @JoinColumn({ name: 'parent_id' })
     parent: Account;
 
-    @ManyToOne(() => Address, { eager: true })
+    @ManyToOne(() => Address, { eager: true, nullable: false })
     @JoinColumn({ name: 'primary_address_id' })
     primaryAddress: Address;
 
-    @ManyToOne(() => Branch, { eager: true })
+    @ManyToOne(() => Branch, { eager: true, nullable: false })
     @JoinColumn({ name: 'branch_id' })
     branch: Branch;
 
