@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Index, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { IsNotEmpty, IsEmail } from 'class-validator';
 import { Privilege } from './Privilege.entity';
 import { Role } from './Role.entity';
@@ -74,4 +74,10 @@ export class User {
         },
     })
     roles: Role[];
+
+    @CreateDateColumn({ name: 'created_at' })
+    createdAt: Date;
+
+    @UpdateDateColumn({ name: 'updated_at' })
+    updatedAt: Date;
 }
