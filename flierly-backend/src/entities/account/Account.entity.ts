@@ -1,5 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { Contact } from '../contact/Contact.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Address } from '../address/Address.entity';
 import { Branch } from '../branch/Branch.entity';
 import { TaxIdentity } from '../taxation/TaxIdentity.entity';
@@ -58,15 +57,9 @@ export class Account {
     @JoinColumn({ name: 'parent_id' })
     parent: Account;
 
-    @OneToMany(() => Address, address => address.account)
-    addresses: Address[];
-
     @ManyToOne(() => Address, { eager: true })
     @JoinColumn({ name: 'primary_address_id' })
     primaryAddress: Address;
-
-    @OneToMany(() => Contact, contact => contact.account)
-    contacts: Contact[];
 
     @ManyToOne(() => Branch, { eager: true })
     @JoinColumn({ name: 'branch_id' })

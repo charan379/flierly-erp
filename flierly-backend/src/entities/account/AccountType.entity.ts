@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { IsNotEmpty } from 'class-validator';
-import { AccountSubtype } from './AccountSubtype.entity';
 
 @Entity('account_types')
 export class AccountType {
@@ -9,6 +8,12 @@ export class AccountType {
     })
     id: number;
 
+    @Column({ type: 'boolean', default: false, name: 'is_deleted' })
+    isDeleted: boolean;
+
+    @Column({ type: 'boolean', default: true, name: 'is_active' })
+    isActive: boolean;
+
     @Column({ unique: true })
     @IsNotEmpty({ message: 'Account type code is required.' })
     code: string;
@@ -16,7 +21,4 @@ export class AccountType {
     @Column()
     @IsNotEmpty({ message: 'Account type name is required.' })
     name: string;
-
-    @OneToMany(() => AccountSubtype, subtype => subtype.accountType)
-    subtypes: AccountSubtype[];
 }

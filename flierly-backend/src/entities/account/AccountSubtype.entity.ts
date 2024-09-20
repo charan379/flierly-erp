@@ -9,6 +9,12 @@ export class AccountSubtype {
     })
     id: number;
 
+    @Column({ type: 'boolean', default: false, name: 'is_deleted' })
+    isDeleted: boolean;
+
+    @Column({ type: 'boolean', default: true, name: 'is_active' })
+    isActive: boolean;
+
     @Column({ unique: true })
     @IsNotEmpty({ message: 'Account subtype code is required.' })
     code: string;
@@ -17,7 +23,7 @@ export class AccountSubtype {
     @IsNotEmpty({ message: 'Account subtype name is required.' })
     name: string;
 
-    @ManyToOne(() => AccountType, type => type.subtypes, { eager: true })
+    @ManyToOne(() => AccountType, { eager: true })
     @JoinColumn({ name: 'account_type_id' })
     accountType: AccountType;
 }

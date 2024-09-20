@@ -1,8 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinColumn, OneToOne, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinColumn, OneToOne } from 'typeorm';
 import { Address } from '../address/Address.entity';
 import { IsEmail, IsNotEmpty } from 'class-validator';
 import { TaxIdentity } from '../taxation/TaxIdentity.entity';
-import { Contact } from '../contact/Contact.entity';
 
 @Entity('branches')
 export class Branch {
@@ -40,9 +39,6 @@ export class Branch {
     @ManyToOne(() => TaxIdentity, { eager: true })
     @JoinColumn({ name: 'tax_identity_id', referencedColumnName: 'id' })
     taxIdentity: TaxIdentity;
-
-    @OneToMany(() => Contact, contact => contact.branch)
-    contacts: Contact[];
 
     @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
     createdAt: Date;

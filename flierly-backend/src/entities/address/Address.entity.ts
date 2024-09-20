@@ -57,7 +57,7 @@ export class Address {
     @Column({ nullable: true, type: 'double precision' })
     longitude: number;
 
-    @ManyToOne(() => Account, account => account.addresses)
+    @ManyToOne(() => Account)
     @JoinColumn({ name: 'account_id' })
     account: Account;
 

@@ -32,11 +32,11 @@ export class Contact {
     @Column({ nullable: true })
     alternatePhone: string;
 
-    @ManyToOne(() => Account, account => account.contacts)
+    @ManyToOne(() => Account)
     @JoinColumn({ name: 'account_id' })
     account: Account;
 
-    @ManyToOne(() => Branch, branch => branch.contacts)
+    @ManyToOne(() => Branch)
     @JoinColumn({ name: 'branch_id' })
     branch: Branch;
 
