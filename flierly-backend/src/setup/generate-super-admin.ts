@@ -9,7 +9,6 @@ import { Privilege } from '@/entities/iam/Privilege.entity';
 async function generateSuperAdmin(): Promise<void> {
     const roleRepository = AppDataSource.getRepository(Role);
     const userRepository = AppDataSource.getRepository(User);
-    const userPasswordRepository = AppDataSource.getRepository(UserPassword);
 
     // Check if Super Admin role exists
     let superAdminRole = await roleRepository.findOne({ where: { code: 'super-admin' }, relations: ['privileges'] });
@@ -48,12 +47,14 @@ async function updateUserPassword(userId: number, password: string): Promise<voi
 
     if (userPassword) {
         userPassword.password = hashedPassword;
+        
         await userPasswordRepository.save(userPassword);
     } else {
         userPassword = userPasswordRepository.create({
             userId,
             password: hashedPassword
         });
+        
         await userPasswordRepository.save(userPassword);
     }
 }
@@ -64,7 +65,6 @@ async function generateSuperAdminRole(): Promise<Role> {
 
     // Fetch all privileges
     const privileges = await privilegeRepository.find();
-    const privilegeIds = privileges.map(privilege => privilege.id);
 
     // Create Super Admin role
     const superAdminRole = roleRepository.create({
@@ -73,6 +73,7 @@ async function generateSuperAdminRole(): Promise<Role> {
         description: 'Account Owner / Super Admin',
         privileges: privileges // Assign all privileges to this role
     });
+
     await roleRepository.save(superAdminRole);
 
     return superAdminRole;
