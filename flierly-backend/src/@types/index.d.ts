@@ -20,6 +20,7 @@ type ModelDetails = {
 type EntityDetails = {
     entity: string,
     code: string,
+    controller: string,
     filePath: string,
 }
 
