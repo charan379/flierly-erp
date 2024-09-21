@@ -7,6 +7,7 @@ import testTypeORMDelete from "@/controllers/misc-controller/testTypeORMDelete";
 import testTypeORMPage from "@/controllers/misc-controller/testTypeORMPage";
 import testTypeORMRead from "@/controllers/misc-controller/testTypeORMRead";
 import testTypeORMRestore from "@/controllers/misc-controller/testTypeORMRestore";
+import testTypeORMUpdate from "@/controllers/misc-controller/testTypeORMUpdate";
 import authenticate from "@/controllers/user-controller/authenticate";
 import refreshAccessToken from "@/controllers/user-controller/refreshAccessToken";
 import { authorize } from "@/middlewares/authorization.middleware";
@@ -23,10 +24,10 @@ router.post('/test/type-orm-page', errorBoundary(testTypeORMPage, 'Role'));
 router.post('/test/type-orm-create', errorBoundary(testTypeORMCreate, 'Role'));
 router.get('/test/type-orm-read/:id', errorBoundary(testTypeORMRead, 'Role'));
 router.delete('/test/type-orm-delete', errorBoundary(testTypeORMDelete, 'Role'));
-router.put('/test/type-orm-restore', errorBoundary(testTypeORMRestore, 'Role'));
-router.put('/test/type-orm-activate', errorBoundary(testTypeORMActivate, 'Role'));
-router.put('/test/type-orm-deactivate', errorBoundary(testTypeORMDeactivate, 'Role'));
-
+router.patch('/test/type-orm-restore', errorBoundary(testTypeORMRestore, 'Role'));
+router.patch('/test/type-orm-activate', errorBoundary(testTypeORMActivate, 'Role'));
+router.patch('/test/type-orm-deactivate', errorBoundary(testTypeORMDeactivate, 'Role'));
+router.put('/test/type-orm-update/:id', errorBoundary(testTypeORMUpdate, 'Role'));
 
 const routeGenerator = (model: string, controller: any) => {
     router.post(`/${model}/create`, authorize(`${model}.create`), errorBoundary(controller['create'], model));
