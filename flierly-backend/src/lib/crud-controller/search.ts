@@ -1,6 +1,6 @@
 import HttpCodes from "@/constants/httpCodes";
 import apiResponse from "@/utils/api-response.generator";
-import JoiSchemaValidator from "@/utils/joi-schema.validator";
+import JoiSchemaValidator from "@/utils/joiObjectValidator/joiSchemaValidator";
 import buildMongoQuery from "@/utils/mongo-query.builder";
 import buildMongoSortObject, { SortObject } from "@/utils/mongo-sort.builder";
 import { Request, Response } from "express";

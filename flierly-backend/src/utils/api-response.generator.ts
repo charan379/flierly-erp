@@ -1,5 +1,18 @@
 import { Request, Response } from "express";
 
+/**
+ * @deprecated
+ * @param success 
+ * @param result 
+ * @param message 
+ * @param controller 
+ * @param requestUrl 
+ * @param error 
+ * @param httpCode 
+ * @param req 
+ * @param res 
+ * @returns 
+ */
 function apiResponse(
     success: boolean,
     result: string | number | null | object | any[],

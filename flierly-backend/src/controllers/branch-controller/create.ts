@@ -3,7 +3,7 @@ import { createBranchSchema } from "@/joi-schemas/branch.joi.schema";
 import BranchModel from "@/models/branch.model";
 import { Branch } from "@/models/interfaces/branch.interface";
 import apiResponse from "@/utils/api-response.generator";
-import JoiSchemaValidator from "@/utils/joi-schema.validator";
+import JoiSchemaValidator from "@/utils/joiObjectValidator/joiSchemaValidator";
 import { Request, Response } from "express";
 
 

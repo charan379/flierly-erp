@@ -8,6 +8,13 @@ export const objectIdSchema = Joi.string()
         'string.pattern.base': "Please provied a valid Id : {#value} is not a valid id."
     });
 
+export const idSchema = Joi.number()
+    .required()
+    .messages({
+        'number.base': "Please provide a valid id: {#value} is not a valid number.",
+        'any.required': "A id is required."
+    });
+
 export const objectIdArraySchema: Joi.Schema<mongoose.ObjectId[]> = Joi.array().items(
     Joi.string()
         .pattern(/^[0-9a-fA-F]{24}$/)

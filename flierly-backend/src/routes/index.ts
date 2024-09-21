@@ -2,6 +2,7 @@ import controllers from "@/controllers";
 import models from "@/controllers/misc-controller/models";
 import testTypeORMCreate from "@/controllers/misc-controller/testTypeORMCreate";
 import testTypeORMPage from "@/controllers/misc-controller/testTypeORMPage";
+import testTypeORMRead from "@/controllers/misc-controller/testTypeORMRead";
 import authenticate from "@/controllers/user-controller/authenticate";
 import refreshAccessToken from "@/controllers/user-controller/refreshAccessToken";
 import { authorize } from "@/middlewares/authorization.middleware";
@@ -16,6 +17,8 @@ router.get(`/user/refresh-access-token`, authorize(), errorBoundary(refreshAcces
 router.get(`/models`, authorize(), errorBoundary(models, "misc"));
 router.post('/test/type-orm-page', errorBoundary(testTypeORMPage, 'Role'));
 router.post('/test/type-orm-create', errorBoundary(testTypeORMCreate, 'Role'));
+router.get('/test/type-orm-read/:id', errorBoundary(testTypeORMRead, 'Role'));
+
 
 const routeGenerator = (model: string, controller: any) => {
     router.post(`/${model}/create`, authorize(`${model}.create`), errorBoundary(controller['create'], model));

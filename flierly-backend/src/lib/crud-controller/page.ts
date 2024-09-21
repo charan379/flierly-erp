@@ -1,6 +1,6 @@
 import HttpCodes from "@/constants/httpCodes";
 import apiResponse from "@/utils/api-response.generator";
-import JoiSchemaValidator from "@/utils/joi-schema.validator";
+import JoiSchemaValidator from "@/utils/joiObjectValidator/joiSchemaValidator";
 import transformMongoQueryFilter from "@/utils/mongo-query-filters.transformer";
 import transformMongoQuerySort from "@/utils/mongo-query-sort.transformer";
 import pageResponseBuilder from "@/utils/page-response.builder";

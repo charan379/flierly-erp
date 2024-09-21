@@ -1,7 +1,7 @@
 import HttpCodes from "@/constants/httpCodes";
 import { objectIdSchema } from "@/joi-schemas/common.joi.schemas";
 import apiResponse from "@/utils/api-response.generator";
-import JoiSchemaValidator from "@/utils/joi-schema.validator";
+import JoiSchemaValidator from "@/utils/joiObjectValidator/joiSchemaValidator";
 import { Request, Response } from "express";
 import Joi from "joi";
 import mongoose from "mongoose";

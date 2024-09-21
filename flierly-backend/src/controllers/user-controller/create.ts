@@ -4,7 +4,7 @@ import FlierlyException from "@/lib/flierly.exception";
 import { User } from "@/models/interfaces/user.interface";
 import UserModel from "@/models/user/user.model";
 import apiResponse from "@/utils/api-response.generator";
-import JoiSchemaValidator from "@/utils/joi-schema.validator";
+import JoiSchemaValidator from "@/utils/joiObjectValidator/joiSchemaValidator";
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
 
