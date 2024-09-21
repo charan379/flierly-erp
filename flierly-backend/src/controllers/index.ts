@@ -1,3 +1,4 @@
+import getEntityList from "@/entities";
 import CRUDController from "@/lib/crud-controller";
 import { getModelsList } from "@/models";
 import { globSync } from "glob";
@@ -19,6 +20,8 @@ export const customCotrollers = globSync(`${__dirname}/**/*-controller`)
 
 const controllers = async () => {
     const modelList = await getModelsList();
+    const entityList = await getEntityList();
+    
     // Create an empty object to hold controllers before the loop
     const controllers: Record<string, object> = {};
 
