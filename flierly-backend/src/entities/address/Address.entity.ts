@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, DeleteDateColumn } from 'typeorm';
 import { IsNotEmpty, IsNumber, ValidationError } from 'class-validator';
 import { Account } from '../account/Account.entity';
 
@@ -7,9 +7,6 @@ export class Address {
     @PrimaryGeneratedColumn({
         type: "bigint"
     }) id: number;
-
-    @Column({ default: false, name: "is_deleted" })
-    isDeleted: boolean;
 
     @Column({ default: true, name: "is_active" })
     isActive: boolean;
@@ -66,6 +63,9 @@ export class Address {
 
     @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
     updatedAt: Date;
+
+    @DeleteDateColumn({ name: 'deleted_at' })
+    deletedAt: Date | null;
 
     @BeforeInsert()
     @BeforeUpdate()

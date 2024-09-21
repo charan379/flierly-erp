@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, CreateDateColumn, UpdateDateColumn, JoinColumn, Unique } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, CreateDateColumn, UpdateDateColumn, JoinColumn, Unique, DeleteDateColumn } from 'typeorm';
 import { Address } from '../address/Address.entity';
 
 @Entity('tax_identities')
@@ -11,9 +11,6 @@ export class TaxIdentity {
         type: 'bigint'
     })
     id: number;
-
-    @Column({ default: false, name: 'is_deleted' })
-    isDeleted: boolean;
 
     @Column({ default: true, name: 'is_active' })
     isActive: boolean;
@@ -48,4 +45,7 @@ export class TaxIdentity {
 
     @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
     updatedAt: Date;
+
+    @DeleteDateColumn({ name: 'deleted_at' })
+    deletedAt: Date | null;
 }

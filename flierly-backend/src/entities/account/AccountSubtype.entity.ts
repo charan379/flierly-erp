@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn, DeleteDateColumn } from 'typeorm';
 import { IsNotEmpty } from 'class-validator';
 import { AccountType } from './AccountType.entity';
 
@@ -8,9 +8,6 @@ export class AccountSubtype {
         type: 'bigint'
     })
     id: number;
-
-    @Column({ type: 'boolean', default: false, name: 'is_deleted' })
-    isDeleted: boolean;
 
     @Column({ type: 'boolean', default: true, name: 'is_active' })
     isActive: boolean;
@@ -26,4 +23,7 @@ export class AccountSubtype {
     @ManyToOne(() => AccountType, { eager: true })
     @JoinColumn({ name: 'account_type_id' })
     accountType: AccountType;
+
+    @DeleteDateColumn({ name: 'deleted_at' })
+    deletedAt: Date | null;
 }

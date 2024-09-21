@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Index, DeleteDateColumn } from 'typeorm';
 import { IsNotEmpty } from 'class-validator';
 import AccessType from '@/constants/accessTypes';
 
@@ -27,4 +27,7 @@ export class Privilege {
     @Column({ unique: true })
     @IsNotEmpty({ message: 'Privilege code is required.' })
     code: string;
+
+    @DeleteDateColumn({ name: 'deleted_at' })
+    deletedAt: Date | null;
 }

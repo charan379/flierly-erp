@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
 import { Address } from '../address/Address.entity';
 import { Branch } from '../branch/Branch.entity';
 import { TaxIdentity } from '../taxation/TaxIdentity.entity';
@@ -12,9 +12,6 @@ export class Account {
         type: 'bigint'
     })
     id: number;
-
-    @Column({ type: 'boolean', default: false, name: 'is_deleted' })
-    isDeleted: boolean;
 
     @Column({ type: 'boolean', default: true, name: 'is_active' })
     isActive: boolean;
@@ -70,4 +67,7 @@ export class Account {
 
     @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
     updatedAt: Date;
+
+    @DeleteDateColumn({ name: 'deleted_at' })
+    deletedAt: Date | null;
 }

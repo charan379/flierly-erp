@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
 import { IsNotEmpty } from 'class-validator';
 import { Privilege } from './Privilege.entity';
 
@@ -9,6 +9,9 @@ export class Role {
         type: "bigint"
     })
     id: number;
+
+    @Column({ type: 'boolean', default: true, name: 'is_active' })
+    isActive: boolean;
 
     @Column({ unique: true })
     @IsNotEmpty({ message: 'Role name is required.' })
@@ -41,4 +44,7 @@ export class Role {
 
     @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
     updatedAt: Date;
+
+    @DeleteDateColumn({ name: 'deleted_at' })
+    deletedAt: Date | null;
 }

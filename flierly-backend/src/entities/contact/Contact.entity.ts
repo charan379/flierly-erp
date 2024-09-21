@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
 import { IsNotEmpty, IsEmail } from 'class-validator';
 import { Account } from '../account/Account.entity';
 import { Branch } from '../branch/Branch.entity';
@@ -10,9 +10,6 @@ export class Contact {
         type: 'bigint'
     })
     id: number;
-
-    @Column({ type: 'boolean', default: false, name: 'is_deleted' })
-    isDeleted: boolean;
 
     @Column({ type: 'boolean', default: true, name: 'is_active' })
     isActive: boolean;
@@ -45,4 +42,7 @@ export class Contact {
 
     @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
     updatedAt: Date;
+
+    @DeleteDateColumn({ name: 'deleted_at' })
+    deletedAt: Date | null;
 }

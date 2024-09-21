@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, DeleteDateColumn } from 'typeorm';
 import { IsNotEmpty } from 'class-validator';
 
 @Entity('account_types')
@@ -7,9 +7,6 @@ export class AccountType {
         type: 'bigint'
     })
     id: number;
-
-    @Column({ type: 'boolean', default: false, name: 'is_deleted' })
-    isDeleted: boolean;
 
     @Column({ type: 'boolean', default: true, name: 'is_active' })
     isActive: boolean;
@@ -21,4 +18,7 @@ export class AccountType {
     @Column()
     @IsNotEmpty({ message: 'Account type name is required.' })
     name: string;
+
+    @DeleteDateColumn({ name: 'deleted_at' })
+    deletedAt: Date | null;
 }

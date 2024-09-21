@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Index, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
 import { IsNotEmpty, IsEmail } from 'class-validator';
 import { Privilege } from './Privilege.entity';
 import { Role } from './Role.entity';
@@ -13,9 +13,6 @@ export class User {
         type: 'bigint',
     })
     id: number;
-
-    @Column({ type: 'boolean', default: false, name: 'is_deleted' })
-    isDeleted: boolean;
 
     @Column({ type: 'boolean', default: true, name: 'is_active' })
     isActive: boolean;
@@ -80,4 +77,7 @@ export class User {
 
     @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
     updatedAt: Date;
+
+    @DeleteDateColumn({ name: 'deleted_at' })
+    deletedAt: Date | null;
 }

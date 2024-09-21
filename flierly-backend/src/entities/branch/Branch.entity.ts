@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinColumn, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinColumn, OneToOne, DeleteDateColumn } from 'typeorm';
 import { Address } from '../address/Address.entity';
 import { IsEmail, IsNotEmpty } from 'class-validator';
 import { TaxIdentity } from '../taxation/TaxIdentity.entity';
@@ -9,9 +9,6 @@ export class Branch {
         type: 'bigint'
     })
     id: number;
-
-    @Column({ default: false, name: 'is_deleted' })
-    isDeleted: boolean;
 
     @Column({ default: true, name: 'is_active' })
     isActive: boolean;
@@ -45,4 +42,7 @@ export class Branch {
 
     @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
     updatedAt: Date;
+
+    @DeleteDateColumn({ name: 'deleted_at' })
+    deletedAt: Date | null;
 }
