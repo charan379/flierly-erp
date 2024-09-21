@@ -1,6 +1,8 @@
 import controllers from "@/controllers";
 import models from "@/controllers/misc-controller/models";
+import testTypeORMActivate from "@/controllers/misc-controller/testTypeORMActivate";
 import testTypeORMCreate from "@/controllers/misc-controller/testTypeORMCreate";
+import testTypeORMDeactivate from "@/controllers/misc-controller/testTypeORMDeactivate";
 import testTypeORMDelete from "@/controllers/misc-controller/testTypeORMDelete";
 import testTypeORMPage from "@/controllers/misc-controller/testTypeORMPage";
 import testTypeORMRead from "@/controllers/misc-controller/testTypeORMRead";
@@ -22,6 +24,9 @@ router.post('/test/type-orm-create', errorBoundary(testTypeORMCreate, 'Role'));
 router.get('/test/type-orm-read/:id', errorBoundary(testTypeORMRead, 'Role'));
 router.delete('/test/type-orm-delete', errorBoundary(testTypeORMDelete, 'Role'));
 router.put('/test/type-orm-restore', errorBoundary(testTypeORMRestore, 'Role'));
+router.put('/test/type-orm-activate', errorBoundary(testTypeORMActivate, 'Role'));
+router.put('/test/type-orm-deactivate', errorBoundary(testTypeORMDeactivate, 'Role'));
+
 
 const routeGenerator = (model: string, controller: any) => {
     router.post(`/${model}/create`, authorize(`${model}.create`), errorBoundary(controller['create'], model));
