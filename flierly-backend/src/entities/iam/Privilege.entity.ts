@@ -9,6 +9,9 @@ export class Privilege {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({ type: 'boolean', default: true, name: 'is_active' })
+    isActive: boolean;
+    
     @Column({ unique: true })
     @IsNotEmpty({ message: 'Privilege name is required.' })
     name: string;
@@ -28,6 +31,6 @@ export class Privilege {
     @IsNotEmpty({ message: 'Privilege code is required.' })
     code: string;
 
-    @DeleteDateColumn({ name: 'deleted_at' })
+    @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz' })
     deletedAt: Date | null;
 }

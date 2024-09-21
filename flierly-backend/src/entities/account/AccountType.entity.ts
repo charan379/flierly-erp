@@ -19,6 +19,6 @@ export class AccountType {
     @IsNotEmpty({ message: 'Account type name is required.' })
     name: string;
 
-    @DeleteDateColumn({ name: 'deleted_at' })
+    @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz' })
     deletedAt: Date | null;
 }

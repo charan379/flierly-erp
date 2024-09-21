@@ -1,8 +1,10 @@
 import controllers from "@/controllers";
 import models from "@/controllers/misc-controller/models";
 import testTypeORMCreate from "@/controllers/misc-controller/testTypeORMCreate";
+import testTypeORMDelete from "@/controllers/misc-controller/testTypeORMDelete";
 import testTypeORMPage from "@/controllers/misc-controller/testTypeORMPage";
 import testTypeORMRead from "@/controllers/misc-controller/testTypeORMRead";
+import testTypeORMRestore from "@/controllers/misc-controller/testTypeORMRestore";
 import authenticate from "@/controllers/user-controller/authenticate";
 import refreshAccessToken from "@/controllers/user-controller/refreshAccessToken";
 import { authorize } from "@/middlewares/authorization.middleware";
@@ -18,7 +20,8 @@ router.get(`/models`, authorize(), errorBoundary(models, "misc"));
 router.post('/test/type-orm-page', errorBoundary(testTypeORMPage, 'Role'));
 router.post('/test/type-orm-create', errorBoundary(testTypeORMCreate, 'Role'));
 router.get('/test/type-orm-read/:id', errorBoundary(testTypeORMRead, 'Role'));
-
+router.delete('/test/type-orm-delete', errorBoundary(testTypeORMDelete, 'Role'));
+router.put('/test/type-orm-restore', errorBoundary(testTypeORMRestore, 'Role'));
 
 const routeGenerator = (model: string, controller: any) => {
     router.post(`/${model}/create`, authorize(`${model}.create`), errorBoundary(controller['create'], model));

@@ -24,6 +24,6 @@ export class AccountSubtype {
     @JoinColumn({ name: 'account_type_id' })
     accountType: AccountType;
 
-    @DeleteDateColumn({ name: 'deleted_at' })
+    @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz' })
     deletedAt: Date | null;
 }
