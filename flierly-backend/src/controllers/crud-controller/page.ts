@@ -15,7 +15,7 @@ const pageQuerySchema: Joi.ObjectSchema = Joi.object({
     binMode: Joi.bool().default(false),
 })
 
-const testTypeORMPage = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Response): Promise<Response> => {
+const page = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Response): Promise<Response> => {
 
     const { filter, limit, page, binMode } = await JoiSchemaValidator<{ filter: object, limit: number, page: number, binMode: boolean }>(pageQuerySchema, req.body, { abortEarly: false, allowUnknown: false }, "dynamic-page");
 
@@ -56,4 +56,4 @@ const testTypeORMPage = async (entity: EntityTarget<ObjectLiteral>, req: Request
 
 }
 
-export default testTypeORMPage;
+export default page;
