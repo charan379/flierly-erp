@@ -3,7 +3,7 @@ import { getModelsList } from "@/models";
 import { globSync } from "glob";
 import path from "path";
 
-const ignoreDirs = ['misc-controller', 'crud-controller'];
+const ignoreDirs = ['misc-controller', 'crud-controller', 'user-controller', 'branch-controller'];
 
 export const customCotrollers = globSync(`${__dirname}/**/*-controller`)
     .filter(controllerDir => !ignoreDirs.includes(controllerDir.split(/[\/\\]/g).slice(-1)[0]))
