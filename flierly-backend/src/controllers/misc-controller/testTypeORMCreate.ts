@@ -1,18 +1,26 @@
 import HttpCodes from "@/constants/httpCodes";
 import { AppDataSource } from "@/lib/app-data-source";
-import apiResponse from "@/utils/api-response.generator";
+import apiResponse from "@/utils/api/responseGenerator";
+import generateJoiSchemaFromTypeORM from "@/utils/joiObjectValidator/generators/generateJoiSchemaFromTypeORM";
+import JoiSchemaValidator from "@/utils/joiObjectValidator/joiSchemaValidator";
 import { validate } from "class-validator";
 import { Request, Response } from "express";
+import { ObjectLiteral } from "typeorm";
 
 const testTypeORMCreate = async (req: Request, res: Response): Promise<Response> => {
-
-    const roleData = req.body;
 
     // Get the repository for the Role entity
     const repo = AppDataSource.getRepository("Role");
 
+    const schemaVal = repo.metadata.columns.reduce((acc: Record<string, any>, column) => {
+        acc[column.propertyName] = column.type;
+        return acc;
+    }, {});
+
+    const validatedRole: ObjectLiteral = await JoiSchemaValidator(generateJoiSchemaFromTypeORM(schemaVal), req.body, { abortEarly: false }, "dynamic create");
+
     // Create a new Role instance
-    const newRole = repo.create(roleData);
+    const newRole = repo.create(validatedRole);
 
     const errors = await validate(newRole);
     if (errors.length > 0) {
@@ -24,19 +32,16 @@ const testTypeORMCreate = async (req: Request, res: Response): Promise<Response>
 
     // Respond with the created Privilege
     return res.status(HttpCodes.CREATED).json(
-        apiResponse(
-            true,
-            savedRole,
-            "Role created successfully",
-            "misc.createRole",
-            req.url,
-            null,
-            HttpCodes.CREATED,
-            req,
-            res
-        )
+        apiResponse({
+            success: true,
+            result: savedRole,
+            message: 'Role created successfully',
+            controller: 'misc.CreateRoleController',
+            httpCode: HttpCodes.CREATED,
+            error: null,
+            req, res
+        })
     );
-
-    };
+};
 
 export default testTypeORMCreate;

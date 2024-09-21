@@ -3,7 +3,7 @@ import { Privilege } from "@/entities/iam/Privilege.entity";
 import { AppDataSource } from "@/lib/app-data-source";
 import apiResponse from "@/utils/api-response.generator";
 import handleFilter from "@/utils/handleFilter";
-import JoiSchemaValidator from "@/utils/joi-schema.validator";
+import JoiSchemaValidator from "@/utils/joiObjectValidator/joiSchemaValidator";
 import { Request, Response } from "express";
 import Joi from "joi";
 
