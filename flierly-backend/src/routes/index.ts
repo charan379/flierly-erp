@@ -4,9 +4,11 @@ import testTypeORMActivate from "@/controllers/misc-controller/testTypeORMActiva
 import testTypeORMCreate from "@/controllers/misc-controller/testTypeORMCreate";
 import testTypeORMDeactivate from "@/controllers/misc-controller/testTypeORMDeactivate";
 import testTypeORMDelete from "@/controllers/misc-controller/testTypeORMDelete";
+import testTypeORMExists from "@/controllers/misc-controller/testTypeORMExists";
 import testTypeORMPage from "@/controllers/misc-controller/testTypeORMPage";
 import testTypeORMRead from "@/controllers/misc-controller/testTypeORMRead";
 import testTypeORMRestore from "@/controllers/misc-controller/testTypeORMRestore";
+import testTypeORMSearch from "@/controllers/misc-controller/testTypeORMSearch";
 import testTypeORMUpdate from "@/controllers/misc-controller/testTypeORMUpdate";
 import authenticate from "@/controllers/user-controller/authenticate";
 import refreshAccessToken from "@/controllers/user-controller/refreshAccessToken";
@@ -28,6 +30,8 @@ router.patch('/test/type-orm-restore', errorBoundary(testTypeORMRestore, 'Role')
 router.patch('/test/type-orm-activate', errorBoundary(testTypeORMActivate, 'Role'));
 router.patch('/test/type-orm-deactivate', errorBoundary(testTypeORMDeactivate, 'Role'));
 router.put('/test/type-orm-update/:id', errorBoundary(testTypeORMUpdate, 'Role'));
+router.post('/test/type-orm-exists', errorBoundary(testTypeORMExists, 'Role'));
+router.post('/test/type-orm-search', errorBoundary(testTypeORMSearch, 'Role'));
 
 const routeGenerator = (model: string, controller: any) => {
     router.post(`/${model}/create`, authorize(`${model}.create`), errorBoundary(controller['create'], model));
