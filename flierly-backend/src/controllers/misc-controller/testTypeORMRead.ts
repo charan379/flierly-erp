@@ -10,7 +10,7 @@ const testTypeORMRead = async (req: Request, res: Response): Promise<Response> =
 
     const id = await JoiSchemaValidator<number>(idSchema, req.params.id, { abortEarly: false, allowUnknown: false }, "misc-controller-get-testTypeORMCreate");
 
-    const repo = AppDataSource.getRepository('Privilege');
+    const repo = AppDataSource.getRepository('Role');
 
     const data = await repo.findOneBy({ id });
 
