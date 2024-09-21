@@ -15,6 +15,16 @@ export const idSchema = Joi.number()
         'any.required': "A id is required."
     });
 
+export const idArraySchema = Joi.array()
+    .items(Joi.number().required())
+    .required()
+    .messages({
+        'array.base': "Please provide a valid array of ids.",
+        'array.empty': "The array should not be empty.",
+        'any.required': "An array of ids is required.",
+        'number.base': "Each id must be a valid number.",
+    });
+
 export const objectIdArraySchema: Joi.Schema<mongoose.ObjectId[]> = Joi.array().items(
     Joi.string()
         .pattern(/^[0-9a-fA-F]{24}$/)
