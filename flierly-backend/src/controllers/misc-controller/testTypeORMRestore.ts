@@ -19,7 +19,7 @@ const testTypeORMRestore = async (req: Request, res: Response): Promise<Response
         success: true,
         result,
         message: 'Restored successfully',
-        controller: 'misc.DeleteRoleController',
+        controller: 'misc.RestoreRoleController',
         httpCode: HttpCodes.CREATED,
         error: null,
         req, res
