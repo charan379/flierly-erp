@@ -16,7 +16,7 @@ async function getEntityList(): Promise<EntityDetails[]> {
             // code
             code: camelToKebabCase(entityFileNameWithoutExtension),
             // controller
-            controller: pascalToKebabCase(entityFileNameWithoutExtension),
+            controller: pascalToKebabCase(entityFileNameWithoutExtension) + "-controller",
         };
     });
 
