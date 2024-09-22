@@ -67,6 +67,24 @@ function applyCondition<T extends ObjectLiteral>(
                 case '$notLike':  // Handle NOT LIKE condition
                     qb[whereMethod](`${alias}.${field} NOT LIKE :${field}`, { [field]: `%${condition[operator]}%` });
                     break;
+                case '$ilike':  // Handle ILIKE (case-insensitive LIKE) condition
+                    qb[whereMethod](`${alias}.${field} ILIKE :${field}`, { [field]: `%${condition[operator]}%` });
+                    break;
+                case '$notIlike':  // Handle NOT ILIKE (case-insensitive NOT LIKE) condition
+                    qb[whereMethod](`${alias}.${field} NOT ILIKE :${field}`, { [field]: `%${condition[operator]}%` });
+                    break;
+                case '$startsWith':  // Handle starts with condition
+                    qb[whereMethod](`${alias}.${field} LIKE :${field}`, { [field]: `${condition[operator]}%` });
+                    break;
+                case '$notStartsWith':  // Handle NOT starts with condition
+                    qb[whereMethod](`${alias}.${field} NOT LIKE :${field}`, { [field]: `${condition[operator]}%` });
+                    break;
+                case '$endsWith':  // Handle ends with condition
+                    qb[whereMethod](`${alias}.${field} LIKE :${field}`, { [field]: `%${condition[operator]}` });
+                    break;
+                case '$notEndsWith':  // Handle NOT ends with condition
+                    qb[whereMethod](`${alias}.${field} NOT LIKE :${field}`, { [field]: `%${condition[operator]}` });
+                    break;
                 case '$regex':  // Handle case-sensitive regex matching
                     qb[whereMethod](`${alias}.${field} ~ :${field}`, { [field]: condition[operator] });
                     break;
