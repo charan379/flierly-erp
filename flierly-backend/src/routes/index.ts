@@ -12,9 +12,9 @@ import testTypeORMSearch from "@/controllers/misc-controller/testTypeORMSearch";
 import testTypeORMUpdate from "@/controllers/misc-controller/testTypeORMUpdate";
 import authenticate from "@/controllers/user-controller/authenticate";
 import refreshAccessToken from "@/controllers/user-controller/refreshAccessToken";
+import getEntityList from "@/entities";
 import { authorize } from "@/middlewares/authorization.middleware";
 import { errorBoundary } from "@/middlewares/error-boundary.middleware";
-import { getModelsList } from "@/models";
 import { Router } from "express";
 
 const router = Router();
@@ -33,23 +33,23 @@ router.put('/test/type-orm-update/:id', errorBoundary(testTypeORMUpdate, 'Role')
 router.post('/test/type-orm-exists', errorBoundary(testTypeORMExists, 'Role'));
 router.post('/test/type-orm-search', errorBoundary(testTypeORMSearch, 'Role'));
 
-const routeGenerator = (model: string, controller: any) => {
-    router.post(`/${model}/create`, authorize(`${model}.create`), errorBoundary(controller['create'], model));
-    router.get(`/${model}/read/:id`, authorize(`${model}.read`), errorBoundary(controller['read'], model));
-    router.get(`/${model}/search`, authorize(`${model}.read`), errorBoundary(controller['search'], model));
-    router.get(`/${model}/exists`, authorize(`${model}.read`), errorBoundary(controller['exists'], model));
-    router.post(`/${model}/page`, authorize(`${model}.read`), errorBoundary(controller['page'], model));
-    router.patch(`/${model}/update/:id`, authorize(`${model}.update`), errorBoundary(controller['update'], model));
-    router.put(`/${model}/update-array-field`, authorize(`${model}.update`), errorBoundary(controller['updateArrayField'], model));
-    router.put(`/${model}/activate`, authorize(`${model}.manage`), errorBoundary(controller['activate'], model));
-    router.delete(`/${model}/delete`, authorize(`${model}.delete`), errorBoundary(controller['delete'], model));
-    router.put(`/${model}/restore`, authorize(`${model}.delete`), errorBoundary(controller['restore'], model));
+const routeGenerator = (entityCode: string, controller: any) => {
+    router.post(`/${entityCode}/create`, authorize(`${entityCode}.create`), errorBoundary(controller['create'], entityCode));
+    router.get(`/${entityCode}/read/:id`, authorize(`${entityCode}.read`), errorBoundary(controller['read'], entityCode));
+    router.post(`/${entityCode}/search`, authorize(`${entityCode}.read`), errorBoundary(controller['search'], entityCode));
+    router.post(`/${entityCode}/exists`, authorize(`${entityCode}.read`), errorBoundary(controller['exists'], entityCode));
+    router.post(`/${entityCode}/page`, authorize(`${entityCode}.read`), errorBoundary(controller['page'], entityCode));
+    router.put(`/${entityCode}/update/:id`, authorize(`${entityCode}.update`), errorBoundary(controller['update'], entityCode));
+    router.patch(`/${entityCode}/activate`, authorize(`${entityCode}.manage`), errorBoundary(controller['activate'], entityCode));
+    router.patch(`/${entityCode}/deactivate`, authorize(`${entityCode}.manage`), errorBoundary(controller['deactivate'], entityCode));
+    router.delete(`/${entityCode}/delete`, authorize(`${entityCode}.delete`), errorBoundary(controller['delete'], entityCode));
+    router.patch(`/${entityCode}/restore`, authorize(`${entityCode}.delete`), errorBoundary(controller['restore'], entityCode));
 }
 
-getModelsList().then(async (models) => {
+getEntityList().then(async (entities) => {
     const controllersList = await controllers();
-    models.forEach(({ name: modelName }) => {
-        routeGenerator(modelName, controllersList[modelName])
+    entities.forEach(({ code, controller }) => {
+        routeGenerator(code, controllersList[controller]);
     });
 });
 
