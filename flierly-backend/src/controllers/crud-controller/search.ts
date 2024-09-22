@@ -1,9 +1,9 @@
 import HttpCodes from "@/constants/httpCodes";
 import { AppDataSource } from "@/lib/app-data-source";
 import apiResponse from "@/utils/api/responseGenerator";
-import { pascalToSnakeCase } from "@/utils/caseConverters";
-import handleFilter from "@/utils/handleFilter";
-import JoiSchemaValidator from "@/utils/joiObjectValidator/joiSchemaValidator";
+import { pascalToSnakeCase } from "@/utils/case-converters";
+import handleFilter from "@/utils/handle-filter";
+import JoiSchemaValidator from "@/utils/joi-object-validator/joiSchemaValidator";
 import { Request, Response } from "express";
 import Joi from "joi";
 import { EntityTarget, ObjectLiteral } from "typeorm";

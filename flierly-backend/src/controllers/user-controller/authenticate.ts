@@ -9,7 +9,7 @@ import { User } from "@/models/interfaces/user.interface";
 import UserPasswordModel from "@/models/user/user-password.model";
 import UserModel from "@/models/user/user.model";
 import apiResponse from "@/utils/api-response.generator";
-import JoiSchemaValidator from "@/utils/joiObjectValidator/joiSchemaValidator";
+import JoiSchemaValidator from "@/utils/joi-object-validator/joiSchemaValidator";
 import { Request, Response } from "express";
 import Joi from "joi";
 

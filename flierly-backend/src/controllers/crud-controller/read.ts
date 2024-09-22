@@ -3,7 +3,7 @@ import { idSchema } from "@/joi-schemas/common.joi.schemas";
 import { AppDataSource } from "@/lib/app-data-source";
 import FlierlyException from "@/lib/flierly.exception";
 import apiResponse from "@/utils/api/responseGenerator";
-import JoiSchemaValidator from "@/utils/joiObjectValidator/joiSchemaValidator";
+import JoiSchemaValidator from "@/utils/joi-object-validator/joiSchemaValidator";
 import { Request, Response } from "express";
 import { EntityTarget, ObjectLiteral } from "typeorm";
 

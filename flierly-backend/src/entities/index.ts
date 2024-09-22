@@ -1,4 +1,4 @@
-import { camelToKebabCase, pascalToKebabCase } from '@/utils/caseConverters';
+import { camelToKebabCase, pascalToKebabCase } from '@/utils/case-converters';
 import { glob } from 'glob';
 import { basename } from 'path';
 

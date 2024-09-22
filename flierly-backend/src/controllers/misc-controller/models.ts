@@ -2,7 +2,7 @@ import HttpCodes from "@/constants/httpCodes";
 import { getModelsList } from "@/models";
 import apiResponse from "@/utils/api-response.generator";
 import filterAndLimit from "@/utils/filter-and-limit-arary-of-objects.util";
-import JoiSchemaValidator from "@/utils/joiObjectValidator/joiSchemaValidator";
+import JoiSchemaValidator from "@/utils/joi-object-validator/joiSchemaValidator";
 import { Request, Response } from "express";
 import Joi from "joi";
 

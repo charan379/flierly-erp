@@ -1,8 +1,8 @@
 import HttpCodes from "@/constants/httpCodes";
 import { AppDataSource } from "@/lib/app-data-source";
 import apiResponse from "@/utils/api/responseGenerator";
-import generateJoiSchemaFromTypeORM from "@/utils/joiObjectValidator/generators/generateJoiSchemaFromTypeORM";
-import JoiSchemaValidator from "@/utils/joiObjectValidator/joiSchemaValidator";
+import generateJoiSchemaFromTypeORM from "@/utils/joi-object-validator/generators/generateJoiSchemaFromTypeORM";
+import JoiSchemaValidator from "@/utils/joi-object-validator/joiSchemaValidator";
 import { validate } from "class-validator";
 import { Request, Response } from "express";
 import { ObjectLiteral } from "typeorm";

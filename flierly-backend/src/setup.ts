@@ -7,7 +7,7 @@ import Database from '@/lib/database';
 import dotenv from 'dotenv';
 import generateSuperAdmin from './setup/generate-super-admin';
 import generatePrivileges from './setup/generate-privileges';
-import validateEnv from '@/utils/envValidator';
+import validateEnv from './utils/env-validator';
 
 dotenv.config();
 

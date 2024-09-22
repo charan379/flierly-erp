@@ -1,5 +1,5 @@
 import { cleanEnv, port, str, url, bool, num } from "envalid"
-import { urlArray } from "./customValidators";
+import { urlArray } from "./custom-validators";
 
 const validateEnv = () => {
     cleanEnv(process.env, {

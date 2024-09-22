@@ -8,8 +8,8 @@ import dotenv from 'dotenv';
 import http, { Server } from 'http';
 import { HttpError } from 'http-errors';
 import Database from './lib/database';
-import validateEnv from '@/utils/envValidator';
 import { EnvConfig } from './config/env';
+import validateEnv from './utils/env-validator';
 
 dotenv.config();
 

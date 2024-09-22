@@ -1,8 +1,8 @@
 import HttpCodes from "@/constants/httpCodes";
 import { AppDataSource } from "@/lib/app-data-source";
 import apiResponse from "@/utils/api/responseGenerator";
-import handleFilter from "@/utils/handleFilter";
-import JoiSchemaValidator from "@/utils/joiObjectValidator/joiSchemaValidator";
+import handleFilter from "@/utils/handle-filter";
+import JoiSchemaValidator from "@/utils/joi-object-validator/joiSchemaValidator";
 import { Request, Response } from "express";
 import Joi from "joi";
 

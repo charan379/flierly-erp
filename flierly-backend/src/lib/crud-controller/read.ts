@@ -1,10 +1,10 @@
 import HttpCodes from "@/constants/httpCodes";
 import { objectIdSchema } from "@/joi-schemas/common.joi.schemas";
 import apiResponse from "@/utils/api-response.generator";
-import JoiSchemaValidator from "@/utils/joiObjectValidator/joiSchemaValidator";
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import FlierlyException from "../flierly.exception";
+import JoiSchemaValidator from "@/utils/joi-object-validator/joiSchemaValidator";
 
 /**
  * Fetches a single document from a Mongoose model based on the provided ID.
