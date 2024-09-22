@@ -5,9 +5,9 @@ import HttpCodes from "@/constants/httpCodes";
 import errorHandler from "@/middlewares/error-handler.middleware";
 import dotenv from 'dotenv';
 import cors from "cors";
-import ReqResLogger from "./middlewares/req-res-logger.middlerware";
+import ReqResLogger from "@/middlewares/req-res-logger.middlerware";
 import { EnvConfig } from "@/config/env";
-import { CorsConfig } from "./config/cors";
+import { CorsConfig } from "@/config/cors";
 
 dotenv.config();
 
