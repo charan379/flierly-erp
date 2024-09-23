@@ -24,10 +24,10 @@ const compareNumberArrays = (
     const newSet = new Set(newNumbers);
 
     // Items to Add: Items in newSet but not in existingSet
-    const newEntries = newNumbers.filter(item => !existingSet.has(item));
+    const newEntries = Array.from(new Set(newNumbers.filter(item => !existingSet.has(item))));
 
     // Items to Remove: Items in existingSet but not in newSet
-    const removedEntries = existingNumbers.filter(item => !newSet.has(item));
+    const removedEntries = Array.from(new Set(existingNumbers.filter(item => !newSet.has(item))));
 
     return { newEntries, removedEntries };
 };
