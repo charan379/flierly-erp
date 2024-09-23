@@ -11,12 +11,12 @@ const create = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Re
 
     const repo = AppDataSource.getRepository(entity);
 
-    const schemaVal = repo.metadata.columns.reduce((acc: Record<string, any>, column) => {
+    const tableColumns = repo.metadata.columns.reduce((acc: Record<string, any>, column) => {
         acc[column.propertyName] = column.type;
         return acc;
     }, {});
 
-    const validatedRow: ObjectLiteral = await JoiSchemaValidator(generateJoiSchemaFromTypeORM(schemaVal), req.body, { abortEarly: false }, "dynamic-create");
+    const validatedRow: ObjectLiteral = await JoiSchemaValidator(generateJoiSchemaFromTypeORM(tableColumns), req.body, { abortEarly: false }, "dynamic-create");
 
     const newRow = repo.create(validatedRow);
 
