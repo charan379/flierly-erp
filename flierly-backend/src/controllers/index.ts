@@ -3,7 +3,7 @@ import { globSync } from "glob";
 import path from "path";
 import CRUDController from "./crud-controller";
 
-const ignoreDirs = ['misc-controller', 'crud-controller', 'branch-controller'];
+const ignoreDirs = ['misc-controller', 'crud-controller', 'branch-controller', 'user-controller'];
 
 export const customCotrollers = globSync(`${__dirname}/**/*-controller`)
     .filter(controllerDir => !ignoreDirs.includes(controllerDir.split(/[\/\\]/g).slice(-1)[0]))
