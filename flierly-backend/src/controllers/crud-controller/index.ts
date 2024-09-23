@@ -10,6 +10,7 @@ import exists from './exists';
 import activate from './activate';
 import restore from './restore';
 import deactivate from './deactivate';
+import updateArrayField from './update-array-field';
 
 const CRUDController = async (entityDetails: EntityDetails) => {
 
@@ -26,6 +27,7 @@ const CRUDController = async (entityDetails: EntityDetails) => {
         activate: (req: Request, res: Response) => activate(entity, req, res),
         deactivate: (req: Request, res: Response) => deactivate(entity, req, res),
         restore: (req: Request, res: Response) => restore(entity, req, res),
+        updateArrayField: (req: Request, res: Response) => updateArrayField(entity, req, res),
     }
 
     return crudMethods;
