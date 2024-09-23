@@ -8,7 +8,7 @@ import { EnvConfig } from '@/config/env';
 // Create a type alias that combines JwtPayload with custom properties
 export type CustomJwtPayload = JwtPayload & {
     username?: string;
-    userId?: mongoose.ObjectId;
+    userId?: number;
 };
 
 dotenv.config();
@@ -26,7 +26,7 @@ const ERROR_MESSAGES = {
 
 const jwtSecret: string = EnvConfig.JWT_SECRET ?? ''
 
-export async function generateJwtToken(userId: mongoose.ObjectId, username: string): Promise<String> {
+export async function generateJwtToken(userId: number, username: string): Promise<String> {
 
     try {
         const signOptions: jwt.SignOptions = {
