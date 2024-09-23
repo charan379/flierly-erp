@@ -4,13 +4,18 @@ WITH user_roles AS (
     WHERE user_id = $1
 ),
 role_privileges AS (
-    SELECT rp.privilege_id
+    SELECT DISTINCT rp.privilege_id
     FROM iam_role_privileges rp
     JOIN user_roles ur ON rp.role_id = ur.role_id
 ),
 additional_privileges AS (
     SELECT privilege_id
     FROM iam_user_additional_privileges
+    WHERE user_id = $1
+),
+restricted_privileges AS (
+    SELECT privilege_id
+    FROM iam_user_restricted_privileges
     WHERE user_id = $1
 ),
 all_privileges AS (
@@ -23,8 +28,4 @@ all_privileges AS (
 SELECT p.*
 FROM iam_privileges p
 JOIN all_privileges ap ON p.id = ap.privilege_id
-WHERE NOT EXISTS (
-    SELECT 1
-    FROM iam_user_restricted_privileges rp
-    WHERE rp.privilege_id = p.id AND rp.user_id = $1
-);
+WHERE p.id NOT IN (SELECT privilege_id FROM restricted_privileges);
