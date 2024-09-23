@@ -4,21 +4,21 @@ import path from "path";
 
 const ignoreDirs = ['misc-controller'];
 
-export const customRoutes = globSync(`${__dirname}/**/*-router`)
+export const routes = globSync(`${__dirname}/**/*-router`)
     .filter(routerDir => !ignoreDirs.includes(routerDir.split(/[\/\\]/g).slice(-1)[0]))
     .map(routerDir => {
 
-        const router = {
+        const route = {
             name: path.basename(routerDir),
             directory: routerDir
         }
 
-        return router;
+        return route;
     });
 
 const router = Router();
 
-customRoutes.forEach((route) => {
+routes.forEach((route) => {
     const routers = require(`@/routes/${route.name}`).default;
     router.use(routers);
 });
