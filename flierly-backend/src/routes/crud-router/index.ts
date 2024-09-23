@@ -1,3 +1,3 @@
-import crudRouter from "./crud.router";
+import crudRouter from "./crud.routes";
 
 export default crudRouter;
