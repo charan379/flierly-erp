@@ -25,7 +25,7 @@ export class Role {
     @IsNotEmpty({ message: 'Role description is required.' })
     description: string;
 
-    @ManyToMany(() => Privilege, { lazy: true })
+    @ManyToMany(() => Privilege, {})
     @JoinTable({
         name: 'iam_role_privileges',
         joinColumn: {
