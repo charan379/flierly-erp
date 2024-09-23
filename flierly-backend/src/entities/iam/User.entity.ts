@@ -30,7 +30,7 @@ export class User {
     @IsNotEmpty({ message: 'User mobile number is required.' })
     mobile: string;
 
-    @ManyToMany(() => Privilege, { lazy: true })
+    @ManyToMany(() => Privilege, {})
     @JoinTable({
         name: 'iam_user_additional_privileges',
         joinColumn: {
@@ -44,7 +44,7 @@ export class User {
     })
     additionalPrivileges: Privilege[];
 
-    @ManyToMany(() => Privilege, { lazy: true })
+    @ManyToMany(() => Privilege, {})
     @JoinTable({
         name: 'iam_user_restricted_privileges',
         joinColumn: {
@@ -58,7 +58,7 @@ export class User {
     })
     restrictedPrivileges: Privilege[];
 
-    @ManyToMany(() => Role, { lazy: true })
+    @ManyToMany(() => Role, {})
     @JoinTable({
         name: 'iam_user_roles',
         joinColumn: {
