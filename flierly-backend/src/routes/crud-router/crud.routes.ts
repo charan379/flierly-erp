@@ -17,6 +17,7 @@ const routeGenerator = (entityCode: string, controller: any) => {
     crudRouter.patch(`/${entityCode}/deactivate`, authorize(`${entityCode}.manage`), errorBoundary(controller['deactivate'], entityCode));
     crudRouter.delete(`/${entityCode}/delete`, authorize(`${entityCode}.delete`), errorBoundary(controller['delete'], entityCode));
     crudRouter.patch(`/${entityCode}/restore`, authorize(`${entityCode}.delete`), errorBoundary(controller['restore'], entityCode));
+    crudRouter.patch(`/${entityCode}/update-array-field`, authorize(`${entityCode}.manage`), errorBoundary(controller['updateArrayField'], entityCode));
 }
 
 getEntityList().then(async (entities) => {
