@@ -8,7 +8,8 @@ const userColumns = [
   {
     title: "ID",
     dataIndex: "id",
-    width: 60, // Updated width
+    width: 80, // Updated width
+    align: "center",
     sorter: true,
     align: "center",
   },
