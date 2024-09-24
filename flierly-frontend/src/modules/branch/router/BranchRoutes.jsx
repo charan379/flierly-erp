@@ -7,11 +7,25 @@ const BranchRoutes = () => {
   return useRoutes([
     {
       path: "",
-      element: <ProtectedRoute element={<WithSuspense importPath={import("@/pages/PageUnderConstruction")} />} requiredPermission='branch.read' />,
+      element: (
+        <ProtectedRoute
+          element={
+            <WithSuspense
+              importPath={import("@/pages/PageUnderConstruction")}
+            />
+          }
+          requiredPermissionRegex={/^branch\.[a-z]+$/}
+        />
+      ),
     },
     {
       path: "list",
-      element: <ProtectedRoute element={<WithSuspense importPath={import("../pages/Branch")} />} requiredPermission='branch.read' />,
+      element: (
+        <ProtectedRoute
+          element={<WithSuspense importPath={import("../pages/Branch")} />}
+          requiredPermissionRegex={/^branch\.[a-z]+$/}
+        />
+      ),
     },
   ]);
 };

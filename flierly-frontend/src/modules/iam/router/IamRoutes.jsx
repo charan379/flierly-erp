@@ -7,15 +7,30 @@ const IamRoutes = () => {
   return useRoutes([
     {
       path: "users",
-      element: <ProtectedRoute element={<WithSuspense importPath={import("../pages/Users")} />} requiredPermission='user.read' />,
+      element: (
+        <ProtectedRoute
+          element={<WithSuspense importPath={import("../pages/Users")} />}
+          requiredPermissionRegex={/^user\.[a-z]+$/}
+        />
+      ),
     },
     {
       path: "roles",
-      element: <ProtectedRoute element={<WithSuspense importPath={import("../pages/Roles")} />} requiredPermission='role.read' />,
+      element: (
+        <ProtectedRoute
+          element={<WithSuspense importPath={import("../pages/Roles")} />}
+          requiredPermissionRegex={/^role\.[a-z]+$/}
+        />
+      ),
     },
     {
-     path: "privileges",
-     element: <ProtectedRoute element={<WithSuspense importPath={import("../pages/Privileges")} />} requiredPermission='privilege.read' />,
+      path: "privileges",
+      element: (
+        <ProtectedRoute
+          element={<WithSuspense importPath={import("../pages/Privileges")} />}
+          requiredPermissionRegex={/^privilege\.[a-z]$/}
+        />
+      ),
     },
   ]);
 };

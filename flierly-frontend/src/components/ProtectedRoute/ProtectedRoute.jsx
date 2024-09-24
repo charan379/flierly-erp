@@ -3,8 +3,8 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 import UnAuthorized from "../UnAuthorized";
 
-const ProtectedRoute = ({ element, requiredPermission }) => {
-  const { allowedAccess, isLoggedIn } = useAuth();
+const ProtectedRoute = ({ element, requiredPermissionRegex }) => {
+  const { isLoggedIn, hasPermission } = useAuth();
 
   const callback = {
     pathname: window.location.pathname,
@@ -12,6 +12,7 @@ const ProtectedRoute = ({ element, requiredPermission }) => {
     url: window.location.href,
   };
 
+  // Check if user is logged in
   if (!isLoggedIn) {
     return (
       <Navigate
@@ -20,10 +21,12 @@ const ProtectedRoute = ({ element, requiredPermission }) => {
     );
   }
 
-  if (!allowedAccess.includes(requiredPermission)) {
+  // Check if user has the required permission
+  if (!hasPermission(requiredPermissionRegex)) {
     return <UnAuthorized />;
   }
 
+  // If the user is logged in and has the required permission, render the element
   return element;
 };
 

@@ -7,7 +7,6 @@ import {
   ContainerOutlined,
   CreditCardOutlined,
   CustomerServiceOutlined,
-  DashboardOutlined,
   FileOutlined,
   FileSyncOutlined,
   FilterOutlined,
@@ -24,22 +23,20 @@ import { Menu } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFingerprint, faGauge, faKey, faUser, faUserGear, faUsersGear, faUserTag } from "@fortawesome/free-solid-svg-icons";
+import { faFingerprint, faGauge, faKey, faUsersGear, faUserTag } from "@fortawesome/free-solid-svg-icons";
 import filterEnabledItems from "@/utils/filterEnabledItems";
 
 const SidebarMenu = () => {
   const { theme } = useTheme();
   const { translate } = useLocale();
 
-  const { allowedAccess } = useAuth();
+  const { allowedAccess, hasPermission } = useAuth();
 
   const menuIconStyle = { fontSize: "18px" };
 
-  const getLinkStyle = (allowedAccess, requiredPermission) => {
+  const getLinkStyle = (permissionRegex) => {
     return {
-      pointerEvents: allowedAccess.includes(requiredPermission) ? 'all' : 'none',
-      // color: allowedAccess.includes(requiredPermission) ? 'inherit' : 'gray',
-      // textDecoration: allowedAccess.includes(requiredPermission) ? 'underline' : 'none',
+      pointerEvents: hasPermission(permissionRegex) ? 'all' : 'none',
     };
   };
 
@@ -53,19 +50,19 @@ const SidebarMenu = () => {
       key: "branch",
       icon: <ClusterOutlined style={menuIconStyle} />,
       label: translate("branchs"),
-      disabled: !allowedAccess.some(access => /^branch\./.test(access)),
+      disabled: !hasPermission(/^branch\./),
       children: [
         {
           key: "branchHome",
           icon: <AreaChartOutlined style={menuIconStyle} />,
-          label: <Link to={"/erp/branch"} style={getLinkStyle(allowedAccess, 'branch.read')}>{translate("statistics")}</Link>,
-          disabled: !allowedAccess.includes('branch.read')
+          label: <Link to={"/erp/branch"} style={getLinkStyle(/^branch\.read$/)}>{translate("statistics")}</Link>,
+          disabled: !hasPermission(/^branch\.read$/),
         },
         {
           key: "branchlist",
           icon: <TableOutlined style={menuIconStyle} />,
-          label: <Link to={"/erp/branch/list"} style={getLinkStyle(allowedAccess, 'branch.read')}>{translate("list_branchs")}</Link>,
-          disabled: !allowedAccess.includes('branch.read')
+          label: <Link to={"/erp/branch/list"} style={getLinkStyle(/^branch\.read$/)}>{translate("list_branchs")}</Link>,
+          disabled: !hasPermission(/^branch\.read$/),
         },
       ],
     },
@@ -73,140 +70,140 @@ const SidebarMenu = () => {
       key: "customer",
       icon: <CustomerServiceOutlined style={menuIconStyle} />,
       label: translate("customers"),
-      disabled: !allowedAccess.some(access => /^customer\./.test(access)),
+      disabled: !hasPermission(/^customer\./),
       children: [
         {
           key: "customerHome",
           icon: <AreaChartOutlined style={menuIconStyle} />,
-          label: <Link to={"/erp/customer"} style={getLinkStyle(allowedAccess, 'customer.read')}>{translate("statistics")}</Link>,
-          disabled: !allowedAccess.includes('customer.read')
+          label: <Link to={"/erp/customer"} style={getLinkStyle(/^customer\.read$/)}>{translate("statistics")}</Link>,
+          disabled: !hasPermission(/^customer\.read$/),
         },
         {
           key: "customerlist",
           icon: <TableOutlined style={menuIconStyle} />,
-          label: <Link to={"/erp/customer/list"} style={getLinkStyle(allowedAccess, 'customer.read')}>{translate("list_customers")}</Link>,
-          disabled: !allowedAccess.includes('customer.read')
+          label: <Link to={"/erp/customer/list"} style={getLinkStyle(/^customer\.read$/)}>{translate("list_customers")}</Link>,
+          disabled: !hasPermission(/^customer\.read$/),
         },
       ],
     },
     {
       key: "people",
       icon: <UserOutlined style={menuIconStyle} />,
-      label: <Link to={"/people"} style={getLinkStyle(allowedAccess, 'people.read')}>{translate("peoples")}</Link>,
-      disabled: !allowedAccess.includes('people.read')
+      label: <Link to={"/people"} style={getLinkStyle(/^people\.read$/)}>{translate("peoples")}</Link>,
+      disabled: !hasPermission(/^people\.read$/),
     },
     {
       key: "company",
       icon: <ShopOutlined style={menuIconStyle} />,
-      label: <Link to={"/company"} style={getLinkStyle(allowedAccess, 'company.read')}>{translate("companies")}</Link>,
-      disabled: !allowedAccess.includes('company.read')
+      label: <Link to={"/company"} style={getLinkStyle(/^company\.read$/)}>{translate("companies")}</Link>,
+      disabled: !hasPermission(/^company\.read$/),
     },
     {
       key: "lead",
       icon: <FilterOutlined style={menuIconStyle} />,
-      label: <Link to={"/lead"} style={getLinkStyle(allowedAccess, 'lead.read')}>{translate("leads")}</Link>,
-      disabled: !allowedAccess.includes('lead.read')
+      label: <Link to={"/lead"} style={getLinkStyle(/^lead\.read$/)}>{translate("leads")}</Link>,
+      disabled: !hasPermission(/^lead\.read$/),
     },
     {
       key: "offer",
       icon: <FileOutlined style={menuIconStyle} />,
-      label: <Link to={"/offer"} style={getLinkStyle(allowedAccess, 'offer.read')}>{translate("offers")}</Link>,
-      disabled: !allowedAccess.includes('offer.read')
+      label: <Link to={"/offer"} style={getLinkStyle(/^offer\.read$/)}>{translate("offers")}</Link>,
+      disabled: !hasPermission(/^offer\.read$/),
     },
     {
       key: "invoice",
       icon: <ContainerOutlined style={menuIconStyle} />,
-      label: <Link to={"/invoice"} style={getLinkStyle(allowedAccess, 'invoice.read')}>{translate("invoices")}</Link>,
-      disabled: !allowedAccess.includes('invoice.read')
+      label: <Link to={"/invoice"} style={getLinkStyle(/^invoice\.read$/)}>{translate("invoices")}</Link>,
+      disabled: !hasPermission(/^invoice\.read$/),
     },
     {
       key: "quote",
       icon: <FileSyncOutlined style={menuIconStyle} />,
-      label: <Link to={"/quote"} style={getLinkStyle(allowedAccess, 'quote.read')}>{translate("proforma invoices")}</Link>,
-      disabled: !allowedAccess.includes('quote.read')
+      label: <Link to={"/quote"} style={getLinkStyle(/^quote\.read$/)}>{translate("proforma invoices")}</Link>,
+      disabled: !hasPermission(/^quote\.read$/),
     },
     {
       key: "payment",
       icon: <CreditCardOutlined style={menuIconStyle} />,
-      label: <Link to={"/payment"} style={getLinkStyle(allowedAccess, 'payment.read')}>{translate("payments")}</Link>,
-      disabled: !allowedAccess.includes('payment.read')
+      label: <Link to={"/payment"} style={getLinkStyle(/^payment\.read$/)}>{translate("payments")}</Link>,
+      disabled: !hasPermission(/^payment\.read$/),
     },
     {
       key: "product",
       icon: <TagOutlined style={menuIconStyle} />,
-      label: <Link to={"/product"} style={getLinkStyle(allowedAccess, 'product.read')}>{translate("products")}</Link>,
-      disabled: !allowedAccess.includes('product.read')
+      label: <Link to={"/product"} style={getLinkStyle(/^product\.read$/)}>{translate("products")}</Link>,
+      disabled: !hasPermission(/^product\.read$/),
     },
     {
       key: "categoryproduct",
       icon: <TagsOutlined style={menuIconStyle} />,
-      label: <Link to={"/category/product"} style={getLinkStyle(allowedAccess, 'categoryproduct.read')}>{translate("products_category")}</Link>,
-      disabled: !allowedAccess.includes('categoryproduct.read')
+      label: <Link to={"/category/product"} style={getLinkStyle(/^categoryproduct\.read$/)}>{translate("products_category")}</Link>,
+      disabled: !hasPermission(/^categoryproduct\.read$/),
     },
     {
       key: "expenses",
       icon: <WalletOutlined style={menuIconStyle} />,
-      label: <Link to={"/expenses"} style={getLinkStyle(allowedAccess, 'expenses.read')}>{translate("expenses")}</Link>,
-      disabled: !allowedAccess.includes('expenses.read')
+      label: <Link to={"/expenses"} style={getLinkStyle(/^expenses\.read$/)}>{translate("expenses")}</Link>,
+      disabled: !hasPermission(/^expenses\.read$/),
     },
     {
       key: "expensesCategory",
       icon: <ReconciliationOutlined style={menuIconStyle} />,
-      label: <Link to={"/category/expenses"} style={getLinkStyle(allowedAccess, 'expensesCategory.read')}>{translate("expenses_Category")}</Link>,
-      disabled: !allowedAccess.includes('expensesCategory.read')
+      label: <Link to={"/category/expenses"} style={getLinkStyle(/^expensesCategory\.read$/)}>{translate("expenses_Category")}</Link>,
+      disabled: !hasPermission(/^expensesCategory\.read$/),
     },
     {
       key: "iam",
       icon: <FontAwesomeIcon icon={faFingerprint} style={menuIconStyle} />,
-      label: <Link to={"/erp/iam"} style={getLinkStyle(allowedAccess, 'user.read')}>{translate("iam")}</Link>,
-      disabled: !allowedAccess.includes('user.read'),
+      label: <Link to={"/erp/iam"} style={getLinkStyle(/^user\.[a-z]+$/)}>{translate("iam")}</Link>,
+      disabled: !hasPermission(/^user\.[a-z]+$/),
       children: [
         {
           key: "users",
           icon: <FontAwesomeIcon icon={faUsersGear} style={menuIconStyle} />,
-          label: <Link to={"/erp/iam/users"} style={getLinkStyle(allowedAccess, 'user.read')}>{translate("users")}</Link>,
-          disabled: !allowedAccess.includes('user.read')
+          label: <Link to={"/erp/iam/users"} style={getLinkStyle(/^user\.[a-z]+$/)}>{translate("users")}</Link>,
+          disabled: !hasPermission(/^user\.[a-z]+$/),
         },
         {
           key: "roles",
           icon: <FontAwesomeIcon icon={faUserTag} style={menuIconStyle} />,
-          label: <Link to={"/erp/iam/roles"} style={getLinkStyle(allowedAccess, 'role.read')}>{translate("roles")}</Link>,
-          disabled: !allowedAccess.includes('role.read')
+          label: <Link to={"/erp/iam/roles"} style={getLinkStyle(/^role\.[a-z]+$/)}>{translate("roles")}</Link>,
+          disabled: !hasPermission(/^role\.[a-z]+$/),
         },
         {
           key: "privileges",
           icon: <FontAwesomeIcon icon={faKey} style={menuIconStyle} />,
-          label: <Link to={"/erp/iam/privileges"} style={getLinkStyle(allowedAccess, 'privilege.read')}>{translate("privileges")}</Link>,
-          disabled: !allowedAccess.includes('privilege.read')
+          label: <Link to={"/erp/iam/privileges"} style={getLinkStyle(/^privilege\.[a-z]+$/)}>{translate("privileges")}</Link>,
+          disabled: !hasPermission(/^privilege\.[a-z]+$/),
         },
-      ]
+      ],
     },
     {
       label: translate("Settings"),
       key: "settings",
       icon: <SettingOutlined style={menuIconStyle} />,
-      disabled: !allowedAccess.includes('settings.read'),
+      disabled: !hasPermission(/^settings\.read$/),
       children: [
         {
           key: "generalSettings",
           icon: <ReconciliationOutlined style={menuIconStyle} />,
-          label: <Link to={"/settings"} style={getLinkStyle(allowedAccess, 'settings.read')}>{translate("settings")}</Link>,
-          disabled: !allowedAccess.includes('settings.read')
+          label: <Link to={"/settings"} style={getLinkStyle(/^settings\.read$/)}>{translate("settings")}</Link>,
+          disabled: !hasPermission(/^settings\.read$/),
         },
         {
           key: "paymentMode",
-          label: <Link to={"/payment/mode"} style={getLinkStyle(allowedAccess, 'paymentMode.read')}>{translate("payments_mode")}</Link>,
-          disabled: !allowedAccess.includes('paymentMode.read')
+          label: <Link to={"/payment/mode"} style={getLinkStyle(/^paymentMode\.read$/)}>{translate("payments_mode")}</Link>,
+          disabled: !hasPermission(/^paymentMode\.read$/),
         },
         {
           key: "taxes",
-          label: <Link to={"/taxes"} style={getLinkStyle(allowedAccess, 'taxes.read')}>{translate("taxes")}</Link>,
-          disabled: !allowedAccess.includes('taxes.read')
+          label: <Link to={"/taxes"} style={getLinkStyle(/^taxes\.read$/)}>{translate("taxes")}</Link>,
+          disabled: !hasPermission(/^taxes\.read$/),
         },
         {
           key: "about",
-          label: <Link to={"/about"} style={getLinkStyle(allowedAccess, 'about.read')}>{translate("about")}</Link>,
-          disabled: !allowedAccess.includes('about.read')
+          label: <Link to={"/about"} style={getLinkStyle(/^about\.read$/)}>{translate("about")}</Link>,
+          disabled: !hasPermission(/^about\.read$/),
         },
       ],
     },
