@@ -9,13 +9,13 @@ import Joi from "joi";
 import { EntityTarget, ObjectLiteral } from "typeorm";
 
 const existsQuerySchema: Joi.ObjectSchema = Joi.object({
-    filter: Joi.object().required(),
+    filters: Joi.object().required(),
     withDeleted: Joi.bool().default(true),
 })
 
 const exists = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Response): Promise<Response> => {
 
-    const { filter, withDeleted } = await JoiSchemaValidator<{ filter: object, withDeleted: boolean }>(existsQuerySchema, req.body, { abortEarly: false, allowUnknown: false }, "dynamic-exists");
+    const { filters, withDeleted } = await JoiSchemaValidator<{ filters: object, withDeleted: boolean }>(existsQuerySchema, req.body, { abortEarly: false, allowUnknown: false }, "dynamic-exists");
 
     const repo = AppDataSource.getRepository(entity);
 
@@ -23,7 +23,7 @@ const exists = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Re
     const queryBuilder = repo.createQueryBuilder(pascalToSnakeCase(entity.toString()));
 
     // Apply filters to the query builder
-    applyFilters(queryBuilder, pascalToSnakeCase(entity.toString()), filter);
+    applyFilters(queryBuilder, pascalToSnakeCase(entity.toString()), filters);
 
     if (withDeleted) {
         queryBuilder.withDeleted();

@@ -49,7 +49,7 @@ const page = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Resp
 
     if (binMode) {
         queryBuilder.withDeleted();
-        queryBuilder.andWhere('deletedAt IS NOT NULL');
+        queryBuilder.andWhere('deleted_at IS NOT NULL');
     }
 
     if (autopopulateIds) {

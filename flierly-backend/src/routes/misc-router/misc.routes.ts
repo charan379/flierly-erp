@@ -18,7 +18,7 @@ import { Router } from "express";
 const miscRouter = Router();
 
 miscRouter.get(`/entities`, authorize(), errorBoundary(entities, "misc"));
-miscRouter.get(`/system-usage`, authorize(), errorBoundary(systemUsage, "misc"));
+miscRouter.get(`/system-usage`, errorBoundary(systemUsage, "misc"));
 miscRouter.get('/test/raw-query/:id', errorBoundary(testExecuteRawSQL, 'Role'));
 miscRouter.post('/test/type-orm-page', errorBoundary(testTypeORMPage, 'Role'));
 miscRouter.post('/test/type-orm-create', errorBoundary(testTypeORMCreate, 'Role'));

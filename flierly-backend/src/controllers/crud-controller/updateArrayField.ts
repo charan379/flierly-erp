@@ -72,7 +72,7 @@ const updateArrayField = async (entity: EntityTarget<ObjectLiteral>, req: Reques
     return res.status(HttpCodes.OK).json(apiResponse({
         success: true,
         result: `Added ${itemsToAdd.length} and removed ${itemsToRemove.length} from ${propertyName}.`,
-        message: 'Updated successfully',
+        message: `Added ${itemsToAdd.length} and removed ${itemsToRemove.length} from ${propertyName}.`,
         controller: 'CRUD.UpdateArrayFieldController',
         httpCode: HttpCodes.OK,
         error: null,
