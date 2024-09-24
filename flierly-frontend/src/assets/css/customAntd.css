@@ -178,6 +178,9 @@ h6 {
   margin-inline-end: 0px;
 }
 
+.table-transfer-flierly-1 .ant-pro-card-body {
+  padding-inline: 0px;
+}
 @media only screen and (max-width: 576px) {
   .crud-data-table-flierly-1 .ant-pagination .ant-pagination-options {
     display: block;

@@ -1,23 +1,16 @@
-import CustomAntDSelectTag from "@/features/SelectRemoteOptions/components/CustomAntDSelectTag";
-import selectRemoteOptionsService from "@/features/SelectRemoteOptions/service";
 import hasOwnProperty from "@/utils/hasOwnProperty";
-import { Badge, Button, Tag } from "antd";
+import { Tag } from "antd";
 import privilegeColumns from "./privilegeColumns";
 import TableTransferShuttle from "@/features/TableTransfer/TableTransferShuttle";
 import roleColumns from "./roleColumns";
 
 const userColumns = [
-  // {
-  //   title: "index",
-  //   dataIndex: "index",
-  //   valueType: "indexBorder",
-  //   width: 15,
-  // },
   {
-    title: "DocId",
-    dataIndex: "_id",
-    hideInTable: true,
-    width: 0,
+    title: "ID",
+    dataIndex: "id",
+    width: 60, // Updated width
+    sorter: true,
+    align: "center",
   },
   {
     title: "Deleted",
@@ -29,7 +22,7 @@ const userColumns = [
     title: "Username",
     dataIndex: "username",
     copyable: true,
-    width: 10,
+    width: 120, // Updated width
     sorter: true,
     queryFormConfig: {
       name: "username",
@@ -45,15 +38,15 @@ const userColumns = [
   {
     title: "Active",
     dataIndex: "isActive",
-    width: 5,
+    width: 100, // Updated width
     align: "center",
-    render: (text, record, index, action) => {
-      return text === false ? (
+    render: (text) => (
+      text === false ? (
         <Tag color="red">InActive</Tag>
       ) : (
         <Tag color="green">Active</Tag>
-      );
-    },
+      )
+    ),
     queryFormConfig: {
       name: "isActive",
       label: "status",
@@ -75,7 +68,7 @@ const userColumns = [
     title: "Email",
     dataIndex: "email",
     copyable: true,
-    width: 15,
+    width: 180, // Updated width
     queryFormConfig: {
       name: "email",
       label: "email",
@@ -91,7 +84,7 @@ const userColumns = [
     title: "Phone",
     dataIndex: "mobile",
     copyable: true,
-    width: 10,
+    width: 120, // Updated width
     queryFormConfig: {
       name: "mobile",
       label: "Phone",
@@ -107,8 +100,8 @@ const userColumns = [
     title: "Roles",
     dataIndex: "roles",
     copyable: true,
-    width: 7,
-    hideInTable: false,
+    width: 100, // Updated width
+    align: "center",
     render: (text, record, index, action) => {
       if (hasOwnProperty(record, "roles") && Array.isArray(record.roles)) {
         return (
@@ -121,7 +114,7 @@ const userColumns = [
               fieldName: "roles",
               onSuccess: () => {
                 setTimeout(() => {
-                  action.reload()
+                  action.reload();
                 }, 300);
               },
             }}
@@ -131,7 +124,7 @@ const userColumns = [
               columnsToDisplay: ["name", "code"],
               targetKeys: record.roles,
               rowKey: 'id',
-              titles: ["available_roles", "assigned_roles"]
+              titles: ["available_roles", "assigned_roles"],
             }}
           />
         );
@@ -144,9 +137,8 @@ const userColumns = [
     title: "Additional Access",
     dataIndex: "additionalPrivileges",
     copyable: true,
-    width: 12,
+    width: 180, // Updated width
     align: "center",
-    hideInTable: false,
     render: (text, record, index, action) => {
       if (hasOwnProperty(record, "additionalPrivileges") && Array.isArray(record.additionalPrivileges)) {
         return (
@@ -159,7 +151,7 @@ const userColumns = [
               fieldName: "additionalPrivileges",
               onSuccess: () => {
                 setTimeout(() => {
-                  action.reload()
+                  action.reload();
                 }, 300);
               },
             }}
@@ -169,7 +161,7 @@ const userColumns = [
               columnsToDisplay: ["name", "access", "entity"],
               targetKeys: record.additionalPrivileges,
               rowKey: 'id',
-              titles: ["available_privileges", "assigned_privileges"]
+              titles: ["available_privileges", "assigned_privileges"],
             }}
           />
         );
@@ -182,9 +174,8 @@ const userColumns = [
     title: "Restricted Access",
     dataIndex: "restrictedPrivileges",
     copyable: true,
-    width: 12,
+    width: 180, // Updated width
     align: "center",
-    hideInTable: false,
     render: (text, record, index, action) => {
       if (hasOwnProperty(record, "restrictedPrivileges") && Array.isArray(record.restrictedPrivileges)) {
         return (
@@ -197,7 +188,7 @@ const userColumns = [
               fieldName: "restrictedPrivileges",
               onSuccess: () => {
                 setTimeout(() => {
-                  action.reload()
+                  action.reload();
                 }, 300);
               },
             }}
@@ -207,7 +198,7 @@ const userColumns = [
               columnsToDisplay: ["name", "access", "entity"],
               targetKeys: record.restrictedPrivileges,
               rowKey: 'id',
-              titles: ["available_privileges", "restricted_privileges"]
+              titles: ["available_privileges", "restricted_privileges"],
             }}
           />
         );
@@ -219,7 +210,7 @@ const userColumns = [
   {
     title: "Created",
     dataIndex: "createdAt",
-    width: 10,
+    width: 180, // Updated width
     valueType: "dateTime",
     queryFormConfig: {
       name: "createdAt",
@@ -235,7 +226,7 @@ const userColumns = [
   {
     title: "Updated",
     dataIndex: "updatedAt",
-    width: 10,
+    width: 180, // Updated width
     valueType: "dateTime",
     queryFormConfig: {
       name: "updatedAt",
@@ -243,6 +234,23 @@ const userColumns = [
       rules: [],
       transformer: "dateRange",
       order: 9,
+      input: {
+        type: "DateRange",
+      },
+    },
+  },
+  {
+    title: "Deleted",
+    dataIndex: "deletedAt",
+    width: 180, // Updated width
+    valueType: "dateTime",
+    sorter: true,
+    queryFormConfig: {
+      name: "deletedAt",
+      label: "deleted_at",
+      rules: [],
+      transformer: "dateRange",
+      order: 11,
       input: {
         type: "DateRange",
       },
