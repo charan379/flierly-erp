@@ -30,6 +30,7 @@ const TableTransferShuttle = ({
     titles: ["left_title", "right_title"]
   },
 }) => {
+
   const { translate } = useLocale();
   const [isModalVisible, setIsModalVisible] = useState(false); // Modal visibility state
   const [isLoading, setIsLoading] = useState(false); // Loading state for async operations
@@ -97,7 +98,10 @@ const TableTransferShuttle = ({
         >
           <Suspense fallback={<><Skeleton active key={"sk1"} /><Skeleton active key={"sk2"} /></>}>
             <TableTransfer
-              {...tableConfig}
+              columns={tableConfig.columns}
+              columnsToDisplay={tableConfig.columnsToDisplay}
+              entityName={tableConfig.entityName}
+              rowKey="id"
               titles={[translate(tableConfig.titles[0]), translate(tableConfig.titles[1])]} // Translate table titles
               targetKeys={targetKeys}
               onTargetKeysChange={handleTargetKeysChange} // Handle changes in selected keys

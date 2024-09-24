@@ -131,7 +131,6 @@ const roleColumns = [
     width: 10,
     valueType: "dateTime",
     sorter: true,
-    defaultSortOrder: "descend",
     queryFormConfig: {
       name: "createdAt",
       label: "created_at",
