@@ -6,7 +6,7 @@ import JoiSchemaValidator from "@/utils/joi-object-validator/joiSchemaValidator"
 import { Request, Response } from "express";
 import { EntityTarget, ObjectLiteral } from "typeorm";
 
-const deactivate = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Response): Promise<Response> => {
+const inactivate = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Response): Promise<Response> => {
 
     const validatedIds: number[] = await JoiSchemaValidator(idArraySchema, req.body, {}, "dynamic-deactivate");
 
@@ -20,12 +20,12 @@ const deactivate = async (entity: EntityTarget<ObjectLiteral>, req: Request, res
     return res.status(HttpCodes.OK).json(apiResponse({
         success: true,
         result,
-        message: 'Deactivated successfully',
-        controller: 'CRUD.DeactivateController',
+        message: `${result.affected} ${repo.metadata.name}'s inactivated successfully.`,
+        controller: 'CRUD.InactivateController',
         httpCode: HttpCodes.OK,
         error: null,
         req, res
     }));
 }
 
-export default deactivate;
+export default inactivate;

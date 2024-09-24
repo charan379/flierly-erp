@@ -54,7 +54,7 @@ const Activate = ({ entity, actions, rows, render }) => {
           cancelButtonProps={{ type: "primary" }}
           onCancel={() => message.warning(translate("request_cancelled"))}
           onConfirm={async () => {
-            const action = activate ? crudService.activate : crudService.deactivate;
+            const action = activate ? crudService.activate : crudService.inactivate;
             const { success } = await action({
               entity: entity,
               ids: rows.selectedRowKeys,
@@ -62,7 +62,7 @@ const Activate = ({ entity, actions, rows, render }) => {
 
             if (success) {
               actions.clearSelected();
-              await actions.reload();
+              actions.reload();
             }
           }}
         >

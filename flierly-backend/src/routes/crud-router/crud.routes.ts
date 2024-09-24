@@ -14,7 +14,7 @@ const routeGenerator = (entityCode: string, controller: any) => {
     crudRouter.post(`/${entityCode}/page`, authorize(`${entityCode}.read`), errorBoundary(controller['page'], entityCode));
     crudRouter.put(`/${entityCode}/update/:id`, authorize(`${entityCode}.update`), errorBoundary(controller['update'], entityCode));
     crudRouter.patch(`/${entityCode}/activate`, authorize(`${entityCode}.manage`), errorBoundary(controller['activate'], entityCode));
-    crudRouter.patch(`/${entityCode}/deactivate`, authorize(`${entityCode}.manage`), errorBoundary(controller['deactivate'], entityCode));
+    crudRouter.patch(`/${entityCode}/inactivate`, authorize(`${entityCode}.manage`), errorBoundary(controller['inactivate'], entityCode));
     crudRouter.delete(`/${entityCode}/delete`, authorize(`${entityCode}.delete`), errorBoundary(controller['delete'], entityCode));
     crudRouter.patch(`/${entityCode}/restore`, authorize(`${entityCode}.delete`), errorBoundary(controller['restore'], entityCode));
     crudRouter.patch(`/${entityCode}/update-array-field`, authorize(`${entityCode}.manage`), errorBoundary(controller['updateArrayField'], entityCode));

@@ -33,7 +33,7 @@ const Delete = ({ entity, actions, rows, render }) => {
             //
             if (success) {
               actions.clearSelected();
-              await actions.reload();
+              actions.reload();
             }
           }}
         >

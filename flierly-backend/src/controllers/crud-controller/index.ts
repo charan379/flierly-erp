@@ -9,7 +9,7 @@ import search from './search';
 import exists from './exists';
 import activate from './activate';
 import restore from './restore';
-import deactivate from './deactivate';
+import inactivate from './inactivate';
 import updateArrayField from './updateArrayField';
 
 const CRUDController = async (entity: EntityTarget<ObjectLiteral>) => {
@@ -23,7 +23,7 @@ const CRUDController = async (entity: EntityTarget<ObjectLiteral>) => {
         search: (req: Request, res: Response) => search(entity, req, res),
         exists: (req: Request, res: Response) => exists(entity, req, res),
         activate: (req: Request, res: Response) => activate(entity, req, res),
-        deactivate: (req: Request, res: Response) => deactivate(entity, req, res),
+        inactivate: (req: Request, res: Response) => inactivate(entity, req, res),
         restore: (req: Request, res: Response) => restore(entity, req, res),
         updateArrayField: (req: Request, res: Response) => updateArrayField(entity, req, res),
     }

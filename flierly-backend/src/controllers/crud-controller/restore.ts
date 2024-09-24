@@ -19,7 +19,7 @@ const restore = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: R
     return res.status(HttpCodes.OK).json(apiResponse({
         success: true,
         result,
-        message: 'Restored successfully',
+        message: `${result.affected} ${repo.metadata.name}'s restored successfully.`,
         controller: 'misc.RestoreRoleController',
         httpCode: HttpCodes.CREATED,
         error: null,

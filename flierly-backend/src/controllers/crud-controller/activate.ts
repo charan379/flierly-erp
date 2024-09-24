@@ -20,7 +20,7 @@ const activate = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: 
     return res.status(HttpCodes.OK).json(apiResponse({
         success: true,
         result,
-        message: 'Activated successfully',
+        message: `${result.affected} ${repo.metadata.name}'s activated successfully.`,
         controller: 'CRUD.ActivateController',
         httpCode: HttpCodes.OK,
         error: null,

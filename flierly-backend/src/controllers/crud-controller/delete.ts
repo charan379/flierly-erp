@@ -29,7 +29,7 @@ const softDelete = async (entity: EntityTarget<ObjectLiteral>, req: Request, res
     return res.status(HttpCodes.OK).json(apiResponse({
         success: true,
         result,
-        message: 'Deleted successfully',
+        message: `${result.affected} ${AppDataSource.getRepository(entity).metadata.name}'s deleted successfully.`,
         controller: 'CRUD.SoftDeleteController',
         httpCode: HttpCodes.OK,
         error: null,

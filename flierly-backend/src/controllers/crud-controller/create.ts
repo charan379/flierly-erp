@@ -33,7 +33,7 @@ const create = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Re
         apiResponse({
             success: true,
             result: savedRole,
-            message: 'Row created successfully',
+            message: `${repo.metadata.name} created successfully.`,
             controller: 'CRUD.CreateController',
             httpCode: HttpCodes.CREATED,
             error: null,

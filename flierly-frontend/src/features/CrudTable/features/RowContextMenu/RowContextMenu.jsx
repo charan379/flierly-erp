@@ -99,7 +99,7 @@ const RowContextMenu = ({
           });
           break;
         case "inactivate":
-          result = await crudService.deactivate({
+          result = await crudService.inactivate({
             entity,
             ids: [record?.id]
           });

@@ -46,8 +46,8 @@ const crudService = {
   },
 
   // Activate
-  deactivate: async ({ entity, ids = [] }) => {
-    const promise = api.patch(`/${entity}/deactivate`, ids);
+  inactivate: async ({ entity, ids = [] }) => {
+    const promise = api.patch(`/${entity}/inactivate`, ids);
     return handleResponse({ promise, notifyOnSuccess: true });
   },
 

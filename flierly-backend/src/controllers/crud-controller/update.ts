@@ -25,7 +25,6 @@ const update = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Re
 
         return updateResult; // Return the result of the update operation
     });
-
     return res.status(HttpCodes.OK).json(apiResponse({
         success: true,
         result,
