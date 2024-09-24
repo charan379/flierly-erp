@@ -30,7 +30,7 @@ const handleOfflineError = () => {
   showErrorNotification(
     'No internet connection',
     'Cannot connect to the Internet. Check your internet network.',
-    15,
+    10,
     1
   );
   return {
@@ -49,7 +49,7 @@ const handleNoResponseError = () => {
   showErrorNotification(
     'Problem connecting to server',
     'Cannot connect to the server. Try again later.',
-    20,
+    5,
     1
   );
   return {
@@ -84,7 +84,7 @@ const handleResponseError = (response) => {
   showErrorNotification(
     `Request error ${status}`,
     message,
-    20,
+    5,
     2
   );
   return response.data;
