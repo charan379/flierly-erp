@@ -16,16 +16,16 @@ export function errorBoundary(fn: (req: Request, res: Response, next: NextFuncti
         try {
             await fn(req, res, next);
         } catch (error: any) {
-            const errorMsg: ErrorMessage = errrorMessageGenerator(error);
-            switch (errorMsg.name) {
+            const errorDetails: ErrorMessage = errrorMessageGenerator(error);
+            switch (errorDetails.name) {
                 case 'ValidationError':
                     // ValidationError
                     return res.status(HttpCodes.BAD_REQUEST).json(apiResponse({
                         success: false,
                         result: null,
-                        message: errorMsg.message,
+                        message: errorDetails.message,
                         controller: `${entityCode}.${fn.name}`,
-                        error: errorMsg,
+                        error: errorDetails,
                         httpCode: HttpCodes.BAD_REQUEST,
                         req, res
                     }));
@@ -34,9 +34,9 @@ export function errorBoundary(fn: (req: Request, res: Response, next: NextFuncti
                     return res.status(HttpCodes.BAD_REQUEST).json(apiResponse({
                         success: false,
                         result: null,
-                        message: errorMsg.message,
+                        message: errorDetails.message,
                         controller: `${entityCode}.${fn.name}`,
-                        error: errorMsg,
+                        error: errorDetails,
                         httpCode: HttpCodes.BAD_REQUEST,
                         req, res
                     }));
@@ -45,21 +45,21 @@ export function errorBoundary(fn: (req: Request, res: Response, next: NextFuncti
                     return res.status(HttpCodes.BAD_REQUEST).json(apiResponse({
                         success: false,
                         result: null,
-                        message: errorMsg.message,
+                        message: errorDetails.message,
                         controller: `${entityCode}.${fn.name}`,
-                        error: errorMsg,
+                        error: errorDetails,
                         httpCode: HttpCodes.BAD_REQUEST,
                         req, res
                     }))
                 default:
                     // Server Error
-                    const httpCode = errorMsg?.httpCode ?? HttpCodes.INTERNAL_SERVER_ERROR;
+                    const httpCode = errorDetails?.httpCode ?? HttpCodes.INTERNAL_SERVER_ERROR;
                     return res.status(httpCode).json(apiResponse({
                         success: false,
                         result: null,
-                        message: errorMsg.message,
+                        message: errorDetails.message,
                         controller: `${entityCode}.${fn.name}`,
-                        error: errorMsg,
+                        error: errorDetails,
                         httpCode: HttpCodes.BAD_REQUEST,
                         req, res
                     }));
