@@ -14,9 +14,8 @@ const Delete = ({ entity, actions, rows, render }) => {
     <Tooltip title={`${translate("delete_selected")}`}>
       <Badge color="blue" count={rows.selectedRowKeys.length} overflowCount={99} >
         <Popconfirm
-          title={`${translate("delete_selected")} : ${
-            rows.selectedRowKeys.length
-          }`}
+          title={`${translate("delete_selected")} : ${rows.selectedRowKeys.length
+            }`}
           description={`${translate(
             "on_confirming_selected_items_will_be_deleted"
           )}`}
@@ -29,7 +28,7 @@ const Delete = ({ entity, actions, rows, render }) => {
           onConfirm={async () => {
             const { success } = await crudService.delete({
               entity: entity,
-              docIds: rows.selectedRowKeys,
+                ids: rows.selectedRowKeys,
             });
             //
             if (success) {

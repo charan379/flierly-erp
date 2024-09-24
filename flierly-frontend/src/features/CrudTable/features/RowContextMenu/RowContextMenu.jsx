@@ -27,7 +27,7 @@ const RowContextMenu = ({
   render,
 }) => {
   if (!render) return;
-  
+
   const { theme } = useTheme();
   const { translate } = useLocale();
   const [popoverPosition, setPopoverPosition] = useState(position);
@@ -51,17 +51,17 @@ const RowContextMenu = ({
       },
       record?.isActive
         ? {
-            label: translate("inactivate"),
-            key: "inactivate",
-            icon: <StopOutlined style={menuItemStyle} />,
-            style: { color: "#9E9E9E", ...menuItemStyle },
-          }
+          label: translate("inactivate"),
+          key: "inactivate",
+          icon: <StopOutlined style={menuItemStyle} />,
+          style: { color: "#9E9E9E", ...menuItemStyle },
+        }
         : {
-            label: translate("activate"),
-            key: "activate",
-            icon: <CheckCircleOutlined style={menuItemStyle} />,
-            style: { color: "#4CAF50", ...menuItemStyle },
-          },
+          label: translate("activate"),
+          key: "activate",
+          icon: <CheckCircleOutlined style={menuItemStyle} />,
+          style: { color: "#4CAF50", ...menuItemStyle },
+        },
       {
         label: translate("delete"),
         key: "delete",
@@ -95,27 +95,25 @@ const RowContextMenu = ({
         case "activate":
           result = await crudService.activate({
             entity,
-            action: "activate",
-            docIds: [record?._id],
+            ids: [record?.id]
           });
           break;
         case "inactivate":
-          result = await crudService.activate({
+          result = await crudService.deactivate({
             entity,
-            action: "inactivate",
-            docIds: [record?._id],
+            ids: [record?.id]
           });
           break;
         case "delete":
           result = await crudService.delete({
             entity,
-            docIds: [record?._id],
+            ids: [record?.id]
           });
           break;
         case "restore":
           result = await crudService.restore({
             entity,
-            docIds: [record?._id],
+            ids: [record?.id]
           });
           break;
         case "close":

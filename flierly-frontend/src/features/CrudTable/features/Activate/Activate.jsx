@@ -22,9 +22,9 @@ const Activate = ({ entity, actions, rows, render }) => {
     rows.selectedRowKeys.length <= 0
       ? {}
       : {
-          backgroundColor: activate ? "#4CAF50" : "#9E9E9E",
-          borderColor: activate ? "#4CAF50" : "#9E9E9E",
-        };
+        backgroundColor: activate ? "#4CAF50" : "#9E9E9E",
+        borderColor: activate ? "#4CAF50" : "#9E9E9E",
+      };
 
   return (
     <Tooltip
@@ -38,8 +38,7 @@ const Activate = ({ entity, actions, rows, render }) => {
             `${activate ? "activate" : "inactivate"}_selected`
           )} : ${rows.selectedRowKeys.length}`}
           description={translate(
-            `on_confirming_selected_items_will_be_${
-              activate ? "activated" : "inactivated"
+            `on_confirming_selected_items_will_be_${activate ? "activated" : "inactivated"
             }`
           )}
           icon={
@@ -55,12 +54,12 @@ const Activate = ({ entity, actions, rows, render }) => {
           cancelButtonProps={{ type: "primary" }}
           onCancel={() => message.warning(translate("request_cancelled"))}
           onConfirm={async () => {
-            const { success } = await crudService.activate({
+            const action = activate ? crudService.activate : crudService.deactivate;
+            const { success } = await action({
               entity: entity,
-              action: activate ? "activate" : "inactivate",
-              docIds: rows.selectedRowKeys,
+              ids: rows.selectedRowKeys,
             });
-            //
+
             if (success) {
               actions.clearSelected();
               await actions.reload();

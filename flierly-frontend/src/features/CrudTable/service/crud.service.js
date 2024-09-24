@@ -14,7 +14,7 @@ const api = axios.create({
 });
 
 const crudService = {
-  // Fetch paginated documents
+  // Fetch paginated
   page: async ({
     entity,
     autopopulateIds = true,
@@ -31,26 +31,29 @@ const crudService = {
     return handleResponse({ promise });
   },
 
-  // Soft delete documents
-  delete: async ({ entity, docIds = [] }) => {
+  // Soft delete
+  delete: async ({ entity, ids = [] }) => {
     const promise = api.delete(`/${entity}/delete`, {
-      data: docIds,
+      data: ids
     });
     return handleResponse({ promise, notifyOnSuccess: true });
   },
 
-  // Activate or inactivate documents
-  activate: async ({ entity, docIds = [], action = "activate" }) => {
-    const promise = api.put(`/${entity}/activate`, {
-      ids: docIds,
-      action,
-    });
+  // Activate
+  activate: async ({ entity, ids = [] }) => {
+    const promise = api.patch(`/${entity}/activate`, ids);
     return handleResponse({ promise, notifyOnSuccess: true });
   },
 
-  // Restore documents
-  restore: async ({ entity, docIds = [] }) => {
-    const promise = api.put(`/${entity}/restore`, docIds);
+  // Activate
+  deactivate: async ({ entity, ids = [] }) => {
+    const promise = api.patch(`/${entity}/deactivate`, ids);
+    return handleResponse({ promise, notifyOnSuccess: true });
+  },
+
+  // Restore
+  restore: async ({ entity, ids = [] }) => {
+    const promise = api.patch(`/${entity}/restore`, ids);
     return handleResponse({ promise, notifyOnSuccess: true });
   },
 };

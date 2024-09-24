@@ -38,7 +38,7 @@ const Restore = ({ entity, actions, rows, render }) => {
           onConfirm={async () => {
             const { success } = await crudService.restore({
               entity: entity,
-              docIds: rows.selectedRowKeys,
+              ids: rows.selectedRowKeys,
             });
             //
             if (success) {
