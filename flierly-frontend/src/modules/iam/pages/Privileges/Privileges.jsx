@@ -14,7 +14,7 @@ export default function Privileges() {
           columns={privilegeColumns}
           dataSource={[]}
           tableKey={"privilege-table"}
-          rowKey="_id"
+          rowKey="id"
           searchFormFields={<QueryPrivilege />}
           createFormFields={<QueryPrivilege />}
         />

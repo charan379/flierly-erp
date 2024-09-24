@@ -29,15 +29,27 @@ const tableTransferService = {
     return handleResponse({ promise });
   },
 
+  // Fetch existing data source
+  fetchExistingData: async ({
+    entity,
+    keys = []
+  }) => {
+    const promise = api.post(
+      `/${entity}/search`,
+      { filters: { id: { $in: keys } }, limit: keys.length },
+      {}
+    );
+    return handleResponse({ promise });
+  },
+
   // Update Array field
-  updateArrayField: async ({ entity, id, fieldPath, dataType, newArray }) => {
-    const promise = api.put(
+  updateArrayField: async ({ entity, id, fieldPath, newArray }) => {
+    const promise = api.patch(
       `${entity}/update-array-field`,
       {
         id,
-        fieldPath,
-        dataType,
-        newArray,
+        propertyName: fieldPath,
+        newArray
       },
       {}
     );

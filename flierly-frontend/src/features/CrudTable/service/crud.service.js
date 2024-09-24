@@ -17,7 +17,7 @@ const crudService = {
   // Fetch paginated documents
   page: async ({
     entity,
-    autopopulate = true,
+    autopopulateIds = true,
     binMode = false,
     pagination = { limit: 10, page: 1 },
     filters = {},
@@ -25,7 +25,7 @@ const crudService = {
   }) => {
     const promise = api.post(
       `/${entity}/page`,
-      { filters, pagination, sort, autopopulate, binMode },
+      { filters, pagination, sort, autopopulateIds, binMode },
       {}
     );
     return handleResponse({ promise });

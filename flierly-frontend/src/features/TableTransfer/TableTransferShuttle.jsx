@@ -1,5 +1,5 @@
 import React, { Suspense, useState } from "react";
-import { Button, Modal, Skeleton } from "antd";
+import { Badge, Button, Modal, Skeleton } from "antd";
 import tableTransferService from "./service";
 import useLocale from "../Language/hooks/useLocale";
 
@@ -14,7 +14,6 @@ const TableTransferShuttle = ({
   requestConfig = {
     entityName: "entity",
     fieldName: "field",
-    fieldDataType: "data_type",
     recordId: "record_id",
     onSuccess: () => { },
   },
@@ -26,9 +25,9 @@ const TableTransferShuttle = ({
     entityName: "entityName",
     columns: [],
     columnsToDisplay: [],
-    existingDataSource: [],
     targetKeys: [],
-    rowKey: "_id"
+    rowKey: "id",
+    titles: ["left_title", "right_title"]
   },
 }) => {
 
@@ -52,7 +51,6 @@ const TableTransferShuttle = ({
     tableTransferService
       .updateArrayField({
         entity: requestConfig.entityName,
-        dataType: requestConfig.fieldDataType,
         fieldPath: requestConfig.fieldName,
         id: requestConfig.recordId,
         newArray: targetKeys,
@@ -76,9 +74,10 @@ const TableTransferShuttle = ({
 
   return (
     <>
-      <Button type={triggerConfig.buttonType} onClick={showModal}>
-        {translate(triggerConfig.text)}
-      </Button>
+      <Badge count={tableConfig.targetKeys.length} overflowCount={99} showZero offset={[-3, 3]} >
+        <Button type={triggerConfig.buttonType} onClick={showModal}>
+          {translate(triggerConfig.text)}
+        </Button></Badge>
       <div onContextMenu={handleContextMenu}>
         <Modal
           title={translate(title)}
@@ -95,6 +94,7 @@ const TableTransferShuttle = ({
           <Suspense fallback={<><Skeleton active key={"sk1"} /><Skeleton active key={"sk2"} /></>}>
             <TableTransfer
               {...tableConfig}
+              titles={[translate(tableConfig.titles[0]), translate(tableConfig.titles[1])]}
               targetKeys={targetKeys}
               onTargetKeysChange={handleTargetKeysChange}
             />

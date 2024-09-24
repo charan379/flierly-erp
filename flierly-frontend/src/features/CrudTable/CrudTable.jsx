@@ -16,7 +16,7 @@ import BinModeToggle from "./features/BinModeToggle";
 const CrudTable = ({
   entity,
   tableKey,
-  rowKey = "_id",
+  rowKey = "id",
   rowTitleKey = "name",
   columns,
   dataSource = [],

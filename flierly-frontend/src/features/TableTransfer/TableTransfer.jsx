@@ -10,26 +10,41 @@ const TableTransfer = ({
   entityName,
   columns,
   columnsToDisplay,
-  existingDataSource = [],
-  rowKey = "_id",
+  rowKey = "id",
   targetKeys = [],
   onTargetKeysChange,
+  titles = []
 }) => {
   // State variables for managing data, pagination, and loading state
   const [dataSource, setDataSource] = useState([]);
-  const [totalDataSource, setTotalDataSource] = useState(existingDataSource);
+  const [totalDataSource, setTotalDataSource] = useState([]);
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
     total: 0,
   });
   const [loading, setLoading] = useState(false);
+  const [loadingExistingData, setLoadingExistingData] = useState(false);
   const [sorter, setSorter] = useState({});
   const [filters, setFilters] = useState({});
   const actionRef = useRef();
 
+  async function fetchExistingData(entityName, keys) {
+    setLoadingExistingData(true);
+
+    const response = await tableTransferService.fetchExistingData({ entity: entityName, keys });
+
+    if (response?.result && Array.isArray(response.result)) {
+      setTotalDataSource((prev) =>
+        uniqBy(prev.concat(response.result), rowKey)
+      );
+    }
+
+    setLoadingExistingData(false);
+
+  }
   // Fetch data for the left table
-  async function fetchLeftData({ pager, sort, filter } = {pager: pagination, sort: sorter, filter: filters}) {
+  async function fetchLeftData({ pager, sort, filter } = { pager: pagination, sort: sorter, filter: filters }) {
     setLoading(true);
     // console.log({pager, sort, filter})
     const response = await tableTransferService.entityPage({
@@ -55,7 +70,7 @@ const TableTransfer = ({
     if (Array.isArray(response?.result?.data)) {
       setDataSource(response.result.data);
       setTotalDataSource((prev) =>
-        uniqBy(prev.concat(response.result.data), "_id")
+        uniqBy(prev.concat(response.result.data), rowKey)
       );
     }
 
@@ -65,7 +80,8 @@ const TableTransfer = ({
   // Initial data fetch on component mount
   useEffect(() => {
     fetchLeftData();
-  }, []);
+    fetchExistingData(entityName, targetKeys);
+  }, [entityName]);
 
   // Filter columns to include in the ProTable
   const leftColumns = columns.filter((column) =>
@@ -77,8 +93,9 @@ const TableTransfer = ({
   );
 
   const handleFiltersChange = (filters) => {
-    if(filters?.field !== undefined) fetchLeftData({filter: {[filters.field]: filters[filters.field]}})
+    if (filters?.field !== undefined) fetchLeftData({ filter: { [filters.field]: filters[filters.field] } })
   };
+
   return (
     <Transfer
       dataSource={totalDataSource}
@@ -87,7 +104,7 @@ const TableTransfer = ({
       showSearch={false}
       rowKey={(record) => record[rowKey]}
       showSelectAll={false}
-      titles={["Available Data", "Selected Data"]}
+      titles={titles}
       selectAllLabels={[
         ({ selectedCount }) => (
           <span>
@@ -162,7 +179,7 @@ const TableTransfer = ({
             showSorterTooltip={{ target: "sorter-icon" }}
             sortDirections={["ascend", "descend"]}
             search={false}
-            loading={direction === "left" && loading}
+            loading={direction === "left" ? loading : loadingExistingData}
             dataSource={direction === "left" ? leftDataSource : rightDataSource}
             size="small"
             rowKey={rowKey}
@@ -197,18 +214,18 @@ const TableTransfer = ({
             pagination={
               direction === "left"
                 ? {
-                    ...pagination,
-                    showSizeChanger: true,
-                    pageSizeOptions: [5, 10, 20, 30, 50, 100],
-                    defaultPageSize: 10,
-                  }
+                  ...pagination,
+                  showSizeChanger: true,
+                  pageSizeOptions: [5, 10, 20, 30, 50, 100],
+                  defaultPageSize: 10,
+                }
                 : false
             }
             tableExtraRender={
               direction === "left"
                 ? () => (
-                    <Search columns={columns} onSearch={handleFiltersChange} />
-                  )
+                  <Search columns={columns} onSearch={handleFiltersChange} />
+                )
                 : null
             }
           />

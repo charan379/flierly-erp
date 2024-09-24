@@ -2,17 +2,12 @@ import selectRemoteOptionsService from "@/features/SelectRemoteOptions/service";
 import { Tag } from "antd";
 
 const privilegeColumns = [
-  // {
-  //   title: "index",
-  //   dataIndex: "index",
-  //   valueType: "indexBorder",
-  //   width: 15,
-  // },
   {
-    title: "DocId",
-    dataIndex: "_id",
-    hideInTable: true,
-    width: 0,
+    title: "ID",
+    dataIndex: "id",
+    width: 2,
+    sorter: true,
+    align: "center"
   },
   {
     title: "Name",
@@ -32,10 +27,55 @@ const privilegeColumns = [
     },
   },
   {
+    title: "Active",
+    dataIndex: "isActive",
+    width: 5,
+    align: "center",
+    render: (text, record, index, action) => {
+      return text === false ? (
+        <Tag color="red">InActive</Tag>
+      ) : (
+        <Tag color="green">Active</Tag>
+      );
+    },
+    queryFormConfig: {
+      name: "isActive",
+      label: "status",
+      rules: [{ type: "boolean" }],
+      order: 2,
+      input: {
+        type: "Select",
+        select: {
+          mode: "single",
+          options: [
+            { label: "Active", value: true },
+            { label: "In Active", value: false },
+          ],
+        },
+      },
+    },
+  },
+  {
     title: "Access",
     dataIndex: "access",
     copyable: false,
     width: 5,
+    render: (text, record, index, action) => {
+      switch (text) {
+        case "Create":
+          return <Tag color="#50C878">{text}</Tag>;
+        case "Read":
+          return <Tag color="#008080">{text}</Tag>;
+        case "Update":
+          return <Tag color="#FF7F50">{text}</Tag>;
+        case "Manage":
+          return <Tag color="#191970">{text}</Tag>
+        case "Delete":
+          return <Tag color="#DC143C">{text}</Tag>
+        default:
+          return <Tag>{text}</Tag>;
+      }
+    },
     queryFormConfig: {
       name: "access",
       label: "access",
@@ -73,8 +113,8 @@ const privilegeColumns = [
     },
   },
   {
-    title: "Model",
-    dataIndex: "model",
+    title: "Entity",
+    dataIndex: "entity",
     copyable: false,
     width: 7,
     sorter: true,
@@ -153,6 +193,23 @@ const privilegeColumns = [
       rules: [],
       transformer: "dateRange",
       order: 6,
+      input: {
+        type: "DateRange",
+      },
+    },
+  },
+  {
+    title: "Deleted",
+    dataIndex: "deletedAt",
+    width: 10,
+    valueType: "dateTime",
+    sorter: true,
+    queryFormConfig: {
+      name: "deletedAt",
+      label: "deleted_at",
+      rules: [],
+      transformer: "dateRange",
+      order: 7,
       input: {
         type: "DateRange",
       },

@@ -4,6 +4,7 @@ import hasOwnProperty from "@/utils/hasOwnProperty";
 import { Badge, Button, Tag } from "antd";
 import privilegeColumns from "./privilegeColumns";
 import TableTransferShuttle from "@/features/TableTransfer/TableTransferShuttle";
+import roleColumns from "./roleColumns";
 
 const userColumns = [
   // {
@@ -111,72 +112,40 @@ const userColumns = [
     render: (text, record, index, action) => {
       if (hasOwnProperty(record, "roles") && Array.isArray(record.roles)) {
         return (
-          <Badge
-            count={record.roles.length}
-            showZero
-            size="small"
-            color="gold"
-            overflowCount={99}
-          >
-            <Button type="link" size="small">
-              User Roels
-            </Button>
-          </Badge>
+          <TableTransferShuttle
+            title="user_roles"
+            triggerConfig={{ buttonType: "link", text: "roles" }}
+            requestConfig={{
+              recordId: record?.id,
+              entityName: "user",
+              fieldName: "roles",
+              onSuccess: () => {
+                setTimeout(() => {
+                  action.reload()
+                }, 300);
+              },
+            }}
+            tableConfig={{
+              entityName: "role",
+              columns: roleColumns,
+              columnsToDisplay: ["name", "code"],
+              targetKeys: record.roles,
+              rowKey: 'id',
+              titles: ["available_roles", "assigned_roles"]
+            }}
+          />
         );
       } else {
         return null;
       }
-    },
-    queryFormConfig: {
-      name: "roles",
-      label: "roles",
-      order: 5,
-      rules: [{ type: "array" }],
-      transformer: "inArray",
-      input: {
-        type: "SelectRemoteOptions",
-        select: {
-          mode: "multiple",
-          // labelInValue: true,
-          asyncOptionsFetcher: async (value) => {
-            const response = await selectRemoteOptionsService.entities({
-              entity: "role",
-              queryField: "name",
-              keyword: value,
-              limit: 20,
-            });
-
-            if (
-              response?.success &&
-              response?.result &&
-              Array.isArray(response.result)
-            ) {
-              return response.result.map((role) => {
-                return { label: role, value: role?._id };
-              });
-            }
-          },
-          debounceTimeout: 300,
-          optionRender: (option, info) => {
-            return `${option?.label?.name} | ${option?.label?.code}`;
-          },
-          tagRender: (props) => {
-            return (
-              <CustomAntDSelectTag
-                title={props.label.name}
-                onClose={props.onClose}
-              />
-            );
-          },
-        },
-      },
     },
   },
   {
     title: "Additional Access",
     dataIndex: "additionalPrivileges",
     copyable: true,
-    width: 10,
+    width: 12,
+    align: "center",
     hideInTable: false,
     render: (text, record, index, action) => {
       if (hasOwnProperty(record, "additionalPrivileges") && Array.isArray(record.additionalPrivileges)) {
@@ -185,9 +154,8 @@ const userColumns = [
             title="user_additional_privileges"
             triggerConfig={{ buttonType: "link", text: "additional_privileges" }}
             requestConfig={{
-              recordId: record?._id,
+              recordId: record?.id,
               entityName: "user",
-              fieldDataType: "objectId",
               fieldName: "additionalPrivileges",
               onSuccess: () => {
                 setTimeout(() => {
@@ -198,10 +166,10 @@ const userColumns = [
             tableConfig={{
               entityName: "privilege",
               columns: privilegeColumns,
-              columnsToDisplay: ["name", "access", "model"],
-              targetKeys: record.additionalPrivileges.map((privilege) => privilege?._id),
-              existingDataSource: record.additionalPrivileges,
-              rowKey: '_id'
+              columnsToDisplay: ["name", "access", "entity"],
+              targetKeys: record.additionalPrivileges,
+              rowKey: 'id',
+              titles: ["available_privileges", "assigned_privileges"]
             }}
           />
         );
@@ -214,17 +182,34 @@ const userColumns = [
     title: "Restricted Access",
     dataIndex: "restrictedPrivileges",
     copyable: true,
-    width: 10,
+    width: 12,
+    align: "center",
     hideInTable: false,
     render: (text, record, index, action) => {
-      if (
-        hasOwnProperty(record, "restrictedPrivileges") &&
-        Array.isArray(record.restrictedPrivileges)
-      ) {
+      if (hasOwnProperty(record, "restrictedPrivileges") && Array.isArray(record.restrictedPrivileges)) {
         return (
-          <Badge count={record.restrictedPrivileges.length}>
-            <Button type="link">Restricted Privileges</Button>
-          </Badge>
+          <TableTransferShuttle
+            title="user_restricted_privileges"
+            triggerConfig={{ buttonType: "link", text: "restricted_privileges" }}
+            requestConfig={{
+              recordId: record?.id,
+              entityName: "user",
+              fieldName: "restrictedPrivileges",
+              onSuccess: () => {
+                setTimeout(() => {
+                  action.reload()
+                }, 300);
+              },
+            }}
+            tableConfig={{
+              entityName: "privilege",
+              columns: privilegeColumns,
+              columnsToDisplay: ["name", "access", "entity"],
+              targetKeys: record.restrictedPrivileges,
+              rowKey: 'id',
+              titles: ["available_privileges", "restricted_privileges"]
+            }}
+          />
         );
       } else {
         return null;
