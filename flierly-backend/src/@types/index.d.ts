@@ -11,12 +11,6 @@ type PageResult = {
     sort?: object;
 }
 
-type ModelDetails = {
-    entity: string,
-    name: string,
-    filePath: string,
-}
-
 type EntityDetails = {
     entity: string,
     code: string,
@@ -62,8 +56,6 @@ type ErrorMessage = {
     reason: string,
     stack?: string
 }
-
-type MongoQueryArray = { [x: string]: string | { $regex: RegExp } | boolean | number }[];
 
 type ResLocals = { success: boolean, message: string, controller: string }
 

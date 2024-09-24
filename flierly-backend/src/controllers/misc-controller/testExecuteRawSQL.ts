@@ -1,6 +1,6 @@
 import HttpCodes from "@/constants/httpCodes";
 import { Privilege } from "@/entities/iam/Privilege.entity";
-import { idSchema } from "@/joi-schemas/common.joi.schemas";
+import { idSchema } from "@/utils/joi-object-validator/joi-schemas/common.joi.schemas";
 import executeQueryFromFile from "@/lib/sql-queries/queryExecutor";
 import apiResponse from "@/utils/api/responseGenerator";
 import JoiSchemaValidator from "@/utils/joi-object-validator/joiSchemaValidator";

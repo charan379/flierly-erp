@@ -1,6 +1,6 @@
 import HttpCodes from "@/constants/httpCodes";
 import { User } from "@/entities/iam/User.entity";
-import { idSchema } from "@/joi-schemas/common.joi.schemas";
+import { idSchema } from "@/utils/joi-object-validator/joi-schemas/common.joi.schemas";
 import { AppDataSource } from "@/lib/app-data-source";
 import FlierlyException from "@/lib/flierly.exception";
 import { generateJwtToken } from "@/lib/jwt";

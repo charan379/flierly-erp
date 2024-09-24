@@ -1,5 +1,4 @@
 import entities from "@/controllers/misc-controller/entities";
-import models from "@/controllers/misc-controller/models";
 import systemUsage from "@/controllers/misc-controller/systemUsage";
 import testExecuteRawSQL from "@/controllers/misc-controller/testExecuteRawSQL";
 import testTypeORMActivate from "@/controllers/misc-controller/testTypeORMActivate";
@@ -18,7 +17,6 @@ import { Router } from "express";
 
 const miscRouter = Router();
 
-miscRouter.get(`/models`, authorize(), errorBoundary(models, "misc"));
 miscRouter.get(`/entities`, authorize(), errorBoundary(entities, "misc"));
 miscRouter.get(`/system-usage`, authorize(), errorBoundary(systemUsage, "misc"));
 miscRouter.get('/test/raw-query/:id', errorBoundary(testExecuteRawSQL, 'Role'));

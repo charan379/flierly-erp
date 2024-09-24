@@ -1,5 +1,5 @@
 import HttpCodes from "@/constants/httpCodes";
-import { idArraySchema, idSchema } from "@/joi-schemas/common.joi.schemas";
+import { idArraySchema, idSchema } from "@/utils/joi-object-validator/joi-schemas/common.joi.schemas";
 import { AppDataSource } from "@/lib/app-data-source";
 import FlierlyException from "@/lib/flierly.exception";
 import apiResponse from "@/utils/api/responseGenerator";

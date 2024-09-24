@@ -14,7 +14,7 @@ export function errorBoundary(fn: (req: Request, res: Response, next: NextFuncti
             const errorMsg: ErrorMessage = errrorMessageGenerator(error);
             switch (errorMsg.name) {
                 case 'ValidationError':
-                    // mongoose ValidationError
+                    // ValidationError
                     return res.status(HttpCodes.BAD_REQUEST).json(apiResponse(false, null, 'Required fields are not supplied', `${modelName}.${fn.name}`, req.url, errorMsg, HttpCodes.BAD_REQUEST, req, res));
                 case 'FlierlyException':
                     // FlierlyException

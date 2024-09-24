@@ -1,5 +1,5 @@
 import HttpCodes from "@/constants/httpCodes";
-import { idSchema } from "@/joi-schemas/common.joi.schemas";
+import { idSchema } from "@/utils/joi-object-validator/joi-schemas/common.joi.schemas";
 import { AppDataSource } from "@/lib/app-data-source";
 import apiResponse from "@/utils/api/responseGenerator";
 import JoiSchemaValidator from "@/utils/joi-object-validator/joiSchemaValidator";

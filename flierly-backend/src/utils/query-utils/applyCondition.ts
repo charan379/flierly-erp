@@ -1,16 +1,14 @@
 import { ObjectLiteral, SelectQueryBuilder } from 'typeorm';
 
-function handleFilter<T extends ObjectLiteral>(queryBuilder: SelectQueryBuilder<T>, alias: string, filter: any) {
-    Object.keys(filter).forEach((field) => {
-        const value = filter[field];
-
-        // Apply standard conditions
-        applyCondition(queryBuilder, alias, field, value, 'andWhere');
-    });
-}
-
-export default handleFilter;
-
+/**
+ * Applies a condition to a TypeORM Query Builder.
+ * 
+ * @param {SelectQueryBuilder<T>} qb - The TypeORM Query Builder instance.
+ * @param {string} alias - The alias used in the query.
+ * @param {string} field - The field name.
+ * @param {any} condition - The condition value.
+ * @param {'andWhere' | 'orWhere'} whereMethod - The method to use for applying the condition.
+ */
 function applyCondition<T extends ObjectLiteral>(
     qb: SelectQueryBuilder<T>,
     alias: string,
@@ -107,3 +105,5 @@ function applyCondition<T extends ObjectLiteral>(
         qb[whereMethod](`${alias}.${field} = :${field}`, { [field]: condition });
     }
 }
+
+export default applyCondition;

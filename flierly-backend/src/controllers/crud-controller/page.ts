@@ -1,8 +1,8 @@
 import HttpCodes from "@/constants/httpCodes";
 import { AppDataSource } from "@/lib/app-data-source";
+import { applyFilters, applySort } from "@/utils/query-utils";
 import apiResponse from "@/utils/api/responseGenerator";
 import { pascalToSnakeCase } from "@/utils/case-converters";
-import handleFilter from "@/utils/handle-filter";
 import JoiSchemaValidator from "@/utils/joi-object-validator/joiSchemaValidator";
 import pageResponseBuilder from "@/utils/page-response.builder";
 import { Request, Response } from "express";
@@ -42,7 +42,10 @@ const page = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Resp
     const queryBuilder = repo.createQueryBuilder(pascalToSnakeCase(entity.toString()));
 
     // Apply filters to the query builder
-    handleFilter(queryBuilder, pascalToSnakeCase(entity.toString()), filters);
+    applyFilters(queryBuilder, pascalToSnakeCase(entity.toString()), filters);
+
+    // Appy Sort Options
+    applySort(queryBuilder, sort);
 
     if (binMode) {
         queryBuilder.withDeleted();

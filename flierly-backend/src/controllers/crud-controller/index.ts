@@ -10,11 +10,9 @@ import exists from './exists';
 import activate from './activate';
 import restore from './restore';
 import deactivate from './deactivate';
-import updateArrayField from './update-array-field';
+import updateArrayField from './updateArrayField';
 
-const CRUDController = async (entityDetails: EntityDetails) => {
-
-    const entity: EntityTarget<ObjectLiteral> = entityDetails.entity;
+const CRUDController = async (entity: EntityTarget<ObjectLiteral>) => {
 
     let crudMethods = {
         create: (req: Request, res: Response) => create(entity, req, res),

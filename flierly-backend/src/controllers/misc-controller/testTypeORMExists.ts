@@ -1,7 +1,7 @@
 import HttpCodes from "@/constants/httpCodes";
 import { AppDataSource } from "@/lib/app-data-source";
+import { applyFilters } from "@/utils/query-utils";
 import apiResponse from "@/utils/api/responseGenerator";
-import handleFilter from "@/utils/handle-filter";
 import JoiSchemaValidator from "@/utils/joi-object-validator/joiSchemaValidator";
 import { Request, Response } from "express";
 import Joi from "joi";
@@ -21,7 +21,7 @@ const testTypeORMExists = async (req: Request, res: Response): Promise<Response>
     const queryBuilder = repo.createQueryBuilder('role');
 
     // Apply filters to the query builder
-    handleFilter(queryBuilder, 'role', filter);
+    applyFilters(queryBuilder, 'role', filter);
 
     if (withDeleted) {
         queryBuilder.withDeleted();

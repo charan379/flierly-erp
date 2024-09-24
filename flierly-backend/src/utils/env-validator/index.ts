@@ -6,7 +6,6 @@ const validateEnv = () => {
         NODE_ENV: str(),
         PORT: port(),
         HTTPS: bool(),
-        MONGODB_SERVER_STRING: str(),
         DB_HOST: str(),
         DB_PORT: num(),
         DB_NAME: str(),

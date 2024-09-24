@@ -4,8 +4,6 @@ const EnvConfig = Object.freeze({
     // 
     PORT: process.env.PORT || 3000,
     //   
-    MONGODB_SERVER_STRING: process.env.MONGODB_SERVER_STRING,
-    //   
     HTTPS: process.env.HTTPS === "true" ? true : false,
     //   
     COOKIE_SECRET: process.env.COOKIE_SECRET || "laka*%^+=-(`~1!laka*%^+=-(`~1!laka*%^+=-(`~1!laka thom thom*%^+=-(`~1!thom",

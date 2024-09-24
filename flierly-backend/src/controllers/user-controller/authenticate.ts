@@ -1,7 +1,7 @@
 import HttpCodes from "@/constants/httpCodes";
 import { User } from "@/entities/iam/User.entity";
 import { UserPassword } from "@/entities/iam/UserPassword.entity";
-import { nameMi5Ma50Schema, passwordSchema } from "@/joi-schemas/common.joi.schemas";
+import { nameMi5Ma50Schema, passwordSchema } from "@/utils/joi-object-validator/joi-schemas/common.joi.schemas";
 import { AppDataSource } from "@/lib/app-data-source";
 import { validateHash } from "@/lib/bcrypt";
 import FlierlyException from "@/lib/flierly.exception";

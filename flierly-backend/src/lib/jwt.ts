@@ -2,7 +2,6 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import FlierlyException from './flierly.exception';
 import HttpCodes from '@/constants/httpCodes';
-import mongoose from 'mongoose';
 import { EnvConfig } from '@/config/env';
 
 // Create a type alias that combines JwtPayload with custom properties

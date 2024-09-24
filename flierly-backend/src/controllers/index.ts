@@ -34,7 +34,7 @@ const controllers = async () => {
             controllers[entityDetail.controller] = controller;
         }
         else {
-            controllers[entityDetail.controller] = await CRUDController(entityDetail);
+            controllers[entityDetail.controller] = await CRUDController(entityDetail.entity);
         }
     }
 

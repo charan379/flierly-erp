@@ -1,8 +1,8 @@
 import HttpCodes from "@/constants/httpCodes";
 import { AppDataSource } from "@/lib/app-data-source";
+import { applyFilters } from "@/utils/query-utils";
 import apiResponse from "@/utils/api/responseGenerator";
 import { pascalToSnakeCase } from "@/utils/case-converters";
-import handleFilter from "@/utils/handle-filter";
 import JoiSchemaValidator from "@/utils/joi-object-validator/joiSchemaValidator";
 import { Request, Response } from "express";
 import Joi from "joi";
@@ -23,7 +23,7 @@ const exists = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Re
     const queryBuilder = repo.createQueryBuilder(pascalToSnakeCase(entity.toString()));
 
     // Apply filters to the query builder
-    handleFilter(queryBuilder, pascalToSnakeCase(entity.toString()), filter);
+    applyFilters(queryBuilder, pascalToSnakeCase(entity.toString()), filter);
 
     if (withDeleted) {
         queryBuilder.withDeleted();
