@@ -21,10 +21,14 @@ function applyCondition<T extends ObjectLiteral>(
         Object.keys(condition).forEach((operator) => {
             switch (operator) {
                 case '$in':  // Handle IN condition
-                    qb[whereMethod](`${alias}.${field} IN (:...${field})`, { [field]: condition[operator] });
+                    if (Array.isArray(condition[operator]) && condition[operator].length > 0) {
+                        qb[whereMethod](`${alias}.${field} IN (:...${field})`, { [field]: condition[operator] });
+                    }
                     break;
                 case '$notIn':  // Handle NOT IN condition
-                    qb[whereMethod](`${alias}.${field} NOT IN (:...${field})`, { [field]: condition[operator] });
+                    if (Array.isArray(condition[operator]) && condition[operator].length > 0) {
+                        qb[whereMethod](`${alias}.${field} NOT IN (:...${field})`, { [field]: condition[operator] });
+                    }
                     break;
                 case '$gte':  // Handle greater than or equal to condition
                     qb[whereMethod](`${alias}.${field} >= :${field}`, { [field]: condition[operator] });
