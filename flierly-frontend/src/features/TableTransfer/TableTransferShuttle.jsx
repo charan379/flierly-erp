@@ -30,24 +30,26 @@ const TableTransferShuttle = ({
     titles: ["left_title", "right_title"]
   },
 }) => {
-
   const { translate } = useLocale();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [targetKeys, setTargetKeys] = useState(tableConfig.targetKeys);
+  const [isModalVisible, setIsModalVisible] = useState(false); // Modal visibility state
+  const [isLoading, setIsLoading] = useState(false); // Loading state for async operations
+  const [targetKeys, setTargetKeys] = useState(tableConfig.targetKeys); // Selected keys for table transfer
 
-  const handleTargetKeysChange = (targetKeys) => {
-    setTargetKeys(targetKeys);
+  // Handle the change in selected target keys
+  const handleTargetKeysChange = (newTargetKeys) => {
+    setTargetKeys(newTargetKeys);
   };
 
+  // Show the modal
   const showModal = () => {
-    setIsModalOpen(true);
+    setIsModalVisible(true);
   };
 
+  // Handle OK action (saving data)
   const handleOk = async () => {
+    setIsLoading(true); // Set loading state to true
 
-    setLoading(true);
-
+    // Update the array field using the service
     tableTransferService
       .updateArrayField({
         entity: requestConfig.entityName,
@@ -56,15 +58,16 @@ const TableTransferShuttle = ({
         newArray: targetKeys,
       })
       .then(() => {
-        requestConfig.onSuccess();
+        requestConfig.onSuccess(); // Call the success callback
       })
       .finally(() => {
-        setLoading(false);
-      })
+        setIsLoading(false); // Reset loading state
+      });
   };
 
+  // Handle modal cancellation
   const handleCancel = () => {
-    setIsModalOpen(false);
+    setIsModalVisible(false); // Close the modal
   };
 
   // Prevent context menu propagation
@@ -74,29 +77,30 @@ const TableTransferShuttle = ({
 
   return (
     <>
-      <Badge count={tableConfig.targetKeys.length} overflowCount={99} showZero offset={[-3, 3]} >
+      <Badge count={tableConfig.targetKeys.length} overflowCount={99} showZero offset={[-3, 3]}>
         <Button type={triggerConfig.buttonType} onClick={showModal}>
-          {translate(triggerConfig.text)}
-        </Button></Badge>
-      <div onContextMenu={handleContextMenu}>
+          {translate(triggerConfig.text)} {/* Translate button text */}
+        </Button>
+      </Badge>
+      <div onContextMenu={handleContextMenu}> {/* Prevent right-click context menu */}
         <Modal
-          title={translate(title)}
+          title={translate(title)} // Translate modal title
           style={{ top: 50 }}
           width={"80%"}
           height={"80dvh"}
-          open={isModalOpen}
-          onOk={handleOk}
-          onCancel={handleCancel}
-          okText={translate(buttonsConfig.okText)}
-          cancelText={translate(buttonsConfig.cancelText)}
-          confirmLoading={loading}
+          open={isModalVisible} // Control modal visibility
+          onOk={handleOk} // Handle OK button
+          onCancel={handleCancel} // Handle Cancel button
+          okText={translate(buttonsConfig.okText)} // Translate OK button text
+          cancelText={translate(buttonsConfig.cancelText)} // Translate Cancel button text
+          confirmLoading={isLoading} // Show loading spinner on OK
         >
           <Suspense fallback={<><Skeleton active key={"sk1"} /><Skeleton active key={"sk2"} /></>}>
             <TableTransfer
               {...tableConfig}
-              titles={[translate(tableConfig.titles[0]), translate(tableConfig.titles[1])]}
+              titles={[translate(tableConfig.titles[0]), translate(tableConfig.titles[1])]} // Translate table titles
               targetKeys={targetKeys}
-              onTargetKeysChange={handleTargetKeysChange}
+              onTargetKeysChange={handleTargetKeysChange} // Handle changes in selected keys
             />
           </Suspense>
         </Modal>
