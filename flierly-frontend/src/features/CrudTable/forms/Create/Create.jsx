@@ -8,7 +8,7 @@ const Create = ({ formFields, title = "add", initialValues, render }) => {
   if (!render) return;
   if (!formFields) return;
 
-  const { langDirection, translate } = useLocale();
+  const { translate } = useLocale();
 
   return (
     <ModalForm
@@ -34,6 +34,7 @@ const Create = ({ formFields, title = "add", initialValues, render }) => {
       modalProps={{
         destroyOnClose: true,
         centered: true,
+        classNames: { body: "crud-table-modal-body" },
       }}
       submitter={{
         searchConfig: {

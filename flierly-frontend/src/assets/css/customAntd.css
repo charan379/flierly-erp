@@ -32,11 +32,19 @@
   background: var(--bg-color-primary-flierly);
 }
 
-.ant-layout .ant-layout-sider .ant-layout-sider-children .ant-menu.ant-menu-inline-collapsed .ant-menu-item {
+.ant-layout
+  .ant-layout-sider
+  .ant-layout-sider-children
+  .ant-menu.ant-menu-inline-collapsed
+  .ant-menu-item {
   padding-inline: calc(50% - 7px - 5px);
 }
 
-.ant-layout .ant-layout-sider .ant-layout-sider-children .ant-menu.ant-menu-inline-collapsed.ant-menu-vertical .ant-menu-item {
+.ant-layout
+  .ant-layout-sider
+  .ant-layout-sider-children
+  .ant-menu.ant-menu-inline-collapsed.ant-menu-vertical
+  .ant-menu-item {
   line-height: 40px;
 }
 
@@ -174,13 +182,25 @@ h6 {
   overflow: hidden;
 }
 
-#table-transfer-search-form > .ant-space-compact > .ant-form-item:not(:last-child) {
+#table-transfer-search-form
+  > .ant-space-compact
+  > .ant-form-item:not(:last-child) {
   margin-inline-end: 0px;
 }
 
 .table-transfer-flierly-1 .ant-pro-card-body {
   padding-inline: 0px;
 }
+
+.ant-modal-body.crud-table-modal-body {
+  max-height: 70dvh;
+  overflow: scroll;
+}
+
+.ant-modal-body.crud-table-modal-body .ant-form {
+  max-width: 95%;
+}
+
 @media only screen and (max-width: 576px) {
   .crud-data-table-flierly-1 .ant-pagination .ant-pagination-options {
     display: block;
