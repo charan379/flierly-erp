@@ -166,48 +166,47 @@ const reverseQueryTransformers = {
    * Reverse transformer for extracting a like condition from a query.
    *
    * @param {Object} value - The query object containing `$like`.
-   * @returns {string|null} - The value of `$like` or null if `$like` is not present.
+   * @returns {string|null} - The value without the '%' wildcards or null if `$like` is not present.
    */
   like: (value) => {
-    return value && typeof value.$like === "string" ? value.$like : null;
+    if (value && typeof value.$like === "string") {
+      return value.$like.replace(/%/g, ""); // Return the value without '%' wildcards.
+    }
+    return null; // Return null if `$like` is not present.
   },
 
   /**
    * Reverse transformer for extracting a not like condition from a query.
    *
    * @param {Object} value - The query object containing `$notLike`.
-   * @returns {string|null} - The value of `$notLike` or null if `$notLike` is not present.
+   * @returns {string|null} - The value without the '%' wildcards or null if `$notLike` is not present.
    */
   notLike: (value) => {
-    return value && typeof value.$notLike === "string" ? value.$notLike : null;
+    if (value && typeof value.$notLike === "string") {
+      return value.$notLike.replace(/%/g, ""); // Return the value without '%' wildcards.
+    }
+    return null; // Return null if `$notLike` is not present.
   },
 
   /**
    * Reverse transformer for extracting an ilike (case-insensitive like) condition from a query.
    *
    * @param {Object} value - The query object containing `$ilike`.
-   * @returns {string|null} - The value of `$ilike` or null if `$ilike` is not present.
+   * @returns {string|null} - The value without the '%' wildcards or null if `$ilike` is not present.
    */
   ilike: (value) => {
-    return value && typeof value.$ilike === "string" ? value.$ilike : null;
+    if (value && typeof value.$ilike === "string") {
+      return value.$ilike.replace(/%/g, ""); // Return the value without '%' wildcards.
+    }
+    return null; // Return null if `$ilike` is not present.
   },
 
   /**
-   * Reverse transformer for extracting a not ilike (case-insensitive not like) condition from a query.
-   *
-   * @param {Object} value - The query object containing `$notIlike`.
-   * @returns {string|null} - The value of `$notIlike` or null if `$notIlike` is not present.
-   */
-  notIlike: (value) => {
-    return value && typeof value.$notIlike === "string" ? value.$notIlike : null;
-  },
-
-  /**
-   * Reverse transformer for extracting a starts with condition from a query.
-   *
-   * @param {Object} value - The query object containing `$startsWith`.
-   * @returns {string|null} - The value of `$startsWith` or null if `$startsWith` is not present.
-   */
+ * Reverse transformer for extracting a starts with condition from a query.
+ *
+ * @param {Object} value - The query object containing `$startsWith`.
+ * @returns {string|null} - The value of `$startsWith` or null if `$startsWith` is not present.
+ */
   startsWith: (value) => {
     return value && typeof value.$startsWith === "string" ? value.$startsWith : null;
   },
@@ -241,7 +240,6 @@ const reverseQueryTransformers = {
   notEndsWith: (value) => {
     return value && typeof value.$notEndsWith === "string" ? value.$notEndsWith : null;
   },
-  
   /**
    * Reverse transformer for extracting a regex condition from a query.
    *

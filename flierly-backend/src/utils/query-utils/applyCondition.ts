@@ -64,16 +64,16 @@ function applyCondition<T extends ObjectLiteral>(
                     qb[whereMethod](`${alias}.${field} IS NOT NULL`);
                     break;
                 case '$like':  // Handle LIKE condition
-                    qb[whereMethod](`${alias}.${field} LIKE :${field}`, { [field]: `%${condition[operator]}%` });
+                    qb[whereMethod](`${alias}.${field} LIKE :${field}`, { [field]: condition[operator] });
                     break;
                 case '$notLike':  // Handle NOT LIKE condition
-                    qb[whereMethod](`${alias}.${field} NOT LIKE :${field}`, { [field]: `%${condition[operator]}%` });
+                    qb[whereMethod](`${alias}.${field} NOT LIKE :${field}`, { [field]: condition[operator] });
                     break;
                 case '$ilike':  // Handle ILIKE (case-insensitive LIKE) condition
-                    qb[whereMethod](`${alias}.${field} ILIKE :${field}`, { [field]: `%${condition[operator]}%` });
+                    qb[whereMethod](`${alias}.${field} ILIKE :${field}`, { [field]: condition[operator] });
                     break;
                 case '$notIlike':  // Handle NOT ILIKE (case-insensitive NOT LIKE) condition
-                    qb[whereMethod](`${alias}.${field} NOT ILIKE :${field}`, { [field]: `%${condition[operator]}%` });
+                    qb[whereMethod](`${alias}.${field} NOT ILIKE :${field}`, { [field]: condition[operator] });
                     break;
                 case '$startsWith':  // Handle starts with condition
                     qb[whereMethod](`${alias}.${field} LIKE :${field}`, { [field]: `${condition[operator]}%` });

@@ -233,7 +233,7 @@ const queryTransformers = {
    */
   like: (value, namePath, allValues) => {
     if (typeof value === "string" && value.trim().length > 0) {
-      return { [namePath]: { $like: `${value}` } };
+      return { [namePath]: { $like: `%${value}%` } };
     } else {
       return null;
     }
@@ -249,7 +249,7 @@ const queryTransformers = {
    */
   notLike: (value, namePath, allValues) => {
     if (typeof value === "string" && value.trim().length > 0) {
-      return { [namePath]: { $notLike: `${value}` } };
+      return { [namePath]: { $notLike: `%${value}%` } };
     } else {
       return null;
     }
@@ -265,7 +265,7 @@ const queryTransformers = {
    */
   ilike: (value, namePath, allValues) => {
     if (typeof value === "string" && value.trim().length > 0) {
-      return { [namePath]: { $ilike: `${value}` } };
+      return { [namePath]: { $ilike: `%${value}%` } };
     } else {
       return null;
     }
@@ -281,7 +281,7 @@ const queryTransformers = {
    */
   notIlike: (value, namePath, allValues) => {
     if (typeof value === "string" && value.trim().length > 0) {
-      return { [namePath]: { $notIlike: `${value}` } };
+      return { [namePath]: { $notIlike: `%${value}%` } };
     } else {
       return null;
     }
