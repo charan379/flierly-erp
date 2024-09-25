@@ -119,8 +119,8 @@ const privilegeColumns = [
     width: 7,
     sorter: true,
     queryFormConfig: {
-      name: "model",
-      label: "model",
+      name: "entity",
+      label: "entity",
       order: 3,
       rules: [{ type: "array" }],
       transformer: "inArray",
@@ -129,7 +129,7 @@ const privilegeColumns = [
         select: {
           mode: "multiple",
           asyncOptionsFetcher: async (value) => {
-            const response = await selectRemoteOptionsService.models({
+            const response = await selectRemoteOptionsService.entities({
               keyword: value,
             });
             if (
