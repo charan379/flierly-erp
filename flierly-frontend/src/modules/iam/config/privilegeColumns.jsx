@@ -1,5 +1,21 @@
+import crudService from "@/features/CrudTable/service/crud.service";
 import selectRemoteOptionsService from "@/features/SelectRemoteOptions/service";
+import debouncePromise from "@/utils/deboucePromise";
 import { Tag } from "antd";
+
+const debouncedValidator = debouncePromise((value) => {
+  return new Promise((resolve, reject) => {
+    crudService.exists({ entity: "privilege", filters: { name: { $ilike: value } } })
+      .then(({ result }) => {
+        console.log(result);
+        if (result?.exists === true) {
+          reject("name already exists.");
+        } else {
+          resolve();
+        }
+      });
+  });
+}, 1000);
 
 const privilegeColumns = [
   {
@@ -18,7 +34,12 @@ const privilegeColumns = [
     queryFormConfig: {
       name: "name",
       label: "name",
-      rules: [{ type: "regexp" }],
+      hasFeedback: true,
+      rules: [{ type: "regexp", required: true, }, ({ }) => ({
+        validator(_, value) {
+          return debouncedValidator(value);
+        }
+      })],
       transformer: "ilike",
       order: 1,
       input: {
