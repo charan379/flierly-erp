@@ -28,7 +28,7 @@ const IamRoutes = () => {
       element: (
         <ProtectedRoute
           element={<WithSuspense importPath={import("../pages/Privileges")} />}
-          requiredPermissionRegex={/^privilege\.[a-z]$/}
+          requiredPermissionRegex={/^privilege\.[a-z]+$/}
         />
       ),
     },
