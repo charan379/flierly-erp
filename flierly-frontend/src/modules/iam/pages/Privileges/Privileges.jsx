@@ -4,6 +4,7 @@ import { CrudTable } from "@/features/CrudTable";
 import privilegeColumns from "../../config/privilegeColumns";
 import QueryPrivilege from "../../forms/QueryPrivilege";
 import CrudTableContextProvider from "@/features/CrudTable/components/CrudTableContextProvider";
+import FormFields from "@/components/FormFields";
 
 export default function Privileges() {
   return (
@@ -16,7 +17,7 @@ export default function Privileges() {
           tableKey={"privilege-table"}
           rowKey="id"
           searchFormFields={<QueryPrivilege />}
-          createFormFields={<QueryPrivilege />}
+          createFormFields={<FormFields columns={privilegeColumns} configKey={"createFormConfig"} />}
         />
       </CrudTableContextProvider>
     </IamLayout>
