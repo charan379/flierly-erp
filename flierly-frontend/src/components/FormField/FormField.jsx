@@ -12,7 +12,7 @@ import React from "react";
 
 const FormField = ({ key, config, showLabel = true }) => {
   const { translate } = useLocale();
-  const { name, label, rules = [], input } = config;
+  const { name, label, rules = [], input, dependencies = [], hasFeedback = false } = config;
 
   // Get transformer if specified
   const transformer = hasOwnProperty(config, "transformer")
@@ -43,6 +43,8 @@ const FormField = ({ key, config, showLabel = true }) => {
     <FormComponent
       key={key ?? name}
       name={name}
+      hasFeedback={hasFeedback}
+      dependencies={dependencies}
       label={showLabel ? translate(label) : null}
       rules={rules}
       {...(select || {})}
@@ -54,12 +56,15 @@ const FormField = ({ key, config, showLabel = true }) => {
 export default FormField;
 
 const FormItems = {
-  Text: ({ name, label, rules = [], transformer }) => (
+  Text: ({ name, label, rules = [], transformer, hasFeedback = false, dependencies = [] }) => (
     <ProFormText
       name={name}
       label={label}
       rules={rules}
       transform={transformer}
+      hasFeedback={hasFeedback}
+      validateTrigge={['onChange']}
+      dependencies={dependencies}
     />
   ),
   Select: ({
@@ -69,6 +74,8 @@ const FormItems = {
     mode = "single",
     options,
     transformer,
+    hasFeedback = false,
+    dependencies = []
   }) => (
     <ProForm.Item
       name={name}
@@ -76,6 +83,8 @@ const FormItems = {
       rules={rules}
       style={{ width: "100%" }}
       transform={transformer}
+      hasFeedback={hasFeedback}
+      dependencies={dependencies}
     >
       <Select
         mode={mode}
@@ -86,12 +95,14 @@ const FormItems = {
       />
     </ProForm.Item>
   ),
-  DateRange: ({ name, label, rules = [], transformer }) => (
+  DateRange: ({ name, label, rules = [], transformer, hasFeedback = false, dependencies = [] }) => (
     <ProFormDateRangePicker
       name={name}
       label={label}
       rules={rules}
       transform={transformer}
+      hasFeedback={hasFeedback}
+      dependencies={dependencies}
     />
   ),
   SelectRemoteOptions: ({
@@ -106,6 +117,8 @@ const FormItems = {
     optionRender,
     tagRender,
     labelInValue = false,
+    hasFeedback = false,
+    dependencies = []
   }) => {
     return (
       <ProForm.Item
@@ -114,6 +127,8 @@ const FormItems = {
         rules={rules}
         style={{ width: "100%" }}
         transform={transformer}
+        hasFeedback={hasFeedback}
+        dependencies={dependencies}
       >
         <SelectRemoteOptions
           labelInValue={labelInValue === true ? true : false}
