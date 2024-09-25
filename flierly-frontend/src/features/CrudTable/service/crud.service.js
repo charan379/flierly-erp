@@ -31,6 +31,19 @@ const crudService = {
     return handleResponse({ promise });
   },
 
+  // Fetch exists status
+  exists: async ({
+    entity,
+    filters = {},
+  }) => {
+    const promise = api.post(
+      `/${entity}/exists`,
+      { filters },
+      {}
+    );
+    return handleResponse({ promise });
+  },
+
   // Soft delete
   delete: async ({ entity, ids = [] }) => {
     const promise = api.delete(`/${entity}/delete`, {
