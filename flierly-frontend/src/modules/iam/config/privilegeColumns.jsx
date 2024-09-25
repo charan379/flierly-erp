@@ -19,7 +19,6 @@ const privilegeColumns = [
     queryFormConfig: {
       name: "name",
       label: "name",
-      hasFeedback: true,
       rules: [{ type: "regexp" }],
       transformer: "ilike",
       order: 1,
