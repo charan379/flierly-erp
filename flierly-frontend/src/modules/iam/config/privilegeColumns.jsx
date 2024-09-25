@@ -19,7 +19,7 @@ const privilegeColumns = [
       name: "name",
       label: "name",
       rules: [{ type: "regexp" }],
-      transformer: "textWithRegex",
+      transformer: "ilike",
       order: 1,
       input: {
         type: "Text",
@@ -173,7 +173,7 @@ const privilegeColumns = [
       name: "createdAt",
       label: "created_at",
       rules: [],
-      transformer: "dateRange",
+      transformer: "between",
       order: 5,
       input: {
         type: "DateRange",
@@ -190,7 +190,7 @@ const privilegeColumns = [
       name: "updatedAt",
       label: "updated_at",
       rules: [],
-      transformer: "dateRange",
+      transformer: "between",
       order: 6,
       input: {
         type: "DateRange",
@@ -207,7 +207,7 @@ const privilegeColumns = [
       name: "deletedAt",
       label: "deleted_at",
       rules: [],
-      transformer: "dateRange",
+      transformer: "between",
       order: 7,
       input: {
         type: "DateRange",
