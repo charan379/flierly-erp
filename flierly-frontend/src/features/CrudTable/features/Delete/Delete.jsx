@@ -1,8 +1,8 @@
 import useLocale from "@/features/Language/hooks/useLocale";
-import { DeleteOutlined, QuestionCircleOutlined } from "@ant-design/icons";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Badge, Button, message, Popconfirm, Tooltip } from "antd";
 import React from "react";
-import crudService from "../../service/crud.service";
+import crudService from "@/service/crud.service";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 

@@ -4,7 +4,7 @@ import { ProTable } from "@ant-design/pro-components";
 import React, { useRef, useState } from "react";
 import Create from "./forms/Create";
 import Search from "./forms/Search";
-import crudService from "./service/crud.service";
+import crudService from "@/service/crud.service";
 import Delete from "./features/Delete";
 import Activate from "./features/Activate";
 import RowContextMenu from "./features/RowContextMenu";

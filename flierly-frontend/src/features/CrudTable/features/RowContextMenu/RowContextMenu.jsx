@@ -14,7 +14,7 @@ import useTheme from "@/features/Theme/hooks/useTheme";
 import useLocale from "@/features/Language/hooks/useLocale";
 import { useEscapeKey } from "@/hooks/useEscapeKey";
 import { useOnOutsideClick } from "@/hooks/useOnOutSideClick";
-import crudService from "../../service/crud.service";
+import crudService from "@/service/crud.service";
 
 const RowContextMenu = ({
   entity,

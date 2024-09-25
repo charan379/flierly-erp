@@ -1,4 +1,4 @@
-import crudService from "@/features/CrudTable/service/crud.service";
+import crudService from "@/service/crud.service";
 import selectRemoteOptionsService from "@/features/SelectRemoteOptions/service";
 import debouncePromise from "@/utils/deboucePromise";
 import { Tag } from "antd";

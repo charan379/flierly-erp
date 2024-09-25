@@ -6,7 +6,7 @@ import {
 } from "@ant-design/icons";
 import { Badge, Button, message, Popconfirm, Tooltip } from "antd";
 import React, { useMemo } from "react";
-import crudService from "../../service/crud.service";
+import crudService from "@/service/crud.service";
 
 const Activate = ({ entity, actions, rows, render }) => {
   if (!render) return;
