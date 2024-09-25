@@ -11,7 +11,6 @@ const userColumns = [
     width: 80, // Updated width
     align: "center",
     sorter: true,
-    align: "center",
   },
   {
     title: "Deleted",
@@ -29,7 +28,7 @@ const userColumns = [
       name: "username",
       label: "username",
       rules: [{ type: "regexp" }],
-      transformer: "textWithRegex",
+      transformer: "ilike",
       order: 1,
       input: {
         type: "Text",
@@ -217,7 +216,7 @@ const userColumns = [
       name: "createdAt",
       label: "created_at",
       rules: [],
-      transformer: "dateRange",
+      transformer: "between",
       order: 8,
       input: {
         type: "DateRange",
@@ -233,7 +232,7 @@ const userColumns = [
       name: "updatedAt",
       label: "updated_at",
       rules: [],
-      transformer: "dateRange",
+      transformer: "between",
       order: 9,
       input: {
         type: "DateRange",
@@ -250,7 +249,7 @@ const userColumns = [
       name: "deletedAt",
       label: "deleted_at",
       rules: [],
-      transformer: "dateRange",
+      transformer: "between",
       order: 11,
       input: {
         type: "DateRange",

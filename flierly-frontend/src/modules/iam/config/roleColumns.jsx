@@ -20,7 +20,7 @@ const roleColumns = [
       name: "name",
       label: "name",
       rules: [{ type: "string" }],
-      transformer: "textWithRegex",
+      transformer: "ilike",
       order: 1,
       input: {
         type: "Text",
@@ -81,7 +81,7 @@ const roleColumns = [
       name: "description",
       label: "description",
       rules: [{ type: "string" }],
-      transformer: "textWithRegex",
+      transformer: "ilike",
       order: 3,
       input: {
         type: "Text",
@@ -135,7 +135,7 @@ const roleColumns = [
       name: "createdAt",
       label: "created_at",
       rules: [],
-      transformer: "dateRange",
+      transformer: "between",
       order: 4,
       input: {
         type: "DateRange",
@@ -152,7 +152,7 @@ const roleColumns = [
       name: "updatedAt",
       label: "updated_at",
       rules: [],
-      transformer: "dateRange",
+      transformer: "between",
       order: 5,
       input: {
         type: "DateRange",
@@ -169,7 +169,7 @@ const roleColumns = [
       name: "deletedAt",
       label: "deleted_at",
       rules: [],
-      transformer: "dateRange",
+      transformer: "between",
       order: 7,
       input: {
         type: "DateRange",
