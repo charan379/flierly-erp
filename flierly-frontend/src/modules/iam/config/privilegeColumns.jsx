@@ -1,21 +1,6 @@
-import crudService from "@/service/crud.service";
 import selectRemoteOptionsService from "@/features/SelectRemoteOptions/service";
-import debouncePromise from "@/utils/deboucePromise";
 import { Tag } from "antd";
-
-const debouncedValidator = debouncePromise((value) => {
-  return new Promise((resolve, reject) => {
-    crudService.exists({ entity: "privilege", filters: { name: { $ilike: value } } })
-      .then(({ result }) => {
-        console.log(result);
-        if (result?.exists === true) {
-          reject("name already exists.");
-        } else {
-          resolve();
-        }
-      });
-  });
-}, 1000);
+import entityExistenceValidator from "@/utils/validators/entityExistenceValidator";
 
 const privilegeColumns = [
   {
@@ -23,7 +8,7 @@ const privilegeColumns = [
     dataIndex: "id",
     width: 2,
     sorter: true,
-    align: "center"
+    align: "center",
   },
   {
     title: "Name",
@@ -35,11 +20,17 @@ const privilegeColumns = [
       name: "name",
       label: "name",
       hasFeedback: true,
-      rules: [{ type: "regexp", required: true, }, ({ }) => ({
-        validator(_, value) {
-          return debouncedValidator(value);
-        }
-      })],
+      rules: [
+        { type: "string", required: true },
+        ({}) => ({
+          validator(_, value) {
+            return entityExistenceValidator({
+              entity: "privilege",
+              filters: { name: { $ilike: value } },
+            });
+          },
+        }),
+      ],
       transformer: "ilike",
       order: 1,
       input: {
@@ -90,9 +81,9 @@ const privilegeColumns = [
         case "Update":
           return <Tag color="#FF7F50">{text}</Tag>;
         case "Manage":
-          return <Tag color="#191970">{text}</Tag>
+          return <Tag color="#191970">{text}</Tag>;
         case "Delete":
-          return <Tag color="#DC143C">{text}</Tag>
+          return <Tag color="#DC143C">{text}</Tag>;
         default:
           return <Tag>{text}</Tag>;
       }
