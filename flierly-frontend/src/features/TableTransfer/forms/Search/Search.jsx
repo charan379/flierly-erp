@@ -23,43 +23,44 @@ const Search = ({ columns, onSearch }) => {
       id="table-transfer-search-form"
       layout="inline"
       onFinish={onSearch}
+      onReset={onSearch}
     >
-      <Space.Compact
-        id="table-transfer-search-form-spc"
-        style={{ maxWidth: "50%", width: "50%" }}
-      >
-        <ProFormSelect
-          name={["field"]}
-          rules={[{ required: true, message: "Search field is required" }]}
-          options={fieldFormItemOptions}
-        />
-        <ProFormDependency name={["field"]}>
-          {({ field }) => {
-            if (field === undefined) {
-              return (
-                <ProFormText
-                  name={["serach", "value"]}
-                  rules={[
-                    { required: true, message: "Search value is required" },
-                  ]}
-                />
-              );
-            }
+  <Space.Compact
+    id="table-transfer-search-form-spc"
+    style={{ maxWidth: "50%", width: "50%" }}
+  >
+    <ProFormSelect
+      name={["field"]}
+      rules={[{ required: true, message: "Search field is required" }]}
+      options={fieldFormItemOptions}
+    />
+    <ProFormDependency name={["field"]}>
+      {({ field }) => {
+        if (field === undefined) {
+          return (
+            <ProFormText
+              name={["serach", "value"]}
+              rules={[
+                { required: true, message: "Search value is required" },
+              ]}
+            />
+          );
+        }
 
-            return (
-              <FormField
-                showLabel={false}
-                config={getColumnQueryConfig({
-                  field,
-                  columns,
-                  required: true,
-                })}
-              />
-            );
-          }}
-        </ProFormDependency>
-      </Space.Compact>
-    </ProForm>
+        return (
+          <FormField
+            showLabel={false}
+            config={getColumnQueryConfig({
+              field,
+              columns,
+              required: true,
+            })}
+          />
+        );
+      }}
+    </ProFormDependency>
+  </Space.Compact>
+    </ProForm >
   );
 };
 

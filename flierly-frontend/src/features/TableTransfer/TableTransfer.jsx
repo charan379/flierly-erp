@@ -84,9 +84,22 @@ const TableTransfer = ({
   // Handle filter changes and refetch data
   const handleFilterChange = (filters) => {
     if (filters?.field !== undefined) {
-      fetchAvailableData({ filter: { [filters.field]: filters[filters.field] } });
+      // Reset pagination to page 1
+      setPaginationInfo(prev => ({
+        ...prev,
+        current: 1,
+      }));
+      fetchAvailableData({ filter: { [filters.field]: filters[filters.field] }, pager: { current: 1 } });
+    } else {
+      // Reset pagination to page 1 and clear filters and sort options
+      setPaginationInfo(prev => ({
+        ...prev,
+        current: 1,
+      }));
+      fetchAvailableData({ pager: { current: 1 }, filter: {}, sort: {} });
     }
   };
+
 
   return (
     <Transfer
