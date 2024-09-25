@@ -30,6 +30,17 @@ const privilegeColumns = [
             });
           },
         }),
+        ({}) => ({
+          validator(_, value) {
+            return new Promise((resolve, reject) => {
+              if (/[^a-zA-Z0-9]/.test(value)) {
+                reject("Username cannot contain special characters.");
+              } else {
+                resolve()
+              }
+            });
+          },
+        }),
       ],
       transformer: "ilike",
       order: 1,
