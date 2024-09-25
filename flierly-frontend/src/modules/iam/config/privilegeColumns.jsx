@@ -20,10 +20,22 @@ const privilegeColumns = [
       name: "name",
       label: "name",
       hasFeedback: true,
+      rules: [{ type: "regexp" }],
+      transformer: "ilike",
+      order: 1,
+      input: {
+        type: "Text",
+      },
+    },
+    createFormConfig: {
+      name: "name",
+      label: "name",
+      hasFeedback: true,
       rules: [
         { type: "string", required: true },
         ({}) => ({
           validator(_, value) {
+            if(value === undefined) return Promise.resolve();
             return entityExistenceValidator({
               entity: "privilege",
               filters: { name: { $ilike: value } },
@@ -36,7 +48,7 @@ const privilegeColumns = [
               if (/[^a-zA-Z0-9]/.test(value)) {
                 reject("Username cannot contain special characters.");
               } else {
-                resolve()
+                resolve();
               }
             });
           },
