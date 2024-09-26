@@ -26,14 +26,14 @@ const create = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Re
     };
 
     // Save the new row to the database
-    const savedRole = await repo.save(newRow);
+    const savedRow = await repo.save(newRow);
 
     // Respond with the created row
     return res.status(HttpCodes.CREATED).json(
         apiResponse({
             success: true,
-            result: savedRole,
-            message: `${repo.metadata.name} created successfully.`,
+            result: savedRow,
+            message: `${repo.metadata.name} created successfully with ID: ${savedRow?.id}`,
             controller: 'CRUD.CreateController',
             httpCode: HttpCodes.CREATED,
             error: null,
