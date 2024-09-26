@@ -11,7 +11,7 @@ const QueryPrivilege = () => {
 
   return (
     <div style={{ direction: langDirection }}>
-      <ProForm.Group>
+      {/* <ProForm.Group> */}
         {privilegeColumns.map((column) => {
           if (hasOwnProperty(column, "queryFormConfig")) {
             return (
@@ -22,7 +22,7 @@ const QueryPrivilege = () => {
             );
           } else return;
         })}
-      </ProForm.Group>
+      {/* </ProForm.Group> */}
     </div>
   );
 };
