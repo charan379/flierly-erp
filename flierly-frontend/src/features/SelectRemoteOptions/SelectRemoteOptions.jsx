@@ -5,6 +5,8 @@ import React, { useMemo, useRef, useState, useEffect } from "react";
 const SelectRemoteOptions = ({
   asyncOptionsFetcher,
   debounceTimeout = 500,
+  width,
+  allowClear,
   ...props
 }) => {
   const [fetching, setFetching] = useState(false);
@@ -36,7 +38,7 @@ const SelectRemoteOptions = ({
 
   return (
     <Select
-      allowClear
+      allowClear={allowClear}
       filterOption={false}
       showSearch
       onSearch={debounceFetcher}
@@ -50,7 +52,7 @@ const SelectRemoteOptions = ({
       dropdownRender={(menu) => {
         return fetching ? <Loader /> : menu;
       }}
-      style={{ width: "100%" }}
+      style={{ width: width ?? "100%" }}
       notFoundContent={<Empty />}
       maxTagCount='responsive'
       {...props}
