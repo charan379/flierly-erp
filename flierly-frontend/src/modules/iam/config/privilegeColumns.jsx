@@ -16,8 +16,6 @@ const privilegeColumns = [
       label: "id",
       hidden: true,
       disabled: true,
-      tooltip: translate("this_is_a_hidden_field"),
-      width: "xs",
       hasFeedback: false,
       allowClear: false,
       input: {
@@ -51,6 +49,19 @@ const privilegeColumns = [
         }),
       ],
     },
+    queryFormConfig: {
+      name: "id",
+      label: "id",
+      allowClear: true,
+      width: 's',
+      input: {
+        type: "Number",
+      },
+      rules: [
+        { type: "integer", required: false },
+      ],
+
+    },
   },
   {
     title: "Name",
@@ -59,20 +70,10 @@ const privilegeColumns = [
     width: 10,
     order: 2,
     sorter: true,
-    queryFormConfig: {
-      name: "name",
-      label: "name",
-      rules: [{ type: "regexp" }],
-      transformer: "ilike",
-      input: {
-        type: "Text",
-      },
-    },
     createFormConfig: {
       name: "name",
       label: "name",
       hasFeedback: true,
-      width: "s",
       allowClear: true,
       rules: [
         { type: "string", required: true },
@@ -86,6 +87,16 @@ const privilegeColumns = [
           },
         }),
       ],
+      input: {
+        type: "Text",
+      },
+    },
+    queryFormConfig: {
+      name: "name",
+      label: "name",
+      rules: [{ type: "regexp" }],
+      width: "s",
+      transformer: "ilike",
       input: {
         type: "Text",
       },
@@ -104,25 +115,9 @@ const privilegeColumns = [
         <Tag color="green">Active</Tag>
       );
     },
-    queryFormConfig: {
-      name: "isActive",
-      label: "status",
-      rules: [{ type: "boolean" }],
-      input: {
-        type: "Select",
-        select: {
-          mode: "single",
-          options: [
-            { label: "Active", value: true },
-            { label: "In Active", value: false },
-          ],
-        },
-      },
-    },
     createFormConfig: {
       name: "isActive",
       label: "status",
-      width: 120,
       allowClear: false,
       rules: [],
       input: {
@@ -135,7 +130,23 @@ const privilegeColumns = [
           ],
         },
       },
-    }
+    },
+    queryFormConfig: {
+      name: "isActive",
+      label: "status",
+      width: 120,
+      rules: [{ type: "boolean" }],
+      input: {
+        type: "Select",
+        select: {
+          mode: "single",
+          options: [
+            { label: "Active", value: true },
+            { label: "In Active", value: false },
+          ],
+        },
+      },
+    },
   },
   {
     title: "Access",
@@ -159,29 +170,9 @@ const privilegeColumns = [
           return <Tag>{text}</Tag>;
       }
     },
-    queryFormConfig: {
-      name: "access",
-      label: "access",
-      rules: [{ type: "array" }],
-      transformer: "inArray",
-      input: {
-        type: "Select",
-        select: {
-          mode: "multiple",
-          options: [
-            { label: "Create", value: "Create", },
-            { label: "Read", value: "Read", },
-            { label: "Update", value: "Update", },
-            { label: "Delete", value: "Delete", },
-            { label: "Manage", value: "Manage", },
-          ],
-        },
-      },
-    },
     createFormConfig: {
       name: "access",
       label: "access",
-      width: 120,
       allowClear: false,
       dependencies: ["entity"],
       rules: [{ type: "enum", required: true, enum: ['Create', 'Read', "Update", "Delete", "Manage"] }],
@@ -198,7 +189,27 @@ const privilegeColumns = [
           ],
         },
       },
-    }
+    },
+    queryFormConfig: {
+      name: "access",
+      label: "access",
+      width: 120,
+      rules: [{ type: "array" }],
+      transformer: "inArray",
+      input: {
+        type: "Select",
+        select: {
+          mode: "multiple",
+          options: [
+            { label: "Create", value: "Create", },
+            { label: "Read", value: "Read", },
+            { label: "Update", value: "Update", },
+            { label: "Delete", value: "Delete", },
+            { label: "Manage", value: "Manage", },
+          ],
+        },
+      },
+    },
   },
   {
     title: "Entity",
@@ -207,37 +218,9 @@ const privilegeColumns = [
     width: 7,
     sorter: true,
     order: 5,
-    queryFormConfig: {
-      name: "entity",
-      label: "entity",
-      rules: [{ type: "array" }],
-      transformer: "inArray",
-      input: {
-        type: "SelectRemoteOptions",
-        select: {
-          mode: "multiple",
-          asyncOptionsFetcher: async (value) => {
-            const response = await selectRemoteOptionsService.entities({
-              keyword: value,
-            });
-            if (
-              response?.success &&
-              response?.result &&
-              Array.isArray(response.result)
-            ) {
-              return response.result.map((model) => {
-                return { label: model.entity, value: model.entity };
-              });
-            }
-          },
-          debounceTimeout: 300,
-        },
-      },
-    },
     createFormConfig: {
       name: "entity",
       label: "entity",
-      width: 280,
       allowClear: true,
       hasFeedback: true,
       dependencies: ["access"],
@@ -275,7 +258,34 @@ const privilegeColumns = [
           debounceTimeout: 300,
         },
       },
-    }
+    },
+    queryFormConfig: {
+      name: "entity",
+      label: "entity",
+      rules: [{ type: "array" }],
+      transformer: "inArray",
+      input: {
+        type: "SelectRemoteOptions",
+        select: {
+          mode: "multiple",
+          asyncOptionsFetcher: async (value) => {
+            const response = await selectRemoteOptionsService.entities({
+              keyword: value,
+            });
+            if (
+              response?.success &&
+              response?.result &&
+              Array.isArray(response.result)
+            ) {
+              return response.result.map((model) => {
+                return { label: model.entity, value: model.entity };
+              });
+            }
+          },
+          debounceTimeout: 300,
+        },
+      },
+    },
   },
   {
     title: "Code",
@@ -284,21 +294,10 @@ const privilegeColumns = [
     width: 10,
     order: 6,
     // Query Config
-    queryFormConfig: {
-      name: "code",
-      label: "code",
-      rules: [{ type: "string" }],
-      transformer: "trimTextValue",
-      order: 4,
-      input: {
-        type: "Text",
-      },
-    },
     createFormConfig: {
       name: "code",
       label: "code",
       hasFeedback: true,
-      width: "s",
       allowClear: true,
       rules: [
         { type: "string", required: true },
@@ -325,6 +324,18 @@ const privilegeColumns = [
           }
         }),
       ],
+      input: {
+        type: "Text",
+      },
+    },
+    // 
+    queryFormConfig: {
+      name: "code",
+      label: "code",
+      width: "s",
+      rules: [{ type: "string" }],
+      transformer: "trimTextValue",
+      order: 4,
       input: {
         type: "Text",
       },
