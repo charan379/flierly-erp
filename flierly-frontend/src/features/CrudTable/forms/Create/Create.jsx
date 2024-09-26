@@ -1,6 +1,6 @@
 import useLocale from "@/features/Language/hooks/useLocale";
 import { PlusOutlined } from "@ant-design/icons";
-import { ModalForm } from "@ant-design/pro-components";
+import { DrawerForm } from "@ant-design/pro-components";
 import { Button, Tooltip } from "antd";
 import React from "react";
 
@@ -11,8 +11,9 @@ const Create = ({ formFields, title = "add", initialValues, render }) => {
   const { translate } = useLocale();
 
   return (
-    <ModalForm
+    <DrawerForm
       title={title}
+      grid={true}
       onFinish={(values) => {
         console.log(values);
         return true;
@@ -30,11 +31,16 @@ const Create = ({ formFields, title = "add", initialValues, render }) => {
           />
         </Tooltip>
       }
-      // modal props
-      modalProps={{
+      resize={{
+        maxWidth: window.innerWidth * 0.9,
+        // minWidth: window.innerWidth * 0.5,
+      }}
+      drawerProps={{
         destroyOnClose: true,
-        centered: true,
-        classNames: { body: "crud-table-modal-body" },
+        styles: {
+          footer: { padding: "15px 15px 15px 15px" },
+          header: { padding: "10px 5px 5px 5px" },
+        },
       }}
       submitter={{
         searchConfig: {
@@ -44,7 +50,7 @@ const Create = ({ formFields, title = "add", initialValues, render }) => {
       }}
     >
       {formFields}
-    </ModalForm>
+    </DrawerForm>
   );
 };
 
