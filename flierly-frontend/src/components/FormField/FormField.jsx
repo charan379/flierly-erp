@@ -13,7 +13,7 @@ import React from "react";
 
 const FormField = ({ key, config, showLabel = true }) => {
   const { translate } = useLocale();
-  const { name, label, rules = [], input, dependencies = [], hasFeedback = false, hidden = false, disabled = false, tooltip, width, allowClear } = config;
+  const { name, label, rules = [], input, dependencies = [], hasFeedback = false, hidden = false, disabled = false, tooltip, width, allowClear = true } = config;
 
   // Get transformer if specified
   const transformer = hasOwnProperty(config, "transformer")
