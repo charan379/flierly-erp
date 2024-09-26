@@ -15,7 +15,7 @@ export default function getTranslation(translation, key) {
     // Convert the key to lowercase and replace non-alphanumeric characters with underscores
     const lowerCaseKey = key
       .toLowerCase()
-      .replace(/[^a-zA-Z0-9]/g, "_")
+      .replace(/[^a-zA-Z0-9_]/g, "_")
       .replace(/ /g, "_");
 
     // Check if the key exists in the translation object and return the corresponding value

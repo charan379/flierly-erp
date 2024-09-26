@@ -1,6 +1,7 @@
 import selectRemoteOptionsService from "@/features/SelectRemoteOptions/service";
 import { Tag } from "antd";
 import entityExistenceValidator from "@/utils/validators/entityExistenceValidator";
+import translate from "@/features/Language/utility/translate";
 
 const privilegeColumns = [
   {
@@ -15,7 +16,7 @@ const privilegeColumns = [
       label: "id",
       hidden: true,
       disabled: true,
-      tooltip: "this_is_a_hidden_field",
+      tooltip: translate("this_is_a_hidden_field"),
       width: "xs",
       hasFeedback: false,
       allowClear: false,

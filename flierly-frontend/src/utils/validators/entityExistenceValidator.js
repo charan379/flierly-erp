@@ -1,5 +1,6 @@
 import crudService from "@/service/crud.service";
 import debouncePromise from "../deboucePromise";
+import translate from "@/features/Language/utility/translate";
 
 /**
  * Validates the existence of an entity in the database with debounce.
@@ -22,7 +23,7 @@ const entityExistenceValidator = debouncePromise(
 
       // If the result indicates the entity exists, reject the promise with the custom message
       if (result?.exists === true) {
-        return Promise.reject(rejectionMessage);
+        return Promise.reject(translate(rejectionMessage));
       }
 
       // Resolve if the entity does not exist
