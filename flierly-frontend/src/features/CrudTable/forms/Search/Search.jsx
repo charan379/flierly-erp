@@ -1,5 +1,5 @@
 import useLocale from "@/features/Language/hooks/useLocale";
-import { DrawerForm } from "@ant-design/pro-components";
+import { ModalForm } from "@ant-design/pro-components";
 import { Badge, Button, Tooltip } from "antd";
 import React from "react";
 import useCrudTableContext from "../../hooks/useCrudTableContext";
@@ -16,13 +16,12 @@ const Search = ({
 }) => {
   if (!render) return;
   if (!formFields) return;
-  const { langDirection, translate } = useLocale();
+  const { translate } = useLocale();
   const { crudTableContextHandler } = useCrudTableContext();
 
   return (
-    <DrawerForm
+    <ModalForm
       title={title}
-      grid={true}
       initialValues={reverseTransformQuery(initialQuery)}
       onFinish={(values) => {
         crudTableContextHandler.filters.set(values);
@@ -50,16 +49,10 @@ const Search = ({
           </Badge>
         </Tooltip>
       }
-      resize={{
-        maxWidth: window.innerWidth * 0.9,
-        // minWidth: window.innerWidth * 0.5,
-      }}
-      drawerProps={{
+      modalProps={{
         destroyOnClose: true,
-        styles: {
-          footer: { padding: "15px 15px 15px 15px" },
-          header: { padding: "10px 5px 5px 5px" },
-        },
+        centered: true,
+        classNames: { body: "crud-table-modal-body" },
       }}
       submitter={{
         searchConfig: {
@@ -69,7 +62,7 @@ const Search = ({
       }}
     >
       {formFields}
-    </DrawerForm>
+    </ModalForm>
   );
 };
 
