@@ -16,7 +16,7 @@ export default function Privileges() {
           dataSource={[]}
           tableKey={"privilege-table"}
           rowKey="id"
-          searchFormFields={<QueryPrivilege />}
+          searchFormFields={<FormFields columns={privilegeColumns} configKey={"queryFormConfig"} />}
           createFormFields={<FormFields columns={privilegeColumns} configKey={"createFormConfig"} />}
         />
       </CrudTableContextProvider>
