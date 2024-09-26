@@ -15,6 +15,7 @@ import useLocale from "@/features/Language/hooks/useLocale";
 import { useEscapeKey } from "@/hooks/useEscapeKey";
 import { useOnOutsideClick } from "@/hooks/useOnOutSideClick";
 import crudService from "@/service/crud.service";
+import Loading from "@/components/Loading";
 
 const RowContextMenu = ({
   entity,
@@ -31,7 +32,8 @@ const RowContextMenu = ({
   const { theme } = useTheme();
   const { translate } = useLocale();
   const [popoverPosition, setPopoverPosition] = useState(position);
-  const [countdown, setCountdown] = useState(30); // Start with 30 seconds
+  const [countdown, setCountdown] = useState(120); // Start with 30 seconds
+  const [isLoading, setIsLoading] = useState(false);
 
   const menuItemStyle = { fontSize: "12px" };
 
@@ -51,17 +53,17 @@ const RowContextMenu = ({
       },
       record?.isActive
         ? {
-          label: translate("inactivate"),
-          key: "inactivate",
-          icon: <StopOutlined style={menuItemStyle} />,
-          style: { color: "#9E9E9E", ...menuItemStyle },
-        }
+            label: translate("inactivate"),
+            key: "inactivate",
+            icon: <StopOutlined style={menuItemStyle} />,
+            style: { color: "#9E9E9E", ...menuItemStyle },
+          }
         : {
-          label: translate("activate"),
-          key: "activate",
-          icon: <CheckCircleOutlined style={menuItemStyle} />,
-          style: { color: "#4CAF50", ...menuItemStyle },
-        },
+            label: translate("activate"),
+            key: "activate",
+            icon: <CheckCircleOutlined style={menuItemStyle} />,
+            style: { color: "#4CAF50", ...menuItemStyle },
+          },
       {
         label: translate("delete"),
         key: "delete",
@@ -90,30 +92,31 @@ const RowContextMenu = ({
 
   const onMenuItemClick = useCallback(
     async ({ key }) => {
+      setIsLoading(true);
       let result = {};
       switch (key) {
         case "activate":
           result = await crudService.activate({
             entity,
-            ids: [record?.id]
+            ids: [record?.id],
           });
           break;
         case "inactivate":
           result = await crudService.inactivate({
             entity,
-            ids: [record?.id]
+            ids: [record?.id],
           });
           break;
         case "delete":
           result = await crudService.delete({
             entity,
-            ids: [record?.id]
+            ids: [record?.id],
           });
           break;
         case "restore":
           result = await crudService.restore({
             entity,
-            ids: [record?.id]
+            ids: [record?.id],
           });
           break;
         case "close":
@@ -128,6 +131,8 @@ const RowContextMenu = ({
         actions.reload();
         close();
       }
+
+      setIsLoading(false);
     },
     [entity, record, actions, close]
   );
@@ -160,7 +165,7 @@ const RowContextMenu = ({
     return () => {
       if (timer) {
         clearInterval(timer);
-        setCountdown(30);
+        setCountdown(120);
       } // Cleanup the timer
     };
   }, [open]);
@@ -227,14 +232,14 @@ const RowContextMenu = ({
       arrow={false}
       destroyTooltipOnHide={true}
       content={
-        <div>
+        <Loading isLoading={isLoading}>
           <Menu
             theme={theme}
             items={items}
             onClick={onMenuItemClick}
             selectable={false}
           />
-        </div>
+        </Loading>
       }
       overlayStyle={{
         position: "fixed",
