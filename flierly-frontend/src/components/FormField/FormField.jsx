@@ -5,6 +5,7 @@ import queryTransformers from "@/utils/queryTransformers";
 import {
   ProForm,
   ProFormDateRangePicker,
+  ProFormDigit,
   ProFormText,
 } from "@ant-design/pro-components";
 import { Select } from "antd";
@@ -12,7 +13,7 @@ import React from "react";
 
 const FormField = ({ key, config, showLabel = true }) => {
   const { translate } = useLocale();
-  const { name, label, rules = [], input, dependencies = [], hasFeedback = false } = config;
+  const { name, label, rules = [], input, dependencies = [], hasFeedback = false, hidden = false, disabled = false, tooltip, width, allowClear } = config;
 
   // Get transformer if specified
   const transformer = hasOwnProperty(config, "transformer")
@@ -45,10 +46,15 @@ const FormField = ({ key, config, showLabel = true }) => {
       name={name}
       hasFeedback={hasFeedback}
       dependencies={dependencies}
+      hidden={hidden}
+      disabled={disabled}
+      tooltip={tooltip}
+      width={width}
       label={showLabel ? translate(label) : null}
       rules={rules}
-      {...(select || {})}
       transformer={transformer}
+      allowClear={allowClear}
+      {...(select || {})}
     />
   );
 };
@@ -56,17 +62,42 @@ const FormField = ({ key, config, showLabel = true }) => {
 export default FormField;
 
 const FormItems = {
-  Text: ({ name, label, rules = [], transformer, hasFeedback = false, dependencies = [] }) => (
-    <ProFormText
-      name={name}
-      label={label}
-      rules={rules}
-      transform={transformer}
-      hasFeedback={hasFeedback}
-      validateTrigge={['onChange']}
-      dependencies={dependencies}
-    />
-  ),
+  Text: ({ name, label, rules = [], transformer, hasFeedback = false, dependencies = [], hidden, disabled, tooltip, width, allowClear }) => {
+    return (
+      <ProFormText
+        name={name}
+        label={label}
+        rules={rules}
+        width={width}
+        hidden={hidden}
+        tooltip={tooltip}
+        disabled={hidden || disabled}
+        allowClear={allowClear}
+        transform={transformer}
+        hasFeedback={hasFeedback}
+        validateTrigge={['onChange']}
+        dependencies={dependencies}
+      />
+    )
+  },
+  Number: ({ name, label, rules = [], transformer, hasFeedback = false, dependencies = [], hidden, disabled, tooltip, width, allowClear }) => {
+    return (
+      <ProFormDigit
+        name={name}
+        label={label}
+        rules={rules}
+        width={width}
+        hidden={hidden}
+        tooltip={tooltip}
+        disabled={hidden || disabled}
+        allowClear={allowClear}
+        transform={transformer}
+        hasFeedback={hasFeedback}
+        validateTrigge={['onChange']}
+        dependencies={dependencies}
+      />
+    )
+  },
   Select: ({
     name,
     label,
@@ -75,36 +106,51 @@ const FormItems = {
     options,
     transformer,
     hasFeedback = false,
-    dependencies = []
-  }) => (
-    <ProForm.Item
-      name={name}
-      label={label}
-      rules={rules}
-      style={{ width: "100%" }}
-      transform={transformer}
-      hasFeedback={hasFeedback}
-      dependencies={dependencies}
-    >
-      <Select
-        mode={mode}
-        placeholder={"Please enter"}
-        maxTagCount='responsive'
-        options={options}
-        allowClear
+    dependencies = [],
+    hidden, disabled, tooltip, width, allowClear
+  }) => {
+    return (
+      <ProForm.Item
+        name={name}
+        label={label}
+        rules={rules}
+        width={width}
+        hidden={hidden}
+        tooltip={tooltip}
+        disabled={hidden || disabled}
+        allowClear={allowClear}
+        style={{ width: width ?? "100%" }}
+        transform={transformer}
+        hasFeedback={hasFeedback}
+        dependencies={dependencies}
+      >
+        <Select
+          mode={mode}
+          placeholder={"Please enter"}
+          maxTagCount='responsive'
+          options={options}
+          allowClear={allowClear}
+        />
+      </ProForm.Item>
+    )
+  },
+  DateRange: ({ name, label, rules = [], transformer, hasFeedback = false, dependencies = [], hidden, disabled, tooltip, width, allowClear }) => {
+    return (
+      <ProFormDateRangePicker
+        name={name}
+        label={label}
+        rules={rules}
+        width={width}
+        hidden={hidden}
+        tooltip={tooltip}
+        disabled={hidden || disabled}
+        allowClear={allowClear}
+        transform={transformer}
+        hasFeedback={hasFeedback}
+        dependencies={dependencies}
       />
-    </ProForm.Item>
-  ),
-  DateRange: ({ name, label, rules = [], transformer, hasFeedback = false, dependencies = [] }) => (
-    <ProFormDateRangePicker
-      name={name}
-      label={label}
-      rules={rules}
-      transform={transformer}
-      hasFeedback={hasFeedback}
-      dependencies={dependencies}
-    />
-  ),
+    )
+  },
   SelectRemoteOptions: ({
     name,
     label,
@@ -118,7 +164,12 @@ const FormItems = {
     tagRender,
     labelInValue = false,
     hasFeedback = false,
-    dependencies = []
+    dependencies = [],
+    width,
+    hidden,
+    tooltip,
+    disabled,
+    allowClear,
   }) => {
     return (
       <ProForm.Item
@@ -129,6 +180,11 @@ const FormItems = {
         transform={transformer}
         hasFeedback={hasFeedback}
         dependencies={dependencies}
+        width={width}
+        hidden={hidden}
+        tooltip={tooltip}
+        disabled={hidden || disabled}
+        allowClear={allowClear}
       >
         <SelectRemoteOptions
           labelInValue={labelInValue === true ? true : false}
@@ -139,6 +195,8 @@ const FormItems = {
           labelRender={labelRender}
           optionRender={optionRender}
           tagRender={tagRender}
+          width={width}
+          allowClear={allowClear}
         />
       </ProForm.Item>
     );
