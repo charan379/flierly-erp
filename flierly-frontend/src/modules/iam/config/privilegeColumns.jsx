@@ -1,7 +1,6 @@
 import selectRemoteOptionsService from "@/features/SelectRemoteOptions/service";
 import { Tag } from "antd";
 import entityExistenceValidator from "@/utils/validators/entityExistenceValidator";
-import translate from "@/features/Language/utility/translate";
 
 const privilegeColumns = [
   {
@@ -11,44 +10,44 @@ const privilegeColumns = [
     sorter: true,
     align: "center",
     order: 1,
-    createFormConfig: {
-      name: "id",
-      label: "id",
-      hidden: true,
-      disabled: true,
-      hasFeedback: false,
-      allowClear: false,
-      input: {
-        type: "Text",
-      },
-      rules: [
-        { type: "string", max: 10, required: false },
-        // number regex validator
-        ({ }) => ({
-          validator(_, value) {
-            return new Promise((resolve, reject) => {
-              if (!value) resolve();
-              if (/^-?\d*(\.\d*)?$/.test(value)) {
-                resolve();
-              } else {
-                reject("id_is_not_a_valid_number")
-              }
-            })
-          }
-        }),
-        // ID already exists validator
-        ({ }) => ({
-          validator(_, value) {
-            if (value === undefined || value === "" || !/^-?\d*(\.\d*)?$/.test(value)) return Promise.resolve();
-            return entityExistenceValidator({
-              entity: "privilege",
-              filters: { id: value },
-              rejectionMessage: "id_already_exisits"
-            });
-          },
-        }),
-      ],
-    },
+    // createFormConfig: {
+    //   name: "id",
+    //   label: "id",
+    //   hidden: true,
+    //   disabled: true,
+    //   hasFeedback: false,
+    //   allowClear: false,
+    //   input: {
+    //     type: "Text",
+    //   },
+    //   rules: [
+    //     { type: "string", max: 10, required: false },
+    //     // number regex validator
+    //     ({ }) => ({
+    //       validator(_, value) {
+    //         return new Promise((resolve, reject) => {
+    //           if (!value) resolve();
+    //           if (/^-?\d*(\.\d*)?$/.test(value)) {
+    //             resolve();
+    //           } else {
+    //             reject("id_is_not_a_valid_number")
+    //           }
+    //         })
+    //       }
+    //     }),
+    //     // ID already exists validator
+    //     ({ }) => ({
+    //       validator(_, value) {
+    //         if (value === undefined || value === "" || !/^-?\d*(\.\d*)?$/.test(value)) return Promise.resolve();
+    //         return entityExistenceValidator({
+    //           entity: "privilege",
+    //           filters: { id: value },
+    //           rejectionMessage: "id_already_exisits"
+    //         });
+    //       },
+    //     }),
+    //   ],
+    // },
     queryFormConfig: {
       name: "id",
       label: "id",
@@ -80,7 +79,7 @@ const privilegeColumns = [
         ({ }) => ({
           validator(_, value) {
             if (value === undefined) return Promise.resolve();
-            return entityExistenceValidator({
+            return entityExistenceValidator("privilege-name-validation-1", {
               entity: "privilege",
               filters: { name: { $ilike: value } },
             });
@@ -229,7 +228,7 @@ const privilegeColumns = [
       ({ getFieldValue }) => ({
         validator(_, value) {
           if (value === undefined || !getFieldValue("access")) return Promise.resolve();
-          return entityExistenceValidator({
+          return entityExistenceValidator("privilege-entity-access-validation-1", {
             entity: "privilege",
             filters: { entity: value, access: getFieldValue("access") },
             rejectionMessage: "privilege_with_enity_access_already_exisits"
@@ -304,7 +303,7 @@ const privilegeColumns = [
         ({ }) => ({
           validator(_, value) {
             if (value === undefined) return Promise.resolve();
-            return entityExistenceValidator({
+            return entityExistenceValidator("privilege-code-validation-1", {
               entity: "privilege",
               filters: { code: value },
               rejectionMessage: "privilege_with_same_code_already_exists"
