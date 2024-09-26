@@ -5,7 +5,8 @@ const english_us = {
     ok: 'Ok',
     accept_terms_conditions: "Accept terms and conditions",
     username: "Username",
-    name: "Name"
+    name: "Name",
+    this_is_a_hidden_field: "This is a hidden field !"
 };
 
 export default english_us;
