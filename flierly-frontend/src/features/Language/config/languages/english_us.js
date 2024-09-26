@@ -4,7 +4,8 @@ const english_us = {
     cancel: 'Cancel',
     ok: 'Ok',
     accept_terms_conditions: "Accept terms and conditions",
-    username: "Username"
+    username: "Username",
+    name: "Name"
 };
 
 export default english_us;
