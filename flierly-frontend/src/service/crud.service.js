@@ -30,15 +30,16 @@ const crudService = {
     );
     return handleResponse({ promise });
   },
-
+  // Create a new entity row
+  create: async ({ entity, data }) => {
+    const promise = api.post(`/${entity}/create`, { ...data }, {});
+    return handleResponse({ promise, notifyOnSuccess: true });
+  },
   // Fetch exists status
-  exists: async ({
-    entity,
-    filters = {},
-  }) => {
+  exists: async ({ entity, filters = {} }) => {
     const promise = api.post(
       `/${entity}/exists`,
-      { filters },
+      { filters, withDeleted: false },
       {}
     );
     return handleResponse({ promise });
@@ -47,7 +48,7 @@ const crudService = {
   // Soft delete
   delete: async ({ entity, ids = [] }) => {
     const promise = api.delete(`/${entity}/delete`, {
-      data: ids
+      data: ids,
     });
     return handleResponse({ promise, notifyOnSuccess: true });
   },

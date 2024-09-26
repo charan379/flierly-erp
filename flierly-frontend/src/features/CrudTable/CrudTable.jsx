@@ -44,13 +44,12 @@ const CrudTable = ({
     menu: true,
   },
 }) => {
-
   const tableHeight = useElementHeight("crud-data-table-flierly-1");
   const tableHeadHeight = useElementHeight("ant-table-thead");
   const tableToolbarHeight = useElementHeight("ant-pro-table-list-toolbar");
   const tablePaginationHeight = useElementHeight("ant-table-pagination");
 
-  const {  translate } = useLocale();
+  const { translate } = useLocale();
 
   const [data, setData] = useState(dataSource);
 
@@ -167,10 +166,12 @@ const CrudTable = ({
         <div></div>,
         // create from
         <Create
+          entity={entity}
           formFields={createFormFields}
           initialValues={createFormInitialValues}
           title={translate("add_from")}
           render={render.create}
+          actions={action}
         />,
         <div></div>,
         // restore the selected items

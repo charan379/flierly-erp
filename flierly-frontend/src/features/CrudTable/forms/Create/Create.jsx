@@ -1,10 +1,18 @@
 import useLocale from "@/features/Language/hooks/useLocale";
+import crudService from "@/service/crud.service";
 import { PlusOutlined } from "@ant-design/icons";
 import { DrawerForm } from "@ant-design/pro-components";
 import { Button, Tooltip } from "antd";
 import React from "react";
 
-const Create = ({ formFields, title = "add", initialValues, render }) => {
+const Create = ({
+  entity,
+  formFields,
+  title = "add",
+  initialValues,
+  render,
+  actions
+}) => {
   if (!render) return;
   if (!formFields) return;
 
@@ -14,8 +22,10 @@ const Create = ({ formFields, title = "add", initialValues, render }) => {
     <DrawerForm
       title={title}
       grid={true}
-      onFinish={(values) => {
+      onFinish={async (values) => {
         console.log(values);
+        await crudService.create({ entity, data: values });
+        actions.reload();
         return true;
       }}
       initialValues={initialValues}
