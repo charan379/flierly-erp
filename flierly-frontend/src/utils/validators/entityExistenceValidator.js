@@ -14,7 +14,7 @@ const entityExistenceValidator = debouncePromise(
   async ({
     entity,
     filters = {},
-    rejectionMessage = "Entity already exists.",
+    rejectionMessage = "entity_already_exists",
   }) => {
     try {
       // Call the exists method from crudService with the provided entity and filters
