@@ -4,12 +4,25 @@ export const initialState = {
   rowMenu: { open: false, position: { x: 0, y: 0 }, currentRecord: {} },
   filters: {},
   binMode: false,
+  updateForm: {
+    open: false, data: {}, id: null
+  }
 };
 
 export function reducer(state, action) {
   switch (action.type) {
     case actionTypes.RESET_STATE:
       return initialState;
+    case actionTypes.OPEN_UPDATE_FROM:
+      return {
+        ...state,
+        updateForm: { open: true, data: action.payload.data, id: action.payload.id }
+      }
+    case actionTypes.CLOSE_UPDATE_FROM:
+      return {
+        ...state,
+        updateForm: initialState.updateForm
+      }
     case actionTypes.UPDATE_FILTERS:
       return {
         ...state,

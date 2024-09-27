@@ -8,8 +8,8 @@ const contextHandler = (state, dispatcher) => ({
     },
     binMode: {
         isActive: () => state?.binMode,
-        activate: () => dispatcher({type: actionTypes.ACTIVATE_BIN_MODE}),
-        deactivate: () => dispatcher({type: actionTypes.DEACTIVATE_BIN_MODE}),
+        activate: () => dispatcher({ type: actionTypes.ACTIVATE_BIN_MODE }),
+        deactivate: () => dispatcher({ type: actionTypes.DEACTIVATE_BIN_MODE }),
     },
     rowMenu: {
         open: () => dispatcher({ type: actionTypes.OPEN_ROW_MENU }),
@@ -20,6 +20,13 @@ const contextHandler = (state, dispatcher) => ({
         setCurrentRecord: (record = {}) => dispatcher({ type: actionTypes.UPDATE_ROW_MENU_CURRENT_RECORD, payload: record }),
         getCurrentRecord: () => state?.rowMenu?.currentRecord,
     },
+    updateForm: {
+        open: ({ data, id }) => dispatcher({ type: actionTypes.OPEN_UPDATE_FROM, payload: { data, id } }),
+        close: () => dispatcher({ type: actionTypes.CLOSE_UPDATE_FROM }),
+        getData: () => state?.updateForm?.data,
+        getId: () => state?.updateForm?.id,
+        isOpen: () => state?.updateForm?.open,
+    }
 });
 
 export default contextHandler;

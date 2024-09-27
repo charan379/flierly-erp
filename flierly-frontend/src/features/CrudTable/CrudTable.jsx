@@ -12,6 +12,7 @@ import Restore from "./features/Restore";
 import useCrudTableContext from "./hooks/useCrudTableContext";
 import Clear from "./features/Clear";
 import BinModeToggle from "./features/BinModeToggle";
+import Update from "./forms/Update";
 
 const CrudTable = ({
   entity,
@@ -22,6 +23,7 @@ const CrudTable = ({
   dataSource = [],
   createFormFields,
   createFormInitialValues,
+  updateFormFields,
   searchFormFields,
   render = {
     restore: true,
@@ -40,6 +42,7 @@ const CrudTable = ({
     bin: true,
     search: true,
     create: true,
+    update: true,
     view: true,
     menu: true,
   },
@@ -172,6 +175,18 @@ const CrudTable = ({
           title={translate("add_from")}
           render={render.create}
           actions={action}
+        />,
+        <div></div>,
+        <Update
+          entity={entity}
+          formFields={updateFormFields}
+          data={crudTableContextHandler.updateForm.getData()}
+          id={crudTableContextHandler.updateForm.getId()}
+          isOpen={crudTableContextHandler.updateForm.isOpen()}
+          title={translate("update_form")}
+          render={render.update}
+          actions={action}
+          close={() => crudTableContextHandler.updateForm.close()}
         />,
         <div></div>,
         // restore the selected items

@@ -16,6 +16,7 @@ import { useEscapeKey } from "@/hooks/useEscapeKey";
 import { useOnOutsideClick } from "@/hooks/useOnOutSideClick";
 import crudService from "@/service/crud.service";
 import Loading from "@/components/Loading";
+import useCrudTableContext from "../../hooks/useCrudTableContext";
 
 const RowContextMenu = ({
   entity,
@@ -35,6 +36,9 @@ const RowContextMenu = ({
   const [countdown, setCountdown] = useState(120); // Start with 30 seconds
   const [isLoading, setIsLoading] = useState(false);
 
+  const { crudTableContextHandler } = useCrudTableContext();
+
+
   const menuItemStyle = { fontSize: "12px" };
 
   const items = useMemo(() => {
@@ -53,17 +57,17 @@ const RowContextMenu = ({
       },
       record?.isActive
         ? {
-            label: translate("inactivate"),
-            key: "inactivate",
-            icon: <StopOutlined style={menuItemStyle} />,
-            style: { color: "#9E9E9E", ...menuItemStyle },
-          }
+          label: translate("inactivate"),
+          key: "inactivate",
+          icon: <StopOutlined style={menuItemStyle} />,
+          style: { color: "#9E9E9E", ...menuItemStyle },
+        }
         : {
-            label: translate("activate"),
-            key: "activate",
-            icon: <CheckCircleOutlined style={menuItemStyle} />,
-            style: { color: "#4CAF50", ...menuItemStyle },
-          },
+          label: translate("activate"),
+          key: "activate",
+          icon: <CheckCircleOutlined style={menuItemStyle} />,
+          style: { color: "#4CAF50", ...menuItemStyle },
+        },
       {
         label: translate("delete"),
         key: "delete",
@@ -106,6 +110,9 @@ const RowContextMenu = ({
             entity,
             ids: [record?.id],
           });
+          break;
+        case "edit":
+          crudTableContextHandler.updateForm.open({ data: record, id: record?.id })
           break;
         case "delete":
           result = await crudService.delete({
