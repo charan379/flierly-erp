@@ -4,6 +4,7 @@ import AccessType from '@/constants/accessTypes';
 
 @Entity('iam_privileges')
 @Index('idx_entity', ['entity'])
+@Index('idx_entity_access_unique', ['entity', 'access'], { unique: true })  // Unique index on 'entity' and 'access'
 export class Privilege {
 
     @PrimaryGeneratedColumn()
