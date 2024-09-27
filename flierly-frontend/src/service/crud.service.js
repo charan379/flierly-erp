@@ -39,7 +39,7 @@ const crudService = {
   exists: async ({ entity, filters = {} }) => {
     const promise = api.post(
       `/${entity}/exists`,
-      { filters, withDeleted: false },
+      { filters, withDeleted: true },
       {}
     );
     return handleResponse({ promise });
