@@ -18,7 +18,7 @@ export default function Privileges() {
           rowKey="id"
           searchFormFields={<FormFields columns={privilegeColumns} configKey={"queryFormConfig"} />}
           createFormFields={<FormFields columns={privilegeColumns} configKey={"createFormConfig"} />}
-          updateFormFields={<FormFields columns={privilegeColumns} configKey={"createFormConfig"} />}
+          updateFormFields={<FormFields columns={privilegeColumns} configKey={"updateFormConfig"} />}
         />
       </CrudTableContextProvider>
     </IamLayout>
