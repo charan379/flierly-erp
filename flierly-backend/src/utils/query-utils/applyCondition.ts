@@ -99,6 +99,12 @@ function applyCondition<T extends ObjectLiteral>(
                 case '$notRegexi':  // Handle case-insensitive NOT regex matching
                     qb[whereMethod](`${alias}.${field} !~* :${field}`, { [field]: condition[operator] });
                     break;
+                case '$equalTo':  // Handle equality condition
+                    qb[whereMethod](`${alias}.${field} = :${field}`, { [field]: condition[operator] });
+                    break;
+                case '$notEqualTo':  // Handle not equal condition
+                    qb[whereMethod](`${alias}.${field} != :${field}`, { [field]: condition[operator] });
+                    break;
                 default:
                     break;
             }
