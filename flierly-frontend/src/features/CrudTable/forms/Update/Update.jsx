@@ -1,6 +1,6 @@
 import useLocale from "@/features/Language/hooks/useLocale";
 import crudService from "@/service/crud.service";
-import { EditFilled, EditOutlined } from "@ant-design/icons";
+import { EditFilled } from "@ant-design/icons";
 import { DrawerForm } from "@ant-design/pro-components";
 import { Button, Tooltip } from "antd";
 import React from "react";
@@ -26,9 +26,9 @@ const Update = ({
       title={title}
       grid={true}
       onFinish={async (values) => {
-        console.log(values);
         await crudService.update({ entity, data: values, id });
         actions.reload();
+        close();
         return true;
       }}
       open={isOpen}
