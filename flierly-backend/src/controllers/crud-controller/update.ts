@@ -28,7 +28,7 @@ const update = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Re
     return res.status(HttpCodes.OK).json(apiResponse({
         success: true,
         result,
-        message: 'Updated successfully',
+        message: `${AppDataSource.getRepository(entity).metadata.name} updated successfully with ID: ${id}`,
         controller: 'CRUD.UpdateController',
         httpCode: HttpCodes.OK,
         error: null,
