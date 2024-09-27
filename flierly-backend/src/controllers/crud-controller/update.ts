@@ -11,7 +11,9 @@ const update = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Re
 
     const id = await JoiSchemaValidator<number>(idSchema, req.params.id, { abortEarly: false, allowUnknown: false }, "dynamic-update");
 
-    const update = await JoiSchemaValidator<object>(Joi.object().required(), req.body, { abortEarly: false, allowUnknown: false }, "dynamic-update");
+    const update: any = await JoiSchemaValidator<object>(Joi.object().required(), req.body, { abortEarly: false, allowUnknown: false }, "dynamic-update");
+
+    if (update?.id) delete update.id;
 
     const result = await AppDataSource.transaction(async (entityManager) => {
 
