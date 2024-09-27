@@ -37,7 +37,7 @@ const crudService = {
   },
   // Update a new entity row
   update: async ({ entity, id, data }) => {
-    const promise = api.put(`/${entity}/${id}`, { ...data }, {});
+    const promise = api.put(`/${entity}/update/${id}`, { ...data }, {});
     return handleResponse({ promise, notifyOnSuccess: true });
   },
   // Fetch exists status
