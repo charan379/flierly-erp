@@ -21,12 +21,12 @@ export class Role {
     @Column({ unique: true })
     @IsNotEmpty({ message: 'Role code is required.' })
     @Length(5, 25, { message: 'Role code must be between 4 and 25 characters.' })  // Min 5, Max 25
-    @Matches(/^[a-z-]+\.[a-z]+$/, { message: 'Role code must match the pattern /^[a-z-]+\\.[a-z]+$/.' })  // Regex pattern
+    @Matches(/^[a-z]+\-[a-z0-9]+$/, { message: 'Role code must match the pattern /^[a-z-]+\\.[a-z]+$/.' })  // Regex pattern
     code: string;
 
     @Column()
     @IsNotEmpty({ message: 'Role description is required.' })
-    @Length(10, 60, { message: 'Role description must be between 10 and 60 characters.' })  // Min 10, Max 60
+    @Length(10, 350, { message: 'Role description must be between 10 and 350 characters.' })  // Min 10, Max 350
     description: string;
 
     @ManyToMany(() => Privilege, {})
