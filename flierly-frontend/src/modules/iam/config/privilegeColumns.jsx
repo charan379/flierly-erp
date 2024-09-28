@@ -124,7 +124,7 @@ const nameColumn = {
     hasFeedback: true,
     allowClear: true,
     rules: [
-      { type: "string", required: true },
+      { type: "string", min: 5, max: 30, required: true },
       ({}) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
@@ -145,7 +145,7 @@ const nameColumn = {
     hasFeedback: true,
     allowClear: true,
     rules: [
-      { type: "string", required: true },
+      { type: "string", min: 5, max: 30, required: true },
       ({ getFieldValue }) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
@@ -422,7 +422,7 @@ const codeColumn = {
     allowClear: true,
     access: { permission: /^privilege\.update$/, ifNoAccess: "disable" },
     rules: [
-      { type: "string", required: true },
+      { type: "string", min: 5, max: 25, required: true },
       ({}) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
@@ -446,7 +446,7 @@ const codeColumn = {
     allowClear: true,
     access: { permission: /^privilege\.manage$/, ifNoAccess: "disable" },
     rules: [
-      { type: "string", required: true },
+      { type: "string", min: 5, max: 25, required: true },
       ({ getFieldValue }) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
@@ -468,7 +468,7 @@ const codeColumn = {
     label: "code",
     width: "s",
     rules: [
-      { type: "string" },
+      { type: "string", min: 5, max: 25 },
       commonColumnConfig.codeColumn.validators.codeRegex,
     ],
     transformer: "trimTextValue",
