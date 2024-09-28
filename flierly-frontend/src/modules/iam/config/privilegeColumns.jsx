@@ -1,7 +1,8 @@
 import selectRemoteOptionsService from "@/features/SelectRemoteOptions/service";
 import { Tag } from "antd";
 import entityExistenceValidator from "@/utils/validators/entityExistenceValidator";
-import timeStampColumns from "@/config/common/timeStampColumns";
+import generateTimeStampColumns from "@/utils/column-generators/generateTimeStampColumns";
+import { generateIdColumn } from "@/utils/column-generators/generateIdColumn";
 
 const commonColumnConfig = {
   // active column
@@ -69,46 +70,7 @@ const commonColumnConfig = {
 };
 
 // Column configuration for "ID"
-const idColumn = {
-  title: "ID",
-  dataIndex: "id",
-  width: 2,
-  sorter: true,
-  align: "center",
-  order: 1,
-  createFormConfig: {
-    name: "id",
-    label: "id",
-    hidden: true,
-    disabled: true,
-    hasFeedback: false,
-    allowClear: false,
-    input: {
-      type: "Text",
-    },
-  },
-  updateFormConfig: {
-    name: "id",
-    label: "id",
-    hidden: true,
-    disabled: true,
-    hasFeedback: false,
-    allowClear: false,
-    input: {
-      type: "Text",
-    },
-  },
-  queryFormConfig: {
-    name: "id",
-    label: "id",
-    allowClear: true,
-    width: "s",
-    input: {
-      type: "Number",
-    },
-    rules: [{ type: "integer", required: false }],
-  },
-};
+const idColumn = generateIdColumn();
 
 // Column configuration for "Name"
 const nameColumn = {
@@ -486,7 +448,7 @@ const privilegeColumns = [
   accessColumn,
   entityColumn,
   codeColumn,
-  ...timeStampColumns,
+  ...generateTimeStampColumns(),
 ];
 
 export default privilegeColumns;
