@@ -3,7 +3,7 @@ import IamLayout from "../../layout/IamLayout";
 import { CrudTable } from "@/features/CrudTable";
 import roleColumns from "../../config/roleColumns";
 import CrudTableContextProvider from "@/features/CrudTable/components/CrudTableContextProvider";
-import QueryRole from "../../forms/QueryRole";
+import FormFields from "@/components/FormFields";
 
 export default function Roles() {
   return (
@@ -14,8 +14,10 @@ export default function Roles() {
           columns={roleColumns}
           dataSource={[]}
           tableKey={"role-table"}
-          rowKey="_id"
-          searchFormFields={<QueryRole />}
+          rowKey="id"
+          searchFormFields={<FormFields columns={roleColumns} configKey={"queryFormConfig"} />}
+          createFormFields={<FormFields columns={roleColumns} configKey={"createFormConfig"} />}
+          updateFormFields={<FormFields columns={roleColumns} configKey={"updateFormConfig"} />}
         />
       </CrudTableContextProvider>
     </IamLayout>
