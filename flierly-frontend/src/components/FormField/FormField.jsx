@@ -8,6 +8,7 @@ import {
   ProFormDateRangePicker,
   ProFormDigit,
   ProFormText,
+  ProFormTextArea,
 } from "@ant-design/pro-components";
 import { Select } from "antd";
 import React from "react";
@@ -17,9 +18,19 @@ const FormField = ({ key, config, showLabel = true }) => {
   const { translate } = useLocale();
   const { hasPermission } = useAuth();
   const {
-    name, label, rules = [], input, dependencies = [], hasFeedback = false,
-    hidden = false, disabled = false, tooltip, width, allowClear = true,
-    access = { permission: "", ifNoAccess: "" }
+    name,
+    label,
+    rules = [],
+    input,
+    dependencies = [],
+    hasFeedback = false,
+    hidden = false,
+    disabled = false,
+    tooltip,
+    width,
+    allowClear = true,
+    access = { permission: "", ifNoAccess: "" },
+    fieldProps,
   } = config;
 
   let isHidden = hidden;
@@ -53,14 +64,22 @@ const FormField = ({ key, config, showLabel = true }) => {
 
   // Ensure 'name' and 'label' are provided
   if (!name || !label) {
-    throw new Error(`Missing required 'name' or 'label' in form field config: ${JSON.stringify(config)}`);
+    throw new Error(
+      `Missing required 'name' or 'label' in form field config: ${JSON.stringify(
+        config
+      )}`
+    );
   }
 
   const { type, select } = input;
   const FormComponent = formItems[type];
 
   if (!FormComponent) {
-    throw new Error(`Unknown form input type '${type}' in form field config: ${JSON.stringify(config)}`);
+    throw new Error(
+      `Unknown form input type '${type}' in form field config: ${JSON.stringify(
+        config
+      )}`
+    );
   }
 
   // Render the form component
@@ -72,12 +91,14 @@ const FormField = ({ key, config, showLabel = true }) => {
       dependencies={dependencies}
       hidden={isHidden}
       disabled={isDisabled}
+      readOnly={isDisabled}
       tooltip={tooltip}
       width={width}
       label={showLabel ? translate(label) : null}
       rules={rules}
       transformer={transformer}
       allowClear={allowClear}
+      fieldProps={fieldProps}
       {...(select || {})}
     />
   );
@@ -86,14 +107,25 @@ const FormField = ({ key, config, showLabel = true }) => {
 export default FormField;
 
 // Common ProForm component to handle shared props
-const ProFormComponent = ({ Component, ...props }) => (
-  <Component {...proFormProps(props)} />
-);
+const ProFormComponent = ({ Component, ...props }) => {
+  return <Component {...proFormProps(props)} />;
+};
 
 // Function to extract common props for ProForm components
 const proFormProps = ({
-  name, label, rules = [], transformer, hasFeedback = false,
-  dependencies = [], hidden, disabled, tooltip, width, allowClear
+  name,
+  label,
+  rules = [],
+  transformer,
+  hasFeedback = false,
+  dependencies = [],
+  hidden,
+  disabled,
+  tooltip,
+  width,
+  allowClear,
+  fieldProps,
+  readOnly,
 }) => ({
   name,
   label,
@@ -105,16 +137,24 @@ const proFormProps = ({
   allowClear,
   transform: transformer,
   hasFeedback,
-  validateTrigger: ['onChange'],
+  validateTrigger: ["onChange"],
   dependencies,
+  fieldProps,
+  readOnly,
 });
 
 // Form items mapping
 const formItems = {
   Text: (props) => <ProFormComponent {...props} Component={ProFormText} />,
   Number: (props) => <ProFormComponent {...props} Component={ProFormDigit} />,
+  TextArea: (props) => (
+    <ProFormComponent {...props} Component={ProFormTextArea} />
+  ),
   Select: (props) => (
-    <ProForm.Item {...proFormProps(props)} style={{ width: props.width ?? "100%" }}>
+    <ProForm.Item
+      {...proFormProps(props)}
+      style={{ width: props.width ?? "100%" }}
+    >
       <Select
         mode={props.mode || "single"}
         placeholder="Please enter"
@@ -126,9 +166,14 @@ const formItems = {
       />
     </ProForm.Item>
   ),
-  DateRange: (props) => <ProFormComponent {...props} Component={ProFormDateRangePicker} />,
+  DateRange: (props) => (
+    <ProFormComponent {...props} Component={ProFormDateRangePicker} />
+  ),
   SelectRemoteOptions: (props) => (
-    <ProForm.Item {...proFormProps(props)} style={{ width: props.width ?? "100%" }}>
+    <ProForm.Item
+      {...proFormProps(props)}
+      style={{ width: props.width ?? "100%" }}
+    >
       <SelectRemoteOptions
         labelInValue={props.labelInValue}
         mode={props.mode || "single"}
