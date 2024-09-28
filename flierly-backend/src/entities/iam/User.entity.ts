@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, Index, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
-import { IsNotEmpty, IsEmail } from 'class-validator';
+import { IsNotEmpty, IsEmail, Length, IsMobilePhone, Matches } from 'class-validator';
 import { Privilege } from './Privilege.entity';
 import { Role } from './Role.entity';
 
@@ -19,15 +19,18 @@ export class User {
 
     @Column({ unique: true })
     @IsNotEmpty({ message: 'Username is required.' })
+    @Length(5, 20, { message: 'Username must be between 5 and 20 characters.' })  // Min 5, Max 20 characters
+    @Matches(/^[a-z0-9_]+$/, { message: 'Username can only contain small case letters, numbers, and underscores.' })  // Alphanumeric + underscore
     username: string;
 
     @Column({ unique: true })
-    @IsEmail({}, { message: 'User email is required.' })
+    @IsEmail({}, { message: 'Invalid email address.' })
     @IsNotEmpty({ message: 'User email is required.' })
     email: string;
 
     @Column({ unique: true })
     @IsNotEmpty({ message: 'User mobile number is required.' })
+    @IsMobilePhone()  // Validates mobile numbers in any locale
     mobile: string;
 
     @ManyToMany(() => Privilege, {})

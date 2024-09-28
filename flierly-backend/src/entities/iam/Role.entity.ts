@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, Length, Matches } from 'class-validator';
 import { Privilege } from './Privilege.entity';
 
 @Entity('iam_roles')
@@ -15,14 +15,18 @@ export class Role {
 
     @Column({ unique: true })
     @IsNotEmpty({ message: 'Role name is required.' })
+    @Length(5, 30, { message: 'Role name must be between 5 and 30 characters.' })  // Min 5, Max 30
     name: string;
 
     @Column({ unique: true })
     @IsNotEmpty({ message: 'Role code is required.' })
+    @Length(5, 25, { message: 'Role code must be between 4 and 25 characters.' })  // Min 5, Max 25
+    @Matches(/^[a-z-]+\.[a-z]+$/, { message: 'Role code must match the pattern /^[a-z-]+\\.[a-z]+$/.' })  // Regex pattern
     code: string;
 
     @Column()
     @IsNotEmpty({ message: 'Role description is required.' })
+    @Length(10, 60, { message: 'Role description must be between 10 and 60 characters.' })  // Min 10, Max 60
     description: string;
 
     @ManyToMany(() => Privilege, {})
