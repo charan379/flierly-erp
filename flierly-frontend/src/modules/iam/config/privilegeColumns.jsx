@@ -1,76 +1,76 @@
-import selectRemoteOptionsService from "@/features/SelectRemoteOptions/service";
 import { Tag } from "antd";
 import entityExistenceValidator from "@/utils/validators/entityExistenceValidator";
 import generateTimeStampColumns from "@/utils/column-generators/generateTimeStampColumns";
-import { generateIdColumn } from "@/utils/column-generators/generateIdColumn";
+import fetchEnityOptions from "@/utils/fetchEntityOptions";
 
-const commonColumnConfig = {
-  // active column
-  activeColumn: {
-    // input
-    input: {
-      options: [
-        { label: "Active", value: true },
-        { label: "In Active", value: false },
-      ],
-    },
+const statusOptions = [
+  { label: "Active", value: true },
+  { label: "In Active", value: false },
+];
+
+const accessOptions = [
+  { label: "Create", value: "Create" },
+  { label: "Read", value: "Read" },
+  { label: "Update", value: "Update" },
+  { label: "Delete", value: "Delete" },
+  { label: "Manage", value: "Manage" },
+];
+
+// code regex pattern validator
+const codeRegex = ({}) => ({
+  validator(_, value) {
+    return new Promise((resolve, reject) => {
+      if (!value) resolve();
+      if (/^[a-z-]+\.[a-z]+$/.test(value)) {
+        resolve();
+      } else {
+        reject("code_is_not_valid");
+      }
+    });
   },
-  // access column
-  accessColumn: {
-    // input
-    input: {
-      options: [
-        { label: "Create", value: "Create" },
-        { label: "Read", value: "Read" },
-        { label: "Update", value: "Update" },
-        { label: "Delete", value: "Delete" },
-        { label: "Manage", value: "Manage" },
-      ],
-    },
-  },
-  // entity column
-  entityColumn: {
-    // input
-    input: {
-      asyncOptionsFetcher: async (value) => {
-        const response = await selectRemoteOptionsService.entities({
-          keyword: value,
-        });
-        if (
-          response?.success &&
-          response?.result &&
-          Array.isArray(response.result)
-        ) {
-          return response.result.map((model) => {
-            return { label: model.entity, value: model.entity };
-          });
-        }
-      },
-    },
-  },
-  // code column
-  codeColumn: {
-    // validators
-    validators: {
-      // code regex pattern validator
-      codeRegex: ({}) => ({
-        validator(_, value) {
-          return new Promise((resolve, reject) => {
-            if (!value) resolve();
-            if (/^[a-z-]+\.[a-z]+$/.test(value)) {
-              resolve();
-            } else {
-              reject("code_is_not_valid");
-            }
-          });
-        },
-      }),
-    },
-  },
-};
+});
 
 // Column configuration for "ID"
-const idColumn = generateIdColumn();
+const idColumn = {
+  title: "ID",
+  dataIndex: "id",
+  width: 2,
+  sorter: true,
+  align: "center",
+  order: 1,
+  createFormConfig: {
+    name: "id",
+    label: "id",
+    hidden: true,
+    disabled: true,
+    hasFeedback: false,
+    allowClear: false,
+    input: {
+      type: "Text",
+    },
+  },
+  updateFormConfig: {
+    name: "id",
+    label: "id",
+    hidden: true,
+    disabled: true,
+    hasFeedback: false,
+    allowClear: false,
+    input: {
+      type: "Text",
+    },
+  },
+  queryFormConfig: {
+    name: "id",
+    label: "id",
+    allowClear: true,
+    width: "s",
+    input: {
+      type: "Number",
+    },
+    rules: [{ type: "integer", required: false }],
+  },
+};
 
 // Column configuration for "Name"
 const nameColumn = {
@@ -161,7 +161,7 @@ const activeColumn = {
       type: "Select",
       select: {
         mode: "single",
-        options: commonColumnConfig.activeColumn.input.options,
+        options: statusOptions,
       },
     },
   },
@@ -175,7 +175,7 @@ const activeColumn = {
       type: "Select",
       select: {
         mode: "single",
-        options: commonColumnConfig.activeColumn.input.options,
+        options: statusOptions,
       },
     },
   },
@@ -188,7 +188,7 @@ const activeColumn = {
       type: "Select",
       select: {
         mode: "single",
-        options: commonColumnConfig.activeColumn.input.options,
+        options: statusOptions,
       },
     },
   },
@@ -234,7 +234,7 @@ const accessColumn = {
       type: "Select",
       select: {
         mode: "single",
-        options: commonColumnConfig.accessColumn.input.options,
+        options: accessOptions,
       },
     },
   },
@@ -255,7 +255,7 @@ const accessColumn = {
       type: "Select",
       select: {
         mode: "single",
-        options: commonColumnConfig.accessColumn.input.options,
+        options: accessOptions,
       },
     },
   },
@@ -269,7 +269,7 @@ const accessColumn = {
       type: "Select",
       select: {
         mode: "multiple",
-        options: commonColumnConfig.accessColumn.input.options,
+        options: accessOptions,
       },
     },
   },
@@ -310,8 +310,7 @@ const entityColumn = {
       type: "SelectRemoteOptions",
       select: {
         mode: "single",
-        asyncOptionsFetcher:
-          commonColumnConfig.entityColumn.input.asyncOptionsFetcher,
+        asyncOptionsFetcher: fetchEnityOptions,
         debounceTimeout: 300,
       },
     },
@@ -347,8 +346,7 @@ const entityColumn = {
       type: "SelectRemoteOptions",
       select: {
         mode: "single",
-        asyncOptionsFetcher:
-          commonColumnConfig.entityColumn.input.asyncOptionsFetcher,
+        asyncOptionsFetcher: fetchEnityOptions,
         debounceTimeout: 300,
       },
     },
@@ -362,8 +360,7 @@ const entityColumn = {
       type: "SelectRemoteOptions",
       select: {
         mode: "multiple",
-        asyncOptionsFetcher:
-          commonColumnConfig.entityColumn.input.asyncOptionsFetcher,
+        asyncOptionsFetcher: fetchEnityOptions,
         debounceTimeout: 300,
       },
     },
@@ -395,7 +392,7 @@ const codeColumn = {
           });
         },
       }),
-      commonColumnConfig.codeColumn.validators.codeRegex,
+      codeRegex,
     ],
     input: {
       type: "Text",
@@ -419,7 +416,7 @@ const codeColumn = {
           });
         },
       }),
-      commonColumnConfig.codeColumn.validators.codeRegex,
+      codeRegex,
     ],
     input: {
       type: "Text",
@@ -429,10 +426,7 @@ const codeColumn = {
     name: "code",
     label: "code",
     width: "s",
-    rules: [
-      { type: "string", min: 5, max: 25 },
-      commonColumnConfig.codeColumn.validators.codeRegex,
-    ],
+    rules: [{ type: "string", min: 5, max: 25 }, codeRegex],
     transformer: "trimTextValue",
     order: 4,
     input: {
