@@ -28,7 +28,7 @@ const pageQuerySchema: Joi.ObjectSchema = Joi.object({
     sort: Joi.object().pattern(
         Joi.string(), // Any key allowed
         Joi.string().valid('ascend', 'descend') // Values: 'ascend' or 'descend'
-    ).default({ createdAt: 'ascend' }), // Default sort by 'createdAt' ascending
+    ).default({ id: 'ascend' }), // Default sort by 'id' ascending
     filters: Joi.object().default({}) // Default: empty filter object
 })
 
