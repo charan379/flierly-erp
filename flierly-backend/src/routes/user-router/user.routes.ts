@@ -9,7 +9,7 @@ const userRouter = Router();
 
 userRouter.post(`/user/authenticate`, errorBoundary(authenticate, 'user'));
 userRouter.get(`/user/refresh-access-token`, authorize(), errorBoundary(refreshAccessToken, 'user'));
-userRouter.post(`user/update-password`, authorize("user.manage-password"), errorBoundary(updatePassword, 'user'));
+userRouter.post(`/user/update-password`, authorize("user.manage-password"), errorBoundary(updatePassword, 'user'));
 
 
 export default userRouter;
