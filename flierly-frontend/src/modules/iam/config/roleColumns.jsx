@@ -332,6 +332,8 @@ const descriptionColumn = {
   },
 };
 
+const timeStamps = generateTimeStampColumns();
+
 const roleColumns = [
   idColumn,
   nameColumn,
@@ -339,7 +341,7 @@ const roleColumns = [
   codeColumn,
   descriptionColumn,
   privilegeColumn,
-  ...generateTimeStampColumns(),
+  ...timeStamps,
 ];
 
 export default roleColumns;
