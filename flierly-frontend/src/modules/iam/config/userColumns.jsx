@@ -5,6 +5,7 @@ import roleColumns from "./roleColumns";
 import TableTransferShuttle from "@/features/TableTransfer/TableTransferShuttle";
 import hasOwnProperty from "@/utils/hasOwnProperty";
 import privilegeColumns from "./privilegeColumns";
+import UserPasswordUpdate from "../forms/UserPasswordUpdate";
 
 // Options for active status
 const statusOptions = [
@@ -151,7 +152,7 @@ const usernameColumn = {
 
 // Column configuration for "Email"
 const emailColumn = {
-  title: "Email",
+  title: "email",
   dataIndex: "email",
   width: 180,
   order: 3,
@@ -215,7 +216,7 @@ const emailColumn = {
 
 // Column configuration for "Mobile"
 const mobileColumn = {
-  title: "Mobile",
+  title: "mobile",
   dataIndex: "mobile",
   width: 120,
   order: 4,
@@ -281,7 +282,7 @@ const mobileColumn = {
 
 // Column configuration for "Is Active"
 const isActiveColumn = {
-  title: "Active",
+  title: "active",
   dataIndex: "isActive",
   width: 80,
   align: "center",
@@ -457,6 +458,17 @@ const restrictedPrivilegesColumn = {
   },
 };
 
+const passwordColumn = {
+  title: "Password",
+  key: "password",
+  width: 100, // Updated width
+  align: "center",
+  order: 8,
+  render: (text, record, index, action) => {
+    return <UserPasswordUpdate userId={record.id} />;
+  },
+};
+
 const timeStamps = generateTimeStampColumns().map((timeStamp) => {
   return {
     ...timeStamp,
@@ -471,6 +483,7 @@ const userColumns = [
   isActiveColumn,
   emailColumn,
   mobileColumn,
+  passwordColumn,
   rolesColumns,
   additionalPrivilegesColumn,
   restrictedPrivilegesColumn,
