@@ -22,7 +22,7 @@ async function generatePrivilegesArray(): Promise<Partial<Privilege>[]> {
 
         if (entities[index].entity === "User") {
             const userPassManagePrivileges: Partial<Privilege> = {
-                name: `${entities[index].entity} - ${AccessType.MANAGE}`,
+                name: `${entities[index].entity} - ${AccessType.MANAGE} Password`,
                 access: AccessType.MANAGE,
                 entity: entities[index].entity,
                 code: `${entities[index].code}.manage-password`,
