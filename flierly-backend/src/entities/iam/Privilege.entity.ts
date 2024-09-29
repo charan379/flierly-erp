@@ -33,7 +33,7 @@ export class Privilege {
     @Column({ unique: true })
     @IsNotEmpty({ message: 'Privilege code is required.' })
     @Length(5, 25, { message: 'Privilege code must be between 4 and 25 characters.' })  // Min 5, Max 25
-    @Matches(/^[a-z-]+\.[a-z]+$/, { message: 'Privilege code must match the pattern /^[a-z-]+\\.[a-z]+$/.' })  // Regex pattern
+    @Matches(/^[a-z-]+\.[a-z-]+$/, { message: 'Privilege code must match the pattern /^[a-z-]+\\.[a-z-]+$/.' })  // Regex pattern
     code: string;
 
     @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
