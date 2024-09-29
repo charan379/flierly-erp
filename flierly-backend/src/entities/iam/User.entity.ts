@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, Index, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
-import { IsNotEmpty, IsEmail, Length, IsMobilePhone, Matches } from 'class-validator';
+import { IsNotEmpty, IsEmail, Length, Matches } from 'class-validator';
 import { Privilege } from './Privilege.entity';
 import { Role } from './Role.entity';
 
@@ -30,7 +30,7 @@ export class User {
 
     @Column({ unique: true })
     @IsNotEmpty({ message: 'User mobile number is required.' })
-    @IsMobilePhone()  // Validates mobile numbers in any locale
+    @Matches(/^\+\d{1,3}[\s][6-9]\d{9}$/, { message: 'Mobile number is not valid' })
     mobile: string;
 
     @ManyToMany(() => Privilege, {})
