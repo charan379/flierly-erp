@@ -31,7 +31,7 @@ export function authorize(privilegeCode: string = ""): (req: Request, res: Respo
             // extract userIf from de-coded token details
             const jwtUserId: number | undefined = deCodedToken.userId;
             // fetch user details from DB using username
-            const user: User | null = await AppDataSource.getRepository(User).findOneBy({ id: jwtUserId, username: jwtUserName });
+            const user: User | null = await AppDataSource.getRepository(User).findOneBy({ id: jwtUserId });
             // Throw error if user does not exist
             if (user === null)
                 throw new FlierlyException("Invalid userId", HttpCodes.UNAUTHORIZED, "Can't find user with provided userId", "authorization-middleware-invalid-userId");
