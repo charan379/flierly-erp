@@ -21,7 +21,7 @@ const codeRegex = ({}) => ({
   validator(_, value) {
     return new Promise((resolve, reject) => {
       if (!value) resolve();
-      if (/^[a-z-]+\.[a-z]+$/.test(value)) {
+      if (/^[a-z-]+\.[a-z-]+$/.test(value)) {
         resolve();
       } else {
         reject("code_is_not_valid");
@@ -222,7 +222,6 @@ const accessColumn = {
     label: "access",
     allowClear: false,
     access: { permission: /^privilege\.update$/, ifNoAccess: "disable" },
-    dependencies: ["entity"],
     rules: [
       {
         type: "enum",
@@ -243,7 +242,6 @@ const accessColumn = {
     label: "access",
     allowClear: false,
     access: { permission: /^privilege\.manage$/, ifNoAccess: "disable" },
-    dependencies: ["entity"],
     rules: [
       {
         type: "enum",
@@ -287,25 +285,9 @@ const entityColumn = {
     name: "entity",
     label: "entity",
     allowClear: false,
-    hasFeedback: true,
-    dependencies: ["access"],
+    hasFeedback: false,
     access: { permission: /^privilege\.update$/, ifNoAccess: "disable" },
-    rules: [
-      { required: true },
-      // Entity Access Validator
-      ({ getFieldValue }) => ({
-        validator(_, value) {
-          if (value === undefined || !getFieldValue("access"))
-            return Promise.resolve();
-          return entityExistenceValidator("privilege-entity-access-val-c-1", {
-            entity: "privilege",
-            filters: { entity: value, access: getFieldValue("access") },
-            rejectionMessage:
-              "privilege_with_entity_same_access_already_exists",
-          });
-        },
-      }),
-    ],
+    rules: [{ required: true }],
     input: {
       type: "SelectRemoteOptions",
       select: {
@@ -319,29 +301,9 @@ const entityColumn = {
     name: "entity",
     label: "entity",
     allowClear: false,
-    hasFeedback: true,
-    dependencies: ["access"],
+    hasFeedback: false,
     access: { permission: /^privilege\.manage$/, ifNoAccess: "disable" },
-    rules: [
-      { required: true },
-      // Entity Access Validator
-      ({ getFieldValue }) => ({
-        validator(_, value) {
-          if (value === undefined || !getFieldValue("access"))
-            return Promise.resolve();
-          return entityExistenceValidator("privilege-entity-access-val-u-1", {
-            entity: "privilege",
-            filters: {
-              id: { $notEqualTo: getFieldValue("id") },
-              entity: value,
-              access: getFieldValue("access"),
-            },
-            rejectionMessage:
-              "privilege_with_entity_same_access_already_exists",
-          });
-        },
-      }),
-    ],
+    rules: [{ required: true }],
     input: {
       type: "SelectRemoteOptions",
       select: {
