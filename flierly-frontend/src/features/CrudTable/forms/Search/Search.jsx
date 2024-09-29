@@ -19,19 +19,23 @@ const Search = ({
   const { translate } = useLocale();
   const { crudTableContextHandler } = useCrudTableContext();
 
+  const onFinish = (values) => {
+    crudTableContextHandler.filters.set(values);
+    actions.reload();
+    actions.reset();
+    return true;
+  };
+
+  const onReset = () => {
+    crudTableContextHandler.filters.set({});
+  };
+
   return (
     <ModalForm
       title={title}
       initialValues={reverseTransformQuery(initialQuery)}
-      onFinish={(values) => {
-        crudTableContextHandler.filters.set(values);
-        actions.reload();
-        actions.reset();
-        return true;
-      }}
-      onReset={() => {
-        crudTableContextHandler.filters.set({});
-      }}
+      onFinish={onFinish}
+      onReset={onReset}
       trigger={
         <Tooltip title={translate("apply_filters")}>
           <Badge

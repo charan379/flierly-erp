@@ -14,23 +14,28 @@ const Update = ({
   isOpen,
   close,
   render,
-  actions
+  actions,
 }) => {
   if (!render) return;
   if (!formFields) return;
 
   const { translate } = useLocale();
 
+  const onFinish = async (values) => {
+    const response = await crudService.update({ entity, data: values, id });
+
+    if (response?.success) {
+      actions.reload();
+      close();
+      return true;
+    }
+  };
+
   return (
     <DrawerForm
       title={title}
       grid={true}
-      onFinish={async (values) => {
-        await crudService.update({ entity, data: values, id });
-        actions.reload();
-        close();
-        return true;
-      }}
+      onFinish={onFinish}
       open={isOpen}
       // clearOnDestroy={true}
       initialValues={data}
@@ -56,7 +61,7 @@ const Update = ({
           footer: { padding: "15px 15px 15px 15px" },
           header: { padding: "10px 5px 5px 5px" },
         },
-        onClose: close
+        onClose: close,
       }}
       submitter={{
         searchConfig: {

@@ -11,23 +11,27 @@ const Create = ({
   title = "add",
   initialValues,
   render,
-  actions
+  actions,
 }) => {
   if (!render) return;
   if (!formFields) return;
 
   const { translate } = useLocale();
 
+  const onFinish = async (values) => {
+    const response = await crudService.create({ entity, data: values });
+
+    if (response?.success) {
+      actions.reload();
+      return true;
+    }
+  };
+
   return (
     <DrawerForm
       title={title}
       grid={true}
-      onFinish={async (values) => {
-        console.log(values);
-        await crudService.create({ entity, data: values });
-        actions.reload();
-        return true;
-      }}
+      onFinish={onFinish}
       initialValues={initialValues}
       trigger={
         <Tooltip title={translate("add_data")}>
