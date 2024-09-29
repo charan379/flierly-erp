@@ -1,10 +1,9 @@
 import userDetailsPrompt from '@/setup/prompts/user-details.prompt';
-import { generateHash } from '@/lib/bcrypt';
 import { AppDataSource } from '../lib/app-data-source';
 import { Role } from '@/entities/iam/Role.entity';
 import { User } from '@/entities/iam/User.entity';
-import { UserPassword } from '@/entities/iam/UserPassword.entity';
 import { Privilege } from '@/entities/iam/Privilege.entity';
+import updateUserPassword from '@/lib/updateUserPassword';
 
 async function generateSuperAdmin(): Promise<void> {
     const roleRepository = AppDataSource.getRepository(Role);
@@ -35,28 +34,6 @@ async function generateSuperAdmin(): Promise<void> {
         username: ${superAdmin.username} \n
         password: ${credsPrompt.password}
     `);
-}
-
-async function updateUserPassword(userId: number, password: string): Promise<void> {
-    const userPasswordRepository = AppDataSource.getRepository(UserPassword);
-
-    const hashedPassword = await generateHash(password);
-
-    // Check if password entry exists
-    let userPassword = await userPasswordRepository.findOne({ where: { userId } });
-
-    if (userPassword) {
-        userPassword.password = hashedPassword;
-        
-        await userPasswordRepository.save(userPassword);
-    } else {
-        userPassword = userPasswordRepository.create({
-            userId,
-            password: hashedPassword
-        });
-        
-        await userPasswordRepository.save(userPassword);
-    }
 }
 
 async function generateSuperAdminRole(): Promise<Role> {
