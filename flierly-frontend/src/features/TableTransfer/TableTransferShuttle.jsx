@@ -9,17 +9,17 @@ const TableTransferShuttle = ({
   title = "shuttle_title",
   triggerConfig = {
     buttonType: "link",
-    text: "button_name"
+    text: "button_name",
   },
   requestConfig = {
     entityName: "entity",
     fieldName: "field",
     recordId: "record_id",
-    onSuccess: () => { },
+    onSuccess: () => {},
   },
   buttonsConfig = {
     okText: "save",
-    cancelText: "cancel"
+    cancelText: "cancel",
   },
   tableConfig = {
     entityName: "entityName",
@@ -27,10 +27,9 @@ const TableTransferShuttle = ({
     columnsToDisplay: [],
     targetKeys: [],
     rowKey: "id",
-    titles: ["left_title", "right_title"]
+    titles: ["left_title", "right_title"],
   },
 }) => {
-
   const { translate } = useLocale();
   const [isModalVisible, setIsModalVisible] = useState(false); // Modal visibility state
   const [isLoading, setIsLoading] = useState(false); // Loading state for async operations
@@ -60,6 +59,7 @@ const TableTransferShuttle = ({
       })
       .then(() => {
         requestConfig.onSuccess(); // Call the success callback
+        setIsModalVisible(false);
       })
       .finally(() => {
         setIsLoading(false); // Reset loading state
@@ -78,12 +78,19 @@ const TableTransferShuttle = ({
 
   return (
     <>
-      <Badge count={tableConfig.targetKeys.length} overflowCount={99} showZero offset={[-3, 3]}>
+      <Badge
+        count={tableConfig.targetKeys.length}
+        overflowCount={99}
+        showZero
+        offset={[-3, 3]}
+      >
         <Button type={triggerConfig.buttonType} onClick={showModal}>
           {translate(triggerConfig.text)} {/* Translate button text */}
         </Button>
       </Badge>
-      <div onContextMenu={handleContextMenu}> {/* Prevent right-click context menu */}
+      <div onContextMenu={handleContextMenu}>
+        {" "}
+        {/* Prevent right-click context menu */}
         <Modal
           title={translate(title)} // Translate modal title
           style={{ top: 50 }}
@@ -96,13 +103,23 @@ const TableTransferShuttle = ({
           cancelText={translate(buttonsConfig.cancelText)} // Translate Cancel button text
           confirmLoading={isLoading} // Show loading spinner on OK
         >
-          <Suspense fallback={<><Skeleton active key={"sk1"} /><Skeleton active key={"sk2"} /></>}>
+          <Suspense
+            fallback={
+              <>
+                <Skeleton active key={"sk1"} />
+                <Skeleton active key={"sk2"} />
+              </>
+            }
+          >
             <TableTransfer
               columns={tableConfig.columns}
               columnsToDisplay={tableConfig.columnsToDisplay}
               entityName={tableConfig.entityName}
               rowKey="id"
-              titles={[translate(tableConfig.titles[0]), translate(tableConfig.titles[1])]} // Translate table titles
+              titles={[
+                translate(tableConfig.titles[0]),
+                translate(tableConfig.titles[1]),
+              ]} // Translate table titles
               targetKeys={targetKeys}
               onTargetKeysChange={handleTargetKeysChange} // Handle changes in selected keys
             />
