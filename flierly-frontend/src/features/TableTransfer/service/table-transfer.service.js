@@ -14,7 +14,7 @@ const api = axios.create({
 });
 
 const tableTransferService = {
-  // Fetch paginated documents
+  // Fetch paginated data
   entityPage: async ({
     entity,
     pagination = { limit: 10, page: 1 },
