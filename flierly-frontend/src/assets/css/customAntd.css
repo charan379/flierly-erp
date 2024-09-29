@@ -166,6 +166,9 @@ h6 {
   height: 98%;
 }
 
+.crud-data-table-flierly-1 .ant-badge-color-geekblue {
+  color: #ffffff;
+}
 .crud-data-table-flierly-1.ant-pro-table-extra {
   margin-block-end: 5px;
 }

@@ -83,6 +83,7 @@ const TableTransferShuttle = ({
         overflowCount={99}
         showZero
         offset={[-3, 3]}
+        color="geekblue"
       >
         <Button type={triggerConfig.buttonType} onClick={showModal}>
           {translate(triggerConfig.text)} {/* Translate button text */}
