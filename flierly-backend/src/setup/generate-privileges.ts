@@ -19,6 +19,16 @@ async function generatePrivilegesArray(): Promise<Partial<Privilege>[]> {
             };
             privileges.push(privilege);
         });
+
+        if (entities[index].entity === "User") {
+            const userPassManagePrivileges: Partial<Privilege> = {
+                name: `${entities[index].entity} - ${AccessType.MANAGE}`,
+                access: AccessType.MANAGE,
+                entity: entities[index].entity,
+                code: `${entities[index].code}.manage-password`,
+            }
+            privileges.push(userPassManagePrivileges);
+        };
     }
     return privileges;
 }
