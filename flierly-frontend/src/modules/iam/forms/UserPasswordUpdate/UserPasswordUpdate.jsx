@@ -2,12 +2,18 @@ import React from "react";
 import { ModalForm, ProFormText } from "@ant-design/pro-components";
 import { Button } from "antd";
 import useLocale from "@/features/Language/hooks/useLocale";
+import userService from "../../service/user.service";
 
 const UserPasswordUpdate = ({ userId }) => {
   const { translate } = useLocale();
 
   const onFinish = async (values) => {
-    console.log(values);
+    const response = await userService.updateUserPassword({
+      userId: values.userId,
+      password: values.password,
+    });
+
+    if (response?.success) return true;
   };
 
   // Prevent context menu propagation
@@ -49,9 +55,7 @@ const UserPasswordUpdate = ({ userId }) => {
       {/* Prevent right-click context menu */}
       <ModalForm
         title={translate("update_user_password")}
-        onFinish={(values) => {
-          console.log(values);
-        }}
+        onFinish={onFinish}
         initialValues={{ userId }}
         modalProps={{
           destroyOnClose: true,
