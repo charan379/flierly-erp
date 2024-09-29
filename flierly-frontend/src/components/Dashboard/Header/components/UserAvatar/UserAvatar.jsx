@@ -6,7 +6,6 @@ export default function UserAvatar() {
   return (
     <Avatar
       size="large"
-      className="header-icon last"
       shape="circle"
       src={user?.photo ? user.photo : undefined}
       style={{
