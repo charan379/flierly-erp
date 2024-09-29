@@ -461,9 +461,10 @@ const restrictedPrivilegesColumn = {
 const passwordColumn = {
   title: "Password",
   key: "password",
-  width: 100, // Updated width
+  width: 180, // Updated width
   align: "center",
   order: 8,
+  permission: /^user\.manage-password$/,
   render: (text, record, index, action) => {
     return <UserPasswordUpdate userId={record.id} />;
   },
