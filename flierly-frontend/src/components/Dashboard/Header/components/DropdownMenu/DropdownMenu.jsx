@@ -2,14 +2,28 @@ import { Badge, Dropdown } from "antd";
 import UserAvatar from "../UserAvatar/UserAvatar";
 import useLocale from "@/features/Language/hooks/useLocale";
 import { Link } from "react-router-dom";
-import { LogoutOutlined, ToolOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  LogoutOutlined,
+  ReloadOutlined,
+  ToolOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import UserDetails from "../UserDetails/UserDetails";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
+import { useState } from "react";
 
 export default function DropdownMenu() {
+  const [open, setOpen] = useState(false);
+
+  const handleOpenChange = (nextOpen, info) => {
+    if (info.source === "trigger" || nextOpen) {
+      setOpen(nextOpen);
+    }
+  };
+
   const { translate } = useLocale();
 
-  const { logout } = useAuth();
+  const { logout, loading, refresh } = useAuth();
 
   const items = [
     {
@@ -22,7 +36,7 @@ export default function DropdownMenu() {
     {
       icon: <UserOutlined />,
       key: "profile-settings",
-      label: <Link to={"/profile"}>{translate("profile_settings")}</Link>,
+      label: translate("profile_settings"),
     },
     {
       icon: <ToolOutlined />,
@@ -31,6 +45,11 @@ export default function DropdownMenu() {
     },
     {
       type: "divider",
+    },
+    {
+      icon: <ReloadOutlined spin={loading === "refreshing"} />,
+      key: "refresh-authentication",
+      label: <Link onClick={() => refresh()}>{translate("refresh_auth")}</Link>,
     },
     {
       icon: <LogoutOutlined />,
@@ -45,6 +64,8 @@ export default function DropdownMenu() {
       autoAdjustOverflow
       menu={{ items }}
       trigger={["click"]}
+      onOpenChange={handleOpenChange}
+      open={open}
       placement="bottomLeft"
       stye={{ width: "max-content" }}
     >
