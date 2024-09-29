@@ -1,7 +1,8 @@
+import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { Avatar } from "antd";
 
 export default function UserAvatar() {
-  const user = { name: "john", email: "john@example.com" };
+  const { user } = useAuth();
   return (
     <Avatar
       size="large"
@@ -14,10 +15,10 @@ export default function UserAvatar() {
         backgroundColor: user?.photo ? "none" : "#fde3cf",
         float: "right",
         cursor: "pointer",
-        fontSize: "18px"
+        fontSize: "18px",
       }}
     >
-      {user?.name?.charAt(0)?.toUpperCase()}
+      {user?.username?.charAt(0)?.toUpperCase()}
     </Avatar>
   );
 }
