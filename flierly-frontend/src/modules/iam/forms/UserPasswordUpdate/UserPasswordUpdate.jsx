@@ -3,6 +3,7 @@ import { ModalForm, ProFormText } from "@ant-design/pro-components";
 import { Button } from "antd";
 import useLocale from "@/features/Language/hooks/useLocale";
 import userService from "../../service/user.service";
+import { LockTwoTone } from "@ant-design/icons";
 
 const UserPasswordUpdate = ({ userId }) => {
   const { translate } = useLocale();
@@ -61,7 +62,7 @@ const UserPasswordUpdate = ({ userId }) => {
           destroyOnClose: true,
           centered: true,
         }}
-        trigger={<Button type="primary" icon={<i className="fas fa-key" />} />}
+        trigger={<Button type="link" icon={<LockTwoTone />}>{translate("update_password")}</Button>}
         submitter={{
           searchConfig: {
             resetText: translate("reset"),
