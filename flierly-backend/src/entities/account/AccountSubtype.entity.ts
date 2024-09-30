@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, DeleteDateColumn } from 'typeorm';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, Length, Matches } from 'class-validator';
 import { AccountType } from './AccountType.entity';
 
 @Entity('account_subtypes')
@@ -14,10 +14,13 @@ export class AccountSubtype {
 
     @Column({ unique: true })
     @IsNotEmpty({ message: 'Account subtype code is required.' })
+    @Length(5, 25, { message: 'Account subtype code must be between 5 and 25 characters.' })  // Min 5, Max 25
+    @Matches(/^[a-z-]+\.[a-z-]+$/, { message: 'Account subtype code must match the pattern /^[a-z-]+\\.[a-z-]+$/.' })  // Regex pattern
     code: string;
 
-    @Column()
+    @Column({ unique: true })
     @IsNotEmpty({ message: 'Account subtype name is required.' })
+    @Length(5, 30, { message: 'Account subtype name must be between 5 and 30 characters.' })  // Min 5, Max 30
     name: string;
 
     @ManyToOne(() => AccountType, { eager: true, nullable: false })
