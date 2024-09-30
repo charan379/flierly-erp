@@ -7,6 +7,7 @@ import Login from "@/modules/auth/pages/Login";
 import Register from "@/modules/auth/pages/Register";
 import Dashboard from "@/components/Dashboard";
 import IamRoutes from "@/modules/iam/router/IamRoutes";
+import AccountRoutes from "@/modules/account/router/AccountRoutes";
 
 const Routes = () => {
   return useRoutes([
@@ -40,6 +41,7 @@ const Routes = () => {
         { path: "customer/*", element: <CustomerRoutes /> }, // Handle customer routes within CustomerRoutes component
         { path: "branch/*", element: <BranchRoutes /> }, // Handle branch routes within BranchRoutes component
         { path: "iam/*", element: <IamRoutes /> }, // Handle iam routes within IamRoutes module
+        { path: "account/*", element: <AccountRoutes /> }, // Handle account routes within AccountRoutes module
         {
           path: "unauthorized",
           element: (

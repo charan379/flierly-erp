@@ -23,7 +23,7 @@ import { Menu } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFingerprint, faGauge, faKey, faUsersGear, faUserTag } from "@fortawesome/free-solid-svg-icons";
+import { faFingerprint, faGauge, faKey, faTags, faUsersGear, faUsersLine, faUsersViewfinder, faUserTag } from "@fortawesome/free-solid-svg-icons";
 import filterEnabledItems from "@/utils/filterEnabledItems";
 
 const SidebarMenu = () => {
@@ -32,7 +32,7 @@ const SidebarMenu = () => {
 
   const { allowedAccess, hasPermission } = useAuth();
 
-  const menuIconStyle = { fontSize: "18px" };
+  const menuIconStyle = { fontSize: "16px" };
 
   const getLinkStyle = (permissionRegex) => {
     return {
@@ -63,6 +63,32 @@ const SidebarMenu = () => {
           icon: <TableOutlined style={menuIconStyle} />,
           label: <Link to={"/erp/branch/list"} style={getLinkStyle(/^branch\.read$/)}>{translate("list_branchs")}</Link>,
           disabled: !hasPermission(/^branch\.read$/),
+        },
+      ],
+    },
+    {
+      key: "account",
+      icon: <FontAwesomeIcon icon={faUsersViewfinder} style={menuIconStyle} />,
+      label: <Link to={"/erp/account"} style={getLinkStyle(/^account(\-[a-z]+)?\.[a-z]+$/)}>{translate("\account")}</Link>,
+      disabled: !hasPermission(/^account(\-[a-z]+)?\.[a-z]+$/),
+      children: [
+        {
+          key: "accounts",
+          icon: <FontAwesomeIcon icon={faUsersLine} style={menuIconStyle} />,
+          label: <Link to={"/erp/account/accounts"} style={getLinkStyle(/^account\.[a-z]+$/)}>{translate("accounts")}</Link>,
+          disabled: !hasPermission(/^account\.[a-z]+$/),
+        },
+        {
+          key: "account-types",
+          icon: <FontAwesomeIcon icon={faTags} style={menuIconStyle} />,
+          label: <Link to={"/erp/account/account-types"} style={getLinkStyle(/^account-type\.[a-z]+$/)}>{translate("account-types")}</Link>,
+          disabled: !hasPermission(/^account-type\.[a-z]+$/),
+        },
+        {
+          key: "account-subtypes",
+          icon: <FontAwesomeIcon icon={faTags} style={menuIconStyle} />,
+          label: <Link to={"/erp/account/account-subtypes"} style={getLinkStyle(/^account-subtype\.[a-z]+$/)}>{translate("account-subtypes")}</Link>,
+          disabled: !hasPermission(/^account-subtype\.[a-z]+$/),
         },
       ],
     },
