@@ -20,7 +20,7 @@ export class AccountSubtype {
     @IsNotEmpty({ message: 'Account subtype name is required.' })
     name: string;
 
-    @ManyToOne(() => AccountType, { eager: true })
+    @ManyToOne(() => AccountType, { eager: true, nullable: false })
     @JoinColumn({ name: 'account_type_id' })
     accountType: AccountType;
 
