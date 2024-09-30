@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, DeleteDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, DeleteDateColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { IsNotEmpty, Length, Matches } from 'class-validator';
 import { AccountType } from './AccountType.entity';
 
@@ -26,6 +26,12 @@ export class AccountSubtype {
     @ManyToOne(() => AccountType, { eager: true, nullable: false })
     @JoinColumn({ name: 'account_type_id' })
     accountType: AccountType;
+
+    @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
+    createdAt: Date;
+
+    @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
+    updatedAt: Date;
 
     @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz' })
     deletedAt: Date | null;
