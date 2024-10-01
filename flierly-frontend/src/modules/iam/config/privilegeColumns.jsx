@@ -1,7 +1,8 @@
 import { Tag } from "antd";
 import entityExistenceValidator from "@/utils/validators/entityExistenceValidator";
 import generateTimeStampColumns from "@/utils/column-generators/generateTimeStampColumns";
-import fetchEnityOptions from "@/utils/fetchEntityOptions";
+import fetchEnityOptions from "@/features/SelectRemoteOptions/utils/fetchEntityOptions";
+
 
 const statusOptions = [
   { label: "Active", value: true },
