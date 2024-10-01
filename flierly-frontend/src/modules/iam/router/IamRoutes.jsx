@@ -6,6 +6,19 @@ import { useRoutes } from "react-router-dom";
 const IamRoutes = () => {
   return useRoutes([
     {
+      path: "",
+      element: (
+        <ProtectedRoute
+          element={
+            <WithSuspense
+              importPath={import("@/pages/PageUnderConstruction")}
+            />
+          }
+          requiredPermissionRegex={/^user\.[a-z]+$/}
+        />
+      ),
+    },
+    {
       path: "users",
       element: (
         <ProtectedRoute
