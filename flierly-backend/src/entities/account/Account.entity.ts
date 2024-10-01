@@ -61,9 +61,6 @@ export class Account {
     @JoinColumn({ name: 'primary_address_id' })
     primaryAddress: Address;
 
-    @OneToMany(() => Address, address => address.account, { eager: true })
-    addresses: Address[];
-
     @ManyToOne(() => Branch, { eager: true, nullable: false })
     @JoinColumn({ name: 'branch_id' })
     branch: Branch;
