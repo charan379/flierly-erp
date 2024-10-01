@@ -18,6 +18,7 @@ const ThemeCompactSwitch = () => {
       align="center"
       vertical={false}
       onClick={onClick}
+      style={{width: "100%"}}
     >
       <Space direction="horizontal" size="large" style={{ display: "flex" }}>
         <Typography.Title level={5} style={{ marginTop: "0.2em" }}>
