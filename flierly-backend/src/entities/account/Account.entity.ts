@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDa
 import { Address } from '../address/Address.entity';
 import { Branch } from '../branch/Branch.entity';
 import { TaxIdentity } from '../taxation/TaxIdentity.entity';
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsEmail, IsNotEmpty, Length, Matches } from 'class-validator';
 import { AccountType } from './AccountType.entity';
 import { AccountSubtype } from './AccountSubtype.entity';
 
@@ -32,13 +32,16 @@ export class Account {
 
     @Column()
     @IsNotEmpty({ message: 'Account name is required.' })
+    @Length(5, 90, { message: 'Account name must be between 5 and 90 characters.' })
     name: string;
 
     @Column({ name: 'registered_phone', unique: true })
     @IsNotEmpty({ message: 'Account registered phone is required.' })
+    @Matches(/^\+\d{1,3}[\s][6-9]\d{9}$/, { message: 'Registered Phone number is not valid' })
     registeredPhone: string;
 
     @Column({ nullable: true, name: 'alternate_phone' })
+    @Matches(/^\+\d{1,3}[\s][6-9]\d{9}$/, { message: 'Alternate Phone number is not valid' })
     alternatePhone: string;
 
     @Column({ unique: true, })
