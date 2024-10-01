@@ -253,7 +253,7 @@ const nameColumn = {
 const timestampColumns = generateTimeStampColumns();
 
 // Final columns list
-const accountSubtypeColumns = [
+const accountTypeColumns = [
   idColumn,
   nameColumn,
   isActiveColumn,
@@ -261,4 +261,4 @@ const accountSubtypeColumns = [
   ...timestampColumns,
 ];
 
-export default accountSubtypeColumns;
+export default accountTypeColumns;

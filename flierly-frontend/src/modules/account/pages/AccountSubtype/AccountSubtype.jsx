@@ -3,7 +3,8 @@ import { CrudTable } from "@/features/CrudTable";
 import CrudTableContextProvider from "@/features/CrudTable/components/CrudTableContextProvider";
 import FormFields from "@/components/FormFields";
 import AccountLayout from "../../layout/AccountLayout";
-import accountSubtypeColumns from "../../config/accountTypeColumns";
+import accountSubtypeColumns from "../../config/accountSubtypeColumns";
+
 
 export default function AccountSubtype() {
   return (

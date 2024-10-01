@@ -1,7 +1,7 @@
 import { Tag } from "antd";
 import entityExistenceValidator from "@/utils/validators/entityExistenceValidator";
 import generateTimeStampColumns from "@/utils/column-generators/generateTimeStampColumns";
-import fetchEnityOptions from "@/utils/fetchEntityOptions";
+import fetchEnityOptions from "@/features/SelectRemoteOptions/utils/fetchEntityOptions";
 
 // code regex pattern validator
 const codeRegex = ({}) => ({
@@ -325,7 +325,7 @@ const accountType = {
 const timestampColumns = generateTimeStampColumns();
 
 // Final columns list
-const accountTypeColumns = [
+const accountSubtypeColumns = [
   idColumn,
   nameColumn,
   isActiveColumn,
@@ -333,4 +333,4 @@ const accountTypeColumns = [
   ...timestampColumns,
 ];
 
-export default accountTypeColumns;
+export default accountSubtypeColumns;
