@@ -20,24 +20,8 @@ const selectRemoteOptionsService = {
     return handleResponse({ promise });
   },
   // Fetch remote entity rows
-  entityRows: async ({ entity, keyword, queryField, limit = 50 }) => {
-    // query
-    const sort = `${queryField}.asc`;
-    const fields = [];
-    const queries = [];
-
-    // assign query fields
-    fields.push(queryField);
-    queries.push(keyword);
-
-    const promise = api.get(`${entity}/search`, {
-      params: {
-        fields: fields.join(","),
-        queries: queries.join(","),
-        sort,
-        limit,
-      },
-    });
+  entityRows: async ({ entity, filters, limit = 50 }) => {
+    const promise = api.post(`${entity}/search`, { filters, limit }, {});
 
     return handleResponse({ promise });
   },
