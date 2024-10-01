@@ -45,7 +45,7 @@ const mobileNumberRegex = () => ({
 const idColumn = {
   title: "ID",
   dataIndex: "id",
-  width: 80,
+  width: 50,
   sorter: true,
   align: "center",
   order: 1,

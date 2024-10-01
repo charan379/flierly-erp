@@ -25,6 +25,7 @@ const CrudTable = ({
   createFormInitialValues,
   updateFormFields,
   searchFormFields,
+  rowSelectionColumnWidth ="3%",
   render = {
     restore: true,
     delete: true,
@@ -100,7 +101,7 @@ const CrudTable = ({
       search={false}
       // row selection configuration
       rowSelection={{
-        columnWidth: "3%",
+        columnWidth: rowSelectionColumnWidth,
         fixed: true,
         type: "checkbox",
         preserveSelectedRowKeys: true,
