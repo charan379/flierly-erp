@@ -1,10 +1,10 @@
 import { Tag } from "antd";
 import entityExistenceValidator from "@/utils/validators/entityExistenceValidator";
 import generateTimeStampColumns from "@/utils/column-generators/generateTimeStampColumns";
-import fetchEnityOptions from "@/features/SelectRemoteOptions/utils/fetchEntityOptions";
+import fetchEntityRowsAsOptions from "@/features/SelectRemoteOptions/utils/fetchEntityRowsAsOptions";
 
 // code regex pattern validator
-const codeRegex = ({}) => ({
+const codeRegex = ({ }) => ({
   validator(_, value) {
     return new Promise((resolve, reject) => {
       if (!value) resolve();
@@ -21,6 +21,18 @@ const statusOptions = [
   { label: "Active", value: true },
   { label: "Inactive", value: false },
 ];
+
+const fetchAccountTypesAsOptions = (value) => {
+  let filters = {};
+  if (value) {
+    filters = { name: { $ilike: `%${value}%` } };
+  }
+  return fetchEntityRowsAsOptions("account-type", filters, 10, (accountTypes) => {
+    return accountTypes.map((acType) => {
+      return { label: acType.name, value: acType.id }
+    })
+  })
+};
 
 // Column configuration for "ID"
 const idColumn = {
@@ -133,7 +145,7 @@ const codeColumn = {
     allowClear: true,
     rules: [
       { type: "string", min: 5, max: 25, required: true },
-      ({}) => ({
+      ({ }) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
           return entityExistenceValidator(
@@ -208,7 +220,7 @@ const nameColumn = {
     allowClear: true,
     rules: [
       { type: "string", min: 5, max: 30, required: true },
-      ({}) => ({
+      ({ }) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
           return entityExistenceValidator(
@@ -284,8 +296,8 @@ const accountType = {
       type: "SelectRemoteOptions",
       select: {
         mode: "single",
-        asyncOptionsFetcher: fetchEnityOptions,
-        debounceTimeout: 300,
+        asyncOptionsFetcher: fetchAccountTypesAsOptions,
+        debounceTimeout: 500,
       },
     },
   },
@@ -300,8 +312,8 @@ const accountType = {
       type: "SelectRemoteOptions",
       select: {
         mode: "single",
-        asyncOptionsFetcher: fetchEnityOptions,
-        debounceTimeout: 300,
+        asyncOptionsFetcher: fetchAccountTypesAsOptions,
+        debounceTimeout: 500,
       },
     },
   },
@@ -314,8 +326,8 @@ const accountType = {
       type: "SelectRemoteOptions",
       select: {
         mode: "multiple",
-        asyncOptionsFetcher: fetchEnityOptions,
-        debounceTimeout: 300,
+        asyncOptionsFetcher: fetchAccountTypesAsOptions,
+        debounceTimeout: 500,
       },
     },
   },
@@ -328,6 +340,7 @@ const timestampColumns = generateTimeStampColumns();
 const accountSubtypeColumns = [
   idColumn,
   nameColumn,
+  accountType,
   isActiveColumn,
   codeColumn,
   ...timestampColumns,
