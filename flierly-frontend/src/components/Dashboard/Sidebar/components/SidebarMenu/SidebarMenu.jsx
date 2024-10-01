@@ -7,6 +7,7 @@ import {
   ContainerOutlined,
   CreditCardOutlined,
   CustomerServiceOutlined,
+  DashboardOutlined,
   FileOutlined,
   FileSyncOutlined,
   FilterOutlined,
@@ -23,7 +24,8 @@ import { Menu } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFingerprint, faGauge, faKey, faTags, faUsersGear, faUsersLine, faUsersViewfinder, faUserTag } from "@fortawesome/free-solid-svg-icons";
+import { faFingerprint, faKey, faTags, faUsersGear, faUsersLine, faUserTag } from "@fortawesome/free-solid-svg-icons";
+import { faAddressBook as faAddressBookRegular } from '@fortawesome/free-regular-svg-icons';
 import filterEnabledItems from "@/utils/filterEnabledItems";
 
 const SidebarMenu = () => {
@@ -43,7 +45,7 @@ const SidebarMenu = () => {
   const items = [
     {
       key: "dashboard",
-      icon: <FontAwesomeIcon icon={faGauge} style={menuIconStyle} />,
+      icon: <DashboardOutlined style={menuIconStyle} />,
       label: <Link to={"/erp"}>{translate("dashboard")}</Link>,
     },
     {
@@ -68,7 +70,7 @@ const SidebarMenu = () => {
     },
     {
       key: "account",
-      icon: <FontAwesomeIcon icon={faUsersViewfinder} style={menuIconStyle} />,
+      icon: <FontAwesomeIcon icon={faAddressBookRegular} style={menuIconStyle} />,
       label: <Link to={"/erp/account"} style={getLinkStyle(/^account(\-[a-z]+)?\.[a-z]+$/)}>{translate("\account")}</Link>,
       disabled: !hasPermission(/^account(\-[a-z]+)?\.[a-z]+$/),
       children: [
