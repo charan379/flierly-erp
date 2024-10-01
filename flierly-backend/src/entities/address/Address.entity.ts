@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, DeleteDateColumn } from 'typeorm';
-import { IsNotEmpty, IsNumber, IsOptional, Matches, ValidationError } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, Length, Matches, ValidationError } from 'class-validator';
 import { Account } from '../account/Account.entity';
 
 @Entity('addresses')
@@ -52,6 +52,7 @@ export class Address {
     @Column({ nullable: true, name: 'contact_name' })
     @IsOptional()
     @IsNotEmpty({ message: "Contact name must not be empty." })
+    @Length(5, 90, { message: 'Contact name must be between 5 and 90 characters.' })
     contactName: string;
 
     @Column({ nullable: true, name: 'contact_number' })

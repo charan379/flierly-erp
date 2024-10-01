@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinColumn, OneToOne, DeleteDateColumn } from 'typeorm';
 import { Address } from '../address/Address.entity';
-import { IsEmail, IsNotEmpty, Matches } from 'class-validator';
+import { IsEmail, IsNotEmpty, Length, Matches } from 'class-validator';
 import { TaxIdentity } from '../taxation/TaxIdentity.entity';
 
 @Entity('branches')
@@ -15,6 +15,7 @@ export class Branch {
 
     @Column()
     @IsNotEmpty({ message: 'Branch name is required.' })
+    @Length(5, 90, { message: 'Branch name must be between 5 and 90 characters.' })
     name: string;
 
     @Column({ unique: true })
