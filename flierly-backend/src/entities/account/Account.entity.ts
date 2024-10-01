@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany, OneToOne } from 'typeorm';
 import { Address } from '../address/Address.entity';
 import { Branch } from '../branch/Branch.entity';
 import { TaxIdentity } from '../taxation/TaxIdentity.entity';
@@ -44,7 +44,7 @@ export class Account {
     @Matches(/^\+\d{1,3}[\s][6-9]\d{9}$/, { message: 'Alternate Phone number is not valid' })
     alternatePhone: string;
 
-    @Column({ unique: true, })
+    @Column({ unique: true })
     @IsEmail({}, { message: 'Invalid email format.' })
     @IsNotEmpty({ message: 'Account email is required.' })
     email: string;
@@ -57,9 +57,12 @@ export class Account {
     @JoinColumn({ name: 'parent_id' })
     parent: Account;
 
-    @ManyToOne(() => Address, { eager: true, nullable: false })
+    @OneToOne(() => Address, { eager: true, nullable: false })
     @JoinColumn({ name: 'primary_address_id' })
     primaryAddress: Address;
+
+    @OneToMany(() => Address, address => address.account, { eager: true })
+    addresses: Address[];
 
     @ManyToOne(() => Branch, { eager: true, nullable: false })
     @JoinColumn({ name: 'branch_id' })
