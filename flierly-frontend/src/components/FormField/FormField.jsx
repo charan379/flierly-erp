@@ -5,6 +5,7 @@ import hasOwnProperty from "@/utils/hasOwnProperty";
 import queryTransformers from "@/utils/queryTransformers";
 import {
   ProForm,
+  ProFormDatePicker,
   ProFormDateRangePicker,
   ProFormDigit,
   ProFormSwitch,
@@ -169,6 +170,9 @@ const formItems = {
   ),
   DateRange: (props) => (
     <ProFormComponent {...props} Component={ProFormDateRangePicker} />
+  ),
+  DatePicker: (props) => (
+    <ProFormComponent {...props} Component={ProFormDatePicker} />
   ),
   SelectRemoteOptions: (props) => (
     <ProForm.Item

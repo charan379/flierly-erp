@@ -71,7 +71,7 @@ const SidebarMenu = () => {
     {
       key: "account",
       icon: <FontAwesomeIcon icon={faAddressBookRegular} style={menuIconStyle} />,
-      label: <Link to={"/erp/account"} style={getLinkStyle(/^account(\-[a-z]+)?\.[a-z]+$/)}>{translate("\account")}</Link>,
+      label: <Link to={"/erp/account"} style={getLinkStyle(/^account(\-[a-z]+)?\.[a-z]+$/)}>{translate("account")}</Link>,
       disabled: !hasPermission(/^account(\-[a-z]+)?\.[a-z]+$/),
       children: [
         {
@@ -91,6 +91,20 @@ const SidebarMenu = () => {
           icon: <FontAwesomeIcon icon={faTags} style={menuIconStyle} />,
           label: <Link to={"/erp/account/account-subtypes"} style={getLinkStyle(/^account-subtype\.[a-z]+$/)}>{translate("account-subtypes")}</Link>,
           disabled: !hasPermission(/^account-subtype\.[a-z]+$/),
+        },
+      ],
+    },
+    {
+      key: "taxation",
+      icon: <FontAwesomeIcon icon={faAddressBookRegular} style={menuIconStyle} />,
+      label: <Link to={"/erp/taxation"} style={getLinkStyle(/^tax.*\.[a-z]+$/)}>{translate("taxation")}</Link>,
+      disabled: !hasPermission(/^tax.*\.[a-z]+$/),
+      children: [
+        {
+          key: "tax-identities",
+          icon: <FontAwesomeIcon icon={faUsersLine} style={menuIconStyle} />,
+          label: <Link to={"/erp/taxation/tax-identities"} style={getLinkStyle(/^tax-identity\.[a-z]+$/)}>{translate("tax-identites")}</Link>,
+          disabled: !hasPermission(/^tax-identity\.[a-z]+$/),
         },
       ],
     },

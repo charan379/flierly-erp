@@ -105,6 +105,7 @@ const gstRegistrationDateColumn = {
     label: "GST Registration Date",
     hasFeedback: true,
     allowClear: true,
+    width: "100%",
     input: {
       type: "DatePicker",
     },
@@ -373,7 +374,12 @@ const isActiveColumn = {
 };
 
 // Timestamps
-const timestampColumns = generateTimeStampColumns();
+const timestampColumns = generateTimeStampColumns().map((timeStamp) => {
+  return {
+    ...timeStamp,
+    width: 180,
+  };
+});
 
 // Column configuration array
 const taxIdentityColumns = [

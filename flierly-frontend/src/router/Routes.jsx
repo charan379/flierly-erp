@@ -8,6 +8,7 @@ import Register from "@/modules/auth/pages/Register";
 import Dashboard from "@/components/Dashboard";
 import IamRoutes from "@/modules/iam/router/IamRoutes";
 import AccountRoutes from "@/modules/account/router/AccountRoutes";
+import TaxationRoutes from "@/modules/taxation/router/TaxationRoutes";
 
 const Routes = () => {
   return useRoutes([
@@ -42,6 +43,7 @@ const Routes = () => {
         { path: "branch/*", element: <BranchRoutes /> }, // Handle branch routes within BranchRoutes component
         { path: "iam/*", element: <IamRoutes /> }, // Handle iam routes within IamRoutes module
         { path: "account/*", element: <AccountRoutes /> }, // Handle account routes within AccountRoutes module
+        { path: "taxation/*", element: <TaxationRoutes /> }, // Handle taxation routes within Taxation module
         {
           path: "unauthorized",
           element: (
