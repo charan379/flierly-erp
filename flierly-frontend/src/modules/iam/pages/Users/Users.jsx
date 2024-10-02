@@ -28,6 +28,7 @@ export default function Users() {
           tableKey={"user-table"}
           rowKey="id"
           rowSelectionColumnWidth="30px"
+          rowTitleKey="username"         
           searchFormFields={<FormFields columns={userColumns} configKey={"queryFormConfig"} />}
           createFormFields={<FormFields columns={userColumns} configKey={"createFormConfig"} />}
           updateFormFields={<FormFields columns={userColumns} configKey={"updateFormConfig"} />}
