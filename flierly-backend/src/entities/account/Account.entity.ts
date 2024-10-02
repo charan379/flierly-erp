@@ -8,9 +8,7 @@ import { AccountSubtype } from './AccountSubtype.entity';
 
 @Entity('accounts')
 export class Account {
-    @PrimaryGeneratedColumn({
-        type: 'bigint'
-    })
+    @PrimaryGeneratedColumn({ type: 'bigint' })
     id: number;
 
     @Column({ type: 'boolean', default: true, name: 'is_active' })
@@ -49,11 +47,11 @@ export class Account {
     @IsNotEmpty({ message: 'Account email is required.' })
     email: string;
 
-    @ManyToOne(() => TaxIdentity, { eager: true, nullable: false })
+    @ManyToOne(() => TaxIdentity, { eager: true, nullable: true })
     @JoinColumn({ name: 'tax_identity_id' })
     taxIdentity: TaxIdentity;
 
-    @ManyToOne(() => Account, { eager: true })
+    @ManyToOne(() => Account, { eager: false, nullable: true })
     @JoinColumn({ name: 'parent_id' })
     parent: Account;
 
@@ -61,7 +59,7 @@ export class Account {
     @JoinColumn({ name: 'primary_address_id' })
     primaryAddress: Address;
 
-    @ManyToOne(() => Branch, { eager: true, nullable: false })
+    @ManyToOne(() => Branch, { eager: true, nullable: true })
     @JoinColumn({ name: 'branch_id' })
     branch: Branch;
 
