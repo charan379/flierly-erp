@@ -424,6 +424,7 @@ const latitudeColumn = {
     name: "latitude",
     label: "Latitude",
     allowClear: true,
+    width: "100%",
     rules: [{ type: "number", message: "Latitude must be a number." }],
     input: {
       type: "Number",
@@ -433,6 +434,7 @@ const latitudeColumn = {
     name: "latitude",
     label: "Latitude",
     allowClear: true,
+    width: "100%",
     rules: [{ type: "number", message: "Latitude must be a number." }],
     input: {
       type: "Number",
@@ -450,6 +452,7 @@ const longitudeColumn = {
     name: "longitude",
     label: "Longitude",
     allowClear: true,
+    width: "100%",
     rules: [{ type: "number", message: "Longitude must be a number." }],
     input: {
       type: "Number",
@@ -459,6 +462,7 @@ const longitudeColumn = {
     name: "longitude",
     label: "Longitude",
     allowClear: true,
+    width: "100%",
     rules: [{ type: "number", message: "Longitude must be a number." }],
     input: {
       type: "Number",
@@ -467,7 +471,12 @@ const longitudeColumn = {
 };
 
 // Timestamps
-const timestampColumns = generateTimeStampColumns();
+const timestampColumns = generateTimeStampColumns().map((timeStamp) => {
+  return {
+    ...timeStamp,
+    width: 180,
+  };
+});
 
 // Column configuration array
 const addressColumns = [

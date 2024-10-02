@@ -109,6 +109,20 @@ const SidebarMenu = () => {
       ],
     },
     {
+      key: "address",
+      icon: <FontAwesomeIcon icon={faAddressBookRegular} style={menuIconStyle} />,
+      label: <Link to={"/erp/address"} style={getLinkStyle(/^address.*\.[a-z]+$/)}>{translate("address")}</Link>,
+      disabled: !hasPermission(/^address.*\.[a-z]+$/),
+      children: [
+        {
+          key: "tax-identities",
+          icon: <FontAwesomeIcon icon={faUsersLine} style={menuIconStyle} />,
+          label: <Link to={"/erp/address/addresses"} style={getLinkStyle(/^address\.[a-z]+$/)}>{translate("addresses")}</Link>,
+          disabled: !hasPermission(/^address\.[a-z]+$/),
+        },
+      ],
+    },
+    {
       key: "customer",
       icon: <CustomerServiceOutlined style={menuIconStyle} />,
       label: translate("customers"),
