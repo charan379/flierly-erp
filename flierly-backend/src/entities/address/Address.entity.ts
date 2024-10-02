@@ -66,14 +66,24 @@ export class Address {
     addressInstructions: string;
 
     @IsNumber({}, { message: "Latitude must be a number." })
-    @Column({ nullable: true, type: 'double precision', name: 'latitude' })
+    @Column({
+        nullable: true,
+        type: 'double precision',
+        name: 'latitude',
+    })
+    @IsOptional()
     latitude: number;
 
     @IsNumber({}, { message: "Longitude must be a number." })
-    @Column({ nullable: true, type: 'double precision', name: 'longitude' })
+    @Column({
+        nullable: true,
+        type: 'double precision',
+        name: 'longitude',
+    })
+    @IsOptional()
     longitude: number;
 
-    @ManyToOne(() => Account, { lazy: true })
+    @ManyToOne(() => Account, { lazy: true, nullable: true })
     @JoinColumn({ name: 'account_id' })
     account: Account;
 
