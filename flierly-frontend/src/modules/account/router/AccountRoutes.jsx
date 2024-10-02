@@ -5,7 +5,7 @@ import { useRoutes } from "react-router-dom";
 
 const AccountRoutes = () => {
   return useRoutes([
-        {
+    {
       path: "",
       element: (
         <ProtectedRoute
@@ -22,7 +22,7 @@ const AccountRoutes = () => {
       path: "accounts",
       element: (
         <ProtectedRoute
-          element={<WithSuspense importPath={import("@/pages/PageUnderConstruction")} />}
+          element={<WithSuspense importPath={import("../pages/Account")} />}
           requiredPermissionRegex={/^account\.[a-z]+$/}
         />
       ),

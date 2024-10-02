@@ -67,7 +67,7 @@ const nameColumn = {
     rules: [
       { required: true, message: "Account name is required." },
       { min: 5, max: 90, message: "Account name must be between 5 and 90 characters." },
-      ({}) => ({
+      ({ }) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
           return entityExistenceValidator("account-name-validation-c-1", {
@@ -122,7 +122,7 @@ const registeredPhoneColumn = {
     rules: [
       { required: true, message: "Account registered phone is required." },
       phoneRegex(),
-      ({}) => ({
+      ({ }) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
           return entityExistenceValidator("account-registered-phone-validation-c-1", {
@@ -209,7 +209,7 @@ const emailColumn = {
     rules: [
       { type: "email", message: "Invalid email format." },
       { required: true, message: "Account email is required." },
-      ({}) => ({
+      ({ }) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
           return entityExistenceValidator("account-email-validation-c-1", {
@@ -220,7 +220,7 @@ const emailColumn = {
       }),
     ],
     input: {
-      type: "Email",
+      type: "Text",
     },
   },
   updateFormConfig: {
@@ -245,7 +245,17 @@ const emailColumn = {
       }),
     ],
     input: {
-      type: "Email",
+      type: "Text",
+    },
+  },
+  queryFormConfig: {
+    name: "email",
+    label: "Email",
+    width: "s",
+    rules: [{ type: "email" }],
+    transformer: "ilike",
+    input: {
+      type: "Text",
     },
   },
 };
@@ -270,7 +280,10 @@ const isActiveColumn = {
     rules: [],
     input: {
       type: "Select",
-      options: statusOptions,
+      select: {
+        mode: "single",
+        options: statusOptions,
+      },
     },
   },
   updateFormConfig: {
@@ -280,7 +293,10 @@ const isActiveColumn = {
     rules: [],
     input: {
       type: "Select",
-      options: statusOptions,
+      select: {
+        mode: "single",
+        options: statusOptions,
+      },
     },
   },
 };
@@ -304,8 +320,7 @@ const isVipColumn = {
     allowClear: false,
     rules: [],
     input: {
-      type: "Select",
-      options: statusOptions,
+      type: "Switch",
     },
   },
   updateFormConfig: {
@@ -314,7 +329,7 @@ const isVipColumn = {
     allowClear: false,
     rules: [],
     input: {
-      type: "Select",
+      type: "Switch",
       options: statusOptions,
     },
   },
@@ -339,8 +354,7 @@ const isKeyColumn = {
     allowClear: false,
     rules: [],
     input: {
-      type: "Select",
-      options: statusOptions,
+      type: "Switch",
     },
   },
   updateFormConfig: {
@@ -349,23 +363,27 @@ const isKeyColumn = {
     allowClear: false,
     rules: [],
     input: {
-      type: "Select",
-      options: statusOptions,
+      type: "Switch",
     },
   },
 };
 
 // Timestamps
-const timestampColumns = generateTimeStampColumns();
+const timestampColumns = generateTimeStampColumns().map((timeStamp) => {
+  return {
+    ...timeStamp,
+    width: 180,
+  };
+});
 
 // Column configuration array
 const accountColumns = [
   idColumn,
   nameColumn,
+  isActiveColumn,
   registeredPhoneColumn,
   alternatePhoneColumn,
   emailColumn,
-  isActiveColumn,
   isVipColumn,
   isKeyColumn,
   ...timestampColumns,
