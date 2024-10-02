@@ -1,6 +1,6 @@
 import { Tag } from "antd";
-import entityExistenceValidator from "@/utils/validators/entityExistenceValidator";
 import generateTimeStampColumns from "@/utils/column-generators/generateTimeStampColumns";
+import translate from "@/features/Language/utility/translate";
 
 // Regex patterns for validation
 const pincodeRegex = /^\d{6}$/;
@@ -8,7 +8,7 @@ const contactNumberRegex = /^\+\d{1,3}[\s][6-9]\d{9}$/;
 
 // Column configuration for "ID"
 const idColumn = {
-  title: "ID",
+  title: translate("id"),
   dataIndex: "id",
   width: 50,
   sorter: true,
@@ -212,7 +212,7 @@ const cityColumn = {
   sorter: true,
   createFormConfig: {
     name: "city",
-    label: "City",
+    label: "city",
     hasFeedback: true,
     allowClear: true,
     rules: [{ required: true, message: "City must not be empty." }],
