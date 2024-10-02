@@ -7,6 +7,7 @@ import {
   ProForm,
   ProFormDateRangePicker,
   ProFormDigit,
+  ProFormSwitch,
   ProFormText,
   ProFormTextArea,
 } from "@ant-design/pro-components";
@@ -190,4 +191,5 @@ const formItems = {
       />
     </ProForm.Item>
   ),
+  Switch: (props) => <ProFormComponent {...props} Component={ProFormSwitch} />, // Add the Switch component here
 };
