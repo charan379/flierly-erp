@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDa
 import { Address } from '../address/Address.entity';
 import { Branch } from '../branch/Branch.entity';
 import { TaxIdentity } from '../taxation/TaxIdentity.entity';
-import { IsEmail, IsNotEmpty, Length, Matches } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, Length, Matches } from 'class-validator';
 import { AccountType } from './AccountType.entity';
 import { AccountSubtype } from './AccountSubtype.entity';
 
@@ -40,6 +40,7 @@ export class Account {
 
     @Column({ nullable: true, name: 'alternate_phone' })
     @Matches(/^\+\d{1,3}[\s][6-9]\d{9}$/, { message: 'Alternate Phone number is not valid' })
+    @IsOptional()
     alternatePhone: string;
 
     @Column({ unique: true })
