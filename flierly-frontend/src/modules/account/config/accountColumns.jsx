@@ -2,6 +2,31 @@ import { Tag } from "antd";
 import entityExistenceValidator from "@/utils/validators/entityExistenceValidator";
 import generateTimeStampColumns from "@/utils/column-generators/generateTimeStampColumns";
 import translate from "@/features/Language/utility/translate";
+import fetchEntityRowsAsOptions from "@/features/SelectRemoteOptions/utils/fetchEntityRowsAsOptions";
+
+const fetchAccountTypesAsOptions = (value) => {
+  let filters = {};
+  if (value) {
+    filters = { name: { $ilike: `%${value}%` } };
+  }
+  return fetchEntityRowsAsOptions("account-type", filters, 10, (accountTypes) => {
+    return accountTypes.map((acType) => {
+      return { label: acType.name, value: acType.id }
+    })
+  })
+};
+
+const fetchAccountSubtypesAsOptions = (value, accTypeId) => {
+  let filters = {};
+  if (value) {
+    filters = { name: { $ilike: `%${value}%` }, accountType: accTypeId };
+  }
+  return fetchEntityRowsAsOptions("account-subtype", filters, 10, (accountSubtypes) => {
+    return accountSubtypes.map((acSubtype) => {
+      return { label: acSubtype.name, value: acSubtype.id }
+    })
+  })
+};
 
 // Options for active status
 const statusOptions = [
@@ -118,6 +143,118 @@ const nameColumn = {
     },
   },
 };
+
+// Column configuration for "Account Type"
+const accountType = {
+  title: translate("account_type"),
+  dataIndex: "accountType",
+  copyable: false,
+  width: 7,
+  sorter: true,
+  order: 3,
+  createFormConfig: {
+    name: "accountType",
+    label: "account_type",
+    allowClear: false,
+    hasFeedback: false,
+    access: { permission: /^account\.create$/, ifNoAccess: "disable" },
+    rules: [{ required: true }],
+    input: {
+      type: "SelectRemoteOptions",
+      select: {
+        mode: "single",
+        asyncOptionsFetcher: fetchAccountTypesAsOptions,
+        debounceTimeout: 300,
+      },
+    },
+  },
+  updateFormConfig: {
+    name: "accountType",
+    label: "account_type",
+    allowClear: false,
+    hasFeedback: false,
+    access: { permission: /^account\.create$/, ifNoAccess: "disable" },
+    rules: [{ required: true }],
+    input: {
+      type: "SelectRemoteOptions",
+      select: {
+        mode: "single",
+        asyncOptionsFetcher: fetchAccountTypesAsOptions,
+        debounceTimeout: 300,
+      },
+    },
+  },
+  queryFormConfig: {
+    name: "accountType",
+    label: "account_type",
+    rules: [{ type: "array" }],
+    transformer: "inArray",
+    input: {
+      type: "SelectRemoteOptions",
+      select: {
+        mode: "multiple",
+        asyncOptionsFetcher: fetchAccountTypesAsOptions,
+        debounceTimeout: 300,
+      },
+    },
+  },
+}
+
+// Column configuration for "Account Type"
+const accountSubtype = {
+  title: translate("account_subtype"),
+  dataIndex: "accountSubtype",
+  copyable: false,
+  width: 7,
+  sorter: true,
+  order: 4,
+  createFormConfig: {
+    name: "accountSubtype",
+    label: "account_subtype",
+    allowClear: false,
+    hasFeedback: false,
+    access: { permission: /^account\.create$/, ifNoAccess: "disable" },
+    rules: [{ required: true }],
+    input: {
+      type: "SelectRemoteOptions",
+      select: {
+        mode: "single",
+        asyncOptionsFetcher: (value) => fetchAccountSubtypesAsOptions(value),
+        debounceTimeout: 300,
+      },
+    },
+  },
+  updateFormConfig: {
+    name: "accountSubtype",
+    label: "account_subtype",
+    allowClear: false,
+    hasFeedback: false,
+    access: { permission: /^account\.manage$/, ifNoAccess: "disable" },
+    rules: [{ required: true }],
+    input: {
+      type: "SelectRemoteOptions",
+      select: {
+        mode: "single",
+        asyncOptionsFetcher: (value) => fetchAccountSubtypesAsOptions(value),
+        debounceTimeout: 300,
+      },
+    },
+  },
+  queryFormConfig: {
+    name: "accountSubtype",
+    label: "account_subtype",
+    rules: [{ type: "array" }],
+    transformer: "inArray",
+    input: {
+      type: "SelectRemoteOptions",
+      select: {
+        mode: "multiple",
+        asyncOptionsFetcher: (value) => fetchAccountSubtypesAsOptions(value),
+        debounceTimeout: 300,
+      },
+    },
+  },
+}
 
 // Column configuration for "Registered Phone"
 const registeredPhoneColumn = {
@@ -444,6 +581,7 @@ const accountColumns = [
   idColumn,
   nameColumn,
   isActiveColumn,
+  accountType,
   registeredPhoneColumn,
   alternatePhoneColumn,
   emailColumn,
