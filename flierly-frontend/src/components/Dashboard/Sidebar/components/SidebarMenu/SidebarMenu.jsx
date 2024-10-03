@@ -3,11 +3,13 @@ import useLocale from "@/features/Language/hooks/useLocale";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import {
   AreaChartOutlined,
+  CalculatorOutlined,
   ClusterOutlined,
   ContainerOutlined,
   CreditCardOutlined,
   CustomerServiceOutlined,
   DashboardOutlined,
+  EnvironmentOutlined,
   FileOutlined,
   FileSyncOutlined,
   FilterOutlined,
@@ -24,7 +26,7 @@ import { Menu } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFingerprint, faKey, faTags, faUsersGear, faUsersLine, faUserTag } from "@fortawesome/free-solid-svg-icons";
+import { faFingerprint, faIdBadge, faKey, faMapLocationDot, faTags, faUsersGear, faUsersLine, faUserTag } from "@fortawesome/free-solid-svg-icons";
 import { faAddressBook as faAddressBookRegular } from '@fortawesome/free-regular-svg-icons';
 import filterEnabledItems from "@/utils/filterEnabledItems";
 
@@ -96,13 +98,13 @@ const SidebarMenu = () => {
     },
     {
       key: "taxation",
-      icon: <FontAwesomeIcon icon={faAddressBookRegular} style={menuIconStyle} />,
+      icon: <CalculatorOutlined style={menuIconStyle} />,
       label: <Link to={"/erp/taxation"} style={getLinkStyle(/^tax.*\.[a-z]+$/)}>{translate("taxation")}</Link>,
       disabled: !hasPermission(/^tax.*\.[a-z]+$/),
       children: [
         {
           key: "tax-identities",
-          icon: <FontAwesomeIcon icon={faUsersLine} style={menuIconStyle} />,
+          icon: <FontAwesomeIcon icon={faIdBadge} style={menuIconStyle} />,
           label: <Link to={"/erp/taxation/tax-identities"} style={getLinkStyle(/^tax-identity\.[a-z]+$/)}>{translate("tax-identites")}</Link>,
           disabled: !hasPermission(/^tax-identity\.[a-z]+$/),
         },
@@ -110,13 +112,13 @@ const SidebarMenu = () => {
     },
     {
       key: "address",
-      icon: <FontAwesomeIcon icon={faAddressBookRegular} style={menuIconStyle} />,
+      icon: <EnvironmentOutlined style={menuIconStyle} />,
       label: <Link to={"/erp/address"} style={getLinkStyle(/^address.*\.[a-z]+$/)}>{translate("address")}</Link>,
       disabled: !hasPermission(/^address.*\.[a-z]+$/),
       children: [
         {
-          key: "tax-identities",
-          icon: <FontAwesomeIcon icon={faUsersLine} style={menuIconStyle} />,
+          key: "addresses",
+          icon: <FontAwesomeIcon icon={faMapLocationDot} style={menuIconStyle} />,
           label: <Link to={"/erp/address/addresses"} style={getLinkStyle(/^address\.[a-z]+$/)}>{translate("addresses")}</Link>,
           disabled: !hasPermission(/^address\.[a-z]+$/),
         },
