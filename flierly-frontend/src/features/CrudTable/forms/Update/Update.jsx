@@ -2,7 +2,7 @@ import useLocale from "@/features/Language/hooks/useLocale";
 import crudService from "@/service/crud.service";
 import { EditFilled } from "@ant-design/icons";
 import { DrawerForm } from "@ant-design/pro-components";
-import { Button, Tooltip } from "antd";
+import { Button, Form, Tooltip } from "antd";
 import React from "react";
 
 const Update = ({
@@ -21,6 +21,8 @@ const Update = ({
 
   const { translate } = useLocale();
 
+  const [formInstance] = Form.useForm();
+
   const onFinish = async (values) => {
     const response = await crudService.update({ entity, data: values, id });
 
@@ -33,6 +35,7 @@ const Update = ({
 
   return (
     <DrawerForm
+      form={formInstance}
       title={title}
       grid={true}
       onFinish={onFinish}
@@ -70,7 +73,7 @@ const Update = ({
         },
       }}
     >
-      {formFields}
+      {React.cloneElement(formFields, { formInstance })}
     </DrawerForm>
   );
 };

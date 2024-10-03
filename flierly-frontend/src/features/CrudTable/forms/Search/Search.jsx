@@ -1,6 +1,6 @@
 import useLocale from "@/features/Language/hooks/useLocale";
 import { ModalForm } from "@ant-design/pro-components";
-import { Badge, Button, Tooltip } from "antd";
+import { Badge, Button, Form, Tooltip } from "antd";
 import React from "react";
 import useCrudTableContext from "../../hooks/useCrudTableContext";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
@@ -17,6 +17,7 @@ const Search = ({
   if (!render) return;
   if (!formFields) return;
   const { translate } = useLocale();
+  const [formInstance] = Form.useForm();
   const { crudTableContextHandler } = useCrudTableContext();
 
   const onFinish = (values) => {
@@ -32,6 +33,7 @@ const Search = ({
 
   return (
     <ModalForm
+      form={formInstance}
       title={title}
       initialValues={reverseTransformQuery(initialQuery)}
       onFinish={onFinish}
@@ -65,7 +67,7 @@ const Search = ({
         },
       }}
     >
-      {formFields}
+      {React.cloneElement(formFields, { formInstance })}
     </ModalForm>
   );
 };

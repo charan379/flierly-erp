@@ -22,7 +22,6 @@ const CrudTable = ({
   columns,
   dataSource = [],
   createFormFields,
-  createFormInitialValues,
   updateFormFields,
   searchFormFields,
   rowSelectionColumnWidth ="3%",
@@ -172,7 +171,6 @@ const CrudTable = ({
         <Create
           entity={entity}
           formFields={createFormFields}
-          initialValues={createFormInitialValues}
           title={translate("add_from")}
           render={render.create}
           actions={action}

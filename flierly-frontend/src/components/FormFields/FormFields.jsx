@@ -5,7 +5,7 @@ import FormField from "@/components/FormField";
 import hasOwnProperty from "@/utils/hasOwnProperty";
 import { Flex } from "antd";
 
-const FormFields = ({ columns = [], configKey }) => {
+const FormFields = ({ columns = [], configKey, formInstance }) => {
   const { langDirection } = useLocale();
 
   return (
