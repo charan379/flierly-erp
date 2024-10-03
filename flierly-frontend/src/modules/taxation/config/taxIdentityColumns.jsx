@@ -106,7 +106,6 @@ const gstColumn = {
   queryFormConfig: {
     name: "gst",
     label: "gst_number",
-    hasFeedback: true,
     allowClear: true,
     width: "s",
     rules: [
@@ -120,13 +119,14 @@ const gstColumn = {
 
 // Column configuration for "GST Registration Date"
 const gstRegistrationDateColumn = {
-  title: "GST Registration Date",
+  title: translate("gst_registration_date"),
   dataIndex: "gstRegistrationDate",
   width: 150,
   sorter: true,
+  order: 3,
   createFormConfig: {
     name: "gstRegistrationDate",
-    label: "GST Registration Date",
+    label: "gst_registration_date",
     hasFeedback: true,
     allowClear: true,
     width: "100%",
@@ -136,34 +136,43 @@ const gstRegistrationDateColumn = {
   },
   updateFormConfig: {
     name: "gstRegistrationDate",
-    label: "GST Registration Date",
+    label: "gst_registration_date",
     hasFeedback: true,
     allowClear: true,
     input: {
       type: "DatePicker",
     },
   },
+  queryFormConfig: {
+    name: "gstRegistrationDate",
+    label: "gst_registration_date",
+    rules: [],
+    transformer: "between",
+    input: {
+      type: "DateRange",
+    },
+  },
 };
 
 // Column configuration for "PAN Number"
 const panColumn = {
-  title: "PAN Number",
+  title: translate("pan_number"),
   dataIndex: "pan",
   width: 150,
   sorter: true,
+  order: 4,
   createFormConfig: {
     name: "pan",
-    label: "PAN Number",
+    label: "pan_number",
     hasFeedback: true,
     allowClear: true,
     rules: [
-      { required: true, message: "PAN number is not allowed to be empty." },
-      { pattern: panRegex, message: "PAN number is not valid." },
+      { pattern: panRegex, message: translate("invalid_pan_number") },
       ({ }) => ({
         validator(_, value) {
           if (!value) return Promise.resolve();
           return entityExistenceValidator("tax-identity-pan-validation-c", {
-            entity: "tax_identity",
+            entity: "tax-identity",
             filters: { pan: { $ilike: value } },
           });
         },
@@ -175,17 +184,16 @@ const panColumn = {
   },
   updateFormConfig: {
     name: "pan",
-    label: "PAN Number",
+    label: "pan_number",
     hasFeedback: true,
     allowClear: true,
     rules: [
-      { required: true, message: "PAN number is not allowed to be empty." },
-      { pattern: panRegex, message: "PAN number is not valid." },
+      { pattern: panRegex, message: translate("invalid_pan_number") },
       ({ getFieldValue }) => ({
         validator(_, value) {
           if (!value) return Promise.resolve();
           return entityExistenceValidator("tax-identity-pan-validation-u", {
-            entity: "tax_identity",
+            entity: "tax-identity",
             filters: {
               id: { $notEqualTo: getFieldValue("id") },
               pan: { $ilike: value },
@@ -198,31 +206,52 @@ const panColumn = {
       type: "Text",
     },
   },
+  queryFormConfig: {
+    name: "pan",
+    label: "pan_number",
+    allowClear: true,
+    width: "s",
+    rules: [
+      { pattern: panRegex, message: translate("invalid_pan_number") },
+    ],
+    input: {
+      type: "Text",
+    },
+  },
 };
 
 // Column configuration for "GST Verified"
 const gstVerifiedColumn = {
-  title: "GST Verified",
+  title: translate("gst_verified"),
   dataIndex: "gstVerified",
   width: 100,
   sorter: true,
+  order: 5,
   render: (text) => {
     return text ? <Tag color="green">Verified</Tag> : <Tag color="red">Not Verified</Tag>;
   },
   createFormConfig: {
     name: "gstVerified",
-    label: "GST Verified",
+    label: "gst_verified",
     allowClear: false,
-    rules: [],
+    rules: [{ type: "boolean" }],
     input: {
       type: "Switch",
     },
   },
   updateFormConfig: {
     name: "gstVerified",
-    label: "GST Verified",
+    label: "gst_verified",
     allowClear: false,
-    rules: [],
+    rules: [{ type: "boolean" }],
+    input: {
+      type: "Switch",
+    },
+  },
+  queryFormConfig: {
+    name: "gstVerified",
+    label: "gst_verified",
+    rules: [{ type: "boolean" }],
     input: {
       type: "Switch",
     },
@@ -231,27 +260,37 @@ const gstVerifiedColumn = {
 
 // Column configuration for "PAN Verified"
 const panVerifiedColumn = {
-  title: "PAN Verified",
+  title: translate("pan_verified"),
   dataIndex: "panVerified",
   width: 100,
   sorter: true,
+  order: 6,
   render: (text) => {
     return text ? <Tag color="green">Verified</Tag> : <Tag color="red">Not Verified</Tag>;
   },
   createFormConfig: {
     name: "panVerified",
-    label: "PAN Verified",
+    label: "pan_verified",
     allowClear: false,
-    rules: [],
+    rules: [{ type: "boolean" }],
     input: {
       type: "Switch",
     },
   },
   updateFormConfig: {
     name: "panVerified",
-    label: "PAN Verified",
+    label: "pan_verified",
     allowClear: false,
-    rules: [],
+    rules: [{ type: "boolean" }],
+    input: {
+      type: "Switch",
+    },
+  },
+  queryFormConfig: {
+    name: "panVerified",
+    label: "pan_verified",
+    allowClear: false,
+    rules: [{ type: "boolean" }],
     input: {
       type: "Switch",
     },
@@ -260,23 +299,23 @@ const panVerifiedColumn = {
 
 // Column configuration for "VAT Number"
 const vatColumn = {
-  title: "VAT Number",
+  title: translate("vat_number"),
   dataIndex: "vat",
   width: 150,
   sorter: true,
+  order: 7,
   createFormConfig: {
     name: "vat",
-    label: "VAT Number",
+    label: "vat_number",
     hasFeedback: true,
     allowClear: true,
     rules: [
-      { required: true, message: "VAT number is not allowed to be empty." },
-      { pattern: vatRegex, message: "VAT number is not valid." },
+      { pattern: vatRegex, message: translate("vat_number_is_invalid") },
       ({ }) => ({
         validator(_, value) {
           if (!value) return Promise.resolve();
           return entityExistenceValidator("tax-identity-vat-validation-c", {
-            entity: "tax_identity",
+            entity: "tax-identity",
             filters: { vat: { $ilike: value } },
           });
         },
@@ -288,17 +327,16 @@ const vatColumn = {
   },
   updateFormConfig: {
     name: "vat",
-    label: "VAT Number",
+    label: "vat_number",
     hasFeedback: true,
     allowClear: true,
     rules: [
-      { required: true, message: "VAT number is not allowed to be empty." },
-      { pattern: vatRegex, message: "VAT number is not valid." },
+      { pattern: vatRegex, message: translate("vat_number_is_invalid") },
       ({ getFieldValue }) => ({
         validator(_, value) {
           if (!value) return Promise.resolve();
           return entityExistenceValidator("tax-identity-vat-validation-u", {
-            entity: "tax_identity",
+            entity: "tax-identity",
             filters: {
               id: { $notEqualTo: getFieldValue("id") },
               vat: { $ilike: value },
@@ -311,27 +349,39 @@ const vatColumn = {
       type: "Text",
     },
   },
+  queryFormConfig: {
+    name: "vat",
+    label: "vat_number",
+    allowClear: true,
+    width: "s",
+    rules: [
+      { pattern: vatRegex, message: translate("vat_number_is_invalid") },
+    ],
+    input: {
+      type: "Text",
+    },
+  },
 };
 
 // Column configuration for "TIN Number"
 const tinColumn = {
-  title: "TIN Number",
+  title: translate("tin_number"),
   dataIndex: "tin",
   width: 150,
   sorter: true,
+  order: 8,
   createFormConfig: {
     name: "tin",
-    label: "TIN Number",
+    label: "tin_number",
     hasFeedback: true,
     allowClear: true,
     rules: [
-      { required: true, message: "TIN number is not allowed to be empty." },
-      { pattern: tinRegex, message: "TIN number is not valid." },
+      { pattern: tinRegex, message: translate("tin_number_is_not_valid") },
       ({ }) => ({
         validator(_, value) {
           if (!value) return Promise.resolve();
           return entityExistenceValidator("tax-identity-tin-validation-c", {
-            entity: "tax_identity",
+            entity: "tax-identity",
             filters: { tin: { $ilike: value } },
           });
         },
@@ -343,17 +393,16 @@ const tinColumn = {
   },
   updateFormConfig: {
     name: "tin",
-    label: "TIN Number",
+    label: "tin_number",
     hasFeedback: true,
     allowClear: true,
     rules: [
-      { required: true, message: "TIN number is not allowed to be empty." },
-      { pattern: tinRegex, message: "TIN number is not valid." },
+      { pattern: tinRegex, message: translate("tin_number_is_not_valid") },
       ({ getFieldValue }) => ({
         validator(_, value) {
           if (!value) return Promise.resolve();
           return entityExistenceValidator("tax-identity-tin-validation-u", {
-            entity: "tax_identity",
+            entity: "tax-identity",
             filters: {
               id: { $notEqualTo: getFieldValue("id") },
               tin: { $ilike: value },
@@ -366,20 +415,33 @@ const tinColumn = {
       type: "Text",
     },
   },
+  queryFormConfig: {
+    name: "tin",
+    label: "tin_number",
+    allowClear: true,
+    width: "s",
+    rules: [
+      { pattern: tinRegex, message: translate("tin_number_is_not_valid") },
+    ],
+    input: {
+      type: "Text",
+    },
+  },
 };
 
 // Active Status
 const isActiveColumn = {
-  title: "Active Status",
+  title: translate("active"),
   dataIndex: "isActive",
   width: 100,
   sorter: true,
+  order: 9,
   render: (text) => {
     return text ? <Tag color="green">Active</Tag> : <Tag color="red">Inactive</Tag>;
   },
   createFormConfig: {
     name: "isActive",
-    label: "Active Status",
+    label: "active",
     allowClear: false,
     rules: [],
     input: {
@@ -388,9 +450,18 @@ const isActiveColumn = {
   },
   updateFormConfig: {
     name: "isActive",
-    label: "Active Status",
+    label: "active",
     allowClear: false,
     rules: [],
+    input: {
+      type: "Switch",
+    },
+  },
+  queryFormConfig: {
+    name: "isActive",
+    label: "active",
+    width: 120,
+    rules: [{ type: "boolean" }],
     input: {
       type: "Switch",
     },
