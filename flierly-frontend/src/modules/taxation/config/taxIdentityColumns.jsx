@@ -1,6 +1,7 @@
 import { Tag } from "antd";
 import entityExistenceValidator from "@/utils/validators/entityExistenceValidator";
 import generateTimeStampColumns from "@/utils/column-generators/generateTimeStampColumns";
+import translate from "@/features/Language/utility/translate";
 
 // Regex patterns for validation
 const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
@@ -10,14 +11,15 @@ const tinRegex = /^[A-Z0-9]{1,10}$/; // Customize this regex as needed
 
 // Column configuration for "ID"
 const idColumn = {
-  title: "ID",
+  title: translate("id"),
   dataIndex: "id",
   width: 50,
   sorter: true,
   align: "center",
+  order: 1,
   createFormConfig: {
     name: "id",
-    label: "ID",
+    label: "id",
     hidden: true,
     disabled: true,
     hasFeedback: false,
@@ -28,7 +30,7 @@ const idColumn = {
   },
   updateFormConfig: {
     name: "id",
-    label: "ID",
+    label: "id",
     hidden: true,
     disabled: true,
     hasFeedback: false,
@@ -37,27 +39,37 @@ const idColumn = {
       type: "Text",
     },
   },
+  queryFormConfig: {
+    name: "id",
+    label: "id",
+    allowClear: true,
+    width: "xs",
+    input: {
+      type: "Number",
+    },
+    rules: [{ type: "integer", required: false }],
+  },
 };
 
 // Column configuration for "GST Number"
 const gstColumn = {
-  title: "GST Number",
+  title: translate("gst_number"),
   dataIndex: "gst",
   width: 150,
   sorter: true,
+  order: 2,
   createFormConfig: {
     name: "gst",
-    label: "GST Number",
+    label: "gst_number",
     hasFeedback: true,
     allowClear: true,
     rules: [
-      { required: true, message: "GST number is not allowed to be empty." },
-      { pattern: gstRegex, message: "GST number is not valid." },
-      ({}) => ({
+      { pattern: gstRegex, message: translate("gst_number_is_invalid") },
+      ({ }) => ({
         validator(_, value) {
           if (!value) return Promise.resolve();
           return entityExistenceValidator("tax-identity-gst-validation-c", {
-            entity: "tax_identity",
+            entity: "tax-identity",
             filters: { gst: { $ilike: value } },
           });
         },
@@ -69,17 +81,16 @@ const gstColumn = {
   },
   updateFormConfig: {
     name: "gst",
-    label: "GST Number",
+    label: "gst_number",
     hasFeedback: true,
     allowClear: true,
     rules: [
-      { required: true, message: "GST number is not allowed to be empty." },
-      { pattern: gstRegex, message: "GST number is not valid." },
+      { pattern: gstRegex, message: translate("gst_number_is_invalid") },
       ({ getFieldValue }) => ({
         validator(_, value) {
           if (!value) return Promise.resolve();
           return entityExistenceValidator("tax-identity-gst-validation-u", {
-            entity: "tax_identity",
+            entity: "tax-identity",
             filters: {
               id: { $notEqualTo: getFieldValue("id") },
               gst: { $ilike: value },
@@ -87,6 +98,19 @@ const gstColumn = {
           });
         },
       }),
+    ],
+    input: {
+      type: "Text",
+    },
+  },
+  queryFormConfig: {
+    name: "gst",
+    label: "gst_number",
+    hasFeedback: true,
+    allowClear: true,
+    width: "s",
+    rules: [
+      { pattern: gstRegex, message: translate("gst_number_is_invalid") },
     ],
     input: {
       type: "Text",
@@ -135,7 +159,7 @@ const panColumn = {
     rules: [
       { required: true, message: "PAN number is not allowed to be empty." },
       { pattern: panRegex, message: "PAN number is not valid." },
-      ({}) => ({
+      ({ }) => ({
         validator(_, value) {
           if (!value) return Promise.resolve();
           return entityExistenceValidator("tax-identity-pan-validation-c", {
@@ -248,7 +272,7 @@ const vatColumn = {
     rules: [
       { required: true, message: "VAT number is not allowed to be empty." },
       { pattern: vatRegex, message: "VAT number is not valid." },
-      ({}) => ({
+      ({ }) => ({
         validator(_, value) {
           if (!value) return Promise.resolve();
           return entityExistenceValidator("tax-identity-vat-validation-c", {
@@ -303,7 +327,7 @@ const tinColumn = {
     rules: [
       { required: true, message: "TIN number is not allowed to be empty." },
       { pattern: tinRegex, message: "TIN number is not valid." },
-      ({}) => ({
+      ({ }) => ({
         validator(_, value) {
           if (!value) return Promise.resolve();
           return entityExistenceValidator("tax-identity-tin-validation-c", {
