@@ -1,4 +1,4 @@
-import { Tag } from "antd";
+import { message, Tag } from "antd";
 import generateTimeStampColumns from "@/utils/column-generators/generateTimeStampColumns";
 import translate from "@/features/Language/utility/translate";
 
@@ -13,6 +13,7 @@ const idColumn = {
   width: 50,
   sorter: true,
   align: "center",
+  order: 1,
   createFormConfig: {
     name: "id",
     label: "ID",
@@ -26,40 +27,60 @@ const idColumn = {
   },
   updateFormConfig: {
     name: "id",
-    label: "ID",
+    label: "id",
     hidden: true,
     disabled: true,
     hasFeedback: false,
     allowClear: false,
     input: {
       type: "Text",
+    },
+    queryFormConfig: {
+      name: "id",
+      label: "id",
+      allowClear: true,
+      width: "s",
+      input: {
+        type: "Number",
+      },
+      rules: [{ type: "integer", required: false }],
     },
   },
 };
 
 // Column configuration for "Is Active"
 const isActiveColumn = {
-  title: "Active Status",
+  title: translate("status"),
   dataIndex: "isActive",
   width: 100,
   sorter: true,
+  order: 2,
   render: (text) => {
     return text ? <Tag color="green">Active</Tag> : <Tag color="red">Inactive</Tag>;
   },
   createFormConfig: {
     name: "isActive",
-    label: "Active Status",
+    label: "status",
     allowClear: false,
-    rules: [],
+    rules: [{ type: "boolean" }],
     input: {
       type: "Switch",
     },
   },
   updateFormConfig: {
     name: "isActive",
-    label: "Active Status",
+    label: "status",
     allowClear: false,
-    rules: [],
+    rules: [{ type: "boolean" }],
+    input: {
+      type: "Switch",
+    },
+  },
+  queryFormConfig: {
+    name: "isActive",
+    label: "status",
+    allowClear: false,
+    rules: [{ type: "boolean" }],
     input: {
       type: "Switch",
     },
@@ -68,26 +89,27 @@ const isActiveColumn = {
 
 // Column configuration for "Address Line 1"
 const line1Column = {
-  title: "Address Line 1",
+  title: translate("address_line_1"),
   dataIndex: "line1",
   width: 150,
   sorter: true,
+  order: 5,
   createFormConfig: {
     name: "line1",
-    label: "Address Line 1",
+    label: "address_line_1",
     hasFeedback: true,
     allowClear: true,
-    rules: [{ required: true, message: "Address line 1 must not be empty." }],
+    rules: [{ required: true, message: translate("address_line_1_is_required") }],
     input: {
       type: "Text",
     },
   },
   updateFormConfig: {
     name: "line1",
-    label: "Address Line 1",
+    label: "address_line_1",
     hasFeedback: true,
     allowClear: true,
-    rules: [{ required: true, message: "Address line 1 must not be empty." }],
+    rules: [{ required: true, message: translate("address_line_1_is_required") }],
     input: {
       type: "Text",
     },
@@ -96,26 +118,27 @@ const line1Column = {
 
 // Column configuration for "Address Line 2"
 const line2Column = {
-  title: "Address Line 2",
+  title: translate("address_line_2"),
   dataIndex: "line2",
   width: 150,
   sorter: true,
+  order: 6,
   createFormConfig: {
     name: "line2",
-    label: "Address Line 2",
+    label: "address_line_2",
     hasFeedback: true,
     allowClear: true,
-    rules: [{ required: true, message: "Address line 2 must not be empty." }],
+    rules: [{ required: true, message: translate("address_line_2_is_required") }],
     input: {
       type: "Text",
     },
   },
   updateFormConfig: {
     name: "line2",
-    label: "Address Line 2",
+    label: "address_line_2",
     hasFeedback: true,
     allowClear: true,
-    rules: [{ required: true, message: "Address line 2 must not be empty." }],
+    rules: [{ required: true, message: "address_line_2_is_required" }],
     input: {
       type: "Text",
     },
@@ -124,13 +147,14 @@ const line2Column = {
 
 // Column configuration for "Address Line 3"
 const line3Column = {
-  title: "Address Line 3",
+  title: translate('address_line_3'),
   dataIndex: "line3",
   width: 150,
   sorter: true,
+  order: 7,
   createFormConfig: {
     name: "line3",
-    label: "Address Line 3",
+    label: "address_line_3",
     allowClear: true,
     rules: [],
     input: {
@@ -139,7 +163,7 @@ const line3Column = {
   },
   updateFormConfig: {
     name: "line3",
-    label: "Address Line 3",
+    label: "address_line_3",
     allowClear: true,
     rules: [],
     input: {
@@ -150,16 +174,17 @@ const line3Column = {
 
 // Column configuration for "Landmark"
 const landmarkColumn = {
-  title: "Landmark",
+  title: translate("landmark"),
   dataIndex: "landmark",
   width: 150,
   sorter: true,
+  order: 8,
   createFormConfig: {
     name: "landmark",
-    label: "Landmark",
+    label: "landmark",
     hasFeedback: true,
     allowClear: true,
-    rules: [{ required: true, message: "Landmark must not be empty." }],
+    rules: [{ required: true, message: translate("landmark_is_required") }],
     input: {
       type: "Text",
     },
@@ -169,7 +194,7 @@ const landmarkColumn = {
     label: "Landmark",
     hasFeedback: true,
     allowClear: true,
-    rules: [{ required: true, message: "Landmark must not be empty." }],
+    rules: [{ required: true, message: translate("landmark_is_required") }],
     input: {
       type: "Text",
     },
@@ -178,26 +203,37 @@ const landmarkColumn = {
 
 // Column configuration for "Area"
 const areaColumn = {
-  title: "Area",
+  title: translate("area"),
   dataIndex: "area",
   width: 150,
   sorter: true,
+  order: 9,
   createFormConfig: {
     name: "area",
-    label: "Area",
+    label: "area",
     hasFeedback: true,
     allowClear: true,
-    rules: [{ required: true, message: "Area must not be empty." }],
+    rules: [{ required: true, message: translate("area_is_required") }],
     input: {
       type: "Text",
     },
   },
   updateFormConfig: {
     name: "area",
-    label: "Area",
+    label: "area",
     hasFeedback: true,
     allowClear: true,
-    rules: [{ required: true, message: "Area must not be empty." }],
+    rules: [{ required: true, message: translate("area_is_required") }],
+    input: {
+      type: "Text",
+    },
+  },
+  queryFormConfig: {
+    name: "area",
+    label: "area",
+    width: "s",
+    rules: [{ type: "string" }],
+    transformer: "ilike",
     input: {
       type: "Text",
     },
@@ -206,26 +242,37 @@ const areaColumn = {
 
 // Column configuration for "City"
 const cityColumn = {
-  title: "City",
+  title: translate("city"),
   dataIndex: "city",
   width: 150,
   sorter: true,
+  order: 10,
   createFormConfig: {
     name: "city",
     label: "city",
     hasFeedback: true,
     allowClear: true,
-    rules: [{ required: true, message: "City must not be empty." }],
+    rules: [{ required: true, message: translate("city_is_required") }],
     input: {
       type: "Text",
     },
   },
   updateFormConfig: {
     name: "city",
-    label: "City",
+    label: "city",
     hasFeedback: true,
     allowClear: true,
-    rules: [{ required: true, message: "City must not be empty." }],
+    rules: [{ required: true, message: translate("city_is_required") }],
+    input: {
+      type: "Text",
+    },
+  },
+  queryFormConfig: {
+    name: "city",
+    label: "city",
+    width: "s",
+    rules: [{ type: "string" }],
+    transformer: "ilike",
     input: {
       type: "Text",
     },
@@ -234,26 +281,37 @@ const cityColumn = {
 
 // Column configuration for "District"
 const districtColumn = {
-  title: "District",
+  title: translate("district"),
   dataIndex: "district",
   width: 150,
   sorter: true,
+  order: 11,
   createFormConfig: {
     name: "district",
-    label: "District",
+    label: "district",
     hasFeedback: true,
     allowClear: true,
-    rules: [{ required: true, message: "District must not be empty." }],
+    rules: [{ required: true, message: translate("district_is_required") }],
     input: {
       type: "Text",
     },
   },
   updateFormConfig: {
     name: "district",
-    label: "District",
+    label: "district",
     hasFeedback: true,
     allowClear: true,
-    rules: [{ required: true, message: "District must not be empty." }],
+    rules: [{ required: true, message: translate("district_is_required") }],
+    input: {
+      type: "Text",
+    },
+  },
+  queryFormConfig: {
+    name: "district",
+    label: "district",
+    width: "s",
+    rules: [{ type: "string" }],
+    transformer: "ilike",
     input: {
       type: "Text",
     },
@@ -262,26 +320,37 @@ const districtColumn = {
 
 // Column configuration for "State"
 const stateColumn = {
-  title: "State",
+  title: "state",
   dataIndex: "state",
   width: 150,
   sorter: true,
+  order: 12,
   createFormConfig: {
     name: "state",
-    label: "State",
+    label: "state",
     hasFeedback: true,
     allowClear: true,
-    rules: [{ required: true, message: "State must not be empty." }],
+    rules: [{ required: true, message: translate("state_is_required") }],
     input: {
       type: "Text",
     },
   },
   updateFormConfig: {
     name: "state",
-    label: "State",
+    label: "state",
     hasFeedback: true,
     allowClear: true,
-    rules: [{ required: true, message: "State must not be empty." }],
+    rules: [{ required: true, message: translate("state_is_required") }],
+    input: {
+      type: "Text",
+    },
+  },
+  queryFormConfig: {
+    name: "state",
+    label: "state",
+    width: "s",
+    rules: [{ type: "string" }],
+    transformer: "ilike",
     input: {
       type: "Text",
     },
@@ -290,18 +359,19 @@ const stateColumn = {
 
 // Column configuration for "Pincode"
 const pincodeColumn = {
-  title: "Pincode",
+  title: translate("pincode"),
   dataIndex: "pincode",
   width: 100,
   sorter: true,
+  order: 13,
   createFormConfig: {
     name: "pincode",
-    label: "Pincode",
+    label: "pincode",
     hasFeedback: true,
     allowClear: true,
     rules: [
-      { required: true, message: "Pincode must not be empty." },
-      { pattern: pincodeRegex, message: "Pincode must be a 6-digit number." },
+      { required: true, message: translate("pincode_is_required") },
+      { pattern: pincodeRegex, message: translate("invalid_pincode") },
     ],
     input: {
       type: "Text",
@@ -309,12 +379,12 @@ const pincodeColumn = {
   },
   updateFormConfig: {
     name: "pincode",
-    label: "Pincode",
+    label: "pincode",
     hasFeedback: true,
     allowClear: true,
     rules: [
-      { required: true, message: "Pincode must not be empty." },
-      { pattern: pincodeRegex, message: "Pincode must be a 6-digit number." },
+      { required: true, message: translate("pincode_is_required") },
+      { pattern: pincodeRegex, message: translate("invalid_pincode") },
     ],
     input: {
       type: "Text",
@@ -324,18 +394,19 @@ const pincodeColumn = {
 
 // Column configuration for "Contact Name"
 const contactNameColumn = {
-  title: "Contact Name",
+  title: translate("contact_name"),
   dataIndex: "contactName",
   width: 150,
   sorter: true,
+  order: 3,
   createFormConfig: {
     name: "contactName",
-    label: "Contact Name",
+    label: "contact_name",
     hasFeedback: true,
     allowClear: true,
     rules: [
-      { required: false },
-      { min: 5, max: 90, message: 'Contact name must be between 5 and 90 characters.' },
+      { required: true, message: translate("contact_name_is_required") },
+      { min: 5, max: 90, message: translate("contact_name_must_be_between_5_and_90_characters") },
     ],
     input: {
       type: "Text",
@@ -343,13 +414,23 @@ const contactNameColumn = {
   },
   updateFormConfig: {
     name: "contactName",
-    label: "Contact Name",
+    label: "contact_name",
     hasFeedback: true,
     allowClear: true,
     rules: [
-      { required: false },
-      { min: 5, max: 90, message: 'Contact name must be between 5 and 90 characters.' },
+      { required: true, message: translate("contact_name_is_required") },
+      { min: 5, max: 90, message: translate("contact_name_must_be_between_5_and_90_characters") },
     ],
+    input: {
+      type: "Text",
+    },
+  },
+  queryFormConfig: {
+    name: "contactName",
+    label: "contact_name",
+    width: "s",
+    rules: [],
+    transformer: "ilike",
     input: {
       type: "Text",
     },
@@ -358,17 +439,18 @@ const contactNameColumn = {
 
 // Column configuration for "Contact Number"
 const contactNumberColumn = {
-  title: "Contact Number",
+  title: translate("contact_number"),
   dataIndex: "contactNumber",
   width: 150,
   sorter: true,
+  order: 4,
   createFormConfig: {
     name: "contactNumber",
-    label: "Contact Number",
+    label: "contact_number",
     allowClear: true,
     rules: [
-      { required: false },
-      { pattern: contactNumberRegex, message: 'Contact number must be in the format: +<country_code> <10-digit_number>' },
+      { required: true, message: translate("contact_number_is_required") },
+      { pattern: contactNumberRegex, message: translate("phone_is_not_valid") },
     ],
     input: {
       type: "Text",
@@ -379,9 +461,19 @@ const contactNumberColumn = {
     label: "Contact Number",
     allowClear: true,
     rules: [
-      { required: false },
-      { pattern: contactNumberRegex, message: 'Contact number must be in the format: +<country_code> <10-digit_number>' },
+      { required: true, message: translate("contact_number_is_required") },
+      { pattern: contactNumberRegex, message: translate("phone_is_not_valid") },
     ],
+    input: {
+      type: "Text",
+    },
+  },
+  queryFormConfig: {
+    name: "contactNumber",
+    label: "contact_number",
+    width: "s",
+    rules: [{ type: "string" }],
+    transformer: "ilike",
     input: {
       type: "Text",
     },
@@ -390,24 +482,27 @@ const contactNumberColumn = {
 
 // Column configuration for "Address Instructions"
 const addressInstructionsColumn = {
-  title: "Address Instructions",
+  title: translate("address_instructions"),
   dataIndex: "addressInstructions",
   width: 150,
   sorter: true,
+  order: 16,
   createFormConfig: {
     name: "addressInstructions",
-    label: "Address Instructions",
+    label: "address_instructions",
     allowClear: true,
-    rules: [],
+    rules: [{ type: "string", min: 10, max: 350, required: true }],
+    fieldProps: { rows: 5 },
     input: {
       type: "TextArea",
     },
   },
   updateFormConfig: {
     name: "addressInstructions",
-    label: "Address Instructions",
+    label: "address_instructions",
     allowClear: true,
-    rules: [],
+    rules: [{ type: "string", min: 10, max: 350, required: true }],
+    fieldProps: { rows: 5 },
     input: {
       type: "TextArea",
     },
@@ -416,26 +511,27 @@ const addressInstructionsColumn = {
 
 // Column configuration for "Latitude"
 const latitudeColumn = {
-  title: "Latitude",
+  title: translate("latitude"),
   dataIndex: "latitude",
   width: 100,
   sorter: true,
+  order: 14,
   createFormConfig: {
     name: "latitude",
-    label: "Latitude",
+    label: "latitude",
     allowClear: true,
     width: "100%",
-    rules: [{ type: "number", message: "Latitude must be a number." }],
+    rules: [{ type: "number" }],
     input: {
       type: "Number",
     },
   },
   updateFormConfig: {
     name: "latitude",
-    label: "Latitude",
+    label: "latitude",
     allowClear: true,
     width: "100%",
-    rules: [{ type: "number", message: "Latitude must be a number." }],
+    rules: [{ type: "number" }],
     input: {
       type: "Number",
     },
@@ -444,26 +540,27 @@ const latitudeColumn = {
 
 // Column configuration for "Longitude"
 const longitudeColumn = {
-  title: "Longitude",
+  title: "longitude",
   dataIndex: "longitude",
   width: 100,
   sorter: true,
+  order: 15,
   createFormConfig: {
     name: "longitude",
-    label: "Longitude",
+    label: "longitude",
     allowClear: true,
     width: "100%",
-    rules: [{ type: "number", message: "Longitude must be a number." }],
+    rules: [{ type: "number" }],
     input: {
       type: "Number",
     },
   },
   updateFormConfig: {
     name: "longitude",
-    label: "Longitude",
+    label: "longitude",
     allowClear: true,
     width: "100%",
-    rules: [{ type: "number", message: "Longitude must be a number." }],
+    rules: [{ type: "number" }],
     input: {
       type: "Number",
     },
