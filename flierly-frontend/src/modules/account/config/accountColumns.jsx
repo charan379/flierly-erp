@@ -1,6 +1,7 @@
 import { Tag } from "antd";
 import entityExistenceValidator from "@/utils/validators/entityExistenceValidator";
 import generateTimeStampColumns from "@/utils/column-generators/generateTimeStampColumns";
+import translate from "@/features/Language/utility/translate";
 
 // Options for active status
 const statusOptions = [
@@ -8,30 +9,19 @@ const statusOptions = [
   { label: "Inactive", value: false },
 ];
 
-// Regex for phone number validation
-const phoneRegex = () => ({
-  validator(_, value) {
-    return new Promise((resolve, reject) => {
-      if (!value) resolve();
-      if (/^\+\d{1,3}[\s][6-9]\d{9}$/.test(value)) {
-        resolve();
-      } else {
-        reject("phone_number_is_not_valid");
-      }
-    });
-  },
-});
+const phoneRegex = /^\+\d{1,3}[\s][6-9]\d{9}$/;
 
 // Column configuration for "ID"
 const idColumn = {
-  title: "ID",
+  title: translate("id"),
   dataIndex: "id",
   width: 50,
   sorter: true,
   align: "center",
+  order: 1,
   createFormConfig: {
     name: "id",
-    label: "ID",
+    label: "id",
     hidden: true,
     disabled: true,
     hasFeedback: false,
@@ -42,7 +32,7 @@ const idColumn = {
   },
   updateFormConfig: {
     name: "id",
-    label: "ID",
+    label: "id",
     hidden: true,
     disabled: true,
     hasFeedback: false,
@@ -51,22 +41,33 @@ const idColumn = {
       type: "Text",
     },
   },
+  queryFormConfig: {
+    name: "id",
+    label: "id",
+    allowClear: true,
+    width: "s",
+    input: {
+      type: "Number",
+    },
+    rules: [{ type: "integer", required: false }],
+  },
 };
 
 // Column configuration for "Account Name"
 const nameColumn = {
-  title: "Account Name",
+  title: translate("account_name"),
   dataIndex: "name",
   width: 180,
   sorter: true,
+  order: 2,
   createFormConfig: {
     name: "name",
-    label: "Account Name",
+    label: "account_name",
     hasFeedback: true,
     allowClear: false,
     rules: [
-      { required: true, message: "Account name is required." },
-      { min: 5, max: 90, message: "Account name must be between 5 and 90 characters." },
+      { required: true, message: translate("account_name_is_required") },
+      { min: 5, max: 90, message: translate("account_name_must_be_between_5_and_90_characters") },
       ({ }) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
@@ -83,12 +84,12 @@ const nameColumn = {
   },
   updateFormConfig: {
     name: "name",
-    label: "Account Name",
+    label: "account_name",
     hasFeedback: true,
     allowClear: false,
     rules: [
-      { required: true, message: "Account name is required." },
-      { min: 5, max: 90, message: "Account name must be between 5 and 90 characters." },
+      { required: true, message: translate("account_name_is_required") },
+      { min: 5, max: 90, message: translate("account_name_must_be_between_5_and_90_characters") },
       ({ getFieldValue }) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
@@ -106,22 +107,33 @@ const nameColumn = {
       type: "Text",
     },
   },
+  queryFormConfig: {
+    name: "name",
+    label: "account_name",
+    rules: [{ type: "regexp" }],
+    width: "s",
+    transformer: "ilike",
+    input: {
+      type: "Text",
+    },
+  },
 };
 
 // Column configuration for "Registered Phone"
 const registeredPhoneColumn = {
-  title: "Registered Phone",
+  title: translate("registered_phone"),
   dataIndex: "registeredPhone",
   width: 180,
   sorter: true,
+  order: 3,
   createFormConfig: {
     name: "registeredPhone",
-    label: "Registered Phone",
+    label: "registered_phone",
     hasFeedback: true,
     allowClear: false,
     rules: [
-      { required: true, message: "Account registered phone is required." },
-      phoneRegex(),
+      { required: true, message: translate("phone_is_required") },
+      { pattern: phoneRegex, message: translate("phone_is_not_valid") },
       ({ }) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
@@ -138,12 +150,12 @@ const registeredPhoneColumn = {
   },
   updateFormConfig: {
     name: "registeredPhone",
-    label: "Registered Phone",
+    label: "registered_phone",
     hasFeedback: true,
     allowClear: false,
     rules: [
-      { required: true, message: "Account registered phone is required." },
-      phoneRegex(),
+      { required: true, message: translate("phone_is_required") },
+      { pattern: phoneRegex, message: translate("phone_is_not_valid") },
       ({ getFieldValue }) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
@@ -161,34 +173,51 @@ const registeredPhoneColumn = {
       type: "Text",
     },
   },
+  queryFormConfig: {
+    name: "registeredPhone",
+    label: "registered_phone",
+    width: "s",
+    rules: [{ type: "string" }],
+    transformer: "ilike",
+    input: {
+      type: "Text",
+    },
+  },
 };
 
 // Column configuration for "Alternate Phone"
 const alternatePhoneColumn = {
-  title: "Alternate Phone",
+  title: translate("alternate_phone"),
   dataIndex: "alternatePhone",
   width: 180,
   sorter: true,
+  order: 4,
   createFormConfig: {
     name: "alternatePhone",
-    label: "Alternate Phone",
+    label: "alternate_phone",
     hasFeedback: true,
     allowClear: true,
-    rules: [
-      phoneRegex(),
-    ],
+    rules: [{ pattern: phoneRegex, message: translate("phone_is_not_valid") }],
     input: {
       type: "Text",
     },
   },
   updateFormConfig: {
     name: "alternatePhone",
-    label: "Alternate Phone",
+    label: "alternate_phone",
     hasFeedback: true,
     allowClear: true,
-    rules: [
-      phoneRegex(),
-    ],
+    rules: [{ pattern: phoneRegex, message: translate("phone_is_not_valid") }],
+    input: {
+      type: "Text",
+    },
+  },
+  queryFormConfig: {
+    name: "alternatePhone",
+    label: "alternate_phone",
+    width: "s",
+    rules: [{ type: "string" }],
+    transformer: "ilike",
     input: {
       type: "Text",
     },
@@ -197,18 +226,19 @@ const alternatePhoneColumn = {
 
 // Column configuration for "Email"
 const emailColumn = {
-  title: "Email",
+  title: translate("email"),
   dataIndex: "email",
   width: 180,
   sorter: true,
+  order: 5,
   createFormConfig: {
     name: "email",
-    label: "Email",
+    label: "email",
     hasFeedback: true,
     allowClear: false,
     rules: [
-      { type: "email", message: "Invalid email format." },
-      { required: true, message: "Account email is required." },
+      { type: "email", message: translate("invalid_email_format") },
+      { required: true, message: translate("email_is_required") },
       ({ }) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
@@ -225,12 +255,12 @@ const emailColumn = {
   },
   updateFormConfig: {
     name: "email",
-    label: "Email",
+    label: "email",
     hasFeedback: true,
     allowClear: false,
     rules: [
-      { type: "email", message: "Invalid email format." },
-      { required: true, message: "Account email is required." },
+      { type: "email", message: translate("invalid_email_format") },
+      { required: true, message: translate("email_is_required") },
       ({ getFieldValue }) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
@@ -250,7 +280,7 @@ const emailColumn = {
   },
   queryFormConfig: {
     name: "email",
-    label: "Email",
+    label: "email",
     width: "s",
     rules: [{ type: "email" }],
     transformer: "ilike",
@@ -262,10 +292,11 @@ const emailColumn = {
 
 // Column configuration for "Is Active"
 const isActiveColumn = {
-  title: "Active",
+  title: translate("active"),
   dataIndex: "isActive",
   width: 80,
   align: "center",
+  order: 6,
   render: (text) => {
     return text === false ? (
       <Tag color="red">Inactive</Tag>
@@ -275,7 +306,7 @@ const isActiveColumn = {
   },
   createFormConfig: {
     name: "isActive",
-    label: "Active",
+    label: "active",
     allowClear: false,
     rules: [],
     input: {
@@ -288,9 +319,22 @@ const isActiveColumn = {
   },
   updateFormConfig: {
     name: "isActive",
-    label: "Active",
+    label: "active",
     allowClear: false,
     rules: [],
+    input: {
+      type: "Select",
+      select: {
+        mode: "single",
+        options: statusOptions,
+      },
+    },
+  },
+  queryFormConfig: {
+    name: "isActive",
+    label: "active",
+    width: 120,
+    rules: [{ type: "boolean" }],
     input: {
       type: "Select",
       select: {
@@ -303,10 +347,11 @@ const isActiveColumn = {
 
 // Column configuration for "VIP Status"
 const isVipColumn = {
-  title: "VIP Status",
+  title: translate("vip"),
   dataIndex: "isVip",
   width: 80,
   align: "center",
+  order: 7,
   render: (text) => {
     return text === false ? (
       <Tag color="red">No</Tag>
@@ -316,31 +361,40 @@ const isVipColumn = {
   },
   createFormConfig: {
     name: "isVip",
-    label: "VIP Status",
+    label: "vip",
     allowClear: false,
-    rules: [],
+    rules: [{ type: "boolean" }],
     input: {
       type: "Switch",
     },
   },
   updateFormConfig: {
     name: "isVip",
-    label: "VIP Status",
+    label: "vip",
     allowClear: false,
-    rules: [],
+    rules: [{ type: "boolean" }],
     input: {
       type: "Switch",
-      options: statusOptions,
+    },
+  },
+  queryFormConfig: {
+    name: "isVip",
+    label: "vip",
+    width: 120,
+    rules: [{ type: "boolean" }],
+    input: {
+      type: "Switch",
     },
   },
 };
 
 // Column configuration for "Key Account"
 const isKeyColumn = {
-  title: "Key Account",
+  title: translate("key_account"),
   dataIndex: "isKey",
-  width: 80,
+  width: 90,
   align: "center",
+  order: 8,
   render: (text) => {
     return text === false ? (
       <Tag color="red">No</Tag>
@@ -350,18 +404,27 @@ const isKeyColumn = {
   },
   createFormConfig: {
     name: "isKey",
-    label: "Key Account",
+    label: "key_account",
     allowClear: false,
-    rules: [],
+    rules: [{ type: "boolean" }],
     input: {
       type: "Switch",
     },
   },
   updateFormConfig: {
     name: "isKey",
-    label: "Key Account",
+    label: "key_account",
     allowClear: false,
-    rules: [],
+    rules: [{ type: "boolean" }],
+    input: {
+      type: "Switch",
+    },
+  },
+  queryFormConfig: {
+    name: "isKey",
+    label: "key_account",
+    allowClear: false,
+    rules: [{ type: "boolean" }],
     input: {
       type: "Switch",
     },

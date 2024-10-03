@@ -6,6 +6,7 @@ import TableTransferShuttle from "@/features/TableTransfer/TableTransferShuttle"
 import hasOwnProperty from "@/utils/hasOwnProperty";
 import privilegeColumns from "./privilegeColumns";
 import UserPasswordUpdate from "../forms/UserPasswordUpdate";
+import translate from "@/features/Language/utility/translate";
 
 // Options for active status
 const statusOptions = [
@@ -13,37 +14,12 @@ const statusOptions = [
   { label: "Inactive", value: false },
 ];
 
-// Regex validator for username
-const usernameRegex = () => ({
-  validator(_, value) {
-    return new Promise((resolve, reject) => {
-      if (!value) resolve();
-      if (/^[a-z0-9_]+$/.test(value)) {
-        resolve();
-      } else {
-        reject("username_is_not_valid");
-      }
-    });
-  },
-});
-
-// Regex validator for username
-const mobileNumberRegex = () => ({
-  validator(_, value) {
-    return new Promise((resolve, reject) => {
-      if (!value) resolve();
-      if (/^\+\d{1,3}[\s][6-9]\d{9}$/.test(value)) {
-        resolve();
-      } else {
-        reject("mobile_is_not_valid");
-      }
-    });
-  },
-});
+const usernameRegex = /^[a-z0-9_]+$/;
+const phoneRegex = /^\+\d{1,3}[\s][6-9]\d{9}$/;
 
 // Column configuration for "ID"
 const idColumn = {
-  title: "ID",
+  title: translate("id"),
   dataIndex: "id",
   width: 50,
   sorter: true,
@@ -85,7 +61,7 @@ const idColumn = {
 
 // Column configuration for "Username"
 const usernameColumn = {
-  title: "Username",
+  title: translate("username"),
   dataIndex: "username",
   copyable: false,
   width: 120,
@@ -98,8 +74,8 @@ const usernameColumn = {
     allowClear: true,
     rules: [
       { type: "string", min: 5, max: 20, required: true },
-      usernameRegex,
-      ({}) => ({
+      { pattern: usernameRegex, message: translate("username_is_not_valid") },
+      ({ }) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
           return entityExistenceValidator("user-username-validation-c-1", {
@@ -120,7 +96,7 @@ const usernameColumn = {
     allowClear: true,
     rules: [
       { type: "string", min: 5, max: 20, required: true },
-      usernameRegex,
+      { pattern: usernameRegex, message: translate("username_is_not_valid") },
       ({ getFieldValue }) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
@@ -152,19 +128,19 @@ const usernameColumn = {
 
 // Column configuration for "Email"
 const emailColumn = {
-  title: "email",
+  title: translate("email"),
   dataIndex: "email",
   width: 180,
   order: 3,
   sorter: true,
   createFormConfig: {
     name: "email",
-    label: "Email",
+    label: "email",
     hasFeedback: true,
     allowClear: true,
     rules: [
       { type: "email", required: true },
-      ({}) => ({
+      ({ }) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
           return entityExistenceValidator("user-email-validation-c-1", {
@@ -180,7 +156,7 @@ const emailColumn = {
   },
   updateFormConfig: {
     name: "email",
-    label: "Email",
+    label: "email",
     hasFeedback: true,
     allowClear: true,
     rules: [
@@ -204,7 +180,7 @@ const emailColumn = {
   },
   queryFormConfig: {
     name: "email",
-    label: "Email",
+    label: "email",
     width: "s",
     rules: [{ type: "email" }],
     transformer: "ilike",
@@ -216,7 +192,7 @@ const emailColumn = {
 
 // Column configuration for "Mobile"
 const mobileColumn = {
-  title: "mobile",
+  title: translate("mobile"),
   dataIndex: "mobile",
   width: 120,
   order: 4,
@@ -228,8 +204,8 @@ const mobileColumn = {
     allowClear: true,
     rules: [
       { type: "string", required: true },
-      mobileNumberRegex,
-      ({}) => ({
+      { pattern: phoneRegex, message: "mobile_is_not_valid" },
+      ({ }) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
           return entityExistenceValidator("user-mobile-validation-c-1", {
@@ -250,7 +226,7 @@ const mobileColumn = {
     allowClear: true,
     rules: [
       { type: "string", required: true },
-      mobileNumberRegex,
+      { pattern: phoneRegex, message: "mobile_is_not_valid" },
       ({ getFieldValue }) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
@@ -272,7 +248,7 @@ const mobileColumn = {
     name: "mobile",
     label: "Mobile",
     width: "s",
-    rules: [{ type: "string" }, mobileNumberRegex],
+    rules: [{ type: "string" }],
     transformer: "ilike",
     input: {
       type: "Text",
@@ -282,7 +258,7 @@ const mobileColumn = {
 
 // Column configuration for "Is Active"
 const isActiveColumn = {
-  title: "active",
+  title: translate("active"),
   dataIndex: "isActive",
   width: 80,
   align: "center",
@@ -296,7 +272,7 @@ const isActiveColumn = {
   },
   createFormConfig: {
     name: "isActive",
-    label: "Active",
+    label: "active",
     access: { permission: /^user\.manage$/, ifNoAccess: "disable" },
     allowClear: false,
     rules: [],
@@ -310,7 +286,7 @@ const isActiveColumn = {
   },
   updateFormConfig: {
     name: "isActive",
-    label: "Active",
+    label: "active",
     access: { permission: /^user\.manage$/, ifNoAccess: "disable" },
     allowClear: false,
     rules: [],
@@ -324,7 +300,7 @@ const isActiveColumn = {
   },
   queryFormConfig: {
     name: "isActive",
-    label: "Active",
+    label: "active",
     width: 120,
     rules: [{ type: "boolean" }],
     input: {
@@ -338,7 +314,7 @@ const isActiveColumn = {
 };
 
 const rolesColumns = {
-  title: "Roles",
+  title: translate('roles'),
   dataIndex: "roles",
   copyable: true,
   width: 100, // Updated width
@@ -377,7 +353,7 @@ const rolesColumns = {
 };
 
 const additionalPrivilegesColumn = {
-  title: "Additional Access",
+  title: translate("additional_access"),
   dataIndex: "additionalPrivileges",
   copyable: true,
   width: 180, // Updated width
@@ -418,7 +394,7 @@ const additionalPrivilegesColumn = {
 };
 
 const restrictedPrivilegesColumn = {
-  title: "Restricted Access",
+  title: translate("restricted_access"),
   dataIndex: "restrictedPrivileges",
   copyable: true,
   width: 180, // Updated width
@@ -459,7 +435,7 @@ const restrictedPrivilegesColumn = {
 };
 
 const passwordColumn = {
-  title: "Password",
+  title: translate("password"),
   key: "password",
   width: 180, // Updated width
   align: "center",

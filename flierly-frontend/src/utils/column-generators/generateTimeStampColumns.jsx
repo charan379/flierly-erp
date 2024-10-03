@@ -1,6 +1,8 @@
+import translate from "@/features/Language/utility/translate";
+
 // Timestamp columns definition
 const createdAtColumn = {
-  title: "Created",
+  title: translate("created_at"),
   dataIndex: "createdAt",
   width: 10,
   order: 98,
@@ -19,7 +21,7 @@ const createdAtColumn = {
 };
 
 const updatedAtColumn = {
-  title: "Updated",
+  title: translate("updated_at"),
   dataIndex: "updatedAt",
   width: 10,
   order: 99,
@@ -38,7 +40,7 @@ const updatedAtColumn = {
 };
 
 const deletedAtColumn = {
-  title: "Deleted",
+  title: translate("deleted_at"),
   dataIndex: "deletedAt",
   width: 10,
   order: 100,
