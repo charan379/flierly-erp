@@ -139,6 +139,7 @@ const gstRegistrationDateColumn = {
     label: "gst_registration_date",
     hasFeedback: true,
     allowClear: true,
+    width: "100%",
     input: {
       type: "DatePicker",
     },
