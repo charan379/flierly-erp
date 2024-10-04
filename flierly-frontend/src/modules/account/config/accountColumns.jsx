@@ -16,18 +16,6 @@ const fetchAccountTypesAsOptions = (value) => {
   })
 };
 
-const fetchAccountSubtypesAsOptions = (value, accTypeId) => {
-  let filters = {};
-  if (value) {
-    filters = { name: { $ilike: `%${value}%` }, accountType: accTypeId };
-  }
-  return fetchEntityRowsAsOptions("account-subtype", filters, 10, (accountSubtypes) => {
-    return accountSubtypes.map((acSubtype) => {
-      return { label: acSubtype.name, value: acSubtype.id }
-    })
-  })
-};
-
 // Options for active status
 const statusOptions = [
   { label: "Active", value: true },
@@ -149,7 +137,7 @@ const accountType = {
   title: translate("account_type"),
   dataIndex: "accountType",
   copyable: false,
-  width: 7,
+  width: 150,
   sorter: true,
   order: 3,
   createFormConfig: {
@@ -205,7 +193,7 @@ const accountSubtype = {
   title: translate("account_subtype"),
   dataIndex: "accountSubtype",
   copyable: false,
-  width: 7,
+  width: 150,
   sorter: true,
   order: 4,
   createFormConfig: {
@@ -219,7 +207,7 @@ const accountSubtype = {
       type: "SelectRemoteOptions",
       select: {
         mode: "single",
-        asyncOptionsFetcher: (value) => fetchAccountSubtypesAsOptions(value),
+        // asyncOptionsFetcher: (value) => fetchAccountSubtypesAsOptions(value, formInstance),
         debounceTimeout: 300,
       },
     },
@@ -235,7 +223,7 @@ const accountSubtype = {
       type: "SelectRemoteOptions",
       select: {
         mode: "single",
-        asyncOptionsFetcher: (value) => fetchAccountSubtypesAsOptions(value),
+        // asyncOptionsFetcher: (value) => fetchAccountSubtypesAsOptions(value, formInstance),
         debounceTimeout: 300,
       },
     },
@@ -249,7 +237,7 @@ const accountSubtype = {
       type: "SelectRemoteOptions",
       select: {
         mode: "multiple",
-        asyncOptionsFetcher: (value) => fetchAccountSubtypesAsOptions(value),
+        // asyncOptionsFetcher: (value) => fetchAccountSubtypesAsOptions(value, formInstance),
         debounceTimeout: 300,
       },
     },
@@ -262,7 +250,7 @@ const registeredPhoneColumn = {
   dataIndex: "registeredPhone",
   width: 180,
   sorter: true,
-  order: 3,
+  order: 5,
   createFormConfig: {
     name: "registeredPhone",
     label: "registered_phone",
@@ -328,7 +316,7 @@ const alternatePhoneColumn = {
   dataIndex: "alternatePhone",
   width: 180,
   sorter: true,
-  order: 4,
+  order: 6,
   createFormConfig: {
     name: "alternatePhone",
     label: "alternate_phone",
@@ -367,7 +355,7 @@ const emailColumn = {
   dataIndex: "email",
   width: 180,
   sorter: true,
-  order: 5,
+  order: 7,
   createFormConfig: {
     name: "email",
     label: "email",
@@ -433,7 +421,7 @@ const isActiveColumn = {
   dataIndex: "isActive",
   width: 80,
   align: "center",
-  order: 6,
+  order: 8,
   render: (text) => {
     return text === false ? (
       <Tag color="red">Inactive</Tag>
@@ -488,7 +476,7 @@ const isVipColumn = {
   dataIndex: "isVip",
   width: 80,
   align: "center",
-  order: 7,
+  order: 9,
   render: (text) => {
     return text === false ? (
       <Tag color="red">No</Tag>
@@ -531,7 +519,7 @@ const isKeyColumn = {
   dataIndex: "isKey",
   width: 90,
   align: "center",
-  order: 8,
+  order: 10,
   render: (text) => {
     return text === false ? (
       <Tag color="red">No</Tag>
@@ -582,6 +570,7 @@ const accountColumns = [
   nameColumn,
   isActiveColumn,
   accountType,
+  accountSubtype,
   registeredPhoneColumn,
   alternatePhoneColumn,
   emailColumn,

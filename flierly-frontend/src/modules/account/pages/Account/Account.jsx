@@ -3,7 +3,7 @@ import AccountLayout from '../../layout/AccountLayout'
 import CrudTableContextProvider from '@/features/CrudTable/components/CrudTableContextProvider'
 import accountColumns from '../../config/accountColumns'
 import { CrudTable } from '@/features/CrudTable'
-import FormFields from '@/components/FormFields'
+import AccountFormFields from '../../components/AccountFormFields'
 
 const Account = () => {
     return (
@@ -16,9 +16,9 @@ const Account = () => {
                     tableKey={"account-table"}
                     rowKey="id"
                     rowSelectionColumnWidth="30px"
-                    searchFormFields={<FormFields columns={accountColumns} configKey={"queryFormConfig"} />}
-                    createFormFields={<FormFields columns={accountColumns} configKey={"createFormConfig"} />}
-                    updateFormFields={<FormFields columns={accountColumns} configKey={"updateFormConfig"} />}
+                    searchFormFields={<AccountFormFields columns={accountColumns} configKey={"queryFormConfig"} />}
+                    createFormFields={<AccountFormFields columns={accountColumns} configKey={"createFormConfig"} />}
+                    updateFormFields={<AccountFormFields columns={accountColumns} configKey={"updateFormConfig"} />}
                 />
             </CrudTableContextProvider>
         </AccountLayout>
