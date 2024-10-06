@@ -56,7 +56,7 @@ export class Account {
     @JoinColumn({ name: 'parent_id' })
     parent: Account;
 
-    @OneToOne(() => Address, { eager: true, nullable: false })
+    @OneToOne(() => Address, { eager: true, nullable: true })
     @JoinColumn({ name: 'primary_address_id' })
     primaryAddress: Address;
 

@@ -1,10 +1,24 @@
 import { message, Tag } from "antd";
 import generateTimeStampColumns from "@/utils/column-generators/generateTimeStampColumns";
 import translate from "@/features/Language/utility/translate";
+import fetchEntityRowsAsOptions from "@/features/SelectRemoteOptions/utils/fetchEntityRowsAsOptions";
 
 // Regex patterns for validation
 const pincodeRegex = /^\d{6}$/;
 const contactNumberRegex = /^\+\d{1,3}[\s][6-9]\d{9}$/;
+
+// fetch accounts
+const fetchAccountsAsOptions = (value) => {
+  let filters = {};
+  if (value) {
+    filters = { name: { $ilike: `%${value}%` } };
+  }
+  return fetchEntityRowsAsOptions("account", filters, 10, (accounts) => {
+    return accounts.map((account) => {
+      return { label: account.name, value: account.id };
+    });
+  });
+};
 
 // Column configuration for "ID"
 const idColumn = {
@@ -56,7 +70,11 @@ const isActiveColumn = {
   sorter: true,
   order: 2,
   render: (text) => {
-    return text ? <Tag color="green">Active</Tag> : <Tag color="red">Inactive</Tag>;
+    return text ? (
+      <Tag color="green">Active</Tag>
+    ) : (
+      <Tag color="red">Inactive</Tag>
+    );
   },
   createFormConfig: {
     name: "isActive",
@@ -99,7 +117,9 @@ const line1Column = {
     label: "address_line_1",
     hasFeedback: true,
     allowClear: true,
-    rules: [{ required: true, message: translate("address_line_1_is_required") }],
+    rules: [
+      { required: true, message: translate("address_line_1_is_required") },
+    ],
     input: {
       type: "Text",
     },
@@ -109,7 +129,9 @@ const line1Column = {
     label: "address_line_1",
     hasFeedback: true,
     allowClear: true,
-    rules: [{ required: true, message: translate("address_line_1_is_required") }],
+    rules: [
+      { required: true, message: translate("address_line_1_is_required") },
+    ],
     input: {
       type: "Text",
     },
@@ -128,7 +150,9 @@ const line2Column = {
     label: "address_line_2",
     hasFeedback: true,
     allowClear: true,
-    rules: [{ required: true, message: translate("address_line_2_is_required") }],
+    rules: [
+      { required: true, message: translate("address_line_2_is_required") },
+    ],
     input: {
       type: "Text",
     },
@@ -147,7 +171,7 @@ const line2Column = {
 
 // Column configuration for "Address Line 3"
 const line3Column = {
-  title: translate('address_line_3'),
+  title: translate("address_line_3"),
   dataIndex: "line3",
   width: 150,
   sorter: true,
@@ -406,7 +430,11 @@ const contactNameColumn = {
     allowClear: true,
     rules: [
       { required: true, message: translate("contact_name_is_required") },
-      { min: 5, max: 90, message: translate("contact_name_must_be_between_5_and_90_characters") },
+      {
+        min: 5,
+        max: 90,
+        message: translate("contact_name_must_be_between_5_and_90_characters"),
+      },
     ],
     input: {
       type: "Text",
@@ -419,7 +447,11 @@ const contactNameColumn = {
     allowClear: true,
     rules: [
       { required: true, message: translate("contact_name_is_required") },
-      { min: 5, max: 90, message: translate("contact_name_must_be_between_5_and_90_characters") },
+      {
+        min: 5,
+        max: 90,
+        message: translate("contact_name_must_be_between_5_and_90_characters"),
+      },
     ],
     input: {
       type: "Text",
@@ -567,6 +599,62 @@ const longitudeColumn = {
   },
 };
 
+// Column configuration for "Account"
+const account = {
+  title: translate("account"),
+  dataIndex: "account",
+  copyable: false,
+  width: 100,
+  sorter: true,
+  order: 16,
+  hidden: true,
+  createFormConfig: {
+    name: "account",
+    label: "account",
+    allowClear: false,
+    hasFeedback: false,
+    access: { permission: /^address\.manage$/, ifNoAccess: "disable" },
+    rules: [{ required: true }],
+    input: {
+      type: "SelectRemoteOptions",
+      select: {
+        mode: "single",
+        asyncOptionsFetcher: fetchAccountsAsOptions,
+        debounceTimeout: 500,
+      },
+    },
+  },
+  updateFormConfig: {
+    name: "account",
+    label: "account",
+    allowClear: false,
+    hasFeedback: false,
+    access: { permission: /^address\.manage$/, ifNoAccess: "disable" },
+    rules: [{ required: true }],
+    input: {
+      type: "SelectRemoteOptions",
+      select: {
+        mode: "single",
+        asyncOptionsFetcher: fetchAccountsAsOptions,
+        debounceTimeout: 500,
+      },
+    },
+  },
+  queryFormConfig: {
+    name: "account",
+    label: "account",
+    rules: [],
+    input: {
+      type: "SelectRemoteOptions",
+      select: {
+        mode: "single",
+        asyncOptionsFetcher: fetchAccountsAsOptions,
+        debounceTimeout: 500,
+      },
+    },
+  },
+};
+
 // Timestamps
 const timestampColumns = generateTimeStampColumns().map((timeStamp) => {
   return {
@@ -593,6 +681,7 @@ const addressColumns = [
   addressInstructionsColumn,
   latitudeColumn,
   longitudeColumn,
+  account,
   ...timestampColumns,
 ];
 

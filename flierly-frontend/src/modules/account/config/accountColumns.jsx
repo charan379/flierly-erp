@@ -452,6 +452,16 @@ const isKeyColumn = {
   },
 };
 
+// Column configuration for "Account Type"
+const primaryAddress = {
+  title: translate("primary_address"),
+  dataIndex: "primaryAddress",
+  copyable: false,
+  width: 150,
+  sorter: true,
+  order: 6,
+}
+
 // Timestamps
 const timestampColumns = generateTimeStampColumns().map((timeStamp) => {
   return {
@@ -467,6 +477,7 @@ const accountColumns = [
   isActiveColumn,
   accountType,
   accountSubtype,
+  primaryAddress,
   registeredPhoneColumn,
   alternatePhoneColumn,
   emailColumn,

@@ -17,12 +17,14 @@ const SelectRemoteOptions = ({
       fetchRef.current += 1;
       const fetchId = fetchRef.current;
       setFetching(true);
-      asyncOptionsFetcher(value).then((newOptions) => {
-        if (fetchId !== fetchRef.current) return;
-        setOptions(newOptions);
-      }).finally(() => {
-        setFetching(false);
-      })
+      asyncOptionsFetcher(value)
+        .then((newOptions) => {
+          if (fetchId !== fetchRef.current) return;
+          setOptions(newOptions);
+        })
+        .finally(() => {
+          setFetching(false);
+        });
     };
     return debounce(loadOptions, debounceTimeout);
   }, [asyncOptionsFetcher, debounceTimeout]);
@@ -33,10 +35,12 @@ const SelectRemoteOptions = ({
       debounceFetcher("");
     }
   }, [debounceFetcher]);
-  
+
   return (
     <Select
       filterOption={false}
+      popupClassName="select-remote-options"
+      getPopupContainer={(props) => props.parentNode}
       showSearch
       onSearch={debounceFetcher}
       onFocus={() => {
@@ -51,7 +55,7 @@ const SelectRemoteOptions = ({
       }}
       style={{ width: props.width ?? "100%" }}
       notFoundContent={<Empty />}
-      maxTagCount='responsive'
+      maxTagCount="responsive"
       {...props}
     />
   );
