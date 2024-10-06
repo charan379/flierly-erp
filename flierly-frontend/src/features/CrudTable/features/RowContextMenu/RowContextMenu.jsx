@@ -112,7 +112,8 @@ const RowContextMenu = ({
           });
           break;
         case "edit":
-          crudTableContextHandler.updateForm.open({ data: record, id: record?.id })
+          crudTableContextHandler.updateForm.open({ data: record, id: record?.id });
+          close();
           break;
         case "delete":
           result = await crudService.delete({
