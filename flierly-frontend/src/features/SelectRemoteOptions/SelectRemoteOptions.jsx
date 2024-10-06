@@ -1,6 +1,6 @@
 import debounce from "@/utils/debounce";
 import { Empty, Flex, Select, Spin } from "antd";
-import React, { useMemo, useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 
 /**
  * SelectRemoteOptions Component
@@ -20,32 +20,41 @@ const SelectRemoteOptions = ({
   const [fetching, setFetching] = useState(false); // State for loading indicator
   const [options, setOptions] = useState([]);      // State for storing fetched options
   const fetchRef = useRef(0);                      // Reference to track async requests
+  const loadingTimeoutRef = useRef(null);          // Reference to manage loading timeout
 
-  // Debounce the fetcher function to delay API calls and avoid over-fetching
-  const debounceFetcher = useMemo(() => {
-    const loadOptions = (value) => {
-      fetchRef.current += 1;                       // Increment fetch reference for uniqueness
-      const fetchId = fetchRef.current;            // Capture current fetch reference
-      setFetching(true);                           // Set loading state to true
+  // Function to load options based on the input value
+  const loadOptions = (value) => {
+    fetchRef.current += 1;                        // Increment fetch reference for uniqueness
+    const fetchId = fetchRef.current;             // Capture current fetch reference
 
-      asyncOptionsFetcher(value)
-        .then((newOptions) => {
-          if (fetchId !== fetchRef.current) return; // Ignore if it's an outdated fetch
-          setOptions(newOptions);                  // Set the new options if fetch is valid
-        })
-        .finally(() => {
-          setFetching(false);                      // Turn off loading state
-        });
-    };
-    return debounce(loadOptions, debounceTimeout);  // Debounced function to delay fetch
-  }, [asyncOptionsFetcher, debounceTimeout]);
+    // Start a timeout for 200ms to show the loader
+    loadingTimeoutRef.current = setTimeout(() => {
+      setFetching(true); // Show loader if fetching takes longer than 200ms
+    }, 50);
+
+    asyncOptionsFetcher(value)
+      .then((newOptions) => {
+        if (fetchId !== fetchRef.current) return; // Ignore if it's an outdated fetch
+        setOptions(newOptions);                   // Set the new options if fetch is valid
+      })
+      .finally(() => {
+        clearTimeout(loadingTimeoutRef.current);  // Clear the loading timeout
+        setFetching(false);                       // Hide loading state immediately after fetching
+      });
+  };
+
+  // Debounce the search input to delay API calls and avoid over-fetching
+  const debounceFetcher = debounce(loadOptions, debounceTimeout);
 
   // Initial fetch on component mount (or when no options are loaded)
   useEffect(() => {
     if (options.length === 0) {
-      debounceFetcher("");  // Fetch options with an empty search input initially
+      loadOptions("");  // Fetch options with an empty search input initially
     }
-  }, [debounceFetcher]);
+  }, [options.length]);
+
+  // Prepare options for dropdown, including loader if fetching
+  const displayedOptions = fetching ? [...options, { label: <Loader />, disabled: true }] : options;
 
   return (
     <Select
@@ -54,14 +63,16 @@ const SelectRemoteOptions = ({
       getPopupContainer={(triggerNode) => triggerNode.parentNode} // Ensure dropdown renders within parent
       showSearch                                 // Enable search functionality
       onSearch={debounceFetcher}                 // Trigger debounced fetch on search
-      onFocus={() => {                           // Fetch on focus if no options are loaded
-        if (options.length === 0) {
-          debounceFetcher("");
-        }
+      onFocus={() => {                           // Fetch on focus without debounce
+        loadOptions("");                          // Fetch options directly without debounce
       }}
-      options={options}                          // Options fetched from remote source
+      dropdownRender={(menu) => (
+        <div style={fetching ? { pointerEvents: "none", cursor: "not-allowed" } : {}}>
+          {menu}
+        </div>
+      )}
+      options={displayedOptions}                  // Options fetched from remote source
       loading={fetching}                         // Show loading indicator while fetching
-      dropdownRender={(menu) => (fetching ? <Loader /> : menu)} // Show loader or options
       style={{ width: props.width ?? "100%" }}   // Default width to 100% unless specified
       notFoundContent={<Empty />}                // Show empty content if no options are found
       maxTagCount="responsive"                   // Make tags responsive when multi-selecting
@@ -77,7 +88,7 @@ const SelectRemoteOptions = ({
  */
 const Loader = () => (
   <Flex align="center" justify="center">
-    <Spin size="small" />                         // Ant Design spinner for loading indicator
+    <Spin size="small" />
   </Flex>
 );
 
