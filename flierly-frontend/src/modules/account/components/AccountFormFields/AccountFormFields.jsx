@@ -90,7 +90,7 @@ const AccountFormFields = ({ columns = [], configKey, formInstance }) => {
         />
       </ProForm.Item>
       {/* primary address */}
-      {configKey !== "updateFormConfig" ? (
+      {configKey === "queryFormConfig" ? (
         ""
       ) : (
         <ProForm.Item

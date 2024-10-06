@@ -1,7 +1,10 @@
 import fetchEntityRowsAsOptions from "@/features/SelectRemoteOptions/utils/fetchEntityRowsAsOptions";
 
 const fetchAccountAddress = (value, accountId) => {
-  let filters = { contactName: { $ilike: `%${value}%` }, account: accountId };
+  let filters = {
+    contactName: { $ilike: `%${value}%` },
+    account: accountId ? accountId : { $isNull: "" },
+  };
   return fetchEntityRowsAsOptions("address", filters, 10, (accountAddress) => {
     return accountAddress.map((address) => {
       return {

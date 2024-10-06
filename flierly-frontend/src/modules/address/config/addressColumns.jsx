@@ -614,7 +614,7 @@ const account = {
     allowClear: false,
     hasFeedback: false,
     access: { permission: /^address\.manage$/, ifNoAccess: "disable" },
-    rules: [{ required: true }],
+    rules: [{ required: false }],
     input: {
       type: "SelectRemoteOptions",
       select: {
@@ -630,7 +630,7 @@ const account = {
     allowClear: false,
     hasFeedback: false,
     access: { permission: /^address\.manage$/, ifNoAccess: "disable" },
-    rules: [{ required: true }],
+    rules: [{ required: false }],
     input: {
       type: "SelectRemoteOptions",
       select: {
