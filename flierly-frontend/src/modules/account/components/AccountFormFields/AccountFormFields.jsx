@@ -13,15 +13,14 @@ import queryTransformers from "@/utils/queryTransformers";
 import fetchAccountAddress from "../../utils/fetchAccountAddress";
 
 const AccountFormFields = ({ columns = [], configKey, formInstance }) => {
-  const { langDirection, translate } = useLocale();
-  const { hasPermission } = useAuth();
+  const { langDirection, translate } = useLocale(); // Localization hooks
+  const { hasPermission } = useAuth();               // Permission hooks
 
-  const [accountTypeId, setAccountTypeId] = useState(undefined);
+  const [accountTypeId, setAccountTypeId] = useState(undefined); // State to hold selected account type
 
+  // Sort and separate columns based on their order
   const sortedColumns = columns.sort((c1, c2) => c1?.order - c2?.order);
-
   const columnsTillActype = sortedColumns.filter((col) => col.order <= 2);
-
   const columnsAfterActype = sortedColumns.filter((col) => col.order >= 5);
 
   return (
@@ -32,24 +31,21 @@ const AccountFormFields = ({ columns = [], configKey, formInstance }) => {
       align="flex-start"
       justify="flex-start"
     >
-      {/*  */}
-      {columnsTillActype.map((column) => {
-        if (hasOwnProperty(column, configKey)) {
-          return <FormField key={`${uniqueId()}`} config={column[configKey]} />;
-        } else return;
-      })}
-      {/* accountType */}
+      {/* Render form fields before account type selection */}
+      {columnsTillActype.map((column) => (
+        hasOwnProperty(column, configKey) ? (
+          <FormField key={uniqueId()} config={column[configKey]} />
+        ) : null
+      ))}
+
+      {/* Account Type Selection */}
       <ProForm.Item
-        key={"account_type"}
+        key="account_type"
         name="accountType"
         label={translate("account_type")}
         required={configKey !== "queryFormConfig"}
         style={{ width: "100%" }}
-        transform={
-          configKey === "queryFormConfig"
-            ? queryTransformers.inArray
-            : undefined
-        }
+        transform={configKey === "queryFormConfig" ? queryTransformers.inArray : undefined}
       >
         <SelectRemoteOptions
           debounceTimeout={500}
@@ -59,45 +55,37 @@ const AccountFormFields = ({ columns = [], configKey, formInstance }) => {
           disabled={!hasPermission(/^account\.create$/)}
           mode={configKey === "queryFormConfig" ? "multiple" : "single"}
           onChange={(value) => {
-            setAccountTypeId(value);
-            formInstance.resetFields(["accountSubtype"]);
+            setAccountTypeId(value); // Update account type state
+            formInstance.setFieldValue("accountSubtype", null); // Reset account subtype
           }}
         />
       </ProForm.Item>
-      {/* accountSubtype */}
+
+      {/* Account Subtype Selection */}
       <ProForm.Item
-        key={"account_subtype"}
+        key="account_subtype"
         name="accountSubtype"
         label={translate("account_subtype")}
         required={configKey !== "queryFormConfig"}
         style={{ width: "100%" }}
-        transform={
-          configKey === "queryFormConfig"
-            ? queryTransformers.inArray
-            : undefined
-        }
+        transform={configKey === "queryFormConfig" ? queryTransformers.inArray : undefined}
       >
         <SelectRemoteOptions
           debounceTimeout={500}
-          asyncOptionsFetcher={(value) =>
-            fetchAccountSubtypesAsOptions(value, accountTypeId)
-          }
+          asyncOptionsFetcher={(value) => fetchAccountSubtypesAsOptions(value, accountTypeId)}
           placeholder="Please enter"
-          disabled={
-            accountTypeId === undefined || !hasPermission(/^account\.create$/)
-          }
+          disabled={accountTypeId === undefined || !hasPermission(/^account\.create$/)}
           mode={configKey === "queryFormConfig" ? "multiple" : "single"}
         />
       </ProForm.Item>
-      {/* primary address */}
-      {configKey === "queryFormConfig" ? (
-        ""
-      ) : (
+
+      {/* Primary Address Selection */}
+      {configKey !== "queryFormConfig" && (
         <ProForm.Item
-          key={"primary_address"}
+          key="primary_address"
           name="primaryAddress"
           label={translate("primary_address")}
-          required={true}
+          required
           style={{ width: "100%" }}
         >
           <SelectRemoteOptions
@@ -105,16 +93,17 @@ const AccountFormFields = ({ columns = [], configKey, formInstance }) => {
             asyncOptionsFetcher={(value) => fetchAccountAddress(value, formInstance.getFieldValue("id"))}
             placeholder="Please enter"
             disabled={false}
-            mode={"single"}
+            mode="single"
           />
         </ProForm.Item>
       )}
-      {/*  */}
-      {columnsAfterActype.map((column) => {
-        if (hasOwnProperty(column, configKey)) {
-          return <FormField key={`${uniqueId()}`} config={column[configKey]} />;
-        } else return;
-      })}
+
+      {/* Render form fields after account type selection */}
+      {columnsAfterActype.map((column) => (
+        hasOwnProperty(column, configKey) ? (
+          <FormField key={uniqueId()} config={column[configKey]} />
+        ) : null
+      ))}
     </Flex>
   );
 };
