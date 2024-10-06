@@ -1,6 +1,9 @@
 import debounce from "@/utils/debounce";
 import { Empty, Flex, Select, Spin } from "antd";
 import React, { useRef, useState, useEffect } from "react";
+import Create from "./forms/Create";
+import accountSubtypeColumns from "@/modules/account/config/accountSubtypeColumns";
+import FormFields from "@/components/FormFields";
 
 /**
  * SelectRemoteOptions Component
@@ -19,27 +22,36 @@ const SelectRemoteOptions = ({
 }) => {
   const [fetching, setFetching] = useState(false); // State for loading indicator
   const [options, setOptions] = useState([]);      // State for storing fetched options
+  const [error, setError] = useState(false);       // State for error handling
   const fetchRef = useRef(0);                      // Reference to track async requests
   const loadingTimeoutRef = useRef(null);          // Reference to manage loading timeout
 
   // Function to load options based on the input value
   const loadOptions = (value) => {
+
     fetchRef.current += 1;                        // Increment fetch reference for uniqueness
     const fetchId = fetchRef.current;             // Capture current fetch reference
 
-    // Start a timeout for 200ms to show the loader
+    // Show the loading spinner if fetching takes more than 200ms
     loadingTimeoutRef.current = setTimeout(() => {
-      setFetching(true); // Show loader if fetching takes longer than 200ms
-    }, 50);
+      setFetching(true);
+    }, 200);
 
+    setError(false); // Reset error state before fetching
+    
     asyncOptionsFetcher(value)
       .then((newOptions) => {
-        if (fetchId !== fetchRef.current) return; // Ignore if it's an outdated fetch
-        setOptions(newOptions);                   // Set the new options if fetch is valid
+        // Ensure we are still handling the latest request
+        if (fetchId !== fetchRef.current) return;
+
+        setOptions(newOptions);                   // Update options state
+      })
+      .catch(() => {
+        setError(true); // Handle fetch errors
       })
       .finally(() => {
         clearTimeout(loadingTimeoutRef.current);  // Clear the loading timeout
-        setFetching(false);                       // Hide loading state immediately after fetching
+        setFetching(false);                       // Hide loading state
       });
   };
 
@@ -48,13 +60,22 @@ const SelectRemoteOptions = ({
 
   // Initial fetch on component mount (or when no options are loaded)
   useEffect(() => {
-    if (options.length === 0) {
-      loadOptions("");  // Fetch options with an empty search input initially
-    }
-  }, [options.length]);
+    loadOptions("");  // Fetch options with an empty search input initially
+
+    return () => {
+      // Clean up timeouts and ensure no outdated requests
+      clearTimeout(loadingTimeoutRef.current);
+      fetchRef.current += 1;
+    };
+  }, []);
+
+  // Fetch on focus without debounce
+  const handleFocus = () => {
+    loadOptions(""); // Fetch options directly without debounce on focus
+  };
 
   // Prepare options for dropdown, including loader if fetching
-  const displayedOptions = fetching ? [...options, { label: <Loader />, disabled: true }] : options;
+  const displayedOptions = fetching ? [{ label: <Loader />, disabled: true }, ...options] : options;
 
   return (
     <Select
@@ -63,9 +84,7 @@ const SelectRemoteOptions = ({
       getPopupContainer={(triggerNode) => triggerNode.parentNode} // Ensure dropdown renders within parent
       showSearch                                 // Enable search functionality
       onSearch={debounceFetcher}                 // Trigger debounced fetch on search
-      onFocus={() => {                           // Fetch on focus without debounce
-        loadOptions("");                          // Fetch options directly without debounce
-      }}
+      onFocus={handleFocus}                      // Trigger immediate fetch on focus
       dropdownRender={(menu) => (
         <div style={fetching ? { pointerEvents: "none", cursor: "not-allowed" } : {}}>
           {menu}
@@ -74,7 +93,20 @@ const SelectRemoteOptions = ({
       options={displayedOptions}                  // Options fetched from remote source
       loading={fetching}                         // Show loading indicator while fetching
       style={{ width: props.width ?? "100%" }}   // Default width to 100% unless specified
-      notFoundContent={<Empty />}                // Show empty content if no options are found
+      notFoundContent={
+        error ? <Empty /> : (
+          <Create
+            entity="account-subtype"
+            formFields={
+              <FormFields
+                columns={accountSubtypeColumns}
+                configKey={"createFormConfig"}
+              />
+            }
+            initialValues={{ accountType: 2 }}
+          />
+        )
+      } // Show empty content, or add options button if no options found
       maxTagCount="responsive"                   // Make tags responsive when multi-selecting
       {...props}                                 // Spread any other props to Select component
     />
