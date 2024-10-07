@@ -1,8 +1,5 @@
 import { serverConfig } from "@/config/serverConfig";
-import {
-  getToken,
-  listenToAuthChanges,
-} from "@/modules/auth/utility/authState";
+import { getToken, listenToAuthChanges } from "@/modules/auth/utility/authState";
 import handleResponse from "@/utils/handlers/handleResponse";
 import axios from "axios";
 
@@ -30,7 +27,6 @@ const selectRemoteOptionsService = {
       { filters, limit },
       { signal } // Pass the signal to the request
     );
-
     return handleResponse({ promise });
   },
 };

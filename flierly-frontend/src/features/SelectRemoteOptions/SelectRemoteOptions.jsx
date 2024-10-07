@@ -19,6 +19,7 @@ const SelectRemoteOptions = ({
 }) => {
   const [fetching, setFetching] = useState(false); // State for loading indicator
   const [options, setOptions] = useState([]);      // State for storing fetched options
+  const [abortController, setAbortController] = useState(null); // Manage AbortController for canceling requests
   const fetchRef = useRef(0);                      // Reference to track async requests
   const loadingTimeoutRef = useRef(null);          // Reference to manage loading timeout
 
@@ -27,12 +28,20 @@ const SelectRemoteOptions = ({
     fetchRef.current += 1;                        // Increment fetch reference for uniqueness
     const fetchId = fetchRef.current;             // Capture current fetch reference
 
+    // Cancel any previous requests when starting a new one
+    if (abortController) {
+      abortController.abort();  // Cancel previous request
+    }
+
+    const newAbortController = new AbortController();
+    setAbortController(newAbortController);
+
     // Show the loading spinner if fetching takes more than 200ms
     loadingTimeoutRef.current = setTimeout(() => {
       setFetching(true);
     }, 200);
 
-    asyncOptionsFetcher(value)
+    asyncOptionsFetcher(value, newAbortController.signal)
       .then((newOptions) => {
         // Ensure we are still handling the latest request
         if (fetchId !== fetchRef.current) return;
@@ -58,6 +67,9 @@ const SelectRemoteOptions = ({
     return () => {
       // Clean up timeouts
       clearTimeout(loadingTimeoutRef.current);
+      if (abortController) {
+        abortController.abort(); // Cancel any ongoing request when component unmounts
+      }
     };
   }, []);
 
