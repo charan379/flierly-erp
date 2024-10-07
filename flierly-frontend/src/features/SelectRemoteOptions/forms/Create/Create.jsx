@@ -1,13 +1,23 @@
 import useLocale from "@/features/Language/hooks/useLocale";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
 import crudService from "@/service/crud.service";
 import { PlusOutlined } from "@ant-design/icons";
 import { DrawerForm } from "@ant-design/pro-components";
-import { Button, Form } from "antd";
+import { Button, Empty, Form } from "antd";
 import React from "react";
 
-
-const Create = ({ entity, formFields, title = "add", initialValues }) => {
+const Create = ({
+  entity,
+  formFields,
+  title = "add",
+  initialValues,
+  permissionCode,
+}) => {
   if (!formFields) return;
+
+  const { hasPermission } = useAuth();
+
+  if (permissionCode && !hasPermission(permissionCode)) return <Empty />;
 
   const { translate } = useLocale();
 
@@ -15,6 +25,7 @@ const Create = ({ entity, formFields, title = "add", initialValues }) => {
 
   const onFinish = async (values) => {
     const response = await crudService.create({ entity, data: values });
+    if(response?.success) return true;
   };
 
   return (
