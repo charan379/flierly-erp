@@ -20,6 +20,7 @@ const Create = ({ entity, formFields, title = "add", initialValues }) => {
   return (
     <DrawerForm
       form={formInstance}
+      initialValues={initialValues}
       title={title}
       grid={true}
       onFinish={onFinish}
