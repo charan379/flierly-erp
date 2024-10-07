@@ -91,6 +91,19 @@ const handleResponseError = (response) => {
 };
 
 /**
+ * Handles request abortion cases.
+ *
+ * @returns {Object} - The abort error state.
+ */
+const handleAbortError = () => {
+  return {
+    success: false,
+    result: null,
+    message: 'Request was aborted.',
+  };
+};
+
+/**
  * Handles errors and displays appropriate notifications.
  *
  * @param {Object} error - The error object from the failed request.
@@ -102,7 +115,12 @@ const errorHandler = (error) => {
     return handleOfflineError();
   }
 
-  const { response } = error;
+  const { response, code } = error;
+
+  // Handle request abortion
+  if (code === 'ERR_CANCELED') {
+    return handleAbortError();
+  }
 
   // Handle case when there is no response from the server
   if (!response) {
