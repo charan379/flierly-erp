@@ -15,13 +15,21 @@ const api = axios.create({
 
 const selectRemoteOptionsService = {
   // Fetch remote options for entities
-  entities: async ({ keyword, limit = 50 }) => {
-    const promise = api.get(`entities`, { params: { keyword, limit } });
+  entities: async ({ keyword, limit = 50, signal }) => {
+    const promise = api.get(`entities`, {
+      params: { keyword, limit },
+      signal, // Pass the signal to the request
+    });
     return handleResponse({ promise });
   },
+
   // Fetch remote entity rows
-  entityRows: async ({ entity, filters, limit = 50 }) => {
-    const promise = api.post(`${entity}/search`, { filters, limit }, {});
+  entityRows: async ({ entity, filters, limit = 50, signal }) => {
+    const promise = api.post(
+      `${entity}/search`,
+      { filters, limit },
+      { signal } // Pass the signal to the request
+    );
 
     return handleResponse({ promise });
   },
