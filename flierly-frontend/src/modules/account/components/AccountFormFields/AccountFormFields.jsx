@@ -72,7 +72,7 @@ const AccountFormFields = ({ columns = [], configKey, formInstance }) => {
       >
         <SelectRemoteOptions
           debounceTimeout={500}
-          asyncOptionsFetcher={(value) => fetchAccountSubtypesAsOptions(value, accountTypeId)}
+          asyncOptionsFetcher={(value, signal) => fetchAccountSubtypesAsOptions(value, signal, accountTypeId)}
           placeholder="Please enter"
           disabled={accountTypeId === undefined || !hasPermission(/^account\.create$/)}
           mode={configKey === "queryFormConfig" ? "multiple" : "single"}
@@ -90,7 +90,7 @@ const AccountFormFields = ({ columns = [], configKey, formInstance }) => {
         >
           <SelectRemoteOptions
             debounceTimeout={500}
-            asyncOptionsFetcher={(value) => fetchAccountAddress(value, formInstance.getFieldValue("id"))}
+            asyncOptionsFetcher={(value, signal) => fetchAccountAddress(value,signal, formInstance.getFieldValue("id"))}
             placeholder="Please enter"
             disabled={false}
             mode="single"
