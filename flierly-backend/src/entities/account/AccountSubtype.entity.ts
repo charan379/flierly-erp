@@ -23,7 +23,7 @@ export class AccountSubtype {
     @Length(5, 30, { message: 'Account subtype name must be between 5 and 30 characters.' })  // Min 5, Max 30
     name: string;
 
-    @ManyToOne(() => AccountType, { eager: true, nullable: false })
+    @ManyToOne(() => AccountType, { eager: false, lazy: true, nullable: false })
     @JoinColumn({ name: 'account_type_id' })
     accountType: AccountType;
 
