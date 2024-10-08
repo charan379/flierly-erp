@@ -16,7 +16,7 @@ export class Stock {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Product)
+    @ManyToOne(() => Product, { eager: true })
     @JoinColumn({ name: "product_id" })
     product: Product;
 
