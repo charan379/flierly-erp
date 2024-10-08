@@ -68,7 +68,9 @@ export class Address {
     @IsNumber({}, { message: "Latitude must be a number." })
     @Column({
         nullable: true,
-        type: 'double precision',
+        type: 'decimal',
+        precision: 9,
+        scale: 6,
         name: 'latitude',
     })
     @IsOptional()
@@ -77,7 +79,9 @@ export class Address {
     @IsNumber({}, { message: "Longitude must be a number." })
     @Column({
         nullable: true,
-        type: 'double precision',
+        type: 'decimal',
+        precision: 9,
+        scale: 6,
         name: 'longitude',
     })
     @IsOptional()
