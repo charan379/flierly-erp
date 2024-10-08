@@ -2,7 +2,8 @@ import { Tag } from "antd";
 import entityExistenceValidator from "@/utils/validators/entityExistenceValidator";
 import generateTimeStampColumns from "@/utils/column-generators/generateTimeStampColumns";
 import translate from "@/features/Language/utility/translate";
-import fetchEntityRowsAsOptions from "@/features/SelectRemoteOptions/utils/fetchEntityRowsAsOptions";
+import fetchTaxIdentitiesAsOptions from "../utils/fetchTaxIdentitiesAsOptions";
+import fetchBranchesAsOptions from "../utils/fetchBranchesAsOptions";
 
 // Options for active status
 const statusOptions = [
@@ -497,6 +498,104 @@ const primaryAddress = {
   },
 };
 
+// Column configuration for "Tax Identification"
+const taxIdentityColumn = {
+  title: translate("tax_identity"),
+  dataIndex: "taxIdentity",
+  copyable: false,
+  width: 150,
+  sorter: true,
+  order: 7,
+  render: (value, record, index, action) => {
+    if (value && typeof value === "object") {
+      return value?.id;
+    } else {
+      return value;
+    }
+  },
+  createFormConfig: {
+    name: "taxIdentity",
+    label: "tax_identity",
+    allowClear: false,
+    hasFeedback: false,
+    access: { permission: /^account\.create$/, ifNoAccess: "disable" },
+    rules: [{ required: true }],
+    input: {
+      type: "SelectRemoteOptions",
+      select: {
+        mode: "single",
+        asyncOptionsFetcher: (value, signal) => fetchTaxIdentitiesAsOptions(value, signal),
+        debounceTimeout: 500,
+      },
+    },
+  },
+  updateFormConfig: {
+    name: "taxIdentity",
+    label: "tax_identity",
+    allowClear: false,
+    hasFeedback: false,
+    access: { permission: /^account\.update$/, ifNoAccess: "disable" },
+    rules: [{ required: true }],
+    input: {
+      type: "SelectRemoteOptions",
+      select: {
+        mode: "single",
+        asyncOptionsFetcher: (value, signal) => fetchTaxIdentitiesAsOptions(value, signal),
+        debounceTimeout: 500,
+      },
+    },
+  },
+};
+
+// Column configuration for "Branch"
+const branchColumn = {
+  title: translate("branch"),
+  dataIndex: "branch",
+  copyable: false,
+  width: 150,
+  sorter: true,
+  order: 8,
+  render: (value, record, index, action) => {
+    if (value && typeof value === "object") {
+      return value?.name;
+    } else {
+      return value;
+    }
+  },
+  createFormConfig: {
+    name: "branch",
+    label: "branch",
+    allowClear: false,
+    hasFeedback: false,
+    access: { permission: /^account\.create$/, ifNoAccess: "disable" },
+    rules: [{ required: true }],
+    input: {
+      type: "SelectRemoteOptions",
+      select: {
+        mode: "single",
+        asyncOptionsFetcher: (value, signal) => fetchBranchesAsOptions(value, signal),
+        debounceTimeout: 500,
+      },
+    },
+  },
+  updateFormConfig: {
+    name: "branch",
+    label: "branch",
+    allowClear: false,
+    hasFeedback: false,
+    access: { permission: /^account\.update$/, ifNoAccess: "disable" },
+    rules: [{ required: true }],
+    input: {
+      type: "SelectRemoteOptions",
+      select: {
+        mode: "single",
+        asyncOptionsFetcher: (value, signal) => fetchBranchesAsOptions(value, signal),
+        debounceTimeout: 500,
+      },
+    },
+  },
+};
+
 // Timestamps
 const timestampColumns = generateTimeStampColumns().map((timeStamp) => {
   return {
@@ -513,6 +612,8 @@ const accountColumns = [
   accountType,
   accountSubtype,
   primaryAddress,
+  taxIdentityColumn,
+  branchColumn,
   registeredPhoneColumn,
   alternatePhoneColumn,
   emailColumn,
