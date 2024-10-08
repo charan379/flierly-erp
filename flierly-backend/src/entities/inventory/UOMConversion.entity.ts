@@ -12,21 +12,21 @@ import {
 import { Product } from './Product.entity';
 import { UOM } from './UOM.entity';
 
-@Entity('product_uom_conversion')
+@Entity('uom_conversions')
 @Unique(['product', 'fromUom', 'toUom'])
-export class ProductUOMConversion {
+export class UOMConversion {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Product)
+    @ManyToOne(() => Product, { eager: true })
     @JoinColumn({ name: "product_id" })
     product: Product;
 
-    @ManyToOne(() => UOM)
+    @ManyToOne(() => UOM, { eager: true })
     @JoinColumn({ name: "from_uom_id" })
     fromUom: UOM;
 
-    @ManyToOne(() => UOM)
+    @ManyToOne(() => UOM, { eager: true })
     @JoinColumn({ name: "to_uom_id" })
     toUom: UOM;
 

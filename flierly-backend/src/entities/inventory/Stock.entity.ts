@@ -17,11 +17,11 @@ export class Stock {
     id: number;
 
     @ManyToOne(() => Product)
-    @JoinColumn({name: "product_id"})
+    @JoinColumn({ name: "product_id" })
     product: Product;
 
-    @ManyToOne(() => UOM)
-    @JoinColumn({name: "uom_id"})
+    @ManyToOne(() => UOM, { eager: true })
+    @JoinColumn({ name: "uom_id" })
     uom: UOM;
 
     @Column({ type: 'decimal', precision: 10, scale: 2 })
@@ -29,10 +29,10 @@ export class Stock {
 
     @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
     createdAt: Date;
-  
+
     @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
     updatedAt: Date;
-  
+
     @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz' })
     deletedAt: Date | null;
 
