@@ -17,10 +17,11 @@ const create = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Re
     }, {});
 
     const validatedRow: ObjectLiteral = await JoiSchemaValidator(generateJoiSchemaFromTypeORM(tableColumns), req.body, { abortEarly: false }, "dynamic-create");
-
+    
     const newRow = repo.create(validatedRow);
 
     const errors = await validate(newRow);
+
     if (errors.length > 0) {
         return res.status(400).json({ message: 'Validation failed', errors });
     };
