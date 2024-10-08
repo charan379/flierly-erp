@@ -49,7 +49,7 @@ export class Account {
     @IsNotEmpty({ message: 'Account email is required.' })
     email: string;
 
-    @ManyToOne(() => TaxIdentity, { eager: true, nullable: true })
+    @ManyToOne(() => TaxIdentity, { eager: true, nullable: false })
     @JoinColumn({ name: 'tax_identity_id' })
     taxIdentity: TaxIdentity;
 
@@ -57,11 +57,11 @@ export class Account {
     @JoinColumn({ name: 'parent_id' })
     parent: Account;
 
-    @OneToOne(() => Address, { eager: true, nullable: true })
+    @OneToOne(() => Address, { eager: true, nullable: false })
     @JoinColumn({ name: 'primary_address_id' })
     primaryAddress: Address;
 
-    @ManyToOne(() => Branch, { eager: true, nullable: true })
+    @ManyToOne(() => Branch, { eager: true, nullable: false })
     @JoinColumn({ name: 'branch_id' })
     branch: Branch;
 
