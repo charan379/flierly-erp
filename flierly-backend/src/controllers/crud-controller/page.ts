@@ -1,13 +1,13 @@
 import HttpCodes from "@/constants/httpCodes";
 import { AppDataSource } from "@/lib/app-data-source";
-import { applyFilters, applySort } from "@/utils/query-utils";
 import apiResponse from "@/utils/api/responseGenerator";
-import { pascalToSnakeCase } from "@/utils/case-converters";
 import JoiSchemaValidator from "@/utils/joi-object-validator/joiSchemaValidator";
 import pageResponseBuilder from "@/utils/page-response.builder";
 import { Request, Response } from "express";
 import Joi from "joi";
-import { EntityTarget, ObjectLiteral } from "typeorm";
+import { EntityTarget, FindManyOptions, IsNull, Not, ObjectLiteral } from "typeorm";
+import applyFindSort from "@/utils/query-utils/applyFindSort";
+import applyConditionForFind from "@/utils/query-utils/applyConditionForFind";
 
 
 interface PageRequestBody {
@@ -38,29 +38,27 @@ const page = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Resp
 
     const repo = AppDataSource.getRepository(entity);
 
-    // Create query builder for the entity
-    const queryBuilder = repo.createQueryBuilder(pascalToSnakeCase(entity.toString()));
-
-    // Apply filters to the query builder
-    applyFilters(queryBuilder, pascalToSnakeCase(entity.toString()), filters);
-
-    // Appy Sort Options
-    applySort(queryBuilder, sort);
+    // Initialize FindManyOptions
+    const findOptions: FindManyOptions<ObjectLiteral> = {
+        relations: autopopulateIds ? [] : [], // Load relations if required
+        where: {}, // Initialize where clause
+        order: applyFindSort(sort), // Initialize order clause
+        skip: (pagination.page - 1) * pagination.limit,
+        take: pagination.limit,
+        withDeleted: binMode
+    };
 
     if (binMode) {
-        queryBuilder.withDeleted();
-        queryBuilder.andWhere('deleted_at IS NOT NULL');
+        findOptions.where = { ...findOptions.where, deletedAt: Not(IsNull()) }
     }
 
-    if (autopopulateIds) {
-        queryBuilder.loadAllRelationIds();
-    }
-
-    // Apply pagination (skip and take for offset and limit)
-    queryBuilder.skip((pagination.page - 1) * pagination.limit).take(pagination.limit);
+    // Apply filters to where clause
+    Object.keys(filters).forEach((field) => {
+        findOptions.where = {...findOptions.where, ...applyConditionForFind(findOptions.where, field, filters[field])};
+    });
 
     // Get the paginated and filtered rows
-    const [results, total] = await queryBuilder.getManyAndCount();
+    const [results, total] = await repo.findAndCount(findOptions);
 
     const page: PageResult = await pageResponseBuilder(results, pagination.page, pagination.limit, total, sort);
 
