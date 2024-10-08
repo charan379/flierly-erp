@@ -35,7 +35,7 @@ const SelectRemoteOptions = ({
     const newAbortController = new AbortController();
     abortControllerRef.current = newAbortController;
 
-    // Set loading state after 200ms to avoid flashing
+    // Set loading state after 50ms to avoid flashing
     loadingTimeoutRef.current = setTimeout(() => setFetching(true), 50);
 
     asyncOptionsFetcher(value, newAbortController.signal)
@@ -54,7 +54,7 @@ const SelectRemoteOptions = ({
   // Debounced fetch for searching
   const debounceFetcher = debounce(loadOptions, debounceTimeout);
 
-  // Fetch options on mount (with empty search input) and on focus
+  // Fetch options on mount (with empty search input)
   useEffect(() => {
     loadOptions("");  // Fetch initial options
 
@@ -64,8 +64,10 @@ const SelectRemoteOptions = ({
     };
   }, []);
 
-  // Fetch options immediately on focus without debounce
-  const handleFocus = () => loadOptions("");
+  // Fetch options on every focus, regardless of whether it's refocused
+  const handleFocus = () => {
+    loadOptions("");  // Fetch options on focus
+  };
 
   // Prepare displayed options including loader if fetching
   const displayedOptions = fetching
@@ -79,7 +81,7 @@ const SelectRemoteOptions = ({
       getPopupContainer={(triggerNode) => triggerNode.parentNode}
       showSearch                                 // Enable search functionality
       onSearch={debounceFetcher}                 // Debounced search fetch
-      onFocus={handleFocus}                      // Immediate fetch on focus
+      onFocus={handleFocus}                      // Fetch options on every focus
       options={displayedOptions}                 // Fetched options
       loading={fetching}                         // Show loading spinner
       style={{ width: props.width ?? "100%" }}   // Default width to 100%
