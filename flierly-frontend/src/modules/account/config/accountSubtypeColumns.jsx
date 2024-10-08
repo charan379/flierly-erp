@@ -4,7 +4,7 @@ import generateTimeStampColumns from "@/utils/column-generators/generateTimeStam
 import fetchEntityRowsAsOptions from "@/features/SelectRemoteOptions/utils/fetchEntityRowsAsOptions";
 
 // code regex pattern validator
-const codeRegex = ({ }) => ({
+const codeRegex = ({}) => ({
   validator(_, value) {
     return new Promise((resolve, reject) => {
       if (!value) resolve();
@@ -27,11 +27,16 @@ const fetchAccountTypesAsOptions = (value) => {
   if (value) {
     filters = { name: { $ilike: `%${value}%` } };
   }
-  return fetchEntityRowsAsOptions("account-type", filters, 10, (accountTypes) => {
-    return accountTypes.map((acType) => {
-      return { label: acType.name, value: acType.id }
-    })
-  })
+  return fetchEntityRowsAsOptions(
+    "account-type",
+    filters,
+    10,
+    (accountTypes) => {
+      return accountTypes.map((acType) => {
+        return { label: acType.name, value: acType.id };
+      });
+    }
+  );
 };
 
 // Column configuration for "ID"
@@ -145,7 +150,7 @@ const codeColumn = {
     allowClear: true,
     rules: [
       { type: "string", min: 5, max: 25, required: true },
-      ({ }) => ({
+      ({}) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
           return entityExistenceValidator(
@@ -220,7 +225,7 @@ const nameColumn = {
     allowClear: true,
     rules: [
       { type: "string", min: 5, max: 30, required: true },
-      ({ }) => ({
+      ({}) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
           return entityExistenceValidator(
@@ -285,6 +290,13 @@ const accountType = {
   width: 7,
   sorter: true,
   order: 5,
+  render: (value, record, index, action) => {
+    if (value && typeof value === "object") {
+      return value?.name;
+    } else {
+      return value;
+    }
+  },
   createFormConfig: {
     name: "accountType",
     label: "accountType",

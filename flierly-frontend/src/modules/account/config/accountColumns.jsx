@@ -68,8 +68,12 @@ const nameColumn = {
     allowClear: false,
     rules: [
       { required: true, message: translate("account_name_is_required") },
-      { min: 5, max: 90, message: translate("account_name_must_be_between_5_and_90_characters") },
-      ({ }) => ({
+      {
+        min: 5,
+        max: 90,
+        message: translate("account_name_must_be_between_5_and_90_characters"),
+      },
+      ({}) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
           return entityExistenceValidator("account-name-validation-c-1", {
@@ -90,7 +94,11 @@ const nameColumn = {
     allowClear: false,
     rules: [
       { required: true, message: translate("account_name_is_required") },
-      { min: 5, max: 90, message: translate("account_name_must_be_between_5_and_90_characters") },
+      {
+        min: 5,
+        max: 90,
+        message: translate("account_name_must_be_between_5_and_90_characters"),
+      },
       ({ getFieldValue }) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
@@ -128,7 +136,14 @@ const accountType = {
   width: 150,
   sorter: true,
   order: 3,
-}
+  render: (value, record, index, action) => {
+    if (value && typeof value === "object") {
+      return value?.name;
+    } else {
+      return value;
+    }
+  },
+};
 
 // Column configuration for "Account Type"
 const accountSubtype = {
@@ -138,7 +153,14 @@ const accountSubtype = {
   width: 150,
   sorter: true,
   order: 4,
-}
+  render: (value, record, index, action) => {
+    if (value && typeof value === "object") {
+      return value?.name;
+    } else {
+      return value;
+    }
+  },
+};
 
 // Column configuration for "Registered Phone"
 const registeredPhoneColumn = {
@@ -155,13 +177,16 @@ const registeredPhoneColumn = {
     rules: [
       { required: true, message: translate("phone_is_required") },
       { pattern: phoneRegex, message: translate("phone_is_not_valid") },
-      ({ }) => ({
+      ({}) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
-          return entityExistenceValidator("account-registered-phone-validation-c-1", {
-            entity: "account",
-            filters: { registeredPhone: { $ilike: value } },
-          });
+          return entityExistenceValidator(
+            "account-registered-phone-validation-c-1",
+            {
+              entity: "account",
+              filters: { registeredPhone: { $ilike: value } },
+            }
+          );
         },
       }),
     ],
@@ -180,13 +205,16 @@ const registeredPhoneColumn = {
       ({ getFieldValue }) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
-          return entityExistenceValidator("account-registered-phone-validation-u-1", {
-            entity: "account",
-            filters: {
-              id: { $notEqualTo: getFieldValue("id") },
-              registeredPhone: { $ilike: value },
-            },
-          });
+          return entityExistenceValidator(
+            "account-registered-phone-validation-u-1",
+            {
+              entity: "account",
+              filters: {
+                id: { $notEqualTo: getFieldValue("id") },
+                registeredPhone: { $ilike: value },
+              },
+            }
+          );
         },
       }),
     ],
@@ -260,7 +288,7 @@ const emailColumn = {
     rules: [
       { type: "email", message: translate("invalid_email_format") },
       { required: true, message: translate("email_is_required") },
-      ({ }) => ({
+      ({}) => ({
         validator(_, value) {
           if (value === undefined) return Promise.resolve();
           return entityExistenceValidator("account-email-validation-c-1", {
@@ -460,7 +488,14 @@ const primaryAddress = {
   width: 150,
   sorter: true,
   order: 6,
-}
+  render: (value, record, index, action) => {
+    if (value && typeof value === "object") {
+      return value?.line1;
+    } else {
+      return value;
+    }
+  },
+};
 
 // Timestamps
 const timestampColumns = generateTimeStampColumns().map((timeStamp) => {
