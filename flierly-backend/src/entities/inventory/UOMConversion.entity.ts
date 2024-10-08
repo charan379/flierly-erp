@@ -33,6 +33,9 @@ export class UOMConversion {
     @Column({ type: 'decimal', precision: 10, scale: 4, name: "conversion_factor" })
     conversionFactor: number;
 
+    @Column({ type: 'text', nullable: true })
+    description: string;
+    
     @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
     createdAt: Date;
 
