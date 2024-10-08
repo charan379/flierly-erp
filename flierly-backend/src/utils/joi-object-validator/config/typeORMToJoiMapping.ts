@@ -18,8 +18,8 @@ const typeORMToJoiMapping: Record<string, Joi.Schema> = {
     'float': Joi.number(),
     'real': Joi.number(),
     'double precision': Joi.number(),
-    'numeric': Joi.number().precision(2),
-    'decimal': Joi.number().precision(2),
+    'numeric': Joi.number().precision(9),
+    'decimal': Joi.number().precision(9),
     'uuid': Joi.string().uuid(),
     // JavaScript types
     'String': Joi.string(),
