@@ -1,10 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany, OneToOne, BeforeInsert, BeforeUpdate, Repository } from 'typeorm';
 import { Address } from '../address/Address.entity';
 import { Branch } from '../branch/Branch.entity';
 import { TaxIdentity } from '../taxation/TaxIdentity.entity';
 import { IsEmail, IsNotEmpty, IsOptional, Length, Matches } from 'class-validator';
 import { AccountType } from './AccountType.entity';
 import { AccountSubtype } from './AccountSubtype.entity';
+import { AppDataSource } from '@/lib/app-data-source';
 
 @Entity('accounts')
 export class Account {
@@ -72,4 +73,36 @@ export class Account {
 
     @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz' })
     deletedAt: Date | null;
+
+    // Hook that runs before inserting or updating an account
+    @BeforeInsert()
+    async updatePrimaryAddress(): Promise<void> {
+        // Check if the account has a primary address that needs to be updated
+        if (this.primaryAddress) {
+            const repository: Repository<Address> = AppDataSource.getRepository(Address);
+
+            // Fetch the current address associated with the primary address
+            const currentAddress = await repository.findOne({
+                where: { id: this.primaryAddress.id }, // Filter by the primary address ID
+                select: ['id', 'account'] // Select only the 'id' and 'account' fields
+            });
+
+            // If the account is already set and matches the current account, skip the update
+            if (currentAddress?.account?.id === this.id) {
+                return; // No need to update since the account ID is the same
+            }
+
+            // Use a transaction to ensure consistency
+            await AppDataSource.transaction(async transactionalEntityManager => {
+                try {
+                    await transactionalEntityManager.update(Address, this.primaryAddress.id, {
+                        account: this,  // Update the address with the account reference
+                    });
+                } catch (error) {
+                    console.error('Transaction failed, rolling back:', error);
+                    throw new Error('Failed to update address during account creation or update.');
+                }
+            });
+        }
+    }
 }
