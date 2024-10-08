@@ -16,10 +16,11 @@ const AccountFormFields = ({ columns = [], configKey, formInstance }) => {
   const { langDirection, translate } = useLocale(); // Localization hooks
   const { hasPermission } = useAuth();               // Permission hooks
 
-  const [accountTypeId, setAccountTypeId] = useState(undefined); // State to hold selected account type
+  const [accountTypeId, setAccountTypeId] = useState(formInstance.getFieldValue("accountType")); // State to hold selected account type
 
   // Sort and separate columns based on their order
-  const sortedColumns = columns.sort((c1, c2) => c1?.order - c2?.order);
+  const sortedColumns = columns.filter((column) => hasOwnProperty(column, configKey))
+  .sort((c1, c2) => c1?.order - c2?.order);
   const columnsTillActype = sortedColumns.filter((col) => col.order <= 2);
   const columnsAfterActype = sortedColumns.filter((col) => col.order >= 5);
 
@@ -31,11 +32,10 @@ const AccountFormFields = ({ columns = [], configKey, formInstance }) => {
       align="flex-start"
       justify="flex-start"
     >
+
       {/* Render form fields before account type selection */}
       {columnsTillActype.map((column) => (
-        hasOwnProperty(column, configKey) ? (
-          <FormField key={uniqueId()} config={column[configKey]} />
-        ) : null
+        <FormField key={uniqueId()} config={column[configKey]} />
       ))}
 
       {/* Account Type Selection */}
@@ -74,7 +74,7 @@ const AccountFormFields = ({ columns = [], configKey, formInstance }) => {
           debounceTimeout={500}
           asyncOptionsFetcher={(value, signal) => fetchAccountSubtypesAsOptions(value, signal, accountTypeId)}
           placeholder="Please enter"
-          disabled={accountTypeId === undefined || !hasPermission(/^account\.create$/)}
+          // disabled={accountTypeId === undefined || !hasPermission(/^account\.create$/)}
           mode={configKey === "queryFormConfig" ? "multiple" : "single"}
         />
       </ProForm.Item>
@@ -100,10 +100,9 @@ const AccountFormFields = ({ columns = [], configKey, formInstance }) => {
 
       {/* Render form fields after account type selection */}
       {columnsAfterActype.map((column) => (
-        hasOwnProperty(column, configKey) ? (
-          <FormField key={uniqueId()} config={column[configKey]} />
-        ) : null
+        <FormField key={uniqueId()} config={column[configKey]} />
       ))}
+      
     </Flex>
   );
 };
