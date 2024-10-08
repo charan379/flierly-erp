@@ -33,6 +33,16 @@ const Update = ({
     }
   };
 
+  let initialValues = {};
+
+  Object.keys(data).forEach((key) => {
+    if (data[key] && typeof data[key] === "object" && !Array.isArray(data[key])) {
+      initialValues = { ...initialValues, [key]: data[key].id };
+    } else {
+      initialValues = { ...initialValues, [key]: data[key] };
+    }
+  });
+
   return (
     <DrawerForm
       form={formInstance}
@@ -41,7 +51,7 @@ const Update = ({
       onFinish={onFinish}
       open={isOpen}
       // clearOnDestroy={true}
-      initialValues={data}
+      initialValues={initialValues}
       trigger={
         <Tooltip title={translate("upadte_data")}>
           <Button
