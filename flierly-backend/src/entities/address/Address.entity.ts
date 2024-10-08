@@ -83,7 +83,7 @@ export class Address {
     @IsOptional()
     longitude: number;
 
-    @ManyToOne(() => Account, { lazy: false, nullable: true })
+    @ManyToOne(() => Account, { lazy: true, nullable: true })
     @JoinColumn({ name: 'account_id' })
     account: Account;
 
