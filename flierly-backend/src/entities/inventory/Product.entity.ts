@@ -13,11 +13,14 @@ export class Product {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar', length: 255, unique: true })
   @IsNotEmpty({ message: 'Name must not be empty.' })
   @Length(3, 90, { message: 'Name must be between 3 and 90 characters.' })
   name: string;
 
+  @Column({ default: true, name: 'is_active' })
+  isActive: boolean;
+  
   @Column({ type: 'varchar', length: 100, unique: true })
   @IsNotEmpty({ message: 'SKU must not be empty.' })
   @Length(3, 25, { message: 'SKU must be between 3 and 25 characters.' })

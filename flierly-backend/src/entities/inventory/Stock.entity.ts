@@ -13,6 +13,9 @@ export class Stock {
   @IsNotEmpty({ message: 'Product must be specified' })
   product: Product;
 
+  @Column({ default: true, name: 'is_active' })
+  isActive: boolean;
+  
   @ManyToOne(() => UOM, { eager: true })
   @JoinColumn({ name: 'uom_id' })
   @IsNotEmpty({ message: 'Unit of Measure (UOM) must be specified' })

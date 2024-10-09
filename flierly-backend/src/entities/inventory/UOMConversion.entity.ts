@@ -19,6 +19,9 @@ export class UOMConversion {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ default: true, name: 'is_active' })
+  isActive: boolean;
+  
   @ManyToOne(() => Product, { eager: true })
   @JoinColumn({ name: 'product_id' })
   @IsNotEmpty({ message: 'Product must not be empty.' })
