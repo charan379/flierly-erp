@@ -1,4 +1,4 @@
-import { IsNotEmpty, Length, IsOptional } from 'class-validator';
+import { IsNotEmpty, Length, IsOptional, Matches } from 'class-validator';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -20,7 +20,13 @@ export class Product {
 
   @Column({ type: 'varchar', length: 100, unique: true })
   @IsNotEmpty({ message: 'SKU must not be empty.' })
+  @Length(3, 25, { message: 'SKU must be between 3 and 25 characters.' })
+  @Matches(/^[a-zA-Z0-9_-]{3,50}$/, { message: "SKU is not valid only letters, numbers, underscores and hyphens allowed." })
   sku: string;
+
+  @Column({ type: "int", unique: true, nullable: true })
+  @IsOptional()
+  hsn: number;
 
   @Column({ type: 'text', nullable: true })
   @IsOptional()
