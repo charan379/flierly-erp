@@ -547,6 +547,7 @@ const latitudeColumn = {
   dataIndex: "latitude",
   width: 100,
   sorter: true,
+  copyable: true,
   order: 14,
   createFormConfig: {
     name: "latitude",
@@ -588,6 +589,7 @@ const longitudeColumn = {
   dataIndex: "longitude",
   width: 100,
   sorter: true,
+  copyable: true,
   order: 15,
   createFormConfig: {
     name: "longitude",
