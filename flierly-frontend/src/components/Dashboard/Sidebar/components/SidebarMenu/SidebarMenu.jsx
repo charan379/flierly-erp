@@ -26,7 +26,7 @@ import { Menu } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFingerprint, faIdBadge, faKey, faMapLocationDot, faTags, faUsersGear, faUsersLine, faUserTag } from "@fortawesome/free-solid-svg-icons";
+import { faBoxArchive, faChartBar, faExchangeAlt, faFingerprint, faIdBadge, faKey, faMapLocationDot, faRulerCombined, faTags, faUsersGear, faUsersLine, faUserTag } from "@fortawesome/free-solid-svg-icons";
 import { faAddressBook as faAddressBookRegular } from '@fortawesome/free-regular-svg-icons';
 import filterEnabledItems from "@/utils/filterEnabledItems";
 
@@ -34,7 +34,7 @@ const SidebarMenu = () => {
   const { theme } = useTheme();
   const { translate } = useLocale();
 
-  const { allowedAccess, hasPermission } = useAuth();
+  const { hasPermission } = useAuth();
 
   const menuIconStyle = { fontSize: "16px" };
 
@@ -93,6 +93,38 @@ const SidebarMenu = () => {
           icon: <FontAwesomeIcon icon={faTags} style={menuIconStyle} />,
           label: <Link to={"/erp/account/account-subtypes"} style={getLinkStyle(/^account-subtype\.[a-z]+$/)}>{translate("account-subtypes")}</Link>,
           disabled: !hasPermission(/^account-subtype\.[a-z]+$/),
+        },
+      ],
+    },
+    {
+      key: "inventory",
+      icon: <FontAwesomeIcon icon={faBoxArchive} style={menuIconStyle} />,
+      label: <Link to={"/erp/inventory"} style={getLinkStyle(/^product(\-[a-z]+)?\.[a-z]+$/)}>{translate("inventory")}</Link>,
+      disabled: !hasPermission(/^product(\-[a-z]+)?\.[a-z]+$/),
+      children: [
+        {
+          key: "products",
+          icon: <FontAwesomeIcon icon={faTags} style={menuIconStyle} />,
+          label: <Link to={"/erp/inventory/products"} style={getLinkStyle(/^product\.[a-z]+$/)}>{translate("products")}</Link>,
+          disabled: !hasPermission(/^product\.[a-z]+$/),
+        },
+        {
+          key: "stocks",
+          icon: <FontAwesomeIcon icon={faChartBar} style={menuIconStyle} />,
+          label: <Link to={"/erp/inventory/stocks"} style={getLinkStyle(/^stock\.[a-z]+$/)}>{translate("stocks")}</Link>,
+          disabled: !hasPermission(/^stock\.[a-z]+$/),
+        },
+        {
+          key: "uoms",
+          icon: <FontAwesomeIcon icon={faRulerCombined} style={menuIconStyle} />,
+          label: <Link to={"/erp/inventory/uoms"} style={getLinkStyle(/^uom\.[a-z]+$/)}>{translate("uoms")}</Link>,
+          disabled: !hasPermission(/^uom\.[a-z]+$/),
+        },
+        {
+          key: "uom-conversions",
+          icon: <FontAwesomeIcon icon={faExchangeAlt} style={menuIconStyle} />,
+          label: <Link to={"/erp/inventory/uom-conversions"} style={getLinkStyle(/^uom\-conversion\.[a-z]+$/)}>{translate("uom-conversions")}</Link>,
+          disabled: !hasPermission(/^uom\-conversion\.[a-z]+$/),
         },
       ],
     },
@@ -185,12 +217,6 @@ const SidebarMenu = () => {
       icon: <CreditCardOutlined style={menuIconStyle} />,
       label: <Link to={"/payment"} style={getLinkStyle(/^payment\.read$/)}>{translate("payments")}</Link>,
       disabled: !hasPermission(/^payment\.read$/),
-    },
-    {
-      key: "product",
-      icon: <TagOutlined style={menuIconStyle} />,
-      label: <Link to={"/product"} style={getLinkStyle(/^product\.read$/)}>{translate("products")}</Link>,
-      disabled: !hasPermission(/^product\.read$/),
     },
     {
       key: "categoryproduct",

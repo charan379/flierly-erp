@@ -10,6 +10,7 @@ import IamRoutes from "@/modules/iam/router/IamRoutes";
 import AccountRoutes from "@/modules/account/router/AccountRoutes";
 import TaxationRoutes from "@/modules/taxation/router/TaxationRoutes";
 import AddressRoutes from "@/modules/address/router/AddressRoutes";
+import InventoryRoutes from "@/modules/inventory/router/InventoryRoutes";
 
 const Routes = () => {
   return useRoutes([
@@ -46,6 +47,7 @@ const Routes = () => {
         { path: "account/*", element: <AccountRoutes /> }, // Handle account routes within AccountRoutes module
         { path: "taxation/*", element: <TaxationRoutes /> }, // Handle taxation routes within Taxation module
         { path: "address/*", element: <AddressRoutes /> }, // Handle address routes within address module
+        { path: "inventory/*", element: <InventoryRoutes /> }, // Handle inventory routes within inventory module
         {
           path: "unauthorized",
           element: (
