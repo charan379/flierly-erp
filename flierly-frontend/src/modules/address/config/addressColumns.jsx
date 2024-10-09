@@ -555,7 +555,13 @@ const latitudeColumn = {
     width: "100%",
     rules: [{ type: "number" }],
     input: {
-      type: "Number",
+      type: "Decimal",
+      decimal: {
+        min: -90,
+        max: 90,
+        precision: 6,
+        step: 0.000001,
+      },
     },
   },
   updateFormConfig: {
@@ -565,7 +571,13 @@ const latitudeColumn = {
     width: "100%",
     rules: [{ type: "number" }],
     input: {
-      type: "Number",
+      type: "Decimal",
+      decimal: {
+        min: -90,
+        max: 90,
+        precision: 6,
+        step: 0.000001,
+      },
     },
   },
 };
@@ -584,7 +596,13 @@ const longitudeColumn = {
     width: "100%",
     rules: [{ type: "number" }],
     input: {
-      type: "Number",
+      type: "Decimal",
+      decimal: {
+        min: -180,
+        max: 180,
+        precision: 6,
+        step: 0.000001,
+      },
     },
   },
   updateFormConfig: {
@@ -594,7 +612,13 @@ const longitudeColumn = {
     width: "100%",
     rules: [{ type: "number" }],
     input: {
-      type: "Number",
+      type: "Decimal",
+      decimal: {
+        min: -180,
+        max: 180,
+        precision: 6,
+        step: 0.000001,
+      },
     },
   },
 };

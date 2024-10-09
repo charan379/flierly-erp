@@ -73,7 +73,7 @@ const FormField = ({ key, config, showLabel = true }) => {
     );
   }
 
-  const { type, select } = input;
+  const { type, select, decimal } = input;
   const FormComponent = formItems[type];
 
   if (!FormComponent) {
@@ -101,7 +101,7 @@ const FormField = ({ key, config, showLabel = true }) => {
       transformer={transformer}
       allowClear={allowClear}
       fieldProps={fieldProps}
-      {...(select || {})}
+      {...(select || decimal || {})}
     />
   );
 };
@@ -149,6 +149,20 @@ const proFormProps = ({
 const formItems = {
   Text: (props) => <ProFormComponent {...props} Component={ProFormText} />,
   Number: (props) => <ProFormComponent {...props} Component={ProFormDigit} />,
+  Decimal: (props) => {
+    return (
+      <ProFormDigit
+        {...proFormProps(props)}
+        min={props?.min}
+        max={props?.max}
+        fieldProps={{
+          ...proFormProps(props).fieldProps,
+          precision: props?.precision,
+          step: props?.step,
+        }}
+      />
+    );
+  },
   TextArea: (props) => (
     <ProFormComponent {...props} Component={ProFormTextArea} />
   ),
