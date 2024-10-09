@@ -585,7 +585,7 @@ const latitudeColumn = {
 
 // Column configuration for "Longitude"
 const longitudeColumn = {
-  title: "longitude",
+  title: translate('longitude'),
   dataIndex: "longitude",
   width: 100,
   sorter: true,

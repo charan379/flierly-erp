@@ -5,7 +5,7 @@ import FormFields from '@/components/FormFields'
 import AddressLayout from '../../layout/AddressLayout'
 import addressColumns from '../../config/addressColumns'
 
-const Address = () => {
+const Addresses = () => {
     return (
         <AddressLayout>
             <CrudTableContextProvider>
@@ -25,4 +25,4 @@ const Address = () => {
     )
 }
 
-export default Address
+export default Addresses

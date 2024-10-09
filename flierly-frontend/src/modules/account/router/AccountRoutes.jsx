@@ -22,7 +22,7 @@ const AccountRoutes = () => {
       path: "accounts",
       element: (
         <ProtectedRoute
-          element={<WithSuspense importPath={import("../pages/Account")} />}
+          element={<WithSuspense importPath={import("../pages/Accounts")} />}
           requiredPermissionRegex={/^account\.[a-z]+$/}
         />
       ),
@@ -31,7 +31,7 @@ const AccountRoutes = () => {
       path: "account-types",
       element: (
         <ProtectedRoute
-          element={<WithSuspense importPath={import("../pages/AccountType")} />}
+          element={<WithSuspense importPath={import("../pages/AccountTypes")} />}
           requiredPermissionRegex={/^account-type\.[a-z]+$/}
         />
       ),
@@ -40,7 +40,7 @@ const AccountRoutes = () => {
       path: "account-subtypes",
       element: (
         <ProtectedRoute
-          element={<WithSuspense importPath={import("../pages/AccountSubtype")} />}
+          element={<WithSuspense importPath={import("../pages/AccountSubtypes")} />}
           requiredPermissionRegex={/^account-subtype\.[a-z]+$/}
         />
       ),

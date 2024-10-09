@@ -22,7 +22,7 @@ const TaxationRoutes = () => {
       path: "tax-identities",
       element: (
         <ProtectedRoute
-          element={<WithSuspense importPath={import("../pages/TaxIdentity")} />}
+          element={<WithSuspense importPath={import("../pages/TaxIdentities")} />}
           requiredPermissionRegex={/^tax-identity\.[a-z]+$/}
         />
       ),

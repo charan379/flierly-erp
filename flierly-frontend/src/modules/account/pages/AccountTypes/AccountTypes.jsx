@@ -5,7 +5,7 @@ import FormFields from "@/components/FormFields";
 import AccountLayout from "../../layout/AccountLayout";
 import accountTypeColumns from "../../config/accountTypeColumns";
 
-export default function AccountType() {
+export default function AccountTypes() {
   return (
     <AccountLayout>
       <CrudTableContextProvider>
@@ -15,9 +15,24 @@ export default function AccountType() {
           dataSource={[]}
           tableKey={"account-type-table"}
           rowKey="id"
-          searchFormFields={<FormFields columns={accountTypeColumns} configKey={"queryFormConfig"} />}
-          createFormFields={<FormFields columns={accountTypeColumns} configKey={"createFormConfig"} />}
-          updateFormFields={<FormFields columns={accountTypeColumns} configKey={"updateFormConfig"} />}
+          searchFormFields={
+            <FormFields
+              columns={accountTypeColumns}
+              configKey={"queryFormConfig"}
+            />
+          }
+          createFormFields={
+            <FormFields
+              columns={accountTypeColumns}
+              configKey={"createFormConfig"}
+            />
+          }
+          updateFormFields={
+            <FormFields
+              columns={accountTypeColumns}
+              configKey={"updateFormConfig"}
+            />
+          }
         />
       </CrudTableContextProvider>
     </AccountLayout>

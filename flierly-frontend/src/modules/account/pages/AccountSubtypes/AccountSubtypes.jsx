@@ -5,8 +5,7 @@ import FormFields from "@/components/FormFields";
 import AccountLayout from "../../layout/AccountLayout";
 import accountSubtypeColumns from "../../config/accountSubtypeColumns";
 
-
-export default function AccountSubtype() {
+export default function AccountSubtypes() {
   return (
     <AccountLayout>
       <CrudTableContextProvider>

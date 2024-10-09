@@ -22,7 +22,7 @@ const AddressRoutes = () => {
       path: "addresses",
       element: (
         <ProtectedRoute
-          element={<WithSuspense importPath={import("../pages/Address")} />}
+          element={<WithSuspense importPath={import("../pages/Addresses")} />}
           requiredPermissionRegex={/^address\.[a-z]+$/}
         />
       ),

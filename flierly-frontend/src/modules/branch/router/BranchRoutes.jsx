@@ -22,7 +22,7 @@ const BranchRoutes = () => {
       path: "list",
       element: (
         <ProtectedRoute
-          element={<WithSuspense importPath={import("../pages/Branch")} />}
+          element={<WithSuspense importPath={import("../pages/Branchs")} />}
           requiredPermissionRegex={/^branch\.[a-z]+$/}
         />
       ),

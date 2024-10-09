@@ -5,7 +5,7 @@ import accountColumns from '../../config/accountColumns'
 import { CrudTable } from '@/features/CrudTable'
 import AccountFormFields from '../../components/AccountFormFields'
 
-const Account = () => {
+const Accounts = () => {
     return (
         <AccountLayout>
             <CrudTableContextProvider>
@@ -25,4 +25,4 @@ const Account = () => {
     )
 }
 
-export default Account;
+export default Accounts;

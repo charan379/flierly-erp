@@ -5,7 +5,7 @@ import { CrudTable } from '@/features/CrudTable'
 import FormFields from '@/components/FormFields'
 import taxIdentityColumns from '../../config/taxIdentityColumns'
 
-const TaxIdentity = () => {
+const TaxIdentities = () => {
     return (
         <TaxationLayout>
             <CrudTableContextProvider>
@@ -25,4 +25,4 @@ const TaxIdentity = () => {
     )
 }
 
-export default TaxIdentity
+export default TaxIdentities;
