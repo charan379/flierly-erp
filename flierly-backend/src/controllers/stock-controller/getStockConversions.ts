@@ -38,12 +38,12 @@ const getStockConversions = async (req: Request, res: Response) => {
         .map(conversion => ({
             toUom: conversion.toUom.name, // or conversion.toUom.code
             conversionFactor: conversion.conversionFactor,
-            convertedQuantity: parseFloat((stock.quantity * conversion.conversionFactor).toFixed(4)), // Rounding to 4 decimal places,
+            convertedQuantity: `${parseFloat((stock.quantity * conversion.conversionFactor).toFixed(4))} ${conversion.toUom.name}s`, // Rounding to 4 decimal places,
         }));
 
     const result = {
         defaultUom: stock.uom.name,          // Return the default UOM (stock's UOM)
-        defaultQuantity: stock.quantity,      // Return the default stock quantity
+        defaultQuantity: `${stock.quantity} ${stock.uom.name}s`,      // Return the default stock quantity
         conversions: conversionResults
     };
 
