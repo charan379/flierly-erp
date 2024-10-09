@@ -1,13 +1,14 @@
+import { IsNotEmpty, IsNumber, IsOptional, IsPositive } from 'class-validator';
 import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    ManyToOne,
-    Unique,
-    DeleteDateColumn,
-    UpdateDateColumn,
-    CreateDateColumn,
-    JoinColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  Unique,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+  JoinColumn,
 } from 'typeorm';
 import { Product } from './Product.entity';
 import { UOM } from './UOM.entity';
@@ -15,33 +16,39 @@ import { UOM } from './UOM.entity';
 @Entity('uom_conversions')
 @Unique(['product', 'fromUom', 'toUom'])
 export class UOMConversion {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @ManyToOne(() => Product, { eager: true })
-    @JoinColumn({ name: "product_id" })
-    product: Product;
+  @ManyToOne(() => Product, { eager: true })
+  @JoinColumn({ name: 'product_id' })
+  @IsNotEmpty({ message: 'Product must not be empty.' })
+  product: Product;
 
-    @ManyToOne(() => UOM, { eager: true })
-    @JoinColumn({ name: "from_uom_id" })
-    fromUom: UOM;
+  @ManyToOne(() => UOM, { eager: true })
+  @JoinColumn({ name: 'from_uom_id' })
+  @IsNotEmpty({ message: 'From UOM must not be empty.' })
+  fromUom: UOM;
 
-    @ManyToOne(() => UOM, { eager: true })
-    @JoinColumn({ name: "to_uom_id" })
-    toUom: UOM;
+  @ManyToOne(() => UOM, { eager: true })
+  @JoinColumn({ name: 'to_uom_id' })
+  @IsNotEmpty({ message: 'To UOM must not be empty.' })
+  toUom: UOM;
 
-    @Column({ type: 'decimal', precision: 10, scale: 4, name: "conversion_factor" })
-    conversionFactor: number;
+  @Column({ type: 'decimal', precision: 10, scale: 4, name: 'conversion_factor' })
+  @IsNumber({maxDecimalPlaces: 4}, { message: 'Conversion factor must be a valid number with upto 4 decimal places.' })
+  @IsPositive({ message: 'Conversion factor must be greater than zero.' })
+  conversionFactor: number;
 
-    @Column({ type: 'text', nullable: true })
-    description: string;
-    
-    @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
-    createdAt: Date;
+  @Column({ type: 'text', nullable: true })
+  @IsOptional()
+  description: string;
 
-    @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
-    updatedAt: Date;
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
+  createdAt: Date;
 
-    @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz' })
-    deletedAt: Date | null;
+  @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
+  updatedAt: Date;
+
+  @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz' })
+  deletedAt: Date | null;
 }
