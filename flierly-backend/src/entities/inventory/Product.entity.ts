@@ -15,7 +15,7 @@ export class Product {
 
   @Column({ type: 'varchar', length: 255 })
   @IsNotEmpty({ message: 'Name must not be empty.' })
-  @Length(3, 25, { message: 'Name must be between 3 and 25 characters.' })
+  @Length(3, 90, { message: 'Name must be between 3 and 90 characters.' })
   name: string;
 
   @Column({ type: 'varchar', length: 100, unique: true })
