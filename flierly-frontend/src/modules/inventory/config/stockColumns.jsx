@@ -204,7 +204,7 @@ const uom = {
 
           if (!value || !productId) return Promise.resolve();
           return entityExistenceValidator("stock-product-uom-validation-c-1", {
-            entity: "uom-convertion",
+            entity: "stock",
             filters: {
               product: productId,
               uom: value,
