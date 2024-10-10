@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsPositive } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsPositive, Length } from 'class-validator';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -44,6 +44,7 @@ export class UOMConversion {
 
   @Column({ type: 'text', nullable: true })
   @IsOptional()
+  @Length(10, 250, { message: 'Description must be between 10 and 250 characters.' })
   description: string;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
