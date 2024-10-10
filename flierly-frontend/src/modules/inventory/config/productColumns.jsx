@@ -9,7 +9,7 @@ const statusOptions = [
   { label: "Inactive", value: false },
 ];
 
-const skuRegex = /^[a-zA-Z0-9_-]{3,50}$/;
+const skuRegex = /^[A-Z0-9_-]{3,50}$/;
 
 // Column configuration for "ID"
 const idColumn = {
@@ -74,7 +74,7 @@ const nameColumn = {
       },
       ({}) => ({
         validator(_, value) {
-          if (value === undefined) return Promise.resolve();
+          if (!value) return Promise.resolve();
           return entityExistenceValidator("product-name-validation-c-1", {
             entity: "product",
             filters: { name: { $ilike: value } },
@@ -100,7 +100,7 @@ const nameColumn = {
       },
       ({ getFieldValue }) => ({
         validator(_, value) {
-          if (value === undefined) return Promise.resolve();
+          if (!value) return Promise.resolve();
           return entityExistenceValidator("product-name-validation-u-1", {
             entity: "product",
             filters: {
@@ -199,7 +199,7 @@ const skuColumn = {
       { pattern: skuRegex, message: translate("sku_is_not_valid") },
       ({}) => ({
         validator(_, value) {
-          if (value === undefined) return Promise.resolve();
+          if (!value) return Promise.resolve();
           return entityExistenceValidator("sku-validation-c-1", {
             entity: "product",
             filters: { sku: { $ilike: value } },
@@ -221,7 +221,7 @@ const skuColumn = {
       { pattern: skuRegex, message: translate("sku_is_not_valid") },
       ({ getFieldValue }) => ({
         validator(_, value) {
-          if (value === undefined) return Promise.resolve();
+          if (!value) return Promise.resolve();
           return entityExistenceValidator("sku-validation-u-1", {
             entity: "product",
             filters: {
@@ -265,7 +265,7 @@ const hsnColumn = {
       { type: "number" },
       ({}) => ({
         validator(_, value) {
-          if (value === undefined || !value) return Promise.resolve();
+          if (!value) return Promise.resolve();
           return entityExistenceValidator("hsn-validation-c-1", {
             entity: "product",
             filters: { hsn: value },
@@ -287,7 +287,7 @@ const hsnColumn = {
       { type: "number" },
       ({ getFieldValue }) => ({
         validator(_, value) {
-          if (value === undefined || !value) return Promise.resolve();
+          if (!value) return Promise.resolve();
           return entityExistenceValidator("hsn-validation-u-1", {
             entity: "product",
             filters: {
