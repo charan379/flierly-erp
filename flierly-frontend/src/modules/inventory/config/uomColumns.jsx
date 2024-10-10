@@ -9,8 +9,6 @@ const statusOptions = [
   { label: "Inactive", value: false },
 ];
 
-const skuRegex = /^[A-Z0-9_-]{3,50}$/;
-
 const shortNameRegex = /^[a-zA-Z0-9]{1,15}$/;
 const codeRegex = /^[a-z0-9]{1,10}$/;
 
