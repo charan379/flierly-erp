@@ -2,7 +2,6 @@ import { lazy, Suspense } from "react"; // Import React's lazy and Suspense for 
 import fetchEntityRowsAsOptions from "@/features/SelectRemoteOptions/utils/fetchEntityRowsAsOptions"; // Import function to fetch entity options
 import FormFields from "@/components/FormFields"; // Import FormFields component for rendering form fields
 import { LoadingOutlined } from "@ant-design/icons"; // Import loading icon from Ant Design
-import taxIdentityColumns from "@/modules/taxation/config/taxIdentityColumns";
 import branchColumns from "@/modules/branch/config/branchColumns";
 
 // Lazy load the Create component to improve performance
