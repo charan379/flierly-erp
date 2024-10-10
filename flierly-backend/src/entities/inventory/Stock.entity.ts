@@ -1,9 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, JoinColumn, Unique } from 'typeorm';
 import { Product } from './Product.entity';
 import { UOM } from './UOM.entity';
 import { IsNotEmpty, IsNumber, IsPositive, Min } from 'class-validator';
 
 @Entity('stock')
+@Unique(['product', 'uom'])
 export class Stock {
   @PrimaryGeneratedColumn()
   id: number;
@@ -15,7 +16,7 @@ export class Stock {
 
   @Column({ default: true, name: 'is_active' })
   isActive: boolean;
-  
+
   @ManyToOne(() => UOM, { eager: true })
   @JoinColumn({ name: 'uom_id' })
   @IsNotEmpty({ message: 'Unit of Measure (UOM) must be specified' })
