@@ -358,7 +358,7 @@ const conversionFactorColumn = {
   dataIndex: "conversionFactor",
   width: 150,
   sorter: true,
-  copyable: false,
+  copyable: true,
   order: 6,
   createFormConfig: {
     name: "conversionFactor",
