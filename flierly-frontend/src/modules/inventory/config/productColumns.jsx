@@ -340,7 +340,7 @@ const descriptionColumn = {
   queryFormConfig: {
     name: "description",
     label: "description",
-    rules: [{ type: "string", min: 20, max: 250, required: false }],
+    rules: [{ type: "string", max: 250, required: false }],
     fieldProps: { rows: 1 },
     transformer: "ilike",
     input: {
