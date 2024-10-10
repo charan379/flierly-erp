@@ -554,7 +554,7 @@ const latitudeColumn = {
     label: "latitude",
     allowClear: true,
     width: "100%",
-    rules: [{ type: "number" }],
+    rules: [],
     input: {
       type: "Decimal",
       decimal: {
@@ -570,7 +570,7 @@ const latitudeColumn = {
     label: "latitude",
     allowClear: true,
     width: "100%",
-    rules: [{ type: "number" }],
+    rules: [],
     input: {
       type: "Decimal",
       decimal: {
@@ -596,7 +596,7 @@ const longitudeColumn = {
     label: "longitude",
     allowClear: true,
     width: "100%",
-    rules: [{ type: "number" }],
+    rules: [],
     input: {
       type: "Decimal",
       decimal: {
@@ -612,7 +612,7 @@ const longitudeColumn = {
     label: "longitude",
     allowClear: true,
     width: "100%",
-    rules: [{ type: "number" }],
+    rules: [],
     input: {
       type: "Decimal",
       decimal: {

@@ -365,7 +365,7 @@ const conversionFactorColumn = {
     label: "conversion_factor",
     allowClear: true,
     width: "100%",
-    rules: [{ type: "number", required: true }],
+    rules: [{ required: true }],
     input: {
       type: "Decimal",
       decimal: {
@@ -380,7 +380,7 @@ const conversionFactorColumn = {
     label: "conversion_factor",
     allowClear: true,
     width: "100%",
-    rules: [{ type: "number", required: true }],
+    rules: [{ required: true }],
     input: {
       type: "Decimal",
       decimal: {

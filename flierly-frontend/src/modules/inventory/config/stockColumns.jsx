@@ -288,7 +288,7 @@ const quantityColumn = {
     label: "quantity",
     allowClear: true,
     width: "100%",
-    rules: [{ type: "number", required: true }],
+    rules: [{ required: true }],
     input: {
       type: "Decimal",
       decimal: {
@@ -303,7 +303,7 @@ const quantityColumn = {
     label: "quantity",
     allowClear: true,
     width: "100%",
-    rules: [{ type: "number", required: true }],
+    rules: [{ required: true }],
     input: {
       type: "Decimal",
       decimal: {
