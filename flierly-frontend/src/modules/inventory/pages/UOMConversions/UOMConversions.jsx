@@ -1,6 +1,6 @@
 import DefaultModuleLayout from "@/components/DefaultModuleLayout";
 import React from "react";
-import uomConvertionColumns from "../../config/uomConvertionColumns";
+import uomConversionColumns from "../../config/uomConvertionColumns";
 import CrudTableContextProvider from "@/features/CrudTable/components/CrudTableContextProvider";
 import { CrudTable } from "@/features/CrudTable";
 import FormFields from "@/components/FormFields";
@@ -11,14 +11,14 @@ const UOMConversions = () => {
       <CrudTableContextProvider>
         <CrudTable
           entity="uom-conversion"
-          columns={uomConvertionColumns}
+          columns={uomConversionColumns}
           dataSource={[]}
           tableKey={"uom-comversion-table"}
           rowKey="id"
           rowSelectionColumnWidth="30px"
-          searchFormFields={<FormFields columns={uomConvertionColumns} configKey={"queryFormConfig"} />}
-          createFormFields={<FormFields columns={uomConvertionColumns} configKey={"createFormConfig"} />}
-          updateFormFields={<FormFields columns={uomConvertionColumns} configKey={"updateFormConfig"} />}
+          searchFormFields={<FormFields columns={uomConversionColumns} configKey={"queryFormConfig"} />}
+          createFormFields={<FormFields columns={uomConversionColumns} configKey={"createFormConfig"} />}
+          updateFormFields={<FormFields columns={uomConversionColumns} configKey={"updateFormConfig"} />}
         />
       </CrudTableContextProvider>
     </DefaultModuleLayout>
