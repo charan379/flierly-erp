@@ -161,7 +161,7 @@ const productColumn = {
     name: "product",
     label: "product",
     rules: [],
-    transformer: 'inArray',
+    transformer: "inArray",
     input: {
       type: "SelectRemoteOptions",
       select: {
@@ -227,13 +227,13 @@ const fromUomColumn = {
     name: "fromUom",
     label: "from_uom",
     rules: [],
-    transformer: 'inArray',
+    transformer: "inArray",
     input: {
       type: "SelectRemoteOptions",
       select: {
         mode: "multiple",
         asyncOptionsFetcher: (value, signal) =>
-            fetchUomsAsOptions(value, signal),
+          fetchUomsAsOptions(value, signal),
         debounceTimeout: 500,
       },
     },
@@ -261,25 +261,24 @@ const toUomColumn = {
     allowClear: false,
     hasFeedback: true,
     access: { permission: /^uom\.create$/, ifNoAccess: "disable" },
-    dependencies: ["product", "fromUom", "toUom"],
+    dependencies: ["product", "fromUom"],
     rules: [
       { required: true },
       ({ getFieldValue }) => ({
         validator(_, value) {
-          const productId = getFieldValue("product")?.id;
-          const fromUomId = getFieldValue("fromUom")?.id;
-          const toUomId = getFieldValue("toUom")?.id;
+          const productId = getFieldValue("product");
+          const fromUomId = getFieldValue("fromUom");
 
-          if (!value || !productId || !fromUomId || !toUomId)
-            return Promise.resolve();
+          console.log(getFieldValue("product"));
+          if (!value || !productId || !fromUomId) return Promise.resolve();
           return entityExistenceValidator(
             "product-to-from-uoms-validation-c-1",
             {
-              entity: "uom-convertion",
+              entity: "uom-conversion",
               filters: {
                 product: productId,
                 fromUom: fromUomId,
-                toUom: toUomId,
+                toUom: value,
               },
             }
           );
@@ -302,25 +301,24 @@ const toUomColumn = {
     allowClear: false,
     hasFeedback: true,
     access: { permission: /^uom\.update$/, ifNoAccess: "disable" },
-    dependencies: ["product", "fromUom", "toUom"],
+    dependencies: ["product", "fromUom"],
     rules: [
       { required: true },
       ({ getFieldValue }) => ({
         validator(_, value) {
-          const productId = getFieldValue("product")?.id;
-          const fromUomId = getFieldValue("fromUom")?.id;
-          const toUomId = getFieldValue("toUom")?.id;
+          const productId = getFieldValue("product");
+          const fromUomId = getFieldValue("fromUom");
 
-          if (!value || !productId || !fromUomId || !toUomId)
-            return Promise.resolve();
+          if (!value || !productId || !fromUomId) return Promise.resolve();
           return entityExistenceValidator(
             "product-to-from-uoms-validation-u-1",
             {
-              entity: "uom-convertion",
+              entity: "uom-conversion",
               filters: {
+                id: { $notEqualTo: getFieldValue("id") },
                 product: productId,
                 fromUom: fromUomId,
-                toUom: toUomId,
+                toUom: value,
               },
             }
           );
@@ -341,7 +339,7 @@ const toUomColumn = {
     name: "toUom",
     label: "to_uom",
     rules: [],
-    transformer: 'inArray',
+    transformer: "inArray",
     input: {
       type: "SelectRemoteOptions",
       select: {
@@ -354,12 +352,52 @@ const toUomColumn = {
   },
 };
 
+// Column configuration for "Conversion Factor"
+const conversionFactorColumn = {
+  title: translate("conversion_factor"),
+  dataIndex: "conversionFactor",
+  width: 150,
+  sorter: true,
+  copyable: false,
+  order: 6,
+  createFormConfig: {
+    name: "conversionFactor",
+    label: "conversion_factor",
+    allowClear: true,
+    width: "100%",
+    rules: [{ type: "number", required: true }],
+    input: {
+      type: "Decimal",
+      decimal: {
+        min: 0,
+        precision: 4,
+        step: 0.0001,
+      },
+    },
+  },
+  updateFormConfig: {
+    name: "conversionFactor",
+    label: "conversion_factor",
+    allowClear: true,
+    width: "100%",
+    rules: [{ type: "number", required: true }],
+    input: {
+      type: "Decimal",
+      decimal: {
+        min: 0,
+        precision: 4,
+        step: 0.0001,
+      },
+    },
+  },
+};
+
 const descriptionColumn = {
   title: translate("description"),
   dataIndex: "description",
   copyable: false,
   width: 200,
-  order: 6,
+  order: 7,
   createFormConfig: {
     name: "description",
     label: "description",
@@ -399,14 +437,15 @@ const timestampColumns = generateTimeStampColumns().map((timeStamp) => {
 });
 
 // Column Configuration Array
-const uomConvertionColumns = [
+const uomConversionColumns = [
   idColumn,
   isActiveColumn,
   productColumn,
   fromUomColumn,
   toUomColumn,
+  conversionFactorColumn,
   descriptionColumn,
   ...timestampColumns,
 ];
 
-export default uomConvertionColumns;
+export default uomConversionColumns;
