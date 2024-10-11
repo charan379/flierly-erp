@@ -360,6 +360,9 @@ const conversionFactorColumn = {
   sorter: true,
   copyable: true,
   order: 6,
+  render: (value, record, index, action) => {
+    return parseFloat(record?.conversionFactor).toLocaleString();
+  },
   createFormConfig: {
     name: "conversionFactor",
     label: "conversion_factor",

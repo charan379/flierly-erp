@@ -4,6 +4,7 @@ import { Tag } from "antd";
 import fetchProductsAsOptions from "../utils/fetchProductsAsOptions";
 import fetchUomsAsOptions from "../utils/fetchUomsAsOptions";
 import entityExistenceValidator from "@/utils/validators/entityExistenceValidator";
+import StockUOMConvertions from "../features/StockUOMConvertions";
 
 // Options for active status
 const statusOptions = [
@@ -178,9 +179,9 @@ const productColumn = {
 const uom = {
   title: translate("uom"),
   dataIndex: "uom",
-  copyable: false,
+  // copyable: false,
   width: 150,
-  sorter: true,
+  // sorter: true,
   order: 4,
   render: (value, record, index, action) => {
     if (value && typeof value === "object") {
@@ -283,6 +284,9 @@ const quantityColumn = {
   sorter: true,
   copyable: true,
   order: 5,
+  render: (value, record, index, action) => {
+    return parseFloat(record?.quantity).toLocaleString()
+  },
   createFormConfig: {
     name: "quantity",
     label: "quantity",
@@ -315,6 +319,18 @@ const quantityColumn = {
   },
 };
 
+// Column configuration for "Get Conversions"
+const conversionColumn = {
+  title: translate("conversions"),
+  key: "conversions",
+  width: 150,
+  align: "center",
+  order: 6,
+  render: (value, record, index, action) => {
+    return <StockUOMConvertions stockId={record?.id} />;
+  },
+};
+
 // Timestamps
 const timestampColumns = generateTimeStampColumns().map((timeStamp) => {
   return {
@@ -330,6 +346,7 @@ const stockColumns = [
   productColumn,
   uom,
   quantityColumn,
+  conversionColumn,
   ...timestampColumns,
 ];
 
