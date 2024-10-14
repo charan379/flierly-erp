@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, JoinColumn, Unique } from 'typeorm';
-import { Product } from './Product.entity';
+import { Product } from '../product/Product.entity';
 import { UOM } from './UOM.entity';
 import { IsNotEmpty, IsNumber, IsPositive, Min } from 'class-validator';
 

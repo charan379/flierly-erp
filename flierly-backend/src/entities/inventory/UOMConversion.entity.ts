@@ -10,7 +10,7 @@ import {
   DeleteDateColumn,
   JoinColumn,
 } from 'typeorm';
-import { Product } from './Product.entity';
+import { Product } from '../product/Product.entity';
 import { UOM } from './UOM.entity';
 
 @Entity('uom_conversions')
