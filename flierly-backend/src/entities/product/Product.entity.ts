@@ -20,7 +20,7 @@ export class Product {
 
   @Column({ default: true, name: 'is_active' })
   isActive: boolean;
-  
+
   @Column({ type: 'varchar', length: 100, unique: true })
   @IsNotEmpty({ message: 'SKU must not be empty.' })
   @Length(3, 25, { message: 'SKU must be between 3 and 25 characters.' })
@@ -30,6 +30,9 @@ export class Product {
   @Column({ type: "int", unique: true, nullable: true })
   @IsOptional()
   hsn: number;
+
+  @Column({ type: "boolean", default: false, name: "is_composite" })
+  isComposite: boolean;
 
   @Column({ type: 'text', nullable: true })
   @IsOptional()
