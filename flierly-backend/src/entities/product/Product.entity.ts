@@ -18,7 +18,8 @@ export class Product {
   @Length(3, 90, { message: 'Name must be between 3 and 90 characters.' })
   name: string;
 
-  @Column({ default: true, name: 'is_active' })
+  @Column({ type: "boolean", default: true, name: 'is_active' })
+  @IsOptional()
   isActive: boolean;
 
   @Column({ type: 'varchar', length: 100, unique: true })
@@ -31,7 +32,12 @@ export class Product {
   @IsOptional()
   hsn: number;
 
+  @Column({ type: "boolean", default: false, name: "is_serialized" })
+  @IsOptional()
+  isSerialized: boolean;
+
   @Column({ type: "boolean", default: false, name: "is_composite" })
+  @IsOptional()
   isComposite: boolean;
 
   @Column({ type: 'text', nullable: true })
