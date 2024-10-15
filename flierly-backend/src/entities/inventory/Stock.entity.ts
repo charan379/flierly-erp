@@ -6,7 +6,9 @@ import { IsNotEmpty, IsNumber, IsPositive, Min } from 'class-validator';
 @Entity('stock')
 @Unique(['product', 'uom'])
 export class Stock {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({
+    type: "bigint"
+  })
   id: number;
 
   @ManyToOne(() => Product, { eager: true })

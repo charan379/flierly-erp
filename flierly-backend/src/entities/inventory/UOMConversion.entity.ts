@@ -16,12 +16,14 @@ import { UOM } from './UOM.entity';
 @Entity('uom_conversions')
 @Unique(['product', 'fromUom', 'toUom'])
 export class UOMConversion {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({
+    type: 'bigint'
+  })
   id: number;
 
   @Column({ default: true, name: 'is_active' })
   isActive: boolean;
-  
+
   @ManyToOne(() => Product, { eager: true })
   @JoinColumn({ name: 'product_id' })
   @IsNotEmpty({ message: 'Product must not be empty.' })
@@ -38,7 +40,7 @@ export class UOMConversion {
   toUom: UOM;
 
   @Column({ type: 'decimal', precision: 10, scale: 4, name: 'conversion_factor' })
-  @IsNumber({maxDecimalPlaces: 4}, { message: 'Conversion factor must be a valid number with upto 4 decimal places.' })
+  @IsNumber({ maxDecimalPlaces: 4 }, { message: 'Conversion factor must be a valid number with upto 4 decimal places.' })
   @IsPositive({ message: 'Conversion factor must be greater than zero.' })
   conversionFactor: number;
 
