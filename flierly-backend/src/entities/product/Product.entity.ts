@@ -6,7 +6,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  JoinColumn,
+  ManyToOne,
 } from 'typeorm';
+import { Brand } from './Brand.entity';
 
 @Entity('products')
 export class Product {
@@ -44,6 +47,11 @@ export class Product {
   @IsOptional()
   @Length(20, 250, { message: 'Description must be between 20 and 250 characters.' })
   description: string;
+
+  // @ManyToOne(() => Brand, { eager: true, nullable: false })
+  // @JoinColumn({ name: "brand_id" })
+  // @IsNotEmpty({ message: 'Brand must be specified' })
+  // brand: Brand;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;
