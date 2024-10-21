@@ -48,10 +48,10 @@ export class Product {
   @Length(20, 250, { message: 'Description must be between 20 and 250 characters.' })
   description: string;
 
-  // @ManyToOne(() => Brand, { eager: true, nullable: false })
-  // @JoinColumn({ name: "brand_id" })
-  // @IsNotEmpty({ message: 'Brand must be specified' })
-  // brand: Brand;
+  @ManyToOne(() => Brand, { eager: true, nullable: false })
+  @JoinColumn({ name: "brand_id" })
+  @IsNotEmpty({ message: 'Brand must be specified' })
+  brand: Brand;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;
