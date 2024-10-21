@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany, OneToOne, BeforeInsert, BeforeUpdate, Repository } from 'typeorm';
 import { Address } from '../address/Address.entity';
-import { Branch } from '../branch/Branch.entity';
 import { TaxIdentity } from '../taxation/TaxIdentity.entity';
 import { IsEmail, IsNotEmpty, IsOptional, Length, Matches } from 'class-validator';
 import { AccountType } from './AccountType.entity';
@@ -60,10 +59,6 @@ export class Account {
     @OneToOne(() => Address, { eager: true, nullable: false })
     @JoinColumn({ name: 'primary_address_id' })
     primaryAddress: Address;
-
-    @ManyToOne(() => Branch, { eager: true, nullable: false })
-    @JoinColumn({ name: 'branch_id' })
-    branch: Branch;
 
     @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
     createdAt: Date;

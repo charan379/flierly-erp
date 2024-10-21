@@ -1,7 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
 import { IsNotEmpty, IsEmail, IsOptional, Matches, Length } from 'class-validator';
 import { Account } from '../account/Account.entity';
-import { Branch } from '../branch/Branch.entity';
 
 @Entity('contacts')
 export class Contact {
@@ -36,10 +35,6 @@ export class Contact {
     @ManyToOne(() => Account)
     @JoinColumn({ name: 'account_id' })
     account: Account;
-
-    @ManyToOne(() => Branch)
-    @JoinColumn({ name: 'branch_id' })
-    branch: Branch;
 
     @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
     createdAt: Date;
