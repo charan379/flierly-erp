@@ -62,4 +62,9 @@ const localeSlice = createSlice({
     },
 });
 
+// locale slice actions
+export const { RESET, CHANGE_LANGUAGE, CHANGE_LANG_DIRECTION } = localeSlice.actions;
+// locale slice reducer
+export const localeReducer = localeSlice.reducer;
+
 export default localeSlice;
