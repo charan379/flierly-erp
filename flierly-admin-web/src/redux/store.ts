@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { localStorageHealthCheck } from "./statePersist";
 import { localeReducer } from "@/features/Locale/redux/localeSlice";
+import { themeReducer } from "@/features/Theme/redux/themeSlice";
 
 // Performing a health check for localStorage state persistence
 localStorageHealthCheck();
@@ -10,7 +11,7 @@ localStorageHealthCheck();
  */
 const rootReducer = combineReducers({
     locale: localeReducer,
-    //   theme: themeReducer,
+    theme: themeReducer,
     //   auth: authReducer,
 });
 

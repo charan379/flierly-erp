@@ -4,6 +4,8 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 import useLocale from "./features/Locale/hooks/useLocale";
 import LangSelector from "./features/Locale/components/LangSelector";
+import ThemeDropdown from "./features/Theme/components/ThemeDropdown/ThemeDropdown";
+import ThemeToggler from "./features/Theme/components/ThemeToggler";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -22,6 +24,8 @@ function App() {
       </div>
       <h1>Vite + React {translate("sign_up")}</h1>
       <LangSelector />
+      <ThemeDropdown />
+      <ThemeToggler />
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}

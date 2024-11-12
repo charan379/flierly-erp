@@ -7,13 +7,16 @@ import ErrorFallback from "./components/ErrorFallback/ErrorFallback.tsx";
 import { Provider } from "react-redux";
 import store from "./redux/store.ts";
 import { BrowserRouter } from "react-router-dom";
+import AntdConfigProvider from "./features/Theme/AntdConfigProvider.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <BrowserRouter>
         <Provider store={store}>
-          <App />
+          <AntdConfigProvider>
+            <App />
+          </AntdConfigProvider>
         </Provider>
       </BrowserRouter>
     </ErrorBoundary>
