@@ -1,0 +1,33 @@
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { localStorageHealthCheck } from "./statePersist";
+import localeSlice from "@/features/Locale/redux/localeSlice";
+
+// Performing a health check for localStorage state persistence
+localStorageHealthCheck();
+
+/**
+ * Combines all the reducers into a single root reducer.
+ */
+const rootReducer = combineReducers({
+    locale: localeSlice.reducer,
+    //   theme: themeReducer,
+    //   auth: authReducer,
+});
+
+/**
+ * Configures the Redux store with the root reducer and enables Redux DevTools.
+ *
+ * @returns {Store<RootState>} The configured Redux store.
+ */
+const store = configureStore({
+    reducer: rootReducer,
+    devTools: process.env.NODE_ENV !== 'production', // Enables Redux DevTools only in non-production environments
+});
+
+// Define the type for the root state
+export type RootState = ReturnType<typeof rootReducer>;
+
+export type AppDispatch = typeof store.dispatch;
+export type AppStore = typeof store;
+
+export default store;
