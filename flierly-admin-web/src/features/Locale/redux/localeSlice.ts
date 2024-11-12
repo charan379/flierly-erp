@@ -12,6 +12,12 @@ const INITIAL_STATE: LocaleState = {
 // Fetching the persisted state from localStorage if available
 const PERSISTING_STATE: LocaleState | null = statePersist.get<LocaleState>("locale") || null;
 
+// Utility function to persist locale state to localStorage
+const persistLocaleState = (state: LocaleState) => {
+    window.localStorage.setItem("locale", JSON.stringify(state));
+};
+
+
 /**
  * Slice for managing locale state.
  */
@@ -26,12 +32,12 @@ const localeSlice = createSlice({
          */
         CHANGE_LANGUAGE: (state, action: PayloadAction<string>) => {
             const langCode = action.payload.toLowerCase(); // Normalize to lowercase
-            // Check if the language code exists in the `languages` object
-            if (langCode in languages) {
-                state.translation = getLanguageObject(langCode); // Get the translation object for the selected language
-                state.langCode = langCode; // Update the language code
-                // Persist the new locale state to localStorage
-                window.localStorage.setItem("locale", JSON.stringify(state));
+            if (Object.keys(languages).includes(langCode)) {
+                state.translation = getLanguageObject(langCode); // Get the translation object
+                state.langCode = langCode; // Update language code
+                persistLocaleState(state); // Persist to localStorage
+            } else {
+                console.warn(`Invalid language code: ${langCode}.`);
             }
         },
 
@@ -42,19 +48,16 @@ const localeSlice = createSlice({
          */
         CHANGE_LANG_DIRECTION: (state, action: PayloadAction<"ltr" | "rtl">) => {
             state.langDirection = action.payload; // Update text direction
-            // Persist the updated state to localStorage
-            window.localStorage.setItem("locale", JSON.stringify(state));
+            persistLocaleState(state); // Persist to localStorage
         },
 
         /**
          * Resets the locale state to the initial values.
          * @param state - The current state of the slice.
          */
-        RESET: (state) => {
-            // Reset the state to the initial state
-            Object.assign(state, INITIAL_STATE);
-            // Persist the reset state to localStorage
-            window.localStorage.setItem("locale", JSON.stringify(state));
+        RESET: () => {
+            persistLocaleState(INITIAL_STATE); // Persist reset state
+            return INITIAL_STATE; // Return initial state
         },
     },
 });
