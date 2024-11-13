@@ -1,5 +1,5 @@
 import store from "@/redux/store";
-import getTranslation from "./getTranslation";
+import getTranslation from "../utils/getTranslation";
 
 /**
  * Listens to locale state changes and executes the callback..
@@ -62,6 +62,4 @@ listenToLocaleChanges((newState: LocaleState) => {
         currentLangCode = newLangCode;
         currentTranslationObject = newState?.translation;
     }
-
-    console.log({ oldLangCode, newLangCode });
 });
