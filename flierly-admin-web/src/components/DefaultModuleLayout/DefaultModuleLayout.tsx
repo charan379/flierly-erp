@@ -13,9 +13,6 @@ type DefaultModuleLayoutProps = {
 
 /**
  * DefaultModuleLayout component to structure a layout with optional header, footer, and error boundary.
- *
- * @param {DefaultModuleLayoutProps} props - Props containing header, footer, and children elements.
- * @returns {JSX.Element} The rendered layout component.
  */
 const DefaultModuleLayout: React.FC<DefaultModuleLayoutProps> = ({
   header,
