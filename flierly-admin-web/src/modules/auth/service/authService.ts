@@ -11,34 +11,28 @@ const api: AxiosInstance = axios.create({
 const authService = {
   /**
    * Function to handle user login
-   * @param {LoginCredentials} credentials - User login credentials
-   * @returns {Promise<any>} - Response data or error
    */
-  login: async (credentials: LoginCredentials): Promise<ApiResponse<UserAuth>> => {
+  login: async (credentials: LoginCredentials): Promise<ApiResponse<UserAuth> | undefined> => {
     try {
       const response: AxiosResponse = await api.post(`/user/authenticate`, credentials);
-      const { data, status } = response;
-      successHandler({ data, status }, { notifyOnSuccess: false, notifyOnFailed: true });
-      return data;
+      successHandler(response, { notifyOnSuccess: false, notifyOnFailed: true });
+      return response.data;;
     } catch (error) {
-      return errorHandler(error);
+      errorHandler(error);
     }
   },
 
   /**
    * Function to handle user refresh token
-   * @param {string} currentToken - The current access token
-   * @returns {Promise<ApiResponse<UserAuth>>} - Response data with refreshed token and user data
    */
-  refreshToken: async ({ currentToken }: { currentToken: string }): Promise<ApiResponse<UserAuth>> => {
+  refreshToken: async ({ currentToken }: { currentToken: string }): Promise<ApiResponse<UserAuth> | undefined> => {
     try {
       api.defaults.headers['Authorization'] = `Bearer ${currentToken}`;
       const response: AxiosResponse = await api.get(`/user/refresh-access-token`);
-      const { data, status } = response;
-      successHandler({ data, status }, { notifyOnSuccess: false, notifyOnFailed: true });
-      return data;
+      successHandler(response, { notifyOnSuccess: false, notifyOnFailed: true });
+      return response.data;
     } catch (error) {
-      return errorHandler(error);
+      errorHandler(error);
     }
   },
 };

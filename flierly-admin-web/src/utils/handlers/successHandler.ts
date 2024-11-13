@@ -1,123 +1,97 @@
 import { notification, message as antdMessage } from "antd";
 import { codeMessage } from "./constants/codeMessage";
+import { AxiosResponse } from "axios";
 
-// Define the response type
-interface ResponseData {
-  success?: boolean;
-  message?: string;
-  error?: {
-    message?: string;
-  };
-  httpCode?: number;
-}
-
-interface Response {
-  data: ResponseData;
-  status: number;
-}
-
-// Define the options type
-interface NotificationOptions {
-  notifyOnSuccess?: boolean;
-  notifyOnFailed?: boolean;
-  notifyType?: "toast" | "message";
+// Define types for notification options and types
+type NotificationType = "toast" | "message";  // Type for the notification style
+type NotificationOptions = {
+  notifyOnSuccess?: boolean;  // Flag to trigger success notifications
+  notifyOnFailed?: boolean;   // Flag to trigger error notifications
+  notifyType?: NotificationType;  // Type of notification ("toast" or "message")
 }
 
 /**
- * Handles the success notification.
+ * Displays a success notification based on the type of notification requested.
  *
- * @param notifyType - The type of notification to use ("toast" or "message").
- * @param httpCode - The HTTP status code to display in the notification.
- * @param message - The message to display in the notification.
+ * @param notifyType - The type of notification to show ("toast" or "message").
+ * @param httpCode - The HTTP status code to be displayed in the notification.
+ * @param message - The message to be displayed in the notification.
  */
-const handleSuccessNotification = (
-  notifyType: "toast" | "message",
+const showSuccessNotification = (
+  notifyType: NotificationType,
   httpCode: number,
   message: string
 ): void => {
-  switch (notifyType) {
-    case "toast":
-      notification.config({
-        duration: 3, // Duration the notification will be displayed
-        maxCount: 3, // Maximum number of notifications displayed at once
-      });
-      notification.success({
-        message: `${httpCode} : Request success`, // Title of the success notification with httpCode
-        description: message, // Description of the success notification
-      });
-      break;
-    case "message":
-      antdMessage.success(message);
-      break;
-    default:
-      break;
+  // Display a toast notification if the type is "toast"
+  if (notifyType === "toast") {
+    notification.success({
+      message: `${httpCode} : Request success`,  // Title with HTTP status code
+      description: message,  // Message content
+      duration: 3,  // Duration for which the toast will be displayed (in seconds)
+    });
+  } else {
+    // Display a message box if the type is "message"
+    antdMessage.success(message);
   }
 };
 
 /**
- * Handles the error notification.
+ * Displays an error notification based on the type of notification requested.
  *
- * @param notifyType - The type of notification to use ("toast" or "message").
- * @param httpCode - The HTTP status code to display in the notification.
- * @param errorMessage - The error message to display in the notification.
+ * @param notifyType - The type of notification to show ("toast" or "message").
+ * @param httpCode - The HTTP status code to be displayed in the notification.
+ * @param errorMessage - The error message to be displayed in the notification.
  */
-const handleErrorNotification = (
-  notifyType: "toast" | "message",
+const showErrorNotification = (
+  notifyType: NotificationType,
   httpCode: number,
   errorMessage: string
 ): void => {
-  switch (notifyType) {
-    case "toast":
-      notification.config({
-        duration: 4, // Duration the notification will be displayed
-        maxCount: 2, // Maximum number of notifications displayed at once
-      });
-      notification.error({
-        message: `${httpCode} : Request failed`, // Title of the error notification with status code
-        description: errorMessage, // Description of the error notification
-      });
-      break;
-    case "message":
-      antdMessage.error(errorMessage);
-      break;
-    default:
-      break;
+  // Display a toast notification if the type is "toast"
+  if (notifyType === "toast") {
+    notification.error({
+      message: `${httpCode} : Request failed`,  // Title with HTTP status code
+      description: errorMessage,  // Error message content
+      duration: 4,  // Duration for which the toast will be displayed (in seconds)
+    });
+  } else {
+    // Display a message box if the type is "message"
+    antdMessage.error(errorMessage);
   }
 };
 
 /**
- * Handles the success and error notifications based on the server response.
+ * Handles success and error notifications based on the server response.
  *
- * @param response - The response object from the server.
- * @param options - Options for customizing the notification behavior.
+ * @param response - The response object from the server containing status and message data.
+ * @param options - Custom options for controlling the notification behavior.
  */
 const successHandler = (
-  response: Response,
-  options: NotificationOptions = {
-    notifyOnSuccess: false,
-    notifyOnFailed: true,
-    notifyType: "toast",
-  }
+  response: AxiosResponse,  // The response object from the server (Axios response)
+  options: NotificationOptions  // Options for customizing notification behavior
 ): void => {
-  // Destructure data and status from response
-  const { data, status } = response;
+  const { data, status } = response;  // Extract data and status from the response
 
-  // Destructure notification options
-  const { notifyOnSuccess = false, notifyOnFailed = true, notifyType = "toast" } = options;
+  // Destructure notification options and provide default values if not provided
+  const { 
+    notifyOnSuccess = false,  // Default: Don't show success notification
+    notifyOnFailed = true,    // Default: Show error notification if failed
+    notifyType = "toast"     // Default: Use "toast" notification type
+  } = options;
 
-  // Extract message and HTTP status code from response data, fallback to default codeMessage if not available
-  const message = data?.message || codeMessage[status];
-  const httpCode = data?.httpCode || status;
+  // Extract the message and HTTP status code from the response data, with a fallback option
+  const message = data?.message || codeMessage[status] || "Request completed";  // Message to display
+  const httpCode = data?.httpCode || status;  // HTTP status code to display
 
-  // Check if the response indicates a successful operation
-  if (data?.success) {
-    if (notifyOnSuccess) handleSuccessNotification(notifyType, httpCode, message); // Trigger success notification if enabled
-  } else {
-    if (notifyOnFailed) {
-      const errorMessage = data?.error?.message || message; // Use the error message if available, otherwise use the default message
-      handleErrorNotification(notifyType, httpCode, errorMessage); // Trigger error notification if enabled
-    }
+  // If the response indicates success, and notifyOnSuccess is true, show a success notification
+  if (data?.success && notifyOnSuccess) {
+    showSuccessNotification(notifyType, httpCode, message);
+  } 
+  // If the response indicates failure, and notifyOnFailed is true, show an error notification
+  else if (!data?.success && notifyOnFailed) {
+    const errorMessage = data?.error?.message || message;  // Use error message from data, or fallback to the general message
+    showErrorNotification(notifyType, httpCode, errorMessage);
   }
 };
 
-export default successHandler;
+export default successHandler;  // Export the successHandler function for use in other parts of the application

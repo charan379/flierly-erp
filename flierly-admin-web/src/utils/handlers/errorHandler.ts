@@ -1,169 +1,141 @@
 import { notification } from 'antd';
 import { codeMessage } from './constants/codeMessage';
 import { logout } from '@/modules/auth/service/authStateService';
-
-interface Response {
-  status: number;
-  data?: {
-    message?: string;
-    error?: {
-      reason?: string;
-    };
-  };
-}
-
-interface Error {
-  response?: Response;
-  code?: string;
-}
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
 /**
- * Displays an error notification with the specified message and description.
+ * Displays an error notification with a title, description, duration, and maximum count.
  *
- * @param message - The title of the error notification.
- * @param description - The description of the error notification.
- * @param duration - Duration the notification will be displayed.
+ * @param message - Title of the error notification.
+ * @param description - Description of the error notification.
+ * @param duration - Duration for which the notification will be displayed (in seconds).
  * @param maxCount - Maximum number of notifications displayed at once.
  */
 const showErrorNotification = (
   message: string,
   description: string,
-  duration: number,
-  maxCount: number
+  duration = 5,    // Default duration is 5 seconds
+  maxCount = 2     // Default maximum number of notifications displayed at once
 ): void => {
-  notification.config({
-    duration,
-    maxCount,
-  });
-  notification.error({
-    message,
-    description,
-  });
+  notification.config({ duration, maxCount });  // Configure notification settings
+  notification.error({ message, description });  // Show the error notification
 };
 
 /**
- * Handles the case when the user is offline.
+ * Returns a standardized error response object for common errors.
  *
- * @returns An object representing the offline error state.
+ * @param message - The error message to include in the response.
+ * @returns A standardized error object containing success status, result, and message.
  */
-const handleOfflineError = (): { success: boolean; result: null; message: string } => {
-  showErrorNotification(
-    'No internet connection',
-    'Cannot connect to the Internet. Check your internet network.',
-    10,
-    1
-  );
-  return {
-    success: false,
-    result: null,
-    message: 'Cannot connect to the server. Check your internet network.',
-  };
-};
+const errorResult = (message: string): { success: boolean; result: null; message: string } => ({
+  success: false,
+  result: null,  // No result data on error
+  message,       // The error message
+});
 
 /**
- * Handles the case when there is no response from the server.
+ * Handles offline errors (e.g., no internet connection).
  *
- * @returns An object representing the server connection error state.
+ * @returns A standardized error response object.
  */
-const handleNoResponseError = (): { success: boolean; result: null; message: string } => {
+const handleOfflineError = (): ReturnType<typeof errorResult> => {
   showErrorNotification(
-    'Problem connecting to server',
-    'Cannot connect to the server. Try again later.',
-    5,
-    1
+    'No internet connection',  // Error title
+    'Cannot connect to the Internet. Check your network.',  // Error description
+    10,  // Show the notification for 10 seconds
+    1    // Only allow 1 notification at a time
   );
-  return {
-    success: false,
-    result: null,
-    message: 'Cannot connect to the server. Contact your account administrator.',
-  };
+  return errorResult('Cannot connect to the server. Check your internet network.');
 };
 
 /**
- * Handles JWT expiration by clearing auth data and redirecting to login.
+ * Handles errors when no server response is received.
+ *
+ * @returns A standardized error response object.
+ */
+const handleNoResponseError = (): ReturnType<typeof errorResult> => {
+  showErrorNotification(
+    'Problem connecting to server',  // Error title
+    'Cannot connect to the server. Try again later.',  // Error description
+    5,  // Show the notification for 5 seconds
+    1    // Only allow 1 notification at a time
+  );
+  return errorResult('Cannot connect to the server. Contact your account administrator.');
+};
+
+/**
+ * Handles JWT expiration by logging the user out and redirecting to the login page.
  */
 const handleJwtExpiration = (): void => {
-  logout();
+  logout();  // Log the user out
   const callback = {
-    pathname: window.location.pathname,
-    search: window.location.search,
-    url: window.location.href,
+    pathname: window.location.pathname,  // Current page path
+    search: window.location.search,      // Current query parameters
+    url: window.location.href,           // Current full URL
   };
+  // Redirect to login page with the current URL as the callback
   window.location.href = `/login?callback=${encodeURIComponent(JSON.stringify(callback))}`;
 };
 
 /**
- * Handles response errors based on the status code.
+ * Handles server response errors, displaying a notification with the error details.
  *
- * @param response - The response object from the server.
- * @returns The response data.
+ * @param response - The response object from the server (AxiosResponse).
+ * @returns The response data after handling the error.
  */
-const handleResponseError = (response: Response): any => {
+const handleResponseError = (response: AxiosResponse): any => {
+  // Get the error message, either from the response or a predefined message based on status
   const message = response.data?.message || codeMessage[response.status];
-  const { status } = response;
-  showErrorNotification(
-    `Request error ${status}`,
-    message,
-    5,
-    2
-  );
-  return response.data;
+  showErrorNotification(`Request error ${response.status}`, message);  // Show the error notification
+  return response.data;  // Return the response data
 };
 
 /**
- * Handles request abortion cases.
+ * Handles aborted requests (e.g., request was manually canceled).
  *
- * @returns The abort error state.
+ * @returns A standardized error response object.
  */
-const handleAbortError = (): { success: boolean; result: null; message: string } => {
-  return {
-    success: false,
-    result: null,
-    message: 'Request was aborted.',
-  };
+const handleAbortError = (): ReturnType<typeof errorResult> => {
+  return errorResult('Request was aborted.');  // Return an aborted request error
 };
 
 /**
- * Handles errors and displays appropriate notifications.
+ * Handles errors during API requests.
  *
- * @param error - The error object from the failed request.
- * @returns An object representing the error state.
+ * @param error - The error object thrown during the API request (AxiosError).
+ * @returns A standardized error response object based on the error type.
  */
-const errorHandler = (error: Error): { success: boolean; result: null; message: string } => {
-  // Check if the user is offline
+const errorHandler = (error: unknown): ReturnType<typeof errorResult> => {
+  // Check if the user is offline (no internet connection)
   if (!navigator.onLine) {
     return handleOfflineError();
   }
 
-  const { response, code } = error;
+  // Check if the error is an AxiosError
+  if (!axios.isAxiosError(error)) {
+    return errorResult('An unexpected error occurred.');  // Return a general error message
+  }
 
-  // Handle request abortion
+  const { response, code } = error as AxiosError<any>;  // Extract response and code from the error
+
+  // Handle aborted requests (e.g., request was canceled)
   if (code === 'ERR_CANCELED') {
     return handleAbortError();
   }
 
-  // Handle case when there is no response from the server
+  // If there is no response, handle as a no response error
   if (!response) {
     return handleNoResponseError();
   }
 
-  // Handle JWT expiration
+  // If the response contains a specific error indicating JWT expiration, handle it
   if (response.data?.error?.reason === 'Token Expired Re-authenticate') {
     handleResponseError(response);
-    handleJwtExpiration();
+    handleJwtExpiration();  // Log out and redirect to login
   }
 
-  // Handle response errors with status codes
-  if (response.status) {
-    return handleResponseError(response);
-  } else {
-    // Default error handling based on online/offline status
-    if (navigator.onLine) {
-      return handleNoResponseError();
-    } else {
-      return handleOfflineError();
-    }
-  }
+  // Handle server response errors based on status
+  return response.status ? handleResponseError(response) : handleNoResponseError();
 };
 
-export default errorHandler;
+export default errorHandler;  // Export the error handler function for use in other parts of the application
