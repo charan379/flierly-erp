@@ -2,6 +2,7 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
+import "@/assets/css/app.css"
 import useLocale from "./features/Locale/hooks/useLocale";
 import LangSelector from "./features/Locale/components/LangSelector";
 import ThemeDropdown from "./features/Theme/components/ThemeDropdown/ThemeDropdown";
