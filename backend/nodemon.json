@@ -1,5 +1,0 @@
-{
-    "watch": ["src"],
-    "ext": "ts",
-    "exec.ignore": "concurrently \"npx tsc --watch\" \"ts-node src/server.ts\""
-}
