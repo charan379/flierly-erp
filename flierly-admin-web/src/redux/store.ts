@@ -13,7 +13,7 @@ localStorageHealthCheck();
 const rootReducer = combineReducers({
     locale: localeReducer,
     theme: themeReducer,
-      auth: authReducer,
+    auth: authReducer,
 });
 
 /**

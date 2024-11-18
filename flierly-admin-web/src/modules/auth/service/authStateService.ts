@@ -1,5 +1,5 @@
-import store, { AppDispatch } from "@/redux/store";
-import { RootState } from "@/redux/store";
+import store from "@/redux/store";
+import { logout as logoutAction } from "../redux/authSlice";
 
 /**
  * Listens to authentication state changes and executes the callback.
@@ -26,15 +26,15 @@ export const listenToAuthChanges = (callback: (authState: AuthState) => void): (
  * @returns {string} The authentication token.
  */
 export const getToken = (): string => {
-    const state: RootState = store.getState();
-    return state.auth.token;
+    const auth: AuthState = store.getState().auth;
+    return auth.token;
 };
 
 /**
  * Logs out the current user.
  */
 export const logout = (): void => {
-    const dispatch: AppDispatch = store.dispatch;
-    dispatch({ type: 'auth/logout' }); // Assuming `logout` is the action name in the auth slice
+    const dispatch = store.dispatch;
+    dispatch(logoutAction()); // Assuming `logout` is the action name in the auth slice
     console.log('Logged out successfully');
 };

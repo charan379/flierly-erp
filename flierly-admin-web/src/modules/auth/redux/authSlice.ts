@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { LoadingTypes } from "../@types/loading";
 import authService from "../service/authService";
-import { RootState } from "@/redux/store";
 
 // Initial state
 const INITIAL_STATE: AuthState = {
@@ -15,79 +14,28 @@ const INITIAL_STATE: AuthState = {
   error: null,
 };
 
-// Create the authentication slice
-const authSlice = createSlice({
-  name: "auth",
-  initialState: INITIAL_STATE,
-  reducers: {
-    // LOGOUT reducer
-    logout: (state) => {
-      state.user = null;
-      state.allowedAccess = [];
-      state.token = "";
-      state.loggedInAt = "";
-      state.tokenExpiresAt = "";
-      state.isLoggedIn = false;
-      state.loading = LoadingTypes.IDLE;
-      state.error = null;
-      localStorage.removeItem("auth");
-    },
-  },
-  extraReducers: (builder) => {
-    // LOGIN async thunk within slice
-    builder
-      .addCase(login.pending, (state) => {
-        state.loading = LoadingTypes.PENDING;
-        state.error = null;
-      })
-      .addCase(login.rejected, (state, action: PayloadAction<any>) => {
-        state.error = action.payload?.error;
-        state.loading = LoadingTypes.FAILED;
-        state.isLoggedIn = false;
-      })
-      .addCase(login.fulfilled, (state, action: PayloadAction<any>) => {
-        const { user, allowedAccess, token, loggedInAt, tokenExpiresAt } = action.payload?.result;
-        state.loading = LoadingTypes.SUCCEEDED;
-        state.user = user;
-        state.allowedAccess = allowedAccess;
-        state.token = token;
-        state.loggedInAt = loggedInAt;
-        state.tokenExpiresAt = tokenExpiresAt;
-        state.isLoggedIn = true;
-        localStorage.setItem("auth", JSON.stringify(state));
-      });
+// Utility for localStorage handling
+const saveAuthToLocalStorage = (authState: AuthState) => {
+  localStorage.setItem("auth", JSON.stringify(authState));
+};
 
-    // REFRESH async thunk within slice
-    builder
-      .addCase(refresh.pending, (state) => {
-        state.loading = LoadingTypes.REFRESHING;
-      })
-      .addCase(refresh.rejected, (state, action: PayloadAction<any>) => {
-        state.error = action.payload?.error;
-        state.loading = LoadingTypes.FAILED;
-      })
-      .addCase(refresh.fulfilled, (state, action: PayloadAction<any>) => {
-        const { user, allowedAccess, token, tokenExpiresAt } = action.payload?.result;
-        state.loading = LoadingTypes.SUCCEEDED;
-        state.user = user;
-        state.allowedAccess = allowedAccess;
-        state.token = token;
-        state.tokenExpiresAt = tokenExpiresAt;
-        localStorage.setItem("auth", JSON.stringify(state));
-      });
-  },
-});
+const clearAuthFromLocalStorage = () => {
+  localStorage.removeItem("auth");
+};
 
 // LOGIN async action
 export const login = createAsyncThunk(
   "auth/login",
   async (credentials: LoginCredentials, thunkAPI) => {
-    const res = await authService.login(credentials);
-
-    if (res?.success === false) {
-      return thunkAPI.rejectWithValue(res);
+    try {
+      const res = await authService.login(credentials);
+      if (res?.success === false) {
+        return thunkAPI.rejectWithValue(res);
+      }
+      return res;
+    } catch (error) {
+      return thunkAPI.rejectWithValue({ error: "Login failed" });
     }
-    return res;
   }
 );
 
@@ -95,18 +43,92 @@ export const login = createAsyncThunk(
 export const refresh = createAsyncThunk(
   "auth/refresh",
   async (currentToken: string | undefined, thunkAPI) => {
-    let token = currentToken || (thunkAPI.getState() as RootState).auth.token;
+    const state = thunkAPI.getState() as any;
+    const token = currentToken || state?.auth?.token;
 
-    const res = await authService.refreshToken({ currentToken: token });
-
-    if (res?.success === false) {
-      return thunkAPI.rejectWithValue(res);
+    try {
+      const res = await authService.refreshToken({ currentToken: token });
+      if (res?.success === false) {
+        return thunkAPI.rejectWithValue(res);
+      }
+      return res;
+    } catch (error) {
+      return thunkAPI.rejectWithValue({ error: "Token refresh failed" });
     }
-    return res;
   }
 );
 
+// Create the authentication slice
+const authSlice = createSlice({
+  name: "auth",
+  initialState: INITIAL_STATE,
+  reducers: {
+    logout: (state) => {
+      Object.assign(state, INITIAL_STATE); // Reset state to initial values
+      clearAuthFromLocalStorage();
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(login.pending, (state) => {
+        state.loading = LoadingTypes.PENDING;
+        state.error = null;
+      })
+      .addCase(login.rejected, (state, action: PayloadAction<any>) => {
+        Object.assign(state, {
+          user: null,
+          allowedAccess: [],
+          token: "",
+          loggedInAt: "",
+          tokenExpiresAt: "",
+          isLoggedIn: false,
+          loading: LoadingTypes.FAILED,
+          error: action.payload?.error || "Login failed"
+        });
+      })
+      .addCase(login.fulfilled, (state, action: PayloadAction<any>) => {
+        const { user, allowedAccess, token, loggedInAt, tokenExpiresAt } =
+          action.payload?.result;
+        Object.assign(state, {
+          user,
+          allowedAccess,
+          token,
+          loggedInAt,
+          tokenExpiresAt,
+          isLoggedIn: true,
+          loading: LoadingTypes.SUCCEEDED,
+        });
+        saveAuthToLocalStorage(state);
+      })
+      .addCase(refresh.pending, (state) => {
+        state.loading = LoadingTypes.REFRESHING;
+      })
+      .addCase(refresh.rejected, (state, action: PayloadAction<any>) => {
+        Object.assign(state, {
+          user: null,
+          allowedAccess: [],
+          token: "",
+          loggedInAt: "",
+          tokenExpiresAt: "",
+          isLoggedIn: false,
+          loading: LoadingTypes.FAILED,
+          error: action.payload?.error || "Token refresh failed"
+        });
+      })
+      .addCase(refresh.fulfilled, (state, action: PayloadAction<any>) => {
+        const { user, allowedAccess, token, tokenExpiresAt } =
+          action.payload?.result;
+        Object.assign(state, {
+          user,
+          allowedAccess,
+          token,
+          tokenExpiresAt,
+          loading: LoadingTypes.SUCCEEDED,
+        });
+        saveAuthToLocalStorage(state);
+      });
+  },
+});
+
 export const { logout } = authSlice.actions;
 export const authReducer = authSlice.reducer;
-
-export default authSlice;

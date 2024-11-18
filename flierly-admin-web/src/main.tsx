@@ -11,14 +11,14 @@ import AntdConfigProvider from "./features/Theme/AntdConfigProvider.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <BrowserRouter>
-        <Provider store={store}>
+    <Provider store={store}>
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <BrowserRouter>
           <AntdConfigProvider>
             <App />
           </AntdConfigProvider>
-        </Provider>
-      </BrowserRouter>
-    </ErrorBoundary>
+        </BrowserRouter>
+      </ErrorBoundary>
+    </Provider>
   </StrictMode>
 );

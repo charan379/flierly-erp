@@ -4,7 +4,7 @@ type ApiResponse<T> = {
     message: string;
     controller: string;
     requestUrl: string;
-    error: ErrorDetails | null;
+    error?: ErrorDetails | null;
     httpCode: number;
 }
 
