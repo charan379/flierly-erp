@@ -36,15 +36,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false }) => {
     }
   }
 
-//   useEffect(() => {
-//     if (redirectOnLogin && loading === LoadingTypes.SUCCEEDED && isLoggedIn) {
-//       if (callback?.pathname) {
-//         navigate({ pathname: callback.pathname, search: callback.search });
-//       } else {
-//         navigate("/erp");
-//       }
-//     }
-//   }, [isLoggedIn, loading, navigate, redirectOnLogin, callback]);
+  useEffect(() => {
+    if (redirectOnLogin && loading === LoadingTypes.SUCCEEDED && isLoggedIn) {
+      if (callback?.pathname) {
+        navigate({ pathname: callback.pathname, search: callback.search });
+      } else {
+        navigate("/erp");
+      }
+    }
+  }, [isLoggedIn, loading, navigate, redirectOnLogin, callback]);
 
   return (
     <Loading isLoading={loading === LoadingTypes.PENDING}>
