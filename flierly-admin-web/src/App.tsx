@@ -7,7 +7,6 @@ import useLocale from "./features/Locale/hooks/useLocale";
 import LangSelector from "./features/Locale/components/LangSelector";
 import ThemeDropdown from "./features/Theme/components/ThemeDropdown/ThemeDropdown";
 import ThemeToggler from "./features/Theme/components/ThemeToggler";
-import LoginForm from "./modules/auth/forms/LoginForm";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -16,7 +15,6 @@ function App() {
 
   return (
     <>
-    <LoginForm />
       <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
