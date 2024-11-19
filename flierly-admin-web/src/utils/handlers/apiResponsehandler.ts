@@ -129,7 +129,6 @@ const handleResponse = async <T>({
             httpCode: status,
         };
     } catch (error) {
-        handleJwtExpiration();
         if (!axios.isAxiosError(error)) {
             console.error("Unexpected error:", error);
             return {
