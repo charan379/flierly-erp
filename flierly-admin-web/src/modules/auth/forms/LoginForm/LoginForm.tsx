@@ -1,48 +1,27 @@
 import React, { useEffect } from "react";
 import useLocale from "@/features/Locale/hooks/useLocale";
-import {
-  InfoCircleOutlined,
-  LockOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import { Button, Checkbox, Form, Input } from "antd";
+import { InfoCircleOutlined, LockOutlined, UserOutlined } from "@ant-design/icons";
+import { Button, Checkbox, Flex, Form, Input } from "antd";
 import Loading from "@/components/Loading";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { LoadingTypes } from "../../@types/loading";
 
 interface LoginFormProps {
-  redirectOnLogin?: boolean; // Optional prop for redirecting after login
+  redirectOnLogin?: boolean;
 }
 
-/**
- * LoginForm component to display a login form with email and password fields.
- */
 const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false }) => {
   const { translate, langDirection } = useLocale();
   const { loading, login, isLoggedIn } = useAuth();
-
   const navigate = useNavigate();
 
-  let callback: { pathname?: string; search?: string } | null = null;
-  const callbackParam = new URLSearchParams(window.location.search).get(
-    "callback"
-  );
-  if (callbackParam) {
-    try {
-      callback = JSON.parse(callbackParam);
-    } catch {
-      console.error("Failed to parse callback parameter");
-    }
-  }
+  const callbackParam = new URLSearchParams(window.location.search).get("callback");
+  const callback = callbackParam ? JSON.parse(callbackParam || "{}") : null;
 
   useEffect(() => {
     if (redirectOnLogin && loading === LoadingTypes.SUCCEEDED && isLoggedIn) {
-      if (callback?.pathname) {
-        navigate({ pathname: callback.pathname, search: callback.search });
-      } else {
-        navigate("/erp");
-      }
+      navigate(callback?.pathname ? { pathname: callback.pathname, search: callback.search } : "/erp");
     }
   }, [isLoggedIn, loading, navigate, redirectOnLogin, callback]);
 
@@ -53,13 +32,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false }) => {
         name="login"
         className="auth-form"
         id="login-form"
-        initialValues={{
-          remember: true,
-        }}
-        onFinish={(values) => login(values)}
+        initialValues={{ remember: true }}
+        onFinish={login}
       >
         <div style={{ direction: langDirection }}>
-          {/* Username */}
           <Form.Item
             label={translate("username")}
             name="username"
@@ -79,13 +55,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false }) => {
             />
           </Form.Item>
 
-          {/* Password */}
           <Form.Item
             label={translate("password")}
             name="password"
-            rules={[
-              { required: true, message: translate("password_is_required") },
-            ]}
+            rules={[{ required: true, message: translate("password_is_required") }]}
             tooltip={{
               title: translate("password_is_required"),
               icon: <InfoCircleOutlined />,
@@ -98,26 +71,17 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false }) => {
             />
           </Form.Item>
 
-          {/* Remember Me */}
-          <Form.Item>
+          <Flex justify="space-between">
             <Form.Item name="remember" valuePropName="checked" noStyle>
               <Checkbox>{translate("remember_me")}</Checkbox>
             </Form.Item>
-            <a
-              className="float-right-line-normal-pt-2"
-              id="login-form-forgot"
-              href="/forgetpassword"
-              style={{
-                marginLeft: langDirection === "rtl" ? "220px" : "0px",
-              }}
-            >
+            <a id="login-form-forgot" href="/forgetpassword" style={{marginLeft: langDirection === "rtl" ? "220px" : undefined,}} >
               {translate("forgot_password")}
             </a>
-          </Form.Item>
+          </Flex>
         </div>
 
-        {/* Submit Button */}
-        <Form.Item>
+        <Form.Item style={{margin: "5px 0px 5px 0px"}}>
           <Button
             type="primary"
             htmlType="submit"
@@ -127,8 +91,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false }) => {
           >
             {translate("sign_in")}
           </Button>
-          {translate("or")}{" "}
-          <a href="/register">{translate("register_now")}</a>
+          {translate("or")} <a href="/register">{translate("register_now")}</a>
         </Form.Item>
       </Form>
     </Loading>
