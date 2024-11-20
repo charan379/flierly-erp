@@ -1,7 +1,7 @@
 /**
  * Handles JWT expiration by logging the user out and redirecting to the login page.
  */
-const handleJwtExpiration = (): void => {
+function handleJwtExpiration(): void {
   // Log the user out
   const callback = {
     pathname: window.location.pathname,  // Current page path
