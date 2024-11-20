@@ -53,12 +53,22 @@ const showErrorNotification = (
  * Handle specific errors like offline, no response, JWT expiration, and abort errors.
  */
 const handleSpecificErrors = <T>(error: AxiosError<ApiResponse<T>>): ErrorDetails => {
+
+    if (!navigator.onLine) {
+        return {
+            name: "NetworkError",
+            httpCode: 0,
+            reason: "No internet connection",
+            message: "You are offline. Please check your internet connection."
+        }
+    }
+
     if (error.message === "Network Error") {
         return {
             name: "NetworkError",
             httpCode: 0,
             reason: "Network Error",
-            message: "You are offline. Please check your internet connection.",
+            message: "Cannot connect to the server. Check your internet network.",
         };
     }
 
@@ -82,7 +92,7 @@ const handleSpecificErrors = <T>(error: AxiosError<ApiResponse<T>>): ErrorDetail
 
     if (error.response?.status === 401) {
         const isTokenExpired = error.response.data?.error?.reason === "Token Expired Re-authenticate"; // Custom server-side error flag
-        if(isTokenExpired) handleJwtExpiration();
+        if (isTokenExpired) handleJwtExpiration();
         return {
             name: "UnauthorizedError",
             httpCode: 401,
