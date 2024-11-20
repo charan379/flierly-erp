@@ -1,7 +1,7 @@
 import React from "react";
 import useLocale from "@/features/Locale/hooks/useLocale";
 import { InfoCircleOutlined, LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Checkbox, Flex, Form, Input } from "antd";
 import { useNavigate } from "react-router-dom";
 import Loading from "@/components/Loading";
 
@@ -118,7 +118,7 @@ const SignUpForm: React.FC = () => {
           </Form.Item>
 
           {/* Accept Terms and Conditions */}
-          <Form.Item>
+          <Flex justify="space-between">
             <Form.Item
               name="terms"
               valuePropName="checked"
@@ -143,11 +143,11 @@ const SignUpForm: React.FC = () => {
             >
               {translate("terms_and_conditions")}
             </a>
-          </Form.Item>
+          </Flex>
         </div>
 
         {/* Form Submission */}
-        <Form.Item>
+        <Form.Item style={{margin: "5px 0px 5px 0px"}}>
           <Button
             type="primary"
             htmlType="submit"
