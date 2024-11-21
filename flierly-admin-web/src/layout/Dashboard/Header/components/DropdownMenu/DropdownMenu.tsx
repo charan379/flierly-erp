@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Badge, Button, Dropdown, DropDownProps, MenuProps } from "antd";
+import { Badge, Dropdown, DropDownProps, MenuProps } from "antd";
 import UserAvatar from "../UserAvatar";
 import useLocale from "@/features/Locale/hooks/useLocale";
 import { Link } from "react-router-dom";
@@ -51,12 +51,14 @@ const DropdownMenu: React.FC = () => {
     {
       icon: <ReloadOutlined spin={loading === "refreshing"} />,
       key: "refresh-authentication",
-      label:<Button type="text" onClick={() => refresh()}>{translate("refresh_auth")}</Button>,
+      label:translate("refresh_auth"),
+      onClick: () => refresh(),
     },
     {
       icon: <LogoutOutlined />,
       key: "logout",
-      label: <Button type="text" onClick={() => logout()}>{translate("logout")}</Button>,
+      label: translate("logout"),
+      onClick: () => logout(),
     },
   ];
 
