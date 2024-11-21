@@ -51,14 +51,12 @@ const DropdownMenu: React.FC = () => {
     {
       icon: <ReloadOutlined spin={loading === "refreshing"} />,
       key: "refresh-authentication",
-      label: (
-        <Button onClick={() => refresh()}>{translate("refresh_auth")}</Button>
-      ),
+      label:<Button type="text" onClick={() => refresh()}>{translate("refresh_auth")}</Button>,
     },
     {
       icon: <LogoutOutlined />,
       key: "logout",
-      label: <Button onClick={() => logout()}>{translate("logout")}</Button>,
+      label: <Button type="text" onClick={() => logout()}>{translate("logout")}</Button>,
     },
   ];
 
