@@ -1,6 +1,9 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store"; // Adjust paths as necessary
-import { login, logout, refresh } from "../redux/authSlice";
+import { logout, setAuth, setLoading } from "../redux/authSlice";
+import authService from "../service/authService";
+import { useEffect } from "react";
+import { LoadingTypes } from "../@types/loading";
 
 export function useAuth() {
 
@@ -9,6 +12,8 @@ export function useAuth() {
     const auth = useTypedSelector((state) => state.auth);
 
     const dispatch = useDispatch<AppDispatch>();
+
+    const controller = new AbortController();
 
     /**
      * Check if a user has a specific permission based on regex.
@@ -19,6 +24,13 @@ export function useAuth() {
         return auth.allowedAccess.some((access) => requiredPermissionRegex.test(access));
     };
 
+    useEffect(() => {
+         
+      return () => {
+        controller.abort();
+      }
+    }, [])
+    
     return {
         user: auth.user,
         token: auth.token,
@@ -33,16 +45,48 @@ export function useAuth() {
          * Dispatch login action with credentials.
          * @param credentials - User credentials.
          */
-        login: (credentials: LoginCredentials) =>
-            dispatch(login(credentials)),
+        login: async (credentials: LoginCredentials) => {
+            dispatch(setLoading(LoadingTypes.PENDING));
+            const response = await authService.login(credentials, controller.signal);
+            if (response.success && response?.result) {
+                const authState: AuthState = {
+                    user: response.result.user,
+                    allowedAccess: response.result.allowedAccess,
+                    error: null,
+                    isLoggedIn: true,
+                    loggedInAt: response.result.loggedInAt,
+                    token: response.result.token,
+                    tokenExpiresAt: response.result.tokenExpiresAt,
+                    loading: LoadingTypes.IDLE
+                }
+                dispatch(setAuth(authState))
+            }
+            dispatch(setLoading(LoadingTypes.SUCCEEDED));
+        },
         /**
          * Dispatch logout action.
          */
         logout: () => dispatch(logout()),
         /**
          * Dispatch refresh action.
-         * @param currentToken - Optional current token to refresh.
          */
-        refresh: (currentToken?: string) => dispatch(refresh(currentToken)),
+        refresh: async () => {
+            dispatch(setLoading(LoadingTypes.REFRESHING));
+            const response = await authService.refreshToken(auth.token);
+            if (response.success && response?.result) {
+                const authState: AuthState = {
+                    user: response.result.user,
+                    allowedAccess: response.result.allowedAccess,
+                    error: null,
+                    isLoggedIn: true,
+                    loggedInAt: response.result.loggedInAt,
+                    token: response.result.token,
+                    tokenExpiresAt: response.result.tokenExpiresAt,
+                    loading: LoadingTypes.IDLE
+                }
+                dispatch(setAuth(authState))
+            }
+            dispatch(setLoading(LoadingTypes.SUCCEEDED));
+        },
     };
 }

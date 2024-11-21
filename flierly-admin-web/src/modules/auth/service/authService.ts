@@ -11,9 +11,9 @@ const authService = {
   /**
    * Function to handle user login
    */
-  login: async (credentials: LoginCredentials): Promise<ApiResponse<UserAuth>> => {
+  login: async (credentials: LoginCredentials, signal?: AbortSignal): Promise<ApiResponse<UserAuth>> => {
     const response: ApiResponse<UserAuth> = await handleResponse({
-      promise: api.post<ApiResponse<UserAuth>>(`/user/authenticate`, credentials),
+      promise: api.post<ApiResponse<UserAuth>>(`/user/authenticate`, credentials, { signal }),
       notifyOnFailed: true,
       notifyOnSuccess: true,
       notifyType: "message"
@@ -24,10 +24,10 @@ const authService = {
   /**
    * Function to handle user refresh token
    */
-  refreshToken: async ({ currentToken }: { currentToken: string }): Promise<ApiResponse<UserAuth>> => {
+  refreshToken: async (currentToken: string, signal?: AbortSignal): Promise<ApiResponse<UserAuth>> => {
     api.defaults.headers['Authorization'] = `Bearer ${currentToken}`;
     const response: ApiResponse<UserAuth> = await handleResponse({
-      promise: api.get<ApiResponse<UserAuth>>(`/user/refresh-access-token`),
+      promise: api.get<ApiResponse<UserAuth>>(`/user/refresh-access-token`, { signal }),
       notifyOnFailed: true,
       notifyOnSuccess: true,
       notifyType: "message"

@@ -54,13 +54,14 @@ const showErrorNotification = (
  */
 const handleSpecificErrors = <T>(error: AxiosError<ApiResponse<T>>): ErrorDetails => {
 
+    console.log(error)
     if (!navigator.onLine) {
         return {
             name: "NetworkError",
             httpCode: 0,
             reason: "No internet connection",
             message: "You are offline. Please check your internet connection."
-        }
+        };
     }
 
     if (error.message === "Network Error") {
@@ -140,21 +141,56 @@ const handleResponse = async <T>({
         };
     } catch (error) {
         if (!axios.isAxiosError(error)) {
-            console.error("Unexpected error:", error);
+
+            const errorDetails: ErrorDetails = {
+                name: "UnknownError",
+                httpCode: 500,
+                reason: "Unknown",
+                message: "An unexpected error occurred",
+                stack: (error as Error)?.stack,
+            };
+
+            if (notifyOnFailed) {
+                showErrorNotification(notifyType, errorDetails.httpCode, errorDetails.message);
+            }
+
             return {
                 success: false,
                 result: null,
                 message: "An unexpected error occurred",
                 controller: "",
                 requestUrl: "",
-                error: {
-                    name: "UnknownError",
-                    httpCode: 500,
-                    reason: "Unknown",
-                    message: "An unexpected error occurred",
-                    stack: (error as Error)?.stack,
-                },
+                error: errorDetails,
                 httpCode: 500,
+            };
+        }
+
+        if (axios.isCancel(error)) {
+
+            const errorDetails: ErrorDetails = {
+                name: "CancelError",
+                httpCode: 499,
+                reason: "Request Cancelled",
+                message: "The request was cancelled.",
+            };
+
+            if (notifyOnFailed) {
+                showErrorNotification(notifyType, errorDetails.httpCode, errorDetails.message);
+            }
+
+            return {
+                success: false,
+                result: null,
+                message: "The request was cancelled.",
+                controller: "",
+                requestUrl: "",
+                error: {
+                    name: "CancelError",
+                    httpCode: 499,
+                    reason: "Request Cancelled",
+                    message: "The request was cancelled.",
+                },
+                httpCode: 499,
             };
         }
 
