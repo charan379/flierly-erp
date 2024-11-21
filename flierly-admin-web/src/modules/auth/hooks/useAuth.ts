@@ -2,7 +2,6 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store"; // Adjust paths as necessary
 import { logout, setAuth, setLoading } from "../redux/authSlice";
 import authService from "../service/authService";
-import { useEffect } from "react";
 import { LoadingTypes } from "../@types/loading";
 
 export function useAuth() {
@@ -23,13 +22,6 @@ export function useAuth() {
     const hasPermission = (requiredPermissionRegex: RegExp): boolean => {
         return auth.allowedAccess.some((access) => requiredPermissionRegex.test(access));
     };
-
-    useEffect(() => {
-         
-      return () => {
-        controller.abort();
-      }
-    }, [])
     
     return {
         user: auth.user,
