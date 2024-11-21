@@ -74,7 +74,7 @@ function useTheme() {
     }, [initTheme, sysPreferenceListener]);
 
     useEffect(() => {
-        changeCssRootVariables(theme as "dark" | "light"); // Apply CSS root variables based on theme
+        changeCssRootVariables(theme); // Apply CSS root variables based on theme
         document.body.setAttribute("data-theme", theme); // Set data-theme attribute on body element
     }, [theme, changeCssRootVariables]);
 

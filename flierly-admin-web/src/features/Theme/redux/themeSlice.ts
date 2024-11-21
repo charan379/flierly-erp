@@ -3,7 +3,7 @@ import statePersist from "@/redux/statePersist";
 
 // Initial state for the theme slice
 const INITIAL_STATE: ThemeState = {
-  mode: "", // Default theme mode is unset
+  mode: "light", // Default theme mode is unset
   preference: "system", // Default theme preference is 'system'
   compact: true, // Default compact mode is enabled
 };
