@@ -4,6 +4,7 @@ import { logout } from "@/modules/auth/service/authStateService";
  * Handles JWT expiration by logging the user out and redirecting to the login page.
  */
 function handleJwtExpiration(): void {
+  console.log("JWT expiration");
   logout(); // dispatch the logout action
   // Log the user out
   const callback = {

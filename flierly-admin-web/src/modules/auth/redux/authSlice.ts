@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { LoadingTypes } from "../@types/loading";
+import statePersist from "@/redux/statePersist";
 
 // Initial state
 const INITIAL_STATE: AuthState = {
@@ -12,6 +13,10 @@ const INITIAL_STATE: AuthState = {
   loading: LoadingTypes.IDLE,
   error: null,
 };
+
+
+// Fetching the persisted state from localStorage if available
+const PERSISTING_STATE: AuthState | null = statePersist.get<AuthState>("auth") || null;
 
 // Utility for localStorage handling
 const saveAuthToLocalStorage = (authState: AuthState) => {
@@ -26,7 +31,7 @@ const clearAuthFromLocalStorage = () => {
 // Create the authentication slice
 const authSlice = createSlice({
   name: "auth",
-  initialState: INITIAL_STATE,
+  initialState: PERSISTING_STATE ?? INITIAL_STATE, // Use persisted state or fallback to the initial state
   reducers: {
     setAuth: (state, action: PayloadAction<AuthState>) => {
       Object.assign(state, action.payload);

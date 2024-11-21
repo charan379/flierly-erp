@@ -54,7 +54,6 @@ const showErrorNotification = (
  */
 const handleSpecificErrors = <T>(error: AxiosError<ApiResponse<T>>): ErrorDetails => {
 
-    console.log(error)
     if (!navigator.onLine) {
         return {
             name: "NetworkError",
