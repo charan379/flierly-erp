@@ -11,11 +11,11 @@ interface UpdateProps {
   formFields: any
   title?: string; // Optional title for the drawer
   data: Record<string, any>; // Data to initialize the form
-  id: string; // ID for the record being updated
+  id: number; // ID for the record being updated
   isOpen: boolean; // Whether the drawer is open
   close: () => void; // Function to close the drawer
   render: boolean; // A boolean to control the rendering of the component
-  actions: ActionType
+  actions: ActionType | undefined
 }
 
 const Update: React.FC<UpdateProps> = ({
@@ -31,6 +31,7 @@ const Update: React.FC<UpdateProps> = ({
 }) => {
   if (!render) return null;
   if (!formFields) return null;
+  if (!actions) return null;
 
   const { translate } = useLocale();
   const [formInstance] = Form.useForm();

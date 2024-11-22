@@ -13,7 +13,7 @@ interface SearchProps {
   title?: string; // Optional title for the modal
   initialQuery?: Record<string, any>; // Optional initial query to transform into form values
   render: boolean; // A boolean to control the rendering of the component
-  actions: ActionType
+  actions: ActionType | undefined
 }
 
 const Search: React.FC<SearchProps> = ({
@@ -25,6 +25,7 @@ const Search: React.FC<SearchProps> = ({
 }) => {
   if (!render) return null;
   if (!formFields) return null;
+  if(!actions) return null;
 
   const { translate } = useLocale();
   const [formInstance] = Form.useForm();

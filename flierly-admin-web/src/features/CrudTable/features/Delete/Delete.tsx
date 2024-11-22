@@ -9,15 +9,15 @@ import crudService from "../../service/crudService";
 
 type DeleteProps = {
   entity: string; // Name of the entity to be deleted
-  actions: Partial<ActionType>; // Optional actions for table state management
-  rows: {
-    selectedRowKeys: number[]; // Array of selected row keys
-  };
+  actions: ActionType | undefined;
+  rows: { selectedRowKeys?: (string | number)[] | undefined; selectedRows?: any[] | undefined; };
   render: boolean; // Whether to render the component
 };
 
 const Delete: React.FC<DeleteProps> = ({ entity, actions, rows, render }) => {
   if (!render) return null;
+  if (!actions) return null;
+  if (rows.selectedRowKeys === undefined) return null;
 
   const { translate } = useLocale();
 
@@ -36,7 +36,7 @@ const Delete: React.FC<DeleteProps> = ({ entity, actions, rows, render }) => {
           onConfirm={async () => {
             const { success } = await crudService.delete({
               entity: entity,
-              ids: rows.selectedRowKeys,
+              ids: rows.selectedRowKeys as number[],
             });
 
             if (success) {

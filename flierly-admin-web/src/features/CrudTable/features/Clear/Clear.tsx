@@ -6,14 +6,14 @@ import { ActionType } from "@ant-design/pro-components";
 
 type ClearProps = {
   render: boolean; // Whether to render the component
-  rows: {
-    selectedRowKeys: number[]; // Array of selected row keys
-  };
-  actions: Partial<ActionType>; // Actions with optional methods
+  rows: { selectedRowKeys?: (string | number)[] | undefined; selectedRows?: any[] | undefined; };
+  actions: ActionType | undefined;
 };
 
 const Clear: React.FC<ClearProps> = ({ render, rows, actions }) => {
   if (!render) return null;
+  if (!actions === undefined) return null;
+  if (rows.selectedRowKeys === undefined) return null;
 
   const { translate } = useLocale();
 
@@ -31,7 +31,7 @@ const Clear: React.FC<ClearProps> = ({ render, rows, actions }) => {
           shape="circle"
           size="middle"
           disabled={rows.selectedRowKeys.length <= 0}
-          onClick={() => actions.clearSelected?.()} // Safely call clearSelected if it exists
+          onClick={() => actions?.clearSelected?.()} // Safely call clearSelected if it exists
         />
       </Badge>
     </Tooltip>

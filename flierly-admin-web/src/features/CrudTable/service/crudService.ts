@@ -24,7 +24,7 @@ const crudService = {
         sort = {},
         signal,
     }: PageProps) => {
-        const promise = api.post(
+        const promise = api.post<ApiResponse<any>>(
             `/${entity}/page`,
             { filters, pagination, sort, autopopulateIds, binMode },
             { signal }

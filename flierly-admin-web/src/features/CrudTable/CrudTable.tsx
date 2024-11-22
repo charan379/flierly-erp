@@ -14,13 +14,13 @@ import Update from "./forms/Update";
 import useCrudTableContext from "./hooks/useCrudTableContext/useCrudTableContext";
 import crudService from "./service/crudService";
 
-interface CrudTableProps {
+interface CrudTableProps<T> {
   entity: string;
   tableKey: string;
-  rowKey?: string;
-  rowTitleKey?: string;
-  columns: ProColumns<any>[];
-  dataSource?: any[];
+  rowKey?: keyof T;
+  rowTitleKey?: keyof T;
+  columns: ProColumns<T>[];
+  dataSource?: T[];
   createFormFields: React.ReactNode;
   updateFormFields: React.ReactNode;
   searchFormFields: React.ReactNode;
@@ -48,11 +48,11 @@ interface CrudTableProps {
   };
 }
 
-const CrudTable = ({
+const CrudTable = <T extends object>({
   entity,
   tableKey,
-  rowKey = "id",
-  rowTitleKey = "name",
+  rowKey = "id" as keyof T,
+  rowTitleKey = "name" as keyof T,
   columns,
   dataSource = [],
   createFormFields,
@@ -60,7 +60,7 @@ const CrudTable = ({
   searchFormFields,
   rowSelectionColumnWidth = "3%",
   render,
-}: CrudTableProps) => {
+}: CrudTableProps<T>) => {
   const tableHeight = useElementHeight("crud-data-table-flierly-1");
   const tableHeadHeight = useElementHeight("ant-table-thead");
   const tableToolbarHeight = useElementHeight("ant-pro-table-list-toolbar");
@@ -68,13 +68,13 @@ const CrudTable = ({
 
   const { translate } = useLocale();
 
-  const [data, setData] = useState<any[]>(dataSource);
+  const [data, setData] = useState<T[]>(dataSource);
 
   const { crudTableContextHandler } = useCrudTableContext();
 
   const actionRef = useRef<any>();
 
-  const handleRowContextMenu = (record: any, event: React.MouseEvent) => {
+  const handleRowContextMenu = (record: T, event: React.MouseEvent) => {
     event.preventDefault(); // Prevent default context menu
     crudTableContextHandler.rowMenu.setCurrentRecord(record);
     crudTableContextHandler.rowMenu.setPosition({
@@ -85,7 +85,7 @@ const CrudTable = ({
   };
 
   return (
-    <ProTable
+    <ProTable<T>
       // classname
       className="crud-data-table-flierly-1"
       // table design configuration
@@ -108,7 +108,7 @@ const CrudTable = ({
       // columns state configuration
       columnsState={{
         persistenceType: "localStorage",
-        persistenceKey: tableKey,
+        persistenceKey: `${tableKey}_columns`,
       }}
       // table search configuration
       search={false}
@@ -119,13 +119,11 @@ const CrudTable = ({
         type: "checkbox",
         preserveSelectedRowKeys: true,
       }}
-      rowKey={rowKey}
+      rowKey={rowKey as string}
       // Configuration for table alert section
       tableAlertRender={false}
       //  Sorter configuration
-      showSorterTooltip={{
-        target: "sorter-icon",
-      }}
+      showSorterTooltip={{target: "sorter-icon"}}
       sortDirections={["ascend", "descend"]}
       // options configuration
       options={{
@@ -144,13 +142,12 @@ const CrudTable = ({
       // datasource
       dataSource={data}
       // data request
-      request={async (params, sort, filter) => {
+      request={async (params, sort) => {
         const { result, success } = await crudService.page({
           entity,
           filters: crudTableContextHandler.filters.get(),
-          pagination: { limit: params.pageSize, page: params.current },
+          pagination: { limit: params?.pageSize ?? 10, page: params?.current ?? 1 },
           sort: sort,
-          autopopulate: true,
           binMode: crudTableContextHandler.binMode.isActive(),
         });
 
@@ -161,7 +158,7 @@ const CrudTable = ({
         };
       }}
       // post data came from request
-      postData={(data) => {
+      postData={(data: T[]) => {
         setData(data);
       }}
       // on row configuration
@@ -259,7 +256,7 @@ const CrudTable = ({
         <RowContextMenu
           render={render.menu}
           entity={entity}
-          recordTitleKey={rowTitleKey}
+          recordTitleKey={rowTitleKey as string}
           actions={actionRef.current}
           record={crudTableContextHandler.rowMenu.getCurrentRecord()}
           open={crudTableContextHandler.rowMenu.isOpen()}

@@ -9,15 +9,16 @@ import crudService from "../../service/crudService";
 
 type RestoreProps = {
   entity: string; // Name of the entity to be restored
-  actions: Partial<ActionType>; // Optional actions for table state management
-  rows: {
-    selectedRowKeys: number[]; // Array of selected row keys
-  };
+  actions: ActionType | undefined;
+  rows: { selectedRowKeys?: (string | number)[] | undefined; selectedRows?: any[] | undefined; };
   render: boolean; // Whether to render the component
 };
 
 const Restore: React.FC<RestoreProps> = ({ entity, actions, rows, render }) => {
   if (!render) return null;
+  if (!actions) return null;
+  if(rows.selectedRowKeys === undefined) return;
+
 
   const { translate } = useLocale();
 
@@ -49,7 +50,7 @@ const Restore: React.FC<RestoreProps> = ({ entity, actions, rows, render }) => {
           onConfirm={async () => {
             const { success } = await crudService.restore({
               entity: entity,
-              ids: rows.selectedRowKeys,
+              ids: rows.selectedRowKeys as number[],
             });
 
             if (success) {

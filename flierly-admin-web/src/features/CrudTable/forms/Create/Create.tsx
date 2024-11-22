@@ -11,7 +11,7 @@ interface CreateProps {
   formFields: any;
   title?: string;
   render: boolean;
-  actions: ActionType;
+  actions: ActionType | undefined;
 }
 
 const Create: React.FC<CreateProps> = ({
@@ -23,6 +23,7 @@ const Create: React.FC<CreateProps> = ({
 }) => {
   if (!render) return null;
   if (!formFields) return null;
+  if (!actions) return null;
 
   const { translate } = useLocale();
 
