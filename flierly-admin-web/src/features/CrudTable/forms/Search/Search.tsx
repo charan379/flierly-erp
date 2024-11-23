@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import useLocale from "@/features/Locale/hooks/useLocale";
 import useCrudTableContext from "../../hooks/useCrudTableContext/useCrudTableContext";
-// import reverseTransformQuery from "@/utils/reverseTransformQuery";
+import reverseTransformQuery from "@/utils/reverseTransformQuery";
 
 // Define types for the component props
 interface SearchProps {
@@ -31,7 +31,7 @@ const Search: React.FC<SearchProps> = ({
   const [formInstance] = Form.useForm();
   const { crudTableContextHandler } = useCrudTableContext();
 
-  const onFinish = (values: Record<string, any>) => {
+  const onFinish = async (values: Record<string, any>): Promise<boolean | void> => {
     crudTableContextHandler.filters.set(values);
     actions.reload();
     actions.reset?.();
@@ -46,8 +46,8 @@ const Search: React.FC<SearchProps> = ({
     <ModalForm
       form={formInstance}
       title={title}
-    //   initialValues={reverseTransformQuery(initialQuery)}
-    //   onFinish={onFinish}
+      initialValues={reverseTransformQuery(initialQuery)}
+      onFinish={onFinish}
       onReset={onReset}
       trigger={
         <Tooltip title={translate("apply_filters")}>

@@ -39,6 +39,7 @@ const Privileges: React.FC = () => {
           }}
           createFormFields={<FormFields columns={privilegeColumns} configKey="createFormConfig" key="Privilege-Create-Form"/>}
           updateFormFields={<FormFields columns={privilegeColumns} configKey="updateFormConfig" key="Privilege-Update-Form"/>}
+          searchFormFields={<FormFields columns={privilegeColumns} configKey="queryFormConfig" key="Privilege-Search-Form"/>}
         />
       </CrudTableContextProvider>
     </DefaultModuleLayout>

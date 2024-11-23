@@ -7,6 +7,7 @@ interface SelectRemoteOptionsProps {
   asyncOptionsFetcher: (value: string, signal?: AbortSignal) => Promise<Array<{ label: string | JSX.Element; value: string }>>;
   debounceTimeout?: number;
   width?: string | number;
+  mode?: "multiple" | "tags";
   [key: string]: any; // For any other additional props passed to Select
 }
 
@@ -103,6 +104,7 @@ const SelectRemoteOptions: React.FC<SelectRemoteOptionsProps> = ({
       style={{ width: props.width ?? "100%" }}   // Default width to 100%
       notFoundContent={fetching ? <Loader /> : <Empty />} // Show loader if fetching, else Empty
       maxTagCount="responsive"                   // Responsive tags in multi-select
+      mode={props.mode}
       {...props}                                 // Spread additional props to Select
     />
   );

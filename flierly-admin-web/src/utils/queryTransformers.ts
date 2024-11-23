@@ -1,187 +1,277 @@
-type TransformerFunction = (
-    value: any,
-    namePath: string,
-    allValues: Record<string, any>
-  ) => Record<string, any> | null;
-  
-  const queryTransformers: Record<string, TransformerFunction> = {
-    trimTextValue: (value: any, namePath: string): Record<string, any> | null => {
-      if (typeof value === "string" && value.trim().length > 0) {
-        return { [namePath]: value.trim() };
-      }
-      return null;
-    },
-  
-    textWithRegex: (value: any, namePath: string): Record<string, any> | null => {
-      if (typeof value === "string" && value.trim().length > 0) {
-        return { [namePath]: `/${value}/i` };
-      }
-      return null;
-    },
-  
-    inArray: (value: any[], namePath: string): Record<string, any> | null => {
-      if (Array.isArray(value) && value.length > 0) {
-        return { [namePath]: { $in: value } };
-      }
-      return null;
-    },
-  
-    dateRange: (
-      value: [string, string],
-      namePath: string
-    ): Record<string, any> | null => {
-      if (Array.isArray(value) && value.length === 2) {
-        const startDate = new Date(value[0]);
-        startDate.setHours(0, 0, 0, 0);
-        const endDate = new Date(value[1]);
-        endDate.setHours(23, 59, 59, 999);
+type TransformerFunction<T = any> = (
+  value: T,
+  namePath: string,
+  allValues: Record<string, any>
+) => Record<string, any> | null;
+
+export type TransformerKey =
+  | "trimTextValue"
+  | "textWithRegex"
+  | "inArray"
+  | "dateRange"
+  | "greaterThanOrEqual"
+  | "lessThanOrEqual"
+  | "greaterThan"
+  | "lessThan"
+  | "notEqual"
+  | "between"
+  | "notBetween"
+  | "isNull"
+  | "isNotNull"
+  | "like"
+  | "notLike"
+  | "ilike"
+  | "notIlike"
+  | "startsWith"
+  | "notStartsWith"
+  | "endsWith"
+  | "notEndsWith"
+  | "regex"
+  | "notRegex"
+  | "regexi"
+  | "notRegexi";
+
+const queryTransformers: Record<TransformerKey, TransformerFunction> = {
+  trimTextValue: (value: string, namePath: string): Record<string, any> | null => {
+    if (value.trim().length > 0) {
+      return { [namePath]: value.trim() };
+    }
+    return null;
+  },
+
+  textWithRegex: (value: string, namePath: string): Record<string, any> | null => {
+    if (value.trim().length > 0) {
+      return { [namePath]: `/${value}/i` };
+    }
+    return null;
+  },
+
+  inArray: (value: unknown[], namePath: string): Record<string, any> | null => {
+    if (Array.isArray(value) && value.length > 0) {
+      return { [namePath]: { $in: value } };
+    }
+    return null;
+  },
+
+  dateRange: (
+    value: [string, string],
+    namePath: string
+  ): Record<string, any> | null => {
+    if (Array.isArray(value) && value.length === 2) {
+      const [startDate, endDate] = value;
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
         return {
           [namePath]: {
-            $gte: startDate.toISOString(),
-            $lte: endDate.toISOString(),
+            $gte: start.toISOString(),
+            $lte: end.toISOString(),
           },
         };
       }
-      return null;
-    },
-  
-    greaterThanOrEqual: (
-      value: any,
-      namePath: string
-    ): Record<string, any> | null => {
-      if (value !== undefined && value !== null) {
-        return { [namePath]: { $gte: value } };
+    }
+    return null;
+  },
+
+  greaterThanOrEqual: (
+    value: number | string | Date,
+    namePath: string
+  ): Record<string, any> | null => {
+    if (value != null) {
+      return { [namePath]: { $gte: value } };
+    }
+    return null;
+  },
+
+  lessThanOrEqual: (
+    value: number | string | Date,
+    namePath: string
+  ): Record<string, any> | null => {
+    if (value != null) {
+      return { [namePath]: { $lte: value } };
+    }
+    return null;
+  },
+
+  greaterThan: (
+    value: number | string | Date,
+    namePath: string
+  ): Record<string, any> | null => {
+    if (value != null) {
+      return { [namePath]: { $gt: value } };
+    }
+    return null;
+  },
+
+  lessThan: (
+    value: number | string | Date,
+    namePath: string
+  ): Record<string, any> | null => {
+    if (value != null) {
+      return { [namePath]: { $lt: value } };
+    }
+    return null;
+  },
+
+  notEqual: (
+    value: number | string | Date,
+    namePath: string
+  ): Record<string, any> | null => {
+    if (value != null) {
+      return { [namePath]: { $ne: value } };
+    }
+    return null;
+  },
+
+  between: (
+    value: [number | string | Date, number | string | Date],
+    namePath: string
+  ): Record<string, any> | null => {
+    if (Array.isArray(value) && value.length === 2) {
+      const [start, end] = value;
+      return { [namePath]: { $between: [start, end] } };
+    }
+    return null;
+  },
+
+  notBetween: (
+    value: [number | string | Date, number | string | Date],
+    namePath: string
+  ): Record<string, any> | null => {
+    if (Array.isArray(value) && value.length === 2) {
+      const [start, end] = value;
+      return { [namePath]: { $notBetween: [start, end] } };
+    }
+    return null;
+  },
+
+  isNull: (value: boolean, namePath: string): Record<string, any> | null => {
+    if (value === true) {
+      return { [namePath]: { $isNull: true } };
+    }
+    return null;
+  },
+
+  isNotNull: (value: boolean, namePath: string): Record<string, any> | null => {
+    if (value === true) {
+      return { [namePath]: { $isNotNull: true } };
+    }
+    return null;
+  },
+
+  like: (value: string, namePath: string): Record<string, any> | null => {
+    if (value.trim().length > 0) {
+      return { [namePath]: { $like: `%${value}%` } };
+    }
+    return null;
+  },
+
+  notLike: (value: string, namePath: string): Record<string, any> | null => {
+    if (value.trim().length > 0) {
+      return { [namePath]: { $notLike: `%${value}%` } };
+    }
+    return null;
+  },
+
+  ilike: (value: string, namePath: string): Record<string, any> | null => {
+    if (value.trim().length > 0) {
+      return { [namePath]: { $ilike: `%${value}%` } };
+    }
+    return null;
+  },
+
+  notIlike: (value: string, namePath: string): Record<string, any> | null => {
+    if (value.trim().length > 0) {
+      return { [namePath]: { $notIlike: `%${value}%` } };
+    }
+    return null;
+  },
+
+  startsWith: (
+    value: string,
+    namePath: string
+  ): Record<string, any> | null => {
+    if (value.trim().length > 0) {
+      return { [namePath]: { $startsWith: value } };
+    }
+    return null;
+  },
+
+  notStartsWith: (
+    value: string,
+    namePath: string
+  ): Record<string, any> | null => {
+    if (value.trim().length > 0) {
+      return { [namePath]: { $notStartsWith: value } };
+    }
+    return null;
+  },
+
+  endsWith: (value: string, namePath: string): Record<string, any> | null => {
+    if (value.trim().length > 0) {
+      return { [namePath]: { $endsWith: value } };
+    }
+    return null;
+  },
+
+  notEndsWith: (
+    value: string,
+    namePath: string
+  ): Record<string, any> | null => {
+    if (value.trim().length > 0) {
+      return { [namePath]: { $notEndsWith: value } };
+    }
+    return null;
+  },
+
+  // New regex-based transformers
+  regex: (value: string, namePath: string): Record<string, any> | null => {
+    if (value.trim().length > 0) {
+      try {
+        const regex = new RegExp(value);
+        return { [namePath]: { $regex: regex } };
+      } catch (e) {
+        return null; // Invalid regex pattern
       }
-      return null;
-    },
-  
-    lessThanOrEqual: (
-      value: any,
-      namePath: string
-    ): Record<string, any> | null => {
-      if (value !== undefined && value !== null) {
-        return { [namePath]: { $lte: value } };
+    }
+    return null;
+  },
+
+  notRegex: (value: string, namePath: string): Record<string, any> | null => {
+    if (value.trim().length > 0) {
+      try {
+        const regex = new RegExp(value);
+        return { [namePath]: { $notRegex: regex } };
+      } catch (e) {
+        return null; // Invalid regex pattern
       }
-      return null;
-    },
-  
-    greaterThan: (value: any, namePath: string): Record<string, any> | null => {
-      if (value !== undefined && value !== null) {
-        return { [namePath]: { $gt: value } };
+    }
+    return null;
+  },
+
+  regexi: (value: string, namePath: string): Record<string, any> | null => {
+    if (value.trim().length > 0) {
+      try {
+        const regex = new RegExp(value, 'i'); // Case-insensitive regex
+        return { [namePath]: { $regex: regex } };
+      } catch (e) {
+        return null; // Invalid regex pattern
       }
-      return null;
-    },
-  
-    lessThan: (value: any, namePath: string): Record<string, any> | null => {
-      if (value !== undefined && value !== null) {
-        return { [namePath]: { $lt: value } };
+    }
+    return null;
+  },
+
+  notRegexi: (value: string, namePath: string): Record<string, any> | null => {
+    if (value.trim().length > 0) {
+      try {
+        const regex = new RegExp(value, 'i'); // Case-insensitive regex
+        return { [namePath]: { $notRegex: regex } };
+      } catch (e) {
+        return null; // Invalid regex pattern
       }
-      return null;
-    },
-  
-    notEqual: (value: any, namePath: string): Record<string, any> | null => {
-      if (value !== undefined && value !== null) {
-        return { [namePath]: { $ne: value } };
-      }
-      return null;
-    },
-  
-    between: (
-      value: [any, any],
-      namePath: string
-    ): Record<string, any> | null => {
-      if (Array.isArray(value) && value.length === 2) {
-        return { [namePath]: { $between: value } };
-      }
-      return null;
-    },
-  
-    notBetween: (
-      value: [any, any],
-      namePath: string
-    ): Record<string, any> | null => {
-      if (Array.isArray(value) && value.length === 2) {
-        return { [namePath]: { $notBetween: value } };
-      }
-      return null;
-    },
-  
-    isNull: (value: boolean, namePath: string): Record<string, any> | null => {
-      if (value === true) {
-        return { [namePath]: { $isNull: true } };
-      }
-      return null;
-    },
-  
-    isNotNull: (value: boolean, namePath: string): Record<string, any> | null => {
-      if (value === true) {
-        return { [namePath]: { $isNotNull: true } };
-      }
-      return null;
-    },
-  
-    like: (value: string, namePath: string): Record<string, any> | null => {
-      if (typeof value === "string" && value.trim().length > 0) {
-        return { [namePath]: { $like: `%${value}%` } };
-      }
-      return null;
-    },
-  
-    notLike: (value: string, namePath: string): Record<string, any> | null => {
-      if (typeof value === "string" && value.trim().length > 0) {
-        return { [namePath]: { $notLike: `%${value}%` } };
-      }
-      return null;
-    },
-  
-    ilike: (value: string, namePath: string): Record<string, any> | null => {
-      if (typeof value === "string" && value.trim().length > 0) {
-        return { [namePath]: { $ilike: `%${value}%` } };
-      }
-      return null;
-    },
-  
-    notIlike: (value: string, namePath: string): Record<string, any> | null => {
-      if (typeof value === "string" && value.trim().length > 0) {
-        return { [namePath]: { $notIlike: `%${value}%` } };
-      }
-      return null;
-    },
-  
-    startsWith: (value: string, namePath: string): Record<string, any> | null => {
-      if (typeof value === "string" && value.trim().length > 0) {
-        return { [namePath]: { $startsWith: value } };
-      }
-      return null;
-    },
-  
-    notStartsWith: (
-      value: string,
-      namePath: string
-    ): Record<string, any> | null => {
-      if (typeof value === "string" && value.trim().length > 0) {
-        return { [namePath]: { $notStartsWith: value } };
-      }
-      return null;
-    },
-  
-    endsWith: (value: string, namePath: string): Record<string, any> | null => {
-      if (typeof value === "string" && value.trim().length > 0) {
-        return { [namePath]: { $endsWith: value } };
-      }
-      return null;
-    },
-  
-    notEndsWith: (
-      value: string,
-      namePath: string
-    ): Record<string, any> | null => {
-      if (typeof value === "string" && value.trim().length > 0) {
-        return { [namePath]: { $notEndsWith: value } };
-      }
-      return null;
-    },
-  };
-  
-  export default queryTransformers;
-  
+    }
+    return null;
+  },
+};
+
+export default queryTransformers;

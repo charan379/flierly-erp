@@ -13,7 +13,7 @@ import {
 import useLocale from "@/features/Locale/hooks/useLocale";
 import SelectRemoteOptions from "@/features/SelectRemoteOptions";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
-import queryTransformers from "@/utils/queryTransformers";
+import queryTransformers, { TransformerKey } from "@/utils/queryTransformers";
 import hasOwnProperty from "@/utils/hasOwnProperty";
 
 // Define types for input config
@@ -33,9 +33,10 @@ type InputConfig =
   }
   | {
     type: "SelectRemoteOptions";
-    asyncOptionsFetcher: () => Promise<any>;
+    asyncOptionsFetcher: (value: string) => Promise<any>;
     labelRender?: (value: any) => React.ReactNode;
     debounceTimeout?: number;
+    mode?: "multiple" | "tags";
   };
 
 // Refine the structure of the form field configuration
@@ -53,7 +54,7 @@ export type FormFieldConfig = {
   allowClear?: boolean;
   access?: AccessConfig;
   fieldProps?: ProFormFieldProps;
-  transformer?: keyof typeof queryTransformers;
+  transformer?: TransformerKey;
 }
 
 interface AccessConfig {
@@ -145,6 +146,8 @@ const formItems: Record<string, React.FC<any>> = {
         disabled={props.hidden || props.disabled}
         hidden={props.hidden}
         fieldProps={props.fieldProps} // Ensure fieldProps are passed correctly
+        mode={props?.mode}
+        
       />
     </ProForm.Item>
   ),
