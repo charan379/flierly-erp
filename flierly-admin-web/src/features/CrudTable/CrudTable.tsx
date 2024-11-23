@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import useElementHeight from "@/hooks/useElementHeight";
 import useLocale from "@/features/Locale/hooks/useLocale";
-import { ProTable, ProColumns } from "@ant-design/pro-components";
+import { ProTable, ProColumns, ActionType } from "@ant-design/pro-components";
 import Create from "./forms/Create";
 import Search from "./forms/Search";
 import Delete from "./features/Delete";
@@ -21,9 +21,9 @@ interface CrudTableProps<T> {
   rowTitleKey?: keyof T;
   columns: ProColumns<T>[];
   dataSource?: T[];
-  createFormFields: React.ReactNode;
-  updateFormFields: React.ReactNode;
-  searchFormFields: React.ReactNode;
+  createFormFields?: React.ReactNode;
+  updateFormFields?: React.ReactNode;
+  searchFormFields?: React.ReactNode;
   rowSelectionColumnWidth?: string;
   render: {
     restore: boolean;
@@ -72,7 +72,7 @@ const CrudTable = <T extends object>({
 
   const { crudTableContextHandler } = useCrudTableContext();
 
-  const actionRef = useRef<any>();
+  const actionRef = useRef<ActionType>();
 
   const handleRowContextMenu = (record: T, event: React.MouseEvent) => {
     event.preventDefault(); // Prevent default context menu
@@ -83,7 +83,7 @@ const CrudTable = <T extends object>({
     });
     crudTableContextHandler.rowMenu.open();
   };
-
+  
   return (
     <ProTable<T>
       // classname

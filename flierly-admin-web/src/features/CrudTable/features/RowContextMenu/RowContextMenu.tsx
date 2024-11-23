@@ -17,10 +17,11 @@ import Loading from "@/components/Loading";
 import useCrudTableContext from "../../hooks/useCrudTableContext/useCrudTableContext";
 import crudService from "../../service/crudService";
 import useOnOutsideClick from "@/hooks/useOnOutsideClick";
+import { ActionType } from "@ant-design/pro-components";
 
 interface RowContextMenuProps {
   entity: string;
-  actions: { reload: () => void };
+  actions: ActionType | undefined;
   record: Record<string, any>;
   recordTitleKey: string;
   open: boolean;
@@ -40,6 +41,7 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({
   render,
 }) => {
   if (!render) return null;
+  if (actions === undefined) return null;
 
   const { theme } = useTheme();
   const { translate } = useLocale();
@@ -142,7 +144,7 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({
       }
 
       if (result?.success) {
-        actions.reload();
+        actions.reload?.();
         close();
       }
 

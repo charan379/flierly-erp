@@ -4,7 +4,7 @@ import React, { useEffect, useCallback } from "react";
 import { ActionType } from "@ant-design/pro-components";
 
 type BinModeToggleProps = {
-  actions: Partial<ActionType>; // Actions with optional properties
+  actions: ActionType | undefined;
   isActive: boolean; // Current state of the toggle
   activate: () => void; // Function to activate bin mode
   deactivate: () => void; // Function to deactivate bin mode
@@ -34,7 +34,7 @@ const BinModeToggle: React.FC<BinModeToggleProps> = ({
 
   useEffect(() => {
     debouncedReload(); // Call the debounced function when isActive changes
-  }, [isActive, debouncedReload]);
+  }, [isActive]);
 
   return (
     <Tooltip title="Toggle Bin Mode">
