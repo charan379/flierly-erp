@@ -1,4 +1,5 @@
 import { ProColumns } from "@ant-design/pro-components";
+import { Tag } from "antd";
 
 // Define columns
 const privilegeColumns: ProColumns<Privilege>[] = [
@@ -9,6 +10,8 @@ const privilegeColumns: ProColumns<Privilege>[] = [
     valueType: "text",
     search: false,
     width: 80,
+    sorter: true,
+    defaultSortOrder: "ascend"
   },
   {
     title: "Privilege Name",
@@ -70,6 +73,15 @@ const privilegeColumns: ProColumns<Privilege>[] = [
     valueType: "switch",
     filters: true,
     onFilter: true,
+    align: "center",
+    width: "80px",
+    render: (_text, entity) => {
+      return !entity.isActive ? (
+        <Tag color="red">InActive</Tag>
+      ) : (
+        <Tag color="green">Active</Tag>
+      );
+    },
   },
   {
     title: "Created At",
