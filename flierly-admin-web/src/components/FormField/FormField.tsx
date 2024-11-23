@@ -20,26 +20,26 @@ import hasOwnProperty from "@/utils/hasOwnProperty";
 type InputConfig =
   | { type: "Text" | "TextArea" | "Number" | "DatePicker" | "DateRange" | "Switch" }
   | {
-      type: "Decimal";
-      precision?: number;
-      step?: number;
-      min?: number;
-      max?: number;
-    }
+    type: "Decimal";
+    precision?: number;
+    step?: number;
+    min?: number;
+    max?: number;
+  }
   | {
-      type: "Select";
-      options?: SelectProps["options"];
-      mode?: "single" | "multiple";
-    }
+    type: "Select";
+    options?: SelectProps["options"];
+    mode?: "single" | "multiple";
+  }
   | {
-      type: "SelectRemoteOptions";
-      asyncOptionsFetcher: () => Promise<any>;
-      labelRender?: (value: any) => React.ReactNode;
-      debounceTimeout?: number;
-    };
+    type: "SelectRemoteOptions";
+    asyncOptionsFetcher: () => Promise<any>;
+    labelRender?: (value: any) => React.ReactNode;
+    debounceTimeout?: number;
+  };
 
 // Refine the structure of the form field configuration
-interface FormFieldConfig {
+export type FormFieldConfig = {
   name: string;
   label: string;
   rules?: ProFormFieldProps["rules"];
@@ -61,7 +61,7 @@ interface AccessConfig {
   ifNoAccess: "hide" | "disable" | "";
 }
 
-interface FormFieldProps {
+export type FormFieldProps = {
   key?: string;
   config: FormFieldConfig;
   showLabel?: boolean;

@@ -3,6 +3,7 @@ import CrudTableContextProvider from "@/features/CrudTable/context/CrudTableCont
 import DefaultModuleLayout from "@/layout/DefaultModuleLayout";
 import React from "react";
 import privilegeColumns from "../../config/privilegeColumns";
+import FormFields from "@/components/FormFields/FormFields";
 
 
 const Privileges: React.FC = () => {
@@ -36,7 +37,8 @@ const Privileges: React.FC = () => {
                 }
             }
           }}
-
+          createFormFields={<FormFields columns={privilegeColumns} configKey="createFormConfig" key="Privilege-Create-Form"/>}
+          updateFormFields={<FormFields columns={privilegeColumns} configKey="updateFormConfig" key="Privilege-Update-Form"/>}
         />
       </CrudTableContextProvider>
     </DefaultModuleLayout>

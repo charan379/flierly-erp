@@ -1,8 +1,8 @@
-import { ProColumns } from "@ant-design/pro-components";
+import { ProColumnsWithFormConfig } from "@/features/CrudTable/types/ProColumnsWithFormConfig";
 import { Tag } from "antd";
 
 // Define columns
-const privilegeColumns: ProColumns<Privilege>[] = [
+const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
   {
     title: "ID",
     dataIndex: "id",
