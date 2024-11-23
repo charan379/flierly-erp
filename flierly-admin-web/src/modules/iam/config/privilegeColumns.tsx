@@ -11,7 +11,7 @@ const privilegeColumns: ProColumns<Privilege>[] = [
     search: false,
     width: 80,
     sorter: true,
-    defaultSortOrder: "ascend"
+    defaultSortOrder: "ascend",
   },
   {
     title: "Privilege Name",
