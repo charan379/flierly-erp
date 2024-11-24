@@ -204,6 +204,14 @@ h6 {
   max-width: 95%;
 }
 
+.ant-picker {
+  width: 100%;
+}
+
+.ant-form-item-control-input-content:has(> .ant-switch) {
+  text-align: left;
+}
+
 @media only screen and (max-width: 576px) {
   .crud-data-table-flierly-1 .ant-pagination .ant-pagination-options {
     display: block;

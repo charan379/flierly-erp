@@ -1,5 +1,5 @@
 import React from "react";
-import { Select, SelectProps } from "antd";
+import { Col, Select, SelectProps } from "antd";
 import {
   ProForm,
   ProFormDatePicker,
@@ -55,6 +55,7 @@ type FormFieldProps = {
 };
 
 const FormComponent: React.FC<FormFieldConfig> = (props) => {
+
   switch (props.input.type) {
     case "Text":
       return <ProFormText {...props} />;
@@ -67,7 +68,7 @@ const FormComponent: React.FC<FormFieldConfig> = (props) => {
     case "DateRange":
       return <ProFormDateRangePicker {...props} />;
     case "Switch":
-      return <ProFormSwitch {...props} />;
+      return <ProFormSwitch {...props} valuePropName="checked" />;
     case "Decimal":
       return (
         <ProFormDigit
@@ -82,33 +83,45 @@ const FormComponent: React.FC<FormFieldConfig> = (props) => {
       );
     case "Select":
       return (
-        <ProForm.Item {...props}>
-          <Select
-            mode={props.input.mode}
-            placeholder="Please select"
-            options={props.input.options}
-            allowClear={props.allowClear}
-            disabled={props.hidden || props.disabled}
-            style={{
-              width: props.width ?? "100%"
-            }}
-          />
-        </ProForm.Item>
+        <Col xs={24} {...props.colProps}>
+          <ProForm.Item {...props} convertValue={(value) => {
+            if (value === true) {
+              return "true";
+            } else if (value === false) {
+              return "false";
+            } else {
+              return value;
+            }
+          }}
+          >
+            <Select
+              mode={props.input.mode}
+              placeholder="Please select"
+              options={props.input.options}
+              allowClear={props.allowClear}
+              disabled={props.hidden || props.disabled}
+              style={{ width: props.width ?? "100%", textAlign: "left" }}
+              dropdownStyle={{ textAlign: "left" }}
+            />
+          </ProForm.Item>
+        </Col>
       );
     case "SelectRemoteOptions":
       return (
-        <ProForm.Item {...props}>
-          <SelectRemoteOptions
-            asyncOptionsFetcher={props.input.asyncOptionsFetcher}
-            debounceTimeout={props.input.debounceTimeout}
-            labelRender={props.input.labelRender}
-            width={props.width}
-            allowClear={props.allowClear}
-            disabled={props.hidden || props.disabled}
-            fieldProps={props.fieldProps}
-            mode={props.input.mode}
-          />
-        </ProForm.Item>
+        <Col xs={24} {...props.colProps}>
+          <ProForm.Item {...props}>
+            <SelectRemoteOptions
+              asyncOptionsFetcher={props.input.asyncOptionsFetcher}
+              debounceTimeout={props.input.debounceTimeout}
+              labelRender={props.input.labelRender}
+              width={props.width}
+              allowClear={props.allowClear}
+              disabled={props.hidden || props.disabled}
+              fieldProps={props.fieldProps}
+              mode={props.input.mode}
+            />
+          </ProForm.Item>
+        </Col>
       );
     default:
       throw new Error(`Invalid input type '${props.input}' in form field configuration.`);

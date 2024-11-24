@@ -52,7 +52,8 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
     title: "ID",
     dataIndex: "id",
     key: "id",
-    valueType: "text",
+    order: 0,
+    valueType: "digit",
     search: false,
     width: 80,
     sorter: true,
@@ -64,7 +65,6 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       disabled: true,
       hasFeedback: false,
       allowClear: false,
-      width: "xl",
       input: {
         type: "Text",
       },
@@ -76,7 +76,6 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       disabled: true,
       hasFeedback: false,
       allowClear: false,
-      width: "xl",
       input: {
         type: "Text",
       },
@@ -85,7 +84,6 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       name: "id",
       label: "id",
       allowClear: true,
-      width: "xl",
       input: {
         type: "Number",
       },
@@ -96,6 +94,7 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
     title: "Privilege Name",
     dataIndex: "name",
     key: "name",
+    order: 1,
     valueType: "text",
     sorter: true,
     createFormConfig: {
@@ -103,7 +102,6 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       label: "name",
       hasFeedback: true,
       allowClear: true,
-      width: "xl",
       rules: [
         { type: "string", min: 5, max: 30, required: true },
         ({ }) => ({
@@ -125,7 +123,6 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       label: "name",
       hasFeedback: true,
       allowClear: true,
-      width: "xl",
       rules: [
         { type: "string", min: 5, max: 30, required: true },
         ({ getFieldValue }) => ({
@@ -149,7 +146,6 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       name: "name",
       label: "name",
       rules: [{ type: "regexp" }],
-      width: "xl",
       transform: queryTransformers.ilike,
       input: {
         type: "Text",
@@ -157,9 +153,56 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
     },
   },
   {
+    title: "Entity",
+    dataIndex: "entity",
+    key: "entity",
+    order: 2,
+    valueType: "text",
+    sorter: true,
+    createFormConfig: {
+      name: "entity",
+      label: "entity",
+      allowClear: false,
+      hasFeedback: false,
+      access: { permission: /^privilege\.update$/, ifNoAccess: "disable" },
+      rules: [{ required: true }],
+      input: {
+        type: "SelectRemoteOptions",
+        asyncOptionsFetcher: fetchEntityOptions,
+        debounceTimeout: 300,
+      },
+    },
+    updateFormConfig: {
+      name: "entity",
+      label: "entity",
+      allowClear: false,
+      hasFeedback: false,
+      access: { permission: /^privilege\.manage$/, ifNoAccess: "disable" },
+      rules: [{ required: true }],
+      input: {
+        type: "SelectRemoteOptions",
+        asyncOptionsFetcher: fetchEntityOptions,
+        debounceTimeout: 300,
+      },
+    },
+    queryFormConfig: {
+      name: "entity",
+      label: "entity",
+      rules: [{ type: "array" }],
+      transform: queryTransformers.inArray,
+      input: {
+        type: "SelectRemoteOptions",
+        asyncOptionsFetcher: fetchEntityOptions,
+        mode: "multiple",
+        debounceTimeout: 300,
+      },
+    },
+  },
+  {
     title: "Access Type",
     dataIndex: "access",
     key: "access",
+    order: 3,
     render: (_dom, entity) => {
       switch (entity.access) {
         case "Create":
@@ -188,7 +231,6 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
           enum: ["Create", "Read", "Update", "Delete", "Manage"],
         },
       ],
-      width: 552,
       input: {
         type: "Select",
         options: accessOptions
@@ -206,7 +248,6 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
           enum: ["Create", "Read", "Update", "Delete", "Manage"],
         },
       ],
-      width: 552,
       input: {
         type: "Select",
         options: accessOptions
@@ -215,7 +256,6 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
     queryFormConfig: {
       name: "access",
       label: "access",
-      width: 552,
       rules: [{ type: "array" }],
       transform: queryTransformers.inArray,
       input: {
@@ -226,50 +266,51 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
     },
   },
   {
-    title: "Entity",
-    dataIndex: "entity",
-    key: "entity",
-    valueType: "text",
-    sorter: true,
+    title: "Active",
+    dataIndex: "isActive",
+    key: "isActive",
+    order: 4,
+    valueType: "switch",
+    filters: true,
+    onFilter: true,
+    align: "center",
+    width: "80px",
+    render: (_text, entity) => {
+      return !entity.isActive ? (
+        <Tag color="red">InActive</Tag>
+      ) : (
+        <Tag color="green">Active</Tag>
+      );
+    },
     createFormConfig: {
-      name: "entity",
-      label: "entity",
+      name: "isActive",
+      label: "active",
+      access: { permission: /^privilege\.manage$/, ifNoAccess: "disable" },
       allowClear: false,
-      hasFeedback: false,
-      access: { permission: /^privilege\.update$/, ifNoAccess: "disable" },
-      rules: [{ required: true }],
-      width: 552,
+      rules: [{type: "string"}],
       input: {
-        type: "SelectRemoteOptions",
-        asyncOptionsFetcher: fetchEntityOptions,
-        debounceTimeout: 300,
+        type: "Select",
+        options: activeFieldOptions
       },
     },
     updateFormConfig: {
-      name: "entity",
-      label: "entity",
-      allowClear: false,
-      hasFeedback: false,
+      name: "isActive",
+      label: "active",
       access: { permission: /^privilege\.manage$/, ifNoAccess: "disable" },
-      rules: [{ required: true }],
-      width: 552,
+      allowClear: false,
+      rules: [{type: "string"}],
       input: {
-        type: "SelectRemoteOptions",
-        asyncOptionsFetcher: fetchEntityOptions,
-        debounceTimeout: 300,
+        type: "Select",
+        options: activeFieldOptions
       },
     },
     queryFormConfig: {
-      name: "entity",
-      label: "entity",
-      rules: [{ type: "array" }],
-      transform: queryTransformers.inArray,
-      width: 552,
+      name: "isActive",
+      label: "active",
+      rules: [{ type: "string" }],
       input: {
-        type: "SelectRemoteOptions",
-        asyncOptionsFetcher: fetchEntityOptions,
-        mode: "multiple",
-        debounceTimeout: 300,
+        type: "Select",
+        options: activeFieldOptions
       },
     },
   },
@@ -277,13 +318,13 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
     title: "Privilege Code",
     dataIndex: "code",
     key: "code",
+    order: 5,
     valueType: "text",
     createFormConfig: {
       name: "code",
       label: "code",
       hasFeedback: true,
       allowClear: true,
-      width: "xl",
       access: { permission: /^privilege\.update$/, ifNoAccess: "disable" },
       rules: [
         { type: "string", min: 5, max: 25, required: true },
@@ -308,7 +349,6 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       label: "code",
       hasFeedback: true,
       allowClear: true,
-      width: "xl",
       access: { permission: /^privilege\.manage$/, ifNoAccess: "disable" },
       rules: [
         { type: "string", min: 5, max: 25, required: true },
@@ -331,7 +371,6 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
     queryFormConfig: {
       name: "code",
       label: "code",
-      width: "xl",
       rules: [{ type: "string", min: 5, max: 25 }, codeRegex()],
       transform: queryTransformers.trimTextValue,
       input: {
@@ -340,67 +379,16 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
     },
   },
   {
-    title: "Active",
-    dataIndex: "isActive",
-    key: "isActive",
-    valueType: "switch",
-    filters: true,
-    onFilter: true,
-    align: "center",
-    width: "80px",
-    render: (_text, entity) => {
-      return !entity.isActive ? (
-        <Tag color="red">InActive</Tag>
-      ) : (
-        <Tag color="green">Active</Tag>
-      );
-    },
-    createFormConfig: {
-      name: "isActive",
-      label: "status",
-      access: { permission: /^privilege\.manage$/, ifNoAccess: "disable" },
-      allowClear: false,
-      rules: [],
-      width: 552,
-      input: {
-        type: "Select",
-        options: activeFieldOptions,
-      },
-    },
-    updateFormConfig: {
-      name: "isActive",
-      label: "status",
-      access: { permission: /^privilege\.manage$/, ifNoAccess: "disable" },
-      allowClear: false,
-      rules: [],
-      width: 552,
-      input: {
-        type: "Select",
-        options: activeFieldOptions,
-      },
-    },
-    queryFormConfig: {
-      name: "isActive",
-      label: "status",
-      width: 552,
-      rules: [{ type: "string" }],
-      input: {
-        type: "Select",
-        options: activeFieldOptions,
-      },
-    },
-  },
-  {
     title: "Created At",
     dataIndex: "createdAt",
     key: "createdAt",
+    order: 6,
     valueType: "dateTime",
     sorter: true,
     queryFormConfig: {
       name: "createdAt",
       label: "created_at",
       rules: [],
-      width: 'xl',
       transform: queryTransformers.between,
       input: {
         type: "DateRange",
@@ -411,6 +399,7 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
     title: "Updated At",
     dataIndex: "updatedAt",
     key: "updatedAt",
+    order: 7,
     valueType: "dateTime",
     sorter: true,
     search: false,
@@ -418,7 +407,6 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       name: "updatedAt",
       label: "updated_at",
       rules: [],
-      width: "xl",
       transform: queryTransformers.between,
       input: {
         type: "DateRange",
@@ -429,14 +417,14 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
     title: "Deleted At",
     dataIndex: "deletedAt",
     key: "deletedAt",
+    order: 8,
     valueType: "dateTime",
     search: false,
-    hideInTable: true, // Optionally hide in the table but keep for filters or exports
+    hideInTable: false,
     queryFormConfig: {
       name: "deletedAt",
       label: "deleted_at",
       rules: [],
-      width: "xl",
       transform: queryTransformers.between,
       input: {
         type: "DateRange",

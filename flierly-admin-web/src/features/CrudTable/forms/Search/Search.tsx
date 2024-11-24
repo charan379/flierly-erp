@@ -54,6 +54,7 @@ const Search: React.FC<SearchProps> = ({
     <DrawerForm
       form={formInstance}
       title={title}
+      grid={true}
       initialValues={initialValues}
       onFinish={onFinish}
       open={drawerOpen}
@@ -84,7 +85,7 @@ const Search: React.FC<SearchProps> = ({
         styles: {
           footer: { padding: "15px 15px 15px 15px" },
           header: { padding: "10px 5px 5px 5px" },
-          content: {padding: "0px 0px 0px 15px"}
+          // content: {padding: "0px 0px 0px 15px"}
         },
       }}
       submitter={{

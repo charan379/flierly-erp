@@ -97,11 +97,13 @@ const SelectRemoteOptions: React.FC<SelectRemoteOptionsProps> = ({
       popupClassName="select-remote-options"      // Custom popup class
       getPopupContainer={(triggerNode) => triggerNode.parentNode}
       showSearch                                 // Enable search functionality
+      placeholder={"Please select"}
       onSearch={debounceFetcher}                 // Debounced search fetch
       onFocus={handleFocus}                      // Fetch options on every focus
       options={displayedOptions}                 // Fetched options
       loading={fetching}                         // Show loading spinner
-      style={{ width: props.width ?? "100%" }}   // Default width to 100%
+      style={{ width: props.width ?? "100%", textAlign: "left" }}   // Default width to 100%
+      dropdownStyle={{ textAlign: "left" }}
       notFoundContent={fetching ? <Loader /> : <Empty />} // Show loader if fetching, else Empty
       maxTagCount="responsive"                   // Responsive tags in multi-select
       mode={props.mode}
