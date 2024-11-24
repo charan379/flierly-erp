@@ -381,7 +381,7 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       name: "createdAt",
       label: "created_at",
       rules: [],
-      transformer: "between",
+      transformer: "dateRange",
       input: {
         type: "DateRange",
       },
@@ -398,7 +398,7 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       name: "updatedAt",
       label: "updated_at",
       rules: [],
-      transformer: "between",
+      transformer: "dateRange",
       input: {
         type: "DateRange",
       },
@@ -415,7 +415,7 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       name: "deletedAt",
       label: "deleted_at",
       rules: [],
-      transformer: "between",
+      transformer: "dateRange",
       input: {
         type: "DateRange",
       },

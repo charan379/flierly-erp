@@ -83,22 +83,25 @@ const proFormProps = ({
   allowClear,
   fieldProps,
   readOnly,
-}: FormFieldConfig & { readOnly?: boolean }) => ({
-  name,
-  label,
-  rules,
-  width,
-  hidden,
-  tooltip,
-  disabled: hidden || disabled,
-  allowClear,
-  transform: transformer ? queryTransformers[transformer] : undefined,
-  hasFeedback,
-  validateTrigger: ["onChange"],
-  dependencies,
-  fieldProps,
-  readOnly,
-});
+}: FormFieldConfig & { readOnly?: boolean }) => {
+
+  return {
+    name,
+    label,
+    rules,
+    width,
+    hidden,
+    tooltip,
+    disabled: hidden || disabled,
+    allowClear,
+    transform: transformer ? queryTransformers[transformer] : undefined,
+    hasFeedback,
+    validateTrigger: ["onChange"],
+    dependencies,
+    fieldProps,
+    readOnly,
+  }
+};
 
 // General-purpose wrapper for ProForm components
 const ProFormComponent: React.FC<{
@@ -147,7 +150,7 @@ const formItems: Record<string, React.FC<any>> = {
         hidden={props.hidden}
         fieldProps={props.fieldProps} // Ensure fieldProps are passed correctly
         mode={props?.mode}
-        
+
       />
     </ProForm.Item>
   ),

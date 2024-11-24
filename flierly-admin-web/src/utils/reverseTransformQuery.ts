@@ -18,7 +18,7 @@ const reverseTransformQuery = (query: Query): TransformedQuery | undefined => {
   if (!query) return undefined;
 
   Object.entries(query).forEach(([key, value]) => {
-    if (value !== null && typeof value === "object") {
+    if (value !== null && typeof value === "object" && !Array.isArray(value)) {
       const operator = Object.keys(value)[0];
       switch (operator) {
         case "$in":
