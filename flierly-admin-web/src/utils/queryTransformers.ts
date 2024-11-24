@@ -1,8 +1,4 @@
-type TransformerFunction<T = any> = (
-  value: T,
-  namePath: string,
-  allValues: Record<string, any>
-) => Record<string, any> | null;
+import { SearchTransformKeyFn } from "@ant-design/pro-components";
 
 export type TransformerKey =
   | "trimTextValue"
@@ -31,7 +27,7 @@ export type TransformerKey =
   | "regexi"
   | "notRegexi";
 
-const queryTransformers: Record<TransformerKey, TransformerFunction> = {
+const queryTransformers: Record<TransformerKey, SearchTransformKeyFn> = {
   trimTextValue: (value: string, namePath: string): Record<string, any> | null => {
     if (value.trim().length > 0) {
       return { [namePath]: value.trim() };
