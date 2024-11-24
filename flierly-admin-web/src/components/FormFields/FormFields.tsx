@@ -16,10 +16,11 @@ const FormFields: React.FC<FormFieldsProps> = ({ columns = [], configKey }) => {
 
     return (
         <Flex
-            style={{ direction: langDirection, paddingRight: "1px", overflow: "hidden" }}
-            gap="middle"
-            wrap
+            style={{ direction: langDirection, paddingRight: "1px", overflow: "scroll", width: "100%" }}
             align="flex-start"
+            gap="middle"
+            // vertical
+            wrap
             justify="flex-start"
         >
             {columns

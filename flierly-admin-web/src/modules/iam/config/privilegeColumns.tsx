@@ -1,6 +1,7 @@
 import { ProColumnsWithFormConfig } from "@/features/CrudTable/types/ProColumnsWithFormConfig";
 import fetchEntityOptions from "@/features/SelectRemoteOptions/utility/fetchEntityOptions";
 import entityExistenceValidator from "@/utils/entityExistenceValidator";
+import queryTransformers from "@/utils/queryTransformers";
 import { Tag } from "antd";
 import { Rule, RuleObject } from 'antd/es/form';
 
@@ -11,6 +12,11 @@ const accessOptions = [
   { label: "Update", value: "Update" },
   { label: "Delete", value: "Delete" },
   { label: "Manage", value: "Manage" },
+];
+
+const activeFieldOptions = [
+  { label: "Active", value: "true" },
+  { label: "InActive", value: "false" },
 ];
 
 /**
@@ -58,6 +64,7 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       disabled: true,
       hasFeedback: false,
       allowClear: false,
+      width: "xl",
       input: {
         type: "Text",
       },
@@ -69,6 +76,7 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       disabled: true,
       hasFeedback: false,
       allowClear: false,
+      width: "xl",
       input: {
         type: "Text",
       },
@@ -77,7 +85,7 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       name: "id",
       label: "id",
       allowClear: true,
-      width: "sm",
+      width: "xl",
       input: {
         type: "Number",
       },
@@ -95,6 +103,7 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       label: "name",
       hasFeedback: true,
       allowClear: true,
+      width: "xl",
       rules: [
         { type: "string", min: 5, max: 30, required: true },
         ({ }) => ({
@@ -116,6 +125,7 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       label: "name",
       hasFeedback: true,
       allowClear: true,
+      width: "xl",
       rules: [
         { type: "string", min: 5, max: 30, required: true },
         ({ getFieldValue }) => ({
@@ -139,8 +149,8 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       name: "name",
       label: "name",
       rules: [{ type: "regexp" }],
-      width: "sm",
-      transformer: "ilike",
+      width: "xl",
+      transform: queryTransformers.ilike,
       input: {
         type: "Text",
       },
@@ -178,9 +188,9 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
           enum: ["Create", "Read", "Update", "Delete", "Manage"],
         },
       ],
+      width: 552,
       input: {
         type: "Select",
-        mode: "single",
         options: accessOptions
       },
     },
@@ -196,18 +206,18 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
           enum: ["Create", "Read", "Update", "Delete", "Manage"],
         },
       ],
+      width: 552,
       input: {
         type: "Select",
-        mode: "single",
         options: accessOptions
       },
     },
     queryFormConfig: {
       name: "access",
       label: "access",
-      width: 120,
+      width: 552,
       rules: [{ type: "array" }],
-      transformer: "inArray",
+      transform: queryTransformers.inArray,
       input: {
         type: "Select",
         mode: "multiple",
@@ -228,6 +238,7 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       hasFeedback: false,
       access: { permission: /^privilege\.update$/, ifNoAccess: "disable" },
       rules: [{ required: true }],
+      width: 552,
       input: {
         type: "SelectRemoteOptions",
         asyncOptionsFetcher: fetchEntityOptions,
@@ -241,6 +252,7 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       hasFeedback: false,
       access: { permission: /^privilege\.manage$/, ifNoAccess: "disable" },
       rules: [{ required: true }],
+      width: 552,
       input: {
         type: "SelectRemoteOptions",
         asyncOptionsFetcher: fetchEntityOptions,
@@ -251,7 +263,8 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       name: "entity",
       label: "entity",
       rules: [{ type: "array" }],
-      transformer: "inArray",
+      transform: queryTransformers.inArray,
+      width: 552,
       input: {
         type: "SelectRemoteOptions",
         asyncOptionsFetcher: fetchEntityOptions,
@@ -270,6 +283,7 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       label: "code",
       hasFeedback: true,
       allowClear: true,
+      width: "xl",
       access: { permission: /^privilege\.update$/, ifNoAccess: "disable" },
       rules: [
         { type: "string", min: 5, max: 25, required: true },
@@ -294,6 +308,7 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       label: "code",
       hasFeedback: true,
       allowClear: true,
+      width: "xl",
       access: { permission: /^privilege\.manage$/, ifNoAccess: "disable" },
       rules: [
         { type: "string", min: 5, max: 25, required: true },
@@ -316,9 +331,9 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
     queryFormConfig: {
       name: "code",
       label: "code",
-      width: "sm",
+      width: "xl",
       rules: [{ type: "string", min: 5, max: 25 }, codeRegex()],
-      transformer: "trimTextValue",
+      transform: queryTransformers.trimTextValue,
       input: {
         type: "Text",
       },
@@ -346,9 +361,10 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       access: { permission: /^privilege\.manage$/, ifNoAccess: "disable" },
       allowClear: false,
       rules: [],
+      width: 552,
       input: {
         type: "Select",
-        options: [{}],
+        options: activeFieldOptions,
       },
     },
     updateFormConfig: {
@@ -357,17 +373,20 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       access: { permission: /^privilege\.manage$/, ifNoAccess: "disable" },
       allowClear: false,
       rules: [],
+      width: 552,
       input: {
-        type: "Switch"
+        type: "Select",
+        options: activeFieldOptions,
       },
     },
     queryFormConfig: {
       name: "isActive",
       label: "status",
-      width: 120,
-      rules: [{ type: "boolean" }],
+      width: 552,
+      rules: [{ type: "string" }],
       input: {
-        type: "Switch",
+        type: "Select",
+        options: activeFieldOptions,
       },
     },
   },
@@ -381,7 +400,8 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       name: "createdAt",
       label: "created_at",
       rules: [],
-      transformer: "between",
+      width: 'xl',
+      transform: queryTransformers.between,
       input: {
         type: "DateRange",
       },
@@ -398,7 +418,8 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       name: "updatedAt",
       label: "updated_at",
       rules: [],
-      transformer: "between",
+      width: "xl",
+      transform: queryTransformers.between,
       input: {
         type: "DateRange",
       },
@@ -415,7 +436,8 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       name: "deletedAt",
       label: "deleted_at",
       rules: [],
-      transformer: "between",
+      width: "xl",
+      transform: queryTransformers.between,
       input: {
         type: "DateRange",
       },

@@ -1,5 +1,5 @@
 import debounce from "@/utils/debounce";
-import { Empty, Flex, Select, Spin } from "antd";
+import { Empty, Flex, Select, SelectProps, Spin } from "antd";
 import React, { useRef, useState, useEffect } from "react";
 
 // Define the types for the props
@@ -7,7 +7,7 @@ interface SelectRemoteOptionsProps {
   asyncOptionsFetcher: (value: string, signal?: AbortSignal) => Promise<Array<{ label: string | JSX.Element; value: string }>>;
   debounceTimeout?: number;
   width?: string | number;
-  mode?: "multiple" | "tags";
+  mode?: SelectProps["mode"];
   [key: string]: any; // For any other additional props passed to Select
 }
 

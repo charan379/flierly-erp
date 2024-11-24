@@ -196,7 +196,7 @@ h6 {
 }
 
 .ant-modal-body.crud-table-modal-body {
-  max-height: 70dvh;
+  max-height: 80dvh;
   overflow: scroll;
 }
 

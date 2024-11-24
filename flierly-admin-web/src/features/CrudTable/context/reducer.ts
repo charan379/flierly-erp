@@ -20,6 +20,7 @@ export const initialState: CrudTableState = {
 export type Action =
     | { type: ActionTypes.RESET_STATE }
     | { type: ActionTypes.UPDATE_FILTERS; payload: Record<string, any> }
+    | { type: ActionTypes.RESET_FILTERS }
     | { type: ActionTypes.OPEN_UPDATE_FORM; payload: { data: any; id: number } }
     | { type: ActionTypes.CLOSE_UPDATE_FORM }
     | { type: ActionTypes.OPEN_ROW_MENU }
@@ -35,48 +36,60 @@ export function reducer(state: CrudTableState, action: Action): CrudTableState {
         // Reset the entire state to its initial values
         case ActionTypes.RESET_STATE:
             return initialState;
-
         // Update filters with the provided payload
         case ActionTypes.UPDATE_FILTERS:
             return {
                 ...state,
                 filters: action.payload,
             };
-
+        case ActionTypes.RESET_FILTERS:
+            return {
+                ...state,
+                filters: initialState.filters
+            }
         // Open or close the update form based on the action type
         case ActionTypes.OPEN_UPDATE_FORM:
+            return {
+                ...state,
+                updateForm: {
+                    open: true,
+                    data: action.payload.data,
+                    id: action.payload.id,
+                }
+            };
         case ActionTypes.CLOSE_UPDATE_FORM:
             return {
                 ...state,
-                updateForm:
-                    action.type === ActionTypes.OPEN_UPDATE_FORM
-                        ? {
-                              open: true,
-                              data: action.payload.data,
-                              id: action.payload.id,
-                          }
-                        : initialState.updateForm, // Reset form if closing
+                updateForm: initialState.updateForm, // Reset form if closing
             };
-
         // Toggle the row menu's open state
         case ActionTypes.OPEN_ROW_MENU:
+            return {
+                ...state,
+                rowMenu: {
+                    ...state.rowMenu,
+                    open: true,
+                },
+            };
         case ActionTypes.CLOSE_ROW_MENU:
             return {
                 ...state,
                 rowMenu: {
                     ...state.rowMenu,
-                    open: action.type === ActionTypes.OPEN_ROW_MENU,
+                    open: false,
                 },
             };
-
         // Activate or deactivate bin mode
         case ActionTypes.ACTIVATE_BIN_MODE:
+            return {
+                ...state,
+                binMode: true,
+            };
         case ActionTypes.DEACTIVATE_BIN_MODE:
             return {
                 ...state,
-                binMode: action.type === ActionTypes.ACTIVATE_BIN_MODE,
+                binMode: false,
             };
-
         // Update the current record for the row menu
         case ActionTypes.UPDATE_ROW_MENU_CURRENT_RECORD:
             return {
@@ -86,7 +99,6 @@ export function reducer(state: CrudTableState, action: Action): CrudTableState {
                     currentRecord: action.payload,
                 },
             };
-
         // Update the position of the row menu
         case ActionTypes.UPDATE_ROW_MENU_POSITION:
             return {
@@ -96,7 +108,6 @@ export function reducer(state: CrudTableState, action: Action): CrudTableState {
                     position: action.payload,
                 },
             };
-
         // Handle unknown actions with an explicit error
         default:
             throw new Error(`Unhandled action type: ${action}`);

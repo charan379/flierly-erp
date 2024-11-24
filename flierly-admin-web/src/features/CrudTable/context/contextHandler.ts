@@ -24,6 +24,12 @@ const contextHandler = (state: CrudTableState, dispatcher: Dispatch<Action>) => 
             dispatcher({ type: ActionTypes.UPDATE_FILTERS, payload: data }),
 
         /**
+         * Reset the filters to initial state
+         * 
+         */
+        reset: () => dispatcher({ type: ActionTypes.RESET_FILTERS }),
+
+        /**
          * Retrieves the current filter data from the state.
          * @returns The current filter data.
          */

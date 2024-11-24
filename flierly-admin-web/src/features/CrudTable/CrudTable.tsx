@@ -171,7 +171,6 @@ const CrudTable = <T extends object>({
       toolBarRender={(action, rows) => [
         <Search
           formFields={searchFormFields}
-          initialQuery={crudTableContextHandler.filters.get()}
           title={translate("search_from")}
           render={render.search}
           actions={action}
