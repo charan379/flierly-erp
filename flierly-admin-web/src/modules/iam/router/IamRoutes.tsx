@@ -1,9 +1,7 @@
+import WithSuspense from "@/components/WithSuspense";
 import ProtectedRoute from "@/features/ProtectedRoute/ProtectedRoute";
-import React, { Suspense, lazy } from "react";
+import React from "react";
 import { Routes, Route } from "react-router-dom";
-
-const PageUnderConstruction = lazy(() => import("@/pages/PageUnderConstruction"));
-const Privileges = lazy(() => import("../pages/Privileges"));
 
 const IamRoutes: React.FC = () => {
   return (
@@ -13,11 +11,7 @@ const IamRoutes: React.FC = () => {
         path=""
         element={
           <ProtectedRoute
-            element={
-              <Suspense fallback={<div>Loading...</div>}>
-                <PageUnderConstruction />
-              </Suspense>
-            }
+            element={<WithSuspense importPath={import("@/pages/PageUnderConstruction")} />}
             requiredPermissionRegex={/^user\.[a-z]+$/}
           />
         }
@@ -28,11 +22,7 @@ const IamRoutes: React.FC = () => {
         path="users"
         element={
           <ProtectedRoute
-            element={
-              <Suspense fallback={<div>Loading...</div>}>
-                <PageUnderConstruction />
-              </Suspense>
-            }
+            element={<WithSuspense importPath={import("@/pages/PageUnderConstruction")} />}
             requiredPermissionRegex={/^user\.[a-z]+$/}
           />
         }
@@ -43,11 +33,7 @@ const IamRoutes: React.FC = () => {
         path="roles"
         element={
           <ProtectedRoute
-            element={
-              <Suspense fallback={<div>Loading...</div>}>
-                <PageUnderConstruction />
-              </Suspense>
-            }
+            element={<WithSuspense importPath={import("@/pages/PageUnderConstruction")} />}
             requiredPermissionRegex={/^role\.[a-z]+$/}
           />
         }
@@ -58,11 +44,7 @@ const IamRoutes: React.FC = () => {
         path="privileges"
         element={
           <ProtectedRoute
-            element={
-              <Suspense fallback={<div>Loading...</div>}>
-                <Privileges />
-              </Suspense>
-            }
+            element={<WithSuspense importPath={import("../pages/Privileges")} />}
             requiredPermissionRegex={/^privilege\.[a-z]+$/}
           />
         }
