@@ -39,6 +39,12 @@ const reverseTransformQuery = (query: Query): TransformedQuery | undefined => {
         case "$ne":
           result[key] = reverseQueryTransformers.notEqual(value);
           break;
+        case "$equalTo":
+          result[key] = reverseQueryTransformers.equalTo(value)
+          break;
+        case "$notEqualTo":
+          result[key] = reverseQueryTransformers.notEqualTo(value)
+          break;
         case "$between":
           result[key] = reverseQueryTransformers.between(value);
           break;

@@ -47,6 +47,14 @@ const reverseQueryTransformers = {
         return value?.$ne;
     },
 
+    notEqualTo: (value: { $notEqualTo: QueryValue }): QueryValue | undefined => {
+        return value?.$notEqualTo;
+    },
+
+    equalTo: (value: { $equalTo: QueryValue }): QueryValue | undefined => {
+        return value?.$equalTo;
+    },
+
     between: (value: { $between: unknown[] }): unknown[] | undefined => {
         return Array.isArray(value?.$between) ? value.$between : undefined;
     },

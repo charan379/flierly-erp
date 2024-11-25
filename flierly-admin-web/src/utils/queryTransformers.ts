@@ -10,6 +10,8 @@ export type TransformerKey =
   | "greaterThan"
   | "lessThan"
   | "notEqual"
+  | "notEqualTo"
+  | "equalTo"
   | "between"
   | "notBetween"
   | "isNull"
@@ -115,6 +117,26 @@ const queryTransformers: Record<TransformerKey, SearchTransformKeyFn> = {
   ): Record<string, any> | null => {
     if (value != null) {
       return { [namePath]: { $ne: value } };
+    }
+    return null;
+  },
+
+  notEqualTo: (
+    value: number | string | Date,
+    namePath: string
+  ): Record<string, any> | null => {
+    if (value != null) {
+      return { [namePath]: { $notEqualTo: value } };
+    }
+    return null;
+  },
+
+  equalTo: (
+    value: number | string | Date,
+    namePath: string
+  ): Record<string, any> | null => {
+    if (value != null) {
+      return { [namePath]: { $equalTo: value } };
     }
     return null;
   },
