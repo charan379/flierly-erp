@@ -241,9 +241,15 @@ const SidebarMenu: React.FC = () => {
     {
       key: "iam",
       icon: <FontAwesomeIcon icon={faFingerprint} style={menuIconStyle} />,
-      label: <Link to={"/erp/iam"} style={getLinkStyle(/^user\.[a-z]+$/)}>{translate("iam")}</Link>,
+      label: translate("iam"),
       disabled: !hasPermission(/^user\.[a-z]+$/),
       children: [
+        {
+          key: "iamHome",
+          icon: <AreaChartOutlined style={menuIconStyle} />,
+          label: <Link to={"/erp/iam"} style={getLinkStyle(/^user\.[a-z]+$/)}>{translate("iam_dashboard")}</Link>,
+          disabled: !hasPermission(/^user\.read$/),
+        },
         {
           key: "users",
           icon: <FontAwesomeIcon icon={faUsersGear} style={menuIconStyle} />,
