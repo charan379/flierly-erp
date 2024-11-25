@@ -1,60 +1,67 @@
 import React, { useState } from "react";
 import { Button, Card, Row, Col, Select, Space, Divider } from "antd";
 import FormField, { FormFieldConfig } from "@/components/FormField";
+import queryTransformers, { TransformerKey } from "@/utils/queryTransformers";
 
-export type QueryCondition = {
-    field: string;
-    value: any;
-    conditions?: { condition: string; formField?: FormFieldConfig }[];
+export type QueryFieldConfig = {
+    field: { label: string; namePath: string };
+    conditions: {
+        condition: { label: string; namePath: TransformerKey };
+        formField: FormFieldConfig;
+    }[];
 };
 
-const QueryBuilder: React.FC<{ config: QueryCondition[] }> = ({ config }) => {
-    const [conditions, setConditions] = useState<{
-        id: number; // Unique identifier for each condition
-        field?: string;
-        condition?: string;
-        value?: any;
-        formConfig?: FormFieldConfig;
-    }[]>([]);
-    const [conditionCount, setConditionCount] = useState(0); // Track total condition count
+type QueryCondition = {
+    id: number;
+    field?: { label: string; namePath: string };
+    condition?: { label: string; namePath: TransformerKey };
+    value?: any;
+    formConfig?: FormFieldConfig;
+}
+const QueryBuilder: React.FC<{ config: QueryFieldConfig[] }> = ({ config }) => {
+    const [conditions, setConditions] = useState<QueryCondition[]>([]);
+    const [conditionCount, setConditionCount] = useState(0);
 
     const handleAddCondition = () => {
         setConditions([
             ...conditions,
             {
-                id: conditionCount, // Use count as unique identifier
+                id: conditionCount,
             },
         ]);
-        setConditionCount((prevCount) => ++prevCount); // Increment count
+        setConditionCount((prevCount) => prevCount + 1);
     };
 
-    const handleFieldChange = (id: number, field: string) => {
+    const handleFieldChange = (id: number, selected: { label: string; value: string }) => {
+        const selectedField = config.find((field) => field.field.namePath === selected.value);
         setConditions((prev) =>
             prev.map((cond) =>
                 cond.id === id
                     ? {
-                          id: cond.id,
-                          field,
-                          condition: "", // Reset condition
-                          value: null, // Reset value
-                          formConfig: undefined, // Reset form configuration
-                      }
+                        ...cond,
+                        field: selectedField?.field,
+                        condition: undefined,
+                        value: null,
+                        formConfig: undefined,
+                    }
                     : cond
             )
         );
     };
 
-    const handleConditionChange = (id: number, condition: string) => {
+    const handleConditionChange = (id: number, namePath: string) => {
         setConditions((prev) =>
             prev.map((cond) => {
                 if (cond.id === id) {
-                    const fieldConfig = config.find((c) => c.field === cond.field);
-                    const conditionConfig = fieldConfig?.conditions?.find((c) => c.condition === condition);
+                    const fieldConfig = config.find((field) => field.field.namePath === cond.field?.namePath);
+                    const selectedCondition = fieldConfig?.conditions.find(
+                        (condition) => condition.condition.namePath === namePath
+                    );
 
                     return {
                         ...cond,
-                        condition,
-                        formConfig: conditionConfig?.formField || undefined,
+                        condition: selectedCondition?.condition,
+                        formConfig: selectedCondition?.formField,
                         value: null, // Reset value when condition changes
                     };
                 }
@@ -71,23 +78,48 @@ const QueryBuilder: React.FC<{ config: QueryCondition[] }> = ({ config }) => {
 
     const handleRemoveCondition = (id: number) => {
         setConditions((prev) => prev.filter((cond) => cond.id !== id));
-        setConditionCount((prevCount) => --prevCount); // Decrement count
+        setConditionCount((prevCount) => prevCount - 1);
     };
 
-    const generateQuery = () =>
-        conditions
-            .map((cond) => `${cond.field} ${cond.condition} ${JSON.stringify(cond.value)}`)
-            .join(" AND ");
+    const getAvailableFields = (): QueryFieldConfig[] => {
+        const usedFields = conditions.map((cond) => cond.field?.namePath);
+        return config.filter((field) => !usedFields.includes(field.field.namePath));
+    };
+
+    // Function to generate query based on QueryCondition
+    const generateQuery = (queryConditions: QueryCondition[]): Record<string, any> => {
+        const query: Record<string, any> = {};
+
+        queryConditions.forEach((queryCondition) => {
+            // For each condition, get the corresponding transformer function based on namePath
+            if (queryCondition?.condition && queryCondition?.field) {
+                const transformerKey = queryCondition.condition?.namePath;
+                const transformerFn = queryTransformers[transformerKey];
+                
+            // If the transformer function exists, apply it to the value
+            if (transformerFn) {
+                const result = transformerFn(queryCondition.value, queryCondition.field.namePath, undefined);
+
+                // If the transformer returns a valid result, add it to the query
+                if (result) {
+                    Object.assign(query, result);
+                }
+            }
+            }
+        });
+
+        return query;
+    };
 
     return (
         <Card style={{ margin: "20px auto", padding: "24px", minWidth: "80%", maxWidth: 1200 }}>
             <Space direction="vertical" style={{ width: "100%" }}>
                 {conditions.map((cond, index) => (
                     <Card
-                        key={cond.id} // Use condition ID as the key
+                        key={cond.id}
                         title={
                             <Row justify="space-between">
-                                <Col>{cond.field || `Condition ${index + 1}`}</Col>
+                                <Col>{cond.field?.label || `Condition ${index + 1}`}</Col>
                                 <Col>
                                     <Button
                                         type="link"
@@ -104,26 +136,27 @@ const QueryBuilder: React.FC<{ config: QueryCondition[] }> = ({ config }) => {
                             <Col span={8}>
                                 <Select
                                     placeholder="Select Field"
-                                    value={cond.field}
-                                    onChange={(value) => handleFieldChange(cond.id, value)}
-                                    options={config.map((c) => ({
-                                        label: c.field,
-                                        value: c.field,
+                                    value={cond.field ? { label: cond.field.label, value: cond.field.namePath } : undefined}
+                                    onChange={(selected) => handleFieldChange(cond.id, selected)}
+                                    options={getAvailableFields().map((field) => ({
+                                        label: field.field.label,
+                                        value: field.field.namePath,
                                     }))}
                                     style={{ width: "100%" }}
+                                    labelInValue
                                 />
                             </Col>
                             <Col span={8}>
                                 <Select
                                     placeholder="Select Condition"
-                                    value={cond.condition}
+                                    value={cond.condition?.namePath}
                                     onChange={(value) => handleConditionChange(cond.id, value)}
                                     options={
                                         config
-                                            .find((c) => c.field === cond.field)
-                                            ?.conditions?.map((c) => ({
-                                                label: c.condition,
-                                                value: c.condition,
+                                            .find((field) => field.field.namePath === cond.field?.namePath)
+                                            ?.conditions.map((condition) => ({
+                                                label: condition.condition.label,
+                                                value: condition.condition.namePath,
                                             })) || []
                                     }
                                     style={{ width: "100%" }}
@@ -132,14 +165,13 @@ const QueryBuilder: React.FC<{ config: QueryCondition[] }> = ({ config }) => {
                             <Col span={8}>
                                 {cond.formConfig && (
                                     <FormField
-                                        key={`${cond.id}-${cond.condition}`} // Unique key for re-rendering
+                                        key={`${cond.id}-${cond.condition?.namePath}`}
                                         config={{
                                             ...cond.formConfig,
                                             name: `conditions[${cond.id}].value`,
-                                            onChange: (value) =>
-                                                handleValueChange(cond.id, value),
+                                            onChange: (value) => handleValueChange(cond.id, value),
                                         }}
-                                        showLabel={false} // Hide label for value input
+                                        showLabel={false}
                                     />
                                 )}
                             </Col>
@@ -152,7 +184,7 @@ const QueryBuilder: React.FC<{ config: QueryCondition[] }> = ({ config }) => {
                 Add Condition
             </Button>
             <Divider>Generated Query</Divider>
-            <pre>{generateQuery() || "No conditions added yet."}</pre>
+            <pre>{JSON.stringify(generateQuery(conditions)) || "No conditions added yet."}</pre>
         </Card>
     );
 };
