@@ -1,38 +1,73 @@
 import PageLoader from "@/components/PageLoader";
 import WithSuspense from "@/components/WithSuspense";
 import ProtectedRoute from "@/features/ProtectedRoute/ProtectedRoute";
-import { QueryCondition } from "@/features/QueryBuilder/QueryBuilder";
+import { QueryFieldConfig } from "@/features/QueryBuilder/QueryBuilder";
 import React, { Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 
 const QueryBuilder = React.lazy(() => import("@/features/QueryBuilder"));
 
-const exampleConfig: QueryCondition[] = [
+const exampleConfig: QueryFieldConfig<Record<string, any>>[] = [
   {
-    field: "Category",
-    value: undefined,
+    field: { label: "Category", namePath: "category" },
     conditions: [
-      { condition: "equals", formField: { input: { type: "Select", options: [{ label: "Electronics", value: "electronics" }, { label: "Clothing", value: "clothing" }] } } },
-      { condition: "not equals", formField: { input: { type: "Select", options: [{ label: "Electronics", value: "electronics" }, { label: "Clothing", value: "clothing" }] } } }
-    ]
+      {
+        condition: { label: "Equals To", namePath: "equalTo" },
+        formField: {
+          input: {
+            type: "Select",
+            options: [
+              { label: "Electronics", value: "electronics" },
+              { label: "Clothing", value: "clothing" },
+            ],
+          },
+        },
+      },
+      {
+        condition: { label: "Not Equals To", namePath: "notEqualTo" },
+        formField: {
+          input: {
+            type: "Select",
+            options: [
+              { label: "Electronics", value: "electronics" },
+              { label: "Clothing", value: "clothing" },
+            ],
+          },
+        },
+      },
+    ],
   },
   {
-    field: "Price",
-    value: undefined,
+    field: { label: "Price", namePath: "price" },
     conditions: [
-      { condition: "greater than", formField: { input: { type: "Number" } } },
-      { condition: "less than", formField: { input: { type: "Number" } } }
-    ]
+      {
+        condition: { label: "Greater Than", namePath: "greaterThan" },
+        formField: { input: { type: "Number" } },
+      },
+      {
+        condition: { label: "Less Than", namePath: "lessThan" },
+        formField: { input: { type: "Number" } },
+      },
+    ],
   },
   {
-    field: "Availability",
-    value: undefined,
+    field: { label: "Availability", namePath: "availability" },
     conditions: [
-      { condition: "equals", formField: { input: { type: "Select", options: [{ label: "In Stock", value: "in_stock" }, { label: "Out of Stock", value: "out_of_stock" }] } } }
-    ]
-  }
+      {
+        condition: { label: "Equals", namePath: "equalTo" },
+        formField: {
+          input: {
+            type: "Select",
+            options: [
+              { label: "In Stock", value: "in_stock" },
+              { label: "Out of Stock", value: "out_of_stock" },
+            ],
+          },
+        },
+      },
+    ],
+  },
 ];
-
 
 const IamRoutes: React.FC = () => {
   return (
