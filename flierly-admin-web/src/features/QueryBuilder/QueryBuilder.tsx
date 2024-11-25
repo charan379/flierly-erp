@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Button, Card, Row, Col, Select, Space, Divider } from "antd";
+import { Button, Card, Row, Col, Select, Space, Divider, Typography } from "antd";
 import FormField, { FormFieldConfig } from "@/components/FormField";
 import queryTransformers, { TransformerKey } from "@/utils/queryTransformers";
 
-export type QueryFieldConfig = {
-    field: { label: string; namePath: string };
+export type QueryFieldConfig<T = Record<string, any>> = {
+    field: { label: string; namePath: keyof T };
     conditions: {
         condition: { label: string; namePath: TransformerKey };
         formField: FormFieldConfig;
@@ -95,16 +95,16 @@ const QueryBuilder: React.FC<{ config: QueryFieldConfig[] }> = ({ config }) => {
             if (queryCondition?.condition && queryCondition?.field) {
                 const transformerKey = queryCondition.condition?.namePath;
                 const transformerFn = queryTransformers[transformerKey];
-                
-            // If the transformer function exists, apply it to the value
-            if (transformerFn) {
-                const result = transformerFn(queryCondition.value, queryCondition.field.namePath, undefined);
 
-                // If the transformer returns a valid result, add it to the query
-                if (result) {
-                    Object.assign(query, result);
+                // If the transformer function exists, apply it to the value
+                if (transformerFn) {
+                    const result = transformerFn(queryCondition.value, queryCondition.field.namePath, undefined);
+
+                    // If the transformer returns a valid result, add it to the query
+                    if (result) {
+                        Object.assign(query, result);
+                    }
                 }
-            }
             }
         });
 
@@ -184,7 +184,9 @@ const QueryBuilder: React.FC<{ config: QueryFieldConfig[] }> = ({ config }) => {
                 Add Condition
             </Button>
             <Divider>Generated Query</Divider>
-            <pre>{JSON.stringify(generateQuery(conditions)) || "No conditions added yet."}</pre>
+            <Typography.Paragraph copyable style={{ backgroundColor: "rgba(150, 150, 150, 0.1)", padding: "0.4em 0.6em", borderRadius: "3px", border: "1px solid rgba(100, 100, 100, 0.2)", textAlign: "left", whiteSpace: "pre-wrap", wordBreak: "break-word", fontFamily: "monospace" }}>
+                {JSON.stringify(generateQuery(conditions), null, 2)}
+            </Typography.Paragraph>
         </Card>
     );
 };
