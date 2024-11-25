@@ -308,6 +308,7 @@ const privilegeColumns: ProColumnsWithFormConfig<Privilege>[] = [
       name: "isActive",
       label: "active",
       rules: [{ type: "string" }],
+      allowClear: true,
       input: {
         type: "Select",
         options: activeFieldOptions
