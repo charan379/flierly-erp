@@ -46,6 +46,7 @@ export type FormFieldConfig = ProFormFieldProps & {
   input: InputConfig;
   access?: AccessConfig;
   fieldProps?: ProFormFieldProps["fieldProps"];
+  onChange?: (value: any) => void;
 };
 
 type FormFieldProps = {
@@ -58,17 +59,17 @@ const FormComponent: React.FC<FormFieldConfig> = (props) => {
 
   switch (props.input.type) {
     case "Text":
-      return <ProFormText {...props} />;
+      return <ProFormText {...props} fieldProps={{ onChange: props?.onChange }} />;
     case "TextArea":
-      return <ProFormTextArea {...props} />;
+      return <ProFormTextArea {...props} fieldProps={{onChange: props?.onChange}} />;
     case "Number":
-      return <ProFormDigit {...props} />;
+      return <ProFormDigit {...props} fieldProps={{onChange: props?.onChange}} />;
     case "DatePicker":
-      return <ProFormDatePicker {...props} />;
+      return <ProFormDatePicker {...props} fieldProps={{onChange: props?.onChange}} />;
     case "DateRange":
-      return <ProFormDateRangePicker {...props} />;
+      return <ProFormDateRangePicker {...props} fieldProps={{onChange: props?.onChange}} />;
     case "Switch":
-      return <ProFormSwitch {...props} valuePropName="checked" />;
+      return <ProFormSwitch {...props} valuePropName="checked" fieldProps={{onChange: props?.onChange}} />;
     case "Decimal":
       return (
         <ProFormDigit
@@ -78,21 +79,24 @@ const FormComponent: React.FC<FormFieldConfig> = (props) => {
             step: props.input.step,
             min: props.input.min,
             max: props.input.max,
+            onChange: props?.onChange
           }}
         />
       );
     case "Select":
       return (
         <Col xs={24} {...props.colProps}>
-          <ProForm.Item {...props} convertValue={(value) => {
-            if (value === true) {
-              return "true";
-            } else if (value === false) {
-              return "false";
-            } else {
-              return value;
-            }
-          }}
+          <ProForm.Item
+            {...props}
+            convertValue={(value) => {
+              if (value === true) {
+                return "true";
+              } else if (value === false) {
+                return "false";
+              } else {
+                return value;
+              }
+            }}
           >
             <Select
               mode={props.input.mode}
@@ -102,6 +106,7 @@ const FormComponent: React.FC<FormFieldConfig> = (props) => {
               disabled={props.hidden || props.disabled}
               style={{ width: props.width ?? "100%", textAlign: "left" }}
               dropdownStyle={{ textAlign: "left" }}
+              onChange={props?.onChange} // Pass onChange to Select component
             />
           </ProForm.Item>
         </Col>
@@ -119,6 +124,7 @@ const FormComponent: React.FC<FormFieldConfig> = (props) => {
               disabled={props.hidden || props.disabled}
               fieldProps={props.fieldProps}
               mode={props.input.mode}
+              onChange={props?.onChange} // Pass onChange to SelectRemoteOptions component
             />
           </ProForm.Item>
         </Col>
@@ -134,13 +140,13 @@ const FormField: React.FC<FormFieldProps> = ({ key, config, showLabel = true }) 
   const { hasPermission } = useAuth();
 
   const {
-    name,
-    label,
+    name = "fieldName",
+    label = "fieldLable",
     hidden,
     disabled,
     access,
+    onChange, // Destructure onChange handler
   } = config;
-
 
   const { permission, ifNoAccess } = access || { permission: /.*/, ifNoAccess: undefined };
 
@@ -175,6 +181,7 @@ const FormField: React.FC<FormFieldProps> = ({ key, config, showLabel = true }) 
       label={showLabel ? (typeof label === "string" ? translate(label) : label) : undefined}
       hidden={isHidden}
       disabled={isDisabled}
+      onChange={onChange} // Pass the onChange handler to FormComponent
     />
   );
 };
