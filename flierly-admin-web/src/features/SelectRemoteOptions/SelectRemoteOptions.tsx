@@ -8,6 +8,7 @@ interface SelectRemoteOptionsProps {
   debounceTimeout?: number;
   width?: string | number;
   mode?: SelectProps["mode"];
+  onChange?: (value: any) => void;
   [key: string]: any; // For any other additional props passed to Select
 }
 
@@ -98,6 +99,7 @@ const SelectRemoteOptions: React.FC<SelectRemoteOptionsProps> = ({
       getPopupContainer={(triggerNode) => triggerNode.parentNode}
       showSearch                                 // Enable search functionality
       placeholder={"Please select"}
+      onChange={props?.onChange}
       onSearch={debounceFetcher}                 // Debounced search fetch
       onFocus={handleFocus}                      // Fetch options on every focus
       options={displayedOptions}                 // Fetched options
