@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Select, SelectProps } from "antd";
+import { Col, ColProps, Select, SelectProps } from "antd";
 import {
   ProForm,
   ProFormDatePicker,
@@ -47,6 +47,10 @@ export type FormFieldConfig = ProFormFieldProps & {
   access?: AccessConfig;
   fieldProps?: ProFormFieldProps["fieldProps"];
   onChange?: (value: any) => void;
+  formInfo?: {
+    isFormItem?: boolean
+    gridForm?: boolean
+  }
 };
 
 type FormFieldProps = {
@@ -55,21 +59,36 @@ type FormFieldProps = {
   showLabel?: boolean;
 };
 
+const WrapUnderCol: React.FC<{ colProps?: ColProps, formInfo: FormFieldConfig["formInfo"], children: React.ReactNode }> = (props) => {
+
+  const { isFormItem, gridForm } = props?.formInfo || { isFormItem: true, gridForm: true };
+
+  if (isFormItem && gridForm) {
+    return (
+      <Col xs={24} {...props.colProps}>
+        {props.children}
+      </Col>
+    )
+  } else {
+    return props.children
+  }
+};
+
 const FormComponent: React.FC<FormFieldConfig> = (props) => {
 
   switch (props.input.type) {
     case "Text":
       return <ProFormText {...props} fieldProps={{ onChange: props?.onChange }} />;
     case "TextArea":
-      return <ProFormTextArea {...props} fieldProps={{onChange: props?.onChange}} />;
+      return <ProFormTextArea {...props} fieldProps={{ onChange: props?.onChange }} />;
     case "Number":
-      return <ProFormDigit {...props} fieldProps={{onChange: props?.onChange}} />;
+      return <ProFormDigit {...props} fieldProps={{ onChange: props?.onChange }} />;
     case "DatePicker":
-      return <ProFormDatePicker {...props} fieldProps={{onChange: props?.onChange}} />;
+      return <ProFormDatePicker {...props} fieldProps={{ onChange: props?.onChange }} />;
     case "DateRange":
-      return <ProFormDateRangePicker {...props} fieldProps={{onChange: props?.onChange}} />;
+      return <ProFormDateRangePicker {...props} fieldProps={{ onChange: props?.onChange }} />;
     case "Switch":
-      return <ProFormSwitch {...props} valuePropName="checked" fieldProps={{onChange: props?.onChange}} />;
+      return <ProFormSwitch {...props} valuePropName="checked" fieldProps={{ onChange: props?.onChange }} />;
     case "Decimal":
       return (
         <ProFormDigit
@@ -85,7 +104,7 @@ const FormComponent: React.FC<FormFieldConfig> = (props) => {
       );
     case "Select":
       return (
-        <Col xs={24} {...props.colProps}>
+        <WrapUnderCol formInfo={props.formInfo} colProps={props.colProps}>
           <ProForm.Item
             {...props}
             convertValue={(value) => {
@@ -104,16 +123,16 @@ const FormComponent: React.FC<FormFieldConfig> = (props) => {
               options={props.input.options}
               allowClear={props.allowClear}
               disabled={props.hidden || props.disabled}
-              style={{ width: props.width ?? "100%", textAlign: "left" }}
+              style={{ width: props.width ?? "100%" }}
               dropdownStyle={{ textAlign: "left" }}
               onChange={props?.onChange} // Pass onChange to Select component
             />
           </ProForm.Item>
-        </Col>
+        </WrapUnderCol>
       );
     case "SelectRemoteOptions":
       return (
-        <Col xs={24} {...props.colProps}>
+        <WrapUnderCol formInfo={props.formInfo} colProps={props.colProps}>
           <ProForm.Item {...props}>
             <SelectRemoteOptions
               asyncOptionsFetcher={props.input.asyncOptionsFetcher}
@@ -127,7 +146,7 @@ const FormComponent: React.FC<FormFieldConfig> = (props) => {
               onChange={props?.onChange} // Pass onChange to SelectRemoteOptions component
             />
           </ProForm.Item>
-        </Col>
+        </WrapUnderCol>
       );
     default:
       throw new Error(`Invalid input type '${props.input}' in form field configuration.`);
