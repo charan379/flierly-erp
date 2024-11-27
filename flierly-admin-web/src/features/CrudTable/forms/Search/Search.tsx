@@ -105,6 +105,7 @@ const Search: React.FC<SearchProps> = ({ title = "filter_data", render, actions 
             title={title}
             open={drawerOpen}
             onClose={() => setDrawerOpen(false)}
+            onOpen={() => setDrawerOpen(true)}
             trigger={
                 <Tooltip title={translate("apply_filters")}>
                     <Badge
@@ -121,16 +122,20 @@ const Search: React.FC<SearchProps> = ({ title = "filter_data", render, actions 
                     </Badge>
                 </Tooltip>
             }
-            minWidth={window.innerWidth * 0.3}
+            minWidth={400}
+            initialWidth={700}
             maxWidth={window.innerWidth * 0.9}
             destroyOnClose={false}
             styles={{
-                body: { padding: "0px 10px" }
+                body: { padding: "0px 10px" },
             }}
             footer={
                 <div style={{ display: "flex", justifyContent: "flex-end", padding: 16 }}>
                     <Button onClick={onResetFilters} danger>
                         {translate("rest")}
+                    </Button>
+                    <Button type="default" onClick={() => setDrawerOpen(false)} style={{ marginLeft: 8 }}>
+                        {translate("cancel")}
                     </Button>
                     <Button type="primary" onClick={onApplyFilters} style={{ marginLeft: 8 }}>
                         {translate("search")}
@@ -138,10 +143,9 @@ const Search: React.FC<SearchProps> = ({ title = "filter_data", render, actions 
                 </div>
             }
         >
-            <Suspense name="QueryBuilder-Suspense-Wrap" fallback={<PageLoading />}>
+            <Suspense name="queryBuilder-suspense-wrap" fallback={<PageLoading />}>
                 <QueryBuilder config={exampleConfig} />
             </Suspense>
-
         </ResizableDrawer>
     );
 };
