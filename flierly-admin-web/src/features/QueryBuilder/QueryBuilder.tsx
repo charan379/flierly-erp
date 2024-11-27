@@ -136,7 +136,7 @@ const QueryBuilder: React.FC<{ config: QueryFieldConfig[] }> = ({ config }) => {
             <Space direction="vertical" size="middle" style={{ width: "100%" }}>
                 {conditions.map((cond, index) => (
                     <CollapsibleCard
-                        key={cond.id}
+                        key={`cond-${cond.id}`}
                         title={<Col>{cond.field?.label || `Condition ${index + 1}`}</Col>}
                         actions={
                             [
@@ -155,8 +155,9 @@ const QueryBuilder: React.FC<{ config: QueryFieldConfig[] }> = ({ config }) => {
                                 flexDirection: isHorizontal ? "row" : "column",
                                 rowGap: "5px"
                             }}
+                            key={`cond-${cond.id}-row`}
                         >
-                            <Col span={isHorizontal ? 8 : 24}>
+                            <Col span={isHorizontal ? 8 : 24} key={`cond-${cond.id}-col-1`}>
                                 <Select
                                     placeholder="Select Field"
                                     value={cond.field ? { label: cond.field.label, value: cond.field.namePath } : undefined}
@@ -169,7 +170,7 @@ const QueryBuilder: React.FC<{ config: QueryFieldConfig[] }> = ({ config }) => {
                                     labelInValue
                                 />
                             </Col>
-                            <Col span={isHorizontal ? 8 : 24}>
+                            <Col span={isHorizontal ? 8 : 24} key={`cond-${cond.id}-col-2`}>
                                 <Select
                                     placeholder="Select Condition"
                                     value={cond.condition?.namePath}
@@ -185,10 +186,11 @@ const QueryBuilder: React.FC<{ config: QueryFieldConfig[] }> = ({ config }) => {
                                     style={{ width: "100%" }}
                                 />
                             </Col>
-                            <Col span={isHorizontal ? 8 : 24} >
+                            <Col span={isHorizontal ? 8 : 24} key={`cond-${cond.id}-col-3`} >
                                 {cond.formConfig && (
                                     <FormField
-                                        key={`${cond.id}-${cond.condition?.namePath}`}
+                                        key={`${cond.field?.namePath}-${cond.condition?.namePath}`}
+                                        fieldKey={`component-${cond.field?.namePath}-${cond.condition?.namePath}`}
                                         config={{
                                             ...cond.formConfig,
                                             name: `conditions[${cond.id}].value`,
