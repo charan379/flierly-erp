@@ -1,22 +1,31 @@
 import React, { useState } from "react";
 import { Drawer, Button, DrawerProps } from "antd";
 
-interface ResizableDrawerProps extends Omit<DrawerProps, "width"> {
+interface ResizableDrawerProps extends Omit<DrawerProps, "width" | "open" | "onClose"> {
     trigger?: React.ReactNode; // Button or trigger element to open the drawer
     initialWidth?: number; // Default width of the drawer
     minWidth?: number; // Minimum width of the drawer
     maxWidth?: number; // Maximum width of the drawer
+    open?: boolean; // Controlled open state
+    onClose?: () => void; // Controlled close handler
+    onOpen?: () => void; // Controlled open handler
 }
 
 const ResizableDrawer: React.FC<ResizableDrawerProps> = ({
     trigger,
-    minWidth = 300,
+    minWidth = 400,
     maxWidth = window.innerWidth * 0.8,
+    open: controlledOpen,
+    onClose: controlledOnClose,
+    onOpen: controlledOnOpen,
     children,
+    initialWidth = 400,
     ...drawerProps
 }) => {
-    const [open, setOpen] = useState(false);
-    const [drawerWidth, setDrawerWidth] = useState(minWidth);
+    const [defaultOpen, setDefaultOpen] = useState(false);
+    const [drawerWidth, setDrawerWidth] = useState(initialWidth);
+
+    const isControlled = controlledOpen !== undefined;
 
     const handleResize = (e: React.MouseEvent<HTMLDivElement>) => {
         const newWidth = window.innerWidth - e.clientX;
@@ -34,19 +43,23 @@ const ResizableDrawer: React.FC<ResizableDrawerProps> = ({
         document.addEventListener("mouseup", onMouseUp);
     };
 
+    const open = isControlled ? controlledOpen : defaultOpen;
+    const onClose = isControlled ? controlledOnClose : () => setDefaultOpen(false);
+    const onOpen = isControlled ? controlledOnOpen : () => setDefaultOpen(true);
+
     return (
         <>
             {trigger ? (
-                React.cloneElement(trigger as React.ReactElement, { onClick: () => setOpen(true) })
+                React.cloneElement(trigger as React.ReactElement, { onClick: onOpen })
             ) : (
-                <Button type="primary" onClick={() => setOpen(true)}>
+                <Button type="primary" onClick={onOpen}>
                     Open Drawer
                 </Button>
             )}
             <Drawer
                 {...drawerProps}
                 open={open}
-                onClose={() => setOpen(false)}
+                onClose={onClose}
                 width={drawerWidth}
             >
                 {children}
