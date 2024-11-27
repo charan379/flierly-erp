@@ -1,111 +1,149 @@
-import React, { useState } from "react";
-import { Badge, Button, Form, Tooltip } from "antd";
-import { ActionType, DrawerForm } from "@ant-design/pro-components";
+import React, { Suspense, useState } from "react";
+import { Badge, Button, Tooltip } from "antd";
+import { ActionType, PageLoading } from "@ant-design/pro-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import useLocale from "@/features/Locale/hooks/useLocale";
 import useCrudTableContext from "../../hooks/useCrudTableContext/useCrudTableContext";
-import reverseTransformQuery from "@/utils/reverseTransformQuery";
-import { Store } from "antd/es/form/interface";
+import { QueryFieldConfig } from "@/features/QueryBuilder/QueryBuilder";
+import ResizableDrawer from "@/components/ResizableDrawer";
+
+const QueryBuilder = React.lazy(() => import("@/features/QueryBuilder/QueryBuilder"));
 
 // Define types for the component props
 interface SearchProps {
-  formFields: any;
-  title?: string; // Optional title for the drawer
-  render: boolean; // A boolean to control the rendering of the component
-  actions: ActionType | undefined;
+    title?: string; // Optional title for the drawer
+    render: boolean; // A boolean to control the rendering of the component
+    actions: ActionType | undefined;
 }
 
-const Search: React.FC<SearchProps> = ({
-  formFields,
-  title = "filter_data",
-  render,
-  actions,
-}) => {
-  if (!render) return null;
-  if (!formFields) return null;
-  if (!actions) return null;
+const exampleConfig: QueryFieldConfig<Record<string, any>>[] = [
+    {
+        field: { label: "Category", namePath: "category" },
+        conditions: [
+            {
+                condition: { label: "Equals To", namePath: "equalTo" },
+                formField: {
+                    input: {
+                        type: "Select",
+                        options: [
+                            { label: "Electronics", value: "electronics" },
+                            { label: "Clothing", value: "clothing" },
+                        ],
+                    },
+                },
+            },
+            {
+                condition: { label: "Not Equals To", namePath: "notEqualTo" },
+                formField: {
+                    input: {
+                        type: "Select",
+                        options: [
+                            { label: "Electronics", value: "electronics" },
+                            { label: "Clothing", value: "clothing" },
+                        ],
+                    },
+                },
+            },
+        ],
+    },
+    {
+        field: { label: "Price", namePath: "price" },
+        conditions: [
+            {
+                condition: { label: "Greater Than", namePath: "greaterThan" },
+                formField: { input: { type: "Number" } },
+            },
+            {
+                condition: { label: "Less Than", namePath: "lessThan" },
+                formField: { input: { type: "Number" } },
+            },
+        ],
+    },
+    {
+        field: { label: "Availability", namePath: "availability" },
+        conditions: [
+            {
+                condition: { label: "Equals", namePath: "equalTo" },
+                formField: {
+                    input: {
+                        type: "Select",
+                        options: [
+                            { label: "In Stock", value: "in_stock" },
+                            { label: "Out of Stock", value: "out_of_stock" },
+                        ],
+                    },
+                },
+            },
+        ],
+    },
+];
 
-  const { translate } = useLocale();
-  const [formInstance] = Form.useForm();
-  const { crudTableContextHandler } = useCrudTableContext();
+const Search: React.FC<SearchProps> = ({ title = "filter_data", render, actions }) => {
+    if (!render || !actions) return null;
 
-  const [initialValues, setInitialValues] = useState<Store | undefined>(
-    reverseTransformQuery(crudTableContextHandler.filters.get())
-  );
-  const [drawerOpen, setDrawerOpen] = useState(false);
+    const { translate } = useLocale();
+    const { crudTableContextHandler } = useCrudTableContext();
 
-  const onFinish = async (values: Record<string, any>): Promise<boolean | void> => {
-    crudTableContextHandler.filters.set(values);
-    actions.reload();
-    setDrawerOpen(false); // Close the drawer after submission
-    return true;
-  };
+    const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const onReset = () => {
-    setInitialValues(undefined);
-    crudTableContextHandler.filters.reset(); // Reset the filter context
-    formInstance.resetFields(); // Reset the form fields
-    actions.reload();
-    setDrawerOpen(false); // Close the drawer after reset
-  };
+    const onApplyFilters = () => {
+        // Simulate filter application
+        const filters = crudTableContextHandler.filters.get();
+        actions.reload();
+        setDrawerOpen(false); // Close the drawer after applying filters
+    };
 
-  return (
-    <DrawerForm
-      form={formInstance}
-      title={title}
-      grid={true}
-      initialValues={initialValues}
-      onFinish={onFinish}
-      open={drawerOpen}
-      onOpenChange={(change) => setDrawerOpen(change)} // Control drawer visibility
-      trigger={
-        <Tooltip title={translate("apply_filters")}>
-          <Badge
-            count={Object.keys(crudTableContextHandler.filters.get())?.length}
-            overflowCount={99}
-          >
-            <Button
-              type="primary"
-              key={`drawer-search-form-trigger`}
-              icon={<FontAwesomeIcon icon={faFilter} />}
-              shape="circle"
-              size="middle"
-              style={{ backgroundColor: "#722ed1" }}
-            />
-          </Badge>
-        </Tooltip>
-      }
-      resize={{
-        maxWidth: window.innerWidth * 0.9,
-        minWidth: window.innerWidth * 0.5,
-      }}
-      drawerProps={{
-        destroyOnClose: false,
-        styles: {
-          footer: { padding: "15px 15px 15px 15px" },
-          header: { padding: "10px 5px 5px 5px" },
-          // content: {padding: "0px 0px 0px 15px"}
-        },
-      }}
-      submitter={{
-        searchConfig: {
-          resetText: translate("close"),
-          submitText: translate("search"),
-        },
-        render: (_, defaultDom) => {
-          return [
-            <Button key="reset" onClick={onReset} danger>
-              {translate("rest")}
-            </Button>,
-            ...defaultDom,
-          ];
-        },
-      }}
-    >
-      {React.cloneElement(formFields, { formInstance })}
-    </DrawerForm>
-  );
+    const onResetFilters = () => {
+        crudTableContextHandler.filters.reset();
+        actions.reload();
+        setDrawerOpen(false); // Close the drawer after reset
+    };
+
+    return (
+        <ResizableDrawer
+            title={title}
+            open={drawerOpen}
+            onClose={() => setDrawerOpen(false)}
+            trigger={
+                <Tooltip title={translate("apply_filters")}>
+                    <Badge
+                        count={Object.keys(crudTableContextHandler.filters.get()).length}
+                        overflowCount={99}
+                    >
+                        <Button
+                            type="primary"
+                            icon={<FontAwesomeIcon icon={faFilter} />}
+                            shape="circle"
+                            size="middle"
+                            style={{ backgroundColor: "#722ed1" }}
+                        />
+                    </Badge>
+                </Tooltip>
+            }
+            minWidth={window.innerWidth * 0.3}
+            maxWidth={window.innerWidth * 0.9}
+            destroyOnClose={false}
+            styles={{
+                body: { padding: "0px 10px" }
+            }}
+            footer={
+                <div style={{ display: "flex", justifyContent: "flex-end", padding: 16 }}>
+                    <Button onClick={onResetFilters} danger>
+                        {translate("rest")}
+                    </Button>
+                    <Button type="primary" onClick={onApplyFilters} style={{ marginLeft: 8 }}>
+                        {translate("search")}
+                    </Button>
+                </div>
+            }
+        >
+            <Suspense name="QueryBuilder-Suspense-Wrap" fallback={<PageLoading />}>
+                <QueryBuilder config={exampleConfig} />
+            </Suspense>
+
+        </ResizableDrawer>
+    );
 };
 
 export default Search;

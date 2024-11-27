@@ -3,7 +3,6 @@ import useElementHeight from "@/hooks/useElementHeight";
 import useLocale from "@/features/Locale/hooks/useLocale";
 import { ProTable, ProColumns, ActionType } from "@ant-design/pro-components";
 import Create from "./forms/Create";
-import Search from "./forms/Search";
 import Delete from "./features/Delete";
 import Activate from "./features/Activate";
 import RowContextMenu from "./features/RowContextMenu";
@@ -13,6 +12,7 @@ import BinModeToggle from "./features/BinModeToggle";
 import Update from "./forms/Update";
 import useCrudTableContext from "./hooks/useCrudTableContext/useCrudTableContext";
 import crudService from "./service/crudService";
+import Search from "./forms/Search";
 
 interface CrudTableProps<T> {
   entity: string;
@@ -57,7 +57,6 @@ const CrudTable = <T extends object>({
   dataSource = [],
   createFormFields,
   updateFormFields,
-  searchFormFields,
   rowSelectionColumnWidth = "3%",
   render,
 }: CrudTableProps<T>) => {
@@ -83,7 +82,7 @@ const CrudTable = <T extends object>({
     });
     crudTableContextHandler.rowMenu.open();
   };
-  
+
   return (
     <ProTable<T>
       // classname
@@ -123,7 +122,7 @@ const CrudTable = <T extends object>({
       // Configuration for table alert section
       tableAlertRender={false}
       //  Sorter configuration
-      showSorterTooltip={{target: "sorter-icon"}}
+      showSorterTooltip={{ target: "sorter-icon" }}
       sortDirections={["ascend", "descend"]}
       // options configuration
       options={{
@@ -170,11 +169,9 @@ const CrudTable = <T extends object>({
       // toolbar controls configuration
       toolBarRender={(action, rows) => [
         <Search
-          formFields={searchFormFields}
-          title={translate("search_from")}
-          render={render.search}
           actions={action}
-        />,
+          render={render.search}
+          title="search" />,
         <div></div>,
         <Create
           entity={entity}
