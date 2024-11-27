@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { Collapse, Space } from "antd";
 import { CaretRightOutlined } from "@ant-design/icons";
 
@@ -8,9 +8,11 @@ type CollapsibleCardProps = {
     actions?: React.ReactNode[]; // Additional actions on the top-right
 };
 
-const CollapsibleCard: React.FC<CollapsibleCardProps> = ({ title, children, actions }) => {
+// Using forwardRef to forward the ref to the underlying Collapse component
+const CollapsibleCard = forwardRef<HTMLDivElement, CollapsibleCardProps>(({ title, children, actions }, ref) => {
     return (
         <Collapse
+            ref={ref} // Forward the ref to the Collapse component
             expandIconPosition="start"
             expandIcon={({ isActive }) => (
                 <CaretRightOutlined
@@ -26,21 +28,23 @@ const CollapsibleCard: React.FC<CollapsibleCardProps> = ({ title, children, acti
             items={[
                 {
                     key: "1",
-                    label:
-                        <React.Fragment>
-                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                <span style={{ fontWeight: 500 }}>{title}</span>
-                                <Space size="small">{actions}</Space>
-                            </div>
-                        </React.Fragment>,
+                    label: (
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                            <span style={{ fontWeight: 500 }}>{title}</span>
+                            <Space size="small">{actions}</Space>
+                        </div>
+                    ),
                     children: children,
                     styles: {
-                        header: { alignItems: "center" }
-                    }
-                }
+                        header: { alignItems: "center" },
+                    },
+                },
             ]}
         />
     );
-};
+});
+
+// Add displayName for debugging purposes
+CollapsibleCard.displayName = "CollapsibleCard";
 
 export default CollapsibleCard;
