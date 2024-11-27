@@ -1,10 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Button, Card, Row, Col, Select, Space, Divider, Typography } from "antd";
+import React, { useState, useRef } from "react";
+import { Button, Card, Row, Col, Select, Space, Divider, Typography, Form } from "antd";
 import FormField, { FormFieldConfig } from "@/components/FormField";
 import queryTransformers, { TransformerKey } from "@/utils/queryTransformers";
 import CollapsibleCard from "./components/CollapsibleCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import useElementWidth from "@/hooks/useElementWidth";
 
 export type QueryFieldConfig<T = Record<string, any>> = {
     field: { label: string; namePath: keyof T };
@@ -25,27 +26,12 @@ type QueryCondition = {
 const QueryBuilder: React.FC<{ config: QueryFieldConfig[] }> = ({ config }) => {
     const [conditions, setConditions] = useState<QueryCondition[]>([]);
     const [conditionCount, setConditionCount] = useState(0);
-    const [isHorizontal, setIsHorizontal] = useState(true);
-    const containerRef = useRef<HTMLDivElement>(null);
+    const { ref: containerRef, width: containerWidth } = useElementWidth<HTMLDivElement>();
+    const { ref: conditionCardRef, width: conditionCardWidth } = useElementWidth<HTMLDivElement>();
 
-    useEffect(() => {
-        const resizeObserver = new ResizeObserver((entries) => {
-            for (let entry of entries) {
-                const width = entry.contentRect.width;
-                setIsHorizontal(width > 900); // Adjust the threshold as needed
-            }
-        });
 
-        if (containerRef.current) {
-            resizeObserver.observe(containerRef.current);
-        }
-
-        return () => {
-            if (containerRef.current) {
-                resizeObserver.unobserve(containerRef.current);
-            }
-        };
-    }, []);
+    const ed = useRef();
+    ed.current
 
     const handleAddCondition = () => {
         setConditions([
@@ -133,106 +119,127 @@ const QueryBuilder: React.FC<{ config: QueryFieldConfig[] }> = ({ config }) => {
 
     return (
         <Card style={{ margin: "20px auto", padding: "24px", minWidth: "80%", maxWidth: 1200 }} ref={containerRef}>
-            <Space direction="vertical" size="middle" style={{ width: "100%" }}>
-                {conditions.map((cond, index) => (
-                    <CollapsibleCard
-                        key={`cond-${cond.id}`}
-                        title={<Col>{cond.field?.label || `Condition ${index + 1}`}</Col>}
-                        actions={
-                            [
-                                <Button
-                                    type="link"
-                                    danger
-                                    onClick={() => handleRemoveCondition(cond.id)}
-                                    icon={<FontAwesomeIcon icon={faTrashCan} fontSize={18} />}
-                                />
-                            ]
-                        }
-                    >
-                        <Row
-                            gutter={16}
-                            style={{
-                                flexDirection: isHorizontal ? "row" : "column",
-                                rowGap: "5px"
-                            }}
-                            key={`cond-${cond.id}-row`}
-                        >
-                            <Col span={isHorizontal ? 8 : 24} key={`cond-${cond.id}-col-1`}>
-                                <Select
-                                    placeholder="Select Field"
-                                    value={cond.field ? { label: cond.field.label, value: cond.field.namePath } : undefined}
-                                    onChange={(selected) => handleFieldChange(cond.id, selected)}
-                                    options={getAvailableFields().map((field) => ({
-                                        label: field.field.label,
-                                        value: field.field.namePath,
-                                    }))}
-                                    style={{ width: "100%" }}
-                                    labelInValue
-                                />
-                            </Col>
-                            <Col span={isHorizontal ? 8 : 24} key={`cond-${cond.id}-col-2`}>
-                                <Select
-                                    placeholder="Select Condition"
-                                    value={cond.condition?.namePath}
-                                    onChange={(value) => handleConditionChange(cond.id, value)}
-                                    options={
-                                        config
-                                            .find((field) => field.field.namePath === cond.field?.namePath)
-                                            ?.conditions.map((condition) => ({
-                                                label: condition.condition.label,
-                                                value: condition.condition.namePath,
-                                            })) || []
-                                    }
-                                    style={{ width: "100%" }}
-                                />
-                            </Col>
-                            <Col span={isHorizontal ? 8 : 24} key={`cond-${cond.id}-col-3`} >
-                                {cond.formConfig && (
-                                    <FormField
-                                        key={`${cond.field?.namePath}-${cond.condition?.namePath}`}
-                                        fieldKey={`component-${cond.field?.namePath}-${cond.condition?.namePath}`}
-                                        config={{
-                                            ...cond.formConfig,
-                                            name: `conditions[${cond.id}].value`,
-                                            onChange: (value) => handleValueChange(cond.id, value),
-                                            colProps: { span: isHorizontal ? 8 : 24 },
-                                            formInfo: {
-                                                gridForm: false,
-                                                isFormItem: false
-                                            }
-                                        }}
-                                        showLabel={false}
-                                    />
-                                )}
-                            </Col>
-                        </Row>
-                    </CollapsibleCard>
-                ))}
-            </Space>
-            <Divider />
-            <Button type="dashed" onClick={handleAddCondition}>
-                Add Condition
-            </Button>
-            <Divider orientation="left" orientationMargin={0}>
-                Generated Query
-            </Divider>
-            <Typography.Paragraph
-                copyable
+            <div
                 style={{
-                    backgroundColor: "rgba(150, 150, 150, 0.1)",
-                    padding: "0.4em 0.6em",
-                    borderRadius: "3px",
-                    border: "1px solid rgba(100, 100, 100, 0.2)",
-                    textAlign: "left",
-                    whiteSpace: "pre-wrap",
-                    wordBreak: "break-word",
-                    fontFamily: "monospace",
+                    display: "flex",
+                    flexDirection: containerWidth > 600 ? "row" : "column",
+                    gap: "20px",
                 }}
             >
-                {JSON.stringify(generateQuery(conditions), null, 2)}
-            </Typography.Paragraph>
+                {/* Conditions Section */}
+                <div style={{ flex: containerWidth > 850 ? 2 : 1 }}>
+                    <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+                        {conditions.map((cond, index) => (
+                            <CollapsibleCard
+                                key={`cond-${cond.id}`}
+                                title={<Col>{cond.field?.label || `Condition ${index + 1}`}</Col>}
+                                ref={conditionCardRef}
+                                actions={[
+                                    <Button
+                                        type="link"
+                                        danger
+                                        onClick={() => handleRemoveCondition(cond.id)}
+                                        icon={<FontAwesomeIcon icon={faTrashCan} fontSize={18} />}
+                                    />,
+                                ]}
+                            >
+                                <Row
+                                    gutter={16}
+                                    style={{
+                                        flexDirection: conditionCardWidth > 500 ? "row" : "column",
+                                        rowGap: "5px",
+                                    }}
+                                >
+                                    <Col span={conditionCardWidth > 500 ? 8 : 24}>
+                                        <Select
+                                            placeholder="Select Field"
+                                            value={
+                                                cond.field
+                                                    ? { label: cond.field.label, value: cond.field.namePath }
+                                                    : undefined
+                                            }
+                                            onChange={(selected) => handleFieldChange(cond.id, selected)}
+                                            options={getAvailableFields().map((field) => ({
+                                                label: field.field.label,
+                                                value: field.field.namePath,
+                                            }))}
+                                            style={{ width: "100%" }}
+                                            labelInValue
+                                        />
+                                    </Col>
+                                    <Col span={conditionCardWidth > 500 ? 8 : 24}>
+                                        <Select
+                                            placeholder="Select Condition"
+                                            value={cond.condition?.namePath}
+                                            onChange={(value) => handleConditionChange(cond.id, value)}
+                                            options={
+                                                config
+                                                    .find((field) => field.field.namePath === cond.field?.namePath)
+                                                    ?.conditions.map((condition) => ({
+                                                        label: condition.condition.label,
+                                                        value: condition.condition.namePath,
+                                                    })) || []
+                                            }
+                                            style={{ width: "100%" }}
+                                        />
+                                    </Col>
+                                    <Col span={conditionCardWidth > 500 ? 8 : 24}>
+                                        {cond.formConfig && (
+                                            <Form>
+                                                <FormField
+                                                    key={`${cond.field?.namePath}-${cond.condition?.namePath}`}
+                                                    fieldKey={`component-${cond.field?.namePath}-${cond.condition?.namePath}`}
+                                                    config={{
+                                                        ...cond.formConfig,
+                                                        name: `conditions[${cond.id}].value`,
+                                                        onChange: (value) => handleValueChange(cond.id, value),
+                                                        colProps: { span: conditionCardWidth > 500 ? 8 : 24 },
+                                                        formInfo: {
+                                                            gridForm: false,
+                                                            isFormItem: false,
+                                                        },
+                                                    }}
+                                                    showLabel={false}
+                                                />
+                                            </Form>
+                                        )}
+                                    </Col>
+                                </Row>
+                            </CollapsibleCard>
+                        ))}
+                    </Space>
+                    <Divider />
+                    <Button type="dashed" onClick={handleAddCondition}>
+                        Add Condition
+                    </Button>
+                </div>
+
+                {/* Generated Query Section */}
+                <div style={{ flex: 1 }}>
+                    <Divider orientation="left" orientationMargin={0}>
+                        Generated Query
+                    </Divider>
+                    <Typography.Paragraph
+                        copyable
+                        style={{
+                            backgroundColor: "rgba(150, 150, 150, 0.1)",
+                            padding: "0.4em 0.6em",
+                            borderRadius: "3px",
+                            border: "1px solid rgba(100, 100, 100, 0.2)",
+                            textAlign: "left",
+                            whiteSpace: "pre-wrap",
+                            wordBreak: "break-word",
+                            fontFamily: "monospace",
+                        }}
+                    >
+                        {JSON.stringify(generateQuery(conditions), null, 2)}
+                    </Typography.Paragraph>
+                </div>
+            </div>
         </Card>
     );
 };
+
+QueryBuilder.displayName = "QueryBuilder";
 
 export default QueryBuilder;
