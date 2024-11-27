@@ -54,7 +54,7 @@ export type FormFieldConfig = ProFormFieldProps & {
 };
 
 type FormFieldProps = {
-  key?: string;
+  fieldKey?: string;
   config: FormFieldConfig;
   showLabel?: boolean;
 };
@@ -154,7 +154,7 @@ const FormComponent: React.FC<FormFieldConfig> = (props) => {
 };
 
 // Main FormField component
-const FormField: React.FC<FormFieldProps> = ({ key, config, showLabel = true }) => {
+const FormField: React.FC<FormFieldProps> = ({ fieldKey, config, showLabel = true }) => {
   const { translate } = useLocale();
   const { hasPermission } = useAuth();
 
@@ -195,8 +195,8 @@ const FormField: React.FC<FormFieldProps> = ({ key, config, showLabel = true }) 
 
   return (
     <FormComponent
+      key={fieldKey ?? name}
       {...config}
-      key={key ?? name}
       label={showLabel ? (typeof label === "string" ? translate(label) : label) : undefined}
       hidden={isHidden}
       disabled={isDisabled}
