@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import { useState, useImperativeHandle, forwardRef } from "react";
 import { Button, Card, Row, Col, Select, Space, Divider, Typography, Form } from "antd";
 import FormField, { FormFieldConfig } from "@/components/FormField";
 import queryTransformers, { TransformerKey } from "@/utils/queryTransformers";
@@ -23,15 +23,40 @@ type QueryCondition = {
     formConfig?: FormFieldConfig;
 };
 
-const QueryBuilder: React.FC<{ config: QueryFieldConfig[] }> = ({ config }) => {
+interface QueryBuilderProps {
+    config: QueryFieldConfig[];
+}
+
+export interface QueryBuilderRef {
+    getQuery: () => Record<string, any>; // Method to get the query
+    resetQuery: () => void; // Method to reset conditions
+}
+
+const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config }, ref) => {
     const [conditions, setConditions] = useState<QueryCondition[]>([]);
     const [conditionCount, setConditionCount] = useState(0);
     const { ref: containerRef, width: containerWidth } = useElementWidth<HTMLDivElement>();
     const { ref: conditionCardRef, width: conditionCardWidth } = useElementWidth<HTMLDivElement>();
 
+    const generateQuery = (queryConditions: QueryCondition[]): Record<string, any> => {
+        const query: Record<string, any> = {};
 
-    const ed = useRef();
-    ed.current
+        queryConditions.forEach((queryCondition) => {
+            if (queryCondition?.condition && queryCondition?.field) {
+                const transformerKey = queryCondition.condition?.namePath;
+                const transformerFn = queryTransformers[transformerKey];
+
+                if (transformerFn) {
+                    const result = transformerFn(queryCondition.value, queryCondition.field.namePath, undefined);
+                    if (result) {
+                        Object.assign(query, result);
+                    }
+                }
+            }
+        });
+
+        return query;
+    };
 
     const handleAddCondition = () => {
         setConditions([
@@ -97,25 +122,15 @@ const QueryBuilder: React.FC<{ config: QueryFieldConfig[] }> = ({ config }) => {
         return config.filter((field) => !usedFields.includes(field.field.namePath));
     };
 
-    const generateQuery = (queryConditions: QueryCondition[]): Record<string, any> => {
-        const query: Record<string, any> = {};
+    // Expose methods to the parent via ref
+    useImperativeHandle(ref, () => ({
+        getQuery: () => generateQuery(conditions),
+        resetQuery: () => {
+            setConditions([]);
+            setConditionCount(0);
+        },
+    }));
 
-        queryConditions.forEach((queryCondition) => {
-            if (queryCondition?.condition && queryCondition?.field) {
-                const transformerKey = queryCondition.condition?.namePath;
-                const transformerFn = queryTransformers[transformerKey];
-
-                if (transformerFn) {
-                    const result = transformerFn(queryCondition.value, queryCondition.field.namePath, undefined);
-                    if (result) {
-                        Object.assign(query, result);
-                    }
-                }
-            }
-        });
-
-        return query;
-    };
     return (
         <Card style={{ margin: "20px auto", padding: "24px", minWidth: "80%", maxWidth: 1200 }} ref={containerRef}>
             <div
@@ -238,7 +253,7 @@ const QueryBuilder: React.FC<{ config: QueryFieldConfig[] }> = ({ config }) => {
             </div>
         </Card>
     );
-};
+});
 
 QueryBuilder.displayName = "QueryBuilder";
 

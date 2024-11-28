@@ -1,11 +1,11 @@
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useRef, useState } from "react";
 import { Badge, Button, Tooltip } from "antd";
 import { ActionType, PageLoading } from "@ant-design/pro-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import useLocale from "@/features/Locale/hooks/useLocale";
 import useCrudTableContext from "../../hooks/useCrudTableContext/useCrudTableContext";
-import { QueryFieldConfig } from "@/features/QueryBuilder/QueryBuilder";
+import { QueryBuilderRef, QueryFieldConfig } from "@/features/QueryBuilder/QueryBuilder";
 import ResizableDrawer from "@/components/ResizableDrawer";
 
 const QueryBuilder = React.lazy(() => import("@/features/QueryBuilder/QueryBuilder"));
@@ -84,20 +84,28 @@ const Search: React.FC<SearchProps> = ({ title = "filter_data", render, actions 
 
     const { translate } = useLocale();
     const { crudTableContextHandler } = useCrudTableContext();
+    const queryBuilderRef = useRef<QueryBuilderRef | null>(null);
 
     const [drawerOpen, setDrawerOpen] = useState(false);
 
     const onApplyFilters = () => {
         // Simulate filter application
-        const filters = crudTableContextHandler.filters.get();
-        actions.reload();
-        setDrawerOpen(false); // Close the drawer after applying filters
+        if (queryBuilderRef?.current) {
+            const query = queryBuilderRef.current.getQuery();
+            crudTableContextHandler.filters.set(query);
+            actions.reload();
+            setDrawerOpen(false); // Close the drawer after applying filters
+        }
     };
 
     const onResetFilters = () => {
-        crudTableContextHandler.filters.reset();
-        actions.reload();
-        setDrawerOpen(false); // Close the drawer after reset
+        if (queryBuilderRef?.current) {
+            queryBuilderRef.current.resetQuery();
+            crudTableContextHandler.filters.reset();
+            actions.reload();
+            setDrawerOpen(false); // Close the drawer after reset
+        }
+
     };
 
     return (
@@ -144,7 +152,7 @@ const Search: React.FC<SearchProps> = ({ title = "filter_data", render, actions 
             }
         >
             <Suspense name="queryBuilder-suspense-wrap" fallback={<PageLoading />}>
-                <QueryBuilder config={exampleConfig} />
+                <QueryBuilder config={exampleConfig} ref={queryBuilderRef} />
             </Suspense>
         </ResizableDrawer>
     );
