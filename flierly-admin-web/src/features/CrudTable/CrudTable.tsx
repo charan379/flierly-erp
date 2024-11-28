@@ -13,16 +13,17 @@ import Update from "./forms/Update";
 import useCrudTableContext from "./hooks/useCrudTableContext/useCrudTableContext";
 import crudService from "./service/crudService";
 import Search from "./forms/Search";
+import { FormFieldConfig } from "@/components/FormField";
 
-interface CrudTableProps<T> {
+interface CrudTableProps<T = Record<string, any>> {
   entity: string;
   tableKey: string;
   rowKey?: keyof T;
   rowTitleKey?: keyof T;
   columns: ProColumns<T>[];
   dataSource?: T[];
-  createFormFields?: React.ReactNode;
-  updateFormFields?: React.ReactNode;
+  createFormFields?: FormFieldConfig<T>[];
+  updateFormFields?: FormFieldConfig<T>[];
   searchFormFields?: React.ReactNode;
   rowSelectionColumnWidth?: string;
   render: {
@@ -48,7 +49,7 @@ interface CrudTableProps<T> {
   };
 }
 
-const CrudTable = <T extends object>({
+const CrudTable = <T extends Record<string, any>>({
   entity,
   tableKey,
   rowKey = "id" as keyof T,
@@ -173,7 +174,7 @@ const CrudTable = <T extends object>({
           render={render.search}
           title="search" />,
         <div></div>,
-        <Create
+        <Create<T>
           entity={entity}
           formFields={createFormFields}
           title={translate("add_from")}
@@ -181,7 +182,7 @@ const CrudTable = <T extends object>({
           actions={action}
         />,
         <div></div>,
-        <Update
+        <Update<T>
           entity={entity}
           formFields={updateFormFields}
           data={crudTableContextHandler.updateForm.getData()}

@@ -1,24 +1,24 @@
-import React from "react";
 import { Button, Form, Tooltip } from "antd";
 import { EditFilled } from "@ant-design/icons";
 import { ActionType, DrawerForm } from "@ant-design/pro-components";
 import useLocale from "@/features/Locale/hooks/useLocale";
 import crudService from "../../service/crudService";
+import FormField, { FormFieldConfig } from "@/components/FormField";
 
 // Define types for the component props
-interface UpdateProps {
+interface UpdateProps<T = Record<string, any>> {
   entity: string; // Entity name for CRUD operations
-  formFields: any
+  formFields?: FormFieldConfig<T>[]; // Form fields configuration
   title?: string; // Optional title for the drawer
   data: Record<string, any>; // Data to initialize the form
-  id: number; // ID for the record being updated
+  id: number | string; // ID for the record being updated
   isOpen: boolean; // Whether the drawer is open
   close: () => void; // Function to close the drawer
   render: boolean; // A boolean to control the rendering of the component
-  actions: ActionType | undefined
+  actions: ActionType | undefined; // Actions for table reload, etc.
 }
 
-const Update: React.FC<UpdateProps> = ({
+const Update = <T extends Record<string, any>>({
   entity,
   formFields,
   title = "update",
@@ -28,16 +28,16 @@ const Update: React.FC<UpdateProps> = ({
   close,
   render,
   actions,
-}) => {
+}: UpdateProps<T>): JSX.Element | null => {
   if (!render) return null;
   if (!formFields) return null;
   if (!actions) return null;
 
   const { translate } = useLocale();
-  const [formInstance] = Form.useForm();
+  const [formInstance] = Form.useForm<T>();
 
-  const onFinish = async (values: Record<string, any>) => {
-    const response = await crudService.update({ entity, data: values, id });
+  const onFinish = async (values: T): Promise<boolean | void> => {
+    const response = await crudService.update<T>({ entity, data: values, id });
 
     if (response?.success) {
       actions.reload();
@@ -46,17 +46,6 @@ const Update: React.FC<UpdateProps> = ({
     }
   };
 
-  // Generate initial values for the form based on the provided data
-  let initialValues: Record<string, any> = {};
-
-  Object.keys(data).forEach((key) => {
-    if (data[key] && typeof data[key] === "object" && !Array.isArray(data[key])) {
-      initialValues = { ...initialValues, [key]: data[key].id };
-    } else {
-      initialValues = { ...initialValues, [key]: data[key] };
-    }
-  });
-
   return (
     <DrawerForm
       form={formInstance}
@@ -64,7 +53,7 @@ const Update: React.FC<UpdateProps> = ({
       grid={true}
       onFinish={onFinish}
       open={isOpen}
-      initialValues={initialValues}
+      initialValues={data}
       trigger={
         <Tooltip title={translate("update_data")}>
           <Button
@@ -74,6 +63,7 @@ const Update: React.FC<UpdateProps> = ({
             shape="circle"
             size="middle"
             style={{ backgroundColor: "#FF9800" }}
+            disabled={formFields.length > 0 ? false : true}
           />
         </Tooltip>
       }
@@ -83,12 +73,11 @@ const Update: React.FC<UpdateProps> = ({
       }}
       drawerProps={{
         destroyOnClose: true,
+        onClose: close,
         styles: {
           footer: { padding: "15px 15px 15px 15px" },
           header: { padding: "10px 5px 5px 5px" },
-          // content: {padding: "0px 0px 0px 15px"}
         },
-        onClose: close,
       }}
       submitter={{
         searchConfig: {
@@ -97,7 +86,9 @@ const Update: React.FC<UpdateProps> = ({
         },
       }}
     >
-      {React.cloneElement(formFields, { formInstance })}
+      {formFields.map((field) => (
+        <FormField key={`${entity}-${String(field.name)}`} config={field} fieldKey={`${entity}-${String(field.name)}`} />
+      ))}
     </DrawerForm>
   );
 };
