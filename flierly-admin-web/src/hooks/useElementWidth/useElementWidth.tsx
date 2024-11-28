@@ -1,40 +1,40 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import debounce from "@/utils/debounce";
+import throttle from "@/utils/throttle";
+import { useState, useEffect, useRef } from "react";
 
-/**
- * Custom hook to track the width of a referenced HTML element.
- * @template T The type of the element to observe (e.g., HTMLDivElement).
- * @returns An object containing:
- *  - `ref`: A ref to attach to the element whose width needs to be observed.
- *  - `width`: The current width of the element.
- */
-const useElementWidth = <T extends HTMLElement>() => {
+const useElementWidth = <T extends HTMLElement>(throttleLimit = 200, debounceDelay = 50) => {
     const ref = useRef<T>(null); // Generic ref to support any HTMLElement type
     const [width, setWidth] = useState<number>(0);
 
-    const updateWidth = useCallback(() => {
-        if (ref.current) {
-            setWidth(ref.current.offsetWidth); // Update width on element resize
-        }
-    }, []);
+    // Throttled or Debounced width update function
+    const updateWidth = throttle(
+        debounce(() => {
+            if (ref.current) {
+                setWidth(ref.current.offsetWidth); // Update width on element resize
+            }
+        }, debounceDelay),
+        throttleLimit
+    );
 
     useEffect(() => {
         const element = ref.current;
-        if (!element) return;
 
-        // Use requestAnimationFrame to improve performance and avoid multiple updates in a single frame
-        const resizeObserver = new ResizeObserver(() => {
-            requestAnimationFrame(updateWidth); // Optimize updates by scheduling them to happen in the next animation frame
-        });
+        if (!element) {
+            setWidth(0); // Set to 0 if no element is available
+            return;
+        }
 
-        resizeObserver.observe(element);
-        updateWidth(); // Initialize the width on mount
+        const resizeObserver = new ResizeObserver(updateWidth);
+
+        resizeObserver.observe(element); // Start observing the element for resize events
+        updateWidth(); // Initialize the width when the element becomes available
 
         return () => {
             resizeObserver.disconnect(); // Cleanup observer when component unmounts
         };
-    }, [updateWidth]);
+    }, [updateWidth]); // Only re-run effect if updateWidth changes
 
-    return { ref, width }; // Return the ref and the width
+    return { ref, width };
 };
 
 export default useElementWidth;
