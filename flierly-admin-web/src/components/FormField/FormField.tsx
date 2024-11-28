@@ -14,161 +14,152 @@ import useLocale from "@/features/Locale/hooks/useLocale";
 import SelectRemoteOptions from "@/features/SelectRemoteOptions";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 
-// Define types for input config
+// Define types for input configuration
 type InputConfig =
   | { type: "Text" | "TextArea" | "Number" | "DatePicker" | "DateRange" | "Switch" }
   | {
-    type: "Decimal";
-    precision?: number;
-    step?: number;
-    min?: number;
-    max?: number;
-  }
+      type: "Decimal";
+      precision?: number;
+      step?: number;
+      min?: number;
+      max?: number;
+    }
   | {
-    type: "Select";
-    options?: SelectProps["options"];
-    mode?: SelectProps["mode"];
-  }
+      type: "Select";
+      options?: SelectProps["options"];
+      mode?: SelectProps["mode"];
+    }
   | {
-    type: "SelectRemoteOptions";
-    asyncOptionsFetcher: (value: string) => Promise<any>;
-    labelRender?: SelectProps["labelRender"];
-    debounceTimeout?: number;
-    mode?: SelectProps["mode"];
-  };
+      type: "SelectRemoteOptions";
+      asyncOptionsFetcher: (value: string) => Promise<any>;
+      labelRender?: SelectProps["labelRender"];
+      debounceTimeout?: number;
+      mode?: SelectProps["mode"];
+    };
 
 type AccessConfig = {
   permission?: RegExp;
   ifNoAccess?: "hide" | "disable";
 };
 
-export type FormFieldConfig = ProFormFieldProps & {
+export type FormFieldConfig<T = Record<string, any>> = Omit<ProFormFieldProps<T>, "name"> & {
+  name?: keyof T;
   input: InputConfig;
   access?: AccessConfig;
-  fieldProps?: ProFormFieldProps["fieldProps"];
+  fieldProps?: ProFormFieldProps<T>["fieldProps"];
   onChange?: (value: any) => void;
   formInfo?: {
-    isFormItem?: boolean
-    gridForm?: boolean
-  }
+    isFormItem?: boolean;
+    gridForm?: boolean;
+  };
 };
 
-type FormFieldProps = {
+type FormFieldProps<T = Record<string, any>> = {
   fieldKey?: string;
-  config: FormFieldConfig;
+  config: FormFieldConfig<T>;
   showLabel?: boolean;
 };
 
-const WrapUnderCol: React.FC<{ colProps?: ColProps, formInfo: FormFieldConfig["formInfo"], children: React.ReactNode }> = (props) => {
-
-  const { isFormItem, gridForm } = props?.formInfo || { isFormItem: true, gridForm: true };
+const WrapUnderCol: React.FC<{
+  colProps?: ColProps;
+  formInfo?: FormFieldConfig["formInfo"];
+  children: React.ReactNode;
+}> = ({ colProps, formInfo, children }) => {
+  const { isFormItem = true, gridForm = true } = formInfo || {};
 
   if (isFormItem && gridForm) {
-    return (
-      <Col xs={24} {...props.colProps}>
-        {props.children}
-      </Col>
-    )
-  } else {
-    return props.children
+    return <Col xs={24} {...colProps}>{children}</Col>;
   }
+  return <>{children}</>;
 };
 
-const FormComponent: React.FC<FormFieldConfig> = (props) => {
+const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
+  const { input, onChange, formInfo, colProps, ...restProps } = props;
 
-  switch (props.input.type) {
+  switch (input.type) {
     case "Text":
-      return <ProFormText {...props} fieldProps={{ onChange: props?.onChange }} />;
+      return <ProFormText {...restProps} fieldProps={{ ...props.fieldProps, onChange }} />;
     case "TextArea":
-      return <ProFormTextArea {...props} fieldProps={{ onChange: props?.onChange }} />;
+      return <ProFormTextArea {...restProps} fieldProps={{ ...props.fieldProps, onChange }} />;
     case "Number":
-      return <ProFormDigit {...props} fieldProps={{ onChange: props?.onChange }} />;
+      return <ProFormDigit {...restProps} fieldProps={{ ...props.fieldProps, onChange }} />;
     case "DatePicker":
-      return <ProFormDatePicker {...props} fieldProps={{ onChange: props?.onChange }} />;
+      return <ProFormDatePicker {...restProps} fieldProps={{ ...props.fieldProps, onChange }} />;
     case "DateRange":
-      return <ProFormDateRangePicker {...props} fieldProps={{ onChange: props?.onChange }} />;
+      return <ProFormDateRangePicker {...restProps} fieldProps={{ ...props.fieldProps, onChange }} />;
     case "Switch":
-      return <ProFormSwitch {...props} valuePropName="checked" fieldProps={{ onChange: props?.onChange }} />;
+      return <ProFormSwitch {...restProps} valuePropName="checked" fieldProps={{ ...props.fieldProps, onChange }} />;
     case "Decimal":
       return (
         <ProFormDigit
-          {...props}
+          {...restProps}
           fieldProps={{
-            precision: props.input.precision,
-            step: props.input.step,
-            min: props.input.min,
-            max: props.input.max,
-            onChange: props?.onChange
+            ...props.fieldProps,
+            precision: input.precision,
+            step: input.step,
+            min: input.min,
+            max: input.max,
+            onChange,
           }}
         />
       );
     case "Select":
       return (
-        <WrapUnderCol formInfo={props.formInfo} colProps={props.colProps}>
-          <ProForm.Item
-            {...props}
-            convertValue={(value) => {
-              if (value === true) {
-                return "true";
-              } else if (value === false) {
-                return "false";
-              } else {
-                return value;
-              }
-            }}
-          >
+        <WrapUnderCol formInfo={formInfo} colProps={colProps}>
+          <ProForm.Item {...restProps}>
             <Select
-              mode={props.input.mode}
+              mode={input.mode}
               placeholder="Please select"
-              options={props.input.options}
+              options={input.options}
               allowClear={props.allowClear}
               disabled={props.hidden || props.disabled}
-              style={{ width: props.width ?? "100%" }}
+              style={{ width: props.width ?? "100%", textAlign: "left" }}
               dropdownStyle={{ textAlign: "left" }}
-              onChange={props?.onChange} // Pass onChange to Select component
+              onChange={onChange}
             />
           </ProForm.Item>
         </WrapUnderCol>
       );
     case "SelectRemoteOptions":
       return (
-        <WrapUnderCol formInfo={props.formInfo} colProps={props.colProps}>
-          <ProForm.Item {...props}>
+        <WrapUnderCol formInfo={formInfo} colProps={colProps}>
+          <ProForm.Item {...restProps}>
             <SelectRemoteOptions
-              asyncOptionsFetcher={props.input.asyncOptionsFetcher}
-              debounceTimeout={props.input.debounceTimeout}
-              labelRender={props.input.labelRender}
+              asyncOptionsFetcher={input.asyncOptionsFetcher}
+              debounceTimeout={input.debounceTimeout}
+              labelRender={input.labelRender}
               width={props.width}
               allowClear={props.allowClear}
               disabled={props.hidden || props.disabled}
               fieldProps={props.fieldProps}
-              mode={props.input.mode}
-              onChange={props?.onChange} // Pass onChange to SelectRemoteOptions component
+              mode={input.mode}
+              onChange={onChange}
             />
           </ProForm.Item>
         </WrapUnderCol>
       );
     default:
-      throw new Error(`Invalid input type '${props.input}' in form field configuration.`);
+      throw new Error(`Unsupported input type '${JSON.stringify(input)}'`);
   }
 };
 
-// Main FormField component
-const FormField: React.FC<FormFieldProps> = ({ fieldKey, config, showLabel = true }) => {
+const FormField = <T extends Record<string, any>>({
+  fieldKey,
+  config,
+  showLabel = true,
+}: FormFieldProps<T>) => {
   const { translate } = useLocale();
   const { hasPermission } = useAuth();
-
   const {
     name = "fieldName",
-    label = "fieldLable",
+    label = "fieldLabel",
     hidden,
     disabled,
     access,
-    onChange, // Destructure onChange handler
+    onChange,
   } = config;
 
-  const { permission, ifNoAccess } = access || { permission: /.*/, ifNoAccess: undefined };
-
+  const { permission, ifNoAccess } = access || {};
   let doNotRender = false;
   let isHidden = hidden;
   let isDisabled = disabled;
@@ -177,17 +168,12 @@ const FormField: React.FC<FormFieldProps> = ({ fieldKey, config, showLabel = tru
     switch (ifNoAccess) {
       case "hide":
         isHidden = true;
-        isDisabled = true;
         break;
       case "disable":
         isDisabled = true;
         break;
-      case undefined:
-        doNotRender = true;
-        break;
       default:
         doNotRender = true;
-        break;
     }
   }
 
@@ -195,12 +181,12 @@ const FormField: React.FC<FormFieldProps> = ({ fieldKey, config, showLabel = tru
 
   return (
     <FormComponent
-      key={fieldKey ?? name}
+      key={fieldKey ?? String(name)}
       {...config}
       label={showLabel ? (typeof label === "string" ? translate(label) : label) : undefined}
       hidden={isHidden}
       disabled={isDisabled}
-      onChange={onChange} // Pass the onChange handler to FormComponent
+      onChange={onChange}
     />
   );
 };
