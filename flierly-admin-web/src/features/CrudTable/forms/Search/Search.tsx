@@ -15,6 +15,7 @@ interface SearchProps {
     title?: string; // Optional title for the drawer
     render: boolean; // A boolean to control the rendering of the component
     actions: ActionType | undefined;
+    queryFieldsConfig?: QueryFieldConfig<any>[]
 }
 
 const exampleConfig: QueryFieldConfig<Record<string, any>>[] = [
@@ -79,8 +80,8 @@ const exampleConfig: QueryFieldConfig<Record<string, any>>[] = [
     },
 ];
 
-const Search: React.FC<SearchProps> = ({ title = "filter_data", render, actions }) => {
-    if (!render || !actions) return null;
+const Search: React.FC<SearchProps> = ({ title = "filter_data", render, actions, queryFieldsConfig }) => {
+    if (!render || !actions || !queryFieldsConfig) return null;
 
     const { translate } = useLocale();
     const { crudTableContextHandler } = useCrudTableContext();
@@ -126,6 +127,7 @@ const Search: React.FC<SearchProps> = ({ title = "filter_data", render, actions 
                             shape="circle"
                             size="middle"
                             style={{ backgroundColor: "#722ed1" }}
+                            disabled={queryFieldsConfig?.length > 0 ? false : true}
                         />
                     </Badge>
                 </Tooltip>
@@ -152,7 +154,7 @@ const Search: React.FC<SearchProps> = ({ title = "filter_data", render, actions 
             }
         >
             <Suspense name="queryBuilder-suspense-wrap" fallback={<PageLoading />}>
-                <QueryBuilder config={exampleConfig} ref={queryBuilderRef} />
+                <QueryBuilder config={queryFieldsConfig} ref={queryBuilderRef} />
             </Suspense>
         </ResizableDrawer>
     );

@@ -2,10 +2,10 @@ import CrudTable from "@/features/CrudTable";
 import CrudTableContextProvider from "@/features/CrudTable/context/CrudTableContextProvider";
 import DefaultModuleLayout from "@/layout/DefaultModuleLayout";
 import React from "react";
-import FormFields from "@/components/FormFields/FormFields";
 import privilegeTableColumns from "../../config/tableColumns";
 import privilegeCreateFields from "../../config/createFormFields";
 import privilegeUpdateFields from "../../config/updateFormFields";
+import privilegeQueryFields from "../../config/queryFormFields";
 
 
 const Privileges: React.FC = () => {
@@ -41,7 +41,7 @@ const Privileges: React.FC = () => {
           }}
           createFormFields={privilegeCreateFields}
           updateFormFields={privilegeUpdateFields}
-          searchFormFields={<FormFields columns={privilegeTableColumns} configKey="queryFormConfig" key="Privilege-Search-Form" />}
+          queryFormFields={privilegeQueryFields}
         />
       </CrudTableContextProvider>
     </DefaultModuleLayout>

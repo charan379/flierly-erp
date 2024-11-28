@@ -14,6 +14,7 @@ import useCrudTableContext from "./hooks/useCrudTableContext/useCrudTableContext
 import crudService from "./service/crudService";
 import Search from "./forms/Search";
 import { FormFieldConfig } from "@/components/FormField";
+import { QueryFieldConfig } from "../QueryBuilder/QueryBuilder";
 
 interface CrudTableProps<T = Record<string, any>> {
   entity: string;
@@ -24,7 +25,7 @@ interface CrudTableProps<T = Record<string, any>> {
   dataSource?: T[];
   createFormFields?: FormFieldConfig<T>[];
   updateFormFields?: FormFieldConfig<T>[];
-  searchFormFields?: React.ReactNode;
+  queryFormFields?: QueryFieldConfig<T>[];
   rowSelectionColumnWidth?: string;
   render: {
     restore: boolean;
@@ -58,6 +59,7 @@ const CrudTable = <T extends Record<string, any>>({
   dataSource = [],
   createFormFields,
   updateFormFields,
+  queryFormFields,
   rowSelectionColumnWidth = "3%",
   render,
 }: CrudTableProps<T>) => {
@@ -171,6 +173,7 @@ const CrudTable = <T extends Record<string, any>>({
       toolBarRender={(action, rows) => [
         <Search
           actions={action}
+          queryFieldsConfig={queryFormFields}
           render={render.search}
           title="search" />,
         <div></div>,
