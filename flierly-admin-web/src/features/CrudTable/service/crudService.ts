@@ -35,17 +35,17 @@ const crudService = {
     /**
      * Create a new entity
      */
-    create: async ({ entity, data, signal }: CreateProps) => {
+    create: async <T>({ entity, data, signal }: CreateProps<T>) => {
         const promise = api.post(`/${entity}/create`, data, { signal });
-        return handleResponse({ promise, notifyOnSuccess: true });
+        return handleResponse<T>({ promise, notifyOnSuccess: true });
     },
 
     /**
      * Update an existing entity
      */
-    update: async ({ entity, id, data, signal }: UpdateProps) => {
+    update: async <T>({ entity, id, data, signal }: UpdateProps<T>) => {
         const promise = api.put(`/${entity}/update/${id}`, data, { signal });
-        return handleResponse({ promise, notifyOnSuccess: true });
+        return handleResponse<T>({ promise, notifyOnSuccess: true });
     },
 
     /**
