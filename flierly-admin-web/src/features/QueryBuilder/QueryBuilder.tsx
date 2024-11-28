@@ -116,7 +116,6 @@ const QueryBuilder: React.FC<{ config: QueryFieldConfig[] }> = ({ config }) => {
 
         return query;
     };
-
     return (
         <Card style={{ margin: "20px auto", padding: "24px", minWidth: "80%", maxWidth: 1200 }} ref={containerRef}>
             <div
@@ -136,6 +135,7 @@ const QueryBuilder: React.FC<{ config: QueryFieldConfig[] }> = ({ config }) => {
                                 ref={conditionCardRef}
                                 actions={[
                                     <Button
+                                        key={"action-1"}
                                         type="link"
                                         danger
                                         onClick={() => handleRemoveCondition(cond.id)}
