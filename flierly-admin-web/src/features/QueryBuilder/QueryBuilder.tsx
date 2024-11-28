@@ -179,6 +179,7 @@ const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config },
                                                 value: field.field.namePath,
                                             }))}
                                             style={{ width: "100%", textAlign: "left" }}
+                                            dropdownStyle={{ textAlign: "left" }}
                                             labelInValue
                                         />
                                     </Col>
@@ -196,6 +197,7 @@ const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config },
                                                     })) || []
                                             }
                                             style={{ width: "100%", textAlign: "left" }}
+                                            dropdownStyle={{ textAlign: "left" }}
                                         />
                                     </Col>
                                     <Col span={conditionCardWidth > 500 ? 8 : 24}>
