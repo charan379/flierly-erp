@@ -11,7 +11,7 @@ export type QueryFieldConfig<T = Record<string, any>> = {
     field: { label: string; namePath: keyof T };
     conditions: {
         condition: { label: string; namePath: TransformerKey };
-        formField: FormFieldConfig;
+        formField: FormFieldConfig<T>;
     }[];
 };
 
