@@ -2,8 +2,10 @@ import CrudTable from "@/features/CrudTable";
 import CrudTableContextProvider from "@/features/CrudTable/context/CrudTableContextProvider";
 import DefaultModuleLayout from "@/layout/DefaultModuleLayout";
 import React from "react";
-import privilegeColumns from "../../config/privilegeColumns";
 import FormFields from "@/components/FormFields/FormFields";
+import privilegeTableColumns from "../../config/tableColumns";
+import privilegeCreateFields from "../../config/createFormFields";
+import privilegeUpdateFields from "../../config/updateFormFields";
 
 
 const Privileges: React.FC = () => {
@@ -12,7 +14,7 @@ const Privileges: React.FC = () => {
       <CrudTableContextProvider>
         <CrudTable<Privilege>
           entity="privilege"
-          columns={privilegeColumns}
+          columns={privilegeTableColumns}
           dataSource={[]}
           tableKey="privilege-table"
           rowKey="id"
@@ -28,18 +30,18 @@ const Privileges: React.FC = () => {
             update: true,
             view: true,
             builtIn: {
-                options: {
-                    density: true, 
-                    fullScreen: true, 
-                    reload: true, 
-                    search: true, 
-                    setting: true
-                }
+              options: {
+                density: true,
+                fullScreen: true,
+                reload: true,
+                search: true,
+                setting: true
+              }
             }
           }}
-          createFormFields={<FormFields columns={privilegeColumns} configKey="createFormConfig" key="Privilege-Create-Form"/>}
-          updateFormFields={<FormFields columns={privilegeColumns} configKey="updateFormConfig" key="Privilege-Update-Form"/>}
-          searchFormFields={<FormFields columns={privilegeColumns} configKey="queryFormConfig" key="Privilege-Search-Form"/>}
+          createFormFields={privilegeCreateFields}
+          updateFormFields={privilegeUpdateFields}
+          searchFormFields={<FormFields columns={privilegeTableColumns} configKey="queryFormConfig" key="Privilege-Search-Form" />}
         />
       </CrudTableContextProvider>
     </DefaultModuleLayout>
