@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function useElementHeight(className: string, maxRetries: number = 20, delay: number = 500): number {
+export default function useElementHeightByClassName(className: string, maxRetries: number = 20, delay: number = 500): number {
   const [height, setHeight] = useState<number>(0);
 
   useEffect(() => {

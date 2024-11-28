@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import useElementHeight from "@/hooks/useElementHeight";
+import useElementHeightByClassName from "@/hooks/useElementHeightByClassName";
 import useLocale from "@/features/Locale/hooks/useLocale";
 import { ProTable, ProColumns, ActionType } from "@ant-design/pro-components";
 import Create from "./forms/Create";
@@ -60,10 +60,10 @@ const CrudTable = <T extends object>({
   rowSelectionColumnWidth = "3%",
   render,
 }: CrudTableProps<T>) => {
-  const tableHeight = useElementHeight("crud-data-table-flierly-1");
-  const tableHeadHeight = useElementHeight("ant-table-thead");
-  const tableToolbarHeight = useElementHeight("ant-pro-table-list-toolbar");
-  const tablePaginationHeight = useElementHeight("ant-table-pagination");
+  const tableHeight = useElementHeightByClassName("crud-data-table-flierly-1");
+  const tableHeadHeight = useElementHeightByClassName("ant-table-thead");
+  const tableToolbarHeight = useElementHeightByClassName("ant-pro-table-list-toolbar");
+  const tablePaginationHeight = useElementHeightByClassName("ant-table-pagination");
 
   const { translate } = useLocale();
 
