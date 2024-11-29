@@ -94,6 +94,7 @@ const Search: React.FC<SearchProps> = ({ title = "filter_data", render, actions,
         if (queryBuilderRef?.current) {
             const query = queryBuilderRef.current.getQuery();
             crudTableContextHandler.filters.set(query);
+            actions?.setPageInfo?.({current: 1})
             actions.reload();
             setDrawerOpen(false); // Close the drawer after applying filters
         }
