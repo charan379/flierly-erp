@@ -8,7 +8,7 @@ interface SelectRemoteOptionsProps {
   debounceTimeout?: number;
   width?: string | number;
   mode?: SelectProps["mode"];
-  onChange?: (value: any) => void;
+  onChange?: SelectProps["onChange"];
   value?: any;
   [key: string]: any; // For any other additional props passed to Select
 }

@@ -78,7 +78,7 @@ const WrapUnderCol: React.FC<{
 };
 
 const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
-  const { input, onChange, formInfo, colProps, value, fieldProps, ...restProps } = props;
+  const { input, onChange: handleChange, formInfo, colProps, value, fieldProps, ...restProps } = props;
   const isStandalone = !formInfo?.isFormItem;
 
   switch (input.type) {
@@ -89,7 +89,7 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
           fieldProps={{
             ...fieldProps,
             ...(isStandalone && value !== undefined ? { value } : {}),
-            ...(isStandalone && onChange ? { onChange } : {}),
+            ...(isStandalone && handleChange ? { onChange: (e) => handleChange(e.target.value) } : {}),
           }}
         />
       );
@@ -100,7 +100,7 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
           fieldProps={{
             ...fieldProps,
             ...(isStandalone && value !== undefined ? { value } : {}),
-            ...(isStandalone && onChange ? { onChange } : {}),
+            ...(isStandalone && handleChange ? { onChange: (e) => handleChange(e.target.value) } : {}),
           }}
         />
       );
@@ -111,7 +111,7 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
           fieldProps={{
             ...fieldProps,
             ...(isStandalone && value !== undefined ? { value } : {}),
-            ...(isStandalone && onChange ? { onChange } : {}),
+            ...(isStandalone && handleChange ? { onChange: (v) => handleChange(v) } : {}),
           }}
         />
       );
@@ -122,7 +122,7 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
           fieldProps={{
             ...fieldProps,
             ...(isStandalone && value !== undefined ? { value } : {}),
-            ...(isStandalone && onChange ? { onChange } : {}),
+            ...(isStandalone && handleChange ? { onChange: (range) => handleChange(range) } : {}),
           }}
         />
       );
@@ -133,7 +133,7 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
           fieldProps={{
             ...fieldProps,
             ...(isStandalone && value !== undefined ? { value } : {}),
-            ...(isStandalone && onChange ? { onChange } : {}),
+            ...(isStandalone && handleChange ? { onChange: (date) => handleChange(date) } : {}),
           }}
         />
       );
@@ -144,7 +144,7 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
           fieldProps={{
             ...fieldProps,
             ...(isStandalone && value !== undefined ? { value } : {}),
-            ...(isStandalone && onChange ? { onChange } : {}),
+            ...(isStandalone && handleChange ? { onChange: (dates) => handleChange(dates) } : {}),
           }}
         />
       );
@@ -156,7 +156,7 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
           fieldProps={{
             ...fieldProps,
             ...(isStandalone && value !== undefined ? { checked: value } : {}),
-            ...(isStandalone && onChange ? { onChange } : {}),
+            ...(isStandalone && handleChange ? { onChange: (checked) => handleChange(checked) } : {}),
           }}
         />
       );
@@ -171,7 +171,7 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
             min: input.min,
             max: input.max,
             ...(isStandalone && value !== undefined ? { value } : {}),
-            ...(isStandalone && onChange ? { onChange } : {}),
+            ...(isStandalone && handleChange ? { onChange: (v) => handleChange(v) } : {}),
           }}
         />
       );
@@ -188,7 +188,7 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
               style={{ width: restProps.width ?? "100%", textAlign: "left" }}
               dropdownStyle={{ textAlign: "left" }}
               {...(isStandalone && value !== undefined ? { value } : {})}
-              {...(isStandalone && onChange ? { onChange } : {})}
+              {...(isStandalone && handleChange ? { onChange: (v) => handleChange(v) } : {})}
             />
           </ProForm.Item>
         </WrapUnderCol>
@@ -207,7 +207,7 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
               disabled={restProps.hidden || restProps.disabled}
               fieldProps={fieldProps}
               {...(isStandalone && value !== undefined ? { value } : {})}
-              {...(isStandalone && onChange ? { onChange } : {})}
+              {...(isStandalone && handleChange ? { onChange: (v) => handleChange(v) } : {})}
             />
           </ProForm.Item>
         </WrapUnderCol>
