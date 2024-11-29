@@ -9,6 +9,7 @@ interface SelectRemoteOptionsProps {
   width?: string | number;
   mode?: SelectProps["mode"];
   onChange?: (value: any) => void;
+  value?: any;
   [key: string]: any; // For any other additional props passed to Select
 }
 
@@ -94,12 +95,14 @@ const SelectRemoteOptions: React.FC<SelectRemoteOptionsProps> = ({
 
   return (
     <Select
+      {...props}                                 // Spread additional props to Select
       filterOption={false}                        // Disable built-in filtering
       popupClassName="select-remote-options"      // Custom popup class
       getPopupContainer={(triggerNode) => triggerNode.parentNode}
       showSearch                                 // Enable search functionality
       placeholder={"Please select"}
-      onChange={props?.onChange}
+      {...(props.value !== undefined ? { value: props.value } : {})}
+      {...(props?.onChange !== undefined ? { onChange: props.onChange } : {})}
       onSearch={debounceFetcher}                 // Debounced search fetch
       onFocus={handleFocus}                      // Fetch options on every focus
       options={displayedOptions}                 // Fetched options
@@ -109,7 +112,6 @@ const SelectRemoteOptions: React.FC<SelectRemoteOptionsProps> = ({
       notFoundContent={fetching ? <Loader /> : <Empty />} // Show loader if fetching, else Empty
       maxTagCount="responsive"                   // Responsive tags in multi-select
       mode={props.mode}
-      {...props}                                 // Spread additional props to Select
     />
   );
 };

@@ -77,7 +77,7 @@ const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config },
                         ...cond,
                         field: selectedField?.field,
                         condition: undefined,
-                        value: null,
+                        value: null, // Reset value when field changes
                         formConfig: undefined,
                     }
                     : cond
@@ -98,7 +98,7 @@ const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config },
                         ...cond,
                         condition: selectedCondition?.condition,
                         formConfig: selectedCondition?.formField,
-                        value: null, // Reset value when condition changes
+                        value: null, // Reset value when the condition changes
                     };
                 }
                 return cond;
@@ -204,19 +204,20 @@ const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config },
                                         {cond.formConfig && (
                                             <Form>
                                                 <FormField
-                                                    key={`${cond.field?.namePath}-${cond.condition?.namePath}`}
+                                                    key={`${cond.id}-${cond.condition?.namePath}`} // Ensure re-render on condition change
                                                     fieldKey={`component-${cond.field?.namePath}-${cond.condition?.namePath}`}
                                                     config={{
-                                                        ...cond.formConfig,
-                                                        name: `conditions[${cond.id}].value`,
-                                                        onChange: (value) => handleValueChange(cond.id, value),
-                                                        colProps: { span: conditionCardWidth > 500 ? 8 : 24 },
+                                                        ...cond.formConfig, // Pass dynamic form configuration
+                                                        name: `conditions[${cond.id}].value`, // Unique name for the form field
+                                                        value: cond.value, // Bind value to the condition's state
+                                                        onChange: (value) => handleValueChange(cond.id, value), // Update condition value
+                                                        colProps: { span: conditionCardWidth > 500 ? 8 : 24 }, // Adjust column layout dynamically
                                                         formInfo: {
                                                             gridForm: false,
                                                             isFormItem: false,
                                                         },
                                                     }}
-                                                    showLabel={false}
+                                                    showLabel={false} // Hide the label to keep the UI clean
                                                 />
                                             </Form>
                                         )}
