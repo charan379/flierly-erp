@@ -48,6 +48,10 @@ const exampleConfig: QueryFieldConfig<Record<string, any>>[] = [
         condition: { label: "Less Than", namePath: "lessThan" },
         formField: { input: { type: "Number" } },
       },
+      {
+        condition: { label: "Between", namePath: "between" },
+        formField: { input: { type: "NumberRange" } },
+      },
     ],
   },
   {
