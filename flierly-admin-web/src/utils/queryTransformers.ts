@@ -1,9 +1,11 @@
 import { SearchTransformKeyFn } from "@ant-design/pro-components";
 
 export type TransformerKey =
+  | "textValue"
   | "trimTextValue"
   | "textWithRegex"
   | "inArray"
+  | "notInArray"
   | "dateRange"
   | "greaterThanOrEqual"
   | "lessThanOrEqual"
@@ -30,15 +32,23 @@ export type TransformerKey =
   | "notRegexi";
 
 const queryTransformers: Record<TransformerKey, SearchTransformKeyFn> = {
+
+  textValue: (value: string, namePath: string): Record<string, any> | null => {
+    if (value && value?.trim?.()?.length > 0) {
+      return { [namePath]: value.trim() };
+    }
+    return null;
+  },
+
   trimTextValue: (value: string, namePath: string): Record<string, any> | null => {
-    if (value.trim().length > 0) {
+    if (value && value?.trim?.()?.length > 0) {
       return { [namePath]: value.trim() };
     }
     return null;
   },
 
   textWithRegex: (value: string, namePath: string): Record<string, any> | null => {
-    if (value.trim().length > 0) {
+    if (value && value?.trim?.()?.length > 0) {
       return { [namePath]: `/${value}/i` };
     }
     return null;
@@ -47,6 +57,13 @@ const queryTransformers: Record<TransformerKey, SearchTransformKeyFn> = {
   inArray: (value: unknown[], namePath: string): Record<string, any> | null => {
     if (Array.isArray(value) && value.length > 0) {
       return { [namePath]: { $in: value } };
+    }
+    return null;
+  },
+
+  notInArray: (value: unknown[], namePath: string): Record<string, any> | null => {
+    if (Array.isArray(value) && value.length > 0) {
+      return { [namePath]: { $notIn: value } };
     }
     return null;
   },
@@ -178,28 +195,28 @@ const queryTransformers: Record<TransformerKey, SearchTransformKeyFn> = {
   },
 
   like: (value: string, namePath: string): Record<string, any> | null => {
-    if (value.trim().length > 0) {
+    if (value && value?.trim?.()?.length > 0) {
       return { [namePath]: { $like: `%${value}%` } };
     }
     return null;
   },
 
   notLike: (value: string, namePath: string): Record<string, any> | null => {
-    if (value.trim().length > 0) {
+    if (value && value?.trim?.()?.length > 0) {
       return { [namePath]: { $notLike: `%${value}%` } };
     }
     return null;
   },
 
   ilike: (value: string, namePath: string): Record<string, any> | null => {
-    if (value.trim().length > 0) {
+    if (value && value?.trim?.()?.length > 0) {
       return { [namePath]: { $ilike: `%${value}%` } };
     }
     return null;
   },
 
   notIlike: (value: string, namePath: string): Record<string, any> | null => {
-    if (value.trim().length > 0) {
+    if (value && value?.trim?.()?.length > 0) {
       return { [namePath]: { $notIlike: `%${value}%` } };
     }
     return null;
@@ -209,7 +226,7 @@ const queryTransformers: Record<TransformerKey, SearchTransformKeyFn> = {
     value: string,
     namePath: string
   ): Record<string, any> | null => {
-    if (value.trim().length > 0) {
+    if (value && value?.trim?.()?.length > 0) {
       return { [namePath]: { $startsWith: value } };
     }
     return null;
@@ -219,14 +236,14 @@ const queryTransformers: Record<TransformerKey, SearchTransformKeyFn> = {
     value: string,
     namePath: string
   ): Record<string, any> | null => {
-    if (value.trim().length > 0) {
+    if (value && value?.trim?.()?.length > 0) {
       return { [namePath]: { $notStartsWith: value } };
     }
     return null;
   },
 
   endsWith: (value: string, namePath: string): Record<string, any> | null => {
-    if (value.trim().length > 0) {
+    if (value && value?.trim?.()?.length > 0) {
       return { [namePath]: { $endsWith: value } };
     }
     return null;
@@ -236,7 +253,7 @@ const queryTransformers: Record<TransformerKey, SearchTransformKeyFn> = {
     value: string,
     namePath: string
   ): Record<string, any> | null => {
-    if (value.trim().length > 0) {
+    if (value && value?.trim?.()?.length > 0) {
       return { [namePath]: { $notEndsWith: value } };
     }
     return null;
@@ -244,19 +261,14 @@ const queryTransformers: Record<TransformerKey, SearchTransformKeyFn> = {
 
   // New regex-based transformers
   regex: (value: string, namePath: string): Record<string, any> | null => {
-    if (value.trim().length > 0) {
-      try {
-        const regex = new RegExp(value);
-        return { [namePath]: { $regex: regex } };
-      } catch (e) {
-        return null; // Invalid regex pattern
-      }
+    if (value && value?.trim?.()?.length > 0) {
+      return { [namePath]: { $regex: value } };
     }
     return null;
   },
 
   notRegex: (value: string, namePath: string): Record<string, any> | null => {
-    if (value.trim().length > 0) {
+    if (value && value?.trim?.()?.length > 0) {
       try {
         const regex = new RegExp(value);
         return { [namePath]: { $notRegex: regex } };
@@ -268,22 +280,17 @@ const queryTransformers: Record<TransformerKey, SearchTransformKeyFn> = {
   },
 
   regexi: (value: string, namePath: string): Record<string, any> | null => {
-    if (value.trim().length > 0) {
-      try {
-        const regex = new RegExp(value, 'i'); // Case-insensitive regex
-        return { [namePath]: { $regex: regex } };
-      } catch (e) {
-        return null; // Invalid regex pattern
-      }
+    if (value && value?.trim?.()?.length > 0) {
+      return { [namePath]: { $regexi: value } };
     }
     return null;
   },
 
   notRegexi: (value: string, namePath: string): Record<string, any> | null => {
-    if (value.trim().length > 0) {
+    if (value && value?.trim?.()?.length > 0) {
       try {
         const regex = new RegExp(value, 'i'); // Case-insensitive regex
-        return { [namePath]: { $notRegex: regex } };
+        return { [namePath]: { $notRegexi: regex } };
       } catch (e) {
         return null; // Invalid regex pattern
       }
