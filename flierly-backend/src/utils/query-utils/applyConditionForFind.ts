@@ -81,16 +81,16 @@ function applyConditionForFind<T extends ObjectLiteral>(
                     conditionObject[field] = Not(Like(`%${condition[operator]}`));
                     break;
                 case '$regex':  // Handle case-sensitive regex matching
-                    conditionObject[field] = Raw((alias) => `${alias}.${field} ~ :${field}`, { [field]: condition[operator] });
+                    conditionObject[field] = Raw((alias) => `${alias} ~ :${field}`, { [field]: condition[operator] });
                     break;
                 case '$notRegex':  // Handle case-sensitive NOT regex matching
-                    conditionObject[field] = Raw((alias) => `${alias}.${field} !~ :${field}`, { [field]: condition[operator] });
+                    conditionObject[field] = Raw((alias) => `${alias}!~ :${field}`, { [field]: condition[operator] });
                     break;
                 case '$regexi':  // Handle case-insensitive regex matching
-                    conditionObject[field] = Raw((alias) => `${alias}.${field} ~* :${field}`, { [field]: condition[operator] });
+                    conditionObject[field] = Raw((alias) => `${alias} ~* :${field}`, { [field]: condition[operator] });
                     break;
                 case '$notRegexi':  // Handle case-insensitive NOT regex matching
-                    conditionObject[field] = Raw((alias) => `${alias}.${field} !~* :${field}`, { [field]: condition[operator] });
+                    conditionObject[field] = Raw((alias) => `${alias} !~* :${field}`, { [field]: condition[operator] });
                     break;
                 case '$equalTo':  // Handle equality condition
                     conditionObject[field] = Equal(condition[operator]);
