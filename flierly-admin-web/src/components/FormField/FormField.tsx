@@ -133,7 +133,7 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
           fieldProps={{
             ...fieldProps,
             ...(isStandalone && value !== undefined ? { value } : {}),
-            ...(isStandalone && handleChange ? { onChange: (date) => handleChange(date) } : {}),
+            ...(isStandalone && handleChange ? { onChange: (_dateWithTimeStamp, date) => handleChange(date) } : {}),
           }}
         />
       );
@@ -144,7 +144,7 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
           fieldProps={{
             ...fieldProps,
             ...(isStandalone && value !== undefined ? { value } : {}),
-            ...(isStandalone && handleChange ? { onChange: (dates) => handleChange(dates) } : {}),
+            ...(isStandalone && handleChange ? { onChange: (_datesWithTimeStamp, dates) => handleChange(dates) } : {}),
           }}
         />
       );
