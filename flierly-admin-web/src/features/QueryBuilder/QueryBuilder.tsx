@@ -1,11 +1,12 @@
 import { useState, useImperativeHandle, forwardRef } from "react";
-import { Button, Card, Row, Col, Select, Space, Divider, Typography, Form } from "antd";
+import { Button, Card, Row, Col, Select, Space, Divider, Typography, Form, Tooltip, Flex } from "antd";
 import FormField, { FormFieldConfig } from "@/components/FormField";
 import queryTransformers, { TransformerKey } from "@/utils/queryTransformers";
 import CollapsibleCard from "./components/CollapsibleCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import useElementWidth from "@/hooks/useElementWidth";
+import { CloseCircleOutlined } from "@ant-design/icons";
 
 export type QueryFieldConfig<T = Record<string, any>> = {
     field: { label: string; namePath: keyof T };
@@ -21,6 +22,7 @@ type QueryCondition = {
     condition?: { label: string; namePath: TransformerKey };
     value?: any;
     formConfig?: FormFieldConfig;
+    isValid?: boolean;
 };
 
 interface QueryBuilderProps {
@@ -59,13 +61,18 @@ const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config },
     };
 
     const handleAddCondition = () => {
-        setConditions([
-            ...conditions,
-            {
-                id: conditionCount,
-            },
-        ]);
-        setConditionCount((prevCount) => prevCount + 1);
+        // Only allow adding condition if the last one is valid
+        const lastCondition = conditions[conditions.length - 1];
+        if ((lastCondition && lastCondition.isValid) || conditions.length === 0) {
+            setConditions([
+                ...conditions,
+                {
+                    id: conditionCount,
+                    isValid: false, // New condition is initially invalid
+                },
+            ]);
+            setConditionCount((prevCount) => prevCount + 1);
+        }
     };
 
     const handleFieldChange = (id: number, selected: { label: string; value: string }) => {
@@ -79,6 +86,7 @@ const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config },
                         condition: undefined,
                         value: null, // Reset value when field changes
                         formConfig: undefined,
+                        isValid: false, // Reset validity when field changes
                     }
                     : cond
             )
@@ -99,6 +107,7 @@ const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config },
                         condition: selectedCondition?.condition,
                         formConfig: selectedCondition?.formField,
                         value: null, // Reset value when the condition changes
+                        isValid: false, // Reset validity when condition changes
                     };
                 }
                 return cond;
@@ -108,7 +117,10 @@ const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config },
 
     const handleValueChange = (id: number, value: any) => {
         setConditions((prev) =>
-            prev.map((cond) => (cond.id === id ? { ...cond, value } : cond))
+            prev.map((cond) => {
+                const isValid = cond.field && cond.condition && value !== null && value !== undefined && value !== "";
+                return cond.id === id ? { ...cond, value, isValid } : cond;
+            })
         );
     };
 
@@ -146,7 +158,18 @@ const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config },
                         {conditions.map((cond, index) => (
                             <CollapsibleCard
                                 key={`cond-${cond.id}`}
-                                title={<Col>{cond.field?.label || `Condition ${index + 1}`}</Col>}
+                                title={
+                                    <Flex gap={10}>
+                                        {cond.field?.label || `Condition ${index + 1}`}
+                                        {!cond?.isValid
+                                            ?
+                                            <Tooltip title="Invalid Condition">
+                                                <CloseCircleOutlined style={{ color: "crimson", fontSize: '14px' }} />
+                                            </Tooltip>
+                                            :
+                                            <></>
+                                        }
+                                    </Flex>}
                                 ref={conditionCardRef}
                                 actions={[
                                     <Button
@@ -227,7 +250,11 @@ const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config },
                         ))}
                     </Space>
                     <Divider />
-                    <Button type="dashed" onClick={handleAddCondition}>
+                    <Button
+                        type="primary"
+                        onClick={handleAddCondition}
+                        disabled={(conditions.length !== 0 && !conditions[conditions.length - 1]?.isValid) || conditions?.length >= config?.length} // Disable Add Condition button if last condition is invalid
+                    >
                         Add Condition
                     </Button>
                 </div>
