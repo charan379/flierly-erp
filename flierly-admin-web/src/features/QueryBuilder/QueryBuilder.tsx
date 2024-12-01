@@ -1,5 +1,5 @@
-import { useState, useImperativeHandle, forwardRef } from "react";
-import { Button, Card, Row, Col, Select, Space, Divider, Typography, Form, Tooltip, Flex } from "antd";
+import React, { useState, useImperativeHandle, forwardRef } from "react";
+import { Button, Card, Row, Col, Select, Space, Divider, Typography, Form, Tooltip, Flex, Checkbox } from "antd";
 import FormField, { FormFieldConfig } from "@/components/FormField";
 import queryTransformers, { TransformerKey } from "@/utils/queryTransformers";
 import CollapsibleCard from "./components/CollapsibleCard";
@@ -37,8 +37,12 @@ export interface QueryBuilderRef {
 const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config }, ref) => {
     const [conditions, setConditions] = useState<QueryCondition[]>([]);
     const [conditionCount, setConditionCount] = useState(0);
-    const { ref: containerRef, width: containerWidth } = useElementWidth<HTMLDivElement>();
+    const [showQueryPreview, setShowQueryPreview] = useState(false); // State to toggle query preview
     const { ref: conditionCardRef, width: conditionCardWidth } = useElementWidth<HTMLDivElement>();
+
+    const handlePreviewToggle = (e: any) => {
+        setShowQueryPreview(e.target.checked); // Update state based on checkbox value
+    };
 
     const generateQuery = (queryConditions: QueryCondition[]): Record<string, any> => {
         const query: Record<string, any> = {};
@@ -146,129 +150,127 @@ const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config },
     return (
         <Card
             style={{ margin: "20px auto", padding: "24px", minWidth: "80%", maxWidth: 1200 }}
-            ref={containerRef}
             title="Query Builder"
             styles={{
                 title: { textAlign: "left" }
             }}
         >
-            <div
-                style={{
-                    display: "flex",
-                    flexDirection: containerWidth > 600 ? "row" : "column",
-                    gap: "20px",
-                }}
-            >
-                {/* Conditions Section */}
-                <div style={{ flex: containerWidth > 850 ? 2 : 1 }}>
-                    <Space direction="vertical" size="middle" style={{ width: "100%" }}>
-                        {conditions.map((cond, index) => (
-                            <CollapsibleCard
-                                key={`cond-${cond.id}`}
-                                title={
-                                    <Flex gap={10}>
-                                        {cond.field?.label || `Condition ${index + 1}`}
-                                        {!cond?.isValid
-                                            ?
-                                            <Tooltip title="Invalid Condition">
-                                                <CloseCircleOutlined style={{ color: "crimson", fontSize: '14px' }} />
-                                            </Tooltip>
-                                            :
-                                            <></>
-                                        }
-                                    </Flex>}
-                                ref={conditionCardRef}
-                                actions={[
-                                    <Button
-                                        key={"action-1"}
-                                        type="link"
-                                        danger
-                                        onClick={() => handleRemoveCondition(cond.id)}
-                                        icon={<FontAwesomeIcon icon={faTrashCan} fontSize={18} />}
-                                    />,
-                                ]}
-                            >
-                                <Row
-                                    gutter={16}
-                                    style={{
-                                        flexDirection: conditionCardWidth > 500 ? "row" : "column",
-                                        rowGap: "5px",
-                                    }}
-                                >
-                                    <Col span={conditionCardWidth > 500 ? 8 : 24}>
-                                        <Select
-                                            placeholder="Select Field"
-                                            value={
-                                                cond.field
-                                                    ? { label: cond.field.label, value: cond.field.namePath }
-                                                    : undefined
-                                            }
-                                            onChange={(selected) => handleFieldChange(cond.id, selected)}
-                                            options={getAvailableFields().map((field) => ({
-                                                label: field.field.label,
-                                                value: field.field.namePath,
-                                            }))}
-                                            style={{ width: "100%", textAlign: "left" }}
-                                            dropdownStyle={{ textAlign: "left" }}
-                                            labelInValue
-                                        />
-                                    </Col>
-                                    <Col span={conditionCardWidth > 500 ? 8 : 24}>
-                                        <Select
-                                            placeholder="Select Condition"
-                                            value={cond.condition?.namePath}
-                                            onChange={(value) => handleConditionChange(cond.id, value)}
-                                            options={
-                                                config
-                                                    .find((field) => field.field.namePath === cond.field?.namePath)
-                                                    ?.conditions.map((condition) => ({
-                                                        label: condition.condition.label,
-                                                        value: condition.condition.namePath,
-                                                    })) || []
-                                            }
-                                            style={{ width: "100%", textAlign: "left" }}
-                                            dropdownStyle={{ textAlign: "left" }}
-                                        />
-                                    </Col>
-                                    <Col span={conditionCardWidth > 500 ? 8 : 24}>
-                                        {cond.formConfig && (
-                                            <Form>
-                                                <FormField
-                                                    key={`${cond.id}-${cond.condition?.namePath}`} // Ensure re-render on condition change
-                                                    fieldKey={`component-${cond.field?.namePath}-${cond.condition?.namePath}`}
-                                                    config={{
-                                                        ...cond.formConfig, // Pass dynamic form configuration
-                                                        name: `conditions[${cond.id}].value`, // Unique name for the form field
-                                                        value: cond.value, // Bind value to the condition's state
-                                                        onChange: (value) => handleValueChange(cond.id, value), // Update condition value
-                                                        colProps: { span: conditionCardWidth > 500 ? 8 : 24 }, // Adjust column layout dynamically
-                                                        allowClear: false,
-                                                        formInfo: {
-                                                            gridForm: false,
-                                                            isFormItem: false,
-                                                        },
-                                                    }}
-                                                    showLabel={false} // Hide the label to keep the UI clean
-                                                />
-                                            </Form>
-                                        )}
-                                    </Col>
-                                </Row>
-                            </CollapsibleCard>
-                        ))}
-                    </Space>
-                    <Divider />
-                    <Button
-                        type="primary"
-                        onClick={handleAddCondition}
-                        disabled={(conditions.length !== 0 && !conditions[conditions.length - 1]?.isValid) || conditions?.length >= config?.length} // Disable Add Condition button if last condition is invalid
+            {/* Conditions Section */}
+            <Space direction="vertical" size="middle" style={{ width: "100%", textAlign: "left" }}>
+                {conditions.map((cond, index) => (
+                    <CollapsibleCard
+                        key={`cond-${cond.id}`}
+                        title={
+                            <Flex gap={10}>
+                                {cond.field?.label || `Condition ${index + 1}`}
+                                {!cond?.isValid
+                                    ?
+                                    <Tooltip title="Invalid Condition">
+                                        <CloseCircleOutlined style={{ color: "crimson", fontSize: '14px' }} />
+                                    </Tooltip>
+                                    :
+                                    <></>
+                                }
+                            </Flex>}
+                        ref={conditionCardRef}
+                        actions={[
+                            <Button
+                                key={"action-1"}
+                                type="link"
+                                danger
+                                onClick={() => handleRemoveCondition(cond.id)}
+                                icon={<FontAwesomeIcon icon={faTrashCan} fontSize={18} />}
+                            />,
+                        ]}
                     >
-                        Add Condition
-                    </Button>
-                </div>
+                        <Row
+                            gutter={16}
+                            style={{
+                                flexDirection: conditionCardWidth > 500 ? "row" : "column",
+                                rowGap: "5px",
+                            }}
+                        >
+                            <Col span={conditionCardWidth > 500 ? 8 : 24}>
+                                <Select
+                                    placeholder="Select Field"
+                                    value={
+                                        cond.field
+                                            ? { label: cond.field.label, value: cond.field.namePath }
+                                            : undefined
+                                    }
+                                    onChange={(selected) => handleFieldChange(cond.id, selected)}
+                                    options={getAvailableFields().map((field) => ({
+                                        label: field.field.label,
+                                        value: field.field.namePath,
+                                    }))}
+                                    style={{ width: "100%", textAlign: "left" }}
+                                    dropdownStyle={{ textAlign: "left" }}
+                                    labelInValue
+                                />
+                            </Col>
+                            <Col span={conditionCardWidth > 500 ? 8 : 24}>
+                                <Select
+                                    placeholder="Select Condition"
+                                    value={cond.condition?.namePath}
+                                    onChange={(value) => handleConditionChange(cond.id, value)}
+                                    options={
+                                        config
+                                            .find((field) => field.field.namePath === cond.field?.namePath)
+                                            ?.conditions.map((condition) => ({
+                                                label: condition.condition.label,
+                                                value: condition.condition.namePath,
+                                            })) || []
+                                    }
+                                    style={{ width: "100%", textAlign: "left" }}
+                                    dropdownStyle={{ textAlign: "left" }}
+                                />
+                            </Col>
+                            <Col span={conditionCardWidth > 500 ? 8 : 24}>
+                                {cond.formConfig && (
+                                    <Form>
+                                        <FormField
+                                            key={`${cond.id}-${cond.condition?.namePath}`} // Ensure re-render on condition change
+                                            fieldKey={`component-${cond.field?.namePath}-${cond.condition?.namePath}`}
+                                            config={{
+                                                ...cond.formConfig, // Pass dynamic form configuration
+                                                name: `conditions[${cond.id}].value`, // Unique name for the form field
+                                                value: cond.value, // Bind value to the condition's state
+                                                onChange: (value) => handleValueChange(cond.id, value), // Update condition value
+                                                colProps: { span: conditionCardWidth > 500 ? 8 : 24 }, // Adjust column layout dynamically
+                                                allowClear: false,
+                                                formInfo: {
+                                                    gridForm: false,
+                                                    isFormItem: false,
+                                                },
+                                            }}
+                                            showLabel={false} // Hide the label to keep the UI clean
+                                        />
+                                    </Form>
+                                )}
+                            </Col>
+                        </Row>
+                    </CollapsibleCard>
+                ))}
+                <Checkbox
+                    onChange={handlePreviewToggle}
+                    checked={showQueryPreview}
+                    style={{ margin: "10px 0px 10px 0px", }}
+                >
+                    Preview Query
+                </Checkbox>
+                <Button
+                    type="primary"
+                    onClick={handleAddCondition}
+                    disabled={(conditions.length !== 0 && !conditions[conditions.length - 1]?.isValid) || conditions?.length >= config?.length} // Disable Add Condition button if last condition is invalid
+                >
+                    Add Condition
+                </Button>
+            </Space>
 
-                {/* Generated Query Section */}
-                <div style={{ flex: 1 }}>
+            {/* Generated Query Section */}
+            {showQueryPreview
+                ?
+                <React.Fragment>
                     <Divider orientation="left" orientationMargin={0}>
                         Generated Query
                     </Divider>
@@ -287,8 +289,10 @@ const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config },
                     >
                         {JSON.stringify(generateQuery(conditions), null, 2)}
                     </Typography.Paragraph>
-                </div>
-            </div>
+                </React.Fragment>
+                :
+                <></>
+            }
         </Card>
     );
 });
