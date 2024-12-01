@@ -14,6 +14,7 @@ const CollapsibleCard = forwardRef<HTMLDivElement, CollapsibleCardProps>(({ titl
         <Collapse
             ref={ref} // Forward the ref to the Collapse component
             expandIconPosition="start"
+            defaultActiveKey={1}
             expandIcon={({ isActive }) => (
                 <CaretRightOutlined
                     rotate={isActive ? 90 : 0}
