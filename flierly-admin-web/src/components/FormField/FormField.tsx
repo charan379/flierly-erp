@@ -183,6 +183,7 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
               mode={input.mode}
               placeholder="Please select"
               options={input.options}
+              maxTagCount={"responsive"}
               allowClear={restProps.allowClear}
               disabled={restProps.hidden || restProps.disabled}
               style={{ width: restProps.width ?? "100%", textAlign: "left" }}
