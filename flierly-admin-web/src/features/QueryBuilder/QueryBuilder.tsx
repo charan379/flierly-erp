@@ -144,7 +144,14 @@ const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config },
     }));
 
     return (
-        <Card style={{ margin: "20px auto", padding: "24px", minWidth: "80%", maxWidth: 1200 }} ref={containerRef}>
+        <Card
+            style={{ margin: "20px auto", padding: "24px", minWidth: "80%", maxWidth: 1200 }}
+            ref={containerRef}
+            title="Query Builder"
+            styles={{
+                title: { textAlign: "left" }
+            }}
+        >
             <div
                 style={{
                     display: "flex",
@@ -235,6 +242,7 @@ const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config },
                                                         value: cond.value, // Bind value to the condition's state
                                                         onChange: (value) => handleValueChange(cond.id, value), // Update condition value
                                                         colProps: { span: conditionCardWidth > 500 ? 8 : 24 }, // Adjust column layout dynamically
+                                                        allowClear: false,
                                                         formInfo: {
                                                             gridForm: false,
                                                             isFormItem: false,
