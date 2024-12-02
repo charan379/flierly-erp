@@ -212,6 +212,14 @@ h6 {
   text-align: left;
 }
 
+.ant-list-item {
+  padding: 8px !important;
+}
+
+.ant-list-item:last-child {
+  border-radius: 0px 0px 5px 5px;
+}
+
 @media only screen and (max-width: 576px) {
   .crud-data-table-flierly-1 .ant-pagination .ant-pagination-options {
     display: block;
