@@ -106,7 +106,7 @@ const IamRoutes: React.FC = () => {
         path="roles"
         element={
           <ProtectedRoute
-            element={<WithSuspense importPath={import("../pages/Test")} />}
+            element={<WithSuspense importPath={import("../pages/Roles")} />}
             requiredPermissionRegex={/^role\.[a-z]+$/}
           />
         }
