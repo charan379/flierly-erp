@@ -7,7 +7,16 @@ type Privilege = {
     access: "Create" | "Read" | "Update" | "Delete" | "Manage";
     entity: string;
     code: string;
-    createdAt: Date;
-    updatedAt: Date;
-    deletedAt: Date | null;
-};
+} & EntityTimeStamps;
+
+// Define a type based on the Role entity
+type Role = {
+    id: number;
+    isActive: boolean;
+    name: string;
+    code: string;
+    description: string;
+    privileges?: Privilege[]
+} & EntityTimeStamps;
+
+

@@ -14,4 +14,10 @@ type ErrorDetails = {
     reason: string;
     stack?: string;
     message: string;
-  }
+}
+
+type EntityTimeStamps = {
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt: Date | null;
+}
