@@ -2,45 +2,51 @@ import React, { useEffect, useState } from "react";
 import { Tabs, Button, Space, Spin, message } from "antd";
 import { ProList } from "@ant-design/pro-components";
 
-type TitleExtractor<T> = (item: T) => React.ReactNode;
+type TitleExtractor<CE> = (item: CE) => React.ReactNode;
 
-interface GenericAssignmentManagerProps<T extends Record<string, any>> {
+interface GenericAssignmentManagerProps<
+    PE extends Record<string, any>,
+    CE extends Record<string, any>
+> {
+    parentEntity: PE;
     parentEntityName: string;
     relatedEntityName: string;
-    parentId: string;
-    fetchAvailableItems: (parentId: string) => Promise<T[]>;
-    fetchAssignedItems: (parentId: string) => Promise<T[]>;
-    onAssign: (parentId: string, items: T[]) => Promise<void>;
-    onRemove: (parentId: string, items: T[]) => Promise<void>;
-    keyExtractor: (item: T) => string;
-    titleExtractor: TitleExtractor<T>;
+    fetchAvailableItems: (parent: PE) => Promise<CE[]>;
+    fetchAssignedItems: (parent: PE) => Promise<CE[]>;
+    onAssign: (parent: PE, items: CE[]) => Promise<void>;
+    onRemove: (parent: PE, items: CE[]) => Promise<void>;
+    keyExtractor: (item: CE) => number;
+    titleExtractor: TitleExtractor<CE>;
 }
 
-const GenericAssignmentManager = <T extends Record<string, any>>({
+const GenericAssignmentManager = <
+    PE extends Record<string, any>,
+    CE extends Record<string, any>
+>({
+    parentEntity,
     parentEntityName,
     relatedEntityName,
-    parentId,
     fetchAvailableItems,
     fetchAssignedItems,
     onAssign,
     onRemove,
     keyExtractor,
     titleExtractor,
-}: GenericAssignmentManagerProps<T>) => {
+}: GenericAssignmentManagerProps<PE, CE>) => {
     const [tabKey, setTabKey] = useState("assigned");
-    const [assignedItems, setAssignedItems] = useState<T[]>([]);
-    const [availableItems, setAvailableItems] = useState<T[]>([]);
-    const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+    const [assignedItems, setAssignedItems] = useState<CE[]>([]);
+    const [availableItems, setAvailableItems] = useState<CE[]>([]);
+    const [selectedKeys, setSelectedKeys] = useState<number[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
     const fetchData = async () => {
         setIsLoading(true);
         try {
             if (tabKey === "assigned") {
-                const data = await fetchAssignedItems(parentId);
+                const data = await fetchAssignedItems(parentEntity);
                 setAssignedItems(data);
             } else {
-                const data = await fetchAvailableItems(parentId);
+                const data = await fetchAvailableItems(parentEntity);
                 setAvailableItems(data);
             }
         } catch (error) {
@@ -69,12 +75,12 @@ const GenericAssignmentManager = <T extends Record<string, any>>({
 
         try {
             if (tabKey === "assigned") {
-                await onRemove(parentId, selectedItems);
+                await onRemove(parentEntity, selectedItems);
                 setAssignedItems((prev) =>
                     prev.filter((item) => !selectedKeys.includes(keyExtractor(item)))
                 );
             } else {
-                await onAssign(parentId, selectedItems);
+                await onAssign(parentEntity, selectedItems);
                 setAvailableItems((prev) =>
                     prev.filter((item) => !selectedKeys.includes(keyExtractor(item)))
                 );
@@ -89,16 +95,16 @@ const GenericAssignmentManager = <T extends Record<string, any>>({
         }
     };
 
-    const handleIndividualAction = async (item: T) => {
+    const handleIndividualAction = async (item: CE) => {
         try {
             if (tabKey === "assigned") {
-                await onRemove(parentId, [item]);
+                await onRemove(parentEntity, [item]);
                 setAssignedItems((prev) =>
                     prev.filter((i) => keyExtractor(i) !== keyExtractor(item))
                 );
                 message.success(`Removed ${relatedEntityName} from ${parentEntityName}`);
             } else {
-                await onAssign(parentId, [item]);
+                await onAssign(parentEntity, [item]);
                 setAvailableItems((prev) =>
                     prev.filter((i) => keyExtractor(i) !== keyExtractor(item))
                 );
@@ -110,7 +116,7 @@ const GenericAssignmentManager = <T extends Record<string, any>>({
         }
     };
 
-    const handleCardClick = (item: T) => {
+    const handleCardClick = (item: CE) => {
         const itemKey = keyExtractor(item);
         const isSelected = selectedKeys.includes(itemKey);
         if (isSelected) {
@@ -139,8 +145,8 @@ const GenericAssignmentManager = <T extends Record<string, any>>({
                 style={{ width: "720px" }}
             >
                 <Tabs.TabPane tab={`Assigned ${relatedEntityName}s`} key="assigned">
-                    <ProList<T>
-                        rowKey={keyExtractor}
+                    <ProList<CE>
+                        rowKey={(item) => keyExtractor(item).toString()}
                         dataSource={assignedItems}
                         metas={{
                             title: {
@@ -158,21 +164,21 @@ const GenericAssignmentManager = <T extends Record<string, any>>({
                             },
                         }}
                         rowSelection={{
-                            selectedRowKeys: selectedKeys,
+                            selectedRowKeys: selectedKeys.map(String),
                             onChange: (selectedRowKeys) => {
-                                setSelectedKeys(selectedRowKeys.map(String));
+                                setSelectedKeys(selectedRowKeys.map(Number));
                             },
                         }}
-                        onItem={(item, _index) => {
+                        onItem={(item) => {
                             return {
-                                onClick: (_event) => handleCardClick(item)
-                            }
+                                onClick: () => handleCardClick(item),
+                            };
                         }}
                     />
                 </Tabs.TabPane>
                 <Tabs.TabPane tab={`Available ${relatedEntityName}s`} key="available">
-                    <ProList<T>
-                        rowKey={keyExtractor}
+                    <ProList<CE>
+                        rowKey={(item) => keyExtractor(item).toString()}
                         dataSource={availableItems}
                         metas={{
                             title: {
@@ -190,15 +196,15 @@ const GenericAssignmentManager = <T extends Record<string, any>>({
                             },
                         }}
                         rowSelection={{
-                            selectedRowKeys: selectedKeys,
+                            selectedRowKeys: selectedKeys.map(String),
                             onChange: (selectedRowKeys) => {
-                                setSelectedKeys(selectedRowKeys.map(String));
+                                setSelectedKeys(selectedRowKeys.map(Number));
                             },
                         }}
-                        onItem={(item, _index) => {
+                        onItem={(item) => {
                             return {
-                                onClick: (_event) => handleCardClick(item)
-                            }
+                                onClick: () => handleCardClick(item),
+                            };
                         }}
                     />
                 </Tabs.TabPane>
