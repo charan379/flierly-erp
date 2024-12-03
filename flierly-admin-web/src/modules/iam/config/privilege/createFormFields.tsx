@@ -1,22 +1,11 @@
 import { FormFieldConfig } from "@/components/FormField";
 import fetchEntityOptions from "@/features/SelectRemoteOptions/utils/fetchEntityOptions";
 import entityExistenceValidator from "@/utils/entityExistenceValidator";
-import { accessOptions, activeFieldOptions } from "./privilege/misc/options";
-import privilegeCodeRegex from "../utils/validators/privilegeCodeRegex";
+import { accessOptions, activeFieldOptions } from "./misc/options";
+import privilegeCodeRegex from "../../utils/validators/privilegeCodeRegex";
 
-const privilegeUpdateFields: FormFieldConfig<Privilege>[] = [
-    // id
-    {
-        name: "id",
-        label: "id",
-        hidden: false,
-        disabled: true,
-        hasFeedback: false,
-        allowClear: false,
-        input: {
-            type: "Text",
-        },
-    },
+
+const privilegeCreateFields: FormFieldConfig<Privilege>[] = [
     // name
     {
         name: "name",
@@ -25,15 +14,12 @@ const privilegeUpdateFields: FormFieldConfig<Privilege>[] = [
         allowClear: true,
         rules: [
             { type: "string", min: 5, max: 30, required: true },
-            ({ getFieldValue }) => ({
+            ({ }) => ({
                 validator(_, value) {
                     if (value === undefined) return Promise.resolve();
-                    return entityExistenceValidator("privilege-name-validation-u-1", {
+                    return entityExistenceValidator("privilege-name-validation-c-1", {
                         entity: "privilege",
-                        filters: {
-                            id: { $notEqualTo: getFieldValue("id") },
-                            name: { $ilike: value },
-                        },
+                        filters: { name: { $ilike: value } },
                     });
                 },
             }),
@@ -48,7 +34,7 @@ const privilegeUpdateFields: FormFieldConfig<Privilege>[] = [
         label: "entity",
         allowClear: false,
         hasFeedback: false,
-        access: { permission: /^privilege\.manage$/, ifNoAccess: "disable" },
+        access: { permission: /^privilege\.update$/, ifNoAccess: "disable" },
         rules: [{ required: true }],
         input: {
             type: "SelectRemoteOptions",
@@ -61,7 +47,7 @@ const privilegeUpdateFields: FormFieldConfig<Privilege>[] = [
         name: "access",
         label: "access",
         allowClear: false,
-        access: { permission: /^privilege\.manage$/, ifNoAccess: "disable" },
+        access: { permission: /^privilege\.update$/, ifNoAccess: "disable" },
         rules: [
             {
                 type: "enum",
@@ -80,20 +66,11 @@ const privilegeUpdateFields: FormFieldConfig<Privilege>[] = [
         label: "active",
         access: { permission: /^privilege\.manage$/, ifNoAccess: "disable" },
         allowClear: false,
-        rules: [],
+        rules: [{ type: "string" }],
         input: {
             type: "Select",
             options: activeFieldOptions
         },
-        convertValue: (value) => {
-            if (value === true) {
-                return "true";
-            } else if (value === false) {
-                return "false";
-            } else {
-                return value;
-            }
-        }
     },
     // code
     {
@@ -101,15 +78,15 @@ const privilegeUpdateFields: FormFieldConfig<Privilege>[] = [
         label: "code",
         hasFeedback: true,
         allowClear: true,
-        access: { permission: /^privilege\.manage$/, ifNoAccess: "disable" },
+        access: { permission: /^privilege\.update$/, ifNoAccess: "disable" },
         rules: [
             { type: "string", min: 5, max: 25, required: true },
-            ({ getFieldValue }) => ({
+            ({ }) => ({
                 validator(_, value) {
                     if (value === undefined) return Promise.resolve();
-                    return entityExistenceValidator("privilege-code-validation-u-1", {
+                    return entityExistenceValidator("privilege-code-validation-c-1", {
                         entity: "privilege",
-                        filters: { id: { $notEqualTo: getFieldValue("id") }, code: value },
+                        filters: { code: value },
                         rejectionMessage: "privilege_with_same_code_already_exists",
                     });
                 },
@@ -119,7 +96,7 @@ const privilegeUpdateFields: FormFieldConfig<Privilege>[] = [
         input: {
             type: "Text",
         },
-    },
+    }
 ];
 
-export default privilegeUpdateFields;
+export default privilegeCreateFields;

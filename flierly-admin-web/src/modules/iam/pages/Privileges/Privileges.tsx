@@ -2,10 +2,10 @@ import CrudTable from "@/features/CrudTable";
 import CrudTableContextProvider from "@/features/CrudTable/context/CrudTableContextProvider";
 import DefaultModuleLayout from "@/layout/DefaultModuleLayout";
 import React from "react";
-import privilegeTableColumns from "../../config/tableColumns";
-import privilegeCreateFields from "../../config/createFormFields";
-import privilegeUpdateFields from "../../config/updateFormFields";
-import privilegeQueryFields from "../../config/queryFormFields";
+import privilegeTableColumns from "../../config/privilege/tableColumns";
+import privilegeCreateFields from "../../config/privilege/createFormFields";
+import privilegeUpdateFields from "../../config/privilege/updateFormFields";
+import privilegeQueryFields from "../../config/privilege/queryFormFields";
 
 
 const Privileges: React.FC = () => {
@@ -34,7 +34,7 @@ const Privileges: React.FC = () => {
                 density: true,
                 fullScreen: true,
                 reload: true,
-                search: true,
+                search: false,
                 setting: true
               }
             }
