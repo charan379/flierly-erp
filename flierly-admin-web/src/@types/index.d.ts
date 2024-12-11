@@ -8,6 +8,19 @@ type ApiResponse<T> = {
     httpCode: number;
 }
 
+type PageData<T> = {
+    data: T[];
+    page: number;
+    pageSize: number;
+    totalResults: number;
+    totalPages: number;
+    hasNextPage?: boolean;
+    hasPreviousPage?: boolean;
+    nextPage?: number;
+    previousPage?: number;
+    sort?: Record<string, any>;
+}
+
 type ErrorDetails = {
     name: string;
     httpCode: number;
