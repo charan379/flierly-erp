@@ -8,7 +8,7 @@ const crudRouter = Router();
 
 const routeGenerator = (entityCode: string, controller: any) => {
     crudRouter.post(`/${entityCode}/create`, authorize(`${entityCode}.create`), errorBoundary(controller['create'], entityCode));
-    crudRouter.get(`/${entityCode}/read/:id`, authorize(`${entityCode}.read`), errorBoundary(controller['read'], entityCode));
+    crudRouter.post(`/${entityCode}/read`, authorize(`${entityCode}.read`), errorBoundary(controller['read'], entityCode));
     crudRouter.post(`/${entityCode}/search`, authorize(`${entityCode}.read`), errorBoundary(controller['search'], entityCode));
     crudRouter.post(`/${entityCode}/exists`, authorize(`${entityCode}.read`), errorBoundary(controller['exists'], entityCode));
     crudRouter.post(`/${entityCode}/page`, authorize(`${entityCode}.read`), errorBoundary(controller['page'], entityCode));
