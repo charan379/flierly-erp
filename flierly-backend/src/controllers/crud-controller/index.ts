@@ -11,6 +11,7 @@ import activate from './activate';
 import restore from './restore';
 import inactivate from './inactivate';
 import updateArrayField from './updateArrayField';
+import relatedEntitiesPage from './relatedEntitiesPage';
 
 const CRUDController = async (entity: EntityTarget<ObjectLiteral>) => {
 
@@ -20,6 +21,7 @@ const CRUDController = async (entity: EntityTarget<ObjectLiteral>) => {
         update: (req: Request, res: Response) => update(entity, req, res),
         delete: (req: Request, res: Response) => softDelete(entity, req, res),
         page: (req: Request, res: Response) => page(entity, req, res),
+        relatedEntitiesPage: (req: Request, res: Response) => relatedEntitiesPage(entity, req, res),
         search: (req: Request, res: Response) => search(entity, req, res),
         exists: (req: Request, res: Response) => exists(entity, req, res),
         activate: (req: Request, res: Response) => activate(entity, req, res),
