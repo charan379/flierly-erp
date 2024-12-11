@@ -12,6 +12,7 @@ const routeGenerator = (entityCode: string, controller: any) => {
     crudRouter.post(`/${entityCode}/search`, authorize(`${entityCode}.read`), errorBoundary(controller['search'], entityCode));
     crudRouter.post(`/${entityCode}/exists`, authorize(`${entityCode}.read`), errorBoundary(controller['exists'], entityCode));
     crudRouter.post(`/${entityCode}/page`, authorize(`${entityCode}.read`), errorBoundary(controller['page'], entityCode));
+    crudRouter.post(`/${entityCode}/related-entities-page`, authorize(`${entityCode}.read`), errorBoundary(controller["relatedEntitiesPage"], entityCode));
     crudRouter.put(`/${entityCode}/update/:id`, authorize(`${entityCode}.update`), errorBoundary(controller['update'], entityCode));
     crudRouter.patch(`/${entityCode}/activate`, authorize(`${entityCode}.manage`), errorBoundary(controller['activate'], entityCode));
     crudRouter.patch(`/${entityCode}/inactivate`, authorize(`${entityCode}.manage`), errorBoundary(controller['inactivate'], entityCode));
