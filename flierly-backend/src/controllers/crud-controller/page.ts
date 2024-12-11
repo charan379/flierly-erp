@@ -18,8 +18,7 @@ interface PageRequestBody {
     filters: FilterObject
 }
 
-const pageQuerySchema: Joi.ObjectSchema = Joi.object({
-    autopopulateIds: Joi.boolean().default(false), // Default: false
+const pageQuerySchema: Joi.ObjectSchema<PageRequestBody> = Joi.object({
     loadRelations: Joi.array().items(Joi.string().disallow('').disallow(null)).unique(),
     binMode: Joi.boolean().default(false), // Default: false
     pagination: Joi.object({
