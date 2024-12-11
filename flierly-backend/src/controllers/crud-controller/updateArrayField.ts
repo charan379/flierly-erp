@@ -38,7 +38,6 @@ const updateArrayField = async (entity: EntityTarget<ObjectLiteral>, req: Reques
         acc[column.propertyName] = column.relationType;
         return acc;
     }, {});
-    console.log(relationColumns)
 
     if (!Object.keys(relationColumns).includes(propertyName)) {
         throw new FlierlyException(`${propertyName} does not exist in ${entity.toString()}`, HttpCodes.BAD_REQUEST);
