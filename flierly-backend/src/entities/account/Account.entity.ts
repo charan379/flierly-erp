@@ -14,11 +14,11 @@ export class Account {
     @Column({ type: 'boolean', default: true, name: 'is_active' })
     isActive: boolean;
 
-    @ManyToOne(() => AccountType, { eager: true, nullable: false })
+    @ManyToOne(() => AccountType, { eager: false, nullable: false })
     @JoinColumn({ name: 'account_type_id' })
     accountType: AccountType;
 
-    @ManyToOne(() => AccountSubtype, { eager: true, nullable: false })
+    @ManyToOne(() => AccountSubtype, { eager: false, nullable: false })
     @JoinColumn({ name: 'account_subtype_id' })
     accountSubtype: AccountSubtype;
 
