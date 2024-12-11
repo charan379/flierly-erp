@@ -11,7 +11,7 @@ import applyConditionForFind from "@/utils/query-utils/applyConditionForFind";
 
 
 interface PageRequestBody {
-    autopopulateIds: boolean;
+    loadRelations: string[];
     binMode: boolean;
     pagination: { page: number, limit: number };
     sort: { [key: string]: 'ascend' | 'descend' }
@@ -20,6 +20,7 @@ interface PageRequestBody {
 
 const pageQuerySchema: Joi.ObjectSchema = Joi.object({
     autopopulateIds: Joi.boolean().default(false), // Default: false
+    loadRelations: Joi.array().items(Joi.string().disallow('').disallow(null)).unique(),
     binMode: Joi.boolean().default(false), // Default: false
     pagination: Joi.object({
         page: Joi.number().integer().min(1).default(1), // Default: 1
@@ -34,13 +35,13 @@ const pageQuerySchema: Joi.ObjectSchema = Joi.object({
 
 const page = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Response): Promise<Response> => {
 
-    const { filters, pagination, autopopulateIds, binMode, sort }: PageRequestBody = await JoiSchemaValidator<PageRequestBody>(pageQuerySchema, req.body, { abortEarly: false, allowUnknown: false }, "dynamic-page");
+    const { filters, pagination, loadRelations, binMode, sort }: PageRequestBody = await JoiSchemaValidator<PageRequestBody>(pageQuerySchema, req.body, { abortEarly: false, allowUnknown: false }, "dynamic-page");
 
     const repo = AppDataSource.getRepository(entity);
 
     // Initialize FindManyOptions
     const findOptions: FindManyOptions<ObjectLiteral> = {
-        relations: autopopulateIds ? [] : [], // Load relations if required
+        relations: loadRelations?.length > 0 ? [...loadRelations] : [], // Load relations if required
         where: {}, // Initialize where clause
         order: applyFindSort(sort), // Initialize order clause
         skip: (pagination.page - 1) * pagination.limit,
@@ -54,7 +55,7 @@ const page = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Resp
 
     // Apply filters to where clause
     Object.keys(filters).forEach((field) => {
-        findOptions.where = {...findOptions.where, ...applyConditionForFind(findOptions.where, field, filters[field])};
+        findOptions.where = { ...findOptions.where, ...applyConditionForFind(findOptions.where, field, filters[field]) };
     });
 
     // Get the paginated and filtered rows
