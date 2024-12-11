@@ -145,7 +145,7 @@ const CrudTable = <T extends Record<string, any>>({
       dataSource={data}
       // data request
       request={async (params, sort) => {
-        const { result, success } = await crudService.page({
+        const { result, success } = await crudService.page<PageData<T>>({
           entity,
           filters: crudTableContextHandler.filters.get(),
           pagination: { limit: params?.pageSize ?? 10, page: params?.current ?? 1 },

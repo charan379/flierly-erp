@@ -15,21 +15,20 @@ const crudService = {
     /**
      * Fetch paginated data
      */
-    page: async ({
+    page: async<T>({
         entity,
-        autopopulateIds = true,
         binMode = false,
         pagination = { limit: 10, page: 1 },
         filters = {},
         sort = {},
         signal,
     }: PageProps) => {
-        const promise = api.post<ApiResponse<any>>(
+        const promise = api.post<ApiResponse<T>>(
             `/${entity}/page`,
-            { filters, pagination, sort, autopopulateIds, binMode },
+            { filters, pagination, sort, binMode },
             { signal }
         );
-        return handleResponse({ promise });
+        return handleResponse<T>({ promise });
     },
 
     /**
