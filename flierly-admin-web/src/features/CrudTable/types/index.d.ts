@@ -16,7 +16,7 @@ type CrudTableState = {
 // Props type for the page function
 type PageProps = {
   entity: string;
-  autopopulateIds?: boolean;
+  loadRelations?: [];
   binMode?: boolean;
   pagination?: {
     limit: number;
