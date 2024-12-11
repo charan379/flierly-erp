@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index, DeleteDateColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Index, DeleteDateColumn, CreateDateColumn, UpdateDateColumn, ManyToMany } from 'typeorm';
 import { IsNotEmpty, Length, Matches } from 'class-validator';
 import AccessType from '@/constants/accessTypes';
+import { Role } from './Role.entity';
 
 @Entity('iam_privileges')
 @Index('idx_entity', ['entity'])
@@ -35,6 +36,9 @@ export class Privilege {
     @Length(5, 25, { message: 'Privilege code must be between 5 and 25 characters.' })  // Min 5, Max 25
     @Matches(/^[a-z-]+\.[a-z-]+$/, { message: 'Privilege code must match the pattern /^[a-z-]+\\.[a-z-]+$/.' })  // Regex pattern
     code: string;
+
+    @ManyToMany(() => Role, role => role.privileges)
+    roles: Role[];
 
     @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
     createdAt: Date;

@@ -29,7 +29,7 @@ export class Role {
     @Length(10, 350, { message: 'Role description must be between 10 and 350 characters.' })  // Min 10, Max 350
     description: string;
 
-    @ManyToMany(() => Privilege, {})
+    @ManyToMany(() => Privilege, privilege => privilege.roles)
     @JoinTable({
         name: 'iam_role_privileges',
         joinColumn: {
