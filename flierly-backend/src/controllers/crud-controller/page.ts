@@ -41,6 +41,7 @@ const page = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Resp
     // Initialize FindManyOptions
     const findOptions: FindManyOptions<ObjectLiteral> = {
         relations: loadRelations?.length > 0 ? [...loadRelations] : [], // Load relations if required
+        relationLoadStrategy: "join",
         where: {}, // Initialize where clause
         order: applyFindSort(sort), // Initialize order clause
         skip: (pagination.page - 1) * pagination.limit,
