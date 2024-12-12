@@ -10,9 +10,9 @@ import { EntityTarget, ObjectLiteral } from "typeorm";
 
 // Define the request body schema for validation
 interface RelatedEntitiesPageRequestBody {
-    parentId: number,
-    parentEntity: string,
-    relationField: string,
+    owningEntityId: number,
+    owningEntity: string,
+    inverseField: string,
     pagination: { page: number, limit: number };
     sort: { [key: string]: 'ascend' | 'descend' }
     filters: FilterObject
@@ -20,9 +20,9 @@ interface RelatedEntitiesPageRequestBody {
 
 // Joi schema for validating incoming requests
 const relatedEntitiesPageQuerySchema: Joi.ObjectSchema<RelatedEntitiesPageRequestBody> = Joi.object({
-    parentId: Joi.number().integer().min(1).required(),
-    parentEntity: Joi.string().disallow('').required(),
-    relationField: Joi.string().disallow('').required(),
+    owningEntityId: Joi.number().integer().min(1).required(),
+    owningEntity: Joi.string().disallow('').required(),
+    inverseField: Joi.string().disallow('').required(),
     pagination: Joi.object({
         page: Joi.number().integer().min(1).default(1), // Default page: 1
         limit: Joi.number().integer().min(1).default(20), // Default limit: 20
@@ -36,31 +36,31 @@ const relatedEntitiesPageQuerySchema: Joi.ObjectSchema<RelatedEntitiesPageReques
 
 // Main function to fetch related entities
 const relatedEntitiesPage = async (
-    entity: EntityTarget<ObjectLiteral>,
+    inverseEntity: EntityTarget<ObjectLiteral>,
     req: Request,
     res: Response
 ): Promise<Response> => {
     // Validate and extract request data
-    const { parentId, parentEntity, relationField, filters, pagination, sort }: RelatedEntitiesPageRequestBody = await JoiSchemaValidator<RelatedEntitiesPageRequestBody>(
+    const { owningEntityId, owningEntity, inverseField, filters, pagination, sort }: RelatedEntitiesPageRequestBody = await JoiSchemaValidator<RelatedEntitiesPageRequestBody>(
         relatedEntitiesPageQuerySchema,
         req.body,
         { abortEarly: false, allowUnknown: false },
         "dynamic-fetch-related-entities"
     );
 
-    const repo = AppDataSource.getRepository(entity); // Get the repository for the target entity
+    const inverseRepo = AppDataSource.getRepository(inverseEntity); // Get the repository for the inverse entity
 
-    const relatedEntity = entity.toString().toLowerCase(); // Determine alias for the related entity
+    const inverseEntityAlias = inverseEntity.toString().toLowerCase(); // Determine alias for the inverse entity
 
-    // Build query: join related entity with parent and filter by parent ID
-    const qb = repo
-        .createQueryBuilder(relatedEntity)
-        .innerJoin(`${relatedEntity}.${relationField}`, parentEntity, `${parentEntity}.id = ${parentId}`) // Join the parent entity with alias
+    // Build query: join inverse entity with owning entity and filter by owning entity ID
+    const qb = inverseRepo
+        .createQueryBuilder(inverseEntityAlias)
+        .innerJoin(`${inverseEntityAlias}.${inverseField}`, owningEntity, `${owningEntity}.id = ${owningEntityId}`) // Join the owning entity with alias
         .skip((pagination.page - 1) * pagination.limit) // Apply pagination (offset)
         .take(pagination.limit); // Limit results
 
     applySort(qb, sort); // Apply sorting based on request
-    applyFilters(qb, relatedEntity, filters); // Apply filters based on request
+    applyFilters(qb, inverseEntityAlias, filters); // Apply filters based on request
 
     // Execute the query and get paginated results
     const [results, total] = await qb.getManyAndCount();

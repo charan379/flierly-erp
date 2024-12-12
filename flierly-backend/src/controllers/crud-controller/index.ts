@@ -10,7 +10,7 @@ import exists from './exists';
 import activate from './activate';
 import restore from './restore';
 import inactivate from './inactivate';
-import updateArrayField from './updateArrayField';
+import updateAssociatedRecords from './updateAssociatedRecords';
 import relatedEntitiesPage from './relatedEntitiesPage';
 
 const CRUDController = async (entity: EntityTarget<ObjectLiteral>) => {
@@ -27,7 +27,7 @@ const CRUDController = async (entity: EntityTarget<ObjectLiteral>) => {
         activate: (req: Request, res: Response) => activate(entity, req, res),
         inactivate: (req: Request, res: Response) => inactivate(entity, req, res),
         restore: (req: Request, res: Response) => restore(entity, req, res),
-        updateArrayField: (req: Request, res: Response) => updateArrayField(entity, req, res),
+        updateAssociatedRecords: (req: Request, res: Response) => updateAssociatedRecords(entity, req, res),
     }
 
     return crudMethods;
