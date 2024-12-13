@@ -1,7 +1,6 @@
 import { ProColumns } from "@ant-design/pro-components";
-import { Tag, Typography } from "antd";
+import { Tag } from "antd";
 
-const { Text } = Typography;
 
 const roleTableColumns: ProColumns<Role>[] = [
     // id
@@ -49,19 +48,10 @@ const roleTableColumns: ProColumns<Role>[] = [
         dataIndex: "privileges",
         key: "privileges",
         order: 4,
-        render: (_, entity) => {
-            if (!entity.privileges || entity.privileges.length === 0) {
-                return <Text type="secondary">No Privileges</Text>;
-            }
+        render: (_, _entity) => {
             return (
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
-                    {entity.privileges.map((privilege) => (
-                        <Tag key={privilege.id} color="blue">
-                            {privilege.name}
-                        </Tag>
-                    ))}
-                </div>
-            );
+                <></>
+            )
         },
     },
     // isActive
