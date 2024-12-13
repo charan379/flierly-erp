@@ -1,3 +1,3 @@
-import GenericAssignmentManager from "./GenericAssignmentManager";
+import AssociationManager from "./GenericAssignmentManager";
 
-export default GenericAssignmentManager;
+export default AssociationManager;

@@ -1,215 +1,300 @@
-import React, { useEffect, useState } from "react";
-import { Tabs, Button, Space, Spin, message } from "antd";
-import { ProList } from "@ant-design/pro-components";
+import { useEffect, useRef, useState } from "react";
+import { Tabs, Button } from "antd";
+import { ActionType, ProColumns, ProTable } from "@ant-design/pro-components";
+import useLocale from "../Locale/hooks/useLocale";
+import genricAssignmentService from "./service/genricAssignmentService";
+import { SettingTwoTone } from "@ant-design/icons";
+import AllocateOne from "./features/AllocateOne";
+import DeallocateOne from "./features/DeallocateOne";
+import AllocateMany from "./features/AllocateMany";
+import DeallocateMany from "./features/DeallocateMany";
 
-type TitleExtractor<CE> = (item: CE) => React.ReactNode;
 
 interface GenericAssignmentManagerProps<
-    PE extends Record<string, any>,
-    CE extends Record<string, any>
+    OE extends { id: number },
+    IE extends { id: number, disabled?: boolean }
 > {
-    parentEntity: PE;
-    parentEntityName: string;
-    relatedEntityName: string;
-    fetchAvailableItems: (parent: PE) => Promise<CE[]>;
-    fetchAssignedItems: (parent: PE) => Promise<CE[]>;
-    onAssign: (parent: PE, items: CE[]) => Promise<void>;
-    onRemove: (parent: PE, items: CE[]) => Promise<void>;
-    keyExtractor: (item: CE) => number;
-    titleExtractor: TitleExtractor<CE>;
+    owningEntityRow: OE;
+    owningEntity: string;
+    associatedEntity: string;
+    associatedEntityColumns: ProColumns<IE>[],
+    associatedSideField: string,
+    owningSideField: string;
 }
 
 const GenericAssignmentManager = <
-    PE extends Record<string, any>,
-    CE extends Record<string, any>
+    OE extends { id: number },
+    IE extends { id: number, disabled?: boolean }
 >({
-    parentEntity,
-    parentEntityName,
-    relatedEntityName,
-    fetchAvailableItems,
-    fetchAssignedItems,
-    onAssign,
-    onRemove,
-    keyExtractor,
-    titleExtractor,
-}: GenericAssignmentManagerProps<PE, CE>) => {
-    const [tabKey, setTabKey] = useState("assigned");
-    const [assignedItems, setAssignedItems] = useState<CE[]>([]);
-    const [availableItems, setAvailableItems] = useState<CE[]>([]);
-    const [selectedKeys, setSelectedKeys] = useState<number[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
+    owningEntityRow,
+    owningEntity,
+    associatedEntity,
+    associatedEntityColumns,
+    associatedSideField,
+    owningSideField,
 
-    const fetchData = async () => {
-        setIsLoading(true);
-        try {
-            if (tabKey === "assigned") {
-                const data = await fetchAssignedItems(parentEntity);
-                setAssignedItems(data);
-            } else {
-                const data = await fetchAvailableItems(parentEntity);
-                setAvailableItems(data);
+}: GenericAssignmentManagerProps<OE, IE>) => {
+    // 
+    const [tabKey, setTabKey] = useState<"allocatedItems" | "availableItems">("allocatedItems");
+    const [allocatedItems, setAllocatedItems] = useState<IE[]>([]);
+    const [availableItems, setAvailableItems] = useState<IE[]>([]);
+    const [itemsToAllocate, setItemsToAllocate] = useState<IE[]>([]);
+    const [itemsToDeallocate, setItemsToDeallocate] = useState<IE[]>([]);
+
+    const { translate } = useLocale();
+
+    const allocatedTableTableRef = useRef<ActionType>();
+    const availableTableRef = useRef<ActionType>();
+
+    const tableColumns: ProColumns<IE>[] = [
+        ...associatedEntityColumns,
+        {
+            key: "actions",
+            fixed: "right",
+            width: "40px",
+            title: <SettingTwoTone />,
+            align: "center",
+            render: (_, entity) => {
+                if (tabKey === "allocatedItems") {
+                    return (
+                        <DeallocateOne
+                            owningEntity={owningEntity}
+                            owningEntityId={owningEntityRow.id}
+                            inverseField={associatedSideField}
+                            inverseIdToDisassociate={entity.id}
+                            tableActionRef={allocatedTableTableRef}
+                        />
+                    )
+                } else if (tabKey === "availableItems") {
+                    return (
+                        <AllocateOne
+                            owningEntity={owningEntity}
+                            owningEntityId={owningEntityRow.id}
+                            inverseField={associatedSideField}
+                            inverseIdToAssociate={entity.id}
+                            tableActionRef={availableTableRef}
+                        />
+                    )
+                } else {
+                    return null
+                }
             }
-        } catch (error) {
-            message.error(`Failed to fetch ${relatedEntityName}s`);
-            console.error(error);
-        } finally {
-            setIsLoading(false);
         }
-    };
+    ];
 
-    const handleTabChange = (key: string) => {
+    const handleTabChange = (key: "allocatedItems" | "availableItems") => {
         setTabKey(key);
-        setSelectedKeys([]);
     };
 
-    const handleBulkAction = async () => {
-        if (selectedKeys.length === 0) {
-            message.warning("No items selected");
-            return;
-        }
-
-        const selectedItems =
-            tabKey === "assigned"
-                ? assignedItems.filter((item) => selectedKeys.includes(keyExtractor(item)))
-                : availableItems.filter((item) => selectedKeys.includes(keyExtractor(item)));
-
-        try {
-            if (tabKey === "assigned") {
-                await onRemove(parentEntity, selectedItems);
-                setAssignedItems((prev) =>
-                    prev.filter((item) => !selectedKeys.includes(keyExtractor(item)))
-                );
-            } else {
-                await onAssign(parentEntity, selectedItems);
-                setAvailableItems((prev) =>
-                    prev.filter((item) => !selectedKeys.includes(keyExtractor(item)))
-                );
-            }
-            message.success(
-                `${selectedItems.length} ${relatedEntityName}(s) ${tabKey === "assigned" ? "removed" : "assigned"} to ${parentEntityName}`
-            );
-            setSelectedKeys([]);
-        } catch (error) {
-            message.error(`Failed to ${tabKey === "assigned" ? "remove" : "assign"} items`);
-            console.error(error);
-        }
-    };
-
-    const handleIndividualAction = async (item: CE) => {
-        try {
-            if (tabKey === "assigned") {
-                await onRemove(parentEntity, [item]);
-                setAssignedItems((prev) =>
-                    prev.filter((i) => keyExtractor(i) !== keyExtractor(item))
-                );
-                message.success(`Removed ${relatedEntityName} from ${parentEntityName}`);
-            } else {
-                await onAssign(parentEntity, [item]);
-                setAvailableItems((prev) =>
-                    prev.filter((i) => keyExtractor(i) !== keyExtractor(item))
-                );
-                message.success(`Assigned ${relatedEntityName} to ${parentEntityName}`);
-            }
-        } catch (error) {
-            message.error(`Failed to ${tabKey === "assigned" ? "remove" : "assign"} item`);
-            console.error(error);
-        }
-    };
-
-    const handleCardClick = (item: CE) => {
-        const itemKey = keyExtractor(item);
-        const isSelected = selectedKeys.includes(itemKey);
-        if (isSelected) {
-            setSelectedKeys(selectedKeys.filter((key) => key !== itemKey));
+    const handleAllocatedItemsCardClick = (clickedItem: IE) => {
+        const isAlreadySelectedToDeallocate = itemsToDeallocate.some((item) => item.id === clickedItem.id);
+        if (isAlreadySelectedToDeallocate) {
+            setItemsToDeallocate(prev => prev.filter((item) => item.id !== clickedItem.id));
         } else {
-            setSelectedKeys([...selectedKeys, itemKey]);
+            setItemsToDeallocate(prev => [...prev, clickedItem]);
+        }
+    };
+
+    const handleAvailableItemsCardClick = (clickedItem: IE) => {
+        const isAlreadySelectedToAllocate = itemsToAllocate.some((item) => item.id === clickedItem.id);
+
+        if (isAlreadySelectedToAllocate) {
+            setItemsToAllocate(prev => prev.filter((item) => item.id !== clickedItem.id));
+        } else {
+            setItemsToAllocate(prev => [...prev, clickedItem])
         }
     };
 
     useEffect(() => {
-        fetchData();
-    }, [tabKey]);
+
+        if (tabKey === "allocatedItems") {
+            allocatedTableTableRef.current?.reload();
+        }
+
+        if (tabKey === "availableItems") {
+            availableTableRef.current?.reload();
+        };
+
+        return () => {
+
+        };
+
+    }, [tabKey])
 
     return (
-        <Spin spinning={isLoading}>
-            <Tabs
-                activeKey={tabKey}
-                onChange={handleTabChange}
-                tabBarExtraContent={
-                    <Space>
-                        <Button type="primary" onClick={handleBulkAction}>
-                            {tabKey === "assigned" ? `Remove from ${parentEntityName}` : `Assign to ${parentEntityName}`}
-                        </Button>
-                    </Space>
-                }
-                style={{ width: "720px" }}
-            >
-                <Tabs.TabPane tab={`Assigned ${relatedEntityName}s`} key="assigned">
-                    <ProList<CE>
-                        rowKey={(item) => keyExtractor(item).toString()}
-                        dataSource={assignedItems}
-                        metas={{
-                            title: {
-                                render: (_, item) => titleExtractor(item),
-                            },
-                            actions: {
-                                render: (_, item) => (
-                                    <Button
-                                        type="link"
-                                        onClick={() => handleIndividualAction(item)}
-                                    >
-                                        Remove
-                                    </Button>
-                                ),
-                            },
-                        }}
-                        rowSelection={{
-                            selectedRowKeys: selectedKeys.map(String),
-                            onChange: (selectedRowKeys) => {
-                                setSelectedKeys(selectedRowKeys.map(Number));
-                            },
-                        }}
-                        onItem={(item) => {
-                            return {
-                                onClick: () => handleCardClick(item),
-                            };
-                        }}
-                    />
-                </Tabs.TabPane>
-                <Tabs.TabPane tab={`Available ${relatedEntityName}s`} key="available">
-                    <ProList<CE>
-                        rowKey={(item) => keyExtractor(item).toString()}
+        <Tabs
+            activeKey={tabKey}
+            onChange={(activeKey) => handleTabChange(activeKey as "allocatedItems" | "availableItems")}
+            style={{ width: "100%", height: "100%" }}
+            items={[
+                {
+                    key: "allocatedItems",
+                    label: `${translate("allocated")} ${associatedEntity}s`,
+                    children:
+                        <ProTable<IE>
+                            rowKey={"id"}
+                            bordered
+                            actionRef={allocatedTableTableRef}
+                            size="large"
+                            dataSource={allocatedItems}
+                            columns={tableColumns}
+                            search={false}
+                            options={{ density: false, fullScreen: false, reload: false, setting: false, search: false }}
+                            tableAlertRender={false}
+                            style={{
+                                width: "100%",
+                                height: "100%",
+                            }}
+                            // data fetch
+                            request={async (params, sort, _filter) => {
+                                const { result, success } = await genricAssignmentService.relatedEntitiespage<PageData<IE>>({
+                                    owningEntity,
+                                    owningEntityId: owningEntityRow.id,
+                                    inverseEntity: associatedEntity,
+                                    inverseSideField: owningSideField,
+                                    owningSideField: associatedSideField,
+                                    pagination: {
+                                        limit: params?.pageSize ?? 10,
+                                        page: params?.current ?? 1
+                                    },
+                                    sort
+                                })
+
+                                return {
+                                    data: result?.data,
+                                    success,
+                                    total: result?.totalResults
+                                }
+                            }}
+                            // set data came form request to state
+                            postData={(data: IE[]) => {
+                                setAllocatedItems(_prev => [...data])
+                            }}
+                            // pagination configuration
+                            pagination={{
+                                showSizeChanger: true,
+                                pageSizeOptions: [5, 10, 20, 25, 50],
+                                defaultPageSize: 10,
+                                responsive: true,
+                                size: "small",
+                            }}
+                            scroll={{
+                                scrollToFirstRowOnChange: true,
+                                x: 800,
+                                y: 300,
+                            }}
+                            rowSelection={{
+                                preserveSelectedRowKeys: true,
+                                selectedRowKeys: itemsToDeallocate.map(item => item.id),
+                                onChange: (_selectedRowKeys, selectedRows) => {
+                                    setItemsToDeallocate([...selectedRows]);
+                                },
+                            }}
+                            onRow={(item) => ({
+                                onClick: () => handleAllocatedItemsCardClick(item),
+                            })}
+                            showSorterTooltip={false}
+                            // toolbar Render
+                            toolBarRender={(action, rows) => [
+                                <DeallocateMany
+                                    actionRef={action}
+                                    owningEntity={owningEntity}
+                                    owningEntityId={owningEntityRow.id}
+                                    inverseField={associatedSideField}
+                                    inverseIdsToDisassociate={rows.selectedRowKeys ? rows.selectedRowKeys.filter((id) => Number.isInteger(id)).map(Number) : []}
+                                />,
+                                <Button onClick={() => action?.clearSelected?.()}>Clear Selection</Button>
+                            ]}
+                        />
+                },
+                {
+                    key: "availableItems",
+                    label: `${translate("available")} ${associatedEntity}s`,
+                    children: <ProTable<IE>
+                        rowKey={"id"}
+                        bordered
+                        actionRef={availableTableRef}
+                        size="large"
+                        className="availableItems"
                         dataSource={availableItems}
-                        metas={{
-                            title: {
-                                render: (_, item) => titleExtractor(item),
-                            },
-                            actions: {
-                                render: (_, item) => (
-                                    <Button
-                                        type="link"
-                                        onClick={() => handleIndividualAction(item)}
-                                    >
-                                        Assign
-                                    </Button>
-                                ),
-                            },
+                        columns={tableColumns}
+                        search={false}
+                        options={{ density: false, fullScreen: false, reload: false, setting: false, search: false }}
+                        style={{
+                            width: "100%",
+                            height: "100%",
+                        }}
+                        // data fetch
+                        request={async (params, sort, _filter) => {
+                            const { result, success } = await genricAssignmentService.relatedEntitiespage<PageData<IE>>({
+                                owningEntity,
+                                owningEntityId: owningEntityRow.id,
+                                inverseEntity: associatedEntity,
+                                inverseSideField: owningSideField,
+                                owningSideField: associatedSideField,
+                                pagination: {
+                                    limit: params?.pageSize ?? 10,
+                                    page: params?.current ?? 1
+                                },
+                                sort,
+                                type: "unallocated"
+                            })
+
+                            return {
+                                data: result?.data,
+                                success,
+                                total: result?.totalResults
+                            }
+                        }}
+                        // set data came form request to state
+                        postData={(data: IE[]) => {
+                            setAvailableItems(_prev => [...data])
+                        }}
+                        // pagination configuration
+                        pagination={{
+                            showSizeChanger: true,
+                            pageSizeOptions: [5, 10, 20, 25, 50],
+                            defaultPageSize: 10,
+                            responsive: true,
+                            size: "small",
+                        }}
+                        tableAlertRender={false}
+                        scroll={{
+                            scrollToFirstRowOnChange: true,
+                            x: 800,
+                            y: 300,
                         }}
                         rowSelection={{
-                            selectedRowKeys: selectedKeys.map(String),
-                            onChange: (selectedRowKeys) => {
-                                setSelectedKeys(selectedRowKeys.map(Number));
+                            preserveSelectedRowKeys: true,
+                            selectedRowKeys: itemsToAllocate.map((item) => item.id),
+                            getCheckboxProps: (item) => {
+                                return {
+                                    disabled: item?.disabled
+                                }
+                            },
+                            onChange: (_selectedRowKeys, selectedRows) => {
+                                setItemsToAllocate([...selectedRows]);
                             },
                         }}
-                        onItem={(item) => {
-                            return {
-                                onClick: () => handleCardClick(item),
-                            };
-                        }}
+                        onRow={(item) => ({
+                            onClick: () => handleAvailableItemsCardClick(item),
+                        })}
+                        showSorterTooltip={false}
+                        toolBarRender={(action, rows) => [
+                            <AllocateMany
+                                actionRef={action}
+                                owningEntity={owningEntity}
+                                owningEntityId={owningEntityRow.id}
+                                inverseField={associatedSideField}
+                                inverseIdsToAssociate={rows.selectedRowKeys ? rows.selectedRowKeys.filter((id) => Number.isInteger(id)).map(Number) : []}
+                            />,
+                            <Button onClick={() => action?.clearSelected?.()}>Clear Selection</Button>
+                        ]}
                     />
-                </Tabs.TabPane>
-            </Tabs>
-        </Spin>
+                }
+            ]}
+        >
+        </Tabs>
     );
 };
 
