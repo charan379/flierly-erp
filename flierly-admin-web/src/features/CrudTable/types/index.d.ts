@@ -27,6 +27,24 @@ type PageProps = {
   signal?: AbortSignal;
 };
 
+// Props type for the page function
+type RelatedEntitiesPageProps = {
+  owningEntity: string,
+  owningEntityId: number,
+  inverseEntity: string,
+  inverseSideField: string,
+  owningSideField: string,
+  pagination?: {
+    limit: number;
+    page: number;
+  };
+  filters?: Record<string, any>;
+  sort?: Record<string, any>;
+  type?: 'allocated' | 'unallocated'
+  signal?: AbortSignal;
+}
+
+
 // Props type for the create function
 type CreateProps<T = Record<string, any>> = {
   entity: string;
@@ -39,6 +57,19 @@ type UpdateProps<T = Record<string, any>> = {
   entity: string;
   id: string | number;
   data: T;
+  signal?: AbortSignal;
+};
+
+// Props type for the update function
+type UpdateAssociatedRecordsProps<T = Record<string, any>> = {
+  owningEntity: string,
+  owningEntityId: number;
+  inverseField: string;
+  newArray?: number[];
+  addOne?: number;
+  removeOne?: number;
+  addMultiple?: number[];
+  removeMultiple?: number[];
   signal?: AbortSignal;
 };
 
