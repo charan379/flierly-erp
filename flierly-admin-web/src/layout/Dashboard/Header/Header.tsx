@@ -71,7 +71,8 @@ const Header: React.FC = () => {
           closeIcon={null}
           title={"Fliery ERP Web Portal"}
           styles={{
-            body: { padding: 5 }
+            body: { padding: 5 },
+            header: { maxHeight: "40px", backgroundColor: "var(--dashboard-header-bg-color)", color: "#fff" }
           }}
           width={320}
           extra={
