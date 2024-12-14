@@ -1,7 +1,18 @@
 import { useState, useEffect } from "react";
 
-export default function useElementHeightByClassName(className: string, maxRetries: number = 20, delay: number = 500): number {
-  const [height, setHeight] = useState<number>(0);
+interface UseElementHeightOptions {
+  maxRetries?: number;
+  delay?: number;
+  fallbackHeight?: number;
+}
+
+export default function useElementHeightByClassName(
+  className: string,
+  options: UseElementHeightOptions = {}
+): number {
+  const { maxRetries = 20, delay = 500, fallbackHeight = 0 } = options;
+
+  const [height, setHeight] = useState<number>(fallbackHeight);
 
   useEffect(() => {
     let observer: ResizeObserver | null = null;
@@ -58,4 +69,4 @@ export default function useElementHeightByClassName(className: string, maxRetrie
   }, [className, maxRetries, delay]);
 
   return height;
-};
+}
