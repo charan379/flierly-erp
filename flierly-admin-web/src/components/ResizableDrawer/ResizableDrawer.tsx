@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Drawer, Button, DrawerProps } from "antd";
+import { Drawer, Button, DrawerProps, Space } from "antd";
 
 interface ResizableDrawerProps extends Omit<DrawerProps, "width" | "open" | "onClose"> {
     trigger?: React.ReactNode; // Button or trigger element to open the drawer
@@ -32,6 +32,11 @@ const ResizableDrawer: React.FC<ResizableDrawerProps> = ({
         setDrawerWidth(Math.min(Math.max(newWidth, minWidth), maxWidth)); // Clamp the width
     };
 
+    // Prevent context menu propagation
+    const handleContextMenu = (e: React.MouseEvent) => {
+        e.stopPropagation(); // Stop the event from propagating
+    };
+
     const startResizing = (e: React.MouseEvent<HTMLDivElement>) => {
         e.preventDefault();
         const onMouseMove = (event: MouseEvent) => handleResize(event as unknown as React.MouseEvent<HTMLDivElement>);
@@ -48,7 +53,7 @@ const ResizableDrawer: React.FC<ResizableDrawerProps> = ({
     const onOpen = isControlled ? controlledOnOpen : () => setDefaultOpen(true);
 
     return (
-        <>
+        <div onContextMenu={handleContextMenu}>
             {trigger ? (
                 React.cloneElement(trigger as React.ReactElement, { onClick: onOpen })
             ) : (
@@ -61,6 +66,10 @@ const ResizableDrawer: React.FC<ResizableDrawerProps> = ({
                 open={open}
                 onClose={onClose}
                 width={drawerWidth}
+                extra={
+                    <Space>
+                        <Button danger type="primary" onClick={onClose}>Cancel</Button>
+                    </Space>}
             >
                 {children}
                 {/* Resize Handle */}
@@ -77,7 +86,7 @@ const ResizableDrawer: React.FC<ResizableDrawerProps> = ({
                     onMouseDown={startResizing}
                 ></div>
             </Drawer>
-        </>
+        </div>
     );
 };
 
