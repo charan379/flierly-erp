@@ -1,5 +1,10 @@
+import ResizableDrawer from "@/components/ResizableDrawer";
+import AssociationManager from "@/features/GenericAssignmentManager";
+import fetchEntityOptions from "@/features/SelectRemoteOptions/utils/fetchEntityOptions";
 import { ProColumns } from "@ant-design/pro-components";
-import { Tag } from "antd";
+import { Button, Tag } from "antd";
+import privilegeTableColumns from "../privilege/tableColumns";
+import queryTransformers from "@/utils/queryTransformers";
 
 
 const roleTableColumns: ProColumns<Role>[] = [
@@ -32,6 +37,7 @@ const roleTableColumns: ProColumns<Role>[] = [
         order: 2,
         valueType: "text",
         sorter: true,
+        copyable: true
     },
     // description
     {
@@ -48,9 +54,44 @@ const roleTableColumns: ProColumns<Role>[] = [
         dataIndex: "privileges",
         key: "privileges",
         order: 4,
-        render: (_, _entity) => {
+        render: (_, entity) => {
             return (
-                <></>
+                <ResizableDrawer
+                    title={<span style={{ padding: 0, textAlign: "left" }}>{`Edit privileges for Role: ${entity.name}`}</span>}
+                    initialWidth={1200}
+                    destroyOnClose
+                    styles={{
+                        footer: { padding: "15px 15px 15px 15px" },
+                        header: { padding: "10px 10px 10px 10px", textAlign: "left" },
+                    }}
+                    trigger={<Button type="link">Manage Privileges</Button>}
+                >
+                    <AssociationManager<Role, Privilege>
+                        owningEntity="role"
+                        owningEntityRow={entity}
+                        owningSideField="roles"
+                        associatedEntity="privilege"
+                        associatedSideField="privileges"
+                        associatedEntityColumns={privilegeTableColumns.filter((column) => ["id", "name", "code", "entity", "access"].includes(column.dataIndex as string))}
+                        associatedEntityQueryConfig={[
+                            { label: "Name", name: "name", formField: { input: { type: "Text" }, rules: [{ required: true, message: "" }] } },
+                            { label: "Code", name: "code", formField: { input: { type: "Text" }, rules: [{ required: true, message: "" }] } },
+                            {
+                                label: "Entity", name: "entity", formField: {
+
+                                    input: {
+                                        type: "SelectRemoteOptions",
+                                        asyncOptionsFetcher: fetchEntityOptions,
+                                        debounceTimeout: 300, mode: "multiple"
+                                    },
+                                    rules: [{ type: "array", required: true, message: "" }],
+                                    transform: queryTransformers.inArray
+                                }
+                            }
+
+                        ]}
+                    />
+                </ResizableDrawer>
             )
         },
     },
