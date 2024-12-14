@@ -18,6 +18,11 @@ const DeallocateMany: React.FC<DeallocateManyProps> = (props) => {
 
     const [isLoding, setIsLoading] = useState(false);
 
+    const buttonStyle =
+        props.inverseIdsToDisassociate.length <= 0
+            ? {}
+            : { backgroundColor: "#FF9800", borderColor: "#FF9800" };
+
     const handleDeallocateMany: React.MouseEventHandler = async (event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -44,6 +49,7 @@ const DeallocateMany: React.FC<DeallocateManyProps> = (props) => {
             loading={isLoding}
             disabled={isLoding || inverseIdsToDisassociate.length <= 0}
             icon={<CloseOutlined />}
+            style={buttonStyle}
             type='primary'
         >
             Deallocate Selected ({inverseIdsToDisassociate.length})

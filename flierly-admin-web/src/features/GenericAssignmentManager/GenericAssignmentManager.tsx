@@ -1,14 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { Tabs, Button } from "antd";
-import { ActionType, ProColumns, ProTable } from "@ant-design/pro-components";
+import { ActionType, ProColumns } from "@ant-design/pro-components";
 import useLocale from "../Locale/hooks/useLocale";
 import genricAssignmentService from "./service/genricAssignmentService";
-import { SettingTwoTone } from "@ant-design/icons";
+import { ClearOutlined, SettingTwoTone } from "@ant-design/icons";
 import AllocateOne from "./features/AllocateOne";
 import DeallocateOne from "./features/DeallocateOne";
 import AllocateMany from "./features/AllocateMany";
 import DeallocateMany from "./features/DeallocateMany";
-
+import { FormFieldConfig } from "@/components/FormField";
+import DataTable from "./features/DataTable";
+import Filter from "./features/Filter";
 
 interface GenericAssignmentManagerProps<
     OE extends { id: number },
@@ -20,6 +22,11 @@ interface GenericAssignmentManagerProps<
     associatedEntityColumns: ProColumns<IE>[],
     associatedSideField: string,
     owningSideField: string;
+    associatedEntityQueryConfig: {
+        label: string,
+        name: keyof IE,
+        formField: FormFieldConfig<IE>
+    }[]
 }
 
 const GenericAssignmentManager = <
@@ -32,6 +39,7 @@ const GenericAssignmentManager = <
     associatedEntityColumns,
     associatedSideField,
     owningSideField,
+    associatedEntityQueryConfig,
 
 }: GenericAssignmentManagerProps<OE, IE>) => {
     // 
@@ -40,6 +48,8 @@ const GenericAssignmentManager = <
     const [availableItems, setAvailableItems] = useState<IE[]>([]);
     const [itemsToAllocate, setItemsToAllocate] = useState<IE[]>([]);
     const [itemsToDeallocate, setItemsToDeallocate] = useState<IE[]>([]);
+    const [allocatedItemsFilter, setAllocatedItemsFilter] = useState({});
+    const [availableItemsFilter, setAvailableItemsFilter] = useState({});
 
     const { translate } = useLocale();
 
@@ -105,21 +115,44 @@ const GenericAssignmentManager = <
         }
     };
 
-    useEffect(() => {
-
+    const handleFilter = (filter: { queryField: string, query: any }) => {
         if (tabKey === "allocatedItems") {
-            allocatedTableTableRef.current?.reload();
-        }
+            setAllocatedItemsFilter({ [filter.queryField]: filter.query });
+            allocatedTableTableRef.current?.setPageInfo?.({ current: 1, total: 0 })
+            allocatedTableTableRef.current?.reload?.()
+        };
 
         if (tabKey === "availableItems") {
+            setAvailableItemsFilter({ [filter.queryField]: filter.query });
+            availableTableRef.current?.setPageInfo?.({ current: 1, total: 0 })
+            availableTableRef.current?.reload?.()
+        }
+    }
+
+    const handleFilterReset = () => {
+        if (tabKey === "allocatedItems") {
+            setAllocatedItemsFilter({});
+            allocatedTableTableRef.current?.setPageInfo?.({ current: 1, total: 0 })
+            allocatedTableTableRef.current?.reload?.()
+        };
+
+        if (tabKey === "availableItems") {
+            setAvailableItemsFilter({});
+            availableTableRef.current?.setPageInfo?.({ current: 1, total: 0 })
+            availableTableRef.current?.reload?.()
+        }
+    }
+
+    useEffect(() => {
+        // Wait for a short delay after tab change to ensure the content is rendered
+        const timeout = setTimeout(() => {
+            allocatedTableTableRef.current?.reload();
             availableTableRef.current?.reload();
-        };
+        }, 10); // Adjust the delay as needed
 
-        return () => {
+        return () => clearTimeout(timeout);
+    }, [tabKey]);
 
-        };
-
-    }, [tabKey])
 
     return (
         <Tabs
@@ -131,21 +164,12 @@ const GenericAssignmentManager = <
                     key: "allocatedItems",
                     label: `${translate("allocated")} ${associatedEntity}s`,
                     children:
-                        <ProTable<IE>
-                            rowKey={"id"}
-                            bordered
+                        <DataTable<IE>
+                            id="allocated-items-table"
+                            key={"allocated-items-table"}
                             actionRef={allocatedTableTableRef}
-                            size="large"
                             dataSource={allocatedItems}
                             columns={tableColumns}
-                            search={false}
-                            options={{ density: false, fullScreen: false, reload: false, setting: false, search: false }}
-                            tableAlertRender={false}
-                            style={{
-                                width: "100%",
-                                height: "100%",
-                            }}
-                            // data fetch
                             request={async (params, sort, _filter) => {
                                 const { result, success } = await genricAssignmentService.relatedEntitiespage<PageData<IE>>({
                                     owningEntity,
@@ -157,7 +181,8 @@ const GenericAssignmentManager = <
                                         limit: params?.pageSize ?? 10,
                                         page: params?.current ?? 1
                                     },
-                                    sort
+                                    sort,
+                                    filters: allocatedItemsFilter
                                 })
 
                                 return {
@@ -166,22 +191,8 @@ const GenericAssignmentManager = <
                                     total: result?.totalResults
                                 }
                             }}
-                            // set data came form request to state
                             postData={(data: IE[]) => {
                                 setAllocatedItems(_prev => [...data])
-                            }}
-                            // pagination configuration
-                            pagination={{
-                                showSizeChanger: true,
-                                pageSizeOptions: [5, 10, 20, 25, 50],
-                                defaultPageSize: 10,
-                                responsive: true,
-                                size: "small",
-                            }}
-                            scroll={{
-                                scrollToFirstRowOnChange: true,
-                                x: 800,
-                                y: 300,
                             }}
                             rowSelection={{
                                 preserveSelectedRowKeys: true,
@@ -193,8 +204,11 @@ const GenericAssignmentManager = <
                             onRow={(item) => ({
                                 onClick: () => handleAllocatedItemsCardClick(item),
                             })}
-                            showSorterTooltip={false}
-                            // toolbar Render
+                            toolbar={{
+                                multipleLine: false,
+                                className: "genric-assignment-manager-pro-table-toolbar",
+                                filter: <Filter<IE> filterConfig={associatedEntityQueryConfig} onFilter={handleFilter} onReset={handleFilterReset} />
+                            }}
                             toolBarRender={(action, rows) => [
                                 <DeallocateMany
                                     actionRef={action}
@@ -203,28 +217,19 @@ const GenericAssignmentManager = <
                                     inverseField={associatedSideField}
                                     inverseIdsToDisassociate={rows.selectedRowKeys ? rows.selectedRowKeys.filter((id) => Number.isInteger(id)).map(Number) : []}
                                 />,
-                                <Button onClick={() => action?.clearSelected?.()}>Clear Selection</Button>
+                                <Button type="primary" style={{ backgroundColor: "#722ed1", borderColor: "#722ed1" }} onClick={() => action?.clearSelected?.()} icon={<ClearOutlined />}>Clear Selected</Button>
                             ]}
                         />
                 },
                 {
                     key: "availableItems",
                     label: `${translate("available")} ${associatedEntity}s`,
-                    children: <ProTable<IE>
-                        rowKey={"id"}
-                        bordered
+                    children: <DataTable<IE>
+                        id="available-items-table"
+                        key={"available-items-table"}
                         actionRef={availableTableRef}
-                        size="large"
-                        className="availableItems"
                         dataSource={availableItems}
                         columns={tableColumns}
-                        search={false}
-                        options={{ density: false, fullScreen: false, reload: false, setting: false, search: false }}
-                        style={{
-                            width: "100%",
-                            height: "100%",
-                        }}
-                        // data fetch
                         request={async (params, sort, _filter) => {
                             const { result, success } = await genricAssignmentService.relatedEntitiespage<PageData<IE>>({
                                 owningEntity,
@@ -237,6 +242,7 @@ const GenericAssignmentManager = <
                                     page: params?.current ?? 1
                                 },
                                 sort,
+                                filters: availableItemsFilter,
                                 type: "unallocated"
                             })
 
@@ -246,23 +252,8 @@ const GenericAssignmentManager = <
                                 total: result?.totalResults
                             }
                         }}
-                        // set data came form request to state
                         postData={(data: IE[]) => {
                             setAvailableItems(_prev => [...data])
-                        }}
-                        // pagination configuration
-                        pagination={{
-                            showSizeChanger: true,
-                            pageSizeOptions: [5, 10, 20, 25, 50],
-                            defaultPageSize: 10,
-                            responsive: true,
-                            size: "small",
-                        }}
-                        tableAlertRender={false}
-                        scroll={{
-                            scrollToFirstRowOnChange: true,
-                            x: 800,
-                            y: 300,
                         }}
                         rowSelection={{
                             preserveSelectedRowKeys: true,
@@ -279,7 +270,11 @@ const GenericAssignmentManager = <
                         onRow={(item) => ({
                             onClick: () => handleAvailableItemsCardClick(item),
                         })}
-                        showSorterTooltip={false}
+                        toolbar={{
+                            multipleLine: false,
+                            className: "genric-assignment-manager-pro-table-toolbar",
+                            filter: <Filter<IE> filterConfig={associatedEntityQueryConfig} onFilter={handleFilter} onReset={handleFilterReset} />
+                        }}
                         toolBarRender={(action, rows) => [
                             <AllocateMany
                                 actionRef={action}
@@ -288,13 +283,13 @@ const GenericAssignmentManager = <
                                 inverseField={associatedSideField}
                                 inverseIdsToAssociate={rows.selectedRowKeys ? rows.selectedRowKeys.filter((id) => Number.isInteger(id)).map(Number) : []}
                             />,
-                            <Button onClick={() => action?.clearSelected?.()}>Clear Selection</Button>
+                            <Button type="primary" style={{ backgroundColor: "#722ed1", borderColor: "#722ed1" }} onClick={() => action?.clearSelected?.()} icon={<ClearOutlined />}>Clear Selected</Button>
                         ]}
                     />
                 }
             ]}
         >
-        </Tabs>
+        </Tabs >
     );
 };
 

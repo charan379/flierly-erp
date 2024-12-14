@@ -18,6 +18,11 @@ const AllocateMany: React.FC<AllocateManyProps> = (props) => {
 
     const [isLoding, setIsLoading] = useState(false);
 
+    const buttonStyle =
+        props.inverseIdsToAssociate.length <= 0
+            ? {}
+            : { backgroundColor: "#009688", borderColor: "#009688" };
+
     const handleAllocateMany: React.MouseEventHandler = async (event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -44,6 +49,7 @@ const AllocateMany: React.FC<AllocateManyProps> = (props) => {
             loading={isLoding}
             disabled={isLoding || inverseIdsToAssociate.length <= 0}
             icon={<PlusOutlined />}
+            style={buttonStyle}
             type='primary'
         >
             Allocate Selected ({inverseIdsToAssociate.length})

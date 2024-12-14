@@ -220,6 +220,26 @@ h6 {
   border-radius: 0px 0px 5px 5px;
 }
 
+.genric-assignment-manager-pro-table-toolbar .ant-pro-table-list-toolbar-right .ant-pro-table-list-toolbar-filter {
+  margin-inline-end: 0px !important;
+}
+
+#genric-assignment-manager-query-from .ant-form-item {
+  margin-bottom: 0;
+}
+
+#genric-assignment-manager-query-from #from-fields div:nth-child(1) > .ant-form-item * {
+  border-top-right-radius: 0px ;
+  border-bottom-right-radius: 0px ;
+  height: unset;
+}
+
+#genric-assignment-manager-query-from #from-fields div:nth-child(2) > .ant-form-item * {
+  border-top-left-radius: 0px ;
+  border-bottom-left-radius: 0px ;
+  height: unset;
+}
+
 @media only screen and (max-width: 576px) {
   .crud-data-table-flierly-1 .ant-pagination .ant-pagination-options {
     display: block;
