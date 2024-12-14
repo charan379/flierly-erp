@@ -2,7 +2,6 @@ import { Layout } from "antd";
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
 import useLocale from "@/features/Locale/hooks/useLocale";
-import Sidebar from "./Sidebar";
 
 const { Content } = Layout;
 
@@ -10,15 +9,13 @@ const Dashboard: React.FC = () => {
   const { langDirection } = useLocale();
 
   return (
-    <Layout>
+    <Layout id="dashboard">
       <Header />
       <Layout
-        hasSider
         style={{
           flexDirection: langDirection === "rtl" ? "row-reverse" : "row",
         }}
       >
-        <Sidebar />
         <Content
           style={{
             width: "100%",

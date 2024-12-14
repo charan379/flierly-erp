@@ -12,10 +12,10 @@ import {
 import UserDetails from "../UserDetails/UserDetails";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 
-const DropdownMenu: React.FC = () => {
+const ProfileDropdown: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
 
-  const handleOpenChange: DropDownProps["onOpenChange"] = (open: boolean, info: {source: "trigger" | "menu";}) => {
+  const handleOpenChange: DropDownProps["onOpenChange"] = (open: boolean, info: { source: "trigger" | "menu"; }) => {
     if (open && info.source === "trigger") {
       setOpen(true);
     } else {
@@ -51,7 +51,7 @@ const DropdownMenu: React.FC = () => {
     {
       icon: <ReloadOutlined spin={loading === "refreshing"} />,
       key: "refresh-authentication",
-      label:translate("refresh_auth"),
+      label: translate("refresh_auth"),
       onClick: () => refresh(),
     },
     {
@@ -72,6 +72,7 @@ const DropdownMenu: React.FC = () => {
       open={open}
       placement="bottomLeft"
       overlayStyle={{ width: "max-content" }}
+      destroyPopupOnHide={true}
     >
       <Badge>
         <UserAvatar />
@@ -80,4 +81,4 @@ const DropdownMenu: React.FC = () => {
   );
 };
 
-export default DropdownMenu;
+export default ProfileDropdown;

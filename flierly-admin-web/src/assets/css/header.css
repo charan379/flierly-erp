@@ -29,6 +29,7 @@
 
 .user-details {
   display: flex;
+  align-items: center;
   min-width: 200px;
 }
 .user-info {

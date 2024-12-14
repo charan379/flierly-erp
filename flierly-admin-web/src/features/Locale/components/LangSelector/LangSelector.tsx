@@ -27,7 +27,7 @@ const LangSelector: React.FC = () => {
                 cursor: 'pointer',
                 direction: 'ltr',
             }}
-            size="large"
+            size="middle"
         />
     );
 };

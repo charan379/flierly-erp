@@ -1,27 +1,31 @@
 import React from "react";
-import { Avatar } from "antd";
+import { Avatar, AvatarProps } from "antd";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
+import { UserOutlined } from "@ant-design/icons";
 
+interface UserAvatarProps {
+  size?: AvatarProps["size"];
+  shape?: AvatarProps["shape"];
+}
 /**
  * UserAvatar component to display the user's avatar or initials.
  *
  */
-const UserAvatar: React.FC = () => {
+const UserAvatar: React.FC<UserAvatarProps> = (props) => {
   const { user } = useAuth();
 
   return (
     <Avatar
-      size="large"
-      shape="circle"
+      size={props?.size ?? "default"}
+      shape={props?.shape ?? "circle"}
       src={user?.email || undefined}
       style={{
         color: "#f56a00",
-        boxShadow: "rgba(150, 190, 238, 0.35) 0px 0px 10px 2px",
         backgroundColor: "#fde3cf",
-        float: "right",
         cursor: "pointer",
-        fontSize: "18px",
+        fontSize: "22px",
       }}
+      icon={<UserOutlined />}
     >
       {user?.username?.[0]?.toUpperCase()}
     </Avatar>

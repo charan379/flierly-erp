@@ -39,6 +39,9 @@ const AntdConfigProvider: React.FC<Props> = React.memo(({ children }) => {
             darkItemBg: "inherit",
             darkPopupBg: "var(--bg-color-secondary-flierly)",
           },
+          Dropdown: {
+            colorBgElevated: "var(--popup-bg-color)"
+          }
         },
       }}
     >

@@ -23,7 +23,7 @@ const ThemeToggler: React.FC<ThemeTogglerProps> = ({ functional = true }) => {
     <Button
       type="default"
       shape="circle"
-      size="large"
+      size="middle"
       icon={themeIcon()}
       onClick={() => {
         if (!functional) return;

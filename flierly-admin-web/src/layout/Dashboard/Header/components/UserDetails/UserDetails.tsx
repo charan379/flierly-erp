@@ -9,7 +9,7 @@ const UserDetails: React.FC = () => {
 
   return (
     <div className="user-details" onClick={() => navigate("/profile")}>
-      <UserAvatar />
+      <UserAvatar size="large" shape="circle" />
       <div className="user-info">
         <p>{user?.username}</p>
         <p>{user?.email}</p>

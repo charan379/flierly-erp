@@ -1,4 +1,4 @@
-import "./App.css";
+// import "./App.css";
 import "@/assets/css/app.css"
 import AppRouter from "./router/AppRouter";
 
