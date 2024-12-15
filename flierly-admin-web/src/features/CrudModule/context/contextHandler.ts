@@ -3,14 +3,14 @@ import { Dispatch } from "react";
 import { Action } from "./reducer";
 
 /**
- * Creates a handler for managing CRUD table state and dispatcher actions.
+ * Creates a handler for managing CRUD module state and dispatcher actions.
  * Provides utility methods for interacting with various aspects of the state.
  *
  * @param state - Current state of the CRUD table.
  * @param dispatcher - Function to dispatch actions to the reducer.
  * @returns Object containing utility methods for state management.
  */
-const contextHandler = (state: CrudTableState, dispatcher: Dispatch<Action>) => ({
+const contextHandler = (state: CrudModuleState, dispatcher: Dispatch<Action>) => ({
     /** Resets the state to its initial value */
     reset: () => dispatcher({ type: ActionTypes.RESET_STATE }),
 

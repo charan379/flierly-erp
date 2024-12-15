@@ -10,8 +10,8 @@ import Restore from "./features/Restore";
 import Clear from "./features/Clear";
 import BinModeToggle from "./features/BinModeToggle";
 import Update from "./forms/Update";
-import useCrudTableContext from "./hooks/useCrudTableContext/useCrudTableContext";
-import crudService from "./service/crudService";
+import useCrudModuleContext from "../CrudModule/hooks/useCrudModuleContext";
+import crudService from "../CrudModule/service/crudService";
 import Search from "./forms/Search";
 import { FormFieldConfig } from "@/components/FormField";
 import { QueryFieldConfig } from "../QueryBuilder/QueryBuilder";
@@ -72,18 +72,18 @@ const CrudTable = <T extends Record<string, any>>({
 
   const [data, setData] = useState<T[]>(dataSource);
 
-  const { crudTableContextHandler } = useCrudTableContext();
+  const { CrudModuleContextHandler } = useCrudModuleContext();
 
   const actionRef = useRef<ActionType>();
 
   const handleRowContextMenu = (record: T, event: React.MouseEvent) => {
     event.preventDefault(); // Prevent default context menu
-    crudTableContextHandler.rowMenu.setCurrentRecord(record);
-    crudTableContextHandler.rowMenu.setPosition({
+    CrudModuleContextHandler.rowMenu.setCurrentRecord(record);
+    CrudModuleContextHandler.rowMenu.setPosition({
       x: event.clientX,
       y: event.clientY,
     });
-    crudTableContextHandler.rowMenu.open();
+    CrudModuleContextHandler.rowMenu.open();
   };
 
   return (
@@ -147,10 +147,10 @@ const CrudTable = <T extends Record<string, any>>({
       request={async (params, sort) => {
         const { result, success } = await crudService.page<PageData<T>>({
           entity,
-          filters: crudTableContextHandler.filters.get(),
+          filters: CrudModuleContextHandler.filters.get(),
           pagination: { limit: params?.pageSize ?? 10, page: params?.current ?? 1 },
           sort: sort,
-          binMode: crudTableContextHandler.binMode.isActive(),
+          binMode: CrudModuleContextHandler.binMode.isActive(),
         });
 
         return {
@@ -188,13 +188,13 @@ const CrudTable = <T extends Record<string, any>>({
         <Update<T>
           entity={entity}
           formFields={updateFormFields}
-          data={crudTableContextHandler.updateForm.getData()}
-          id={crudTableContextHandler.updateForm.getId()}
-          isOpen={crudTableContextHandler.updateForm.isOpen()}
+          data={CrudModuleContextHandler.updateForm.getData()}
+          id={CrudModuleContextHandler.updateForm.getId()}
+          isOpen={CrudModuleContextHandler.updateForm.isOpen()}
           title={translate("update_form")}
           render={render.update}
           actions={action}
-          close={() => crudTableContextHandler.updateForm.close()}
+          close={() => CrudModuleContextHandler.updateForm.close()}
         />,
         <div></div>,
         <Restore
@@ -239,10 +239,10 @@ const CrudTable = <T extends Record<string, any>>({
                 <BinModeToggle
                   render={render.bin}
                   actions={actionRef.current}
-                  isActive={crudTableContextHandler.binMode.isActive()}
-                  activate={() => crudTableContextHandler.binMode.activate()}
+                  isActive={CrudModuleContextHandler.binMode.isActive()}
+                  activate={() => CrudModuleContextHandler.binMode.activate()}
                   deactivate={() =>
-                    crudTableContextHandler.binMode.deactivate()
+                    CrudModuleContextHandler.binMode.deactivate()
                   }
                 />
               ),
@@ -258,10 +258,10 @@ const CrudTable = <T extends Record<string, any>>({
           entity={entity}
           recordTitleKey={rowTitleKey as string}
           actions={actionRef.current}
-          record={crudTableContextHandler.rowMenu.getCurrentRecord()}
-          open={crudTableContextHandler.rowMenu.isOpen()}
-          position={crudTableContextHandler.rowMenu.getPosition()}
-          close={() => crudTableContextHandler.rowMenu.close()}
+          record={CrudModuleContextHandler.rowMenu.getCurrentRecord()}
+          open={CrudModuleContextHandler.rowMenu.isOpen()}
+          position={CrudModuleContextHandler.rowMenu.getPosition()}
+          close={() => CrudModuleContextHandler.rowMenu.close()}
         />
       )}
     />

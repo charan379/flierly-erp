@@ -6,7 +6,7 @@ import {
   StopOutlined,
 } from "@ant-design/icons";
 import { Badge, Button, message, Popconfirm, Tooltip } from "antd";
-import crudService from "../../service/crudService";
+import crudService from "../../../CrudModule/service/crudService";
 import { ActionType } from "@ant-design/pro-components";
 
 type ActivateProps = {

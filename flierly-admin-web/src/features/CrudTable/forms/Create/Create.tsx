@@ -2,7 +2,7 @@ import { Button, Form, Tooltip } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { ActionType, DrawerForm } from "@ant-design/pro-components";
 import useLocale from "@/features/Locale/hooks/useLocale";
-import crudService from "../../service/crudService";
+import crudService from "../../../CrudModule/service/crudService";
 import FormField, { FormFieldConfig } from "@/components/FormField";
 import { useState } from "react";
 

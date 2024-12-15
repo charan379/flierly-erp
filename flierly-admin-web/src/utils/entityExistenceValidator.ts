@@ -1,4 +1,4 @@
-import crudService from "@/features/CrudTable/service/crudService";
+import crudService from "@/features/CrudModule/service/crudService";
 import debouncePromise from "./debouncePromise";
 import { translate } from "@/features/Locale/service/localeStateService";
 

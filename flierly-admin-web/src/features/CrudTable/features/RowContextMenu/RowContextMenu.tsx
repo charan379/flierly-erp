@@ -14,8 +14,8 @@ import useTheme from "@/features/Theme/hooks/useTheme";
 import useLocale from "@/features/Locale/hooks/useLocale";
 import useEscapeKey from "@/hooks/useEscapeKey";
 import Loading from "@/components/Loading";
-import useCrudTableContext from "../../hooks/useCrudTableContext/useCrudTableContext";
-import crudService from "../../service/crudService";
+import useCrudModuleContext from "../../../CrudModule/hooks/useCrudModuleContext";
+import crudService from "../../../CrudModule/service/crudService";
 import useOnOutsideClick from "@/hooks/useOnOutsideClick";
 import { ActionType } from "@ant-design/pro-components";
 
@@ -49,7 +49,7 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({
   const [countdown, setCountdown] = useState<number>(120); // Start with 120 seconds
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const { crudTableContextHandler } = useCrudTableContext();
+  const { CrudModuleContextHandler } = useCrudModuleContext();
 
   const menuItemStyle = { fontSize: "12px" };
 
@@ -69,17 +69,17 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({
       },
       record?.isActive
         ? {
-            label: translate("inactivate"),
-            key: "inactivate",
-            icon: <StopOutlined style={menuItemStyle} />,
-            style: { color: "#9E9E9E", ...menuItemStyle },
-          }
+          label: translate("inactivate"),
+          key: "inactivate",
+          icon: <StopOutlined style={menuItemStyle} />,
+          style: { color: "#9E9E9E", ...menuItemStyle },
+        }
         : {
-            label: translate("activate"),
-            key: "activate",
-            icon: <CheckCircleOutlined style={menuItemStyle} />,
-            style: { color: "#4CAF50", ...menuItemStyle },
-          },
+          label: translate("activate"),
+          key: "activate",
+          icon: <CheckCircleOutlined style={menuItemStyle} />,
+          style: { color: "#4CAF50", ...menuItemStyle },
+        },
       {
         label: translate("delete"),
         key: "delete",
@@ -120,7 +120,7 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({
           });
           break;
         case "edit":
-          crudTableContextHandler.updateForm.open({ data: record, id: record?.id });
+          CrudModuleContextHandler.updateForm.open({ data: record, id: record?.id });
           close();
           break;
         case "delete":

@@ -5,7 +5,7 @@ import React from "react";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ActionType } from "@ant-design/pro-components";
-import crudService from "../../service/crudService";
+import crudService from "../../../CrudModule/service/crudService";
 
 type DeleteProps = {
   entity: string; // Name of the entity to be deleted

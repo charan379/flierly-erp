@@ -22,7 +22,7 @@ const crudService = {
         filters = {},
         sort = {},
         signal,
-    }: PageProps) => {
+    }: EntitiesPageRequest) => {
         const promise = api.post<ApiResponse<T>>(
             `/${entity}/page`,
             { filters, pagination, sort, binMode },
@@ -34,7 +34,7 @@ const crudService = {
     /**
      * Create a new entity
      */
-    create: async <T>({ entity, data, signal }: CreateProps<T>) => {
+    create: async <T>({ entity, data, signal }: CreateEntityRequest<T>) => {
         const promise = api.post(`/${entity}/create`, data, { signal });
         return handleResponse<T>({ promise, notifyOnSuccess: true });
     },
@@ -42,7 +42,7 @@ const crudService = {
     /**
      * Update an existing entity
      */
-    update: async <T>({ entity, id, data, signal }: UpdateProps<T>) => {
+    update: async <T>({ entity, id, data, signal }: UpdateEntityRequest<T>) => {
         const promise = api.put(`/${entity}/update/${id}`, data, { signal });
         return handleResponse<T>({ promise, notifyOnSuccess: true });
     },
@@ -50,7 +50,7 @@ const crudService = {
     /**
      * Check if an entity exists
      */
-    exists: async ({ entity, filters = {}, signal }: ExistsProps) => {
+    exists: async ({ entity, filters = {}, signal }: EntityRecordExistsRequest) => {
         const promise = api.post(
             `/${entity}/exists`,
             { filters, withDeleted: true },
@@ -62,7 +62,7 @@ const crudService = {
     /**
      * Soft delete entities
      */
-    delete: async ({ entity, ids = [], signal }: DeleteProps) => {
+    delete: async ({ entity, ids = [], signal }: EntityRecordsDeleteRequest) => {
         const promise = api.delete(`/${entity}/delete`, {
             data: ids,
             signal,
@@ -73,7 +73,7 @@ const crudService = {
     /**
      * Activate entities
      */
-    activate: async ({ entity, ids = [], signal }: ActivateProps) => {
+    activate: async ({ entity, ids = [], signal }: EntityRecordsActivateRequest) => {
         const promise = api.patch(`/${entity}/activate`, ids, { signal });
         return handleResponse({ promise, notifyOnSuccess: true });
     },
@@ -81,7 +81,7 @@ const crudService = {
     /**
      * Inactivate entities
      */
-    inactivate: async ({ entity, ids = [], signal }: InactivateProps) => {
+    inactivate: async ({ entity, ids = [], signal }: EntityRecordsInactivateRequest) => {
         const promise = api.patch(`/${entity}/inactivate`, ids, { signal });
         return handleResponse({ promise, notifyOnSuccess: true });
     },
@@ -89,7 +89,7 @@ const crudService = {
     /**
      * Restore entities
      */
-    restore: async ({ entity, ids = [], signal }: RestoreProps) => {
+    restore: async ({ entity, ids = [], signal }: EntityRecordsRestoreRequest) => {
         const promise = api.patch(`/${entity}/restore`, ids, { signal });
         return handleResponse({ promise, notifyOnSuccess: true });
     },

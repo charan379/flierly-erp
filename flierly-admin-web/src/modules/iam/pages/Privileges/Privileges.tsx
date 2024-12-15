@@ -1,25 +1,20 @@
 import CrudTable from "@/features/CrudTable";
-import CrudTableContextProvider from "@/features/CrudTable/context/CrudTableContextProvider";
-import DefaultModuleLayout from "@/layout/DefaultModuleLayout";
+import CrudModuleContextProvider from "@/features/CrudModule/context/CrudModuleContextProvider";
+import CrudModule from "@/features/CrudModule";
 import React from "react";
 import privilegeTableColumns from "../../config/privilege/tableColumns";
 import privilegeCreateFields from "../../config/privilege/createFormFields";
 import privilegeUpdateFields from "../../config/privilege/updateFormFields";
 import privilegeQueryFields from "../../config/privilege/queryFormFields";
-import { UserOutlined } from "@ant-design/icons";
-import { Button } from "antd";
 
 const Privileges: React.FC = () => {
   return (
-    <DefaultModuleLayout
+    <CrudModule
       header
       title={"privileges"}
-      extra={[
-        <UserOutlined />,
-        <Button>Test</Button>
-      ]}
+      menuKeys={["iam"]}
     >
-      <CrudTableContextProvider>
+      <CrudModuleContextProvider>
         <CrudTable<Privilege>
           entity="privilege"
           columns={privilegeTableColumns}
@@ -51,8 +46,8 @@ const Privileges: React.FC = () => {
           updateFormFields={privilegeUpdateFields}
           queryFormFields={privilegeQueryFields}
         />
-      </CrudTableContextProvider>
-    </DefaultModuleLayout>
+      </CrudModuleContextProvider>
+    </CrudModule>
   );
 };
 

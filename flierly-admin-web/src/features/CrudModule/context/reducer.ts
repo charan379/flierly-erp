@@ -1,7 +1,7 @@
 import { ActionTypes } from "./ActionTypes";
 
 // Initial state for the CRUD table context
-export const initialState: CrudTableState = {
+export const initialState: CrudModuleState = {
     rowMenu: {
         open: false,
         position: { x: 0, y: 0 },
@@ -31,7 +31,7 @@ export type Action =
     | { type: ActionTypes.UPDATE_ROW_MENU_POSITION; payload: { x: number; y: number } };
 
 // Reducer function to handle state updates based on dispatched actions
-export function reducer(state: CrudTableState, action: Action): CrudTableState {
+export function reducer(state: CrudModuleState, action: Action): CrudModuleState {
     switch (action.type) {
         // Reset the entire state to its initial values
         case ActionTypes.RESET_STATE:

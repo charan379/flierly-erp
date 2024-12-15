@@ -1,4 +1,4 @@
-type CrudTableState = {
+type CrudModuleState = {
   rowMenu: {
     open: boolean;
     position: { x: number; y: number };
@@ -13,8 +13,13 @@ type CrudTableState = {
   };
 }
 
+type CrudModuleContextType = {
+  state: CrudModuleState;
+  dispatcher?: React.Dispatch<Action>
+}
+
 // Props type for the page function
-type PageProps = {
+type EntitiesPageRequest = {
   entity: string;
   loadRelations?: [];
   binMode?: boolean;
@@ -28,7 +33,7 @@ type PageProps = {
 };
 
 // Props type for the page function
-type RelatedEntitiesPageProps = {
+type RelatedEntitiesPageRequest = {
   owningEntity: string,
   owningEntityId: number,
   inverseEntity: string,
@@ -46,14 +51,14 @@ type RelatedEntitiesPageProps = {
 
 
 // Props type for the create function
-type CreateProps<T = Record<string, any>> = {
+type CreateEntityRequest<T = Record<string, any>> = {
   entity: string;
   data: T;
   signal?: AbortSignal;
 };
 
 // Props type for the update function
-type UpdateProps<T = Record<string, any>> = {
+type UpdateEntityRequest<T = Record<string, any>> = {
   entity: string;
   id: string | number;
   data: T;
@@ -61,7 +66,7 @@ type UpdateProps<T = Record<string, any>> = {
 };
 
 // Props type for the update function
-type UpdateAssociatedRecordsProps<T = Record<string, any>> = {
+type UpdateAssociatedEntityRecordsRequest<T = Record<string, any>> = {
   owningEntity: string,
   owningEntityId: number;
   inverseField: string;
@@ -74,35 +79,35 @@ type UpdateAssociatedRecordsProps<T = Record<string, any>> = {
 };
 
 // Props type for the exists function
-type ExistsProps = {
+type EntityRecordExistsRequest = {
   entity: string;
   filters?: Record<string, any>;
   signal?: AbortSignal;
 };
 
 // Props type for the delete function
-type DeleteProps = {
+type EntityRecordsDeleteRequest = {
   entity: string;
   ids: number[];
   signal?: AbortSignal;
 };
 
 // Props type for the activate function
-type ActivateProps = {
+type EntityRecordsActivateRequest = {
   entity: string;
   ids: number[];
   signal?: AbortSignal;
 };
 
 // Props type for the inactivate function
-type InactivateProps = {
+type EntityRecordsInactivateRequest = {
   entity: string;
   ids: number[];
   signal?: AbortSignal;
 };
 
 // Props type for the restore function
-type RestoreProps = {
+type EntityRecordsRestoreRequest = {
   entity: string;
   ids: number[];
   signal?: AbortSignal;

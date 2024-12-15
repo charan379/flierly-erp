@@ -5,7 +5,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCanArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { ActionType } from "@ant-design/pro-components";
-import crudService from "../../service/crudService";
+import crudService from "../../../CrudModule/service/crudService";
 
 type RestoreProps = {
   entity: string; // Name of the entity to be restored

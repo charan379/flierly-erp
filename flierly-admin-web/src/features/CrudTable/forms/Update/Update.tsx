@@ -2,7 +2,7 @@ import { Button, Form, Tooltip } from "antd";
 import { EditFilled } from "@ant-design/icons";
 import { ActionType, DrawerForm } from "@ant-design/pro-components";
 import useLocale from "@/features/Locale/hooks/useLocale";
-import crudService from "../../service/crudService";
+import crudService from "../../../CrudModule/service/crudService";
 import FormField, { FormFieldConfig } from "@/components/FormField";
 
 // Define types for the component props

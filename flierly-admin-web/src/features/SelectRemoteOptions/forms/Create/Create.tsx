@@ -4,7 +4,7 @@ import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { PlusOutlined } from "@ant-design/icons";
 import { DrawerForm } from "@ant-design/pro-components";
 import { Button, Empty, Form } from "antd";
-import crudService from "@/features/CrudTable/service/crudService";
+import crudService from "@/features/CrudModule/service/crudService";
 
 interface CreateProps {
     entity: string;
