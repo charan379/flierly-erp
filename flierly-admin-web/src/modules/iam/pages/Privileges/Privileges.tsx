@@ -6,11 +6,19 @@ import privilegeTableColumns from "../../config/privilege/tableColumns";
 import privilegeCreateFields from "../../config/privilege/createFormFields";
 import privilegeUpdateFields from "../../config/privilege/updateFormFields";
 import privilegeQueryFields from "../../config/privilege/queryFormFields";
-
+import { UserOutlined } from "@ant-design/icons";
+import { Button } from "antd";
 
 const Privileges: React.FC = () => {
   return (
-    <DefaultModuleLayout>
+    <DefaultModuleLayout
+      header
+      title={"privileges"}
+      extra={[
+        <UserOutlined />,
+        <Button>Test</Button>
+      ]}
+    >
       <CrudTableContextProvider>
         <CrudTable<Privilege>
           entity="privilege"

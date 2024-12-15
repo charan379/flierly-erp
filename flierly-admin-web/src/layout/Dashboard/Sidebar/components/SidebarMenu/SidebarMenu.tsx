@@ -21,7 +21,7 @@ const SidebarMenu: React.FC = () => {
         height: "78dvh",
         paddingBottom: "30px",
         paddingTop: "10px",
-        background: "inherit",
+        background: "red",
         textAlign: 'start',
       }}
     />

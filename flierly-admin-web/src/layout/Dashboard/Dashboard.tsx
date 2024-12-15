@@ -17,7 +17,7 @@ const Dashboard: React.FC = () => {
       <Content
         style={{
           width: "100%",
-          padding: "5px 2px 2px 5px",
+          padding: "0",
           height: "100%",
           margin: "0",
           display: "flex",

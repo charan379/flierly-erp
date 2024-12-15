@@ -6,7 +6,7 @@ import roleTableColumns from "../../config/role/tableColumns";
 
 const Roles: React.FC = () => {
     return (
-        <DefaultModuleLayout>
+        <DefaultModuleLayout header>
             <CrudTableContextProvider>
                 <CrudTable<Role>
                     entity="role"

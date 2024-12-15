@@ -1,28 +1,65 @@
 import React, { ReactNode, CSSProperties } from "react";
 import ErrorFallback from "@/components/ErrorFallback";
-import { Layout } from "antd";
+import { Layout, Menu, Typography } from "antd";
 import { ErrorBoundary } from "react-error-boundary";
+import getMenuItems from "../Dashboard/Navigation/utils/getMenuItems";
+import useTheme from "@/features/Theme/hooks/useTheme";
+import useLocale from "@/features/Locale/hooks/useLocale";
 
 const { Header, Content, Footer } = Layout;
 
 type DefaultModuleLayoutProps = {
-  header?: ReactNode;
+  header?: boolean;
+  title?: string | ReactNode,
+  extra?: ReactNode[],
   footer?: ReactNode;
   children: ReactNode;
 };
 
 /**
  * DefaultModuleLayout component to structure a layout with optional header, footer, and error boundary.
+ * footer wont be dispalyed in this layout
  */
 const DefaultModuleLayout: React.FC<DefaultModuleLayoutProps> = ({
   header,
   footer,
+  extra,
+  title,
   children,
 }) => {
+
+  const { theme } = useTheme();
+  const { translate } = useLocale();
+
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <Layout style={styles.layout}>
-        {header && <Header style={styles.header}>{header}</Header>}
+        {header &&
+          <Header style={styles.header}>
+            {typeof title === 'string' ? <Typography.Title level={4}>{translate(title)}</Typography.Title> : title}
+            <div style={{
+              display: "flex",
+              flexDirection: "row-reverse",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              gap: '10px'
+            }}>
+              <Menu
+                theme={theme}
+                className="no-scrollbar"
+                items={getMenuItems().filter(m => m.key === "iam")}
+                mode="horizontal"
+                selectable={false}
+                style={{
+                  maxHeight: 'inherit',
+                  backgroundColor: "inherit",
+                  border: "none"
+                }}
+              />
+              {extra}
+            </div>
+          </Header>
+        }
         <Content className="sb-thumb-md" style={styles.content}>
           {children}
         </Content>
@@ -38,16 +75,17 @@ const styles: Record<string, CSSProperties> = {
   layout: {
     height: "100%",
     width: "100%",
-    background: "var(--bg-color-primary-flierly) !important",
-    boxShadow: "var(--floating-section-box-shadow) !important",
-    borderRadius: "10px",
   },
   header: {
-    padding: "0px 15px",
-    background: "inherit",
-    borderTopLeftRadius: "inherit",
-    borderTopRightRadius: "inherit",
+    padding: "0px 5px",
+    display: "flex",
+    backgroundColor: "inherit",
+    justifyContent: "space-between",
+    alignItems: "center",
     width: "100%",
+    overflowX: "hidden",
+    overflowY: "hidden",
+    maxHeight: "40px",
   },
   content: {
     height: "100%",
@@ -55,13 +93,13 @@ const styles: Record<string, CSSProperties> = {
     flexDirection: "row",
     alignItems: "start",
     justifyContent: "center",
+    padding: "1px 5px",
     flexWrap: "wrap",
     overflow: "auto",
   },
   footer: {
-    background: "inherit",
-    padding: "5px 15px",
-    borderBottomLeftRadius: "inherit",
-    borderBottomRightRadius: "inherit",
+    width: "100%",
+    display: "none",
+    padding: "0px",
   },
 };
