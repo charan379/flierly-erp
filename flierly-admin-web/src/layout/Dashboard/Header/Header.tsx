@@ -39,7 +39,8 @@ const Header: React.FC = () => {
       style={{
         position: "relative",
         padding: "0px 20px 0px 0px",
-        background: "var(--dashboard-header-bg-color) !important",
+        background: "var(--dashboard-item-bg-color) !important",
+        color: "var(--dashboard-item-font-color) !important",
         display: "flex",
         alignItems: "center",
         flexDirection: "row",
@@ -47,7 +48,6 @@ const Header: React.FC = () => {
         gap: "10px",
         height: "40px",
         boxShadow: "var(--floating-section-box-shadow)",
-        marginBottom: "2px",
         overflow: "hidden"
       }}
     >
@@ -72,7 +72,7 @@ const Header: React.FC = () => {
           title={"Fliery ERP Web Portal"}
           styles={{
             body: { padding: 5 },
-            header: { maxHeight: "40px", backgroundColor: "var(--dashboard-header-bg-color)", color: "#fff" }
+            header: { maxHeight: "40px", backgroundColor: "var(--dashboard-item-bg-color)", color: "var(--dashboard-item-font-color)" }
           }}
           width={320}
           extra={

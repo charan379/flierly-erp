@@ -1,5 +1,6 @@
 const darkTheme = {
-  "--dashboard-header-bg-color": "#141414",
+  "--dashboard-item-bg-color": "#141414",
+  "--dashboard-item-font-color": "#fff",
   "--popup-bg-color": "#2b2b28",
   "--bg-color-primary-flierly": "#141414",
   "--bg-color-secondary-flierly": "#0b0905",

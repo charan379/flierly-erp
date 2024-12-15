@@ -1,5 +1,6 @@
 const lightTheme = {
-  "--dashboard-header-bg-color": "#0078d4",
+  "--dashboard-item-bg-color": "#0078d4",
+  "--dashboard-item-font-color": "#fff",
   "--popup-bg-color": "#ffffff",
   "--bg-color-primary-flierly": "#ffffff",
   "--bg-color-secondary-flierly": "#f4f6fa",

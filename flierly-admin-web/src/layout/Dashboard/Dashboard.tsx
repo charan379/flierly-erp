@@ -1,40 +1,56 @@
 import { Layout } from "antd";
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
-import useLocale from "@/features/Locale/hooks/useLocale";
 
-const { Content } = Layout;
+const { Content, Footer } = Layout;
 
 const Dashboard: React.FC = () => {
-  const { langDirection } = useLocale();
 
   return (
-    <Layout id="dashboard">
+    <Layout id="dashboard" style={{
+      width: '100%',
+      height: "100%"
+    }}
+
+    >
       <Header />
-      <Layout
+      <Content
         style={{
-          flexDirection: langDirection === "rtl" ? "row-reverse" : "row",
+          width: "100%",
+          padding: "5px 2px 2px 5px",
+          height: "100%",
+          margin: "0",
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          flexWrap: "wrap",
+          overflow: "scroll",
+          opacity: "1",
         }}
       >
-        <Content
-          style={{
-            width: "100%",
-            padding: "1px 2px 2px 5px",
-            height: "90dvh",
-            margin: "0",
-            borderRadius: "10px",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            flexWrap: "wrap",
-            overflow: "scroll",
-            opacity: "1",
-          }}
-        >
-          <Outlet />
-        </Content>
-      </Layout>
+        <Outlet />
+      </Content>
+      <Footer
+        id="dashboard-footer"
+        style={{
+          position: "relative",
+          padding: "1px 5px",
+          background: "var(--dashboard-item-bg-color) !important",
+          color: "var(--dashboard-item-font-color) !important",
+          display: "flex",
+          alignItems: "center",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          gap: "10px",
+          height: "15px",
+          overflow: "hidden",
+          fontSize: "0.5rem"
+        }}>
+        <div>App</div>
+        <div>Flierly ERP Web Portal</div>
+        <div>Version v0.01</div>
+      </Footer>
     </Layout>
   );
 };
