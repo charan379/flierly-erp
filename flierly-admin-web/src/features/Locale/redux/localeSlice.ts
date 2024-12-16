@@ -4,8 +4,8 @@ import statePersist from "@/redux/statePersist";
 
 // Initial state for the locale slice
 const INITIAL_STATE: LocaleState = {
-    translation: languages.te_in, // Default language is English (US)
-    langCode: "te_in", // Default language code
+    translation: languages.en_us, // Default language is English (US)
+    langCode: "en_us", // Default language code
     langDirection: "ltr", // Default language direction is left-to-right
 };
 
