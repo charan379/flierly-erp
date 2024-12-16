@@ -1,14 +1,18 @@
-import NotFound from "@/components/NotFound";
-import React from "react";
+import PageLoader from "@/components/PageLoader";
+import React, { Suspense } from "react";
 
+
+const NotFound = React.lazy(() => import("@/components/NotFound"));
 /**
  * PageNotFound component to render the 404 error page.
  * This serves as a simple wrapper for the NotFound component.
- *
- * @returns {JSX.Element} The rendered PageNotFound component.
  */
 const PageNotFound: React.FC = () => {
-  return <NotFound />; // Rendering the NotFound component
+  return (
+    <Suspense fallback={<PageLoader />}>
+      <NotFound />
+    </Suspense>
+  ); // Rendering the NotFound component
 };
 
 export default PageNotFound;
