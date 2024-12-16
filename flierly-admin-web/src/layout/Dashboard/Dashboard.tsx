@@ -1,14 +1,21 @@
-import { Layout, Modal, Typography } from "antd";
-import { Outlet } from "react-router-dom";
+import { Layout } from "antd";
+import { Outlet, useLocation } from "react-router-dom";
 import Header from "./Header";
+import ReAuthenticate from "@/modules/auth/features/ReAuthenticate";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
-import LoginForm from "@/modules/auth/forms/LoginForm";
 
 const { Content, Footer } = Layout;
 
 const Dashboard: React.FC = () => {
 
-  const { isExpired, error } = useAuth();
+  const { tokenExpiresAt } = useAuth();
+
+  const location = useLocation();
+
+  const callback = {
+    pathname: location.pathname,
+    search: location.search,
+  };
 
   return (
     <Layout id="dashboard" style={{
@@ -34,24 +41,10 @@ const Dashboard: React.FC = () => {
       >
         {/* outlet */}
         <Outlet />
-        {/* auth modal */}
-        <Modal
-          open={isExpired}
-          closable={false}
-          title={<Typography.Title level={4} type="danger" style={{ textAlign: "center" }}>{error?.message}</Typography.Title>}
-          footer={false}
-          styles={{
-            mask: {
-              backgroundColor: "rgb(0 0 0 / 75%)"
-            },
-            content: {
-              padding: "1px 16px"
-            }
-          }}
-        >
-          <LoginForm redirectOnLogin={false} />
-        </Modal>
-        {/*  */}
+        <ReAuthenticate
+          tokenExpiresAt={tokenExpiresAt}
+          onExpiryNavigateToURL={`/login?callback=${encodeURIComponent(JSON.stringify(callback))}`}
+        />
       </Content>
       <Footer
         id="dashboard-footer"

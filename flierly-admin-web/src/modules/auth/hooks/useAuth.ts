@@ -5,11 +5,8 @@ import authService from "../service/authService";
 import { LoadingTypes } from "../@types/loading";
 
 export function useAuth() {
-
     const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
-
     const auth = useTypedSelector((state) => state.auth);
-
     const dispatch = useDispatch<AppDispatch>();
 
     const controller = new AbortController();
@@ -23,6 +20,13 @@ export function useAuth() {
         return auth.allowedAccess.some((access) => requiredPermissionRegex.test(access));
     };
 
+    // Convert token expiration date to Date object
+    const tokenExpiresAtDateTime = new Date(auth.tokenExpiresAt);
+    const currentDateTime = new Date();
+
+    // Check if the token expiration date is in the past
+    const isTokenExpiryDatePast = tokenExpiresAtDateTime < currentDateTime;
+
     return {
         user: auth.user,
         token: auth.token,
@@ -33,6 +37,7 @@ export function useAuth() {
         error: auth.error,
         allowedAccess: auth.allowedAccess,
         isExpired: auth.isExpired,
+        isTokenExpiryDatePast,
         hasPermission,
         /**
          * Dispatch login action with credentials.
@@ -52,8 +57,8 @@ export function useAuth() {
                     tokenExpiresAt: response.result.tokenExpiresAt,
                     loading: LoadingTypes.IDLE,
                     isExpired: false,
-                }
-                dispatch(setAuth(authState))
+                };
+                dispatch(setAuth(authState));
             }
             dispatch(setLoading(LoadingTypes.SUCCEEDED));
         },
@@ -82,8 +87,8 @@ export function useAuth() {
                     tokenExpiresAt: response.result.tokenExpiresAt,
                     loading: LoadingTypes.IDLE,
                     isExpired: false,
-                }
-                dispatch(setAuth(authState))
+                };
+                dispatch(setAuth(authState));
             }
             dispatch(setLoading(LoadingTypes.SUCCEEDED));
         },

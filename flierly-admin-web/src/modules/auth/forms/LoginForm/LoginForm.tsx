@@ -13,9 +13,10 @@ import { LoadingTypes } from "../../@types/loading";
 
 interface LoginFormProps {
   redirectOnLogin?: boolean;
+  isForPopup?: boolean;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false, isForPopup = false }) => {
   const { translate, langDirection } = useLocale();
   const { loading, login, isLoggedIn, tokenExpiresAt } = useAuth();
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false }) => {
   const isTokenExpired = tokenExpiresAtDateTime < currentDateTime;
 
   useEffect(() => {
-    if (redirectOnLogin && loading === LoadingTypes.SUCCEEDED && isLoggedIn && !isTokenExpired) {
+    if (redirectOnLogin && !isForPopup && loading === LoadingTypes.SUCCEEDED && isLoggedIn && !isTokenExpired) {
       const targetPath = callback?.pathname ? { pathname: callback.pathname, search: callback.search } : "/erp";
       navigate(targetPath, { replace: true }
       );
@@ -37,7 +38,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false }) => {
 
     return () => {
     }
-  }, [isLoggedIn, loading, navigate, redirectOnLogin, callback, isTokenExpired]);
+  }, [isLoggedIn, loading, navigate, redirectOnLogin, isForPopup, callback, isTokenExpired]);
 
   return (
     <Loading isLoading={loading === LoadingTypes.PENDING}>
@@ -87,16 +88,20 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false }) => {
             />
           </Form.Item>
 
-          <Flex justify="space-between">
-            <Form.Item name="remember" valuePropName="checked" noStyle>
-              <Checkbox>{translate("remember_me")}</Checkbox>
-            </Form.Item>
-            <a id="login-form-forgot" href="/forgetpassword" style={{
-              marginLeft: langDirection === "rtl" ? "220px" : undefined,
-            }}>
-              {translate("forgot_password")}
-            </a>
-          </Flex>
+          {!isForPopup
+            ?
+            <Flex justify="space-between">
+              <Form.Item name="remember" valuePropName="checked" noStyle>
+                <Checkbox>{translate("remember_me")}</Checkbox>
+              </Form.Item>
+              <a id="login-form-forgot" href="/forgetpassword" style={{
+                marginLeft: langDirection === "rtl" ? "220px" : undefined,
+              }}>
+                {translate("forgot_password")}
+              </a>
+            </Flex>
+            : null
+          }
         </div>
 
         <Form.Item style={{ margin: "5px 0px 5px 0px" }}>
@@ -109,7 +114,11 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false }) => {
           >
             {translate("sign_in")}
           </Button>
-          {translate("or")} <a href="/register">{translate("register_now")}</a>
+
+          {!isForPopup
+            ? <>{translate("or")} <a href="/register">{translate("register_now")}</a></>
+            : null
+          }
         </Form.Item>
       </Form>
     </Loading>
