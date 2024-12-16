@@ -90,7 +90,7 @@ const styles: Record<string, CSSProperties> = {
     width: "100%",
   },
   header: {
-    padding: "0px 5px",
+    padding: "0px 10px",
     display: "flex",
     backgroundColor: "inherit",
     justifyContent: "space-between",
