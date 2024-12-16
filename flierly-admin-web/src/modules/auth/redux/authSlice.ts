@@ -11,6 +11,7 @@ const INITIAL_STATE: AuthState = {
   tokenExpiresAt: "",
   isLoggedIn: false,
   loading: LoadingTypes.IDLE,
+  isExpired: false,
   error: null,
 };
 
@@ -41,12 +42,18 @@ const authSlice = createSlice({
       Object.assign(state, INITIAL_STATE); // Reset state to initial values
       clearAuthFromLocalStorage();
     },
-    setLoading:(state, action: PayloadAction<LoadingTypes>) => {
+    setExpiredTrue: (state, action: PayloadAction<ErrorDetails>) => {
+      state.isExpired = true;
+      state.error = action.payload;
+      state.loading = LoadingTypes.IDLE;
+      saveAuthToLocalStorage(state);
+    },
+    setLoading: (state, action: PayloadAction<LoadingTypes>) => {
       state.loading = action.payload;
-      saveAuthToLocalStorage(state);      
+      saveAuthToLocalStorage(state);
     }
   },
 });
 
-export const { logout, setAuth, setLoading } = authSlice.actions;
+export const { logout, setAuth, setLoading, setExpiredTrue } = authSlice.actions;
 export const authReducer = authSlice.reducer;

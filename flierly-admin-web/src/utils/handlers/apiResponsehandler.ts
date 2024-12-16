@@ -53,7 +53,6 @@ const showErrorNotification = (
  * Handle specific errors like offline, no response, JWT expiration, and abort errors.
  */
 const handleSpecificErrors = <T>(error: AxiosError<ApiResponse<T>>): ErrorDetails => {
-
     if (!navigator.onLine) {
         return {
             name: "NetworkError",
@@ -92,15 +91,19 @@ const handleSpecificErrors = <T>(error: AxiosError<ApiResponse<T>>): ErrorDetail
 
     if (error.response?.status === 401) {
         const isTokenExpired = error.response.data?.error?.reason === "Token Expired Re-authenticate"; // Custom server-side error flag
-        if (isTokenExpired) handleJwtExpiration();
-        return {
+
+        const errorDetails: ErrorDetails = {
             name: "UnauthorizedError",
             httpCode: 401,
             reason: isTokenExpired ? "JWT Expired" : "Unauthorized",
             message: isTokenExpired
                 ? "Your session has expired. Please log in again."
                 : "Unauthorized request.",
-        };
+        }
+
+        if (isTokenExpired) handleJwtExpiration(errorDetails);
+
+        return errorDetails;
     }
 
     return {
@@ -139,6 +142,7 @@ const handleResponse = async <T>({
             httpCode: status,
         };
     } catch (error) {
+        // if not an axios error
         if (!axios.isAxiosError(error)) {
 
             const errorDetails: ErrorDetails = {
@@ -164,6 +168,7 @@ const handleResponse = async <T>({
             };
         }
 
+        // if axios request cancelled
         if (axios.isCancel(error)) {
 
             const errorDetails: ErrorDetails = {
@@ -199,6 +204,10 @@ const handleResponse = async <T>({
 
         if (notifyOnFailed) {
             showErrorNotification(notifyType, httpCode, errorDetails.message);
+        }
+
+        if (httpCode == 401 && errorDetails.reason === "Token Expired Re-authenticate") {
+            handleJwtExpiration(errorDetails);
         }
 
         return {

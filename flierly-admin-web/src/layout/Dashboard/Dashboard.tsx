@@ -1,17 +1,20 @@
-import { Layout } from "antd";
+import { Layout, Modal, Typography } from "antd";
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
+import LoginForm from "@/modules/auth/forms/LoginForm";
 
 const { Content, Footer } = Layout;
 
 const Dashboard: React.FC = () => {
+
+  const { isExpired, error } = useAuth();
 
   return (
     <Layout id="dashboard" style={{
       width: '100%',
       height: "100%"
     }}
-
     >
       <Header />
       <Content
@@ -29,7 +32,26 @@ const Dashboard: React.FC = () => {
           opacity: "1",
         }}
       >
+        {/* outlet */}
         <Outlet />
+        {/* auth modal */}
+        <Modal
+          open={isExpired}
+          closable={false}
+          title={<Typography.Title level={4} type="danger" style={{ textAlign: "center" }}>{error?.message}</Typography.Title>}
+          footer={false}
+          styles={{
+            mask: {
+              backgroundColor: "rgb(0 0 0 / 75%)"
+            },
+            content: {
+              padding: "1px 16px"
+            }
+          }}
+        >
+          <LoginForm redirectOnLogin={false} />
+        </Modal>
+        {/*  */}
       </Content>
       <Footer
         id="dashboard-footer"

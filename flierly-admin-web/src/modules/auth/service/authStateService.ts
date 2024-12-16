@@ -33,6 +33,13 @@ export const getToken = (): string => {
  * Logs out the current user.
  */
 export const logout = (): void => {
-    store.dispatch({type: "auth/logout"});
+    store.dispatch({ type: "auth/logout" });
     console.log('Logged out successfully');
 };
+
+/**
+ * Sets the isExpired field to true.
+ */
+export const setExpiredTrue = (error: ErrorDetails): void => {
+    store.dispatch({ type: "auth/setExpiredTrue", payload: error });
+}

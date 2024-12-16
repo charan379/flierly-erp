@@ -1,19 +1,19 @@
-import { logout } from "@/modules/auth/service/authStateService";
+import { setExpiredTrue } from "@/modules/auth/service/authStateService";
 
 /**
  * Handles JWT expiration by logging the user out and redirecting to the login page.
  */
-function handleJwtExpiration(): void {
+function handleJwtExpiration(error: ErrorDetails): void {
   console.log("JWT expiration");
-  logout(); // dispatch the logout action
+  setExpiredTrue(error); // dispatch the setExpiredTrue action
   // Log the user out
-  const callback = {
-    pathname: window.location.pathname,  // Current page path
-    search: window.location.search,      // Current query parameters
-    url: window.location.href,           // Current full URL
-  };
+  // const callback = {
+  //   pathname: window.location.pathname,  // Current page path
+  //   search: window.location.search,      // Current query parameters
+  //   url: window.location.href,           // Current full URL
+  // };
   // Redirect to login page with the current URL as the callback
-  window.location.href = `/login?callback=${encodeURIComponent(JSON.stringify(callback))}`;
+  // window.location.href = `/login?callback=${encodeURIComponent(JSON.stringify(callback))}`;
 };
 
 export default handleJwtExpiration;

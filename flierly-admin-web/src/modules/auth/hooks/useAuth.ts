@@ -1,6 +1,6 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store"; // Adjust paths as necessary
-import { logout, setAuth, setLoading } from "../redux/authSlice";
+import { logout, setAuth, setLoading, setExpiredTrue } from "../redux/authSlice";
 import authService from "../service/authService";
 import { LoadingTypes } from "../@types/loading";
 
@@ -22,7 +22,7 @@ export function useAuth() {
     const hasPermission = (requiredPermissionRegex: RegExp): boolean => {
         return auth.allowedAccess.some((access) => requiredPermissionRegex.test(access));
     };
-    
+
     return {
         user: auth.user,
         token: auth.token,
@@ -32,6 +32,7 @@ export function useAuth() {
         loading: auth.loading,
         error: auth.error,
         allowedAccess: auth.allowedAccess,
+        isExpired: auth.isExpired,
         hasPermission,
         /**
          * Dispatch login action with credentials.
@@ -49,7 +50,8 @@ export function useAuth() {
                     loggedInAt: response.result.loggedInAt,
                     token: response.result.token,
                     tokenExpiresAt: response.result.tokenExpiresAt,
-                    loading: LoadingTypes.IDLE
+                    loading: LoadingTypes.IDLE,
+                    isExpired: false,
                 }
                 dispatch(setAuth(authState))
             }
@@ -59,6 +61,10 @@ export function useAuth() {
          * Dispatch logout action.
          */
         logout: () => dispatch(logout()),
+        /**
+         * Dispatch expired true
+         */
+        setExpiredTrue: (error: ErrorDetails) => dispatch(setExpiredTrue(error)),
         /**
          * Dispatch refresh action.
          */
@@ -74,7 +80,8 @@ export function useAuth() {
                     loggedInAt: response.result.loggedInAt,
                     token: response.result.token,
                     tokenExpiresAt: response.result.tokenExpiresAt,
-                    loading: LoadingTypes.IDLE
+                    loading: LoadingTypes.IDLE,
+                    isExpired: false,
                 }
                 dispatch(setAuth(authState))
             }

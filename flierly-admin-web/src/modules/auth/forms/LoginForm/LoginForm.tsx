@@ -17,21 +17,27 @@ interface LoginFormProps {
 
 const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false }) => {
   const { translate, langDirection } = useLocale();
-  const { loading, login, isLoggedIn } = useAuth();
+  const { loading, login, isLoggedIn, tokenExpiresAt } = useAuth();
   const navigate = useNavigate();
 
   const callbackParam = new URLSearchParams(window.location.search).get("callback");
   const callback = callbackParam ? JSON.parse(callbackParam || "{}") : null;
 
+  // Convert token expiration date to Date object
+  const tokenExpiresAtDateTime = new Date(tokenExpiresAt);
+  const currentDateTime = new Date();
+  const isTokenExpired = tokenExpiresAtDateTime < currentDateTime;
+
   useEffect(() => {
-    if (redirectOnLogin && loading === LoadingTypes.SUCCEEDED && isLoggedIn) {
-      navigate(
-        callback?.pathname
-          ? { pathname: callback.pathname, search: callback.search }
-          : "/erp"
+    if (redirectOnLogin && loading === LoadingTypes.SUCCEEDED && isLoggedIn && !isTokenExpired) {
+      const targetPath = callback?.pathname ? { pathname: callback.pathname, search: callback.search } : "/erp";
+      navigate(targetPath, { replace: true }
       );
     }
-  }, [isLoggedIn, loading, navigate, redirectOnLogin, callback]);
+
+    return () => {
+    }
+  }, [isLoggedIn, loading, navigate, redirectOnLogin, callback, isTokenExpired]);
 
   return (
     <Loading isLoading={loading === LoadingTypes.PENDING}>
@@ -86,8 +92,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false }) => {
               <Checkbox>{translate("remember_me")}</Checkbox>
             </Form.Item>
             <a id="login-form-forgot" href="/forgetpassword" style={{
-                marginLeft: langDirection === "rtl" ? "220px" : undefined,
-              }}>
+              marginLeft: langDirection === "rtl" ? "220px" : undefined,
+            }}>
               {translate("forgot_password")}
             </a>
           </Flex>
