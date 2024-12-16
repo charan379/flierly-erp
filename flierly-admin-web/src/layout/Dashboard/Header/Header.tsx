@@ -38,7 +38,7 @@ const Header: React.FC = () => {
       id="dashboard-header"
       style={{
         position: "relative",
-        padding: "0px 20px 0px 0px",
+        padding: "0px 10px 0px 0px",
         background: "var(--dashboard-item-bg-color) !important",
         color: "var(--dashboard-item-font-color) !important",
         display: "flex",
