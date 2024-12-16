@@ -16,7 +16,7 @@ import Search from "./forms/Search";
 import { FormFieldConfig } from "@/components/FormField";
 import { QueryFieldConfig } from "../QueryBuilder/QueryBuilder";
 
-interface CrudTableProps<T = Record<string, any>> {
+export interface CrudTableProps<T = Record<string, any>> {
   entity: string;
   tableKey: string;
   rowKey?: keyof T;
