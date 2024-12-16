@@ -1,7 +1,12 @@
-import CrudTable from "@/features/CrudTable";
 import CrudModule from "@/features/CrudModule";
-import React from "react";
+import React, { ComponentType, LazyExoticComponent, Suspense } from "react";
 import roleTableColumns from "../../config/role/tableColumns";
+import PageLoader from "@/components/PageLoader";
+import { CrudTableProps } from "@/features/CrudTable/CrudTable";
+
+
+// Lazy load CrudTable
+const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<Role>>> = React.lazy(() => import("@/features/CrudTable"));
 
 const Roles: React.FC = () => {
     return (
@@ -9,34 +14,36 @@ const Roles: React.FC = () => {
             title={"roles"}
             menuKeys={["iam"]}
         >
-            <CrudTable<Role>
-                entity="role"
-                columns={roleTableColumns}
-                dataSource={[]}
-                tableKey="role-table"
-                rowKey="id"
-                render={{
-                    activate: true,
-                    bin: true,
-                    clear: true,
-                    create: true,
-                    delete: true,
-                    menu: true,
-                    restore: true,
-                    search: true,
-                    update: true,
-                    view: true,
-                    builtIn: {
-                        options: {
-                            density: true,
-                            fullScreen: true,
-                            reload: true,
-                            search: false,
-                            setting: true
+            <Suspense fallback={<PageLoader />}>
+                <CrudTable
+                    entity="role"
+                    columns={roleTableColumns}
+                    dataSource={[]}
+                    tableKey="role-table"
+                    rowKey="id"
+                    render={{
+                        activate: true,
+                        bin: true,
+                        clear: true,
+                        create: true,
+                        delete: true,
+                        menu: true,
+                        restore: true,
+                        search: true,
+                        update: true,
+                        view: true,
+                        builtIn: {
+                            options: {
+                                density: true,
+                                fullScreen: true,
+                                reload: true,
+                                search: false,
+                                setting: true
+                            }
                         }
-                    }
-                }}
-            />
+                    }}
+                />
+            </Suspense>
         </CrudModule>
     );
 };

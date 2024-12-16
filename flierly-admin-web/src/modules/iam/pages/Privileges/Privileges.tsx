@@ -1,11 +1,13 @@
-import CrudTable from "@/features/CrudTable";
-import CrudModuleContextProvider from "@/features/CrudModule/context/CrudModuleContextProvider";
 import CrudModule from "@/features/CrudModule";
-import React from "react";
+import React, { ComponentType, LazyExoticComponent, Suspense } from "react";
 import privilegeTableColumns from "../../config/privilege/tableColumns";
 import privilegeCreateFields from "../../config/privilege/createFormFields";
 import privilegeUpdateFields from "../../config/privilege/updateFormFields";
 import privilegeQueryFields from "../../config/privilege/queryFormFields";
+import { CrudTableProps } from "@/features/CrudTable/CrudTable";
+import PageLoader from "@/components/PageLoader";
+
+const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<Privilege>>> = React.lazy(() => import("@/features/CrudTable"));
 
 const Privileges: React.FC = () => {
   return (
@@ -14,8 +16,8 @@ const Privileges: React.FC = () => {
       title={"privileges"}
       menuKeys={["iam"]}
     >
-      <CrudModuleContextProvider>
-        <CrudTable<Privilege>
+      <Suspense fallback={<PageLoader />}>
+        <CrudTable
           entity="privilege"
           columns={privilegeTableColumns}
           dataSource={[]}
@@ -46,7 +48,7 @@ const Privileges: React.FC = () => {
           updateFormFields={privilegeUpdateFields}
           queryFormFields={privilegeQueryFields}
         />
-      </CrudModuleContextProvider>
+      </Suspense>
     </CrudModule>
   );
 };
