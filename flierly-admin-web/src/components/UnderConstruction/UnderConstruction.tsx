@@ -20,7 +20,7 @@ const UnderConstruction: React.FC = () => {
                     type="primary" // Primary type button
                     onClick={() => {
                         console.log("Navigate button clicked, redirecting to home page");
-                        navigate('/'); // Navigate back on button click
+                        navigate(-1); // Navigate back on button click
                     }}
                 >
                     {translate("back")} {/* Translated button text */}
