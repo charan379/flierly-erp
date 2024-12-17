@@ -1,9 +1,10 @@
-import { Button, Form, Tooltip } from "antd";
+import { Button, Form, Skeleton, Space, Tooltip } from "antd";
 import { EditFilled } from "@ant-design/icons";
 import { ActionType, DrawerForm } from "@ant-design/pro-components";
 import useLocale from "@/features/Locale/hooks/useLocale";
 import crudService from "../../../CrudModule/service/crudService";
 import FormField, { FormFieldConfig } from "@/components/FormField";
+import { useState } from "react";
 
 // Define types for the component props
 interface UpdateProps<T = Record<string, any>> {
@@ -35,6 +36,7 @@ const Update = <T extends Record<string, any>>({
 
   const { translate } = useLocale();
   const [formInstance] = Form.useForm<T>();
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(isOpen);
 
   const onFinish = async (values: T): Promise<boolean | void> => {
     const response = await crudService.update<T>({ entity, data: values, id });
@@ -74,6 +76,7 @@ const Update = <T extends Record<string, any>>({
       drawerProps={{
         destroyOnClose: true,
         onClose: close,
+        afterOpenChange: (change) => setIsDrawerOpen(change),
         styles: {
           footer: { padding: "15px 15px 15px 15px" },
           header: { padding: "10px 5px 5px 5px" },
@@ -86,9 +89,22 @@ const Update = <T extends Record<string, any>>({
         },
       }}
     >
-      {formFields.map((field) => (
-        <FormField key={`${entity}-${String(field.name)}`} config={field} fieldKey={`${entity}-${String(field.name)}`} />
-      ))}
+      {isDrawerOpen ? formFields.map((field) => (
+        <FormField
+          key={`${entity}-${String(field.name)}`}
+          config={field}
+          fieldKey={`${entity}-${String(field.name)}`}
+        />
+      ))
+        :
+        <Space direction="vertical" style={{ width: '100%' }} size={16}>
+          {formFields?.map((_, index) => {
+            return (
+              <Skeleton.Input active block key={index} />
+            )
+          })}
+        </Space>
+      }
     </DrawerForm>
   );
 };

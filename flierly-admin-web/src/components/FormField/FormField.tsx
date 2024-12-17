@@ -1,19 +1,19 @@
-import React from "react";
-import { Col, ColProps, Select, SelectProps } from "antd";
-import {
-  ProForm,
-  ProFormDatePicker,
-  ProFormDateRangePicker,
-  ProFormDigit,
-  ProFormSwitch,
-  ProFormText,
-  ProFormTextArea,
-  ProFormFieldProps,
-  ProFormDigitRange,
-} from "@ant-design/pro-components";
+import React, { Suspense } from "react";
+import { Col, ColProps, Select, SelectProps, Skeleton } from "antd";
+import { ProFormFieldProps } from "@ant-design/pro-components";
 import useLocale from "@/features/Locale/hooks/useLocale";
-import SelectRemoteOptions from "@/features/SelectRemoteOptions";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
+
+const ProFormItem = React.lazy(() => import("@ant-design/pro-components").then((module) => ({ default: module.ProFormItem })));
+const SelectRemoteOptions = React.lazy(() => import("@/features/SelectRemoteOptions"));
+const ProFormDatePicker = React.lazy(() => import("@ant-design/pro-components").then((module) => ({ default: module.ProFormDatePicker })));
+const ProFormDateRangePicker = React.lazy(() => import("@ant-design/pro-components").then((module) => ({ default: module.ProFormDateRangePicker })));
+const ProFormDigit = React.lazy(() => import("@ant-design/pro-components").then((module) => ({ default: module.ProFormDigit })));
+const ProFormSwitch = React.lazy(() => import("@ant-design/pro-components").then((module) => ({ default: module.ProFormSwitch })));
+const ProFormText = React.lazy(() => import("@ant-design/pro-components").then((module) => ({ default: module.ProFormText })));
+const ProFormTextArea = React.lazy(() => import("@ant-design/pro-components").then((module) => ({ default: module.ProFormTextArea })));
+const ProFormDigitRange = React.lazy(() => import("@ant-design/pro-components").then((module) => ({ default: module.ProFormDigitRange })));
+
 
 type InputConfig =
   | { type: "Text" | "TextArea" | "Number" | "NumberRange" | "DatePicker" | "DateRange" | "Switch" }
@@ -55,7 +55,7 @@ export type FormFieldConfig<T = Record<string, any>> = Omit<ProFormFieldProps<T>
   };
 };
 
-type FormFieldProps<T = Record<string, any>> = {
+export type FormFieldProps<T = Record<string, any>> = {
   fieldKey?: string;
   config: FormFieldConfig<T>;
   showLabel?: boolean;
@@ -84,133 +84,153 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
   switch (input.type) {
     case "Text":
       return (
-        <ProFormText
-          {...restProps}
-          fieldProps={{
-            ...fieldProps,
-            ...(isStandalone && value !== undefined ? { value } : {}),
-            ...(isStandalone && handleChange ? { onChange: (e) => handleChange(e.target.value) } : {}),
-          }}
-        />
+        <Suspense fallback={<Skeleton.Input active block />}>
+          <ProFormText
+            {...restProps}
+            fieldProps={{
+              ...fieldProps,
+              ...(isStandalone && value !== undefined ? { value } : {}),
+              ...(isStandalone && handleChange ? { onChange: (e) => handleChange(e.target.value) } : {}),
+            }}
+          />
+        </Suspense>
       );
     case "TextArea":
       return (
-        <ProFormTextArea
-          {...restProps}
-          fieldProps={{
-            ...fieldProps,
-            ...(isStandalone && value !== undefined ? { value } : {}),
-            ...(isStandalone && handleChange ? { onChange: (e) => handleChange(e.target.value) } : {}),
-          }}
-        />
+        <Suspense fallback={<Skeleton.Input active block />}>
+          <ProFormTextArea
+            {...restProps}
+            fieldProps={{
+              ...fieldProps,
+              ...(isStandalone && value !== undefined ? { value } : {}),
+              ...(isStandalone && handleChange ? { onChange: (e) => handleChange(e.target.value) } : {}),
+            }}
+          />
+        </Suspense>
       );
     case "Number":
       return (
-        <ProFormDigit
-          {...restProps}
-          fieldProps={{
-            ...fieldProps,
-            ...(isStandalone && value !== undefined ? { value } : {}),
-            ...(isStandalone && handleChange ? { onChange: (v) => handleChange(v) } : {}),
-          }}
-        />
+        <Suspense fallback={<Skeleton.Input active block />}>
+          <ProFormDigit
+            {...restProps}
+            fieldProps={{
+              ...fieldProps,
+              ...(isStandalone && value !== undefined ? { value } : {}),
+              ...(isStandalone && handleChange ? { onChange: (v) => handleChange(v) } : {}),
+            }}
+          />
+        </Suspense>
       );
     case "NumberRange":
       return (
-        <ProFormDigitRange
-          {...restProps}
-          fieldProps={{
-            ...fieldProps,
-            ...(isStandalone && value !== undefined ? { value } : {}),
-            ...(isStandalone && handleChange ? { onChange: (range) => handleChange(range) } : {}),
-          }}
-        />
+        <Suspense fallback={<Skeleton.Input active block />}>
+          <ProFormDigitRange
+            {...restProps}
+            fieldProps={{
+              ...fieldProps,
+              ...(isStandalone && value !== undefined ? { value } : {}),
+              ...(isStandalone && handleChange ? { onChange: (range) => handleChange(range) } : {}),
+            }}
+          />
+        </Suspense>
       );
     case "DatePicker":
       return (
-        <ProFormDatePicker
-          {...restProps}
-          fieldProps={{
-            ...fieldProps,
-            ...(isStandalone && value !== undefined ? { value } : {}),
-            ...(isStandalone && handleChange ? { onChange: (_dateWithTimeStamp, date) => handleChange(date) } : {}),
-          }}
-        />
+        <Suspense fallback={<Skeleton.Input active block />}>
+          <ProFormDatePicker
+            {...restProps}
+            fieldProps={{
+              ...fieldProps,
+              ...(isStandalone && value !== undefined ? { value } : {}),
+              ...(isStandalone && handleChange ? { onChange: (_dateWithTimeStamp, date) => handleChange(date) } : {}),
+            }}
+          />
+        </Suspense>
       );
     case "DateRange":
       return (
-        <ProFormDateRangePicker
-          {...restProps}
-          fieldProps={{
-            ...fieldProps,
-            ...(isStandalone && value !== undefined ? { value } : {}),
-            ...(isStandalone && handleChange ? { onChange: (_datesWithTimeStamp, dates) => handleChange(dates) } : {}),
-          }}
-        />
+        <Suspense fallback={<Skeleton.Input active block />}>
+          <ProFormDateRangePicker
+            {...restProps}
+            fieldProps={{
+              ...fieldProps,
+              ...(isStandalone && value !== undefined ? { value } : {}),
+              ...(isStandalone && handleChange ? { onChange: (_datesWithTimeStamp, dates) => handleChange(dates) } : {}),
+            }}
+          />
+        </Suspense>
       );
     case "Switch":
       return (
-        <ProFormSwitch
-          {...restProps}
-          valuePropName="checked"
-          fieldProps={{
-            ...fieldProps,
-            ...(isStandalone && value !== undefined ? { checked: value } : {}),
-            ...(isStandalone && handleChange ? { onChange: (checked) => handleChange(checked) } : {}),
-          }}
-        />
+        <Suspense fallback={<Skeleton.Input active block />}>
+          <ProFormSwitch
+            {...restProps}
+            valuePropName="checked"
+            fieldProps={{
+              ...fieldProps,
+              ...(isStandalone && value !== undefined ? { checked: value } : {}),
+              ...(isStandalone && handleChange ? { onChange: (checked) => handleChange(checked) } : {}),
+            }}
+          />
+        </Suspense>
       );
     case "Decimal":
       return (
-        <ProFormDigit
-          {...restProps}
-          fieldProps={{
-            ...fieldProps,
-            precision: input.precision,
-            step: input.step,
-            min: input.min,
-            max: input.max,
-            ...(isStandalone && value !== undefined ? { value } : {}),
-            ...(isStandalone && handleChange ? { onChange: (v) => handleChange(v) } : {}),
-          }}
-        />
+        <Suspense fallback={<Skeleton.Input active block />}>
+          <ProFormDigit
+            {...restProps}
+            fieldProps={{
+              ...fieldProps,
+              precision: input.precision,
+              step: input.step,
+              min: input.min,
+              max: input.max,
+              ...(isStandalone && value !== undefined ? { value } : {}),
+              ...(isStandalone && handleChange ? { onChange: (v) => handleChange(v) } : {}),
+            }}
+          />
+        </Suspense>
       );
     case "Select":
       return (
         <WrapUnderCol formInfo={formInfo} colProps={colProps}>
-          <ProForm.Item {...restProps}>
-            <Select
-              mode={input.mode}
-              placeholder="Please select"
-              options={input.options}
-              maxTagCount={"responsive"}
-              allowClear={restProps.allowClear}
-              disabled={restProps.hidden || restProps.disabled}
-              style={{ width: restProps.width ?? "100%", textAlign: "left" }}
-              dropdownStyle={{ textAlign: "left" }}
-              {...(isStandalone && value !== undefined ? { value } : {})}
-              {...(isStandalone && handleChange ? { onChange: (v) => handleChange(v) } : {})}
-            />
-          </ProForm.Item>
+          <Suspense fallback={<Skeleton.Input active block />}>
+            <ProFormItem {...restProps}>
+              <Select
+                mode={input.mode}
+                placeholder="Please select"
+                options={input.options}
+                maxTagCount={"responsive"}
+                allowClear={restProps.allowClear}
+                disabled={restProps.hidden || restProps.disabled}
+                style={{ width: restProps.width ?? "100%", textAlign: "left" }}
+                dropdownStyle={{ textAlign: "left" }}
+                {...(isStandalone && value !== undefined ? { value } : {})}
+                {...(isStandalone && handleChange ? { onChange: (v) => handleChange(v) } : {})}
+              />
+            </ProFormItem>
+          </Suspense>
         </WrapUnderCol>
       );
     case "SelectRemoteOptions":
       return (
         <WrapUnderCol formInfo={formInfo} colProps={colProps}>
-          <ProForm.Item {...restProps}>
-            <SelectRemoteOptions
-              asyncOptionsFetcher={input.asyncOptionsFetcher}
-              debounceTimeout={input.debounceTimeout}
-              labelRender={input.labelRender}
-              mode={input.mode}
-              width={restProps.width}
-              allowClear={restProps.allowClear}
-              disabled={restProps.hidden || restProps.disabled}
-              fieldProps={fieldProps}
-              {...(isStandalone && value !== undefined ? { value } : {})}
-              {...(isStandalone && handleChange ? { onChange: (v) => handleChange(v) } : {})}
-            />
-          </ProForm.Item>
+          <Suspense fallback={<Skeleton.Input active block />}>
+            <ProFormItem {...restProps}>
+              <SelectRemoteOptions
+                asyncOptionsFetcher={input.asyncOptionsFetcher}
+                debounceTimeout={input.debounceTimeout}
+                labelRender={input.labelRender}
+                mode={input.mode}
+                width={restProps.width}
+                allowClear={restProps.allowClear}
+                disabled={restProps.hidden || restProps.disabled}
+                fieldProps={fieldProps}
+                {...(isStandalone && value !== undefined ? { value } : {})}
+                {...(isStandalone && handleChange ? { onChange: (v) => handleChange(v) } : {})}
+              />
+            </ProFormItem>
+          </Suspense>
         </WrapUnderCol>
       );
     default:

@@ -1,4 +1,4 @@
-import { Button, Form, Tooltip } from "antd";
+import { Button, Form, Skeleton, Space, Tooltip } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { ActionType, DrawerForm } from "@ant-design/pro-components";
 import useLocale from "@/features/Locale/hooks/useLocale";
@@ -22,14 +22,14 @@ const Create = <T extends Record<string, any>>({
   render,
   actions,
 }: CreateProps<T>): JSX.Element | null => {
-  if (!render) return null;
-  if (!formFields) return null;
-  if (!actions) return null;
+  if (!render || !formFields || !actions) return null;
 
   const { translate } = useLocale();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
 
-  const [formInstance] = Form.useForm<T>();
+  // Properly initialize and connect form instance
+  const [form] = Form.useForm<T>();
 
   const onFinish = async (values: T): Promise<boolean | void> => {
     setIsLoading(true);
@@ -37,14 +37,15 @@ const Create = <T extends Record<string, any>>({
 
     if (response?.success) {
       actions.reload();
+      setIsLoading(false);
       return true;
     }
     setIsLoading(false);
   };
 
   return (
-    <DrawerForm
-      form={formInstance}
+    <DrawerForm<T>
+      form={form} // Pass the form instance here
       title={title}
       grid={true}
       onFinish={onFinish}
@@ -53,15 +54,15 @@ const Create = <T extends Record<string, any>>({
         <Tooltip title={translate("add_data")}>
           <Button
             type="primary"
-            key={`drawer-create-form-trigger`}
             icon={<PlusOutlined />}
             shape="circle"
             size="middle"
             style={{ backgroundColor: "teal" }}
-            disabled={formFields?.length > 0 ? false : true}
+            disabled={formFields.length === 0}
           />
         </Tooltip>
       }
+      loading={isLoading}
       resize={{
         maxWidth: window.innerWidth * 0.9,
         minWidth: window.innerWidth * 0.5,
@@ -72,6 +73,7 @@ const Create = <T extends Record<string, any>>({
           footer: { padding: "15px 15px 15px 15px" },
           header: { padding: "10px 5px 5px 5px" },
         },
+        afterOpenChange: (change) => setIsDrawerOpen(change)
       }}
       submitter={{
         searchConfig: {
@@ -80,9 +82,22 @@ const Create = <T extends Record<string, any>>({
         },
       }}
     >
-      {formFields.map((field) => (
-        <FormField key={`${entity}-${String(field.name)}`} config={field} fieldKey={`${entity}-${String(field.name)}`} />
-      ))}
+      {isDrawerOpen ? formFields.map((field) => (
+        <FormField
+          key={`${entity}-${String(field.name)}`}
+          config={field}
+          fieldKey={`${entity}-${String(field.name)}`}
+        />
+      ))
+        :
+        <Space direction="vertical" style={{ width: '100%' }} size={16}>
+          {formFields?.map((_, index) => {
+            return (
+              <Skeleton.Input active block key={index} />
+            )
+          })}
+        </Space>
+      }
     </DrawerForm>
   );
 };
