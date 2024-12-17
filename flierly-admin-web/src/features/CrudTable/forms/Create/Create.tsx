@@ -5,6 +5,7 @@ import useLocale from "@/features/Locale/hooks/useLocale";
 import crudService from "../../../CrudModule/service/crudService";
 import FormField, { FormFieldConfig } from "@/components/FormField";
 import { useState } from "react";
+import "./create.css"
 
 // Define the types for props
 interface CreateProps<T = Record<string, any>> {
@@ -49,7 +50,7 @@ const Create = <T extends Record<string, any>>({
       title={title}
       grid={true}
       onFinish={onFinish}
-      loading={isLoading || formInstance.isFieldsValidating()}
+      id="crud-table-create-form"
       trigger={
         <Tooltip title={translate("add_data")}>
           <Button

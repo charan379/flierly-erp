@@ -5,6 +5,7 @@ import useLocale from "@/features/Locale/hooks/useLocale";
 import crudService from "../../../CrudModule/service/crudService";
 import FormField, { FormFieldConfig } from "@/components/FormField";
 import { useState } from "react";
+import "./update.css"
 
 // Define types for the component props
 interface UpdateProps<T = Record<string, any>> {
@@ -51,6 +52,7 @@ const Update = <T extends Record<string, any>>({
   return (
     <DrawerForm
       form={formInstance}
+      id="crud-table-update-form"
       title={title}
       grid={true}
       onFinish={onFinish}
