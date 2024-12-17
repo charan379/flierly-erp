@@ -15,6 +15,7 @@ import crudService from "../CrudModule/service/crudService";
 import Search from "./forms/Search";
 import { FormFieldConfig } from "@/components/FormField";
 import { QueryFieldConfig } from "../QueryBuilder/QueryBuilder";
+import shortid from "shortid";
 
 export interface CrudTableProps<T = Record<string, any>> {
   entity: string;
@@ -254,6 +255,7 @@ const CrudTable = <T extends Record<string, any>>({
       // table extra render components
       tableExtraRender={() => (
         <RowContextMenu
+          key={shortid()}
           render={render.menu}
           entity={entity}
           recordTitleKey={rowTitleKey as string}
