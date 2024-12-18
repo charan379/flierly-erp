@@ -22,7 +22,7 @@ const privilegeUpdateFields: FormFieldConfig<Privilege>[] = [
         name: "name",
         label: "name",
         hasFeedback: true,
-        allowClear: true,
+        allowClear: false,
         rules: [
             { type: "string", min: 5, max: 30, required: true },
             ({ getFieldValue }) => ({
@@ -100,7 +100,7 @@ const privilegeUpdateFields: FormFieldConfig<Privilege>[] = [
         name: "code",
         label: "code",
         hasFeedback: true,
-        allowClear: true,
+        allowClear: false,
         access: { permission: /^privilege\.manage$/, ifNoAccess: "disable" },
         rules: [
             { type: "string", min: 5, max: 25, required: true },

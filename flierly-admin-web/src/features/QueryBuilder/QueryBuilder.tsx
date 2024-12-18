@@ -237,7 +237,6 @@ const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config },
                                                 value: cond.value, // Bind value to the condition's state
                                                 onChange: (value) => handleValueChange(cond.id, value), // Update condition value
                                                 colProps: { span: conditionCardWidth > 500 ? 8 : 24 }, // Adjust column layout dynamically
-                                                allowClear: false,
                                                 formInfo: {
                                                     gridForm: false,
                                                     isFormItem: false,

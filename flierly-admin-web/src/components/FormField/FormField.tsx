@@ -1,8 +1,9 @@
 import React, { Suspense } from "react";
 import { Col, ColProps, Select, SelectProps, Skeleton } from "antd";
-import { ProFormFieldProps } from "@ant-design/pro-components";
+import { ProFormFieldProps, ProFormItemProps } from "@ant-design/pro-components";
 import useLocale from "@/features/Locale/hooks/useLocale";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
+import { pick } from "lodash";
 
 const ProFormItem = React.lazy(() => import("@ant-design/pro-components").then((module) => ({ default: module.ProFormItem })));
 const SelectRemoteOptions = React.lazy(() => import("@/features/SelectRemoteOptions"));
@@ -42,11 +43,10 @@ type AccessConfig = {
   ifNoAccess?: "hide" | "disable";
 };
 
-export type FormFieldConfig<T = Record<string, any>> = Omit<ProFormFieldProps<T>, "name"> & {
+export type FormFieldConfig<T = Record<string, any>> = Omit<ProFormFieldProps<T>, "name" | "fieldProps"> & {
   name?: keyof T;
   input: InputConfig;
   access?: AccessConfig;
-  fieldProps?: ProFormFieldProps<T>["fieldProps"];
   onChange?: (value: any) => void;
   value?: any;
   formInfo?: {
@@ -77,10 +77,26 @@ const WrapUnderCol: React.FC<{
   return <>{children}</>;
 };
 
-const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
-  const { input, onChange: handleChange, formInfo, colProps, value, fieldProps, ...restProps } = props;
-  const isStandalone = !formInfo?.isFormItem;
+const allowedProFormItemProps: (keyof ProFormItemProps)[] = [
+  "name",
+  "label",
+  "valuePropName",
+  "rules",
+  "dependencies",
+  "hidden",
+  "shouldUpdate",
+  "initialValue",
+  "tooltip",
+  "validateTrigger",
+  "getValueProps",
+  "normalize",
+  "preserve",
+  "convertValue"
+];
 
+const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
+  const { input, onChange: handleChange, formInfo, colProps, value, ...restProps } = props;
+  const isStandalone = !formInfo?.isFormItem;
   switch (input.type) {
     case "Text":
       return (
@@ -88,7 +104,6 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
           <ProFormText
             {...restProps}
             fieldProps={{
-              ...fieldProps,
               ...(isStandalone && value !== undefined ? { value } : {}),
               ...(isStandalone && handleChange ? { onChange: (e) => handleChange(e.target.value) } : {}),
             }}
@@ -101,7 +116,6 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
           <ProFormTextArea
             {...restProps}
             fieldProps={{
-              ...fieldProps,
               ...(isStandalone && value !== undefined ? { value } : {}),
               ...(isStandalone && handleChange ? { onChange: (e) => handleChange(e.target.value) } : {}),
             }}
@@ -114,7 +128,6 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
           <ProFormDigit
             {...restProps}
             fieldProps={{
-              ...fieldProps,
               ...(isStandalone && value !== undefined ? { value } : {}),
               ...(isStandalone && handleChange ? { onChange: (v) => handleChange(v) } : {}),
             }}
@@ -127,7 +140,6 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
           <ProFormDigitRange
             {...restProps}
             fieldProps={{
-              ...fieldProps,
               ...(isStandalone && value !== undefined ? { value } : {}),
               ...(isStandalone && handleChange ? { onChange: (range) => handleChange(range) } : {}),
             }}
@@ -140,7 +152,6 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
           <ProFormDatePicker
             {...restProps}
             fieldProps={{
-              ...fieldProps,
               ...(isStandalone && value !== undefined ? { value } : {}),
               ...(isStandalone && handleChange ? { onChange: (_dateWithTimeStamp, date) => handleChange(date) } : {}),
             }}
@@ -153,7 +164,6 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
           <ProFormDateRangePicker
             {...restProps}
             fieldProps={{
-              ...fieldProps,
               ...(isStandalone && value !== undefined ? { value } : {}),
               ...(isStandalone && handleChange ? { onChange: (_datesWithTimeStamp, dates) => handleChange(dates) } : {}),
             }}
@@ -167,7 +177,6 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
             {...restProps}
             valuePropName="checked"
             fieldProps={{
-              ...fieldProps,
               ...(isStandalone && value !== undefined ? { checked: value } : {}),
               ...(isStandalone && handleChange ? { onChange: (checked) => handleChange(checked) } : {}),
             }}
@@ -180,7 +189,6 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
           <ProFormDigit
             {...restProps}
             fieldProps={{
-              ...fieldProps,
               precision: input.precision,
               step: input.step,
               min: input.min,
@@ -195,7 +203,7 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
       return (
         <WrapUnderCol formInfo={formInfo} colProps={colProps}>
           <Suspense fallback={<Skeleton.Input active block />}>
-            <ProFormItem {...restProps}>
+            <ProFormItem {...pick(restProps, allowedProFormItemProps)}>
               <Select
                 mode={input.mode}
                 placeholder="Please select"
@@ -216,7 +224,7 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
       return (
         <WrapUnderCol formInfo={formInfo} colProps={colProps}>
           <Suspense fallback={<Skeleton.Input active block />}>
-            <ProFormItem {...restProps}>
+            <ProFormItem {...pick(restProps, allowedProFormItemProps)}>
               <SelectRemoteOptions
                 asyncOptionsFetcher={input.asyncOptionsFetcher}
                 debounceTimeout={input.debounceTimeout}
@@ -225,7 +233,6 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
                 width={restProps.width}
                 allowClear={restProps.allowClear}
                 disabled={restProps.hidden || restProps.disabled}
-                fieldProps={fieldProps}
                 {...(isStandalone && value !== undefined ? { value } : {})}
                 {...(isStandalone && handleChange ? { onChange: (v) => handleChange(v) } : {})}
               />
