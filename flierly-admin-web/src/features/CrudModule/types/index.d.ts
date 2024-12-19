@@ -5,6 +5,7 @@ type CrudModuleState = {
     currentRecord: Record<string, any>;
   };
   filters: Record<string, any>;
+  conditions: QueryCondition[]; // Add conditions to state
   binMode: boolean;
   updateForm: {
     open: boolean;
