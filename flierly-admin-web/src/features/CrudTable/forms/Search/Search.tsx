@@ -31,6 +31,8 @@ const Search: React.FC<SearchProps> = ({ title = "filter_data", render, actions,
         // Simulate filter application
         if (queryBuilderRef?.current) {
             const query = queryBuilderRef.current.getQuery();
+            const currentConditions = queryBuilderRef.current.getConditions();
+            CrudModuleContextHandler.conditions.set(currentConditions);
             CrudModuleContextHandler.filters.set(query);
             actions?.setPageInfo?.({ current: 1, total: 0 })
             actions.reload();
@@ -49,12 +51,20 @@ const Search: React.FC<SearchProps> = ({ title = "filter_data", render, actions,
 
     };
 
+    const handleDrawerClose = () => {
+        setDrawerOpen(false);
+    };
+
+    const handleDrawerOpen = () => {
+        setDrawerOpen(true);
+    }
+
     return (
         <ResizableDrawer
             title={title}
             open={drawerOpen}
-            onClose={() => setDrawerOpen(false)}
-            onOpen={() => setDrawerOpen(true)}
+            onClose={handleDrawerClose}
+            onOpen={handleDrawerOpen}
             trigger={
                 <Tooltip title={translate("apply_filters")}>
                     <Badge
@@ -75,7 +85,7 @@ const Search: React.FC<SearchProps> = ({ title = "filter_data", render, actions,
             minWidth={400}
             initialWidth={700}
             maxWidth={window.innerWidth * 0.9}
-            destroyOnClose={false}
+            destroyOnClose={true}
             styles={{
                 body: { padding: "0px 10px" },
             }}
@@ -84,7 +94,7 @@ const Search: React.FC<SearchProps> = ({ title = "filter_data", render, actions,
                     <Button onClick={onResetFilters} danger>
                         {translate("rest")}
                     </Button>
-                    <Button type="default" onClick={() => setDrawerOpen(false)} style={{ marginLeft: 8 }}>
+                    <Button type="default" onClick={handleDrawerClose} style={{ marginLeft: 8 }}>
                         {translate("cancel")}
                     </Button>
                     <Button type="primary" onClick={onApplyFilters} style={{ marginLeft: 8 }}>
@@ -94,7 +104,11 @@ const Search: React.FC<SearchProps> = ({ title = "filter_data", render, actions,
             }
         >
             <Suspense name="queryBuilder-suspense-wrap" fallback={<PageLoading />}>
-                <QueryBuilder config={queryFieldsConfig} ref={queryBuilderRef} />
+                <QueryBuilder
+                    config={queryFieldsConfig}
+                    ref={queryBuilderRef}
+                    initialConditions={CrudModuleContextHandler.conditions.get()}
+                />
             </Suspense>
         </ResizableDrawer>
     );

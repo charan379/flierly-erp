@@ -16,7 +16,7 @@ export type QueryFieldConfig<T = Record<string, any>> = {
     }[];
 };
 
-type QueryCondition = {
+export type QueryCondition = {
     id: number;
     field?: { label: string; namePath: string };
     condition?: { label: string; namePath: TransformerKey };
@@ -27,15 +27,17 @@ type QueryCondition = {
 
 interface QueryBuilderProps {
     config: QueryFieldConfig[];
+    initialConditions?: QueryCondition[]; // New prop for initial conditions
 }
 
 export interface QueryBuilderRef {
     getQuery: () => Record<string, any>; // Method to get the query
     resetQuery: () => void; // Method to reset conditions
+    getConditions: () => QueryCondition[]; // Method to get the current conditions
 }
 
-const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config }, ref) => {
-    const [conditions, setConditions] = useState<QueryCondition[]>([]);
+const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config, initialConditions = [] }, ref) => {
+    const [conditions, setConditions] = useState<QueryCondition[]>(initialConditions);
     const [conditionCount, setConditionCount] = useState(0);
     const [showQueryPreview, setShowQueryPreview] = useState(false); // State to toggle query preview
     const { ref: conditionCardRef, width: conditionCardWidth } = useElementWidth<HTMLDivElement>();
@@ -145,6 +147,7 @@ const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config },
             setConditions([]);
             setConditionCount(0);
         },
+        getConditions: () => conditions, // Expose current conditions
     }));
 
     return (
