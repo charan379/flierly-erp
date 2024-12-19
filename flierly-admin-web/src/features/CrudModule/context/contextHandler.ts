@@ -1,6 +1,7 @@
 import { ActionTypes } from "./ActionTypes";
 import { Dispatch } from "react";
 import { Action } from "./reducer";
+import { QueryCondition } from "@/features/QueryBuilder/QueryBuilder";
 
 /**
  * Creates a handler for managing CRUD module state and dispatcher actions.
@@ -130,6 +131,22 @@ const contextHandler = (state: CrudModuleState, dispatcher: Dispatch<Action>) =>
          * @returns True if the update form is open, otherwise false.
          */
         isOpen: () => state.updateForm.open,
+    },
+
+    /** Handlers for managing conditions */
+    conditions: {
+        /**
+         * Updates the conditions in the state.
+         * @param data - New conditions data to set.
+         */
+        set: (data: QueryCondition[]) =>
+            dispatcher({ type: ActionTypes.UPDATE_QUERY_CONDITIONS, payload: data }),
+
+        /**
+         * Retrieves the current conditions data from the state.
+         * @returns The current conditions data.
+         */
+        get: () => state.conditions,
     },
 });
 
