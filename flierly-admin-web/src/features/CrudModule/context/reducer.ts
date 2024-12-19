@@ -1,3 +1,4 @@
+import { QueryCondition } from "@/features/QueryBuilder/QueryBuilder";
 import { ActionTypes } from "./ActionTypes";
 
 // Initial state for the CRUD table context
@@ -7,6 +8,7 @@ export const initialState: CrudModuleState = {
         position: { x: 0, y: 0 },
         currentRecord: {},
     },
+    conditions: [], // Stores query conditions
     filters: {}, // Stores applied filters
     binMode: false, // Indicates if bin mode is active
     updateForm: {
@@ -28,7 +30,8 @@ export type Action =
     | { type: ActionTypes.ACTIVATE_BIN_MODE }
     | { type: ActionTypes.DEACTIVATE_BIN_MODE }
     | { type: ActionTypes.UPDATE_ROW_MENU_CURRENT_RECORD; payload: Record<string, any> }
-    | { type: ActionTypes.UPDATE_ROW_MENU_POSITION; payload: { x: number; y: number } };
+    | { type: ActionTypes.UPDATE_ROW_MENU_POSITION; payload: { x: number; y: number } }
+    | { type: ActionTypes.UPDATE_QUERY_CONDITIONS; payload: QueryCondition[] };
 
 // Reducer function to handle state updates based on dispatched actions
 export function reducer(state: CrudModuleState, action: Action): CrudModuleState {
@@ -107,6 +110,12 @@ export function reducer(state: CrudModuleState, action: Action): CrudModuleState
                     ...state.rowMenu,
                     position: action.payload,
                 },
+            };
+        // Update the query conditions
+        case ActionTypes.UPDATE_QUERY_CONDITIONS:
+            return {
+                ...state,
+                conditions: action.payload,
             };
         // Handle unknown actions with an explicit error
         default:
