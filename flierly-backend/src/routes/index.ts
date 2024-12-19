@@ -2,7 +2,7 @@ import { Router } from "express";
 import { globSync } from "glob";
 import path from "path";
 
-const ignoreDirs = ['misc-controller'];
+const ignoreDirs = ['misc-controller', "upload-controller"];
 
 export const routes = globSync(`${__dirname}/**/*-router`)
     .filter(routerDir => !ignoreDirs.includes(routerDir.split(/[\/\\]/g).slice(-1)[0]))

@@ -11,13 +11,17 @@ import testTypeORMRead from "@/controllers/misc-controller/testTypeORMRead";
 import testTypeORMRestore from "@/controllers/misc-controller/testTypeORMRestore";
 import testTypeORMSearch from "@/controllers/misc-controller/testTypeORMSearch";
 import testTypeORMUpdate from "@/controllers/misc-controller/testTypeORMUpdate";
+import uploadFileController from "@/controllers/upload-controller/uploadFile";
 import { authorize } from "@/middlewares/authorization.middleware";
 import { errorBoundary } from "@/middlewares/error-boundary.middleware";
+import { upload } from "@/middlewares/multer.middleware";
 import { Router } from "express";
 
 const miscRouter = Router();
 
 miscRouter.get(`/entities`, authorize(), errorBoundary(entities, "misc"));
+miscRouter.post(`/misc/test-upload`, upload.single('file'), authorize(), errorBoundary(uploadFileController, "misc"));
+
 miscRouter.get(`/system-usage`, errorBoundary(systemUsage, "misc"));
 miscRouter.get('/test/raw-query/:id', errorBoundary(testExecuteRawSQL, 'Role'));
 miscRouter.post('/test/type-orm-page', errorBoundary(testTypeORMPage, 'Role'));

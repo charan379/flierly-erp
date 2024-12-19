@@ -1,0 +1,65 @@
+import Joi from "joi";
+import JoiSchemaValidator from "@/utils/joi-object-validator/joiSchemaValidator";
+import apiResponse from "@/utils/api/responseGenerator";
+import HttpCodes from "@/constants/httpCodes";
+import { Request, Response } from "express";
+import { FileUpload } from "@/entities/storage/FileUpload.entity";
+import storageService from "@/service/storage/storageService";
+import { AppDataSource } from "@/lib/app-data-source";
+
+// Joi validation schema for file upload
+const fileUploadSchema: Joi.ObjectSchema = Joi.object({
+    file: Joi.object().required(), // Ensure file is included in the request
+});
+
+// Upload file controller
+const uploadFileController = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        // Validate the request using Joi
+        await JoiSchemaValidator(fileUploadSchema, { file: req.file }, { abortEarly: false, allowUnknown: true }, "file-upload");
+
+        const file = req.file;
+        if (!file) {
+            return res
+                .status(HttpCodes.BAD_REQUEST)
+                .json(apiResponse({
+                    success: false,
+                    message: "File is required",
+                    result: null,
+                    error: "File is required",
+                    controller: "uploadFileController",
+                    httpCode: HttpCodes.BAD_REQUEST,
+                    req, res
+                }));
+        }
+
+        // Destination path for the uploaded file
+        const destinationPath = ``;
+        const { fileUrl, fileUpload } = await storageService.uploadFile(file, destinationPath);
+
+        return res.status(HttpCodes.CREATED).json(apiResponse({
+            success: true,
+            message: "File uploaded successfully",
+            result: {
+                fileUrl,
+                metadata: fileUpload,
+            },
+            error: null,
+            controller: "uploadFileController",
+            httpCode: HttpCodes.CREATED,
+            req, res,
+        }));
+    } catch (error: any) {
+        return res.status(HttpCodes.INTERNAL_SERVER_ERROR).json(apiResponse({
+            success: false,
+            message: "Failed to upload file",
+            result: null,
+            error: error.message,
+            controller: "uploadFileController",
+            httpCode: HttpCodes.INTERNAL_SERVER_ERROR,
+            req, res,
+        }));
+    }
+};
+
+export default uploadFileController;
