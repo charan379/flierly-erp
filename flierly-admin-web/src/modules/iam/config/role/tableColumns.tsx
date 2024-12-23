@@ -5,6 +5,8 @@ import { ProColumns } from "@ant-design/pro-components";
 import { Button, Tag } from "antd";
 import privilegeTableColumns from "../privilege/tableColumns";
 import queryTransformers from "@/utils/queryTransformers";
+import formatDateToLocaleTimezone from "@/utils/formatDateTimeToLocaleTimezone";
+import _ from "lodash";
 
 
 const roleTableColumns: ProColumns<Role>[] = [
@@ -120,8 +122,11 @@ const roleTableColumns: ProColumns<Role>[] = [
         dataIndex: "updatedAt",
         key: "updatedAt",
         order: 6,
-        valueType: "dateTime",
+        valueType: "text",
         sorter: true,
+        renderText(text, _record, _index, _action) {
+            return formatDateToLocaleTimezone(text, "DD-MM-YYYY HH:mm:ss", true);
+        },
     },
     // createdAt
     {
@@ -129,8 +134,11 @@ const roleTableColumns: ProColumns<Role>[] = [
         dataIndex: "createdAt",
         key: "createdAt",
         order: 7,
-        valueType: "dateTime",
+        valueType: "text",
         sorter: true,
+        renderText(text, _record, _index, _action) {
+            return formatDateToLocaleTimezone(text, "DD-MM-YY HH:mm:ss", true);
+        },
     },
     // deletedAt
     {
@@ -138,8 +146,11 @@ const roleTableColumns: ProColumns<Role>[] = [
         dataIndex: "deletedAt",
         key: "deletedAt",
         order: 8,
-        valueType: "dateTime",
+        valueType: "text",
         sorter: true,
+        renderText(text, _record, _index, _action) {
+            return formatDateToLocaleTimezone(text, "DD-MM-YYYY HH:mm:ss", true);
+        },
     },
 ];
 

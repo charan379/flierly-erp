@@ -1,3 +1,4 @@
+import formatDateToLocaleTimezone from "@/utils/formatDateTimeToLocaleTimezone";
 import { ProColumns } from "@ant-design/pro-components";
 import { Tag } from "antd";
 
@@ -88,8 +89,11 @@ const privilegeTableColumns: ProColumns<Privilege>[] = [
         dataIndex: "updatedAt",
         key: "updatedAt",
         order: 6,
-        valueType: "dateTime",
+        valueType: "text",
         sorter: true,
+        renderText(text, _record, _index, _action) {
+            return formatDateToLocaleTimezone(text, "DD-MM-YYYY HH:mm:ss", true);
+        },
     },
     // createdAt
     {
@@ -97,8 +101,11 @@ const privilegeTableColumns: ProColumns<Privilege>[] = [
         dataIndex: "createdAt",
         key: "createdAt",
         order: 7,
-        valueType: "dateTime",
+        valueType: "text",
         sorter: true,
+        renderText(text, _record, _index, _action) {
+            return formatDateToLocaleTimezone(text, "DD-MM-YYYY HH:mm:ss", true);
+        },
     },
     // deletedAt
     {
@@ -106,8 +113,11 @@ const privilegeTableColumns: ProColumns<Privilege>[] = [
         dataIndex: "deletedAt",
         key: "deletedAt",
         order: 8,
-        valueType: "dateTime",
+        valueType: "text",
         sorter: true,
+        renderText(text, _record, _index, _action) {
+            return formatDateToLocaleTimezone(text, "DD-MM-YY HH:mm:ss", true);
+        },
     }
 ];
 

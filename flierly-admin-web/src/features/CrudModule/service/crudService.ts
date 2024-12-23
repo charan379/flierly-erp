@@ -50,9 +50,9 @@ const crudService = {
     /**
      * Check if an entity exists
      */
-    exists: async ({ entity, filters = {}, signal }: EntityRecordExistsRequest) => {
+    isExists: async ({ entity, filters = {}, signal }: EntityRecordExistsRequest) => {
         const promise = api.post(
-            `/${entity}/exists`,
+            `/${entity}/is-exists`,
             { filters, withDeleted: true },
             { signal }
         );
