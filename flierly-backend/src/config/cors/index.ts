@@ -1,3 +1,3 @@
-import CorsConfig from "./corsConfig";
+import CorsConfig from './cors.config';
 
 export { CorsConfig };

@@ -1,34 +1,28 @@
-import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    CreateDateColumn,
-    DeleteDateColumn,
-} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, DeleteDateColumn } from 'typeorm';
 
-@Entity("file_uploads")
+@Entity('file_uploads')
 export class FileUpload {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ name: "original_name" })
-    originalName: string;
+  @Column({ name: 'original_name' })
+  originalName: string;
 
-    @Column({ name: "mime_type" })
-    mimeType: string;
+  @Column({ name: 'mime_type' })
+  mimeType: string;
 
-    @Column()
-    size: number;
+  @Column()
+  size: number;
 
-    @Column({ name: "storage_backend" })
-    storageBackend: string;
+  @Column({ name: 'storage_backend' })
+  storageBackend: string;
 
-    @Column({ name: "file_path" })
-    filePath: string;
+  @Column({ name: 'file_path' })
+  filePath: string;
 
-    @CreateDateColumn({ name: 'uploaded_at', type: 'timestamptz' })
-    uploadedAt: Date;
+  @CreateDateColumn({ name: 'uploaded_at', type: 'timestamptz' })
+  uploadedAt: Date;
 
-    @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz' })
-    deletedAt: Date | null;
+  @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz' })
+  deletedAt: Date | null;
 }

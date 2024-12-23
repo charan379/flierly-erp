@@ -49,7 +49,7 @@ const genricAssignmentService = {
     }: RelatedEntitiesPageRequest) => {
 
         const promise = api.post<ApiResponse<T>>(
-            `/${inverseEntity}/related-entities-page`,
+            `/${inverseEntity}/associated-entity-records-page`,
             { owningEntity, owningEntityId, inverseSideField, owningSideField, filters, pagination, sort, type },
             { signal }
         );

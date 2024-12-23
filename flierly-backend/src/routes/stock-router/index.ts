@@ -1,3 +1,3 @@
-import stockRouter from "./stock.routes";
+import stockRouter from './stock.routes';
 
 export default stockRouter;

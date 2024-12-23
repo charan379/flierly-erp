@@ -1,31 +1,31 @@
-import controllers from "@/controllers";
-import getEntityList from "@/entities";
-import { authorize } from "@/middlewares/authorization.middleware";
-import { errorBoundary } from "@/middlewares/error-boundary.middleware";
-import { Router } from "express";
+import controllers from '@/controllers';
+import getEntityList from '@/entities';
+import { authorize } from '@/middlewares/authorization.middleware';
+import { controllerErrorBoundary } from '@/middlewares/controller-error-boundary.middleware';
+import { Router } from 'express';
 
 const crudRouter = Router();
 
 const routeGenerator = (entityCode: string, controller: any) => {
-    crudRouter.post(`/${entityCode}/create`, authorize(`${entityCode}.create`), errorBoundary(controller['create'], entityCode));
-    crudRouter.post(`/${entityCode}/read`, authorize(`${entityCode}.read`), errorBoundary(controller['read'], entityCode));
-    crudRouter.post(`/${entityCode}/search`, authorize(`${entityCode}.read`), errorBoundary(controller['search'], entityCode));
-    crudRouter.post(`/${entityCode}/exists`, authorize(`${entityCode}.read`), errorBoundary(controller['exists'], entityCode));
-    crudRouter.post(`/${entityCode}/page`, authorize(`${entityCode}.read`), errorBoundary(controller['page'], entityCode));
-    crudRouter.post(`/${entityCode}/related-entities-page`, authorize(`${entityCode}.read`), errorBoundary(controller["relatedEntitiesPage"], entityCode));
-    crudRouter.put(`/${entityCode}/update/:id`, authorize(`${entityCode}.update`), errorBoundary(controller['update'], entityCode));
-    crudRouter.patch(`/${entityCode}/activate`, authorize(`${entityCode}.manage`), errorBoundary(controller['activate'], entityCode));
-    crudRouter.patch(`/${entityCode}/inactivate`, authorize(`${entityCode}.manage`), errorBoundary(controller['inactivate'], entityCode));
-    crudRouter.delete(`/${entityCode}/delete`, authorize(`${entityCode}.delete`), errorBoundary(controller['delete'], entityCode));
-    crudRouter.patch(`/${entityCode}/restore`, authorize(`${entityCode}.delete`), errorBoundary(controller['restore'], entityCode));
-    crudRouter.patch(`/${entityCode}/update-associated-records`, authorize(`${entityCode}.manage`), errorBoundary(controller['updateAssociatedRecords'], entityCode));
-}
+  crudRouter.post(`/${entityCode}/create`, authorize(`${entityCode}.create`), controllerErrorBoundary(controller['create'], entityCode));
+  crudRouter.post(`/${entityCode}/read`, authorize(`${entityCode}.read`), controllerErrorBoundary(controller['read'], entityCode));
+  crudRouter.post(`/${entityCode}/search`, authorize(`${entityCode}.read`), controllerErrorBoundary(controller['search'], entityCode));
+  crudRouter.post(`/${entityCode}/is-exists`, authorize(`${entityCode}.read`), controllerErrorBoundary(controller['isExists'], entityCode));
+  crudRouter.post(`/${entityCode}/page`, authorize(`${entityCode}.read`), controllerErrorBoundary(controller['page'], entityCode));
+  crudRouter.post(`/${entityCode}/associated-entity-records-page`, authorize(`${entityCode}.read`), controllerErrorBoundary(controller['associatedEntityRecordsPage'], entityCode));
+  crudRouter.put(`/${entityCode}/update/:id`, authorize(`${entityCode}.update`), controllerErrorBoundary(controller['update'], entityCode));
+  crudRouter.patch(`/${entityCode}/activate`, authorize(`${entityCode}.manage`), controllerErrorBoundary(controller['activate'], entityCode));
+  crudRouter.patch(`/${entityCode}/inactivate`, authorize(`${entityCode}.manage`), controllerErrorBoundary(controller['inactivate'], entityCode));
+  crudRouter.delete(`/${entityCode}/delete`, authorize(`${entityCode}.delete`), controllerErrorBoundary(controller['delete'], entityCode));
+  crudRouter.patch(`/${entityCode}/restore`, authorize(`${entityCode}.delete`), controllerErrorBoundary(controller['restore'], entityCode));
+  crudRouter.patch(`/${entityCode}/update-associated-records`, authorize(`${entityCode}.manage`), controllerErrorBoundary(controller['updateEntityAssociatedRecords'], entityCode));
+};
 
 getEntityList().then(async (entities) => {
-    const controllersList = await controllers();
-    entities.forEach(({ code, controller }) => {
-        routeGenerator(code, controllersList[controller]);
-    });
+  const controllersList = await controllers();
+  entities.forEach(({ code, controller }) => {
+    routeGenerator(code, controllersList[controller]);
+  });
 });
 
 export default crudRouter;

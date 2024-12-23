@@ -1,3 +1,3 @@
-import EnvConfig from "./envConfig";
+import EnvConfig from './env.config';
 
 export { EnvConfig };

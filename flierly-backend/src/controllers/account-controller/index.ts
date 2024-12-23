@@ -1,12 +1,12 @@
-import CRUDController from "../crud-controller";
-import updateAccount from './updateAccount';
+import CRUDController from '../crud-controller';
+import updateAccount from './update.controller';
 
 const accountController = async () => {
-    const defaultController = await CRUDController("Account");
+  const defaultController = await CRUDController('Account');
 
-    const controllers = { ...defaultController, update: updateAccount };
+  const controllers = { ...defaultController, update: updateAccount };
 
-    return controllers;
-}
+  return controllers;
+};
 
 export default accountController;

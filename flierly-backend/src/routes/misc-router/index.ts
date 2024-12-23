@@ -1,3 +1,3 @@
-import miscRouter from "./misc.routes";
+import miscRouter from './misc.routes';
 
 export default miscRouter;

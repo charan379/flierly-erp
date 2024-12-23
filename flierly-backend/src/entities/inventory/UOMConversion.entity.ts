@@ -1,15 +1,5 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsPositive, Length } from 'class-validator';
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  Unique,
-  CreateDateColumn,
-  UpdateDateColumn,
-  DeleteDateColumn,
-  JoinColumn,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, Unique, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, JoinColumn } from 'typeorm';
 import { Product } from '../product/Product.entity';
 import { UOM } from './UOM.entity';
 
@@ -17,7 +7,7 @@ import { UOM } from './UOM.entity';
 @Unique(['product', 'fromUom', 'toUom'])
 export class UOMConversion {
   @PrimaryGeneratedColumn({
-    type: 'bigint'
+    type: 'bigint',
   })
   id: number;
 

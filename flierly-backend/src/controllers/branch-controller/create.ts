@@ -6,8 +6,6 @@
 // import JoiSchemaValidator from "@/utils/joi-object-validator/joiSchemaValidator";
 // import { Request, Response } from "express";
 
-
-
 // const create = async (req: Request, res: Response) => {
 //     const branch: Branch = await JoiSchemaValidator<Branch>(createBranchSchema, req.body, { abortEarly: false, allowUnknown: false }, "create-branch-custom-controller");
 

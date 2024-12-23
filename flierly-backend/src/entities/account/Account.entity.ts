@@ -1,103 +1,117 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany, OneToOne, BeforeInsert, BeforeUpdate, Repository } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+  OneToMany,
+  OneToOne,
+  BeforeInsert,
+  BeforeUpdate,
+  Repository,
+} from 'typeorm';
 import { Address } from '../address/Address.entity';
 import { TaxIdentity } from '../taxation/TaxIdentity.entity';
 import { IsEmail, IsNotEmpty, IsOptional, Length, Matches } from 'class-validator';
 import { AccountType } from './AccountType.entity';
 import { AccountSubtype } from './AccountSubtype.entity';
-import { AppDataSource } from '@/lib/app-data-source';
+import { AppDataSource } from '@/lib/typeorm/app-datasource';
 
 @Entity('accounts')
 export class Account {
-    @PrimaryGeneratedColumn({ type: 'bigint' })
-    id: number;
+  @PrimaryGeneratedColumn({ type: 'bigint' })
+  id: number;
 
-    @Column({ type: 'boolean', default: true, name: 'is_active' })
-    isActive: boolean;
+  @Column({ type: 'boolean', default: true, name: 'is_active' })
+  isActive: boolean;
 
-    @ManyToOne(() => AccountType, { eager: false, nullable: false })
-    @JoinColumn({ name: 'account_type_id' })
-    accountType: AccountType;
+  @ManyToOne(() => AccountType, { eager: false, nullable: false })
+  @JoinColumn({ name: 'account_type_id' })
+  accountType: AccountType;
 
-    @ManyToOne(() => AccountSubtype, { eager: false, nullable: false })
-    @JoinColumn({ name: 'account_subtype_id' })
-    accountSubtype: AccountSubtype;
+  @ManyToOne(() => AccountSubtype, { eager: false, nullable: false })
+  @JoinColumn({ name: 'account_subtype_id' })
+  accountSubtype: AccountSubtype;
 
-    @Column({ type: 'boolean', default: false, name: 'is_vip' })
-    isVip: boolean;
+  @Column({ type: 'boolean', default: false, name: 'is_vip' })
+  isVip: boolean;
 
-    @Column({ type: 'boolean', default: false, name: 'is_key' })
-    isKey: boolean;
+  @Column({ type: 'boolean', default: false, name: 'is_key' })
+  isKey: boolean;
 
-    @Column()
-    @IsNotEmpty({ message: 'Account name is required.' })
-    @Length(5, 90, { message: 'Account name must be between 5 and 90 characters.' })
-    name: string;
+  @Column()
+  @IsNotEmpty({ message: 'Account name is required.' })
+  @Length(5, 90, { message: 'Account name must be between 5 and 90 characters.' })
+  name: string;
 
-    @Column({ name: 'registered_phone', unique: true })
-    @IsNotEmpty({ message: 'Account registered phone is required.' })
-    @Matches(/^\+\d{1,3}[\s][6-9]\d{9}$/, { message: 'Registered Phone number is not valid' })
-    registeredPhone: string;
+  @Column({ name: 'registered_phone', unique: true })
+  @IsNotEmpty({ message: 'Account registered phone is required.' })
+  @Matches(/^\+\d{1,3}[\s][6-9]\d{9}$/, { message: 'Registered Phone number is not valid' })
+  registeredPhone: string;
 
-    @Column({ nullable: true, name: 'alternate_phone' })
-    @Matches(/^\+\d{1,3}[\s][6-9]\d{9}$/, { message: 'Alternate Phone number is not valid' })
-    @IsOptional()
-    alternatePhone: string;
+  @Column({ nullable: true, name: 'alternate_phone' })
+  @Matches(/^\+\d{1,3}[\s][6-9]\d{9}$/, { message: 'Alternate Phone number is not valid' })
+  @IsOptional()
+  alternatePhone: string;
 
-    @Column({ unique: true })
-    @IsEmail({}, { message: 'Invalid email format.' })
-    @IsNotEmpty({ message: 'Account email is required.' })
-    email: string;
+  @Column({ unique: true })
+  @IsEmail({}, { message: 'Invalid email format.' })
+  @IsNotEmpty({ message: 'Account email is required.' })
+  email: string;
 
-    @ManyToOne(() => TaxIdentity, { eager: true, nullable: false })
-    @JoinColumn({ name: 'tax_identity_id' })
-    taxIdentity: TaxIdentity;
+  @ManyToOne(() => TaxIdentity, { eager: true, nullable: false })
+  @JoinColumn({ name: 'tax_identity_id' })
+  taxIdentity: TaxIdentity;
 
-    @ManyToOne(() => Account, { eager: false, nullable: true })
-    @JoinColumn({ name: 'parent_id' })
-    parent: Account;
+  @ManyToOne(() => Account, { eager: false, nullable: true })
+  @JoinColumn({ name: 'parent_id' })
+  parent: Account;
 
-    @OneToOne(() => Address, { eager: true, nullable: false })
-    @JoinColumn({ name: 'primary_address_id' })
-    primaryAddress: Address;
+  @OneToOne(() => Address, { eager: true, nullable: false })
+  @JoinColumn({ name: 'primary_address_id' })
+  primaryAddress: Address;
 
-    @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
-    createdAt: Date;
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
+  createdAt: Date;
 
-    @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
-    updatedAt: Date;
+  @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
+  updatedAt: Date;
 
-    @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz' })
-    deletedAt: Date | null;
+  @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz' })
+  deletedAt: Date | null;
 
-    // Hook that runs before inserting or updating an account
-    @BeforeInsert()
-    async updatePrimaryAddress(): Promise<void> {
-        // Check if the account has a primary address that needs to be updated
-        if (this.primaryAddress) {
-            const repository: Repository<Address> = AppDataSource.getRepository(Address);
+  // Hook that runs before inserting or updating an account
+  @BeforeInsert()
+  async updatePrimaryAddress(): Promise<void> {
+    // Check if the account has a primary address that needs to be updated
+    if (this.primaryAddress) {
+      const repository: Repository<Address> = AppDataSource.getRepository(Address);
 
-            // Fetch the current address associated with the primary address
-            const currentAddress = await repository.findOne({
-                where: { id: this.primaryAddress.id }, // Filter by the primary address ID
-                select: ['id', 'account'] // Select only the 'id' and 'account' fields
-            });
+      // Fetch the current address associated with the primary address
+      const currentAddress = await repository.findOne({
+        where: { id: this.primaryAddress.id }, // Filter by the primary address ID
+        select: ['id', 'account'], // Select only the 'id' and 'account' fields
+      });
 
-            // If the account is already set and matches the current account, skip the update
-            if (currentAddress?.account?.id === this.id) {
-                return; // No need to update since the account ID is the same
-            }
+      // If the account is already set and matches the current account, skip the update
+      if (currentAddress?.account?.id === this.id) {
+        return; // No need to update since the account ID is the same
+      }
 
-            // Use a transaction to ensure consistency
-            await AppDataSource.transaction(async transactionalEntityManager => {
-                try {
-                    await transactionalEntityManager.update(Address, this.primaryAddress.id, {
-                        account: this,  // Update the address with the account reference
-                    });
-                } catch (error) {
-                    console.error('Transaction failed, rolling back:', error);
-                    throw new Error('Failed to update address during account creation or update.');
-                }
-            });
+      // Use a transaction to ensure consistency
+      await AppDataSource.transaction(async (transactionalEntityManager) => {
+        try {
+          await transactionalEntityManager.update(Address, this.primaryAddress.id, {
+            account: this, // Update the address with the account reference
+          });
+        } catch (error) {
+          console.error('Transaction failed, rolling back:', error);
+          throw new Error('Failed to update address during account creation or update.');
         }
+      });
     }
+  }
 }

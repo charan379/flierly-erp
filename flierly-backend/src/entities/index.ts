@@ -3,26 +3,25 @@ import { glob } from 'glob';
 import { basename } from 'path';
 
 async function getEntityList(): Promise<EntityDetails[]> {
+  const files = await glob(`${__dirname}/**/*.entity.{ts,js}`);
 
-    const files = await glob(`${__dirname}/**/*.entity.{ts,js}`);
+  const entityList: EntityDetails[] = files.map((file) => {
+    const entityFileNameWithoutExtension: string = basename(file).split('.')[0];
+    return {
+      // entity name
+      entity: entityFileNameWithoutExtension,
+      // path
+      filePath: file,
+      // code
+      code: camelToKebabCase(entityFileNameWithoutExtension),
+      // controller
+      controller: pascalToKebabCase(entityFileNameWithoutExtension) + '-controller',
+    };
+  });
 
-    const entityList: EntityDetails[] = files.map(file => {
-        const entityFileNameWithoutExtension: string = basename(file).split('.')[0];
-        return {
-            // entity name
-            entity: entityFileNameWithoutExtension,
-            // path
-            filePath: file,
-            // code
-            code: camelToKebabCase(entityFileNameWithoutExtension),
-            // controller
-            controller: pascalToKebabCase(entityFileNameWithoutExtension) + "-controller",
-        };
-    });
+  const igonredEntity = ['user-password'];
 
-    const igonredEntity = ['user-password'];
-
-    return entityList.filter(entity => !igonredEntity.includes(entity.code));
-};
+  return entityList.filter((entity) => !igonredEntity.includes(entity.code));
+}
 
 export default getEntityList;

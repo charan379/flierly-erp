@@ -1,7 +1,7 @@
-import kebabToPascalCase from './convertors/kebabToPascalCase';
-import camelToSnakeCase from './convertors/camelToSnakeCase';
-import camelToKebabCase from './convertors/camelToKebabCase';
-import pascalToSnakeCase from './convertors/pascalToSnakeCase';
-import pascalToKebabCase from './convertors/pascalToKebabCase';
+import kebabToPascalCase from './kebab-to-pascal.converter';
+import camelToSnakeCase from './camel-to-snake.converter';
+import camelToKebabCase from './camel-to-kebab.converter';
+import pascalToSnakeCase from './pascal-to-snake.converter';
+import pascalToKebabCase from './pascal-to-kebab.converter';
 
 export { camelToSnakeCase, camelToKebabCase, kebabToPascalCase, pascalToSnakeCase, pascalToKebabCase };

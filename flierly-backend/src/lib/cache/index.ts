@@ -1,3 +1,3 @@
-import { getCache, setCache } from "./cache";
+import { getCache, setCache } from './cache';
 
 export { setCache, getCache };

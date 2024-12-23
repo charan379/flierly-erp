@@ -1,3 +1,3 @@
-import urlArray from "./urlArray";
+import urlArray from './url-array.validator';
 
-export { urlArray }
+export { urlArray };

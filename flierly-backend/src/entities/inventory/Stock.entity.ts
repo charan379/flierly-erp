@@ -7,7 +7,7 @@ import { IsNotEmpty, IsNumber, IsPositive, Min } from 'class-validator';
 @Unique(['product', 'uom'])
 export class Stock {
   @PrimaryGeneratedColumn({
-    type: "bigint"
+    type: 'bigint',
   })
   id: number;
 

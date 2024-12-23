@@ -1,14 +1,5 @@
 import { IsNotEmpty, Length, IsOptional, Matches } from 'class-validator';
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-  DeleteDateColumn,
-  JoinColumn,
-  ManyToOne,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, JoinColumn, ManyToOne } from 'typeorm';
 import { Brand } from './Brand.entity';
 
 @Entity('products')
@@ -21,25 +12,25 @@ export class Product {
   @Length(3, 90, { message: 'Name must be between 3 and 90 characters.' })
   name: string;
 
-  @Column({ type: "boolean", default: true, name: 'is_active' })
+  @Column({ type: 'boolean', default: true, name: 'is_active' })
   @IsOptional()
   isActive: boolean;
 
   @Column({ type: 'varchar', length: 100, unique: true })
   @IsNotEmpty({ message: 'SKU must not be empty.' })
   @Length(3, 25, { message: 'SKU must be between 3 and 25 characters.' })
-  @Matches(/^[A-Z0-9_-]{3,50}$/, { message: "SKU is not valid only capital letters, numbers, underscores and hyphens allowed." })
+  @Matches(/^[A-Z0-9_-]{3,50}$/, { message: 'SKU is not valid only capital letters, numbers, underscores and hyphens allowed.' })
   sku: string;
 
-  @Column({ type: "int", unique: true, nullable: true })
+  @Column({ type: 'int', unique: true, nullable: true })
   @IsOptional()
   hsn: number;
 
-  @Column({ type: "boolean", default: false, name: "is_serialized" })
+  @Column({ type: 'boolean', default: false, name: 'is_serialized' })
   @IsOptional()
   isSerialized: boolean;
 
-  @Column({ type: "boolean", default: false, name: "is_composite" })
+  @Column({ type: 'boolean', default: false, name: 'is_composite' })
   @IsOptional()
   isComposite: boolean;
 
@@ -49,7 +40,7 @@ export class Product {
   description: string;
 
   @ManyToOne(() => Brand, { eager: true, nullable: false })
-  @JoinColumn({ name: "brand_id" })
+  @JoinColumn({ name: 'brand_id' })
   @IsNotEmpty({ message: 'Brand must be specified' })
   brand: Brand;
 

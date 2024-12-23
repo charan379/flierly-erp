@@ -1,13 +1,13 @@
-import express, { Express } from "express";
-import createHttpError from "http-errors";
-import router from "@/routes";
-import HttpCodes from "@/constants/httpCodes";
-import errorHandler from "@/middlewares/error-handler.middleware";
+import express, { Express } from 'express';
+import createHttpError from 'http-errors';
+import router from '@/routes';
+import HttpCodes from '@/constants/http-codes.enum';
+import errorHandler from '@/middlewares/error-handler.middleware';
 import dotenv from 'dotenv';
-import cors from "cors";
-import ReqResLogger from "@/middlewares/req-res-logger.middlerware";
-import { EnvConfig } from "@/config/env";
-import { CorsConfig } from "@/config/cors";
+import cors from 'cors';
+import ReqResLogger from '@/middlewares/req-res-logger.middlerware';
+import { EnvConfig } from '@/config/env';
+import { CorsConfig } from '@/config/cors';
 
 dotenv.config();
 
@@ -27,10 +27,10 @@ app.use(ReqResLogger);
 
 app.use(router);
 
-app.all("/*", (req, res, next) => {
-    // console.debug(req.path);
-    next(createHttpError(HttpCodes.NOT_FOUND));
-})
+app.all('/*', (req, res, next) => {
+  // console.debug(req.path);
+  next(createHttpError(HttpCodes.NOT_FOUND));
+});
 
 app.use(errorHandler);
 
