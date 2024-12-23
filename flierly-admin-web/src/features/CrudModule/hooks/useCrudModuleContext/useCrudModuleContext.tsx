@@ -1,6 +1,6 @@
 import { useContext, useMemo } from 'react';
 import CrudModuleContext from '../../context/CrudModuleContext';
-import contextHandler from '../../context/contextHandler';
+import contextHandler from '../../context/context-handler';
 
 // Custom hook to handle context state and dispatch actions in the CrudModuleContext
 function useCrudModuleContext() {

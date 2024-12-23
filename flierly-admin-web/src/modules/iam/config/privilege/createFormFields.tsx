@@ -1,7 +1,7 @@
 import { FormFieldConfig } from "@/components/FormField";
 import fetchEntityOptions from "@/features/SelectRemoteOptions/utils/fetchEntityOptions";
 import entityExistenceValidator from "@/utils/entityExistenceValidator";
-import { accessOptions, activeFieldOptions } from "./misc/options";
+import { accessOptions, activeFieldOptions } from "@/constants/select-options.constant";
 import privilegeCodeRegex from "../../utils/validators/privilegeCodeRegex";
 
 

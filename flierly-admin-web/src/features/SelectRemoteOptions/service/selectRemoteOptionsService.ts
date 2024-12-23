@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { serverConfig } from "@/config/serverConfig";
+import { serverConfig } from "@/config/server.config";
 import { getToken, listenToAuthChanges } from "@/modules/auth/service/authStateService";
 import handleResponse from "@/utils/handlers/apiResponsehandler";
 

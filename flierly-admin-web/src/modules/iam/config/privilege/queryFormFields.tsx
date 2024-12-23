@@ -1,5 +1,5 @@
 import { QueryFieldConfig } from "@/features/QueryBuilder/QueryBuilder";
-import { accessOptions, activeFieldOptions } from "./misc/options";
+import { accessOptions, activeFieldOptions } from "@/constants/select-options.constant";
 import fetchEntityOptions from "@/features/SelectRemoteOptions/utils/fetchEntityOptions";
 
 const privilegeQueryFields: QueryFieldConfig<Privilege>[] = [

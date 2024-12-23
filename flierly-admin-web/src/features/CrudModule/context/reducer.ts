@@ -1,5 +1,5 @@
 import { QueryCondition } from "@/features/QueryBuilder/QueryBuilder";
-import { ActionTypes } from "./ActionTypes";
+import { ActionTypes } from "./action-types.enum";
 
 // Initial state for the CRUD table context
 export const initialState: CrudModuleState = {

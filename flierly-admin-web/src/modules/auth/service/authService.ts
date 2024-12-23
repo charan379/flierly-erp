@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { serverConfig } from "@/config/serverConfig";
+import { serverConfig } from "@/config/server.config";
 import handleResponse from "@/utils/handlers/apiResponsehandler";
 
 // Create an axios instance with the base URL from server configuration

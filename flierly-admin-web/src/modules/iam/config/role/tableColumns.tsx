@@ -7,6 +7,7 @@ import privilegeTableColumns from "../privilege/tableColumns";
 import queryTransformers from "@/utils/queryTransformers";
 import formatDateToLocaleTimezone from "@/utils/formatDateTimeToLocaleTimezone";
 import _ from "lodash";
+import { accessOptions, activeFieldOptions } from "@/constants/select-options.constant";
 
 
 const roleTableColumns: ProColumns<Role>[] = [
@@ -76,11 +77,16 @@ const roleTableColumns: ProColumns<Role>[] = [
                         associatedSideField="privileges"
                         associatedEntityColumns={privilegeTableColumns.filter((column) => ["id", "name", "code", "entity", "access"].includes(column.dataIndex as string))}
                         associatedEntityQueryConfig={[
+                            {
+                                label: "ID", name: "id", formField: {
+                                    input: { type: "Number" },
+                                    rules: [{ required: true, message: "" }]
+                                }
+                            },
                             { label: "Name", name: "name", formField: { input: { type: "Text" }, rules: [{ required: true, message: "" }] } },
                             { label: "Code", name: "code", formField: { input: { type: "Text" }, rules: [{ required: true, message: "" }] } },
                             {
                                 label: "Entity", name: "entity", formField: {
-
                                     input: {
                                         type: "SelectRemoteOptions",
                                         asyncOptionsFetcher: fetchEntityOptions,
@@ -89,8 +95,19 @@ const roleTableColumns: ProColumns<Role>[] = [
                                     rules: [{ type: "array", required: true, message: "" }],
                                     transform: queryTransformers.inArray
                                 }
+                            },
+                            {
+                                label: "Access", name: "access", formField: {
+                                    input: { type: "Select", options: accessOptions },
+                                    rules: [{ type: "string", required: true, message: "" }]
+                                }
+                            },
+                            {
+                                label: "Status", name: "isActive", formField: {
+                                    input: { type: "Select", options: activeFieldOptions },
+                                    rules: [{ type: "string", required: true, message: "" }]
+                                }
                             }
-
                         ]}
                     />
                 </ResizableDrawer>

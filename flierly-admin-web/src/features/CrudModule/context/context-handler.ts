@@ -1,4 +1,4 @@
-import { ActionTypes } from "./ActionTypes";
+import { ActionTypes } from "./action-types.enum";
 import { Dispatch } from "react";
 import { Action } from "./reducer";
 import { QueryCondition } from "@/features/QueryBuilder/QueryBuilder";

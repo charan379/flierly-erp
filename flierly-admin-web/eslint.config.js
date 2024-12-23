@@ -23,6 +23,13 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
+      "no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_", // Ignore unused parameters that start with an underscore,
+        "varsIgnorePattern": "^_"   // Ignore variables that start with _
+      }
+    ]
     },
   },
 )
