@@ -24,7 +24,7 @@ const systemUsage = async (req: Request, res: Response) => {
 export default systemUsage;
 
 // Helper function to gather system information
-function getSystemUsage() {
+function getSystemUsage () {
   const memoryUsage = process.memoryUsage();
   const totalMemory = os.totalmem();
   const freeMemory = os.freemem();

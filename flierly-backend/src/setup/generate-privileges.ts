@@ -5,7 +5,7 @@ import { AppDataSource } from '@/lib/typeorm/app-datasource';
 import getDifferenceFromArrayOfObjects from '@/utils/get-difference-from-arary-of-objects.util';
 
 // Function to generate privilege array based on entities and access types
-async function generatePrivilegesArray(): Promise<Partial<Privilege>[]> {
+async function generatePrivilegesArray (): Promise<Partial<Privilege>[]> {
   const privileges: Partial<Privilege>[] = [];
   const entities = await getEntityList();
 
@@ -13,7 +13,7 @@ async function generatePrivilegesArray(): Promise<Partial<Privilege>[]> {
     Object.values(AccessType).forEach((access) => {
       const privilege: Partial<Privilege> = {
         name: `${entities[index].entity} - ${access}`,
-        access: access,
+        access,
         entity: entities[index].entity,
         code: `${entities[index].code}.${access.toLowerCase()}`,
       };
@@ -34,7 +34,7 @@ async function generatePrivilegesArray(): Promise<Partial<Privilege>[]> {
 }
 
 // Function to generate and sync privileges with the database
-async function generatePrivileges() {
+async function generatePrivileges () {
   const privilegeRepository = AppDataSource.getRepository(Privilege);
 
   // Generate privilege array

@@ -6,7 +6,7 @@ import executeQueryFromFile from '@/lib/typeorm/query-executors';
  * @param userId - The ID of the user.
  * @returns A promise that resolves to a set of privilege codes.
  */
-async function getUserPrivilegeCodes(userId: number): Promise<Set<string>> {
+async function getUserPrivilegeCodes (userId: number): Promise<Set<string>> {
   // Execute the query to get user privileges
   const userPrivileges: Privilege[] = await executeQueryFromFile<Privilege[]>('src/lib/typeorm/sql-queries/iam/user-privileges.query.sql', [userId]);
 

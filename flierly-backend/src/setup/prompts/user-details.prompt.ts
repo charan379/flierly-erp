@@ -1,6 +1,6 @@
 import prompter from 'prompts';
 
-async function userDetailsPrompt(): Promise<{ username: string; password: string; email: string; mobile: string }> {
+async function userDetailsPrompt (): Promise<{ username: string; password: string; email: string; mobile: string }> {
   let password: string = '';
 
   const response: { username: string; password: string; confirm_password: string; email: string; mobile: string } = await prompter([

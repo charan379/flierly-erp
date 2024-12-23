@@ -102,7 +102,7 @@ export class Address {
 
   @BeforeInsert()
   @BeforeUpdate()
-  async validateCoordinates() {
+  async validateCoordinates (): Promise<void> {
     const hasLatitude = this.latitude !== null && this.latitude !== undefined;
     const hasLongitude = this.longitude !== null && this.longitude !== undefined;
 

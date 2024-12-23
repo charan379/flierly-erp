@@ -1,5 +1,5 @@
-async function pageResponseBuilder(data: any[], page: number, pageSize: number, totalResults: number, sort: object): Promise<PageResult> {
-  let pageResponse: PageResult = {
+async function pageResponseBuilder<T,> (data: T[], page: number, pageSize: number, totalResults: number, sort: object): Promise<Page<T>> {
+  let pageResponse: Page<T> = {
     data: [],
     page,
     pageSize,

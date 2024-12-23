@@ -33,7 +33,7 @@ const read = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Resp
 
   // Find the entity by ID with the specified relations
   const data = await repo.findOne({
-    where: { id: id },
+    where: { id },
     relations: loadRelations?.length > 0 ? loadRelations : loadRelations,
   });
 

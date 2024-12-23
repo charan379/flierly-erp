@@ -3,7 +3,7 @@ import NodeCache from 'node-cache';
 const isDev = process.env.NODE_ENV === 'development';
 const cache = isDev ? null : new NodeCache();
 
-async function getCache<T>(key: string): Promise<T | null> {
+async function getCache<T> (key: string): Promise<T | null> {
   if (isDev || !cache) {
     return null;
   }
@@ -14,7 +14,7 @@ async function getCache<T>(key: string): Promise<T | null> {
   return null;
 }
 
-async function setCache<T>(key: string, value: T, duration: number): Promise<void> {
+async function setCache<T> (key: string, value: T, duration: number): Promise<void> {
   if (isDev || !cache) {
     return;
   }

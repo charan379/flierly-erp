@@ -7,10 +7,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  OneToMany,
   OneToOne,
   BeforeInsert,
-  BeforeUpdate,
   Repository,
 } from 'typeorm';
 import { Address } from '../address/Address.entity';
@@ -85,7 +83,7 @@ export class Account {
 
   // Hook that runs before inserting or updating an account
   @BeforeInsert()
-  async updatePrimaryAddress(): Promise<void> {
+  async updatePrimaryAddress (): Promise<void> {
     // Check if the account has a primary address that needs to be updated
     if (this.primaryAddress) {
       const repository: Repository<Address> = AppDataSource.getRepository(Address);

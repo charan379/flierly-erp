@@ -18,7 +18,7 @@ const testTypeORMUpdate = async (req: Request, res: Response): Promise<Response>
       .createQueryBuilder()
       .update()
       .set({ ...update })
-      .where('id = :id', { id: id }) // Specify which IDs to update
+      .where('id = :id', { id }) // Specify which IDs to update
       .execute();
 
     return updateResult; // Return the result of the update operation

@@ -8,7 +8,7 @@ export class TencentCloudStorageService implements IStorage {
   private bucketName: string;
   private region: string;
 
-  constructor() {
+  constructor () {
     this.cos = new COS({
       SecretId: process.env.TENCENT_CLOUD_SECRET_ID,
       SecretKey: process.env.TENCENT_CLOUD_SECRET_KEY,
@@ -17,7 +17,7 @@ export class TencentCloudStorageService implements IStorage {
     this.region = process.env.TENCENT_CLOUD_REGION || 'ap-guangzhou';
   }
 
-  async uploadFile(file: Express.Multer.File, destinationPath: string): Promise<{ fileUrl: string; fileUpload: FileUpload }> {
+  async uploadFile (file: Express.Multer.File, destinationPath: string): Promise<{ fileUrl: string; fileUpload: FileUpload }> {
     const params = {
       Bucket: this.bucketName,
       Region: this.region,
@@ -25,7 +25,7 @@ export class TencentCloudStorageService implements IStorage {
       Body: file.buffer,
       ContentType: file.mimetype,
     };
-    const result = await this.cos.putObject(params);
+    const _result = await this.cos.putObject(params);
     const fileUrl = `https://${params.Bucket}.cos.${params.Region}.myqcloud.com/${params.Key}`;
 
     // Save metadata to the database
@@ -43,7 +43,7 @@ export class TencentCloudStorageService implements IStorage {
     return { fileUrl, fileUpload: metadata };
   }
 
-  async downloadFile(filePath: string): Promise<Buffer> {
+  async downloadFile (filePath: string): Promise<Buffer> {
     const params = {
       Bucket: this.bucketName,
       Region: this.region,
@@ -56,11 +56,11 @@ export class TencentCloudStorageService implements IStorage {
     return response.Body as Buffer;
   }
 
-  getFileUrl(destinationPath: string): string {
+  getFileUrl (destinationPath: string): string {
     return `https://${this.bucketName}.cos.${this.region}.myqcloud.com/${destinationPath}`;
   }
 
-  async deleteFile(destinationPath: string): Promise<void> {
+  async deleteFile (destinationPath: string): Promise<void> {
     const params = {
       Bucket: this.bucketName,
       Region: this.region,

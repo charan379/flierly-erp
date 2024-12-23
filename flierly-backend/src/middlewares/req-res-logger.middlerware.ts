@@ -36,12 +36,12 @@ const logger = pino({
 
 const ReqResLogger = pinoHttp({
   // Reuse an existing logger instance
-  logger: logger,
+  logger,
 
   quietReqLogger: true, // turn off the default logging output
 
   // Define a custom request id function
-  genReqId: function (req: Request, res: Response) {
+  genReqId (req: Request, res: Response) {
     const existingID = req.id ?? req.headers['x-request-id'];
     if (existingID) return existingID;
     const id = randomUUID();
@@ -63,7 +63,7 @@ const ReqResLogger = pinoHttp({
   // useLevel: 'info',
 
   // Define a custom logger level
-  customLogLevel: function (req: Request, res: Response, err: any) {
+  customLogLevel (req: Request, res: Response, err: any) {
     if (res.statusCode >= 400 && res.statusCode < 500) {
       return 'warn';
     } else if (res.statusCode >= 500 || err) {
@@ -75,7 +75,7 @@ const ReqResLogger = pinoHttp({
   },
 
   // Define a custom success message
-  customSuccessMessage: function (req: Request, res: Response) {
+  customSuccessMessage (req: Request, res: Response) {
     if (res.statusCode === 404) {
       return 'resource not found';
     }
@@ -83,13 +83,13 @@ const ReqResLogger = pinoHttp({
   },
 
   // Define a custom receive message
-  customReceivedMessage: function (req: Request, res: Response) {
-    return 'request received: ' + req.method;
+  customReceivedMessage (req: Request, _res: Response) {
+    return `request received: ${  req.method}`;
   },
 
   // Define a custom error message
-  customErrorMessage: function (req: Request, res: Response, err: Error) {
-    return 'request errored with status code: ' + res.statusCode;
+  customErrorMessage (req: Request, res: Response, _err: Error) {
+    return `request errored with status code: ${  res.statusCode}`;
   },
 
   // Override attribute keys for the log object
@@ -101,7 +101,7 @@ const ReqResLogger = pinoHttp({
   },
 
   // Define additional custom request properties
-  customProps: function (req: Request, res: Response) {
+  customProps (req: Request, res: Response) {
     return {
       username: req?.username,
       timestamp: new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata', dateStyle: 'long', timeStyle: 'medium' }),

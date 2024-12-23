@@ -107,7 +107,7 @@ const associatedEntityRecordsPage = async (inverseEntity: EntityTarget<ObjectLit
   const [results, total] = await qb.getManyAndCount();
 
   // Build response object with pagination data
-  const page: PageResult = await pageResponseBuilder(results, pagination.page, pagination.limit, total, sort);
+  const page: Page<object> = await pageResponseBuilder(results, pagination.page, pagination.limit, total, sort);
 
   // Return successful response
   return res.status(HttpCodes.OK).json(

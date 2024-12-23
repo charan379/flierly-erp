@@ -1,7 +1,7 @@
 import { AppDataSource } from './typeorm/app-datasource';
 
 class Database {
-  public static async connect(): Promise<void> {
+  public static async connect (): Promise<void> {
     console.log('🛢 [Database]: Establishing Database connection...');
 
     // establish database connection
@@ -17,7 +17,7 @@ class Database {
     }
   }
 
-  public static async disconnect() {
+  public static async disconnect () {
     try {
       console.info('🛢 [Database]: Disconnecting database connection.');
 

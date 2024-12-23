@@ -59,7 +59,7 @@ server.on('listening', async () => {
   // establish database connection
   await Database.connect();
 
-  console.info('🚀 [server]: Server started is running on ' + port);
+  console.info(`🚀 [server]: Server started is running on ${port}`);
 });
 
 /**

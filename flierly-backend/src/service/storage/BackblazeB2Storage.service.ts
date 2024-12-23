@@ -8,7 +8,7 @@ export class BackblazeB2StorageService implements IStorage {
   private b2: B2;
   private bucketId: string;
 
-  constructor() {
+  constructor () {
     this.b2 = new B2({
       applicationKeyId: EnvConfig.B2_APPLICATION_KEY_ID,
       applicationKey: EnvConfig.B2_APPLICATION_KEY,
@@ -16,13 +16,13 @@ export class BackblazeB2StorageService implements IStorage {
     this.bucketId = EnvConfig.B2_BUCKET_ID;
   }
 
-  async uploadFile(file: Express.Multer.File, destinationPath: string): Promise<{ fileUrl: string; fileUpload: FileUpload }> {
+  async uploadFile (file: Express.Multer.File, destinationPath: string): Promise<{ fileUrl: string; fileUpload: FileUpload }> {
     await this.b2.authorize();
     const response = await this.b2.getUploadUrl({ bucketId: this.bucketId });
     const uploadUrl = response.data.uploadUrl;
     const uploadAuthToken = response.data.authorizationToken;
 
-    const uploadResponse = await this.b2.uploadFile({
+    const _uploadResponse = await this.b2.uploadFile({
       uploadUrl,
       uploadAuthToken,
       fileName: destinationPath,
@@ -46,7 +46,7 @@ export class BackblazeB2StorageService implements IStorage {
     return { fileUrl, fileUpload: metadata };
   }
 
-  async downloadFile(filePath: string): Promise<Buffer> {
+  async downloadFile (filePath: string): Promise<Buffer> {
     await this.b2.authorize();
     const response = await this.b2.downloadFileByName({
       bucketName: this.bucketId,
@@ -57,11 +57,11 @@ export class BackblazeB2StorageService implements IStorage {
     return Buffer.from(response.data);
   }
 
-  getFileUrl(destinationPath: string): string {
+  getFileUrl (destinationPath: string): string {
     return `https://f002.backblazeb2.com/file/${this.bucketId}/${destinationPath}`;
   }
 
-  async deleteFile(destinationPath: string): Promise<void> {
+  async deleteFile (destinationPath: string): Promise<void> {
     await this.b2.authorize();
     const fileInfo = await this.b2.getFileInfo({ fileId: destinationPath });
     await this.b2.deleteFileVersion({

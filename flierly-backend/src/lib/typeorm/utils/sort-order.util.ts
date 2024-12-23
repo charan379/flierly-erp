@@ -12,7 +12,7 @@ type SortOrder = 'ascend' | 'descend' | 'asc' | 'desc' | 'ascending' | 'descendi
  *   - Values can be: 'ascend', 'descend', 'asc', 'desc', 'ascending', 'descending', 1, or -1.
  * @returns {FindOptionsOrder<ObjectLiteral>} - The constructed sort options for use in repo.find().
  */
-function sortOrder(sort: Record<string, SortOrder>): FindOptionsOrder<ObjectLiteral> {
+function sortOrder (sort: Record<string, SortOrder>): FindOptionsOrder<ObjectLiteral> {
   const order: FindOptionsOrder<ObjectLiteral> = {};
 
   Object.entries(sort).forEach(([key, value]) => {

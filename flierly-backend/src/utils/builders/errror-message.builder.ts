@@ -6,16 +6,16 @@ import FlierlyException from '@/lib/flierly.exception';
 import { EnvConfig } from '@/config/env';
 
 // Helper to format Validation Errors from class-validator
-function formatValidationErrors(error: ValidationError): string {
+function formatValidationErrors (error: ValidationError): string {
   return Object.values(error.constraints || {}).join(', ') || 'Validation error';
 }
 
 // Type guard to check if the error is one of the custom error types
-function isInstance<T>(error: any, type: new (...args: any[]) => T): error is T {
+function isInstance<T> (error: any, type: new (...args: any[]) => T): error is T {
   return error instanceof type;
 }
 
-function errrorMessageBuilder(error: Error | HttpError | FlierlyException | ValidationError | QueryFailedError): ErrorMessage {
+function errrorMessageBuilder (error: Error | HttpError | FlierlyException | ValidationError | QueryFailedError): ErrorMessage {
   // Default error message structure
   const errorMessage: ErrorMessage = {
     name: 'UnknownError',

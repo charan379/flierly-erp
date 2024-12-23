@@ -22,7 +22,7 @@ interface ApiResponse {
  * @param res - The Express response object.
  * @returns The standardized response object.
  */
-function apiResponseBuilder({
+function apiResponseBuilder ({
   success,
   result,
   message,

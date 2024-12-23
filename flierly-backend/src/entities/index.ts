@@ -2,7 +2,7 @@ import { camelToKebabCase, pascalToKebabCase } from '@/utils/case-converters';
 import { glob } from 'glob';
 import { basename } from 'path';
 
-async function getEntityList(): Promise<EntityDetails[]> {
+async function getEntityList (): Promise<EntityDetails[]> {
   const files = await glob(`${__dirname}/**/*.entity.{ts,js}`);
 
   const entityList: EntityDetails[] = files.map((file) => {
@@ -15,7 +15,7 @@ async function getEntityList(): Promise<EntityDetails[]> {
       // code
       code: camelToKebabCase(entityFileNameWithoutExtension),
       // controller
-      controller: pascalToKebabCase(entityFileNameWithoutExtension) + '-controller',
+      controller: `${pascalToKebabCase(entityFileNameWithoutExtension)  }-controller`,
     };
   });
 

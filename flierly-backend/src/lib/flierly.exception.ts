@@ -14,7 +14,7 @@ class FlierlyException extends Error {
    * @param reason - Reason for the error.
    * @param stack - Stack trace for the error.
    */
-  constructor(message: string, httpCode: HttpCodes, reason: string = '', stack: string = '') {
+  constructor (message: string, httpCode: HttpCodes, reason: string = '', stack: string = '') {
     // Call the base Error class constructor with the message
     super(message);
     // Set the name of the error class

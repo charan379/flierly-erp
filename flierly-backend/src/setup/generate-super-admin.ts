@@ -5,7 +5,7 @@ import { User } from '@/entities/iam/User.entity';
 import { Privilege } from '@/entities/iam/Privilege.entity';
 import updateUserPassword from '@/service/iam/update-user-password.service';
 
-async function generateSuperAdmin(): Promise<void> {
+async function generateSuperAdmin (): Promise<void> {
   const roleRepository = AppDataSource.getRepository(Role);
   const userRepository = AppDataSource.getRepository(User);
 
@@ -36,7 +36,7 @@ async function generateSuperAdmin(): Promise<void> {
     `);
 }
 
-async function generateSuperAdminRole(): Promise<Role> {
+async function generateSuperAdminRole (): Promise<Role> {
   const privilegeRepository = AppDataSource.getRepository(Privilege);
   const roleRepository = AppDataSource.getRepository(Role);
 
@@ -48,7 +48,7 @@ async function generateSuperAdminRole(): Promise<Role> {
     code: 'super-admin',
     name: 'Super Admin Role',
     description: 'Account Owner / Super Admin',
-    privileges: privileges, // Assign all privileges to this role
+    privileges, // Assign all privileges to this role
   });
 
   await roleRepository.save(superAdminRole);

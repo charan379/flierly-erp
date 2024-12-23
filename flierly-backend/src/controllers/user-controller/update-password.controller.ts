@@ -40,7 +40,7 @@ const updatePassword = async (req: Request, res: Response): Promise<Response> =>
       controller: 'user.update-password',
       error: null,
       httpCode: HttpCodes.OK,
-      message: message,
+      message,
       result: message,
       req,
       res,

@@ -8,12 +8,12 @@ export class GcpStorageService implements IStorage {
   private storage: Storage;
   private bucketName: string;
 
-  constructor() {
+  constructor () {
     this.storage = new Storage();
     this.bucketName = EnvConfig.GCP_BUCKET_NAME;
   }
 
-  async uploadFile(file: Express.Multer.File, destinationPath: string): Promise<{ fileUrl: string; fileUpload: FileUpload }> {
+  async uploadFile (file: Express.Multer.File, destinationPath: string): Promise<{ fileUrl: string; fileUpload: FileUpload }> {
     const bucket = this.storage.bucket(this.bucketName);
     const blob = bucket.file(destinationPath);
     const stream = blob.createWriteStream({
@@ -40,18 +40,18 @@ export class GcpStorageService implements IStorage {
     return { fileUrl, fileUpload: metadata };
   }
 
-  async downloadFile(filePath: string): Promise<Buffer> {
+  async downloadFile (filePath: string): Promise<Buffer> {
     const bucket = this.storage.bucket(this.bucketName);
     const blob = bucket.file(filePath);
     const [contents] = await blob.download();
     return contents;
   }
 
-  getFileUrl(destinationPath: string): string {
+  getFileUrl (destinationPath: string): string {
     return `https://storage.googleapis.com/${this.bucketName}/${destinationPath}`;
   }
 
-  async deleteFile(destinationPath: string): Promise<void> {
+  async deleteFile (destinationPath: string): Promise<void> {
     const bucket = this.storage.bucket(this.bucketName);
     const blob = bucket.file(destinationPath);
     await blob.delete();

@@ -10,7 +10,7 @@ import { getCache, setCache } from '../cache';
  * @param cacheDuration - The duration to cache the query result (default: 60000 ms).
  * @returns A promise that resolves to the query result.
  */
-async function executeQueryFromFile<T>(relativeFilePath: string, params: any[], cacheDuration: number = 60000): Promise<T> {
+async function executeQueryFromFile<T> (relativeFilePath: string, params: any[], cacheDuration: number = 60000): Promise<T> {
   try {
     const cacheKey = `${relativeFilePath}:${JSON.stringify(params)}`;
 
@@ -42,7 +42,7 @@ async function executeQueryFromFile<T>(relativeFilePath: string, params: any[], 
  * @param cacheDuration - The duration to cache the query (default: 60000 ms).
  * @returns A promise that resolves to the SQL query string.
  */
-async function getQueryFromCacheOrFile(relativeFilePath: string, cacheDuration: number): Promise<string> {
+async function getQueryFromCacheOrFile (relativeFilePath: string, cacheDuration: number): Promise<string> {
   const queryCacheKey = `query:${relativeFilePath}`;
   const cachedQuery = await getCache<string>(queryCacheKey);
 

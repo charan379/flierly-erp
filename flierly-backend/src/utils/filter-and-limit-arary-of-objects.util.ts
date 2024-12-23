@@ -1,7 +1,7 @@
 /**
  * Filters and limits an array of objects based on a regular expression and a specified property.
  */
-function filterAndLimit<T>(args: FilterAndLimitArgs<T>): T[] {
+function filterAndLimit<T> (args: FilterAndLimitArgs<T>): T[] {
   const { data, matcher, limit, queryKey } = args;
 
   // Reduce the data array to accumulate items that match the regex and within the limit

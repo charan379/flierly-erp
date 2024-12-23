@@ -8,7 +8,7 @@ import { Between, Equal, FindOptionsWhere, ILike, In, IsNull, LessThan, LessThan
  * @param {any} condition - The condition value.
  * @returns {FindOptionsWhere<T>} - The updated where condition.
  */
-function whereCondition<T extends ObjectLiteral>(where: FindOptionsWhere<T> | undefined, field: string, condition: any): FindOptionsWhere<T> {
+function whereCondition<T extends ObjectLiteral> (where: FindOptionsWhere<T> | undefined, field: string, condition: any): FindOptionsWhere<T> {
   const conditionObject: any = {};
 
   if (typeof condition === 'object' && !Array.isArray(condition)) {

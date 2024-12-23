@@ -1,5 +1,5 @@
-type PageResult = {
-  data: any[];
+type Page<T> = {
+  data: T[];
   page: number;
   pageSize: number;
   totalResults: number;
@@ -32,11 +32,11 @@ type PageRequest = {
   sort: SortBy;
 };
 
-type ApiResponse = {
+type ApiResponse<T> = {
   // Indicates if the request was successful
   success: boolean;
   // The result of the API call, can be various types
-  result: any;
+  result: T;
   // A message providing more details about the result
   message: string;
   // The name of the controller that handled the request
@@ -44,7 +44,7 @@ type ApiResponse = {
   // URL of the request
   requestUrl: string;
   // Error details if the request was unsuccessful
-  error: string | ErrorObject | null | ErrorMessage;
+  error: string | null | ErrorMessage;
   // The HTTP status code of the response
   httpCode: number;
 };
@@ -52,7 +52,7 @@ type ApiResponse = {
 type ErrorMessage = {
   name: String;
   message: string;
-  httpCode: HttpCodes;
+  httpCode: number;
   reason: string;
   stack?: string;
 };

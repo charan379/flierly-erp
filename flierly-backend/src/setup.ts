@@ -14,7 +14,7 @@ dotenv.config();
 // validate environment variables
 validateEnv();
 
-async function setup() {
+async function setup (): Promise<void> {
   try {
     console.log('⚙️  [Setup]: Starting Flierly application setup...');
     // Establish Database

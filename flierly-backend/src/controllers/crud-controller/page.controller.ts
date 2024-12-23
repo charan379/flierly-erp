@@ -73,7 +73,7 @@ const page = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Resp
   // Get the paginated and filtered rows
   const [results, total] = await repo.findAndCount(findOptions);
 
-  const page: PageResult = await pageResponseBuilder(results, pagination.page, pagination.limit, total, sort);
+  const page: Page<object> = await pageResponseBuilder(results, pagination.page, pagination.limit, total, sort);
 
   return res.status(HttpCodes.OK).json(
     apiResponseBuilder({

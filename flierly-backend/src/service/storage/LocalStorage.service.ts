@@ -8,11 +8,11 @@ import { AppDataSource } from '@/lib/typeorm/app-datasource';
 export class LocalStorageService implements IStorage {
   private storagePath: string;
 
-  constructor() {
+  constructor () {
     this.storagePath = path.join(__dirname, '../../../uploads');
   }
 
-  async uploadFile(file: Express.Multer.File, destinationPath: string): Promise<{ fileUrl: string; fileUpload: FileUpload }> {
+  async uploadFile (file: Express.Multer.File, destinationPath: string): Promise<{ fileUrl: string; fileUpload: FileUpload }> {
     // Generate a unique file name
     const uniqueName = `${uuidv4()}-${file.originalname}`;
 
@@ -37,16 +37,16 @@ export class LocalStorageService implements IStorage {
     return { fileUrl, fileUpload: metadata };
   }
 
-  async downloadFile(filePath: string): Promise<Buffer> {
+  async downloadFile (filePath: string): Promise<Buffer> {
     const fullPath = path.join(this.storagePath, filePath);
     return fs.promises.readFile(fullPath);
   }
 
-  getFileUrl(destinationPath: string): string {
+  getFileUrl (destinationPath: string): string {
     return `/uploads/${destinationPath}`;
   }
 
-  async deleteFile(destinationPath: string): Promise<void> {
+  async deleteFile (destinationPath: string): Promise<void> {
     const filePath = path.join(this.storagePath, destinationPath);
     await fs.promises.unlink(filePath);
   }

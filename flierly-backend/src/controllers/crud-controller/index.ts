@@ -19,7 +19,7 @@ import associatedEntityRecordsPage from './associated-entity-records-page.contro
  * @returns An object containing the CRUD methods.
  */
 const CRUDController = async (entity: EntityTarget<ObjectLiteral>) => {
-  let crudMethods = {
+  const crudMethods = {
     create: (req: Request, res: Response) => create(entity, req, res),
     read: (req: Request, res: Response) => read(entity, req, res),
     update: (req: Request, res: Response) => update(entity, req, res),

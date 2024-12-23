@@ -8,7 +8,7 @@ export class AwsS3StorageService implements IStorage {
   private s3: AWS.S3;
   private bucketName: string;
 
-  constructor() {
+  constructor () {
     this.s3 = new AWS.S3({
       accessKeyId: EnvConfig.S3_ACCESS_KEY,
       secretAccessKey: EnvConfig.S3_SECRET_KEY,
@@ -17,7 +17,7 @@ export class AwsS3StorageService implements IStorage {
     this.bucketName = EnvConfig.S3_BUCKET_NAME;
   }
 
-  async uploadFile(file: Express.Multer.File, destinationPath: string): Promise<{ fileUrl: string; fileUpload: FileUpload }> {
+  async uploadFile (file: Express.Multer.File, destinationPath: string): Promise<{ fileUrl: string; fileUpload: FileUpload }> {
     const params = {
       Bucket: this.bucketName,
       Key: destinationPath,
@@ -42,7 +42,7 @@ export class AwsS3StorageService implements IStorage {
     return { fileUrl, fileUpload: metadata };
   }
 
-  async downloadFile(filePath: string): Promise<Buffer> {
+  async downloadFile (filePath: string): Promise<Buffer> {
     const params = {
       Bucket: this.bucketName,
       Key: filePath,
@@ -54,11 +54,11 @@ export class AwsS3StorageService implements IStorage {
     return response.Body as Buffer;
   }
 
-  getFileUrl(destinationPath: string): string {
+  getFileUrl (destinationPath: string): string {
     return `https://${this.bucketName}.s3.amazonaws.com/${destinationPath}`;
   }
 
-  async deleteFile(destinationPath: string): Promise<void> {
+  async deleteFile (destinationPath: string): Promise<void> {
     const params = {
       Bucket: this.bucketName,
       Key: destinationPath,

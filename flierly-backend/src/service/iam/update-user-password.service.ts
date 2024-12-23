@@ -2,7 +2,7 @@ import { UserPassword } from '@/entities/iam/UserPassword.entity';
 import { generateHash } from '@/lib/bcrypt';
 import { AppDataSource } from '@/lib/typeorm/app-datasource';
 
-async function updateUserPassword(userId: number, password: string): Promise<string> {
+async function updateUserPassword (userId: number, password: string): Promise<string> {
   const userPasswordRepository = AppDataSource.getRepository(UserPassword);
 
   // Generate hashed password

@@ -65,7 +65,7 @@ export class TaxIdentity {
   // Hook for validation before insert
   @BeforeInsert()
   @BeforeUpdate()
-  validateGSTDetails() {
+  async validateGSTDetails (): Promise<void> {
     if (this.gst) {
       if (!this.gstRegistrationDate || !this.gstAddress) {
         const error = new ValidationError();

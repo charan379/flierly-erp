@@ -7,7 +7,7 @@
  * @param {string} key - The common key to compare objects.
  * @returns {T[]} The objects in `array2` that are not in `array1`.
  */
-function getDifferenceFromArrayOfObjects<T>(array1: object[], array2: object[], key: string): T[] {
+function getDifferenceFromArrayOfObjects<T> (array1: object[], array2: object[], key: string): T[] {
   // Create a set of keys from array1 for efficient lookup
   const keysInArray1 = new Set(array1.map((obj: { [key: string]: any }) => obj[key]));
 

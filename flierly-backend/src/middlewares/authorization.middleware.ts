@@ -6,7 +6,7 @@ import { CustomJwtPayload, verifyJwtToken } from '@/lib/jwt';
 import getUserPrivilegeCodes from '@/service/iam/get-user-privilege-codes.service';
 import { NextFunction, Request, Response } from 'express';
 
-export function authorize(privilegeCode: string = ''): (req: Request, res: Response, next: NextFunction) => Promise<void | Response> {
+export function authorize (privilegeCode: string = ''): (req: Request, res: Response, next: NextFunction) => Promise<void | Response> {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       // Get authorization header value from request
@@ -34,7 +34,7 @@ export function authorize(privilegeCode: string = ''): (req: Request, res: Respo
       // verifyJwtToken and de-code token details
       const deCodedToken: CustomJwtPayload = await verifyJwtToken(bearerToken);
       // extract username from de-coded token details
-      const jwtUserName: string | undefined = deCodedToken.username;
+      const _jwtUserName: string | undefined = deCodedToken.username;
       // extract userIf from de-coded token details
       const jwtUserId: number | undefined = deCodedToken.userId;
       // fetch user details from DB using username

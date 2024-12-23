@@ -8,7 +8,7 @@ import qbWhereCondition from './qb-where-condition.util';
  * @param {string} alias - The alias used in the query.
  * @param {any} filter - The filter object.
  */
-function qbFilters<T extends ObjectLiteral>(queryBuilder: SelectQueryBuilder<T>, alias: string, filter: any) {
+function qbFilters<T extends ObjectLiteral> (queryBuilder: SelectQueryBuilder<T>, alias: string, filter: any) {
   Object.keys(filter).forEach((field) => {
     const value = filter[field];
 

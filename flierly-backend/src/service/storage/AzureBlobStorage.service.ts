@@ -8,12 +8,12 @@ export class AzureBlobStorageService implements IStorage {
   private blobServiceClient: BlobServiceClient;
   private containerName: string;
 
-  constructor() {
+  constructor () {
     this.blobServiceClient = BlobServiceClient.fromConnectionString(EnvConfig.AZURE_STORAGE_CONNECTION_STRING);
     this.containerName = EnvConfig.AZURE_CONTAINER_NAME;
   }
 
-  async uploadFile(file: Express.Multer.File, destinationPath: string): Promise<{ fileUrl: string; fileUpload: FileUpload }> {
+  async uploadFile (file: Express.Multer.File, destinationPath: string): Promise<{ fileUrl: string; fileUpload: FileUpload }> {
     const containerClient = this.blobServiceClient.getContainerClient(this.containerName);
     const blockBlobClient = containerClient.getBlockBlobClient(destinationPath);
     await blockBlobClient.uploadData(file.buffer, {
@@ -36,25 +36,25 @@ export class AzureBlobStorageService implements IStorage {
     return { fileUrl, fileUpload: metadata };
   }
 
-  async downloadFile(filePath: string): Promise<Buffer> {
+  async downloadFile (filePath: string): Promise<Buffer> {
     const containerClient = this.blobServiceClient.getContainerClient(this.containerName);
     const blockBlobClient = containerClient.getBlockBlobClient(filePath);
     const downloadBlockBlobResponse = await blockBlobClient.download(0);
     return Buffer.from(await streamToBuffer(downloadBlockBlobResponse.readableStreamBody!));
   }
 
-  getFileUrl(destinationPath: string): string {
+  getFileUrl (destinationPath: string): string {
     return `https://${this.blobServiceClient.accountName}.blob.core.windows.net/${this.containerName}/${destinationPath}`;
   }
 
-  async deleteFile(destinationPath: string): Promise<void> {
+  async deleteFile (destinationPath: string): Promise<void> {
     const containerClient = this.blobServiceClient.getContainerClient(this.containerName);
     const blockBlobClient = containerClient.getBlockBlobClient(destinationPath);
     await blockBlobClient.delete();
   }
 }
 
-async function streamToBuffer(readableStream: NodeJS.ReadableStream): Promise<Buffer> {
+async function streamToBuffer (readableStream: NodeJS.ReadableStream): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     const chunks: Buffer[] = [];
     readableStream.on('data', (data) => {

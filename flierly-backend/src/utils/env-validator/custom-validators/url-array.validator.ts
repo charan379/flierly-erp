@@ -10,7 +10,7 @@ const urlArray = makeValidator<string[]>((input) => {
   for (const urlString of urls) {
     try {
       new URL(urlString);
-    } catch (err) {
+    } catch (_err) {
       throw new EnvError(`Invalid URL: ${urlString}`);
     }
   }
