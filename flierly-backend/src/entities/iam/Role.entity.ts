@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
 import { IsNotEmpty, Length, Matches } from 'class-validator';
 import { Privilege } from './Privilege.entity';
+import { User } from './User.entity';
 
 @Entity('iam_roles')
 export class Role {
@@ -41,6 +42,9 @@ export class Role {
     },
   })
   privileges: Privilege[];
+
+  @ManyToMany(() => User, (user) => user.roles)
+  users: User[];
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;

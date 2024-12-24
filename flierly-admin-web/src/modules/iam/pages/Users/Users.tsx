@@ -1,28 +1,27 @@
 import CrudModule from "@/features/CrudModule";
 import React, { ComponentType, LazyExoticComponent, Suspense } from "react";
-import roleTableColumns from "../../config/role/tableColumns";
 import PageLoader from "@/components/PageLoader";
 import { CrudTableProps } from "@/features/CrudTable/CrudTable";
-import roleCreateFields from "../../config/role/createFormFields";
-import roleUpdateFields from "../../config/role/updateFormFields";
-import roleQueryFields from "../../config/role/queryFormFields";
-
+import userCreateFields from "../../config/user/createFormFields";
+import userUpdateFields from "../../config/user/updateFormFields";
+import userQueryFields from "../../config/user/queryFormFields";
+import userTableColumns from "../../config/user/tableColumns";
 
 // Lazy load CrudTable
-const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<Role>>> = React.lazy(() => import("@/features/CrudTable"));
+const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<User>>> = React.lazy(() => import("@/features/CrudTable"));
 
-const Roles: React.FC = () => {
+const Users: React.FC = () => {
     return (
         <CrudModule header
-            title={"roles"}
+            title={"users"}
             menuKeys={["iam"]}
         >
             <Suspense fallback={<PageLoader />}>
                 <CrudTable
-                    entity="role"
-                    columns={roleTableColumns}
+                    entity="user"
+                    columns={userTableColumns}
                     dataSource={[]}
-                    tableKey="role-table"
+                    tableKey="user-table"
                     rowKey="id"
                     render={{
                         activate: true,
@@ -45,13 +44,13 @@ const Roles: React.FC = () => {
                             }
                         }
                     }}
-                    createFormFields={roleCreateFields}
-                    updateFormFields={roleUpdateFields}
-                    queryFormFields={roleQueryFields}
+                    createFormFields={userCreateFields}
+                    updateFormFields={userUpdateFields}
+                    queryFormFields={userQueryFields}
                 />
             </Suspense>
         </CrudModule>
     );
 };
 
-export default Roles;
+export default Users;

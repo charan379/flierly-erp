@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, Index, DeleteDateColumn, Create
 import { IsNotEmpty, Length, Matches } from 'class-validator';
 import AccessType from '@/constants/access-types.enum';
 import { Role } from './Role.entity';
+import { User } from './User.entity';
 
 @Entity('iam_privileges')
 @Index('idx_entity', ['entity'])
@@ -38,6 +39,12 @@ export class Privilege {
 
   @ManyToMany(() => Role, (role) => role.privileges)
   roles: Role[];
+
+  @ManyToMany(() => User, (user) => user.additionalPrivileges)
+  usersWithAdditionalPrivileges: User[];
+
+  @ManyToMany(() => User, (user) => user.restrictedPrivileges)
+  usersWithRestrictedPrivileges: User[];
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;

@@ -10,17 +10,6 @@ type AuthState = {
     error: ErrorDetails | null;
 }
 
-type User = {
-    id: string;
-    isActive: boolean;
-    username: string;
-    email: string;
-    mobile: string;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-}
-
 type UserAuth = {
     user: User;
     allowedAccess: string[];

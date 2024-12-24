@@ -27,7 +27,6 @@ export interface CrudTableProps<T = Record<string, any>> {
   createFormFields?: FormFieldConfig<T>[];
   updateFormFields?: FormFieldConfig<T>[];
   queryFormFields?: QueryFieldConfig<T>[];
-  rowSelectionColumnWidth?: string;
   render: {
     restore: boolean;
     delete: boolean;
@@ -61,7 +60,6 @@ const CrudTable = <T extends Record<string, any>>({
   createFormFields,
   updateFormFields,
   queryFormFields,
-  rowSelectionColumnWidth = "3%",
   render,
 }: CrudTableProps<T>) => {
   const tableHeight = useElementHeightByClassName("crud-data-table-flierly-1");
@@ -117,7 +115,6 @@ const CrudTable = <T extends Record<string, any>>({
       search={false}
       // row selection configuration
       rowSelection={{
-        columnWidth: rowSelectionColumnWidth,
         fixed: true,
         type: "checkbox",
         preserveSelectedRowKeys: true,

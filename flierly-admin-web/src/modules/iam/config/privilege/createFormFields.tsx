@@ -2,8 +2,6 @@ import { FormFieldConfig } from "@/components/FormField";
 import fetchEntityOptions from "@/features/SelectRemoteOptions/utils/fetchEntityOptions";
 import entityExistenceValidator from "@/utils/entityExistenceValidator";
 import { accessOptions, activeFieldOptions } from "@/constants/select-options.constant";
-import privilegeCodeRegex from "../../utils/validators/privilegeCodeRegex";
-
 
 const privilegeCreateFields: FormFieldConfig<Privilege>[] = [
     // name
@@ -34,7 +32,7 @@ const privilegeCreateFields: FormFieldConfig<Privilege>[] = [
         label: "entity",
         allowClear: false,
         hasFeedback: false,
-        access: { permission: /^privilege\.update$/, ifNoAccess: "disable" },
+        access: { permission: /^privilege\.create$/, ifNoAccess: "disable" },
         rules: [{ required: true }],
         input: {
             type: "SelectRemoteOptions",
@@ -47,7 +45,7 @@ const privilegeCreateFields: FormFieldConfig<Privilege>[] = [
         name: "access",
         label: "access",
         allowClear: false,
-        access: { permission: /^privilege\.update$/, ifNoAccess: "disable" },
+        access: { permission: /^privilege\.create$/, ifNoAccess: "disable" },
         rules: [
             {
                 type: "enum",
@@ -78,9 +76,10 @@ const privilegeCreateFields: FormFieldConfig<Privilege>[] = [
         label: "code",
         hasFeedback: true,
         allowClear: true,
-        access: { permission: /^privilege\.update$/, ifNoAccess: "disable" },
+        access: { permission: /^privilege\.create$/, ifNoAccess: "disable" },
         rules: [
-            { type: "string", min: 5, max: 25, required: true },
+            { type: "string", pattern: /^[a-z-]+\.[a-z-]+$/, message: "invalid_code" },
+            { min: 5, max: 25, required: true },
             ({ }) => ({
                 validator(_, value) {
                     if (value === undefined) return Promise.resolve();
@@ -91,7 +90,6 @@ const privilegeCreateFields: FormFieldConfig<Privilege>[] = [
                     });
                 },
             }),
-            privilegeCodeRegex(),
         ],
         input: {
             type: "Text",

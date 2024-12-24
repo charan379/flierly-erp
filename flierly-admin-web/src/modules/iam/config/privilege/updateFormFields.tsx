@@ -2,7 +2,6 @@ import { FormFieldConfig } from "@/components/FormField";
 import fetchEntityOptions from "@/features/SelectRemoteOptions/utils/fetchEntityOptions";
 import entityExistenceValidator from "@/utils/entityExistenceValidator";
 import { accessOptions, activeFieldOptions } from "@/constants/select-options.constant";
-import privilegeCodeRegex from "../../utils/validators/privilegeCodeRegex";
 
 const privilegeUpdateFields: FormFieldConfig<Privilege>[] = [
     // id
@@ -23,6 +22,7 @@ const privilegeUpdateFields: FormFieldConfig<Privilege>[] = [
         label: "name",
         hasFeedback: true,
         allowClear: false,
+        access: { permission: /^privilege\.manage$/, ifNoAccess: "disable" },
         rules: [
             { type: "string", min: 5, max: 30, required: true },
             ({ getFieldValue }) => ({
@@ -103,7 +103,8 @@ const privilegeUpdateFields: FormFieldConfig<Privilege>[] = [
         allowClear: false,
         access: { permission: /^privilege\.manage$/, ifNoAccess: "disable" },
         rules: [
-            { type: "string", min: 5, max: 25, required: true },
+            { type: "string", pattern: /^[a-z-]+\.[a-z-]+$/, message: "invalid_code" },
+            { min: 5, max: 25, required: true },
             ({ getFieldValue }) => ({
                 validator(_, value) {
                     if (value === undefined) return Promise.resolve();
@@ -114,7 +115,6 @@ const privilegeUpdateFields: FormFieldConfig<Privilege>[] = [
                     });
                 },
             }),
-            privilegeCodeRegex(),
         ],
         input: {
             type: "Text",

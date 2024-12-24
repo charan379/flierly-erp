@@ -1,13 +1,11 @@
 import ResizableDrawer from "@/components/ResizableDrawer";
 import AssociationManager from "@/features/GenericAssignmentManager";
-import fetchEntityOptions from "@/features/SelectRemoteOptions/utils/fetchEntityOptions";
 import { ProColumns } from "@ant-design/pro-components";
 import { Button, Tag } from "antd";
 import privilegeTableColumns from "../privilege/tableColumns";
-import queryTransformers from "@/utils/queryTransformers";
 import formatDateToLocaleTimezone from "@/utils/formatDateTimeToLocaleTimezone";
 import _ from "lodash";
-import { accessOptions, activeFieldOptions } from "@/constants/select-options.constant";
+import privilegeAssociatedEntityQueryFields from "../privilege/associatedEntityQueryFields";
 
 
 const roleTableColumns: ProColumns<Role>[] = [
@@ -76,39 +74,7 @@ const roleTableColumns: ProColumns<Role>[] = [
                         associatedEntity="privilege"
                         associatedSideField="privileges"
                         associatedEntityColumns={privilegeTableColumns.filter((column) => ["id", "name", "code", "entity", "access"].includes(column.dataIndex as string))}
-                        associatedEntityQueryConfig={[
-                            {
-                                label: "ID", name: "id", formField: {
-                                    input: { type: "Number" },
-                                    rules: [{ required: true, message: "" }]
-                                }
-                            },
-                            { label: "Name", name: "name", formField: { input: { type: "Text" }, rules: [{ required: true, message: "" }] } },
-                            { label: "Code", name: "code", formField: { input: { type: "Text" }, rules: [{ required: true, message: "" }] } },
-                            {
-                                label: "Entity", name: "entity", formField: {
-                                    input: {
-                                        type: "SelectRemoteOptions",
-                                        asyncOptionsFetcher: fetchEntityOptions,
-                                        debounceTimeout: 300, mode: "multiple"
-                                    },
-                                    rules: [{ type: "array", required: true, message: "" }],
-                                    transform: queryTransformers.inArray
-                                }
-                            },
-                            {
-                                label: "Access", name: "access", formField: {
-                                    input: { type: "Select", options: accessOptions },
-                                    rules: [{ type: "string", required: true, message: "" }]
-                                }
-                            },
-                            {
-                                label: "Status", name: "isActive", formField: {
-                                    input: { type: "Select", options: activeFieldOptions },
-                                    rules: [{ type: "string", required: true, message: "" }]
-                                }
-                            }
-                        ]}
+                        associatedEntityQueryConfig={privilegeAssociatedEntityQueryFields}
                     />
                 </ResizableDrawer>
             )

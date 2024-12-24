@@ -32,7 +32,7 @@ export class User {
   @Matches(/^\+\d{1,3}[\s][6-9]\d{9}$/, { message: 'Mobile number is not valid' })
   mobile: string;
 
-  @ManyToMany(() => Privilege, {})
+  @ManyToMany(() => Privilege, (privilege) => privilege.usersWithAdditionalPrivileges)
   @JoinTable({
     name: 'iam_user_additional_privileges',
     joinColumn: {
@@ -46,7 +46,7 @@ export class User {
   })
   additionalPrivileges: Privilege[];
 
-  @ManyToMany(() => Privilege, {})
+  @ManyToMany(() => Privilege, (privilege) => privilege.usersWithRestrictedPrivileges)
   @JoinTable({
     name: 'iam_user_restricted_privileges',
     joinColumn: {
@@ -60,7 +60,7 @@ export class User {
   })
   restrictedPrivileges: Privilege[];
 
-  @ManyToMany(() => Role, {})
+  @ManyToMany(() => Role, (role) => role.users)
   @JoinTable({
     name: 'iam_user_roles',
     joinColumn: {

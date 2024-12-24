@@ -19,4 +19,13 @@ type Role = {
     privileges?: Privilege[]
 } & EntityTimeStamps;
 
-
+type User = {
+    id: number;
+    isActive: boolean;
+    username: string;
+    email: string;
+    mobile: string;
+    additionalPrivileges: Privilege[];
+    restrictedPrivileges: Privilege[];
+    roles: Role[];
+} & EntityTimeStamps;

@@ -91,7 +91,8 @@ const allowedProFormItemProps: (keyof ProFormItemProps)[] = [
   "getValueProps",
   "normalize",
   "preserve",
-  "convertValue"
+  "convertValue",
+  "transform",
 ];
 
 const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
