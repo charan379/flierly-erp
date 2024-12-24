@@ -2,7 +2,7 @@ import Joi from 'joi';
 import typeORMToJoiMapping from '../config/typeorm-to-joi.mapping';
 
 // / Function to generate Joi schema from a TypeORM-like entity definition (with JS types)
-const generateJoiSchemaFromTypeORM = (entityDefinition: Record<string, any>, enumMappings: Record<string, string[]> = {}): Joi.ObjectSchema => {
+const generateJoiSchemaFromTypeORM = (entityDefinition: Record<string, any>, _enumMappings: Record<string, string[]> = {}): Joi.ObjectSchema => {
   const schema: Record<string, Joi.Schema> = {};
 
   Object.keys(entityDefinition).forEach((field) => {

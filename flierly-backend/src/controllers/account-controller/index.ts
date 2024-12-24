@@ -1,7 +1,7 @@
-import CRUDController from '../crud-controller';
+import CRUDController, { ICRUDController } from '../crud-controller';
 import updateAccount from './update.controller';
 
-const accountController = async () => {
+const accountController = async (): Promise<ICRUDController> => {
   const defaultController = await CRUDController('Account');
 
   const controllers = { ...defaultController, update: updateAccount };

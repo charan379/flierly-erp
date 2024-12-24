@@ -9,7 +9,7 @@ import http, { Server } from 'http';
 import { HttpError } from 'http-errors';
 import Database from './lib/database';
 import { EnvConfig } from './config/env';
-import validateEnv from './utils/env-validator';
+import validateEnv from './lib/env-validator';
 
 dotenv.config();
 
@@ -66,10 +66,10 @@ server.on('listening', async () => {
  * Normalize a port into a number, string, or false.
  * if port is not specified in environment, or if provided a string
  */
-function normalizePort(val: any) {
+function normalizePort (val: string | number): number {
   const defaultPort = 3000;
 
-  const port = parseInt(val, 10);
+  const port = parseInt(String(val), 10);
 
   if (typeof port !== 'number') {
     return defaultPort;

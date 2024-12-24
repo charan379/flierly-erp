@@ -1,7 +1,7 @@
 import { cleanEnv, port, str, url, bool, num } from 'envalid';
 import { urlArray } from './custom-validators';
 
-const validateEnv = () => {
+const validateEnv = (): void => {
   cleanEnv(process.env, {
     NODE_ENV: str(),
     PORT: port(),

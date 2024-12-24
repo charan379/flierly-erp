@@ -1,7 +1,6 @@
 /**
  * HttpCodes enum
  */
-
 enum HttpCodes {
   OK = 200,
   CREATED = 201,

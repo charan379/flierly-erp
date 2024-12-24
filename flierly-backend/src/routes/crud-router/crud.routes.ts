@@ -1,4 +1,5 @@
 import controllers from '@/controllers';
+import { ICRUDController } from '@/controllers/crud-controller';
 import getEntityList from '@/entities';
 import { authorize } from '@/middlewares/authorization.middleware';
 import { controllerErrorBoundary } from '@/middlewares/controller-error-boundary.middleware';
@@ -6,8 +7,8 @@ import { Router } from 'express';
 
 const crudRouter = Router();
 
-const routeGenerator = (entityCode: string, controller: any) => {
-  crudRouter.post(`/${entityCode}/create`, authorize(`${entityCode}.create`), controllerErrorBoundary(controller['create'], entityCode));
+const routeGenerator = (entityCode: string, controller: ICRUDController) => {
+  crudRouter.post(`/${entityCode}/create`, authorize(`${entityCode}.create`), controllerErrorBoundary(controller.create, entityCode));
   crudRouter.post(`/${entityCode}/read`, authorize(`${entityCode}.read`), controllerErrorBoundary(controller['read'], entityCode));
   crudRouter.post(`/${entityCode}/search`, authorize(`${entityCode}.read`), controllerErrorBoundary(controller['search'], entityCode));
   crudRouter.post(`/${entityCode}/is-exists`, authorize(`${entityCode}.read`), controllerErrorBoundary(controller['isExists'], entityCode));

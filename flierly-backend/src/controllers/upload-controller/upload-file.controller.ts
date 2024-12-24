@@ -3,9 +3,7 @@ import JoiSchemaValidator from '@/lib/joi/joi-schema.validator';
 import apiResponseBuilder from '@/utils/builders/api-response.builder';
 import HttpCodes from '@/constants/http-codes.enum';
 import { Request, Response } from 'express';
-import { FileUpload } from '@/entities/storage/FileUpload.entity';
 import storageService from '@/service/storage/storageService';
-import { AppDataSource } from '@/lib/typeorm/app-datasource';
 
 // Joi validation schema for file upload
 const fileUploadSchema: Joi.ObjectSchema = Joi.object({

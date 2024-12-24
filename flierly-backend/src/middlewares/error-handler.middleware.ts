@@ -2,7 +2,7 @@ import { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
 import errrorMessageBuilder from '@/utils/builders/errror-message.builder';
 import apiResponseBuilder from '@/utils/builders/api-response.builder';
 
-const errorHandler: ErrorRequestHandler = (error: Error, req: Request, res: Response, next: NextFunction) => {
+const errorHandler: ErrorRequestHandler = (error: Error, req: Request, res: Response, _next: NextFunction) => {
   // set locals, only in development
   res.locals.error = req.app.get('env') === 'development' ? error : {};
 

@@ -13,12 +13,27 @@ import inactivate from './inactivate.controller';
 import updateEntityAssociatedRecords from './update-entity-associated-records.controller';
 import associatedEntityRecordsPage from './associated-entity-records-page.controller';
 
+export interface ICRUDController {
+  create: (req: Request, res: Response) => Promise<Response>;
+  read: (req: Request, res: Response) => Promise<Response>;
+  update: (req: Request, res: Response) => Promise<Response>;
+  delete: (req: Request, res: Response) => Promise<Response>;
+  page: (req: Request, res: Response) => Promise<Response>;
+  associatedEntityRecordsPage: (req: Request, res: Response) => Promise<Response>;
+  search: (req: Request, res: Response) => Promise<Response>;
+  isExists: (req: Request, res: Response) => Promise<Response>;
+  activate: (req: Request, res: Response) => Promise<Response>;
+  inactivate: (req: Request, res: Response) => Promise<Response>;
+  restore: (req: Request, res: Response) => Promise<Response>;
+  updateEntityAssociatedRecords: (req: Request, res: Response) => Promise<Response>;
+}
+
 /**
  * Generate CRUD methods for a given entity.
  * @param entity - The entity to generate CRUD methods for.
  * @returns An object containing the CRUD methods.
  */
-const CRUDController = async (entity: EntityTarget<ObjectLiteral>) => {
+const CRUDController = async (entity: EntityTarget<ObjectLiteral>): Promise<ICRUDController> => {
   const crudMethods = {
     create: (req: Request, res: Response) => create(entity, req, res),
     read: (req: Request, res: Response) => read(entity, req, res),

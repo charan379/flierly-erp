@@ -1,7 +1,6 @@
 /**
  * Access Codes Enum
  */
-
 enum AccessType {
   CREATE = 'Create',
   READ = 'Read',

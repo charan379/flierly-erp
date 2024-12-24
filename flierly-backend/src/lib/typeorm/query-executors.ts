@@ -51,7 +51,6 @@ async function getQueryFromCacheOrFile (relativeFilePath: string, cacheDuration:
   }
 
   const fullPath = path.join(__dirname, '../../../', relativeFilePath);
-  console.log(fullPath);
   const query = await fs.readFile(fullPath, 'utf8');
   await setCache(queryCacheKey, query, cacheDuration);
 
