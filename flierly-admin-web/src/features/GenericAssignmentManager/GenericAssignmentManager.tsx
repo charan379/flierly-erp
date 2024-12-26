@@ -148,6 +148,7 @@ const GenericAssignmentManager = <OE extends { id: number }, IE extends { id: nu
 
   return (
     <Tabs
+      size='small'
       activeKey={tabKey}
       onChange={(activeKey) => handleTabChange(activeKey as 'allocatedItems' | 'availableItems')}
       style={{ width: '100%', height: '100%' }}
