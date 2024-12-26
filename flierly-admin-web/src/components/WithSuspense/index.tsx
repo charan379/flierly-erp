@@ -1,3 +1,3 @@
-import WithSuspense from "./WithSuspense";
+import WithSuspense from './WithSuspense'
 
-export default WithSuspense;
+export default WithSuspense

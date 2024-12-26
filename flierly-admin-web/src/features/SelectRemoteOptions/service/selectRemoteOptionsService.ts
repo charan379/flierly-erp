@@ -1,22 +1,21 @@
-import axios, { AxiosInstance } from "axios";
-import { serverConfig } from "@/config/server.config";
-import { getToken, listenToAuthChanges } from "@/modules/auth/service/authStateService";
-import handleResponse from "@/utils/handlers/apiResponsehandler";
+import axios, { AxiosInstance } from 'axios'
+import { serverConfig } from '@/config/server.config'
+import { getToken, listenToAuthChanges } from '@/modules/auth/service/authStateService'
+import handleResponse from '@/utils/handlers/apiResponsehandler'
 
 // Define types for the service methods
 interface EntityRequestParams {
-  keyword?: string;
-  limit?: number;
-  signal?: AbortSignal;
+  keyword?: string
+  limit?: number
+  signal?: AbortSignal
 }
 
 interface EntityRowsRequestParams {
-  entity: string;
-  filters: Record<string, any>;
-  limit?: number;
-  signal?: AbortSignal;
+  entity: string
+  filters: Record<string, any>
+  limit?: number
+  signal?: AbortSignal
 }
-
 
 // Create an Axios instance
 const api: AxiosInstance = axios.create({
@@ -24,7 +23,7 @@ const api: AxiosInstance = axios.create({
   headers: {
     Authorization: `Bearer ${getToken()}`,
   },
-});
+})
 
 // Service for handling remote options
 const selectRemoteOptionsService = {
@@ -35,8 +34,8 @@ const selectRemoteOptionsService = {
     const promise = api.get<ApiResponse<any>>(`entities`, {
       params: { keyword, limit },
       signal, // Pass the signal to the request
-    });
-    return handleResponse({ promise });
+    })
+    return handleResponse({ promise })
   },
 
   /**
@@ -46,18 +45,18 @@ const selectRemoteOptionsService = {
     const promise = api.post<ApiResponse<any>>(
       `${entity}/search`,
       { filters, limit },
-      { signal } // Pass the signal to the request
-    );
-    return handleResponse({ promise });
+      { signal }, // Pass the signal to the request
+    )
+    return handleResponse({ promise })
   },
-};
+}
 
-export default selectRemoteOptionsService;
+export default selectRemoteOptionsService
 
 // Listen for authentication state changes and update token
 listenToAuthChanges((newState) => {
-  const newToken = `Bearer ${newState?.token}`;
+  const newToken = `Bearer ${newState?.token}`
   if (newToken) {
-    api.defaults.headers["Authorization"] = newToken;
+    api.defaults.headers['Authorization'] = newToken
   }
-});
+})

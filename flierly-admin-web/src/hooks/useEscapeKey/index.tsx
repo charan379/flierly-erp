@@ -1,3 +1,3 @@
-import useEscapeKey from "./useEscapeKey";
+import useEscapeKey from './useEscapeKey'
 
-export default useEscapeKey;
+export default useEscapeKey

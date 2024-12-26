@@ -1,3 +1,3 @@
-import ReAuthenticate from "./ReAuthenticate";
+import ReAuthenticate from './ReAuthenticate'
 
-export default ReAuthenticate;
+export default ReAuthenticate

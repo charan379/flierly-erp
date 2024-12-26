@@ -1,3 +1,3 @@
-import Update from "./Update";
+import Update from './Update'
 
-export default Update;
+export default Update

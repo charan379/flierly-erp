@@ -1,3 +1,3 @@
-import AllocateOne from "./AllocateOne";
+import AllocateOne from './AllocateOne'
 
-export default AllocateOne;
+export default AllocateOne

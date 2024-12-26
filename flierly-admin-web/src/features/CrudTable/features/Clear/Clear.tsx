@@ -1,29 +1,25 @@
-import useLocale from "@/features/Locale/hooks/useLocale";
-import { ClearOutlined } from "@ant-design/icons";
-import { Badge, Button, Tooltip } from "antd";
-import React from "react";
-import { ActionType } from "@ant-design/pro-components";
+import useLocale from '@/features/Locale/hooks/useLocale'
+import { ClearOutlined } from '@ant-design/icons'
+import { Badge, Button, Tooltip } from 'antd'
+import React from 'react'
+import { ActionType } from '@ant-design/pro-components'
 
 type ClearProps = {
-  render: boolean; // Whether to render the component
-  rows: { selectedRowKeys?: (string | number)[] | undefined; selectedRows?: any[] | undefined; };
-  actions: ActionType | undefined;
-};
+  render: boolean // Whether to render the component
+  rows: { selectedRowKeys?: (string | number)[] | undefined; selectedRows?: any[] | undefined }
+  actions: ActionType | undefined
+}
 
 const Clear: React.FC<ClearProps> = ({ render, rows, actions }) => {
-  if (!render) return null;
-  if (!actions === undefined) return null;
-  if (rows.selectedRowKeys === undefined) return null;
+  if (!render) return null
+  if (!actions === undefined) return null
+  if (rows.selectedRowKeys === undefined) return null
 
-  const { translate } = useLocale();
+  const { translate } = useLocale()
 
   return (
-    <Tooltip title={`${translate("clear_selected")}`}>
-      <Badge
-        color="pink"
-        overflowCount={99}
-        count={rows.selectedRowKeys.length}
-      >
+    <Tooltip title={`${translate('clear_selected')}`}>
+      <Badge color="pink" overflowCount={99} count={rows.selectedRowKeys.length}>
         <Button
           type="primary"
           key="clear-selected-rows-trigger"
@@ -35,7 +31,7 @@ const Clear: React.FC<ClearProps> = ({ render, rows, actions }) => {
         />
       </Badge>
     </Tooltip>
-  );
-};
+  )
+}
 
-export default Clear;
+export default Clear

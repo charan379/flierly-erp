@@ -1,3 +1,3 @@
-import BinModeToggle from "./BinModeToggle";
+import BinModeToggle from './BinModeToggle'
 
-export default BinModeToggle;
+export default BinModeToggle

@@ -1,44 +1,38 @@
-import React, { useEffect } from "react";
-import useLocale from "@/features/Locale/hooks/useLocale";
-import {
-  InfoCircleOutlined,
-  LockOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import { Button, Checkbox, Flex, Form, Input } from "antd";
-import Loading from "@/components/Loading";
-import { useAuth } from "../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
-import { LoadingTypes } from "../../@types/loading";
+import React, { useEffect } from 'react'
+import useLocale from '@/features/Locale/hooks/useLocale'
+import { InfoCircleOutlined, LockOutlined, UserOutlined } from '@ant-design/icons'
+import { Button, Checkbox, Flex, Form, Input } from 'antd'
+import Loading from '@/components/Loading'
+import { useAuth } from '../../hooks/useAuth'
+import { useNavigate } from 'react-router-dom'
+import { LoadingTypes } from '../../@types/loading'
 
 interface LoginFormProps {
-  redirectOnLogin?: boolean;
-  isForPopup?: boolean;
+  redirectOnLogin?: boolean
+  isForPopup?: boolean
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false, isForPopup = false }) => {
-  const { translate, langDirection } = useLocale();
-  const { loading, login, isLoggedIn, tokenExpiresAt } = useAuth();
-  const navigate = useNavigate();
+  const { translate, langDirection } = useLocale()
+  const { loading, login, isLoggedIn, tokenExpiresAt } = useAuth()
+  const navigate = useNavigate()
 
-  const callbackParam = new URLSearchParams(window.location.search).get("callback");
-  const callback = callbackParam ? JSON.parse(callbackParam || "{}") : null;
+  const callbackParam = new URLSearchParams(window.location.search).get('callback')
+  const callback = callbackParam ? JSON.parse(callbackParam || '{}') : null
 
   // Convert token expiration date to Date object
-  const tokenExpiresAtDateTime = new Date(tokenExpiresAt);
-  const currentDateTime = new Date();
-  const isTokenExpired = tokenExpiresAtDateTime < currentDateTime;
+  const tokenExpiresAtDateTime = new Date(tokenExpiresAt)
+  const currentDateTime = new Date()
+  const isTokenExpired = tokenExpiresAtDateTime < currentDateTime
 
   useEffect(() => {
     if (redirectOnLogin && !isForPopup && loading === LoadingTypes.SUCCEEDED && isLoggedIn && !isTokenExpired) {
-      const targetPath = callback?.pathname ? { pathname: callback.pathname, search: callback.search } : "/erp";
-      navigate(targetPath, { replace: true }
-      );
+      const targetPath = callback?.pathname ? { pathname: callback.pathname, search: callback.search } : '/erp'
+      navigate(targetPath, { replace: true })
     }
 
-    return () => {
-    }
-  }, [isLoggedIn, loading, navigate, redirectOnLogin, isForPopup, callback, isTokenExpired]);
+    return () => {}
+  }, [isLoggedIn, loading, navigate, redirectOnLogin, isForPopup, callback, isTokenExpired])
 
   return (
     <Loading isLoading={loading === LoadingTypes.PENDING}>
@@ -50,77 +44,70 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false, isForPop
         size="middle"
         initialValues={{ remember: true }}
         onFinish={(values) => {
-          login(values);
+          login(values)
         }}
       >
         <div style={{ direction: langDirection }}>
           <Form.Item
-            label={translate("username")}
+            label={translate('username')}
             name="username"
-            rules={[
-              { required: true, message: translate("username_is_required") },
-              { type: "string" },
-            ]}
+            rules={[{ required: true, message: translate('username_is_required') }, { type: 'string' }]}
             tooltip={{
-              title: translate("username_is_required"),
+              title: translate('username_is_required'),
               icon: <InfoCircleOutlined />,
             }}
           >
-            <Input
-              prefix={<UserOutlined className="site-form-item-icon" />}
-              placeholder={translate("username")}
-            />
+            <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder={translate('username')} />
           </Form.Item>
 
           <Form.Item
-            label={translate("password")}
+            label={translate('password')}
             name="password"
-            rules={[{ required: true, message: translate("password_is_required") }, { pattern: /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,26})$/, message: "invalid_password" }, { max: 28, min: 8 }]}
+            rules={[
+              { required: true, message: translate('password_is_required') },
+              { pattern: /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,26})$/, message: 'invalid_password' },
+              { max: 28, min: 8 },
+            ]}
             tooltip={{
-              title: translate("password_is_required"),
+              title: translate('password_is_required'),
               icon: <InfoCircleOutlined />,
             }}
           >
-            <Input.Password
-              prefix={<LockOutlined className="site-form-item-icon" />}
-              placeholder={translate("password")}
-            />
+            <Input.Password prefix={<LockOutlined className="site-form-item-icon" />} placeholder={translate('password')} />
           </Form.Item>
 
-          {!isForPopup
-            ?
+          {!isForPopup ? (
             <Flex justify="space-between">
               <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox>{translate("remember_me")}</Checkbox>
+                <Checkbox>{translate('remember_me')}</Checkbox>
               </Form.Item>
-              <a id="login-form-forgot" href="/forgetpassword" style={{
-                marginLeft: langDirection === "rtl" ? "220px" : undefined,
-              }}>
-                {translate("forgot_password")}
+              <a
+                id="login-form-forgot"
+                href="/forgetpassword"
+                style={{
+                  marginLeft: langDirection === 'rtl' ? '220px' : undefined,
+                }}
+              >
+                {translate('forgot_password')}
               </a>
             </Flex>
-            : null
-          }
+          ) : null}
         </div>
 
-        <Form.Item style={{ margin: "5px 0px 5px 0px" }}>
-          <Button
-            type="primary"
-            htmlType="submit"
-            className="auth-form-button"
-            loading={loading === LoadingTypes.PENDING}
-          >
-            {translate("sign_in")}
+        <Form.Item style={{ margin: '5px 0px 5px 0px' }}>
+          <Button type="primary" htmlType="submit" className="auth-form-button" loading={loading === LoadingTypes.PENDING}>
+            {translate('sign_in')}
           </Button>
 
-          {!isForPopup
-            ? <>{translate("or")} <a href="/register">{translate("register_now")}</a></>
-            : null
-          }
+          {!isForPopup ? (
+            <>
+              {translate('or')} <a href="/register">{translate('register_now')}</a>
+            </>
+          ) : null}
         </Form.Item>
       </Form>
     </Loading>
-  );
-};
+  )
+}
 
-export default LoginForm;
+export default LoginForm

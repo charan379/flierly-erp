@@ -1,3 +1,3 @@
-import DeallocateMany from "./DeallocateMany";
+import DeallocateMany from './DeallocateMany'
 
-export default DeallocateMany;
+export default DeallocateMany

@@ -1,7 +1,7 @@
-import PageLoader from "@/components/PageLoader";
-import React, { ComponentType, LazyExoticComponent, Suspense } from "react";
+import PageLoader from '@/components/PageLoader'
+import React, { ComponentType, LazyExoticComponent, Suspense } from 'react'
 
-const UnderConstruction: LazyExoticComponent<ComponentType<any>> = React.lazy(() => import("@/components/UnderConstruction"))
+const UnderConstruction: LazyExoticComponent<ComponentType<any>> = React.lazy(() => import('@/components/UnderConstruction'))
 
 /**
  * PageUnderConstruction component to display an under construction page.
@@ -11,7 +11,7 @@ const PageUnderConstruction: React.FC = () => {
     <Suspense fallback={<PageLoader />}>
       <UnderConstruction />
     </Suspense>
-  );
-};
+  )
+}
 
-export default PageUnderConstruction;
+export default PageUnderConstruction

@@ -1,10 +1,10 @@
-import ProtectedRoute from "@/features/ProtectedRoute/ProtectedRoute";
-import PageUnderConstruction from "@/pages/PageUnderConstruction";
-import React from "react";
-import { Routes, Route } from "react-router-dom";
-import Roles from "../pages/Roles";
-import Privileges from "../pages/Privileges";
-import Users from "../pages/Users";
+import ProtectedRoute from '@/features/ProtectedRoute/ProtectedRoute'
+import PageUnderConstruction from '@/pages/PageUnderConstruction'
+import React from 'react'
+import { Routes, Route } from 'react-router-dom'
+import Roles from '../pages/Roles'
+import Privileges from '../pages/Privileges'
+import Users from '../pages/Users'
 
 const IamRoutes: React.FC = () => {
   return (
@@ -21,7 +21,7 @@ const IamRoutes: React.FC = () => {
       {/* Privileges route */}
       <Route path="privileges" element={<ProtectedRoute element={<Privileges />} requiredPermissionRegex={/^privilege\.[a-z]+$/} />} />
     </Routes>
-  );
-};
+  )
+}
 
-export default IamRoutes;
+export default IamRoutes

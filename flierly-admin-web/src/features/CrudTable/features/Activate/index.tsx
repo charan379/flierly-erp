@@ -1,3 +1,3 @@
-import Activate from "./Activate";
+import Activate from './Activate'
 
-export default Activate;
+export default Activate

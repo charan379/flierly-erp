@@ -1,3 +1,3 @@
-import ThemeCompactSwitch from "./ThemeCompactSwitch";
+import ThemeCompactSwitch from './ThemeCompactSwitch'
 
-export default ThemeCompactSwitch;
+export default ThemeCompactSwitch

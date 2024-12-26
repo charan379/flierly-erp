@@ -1,3 +1,3 @@
-import PageUnAuthorized from "./PageUnAuthorized";
+import PageUnAuthorized from './PageUnAuthorized'
 
-export default PageUnAuthorized;
+export default PageUnAuthorized

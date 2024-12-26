@@ -1,3 +1,3 @@
-import ProfileDropdown from "./ProfileDropdown";
+import ProfileDropdown from './ProfileDropdown'
 
-export default ProfileDropdown;
+export default ProfileDropdown

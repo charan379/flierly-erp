@@ -1,3 +1,3 @@
-import CollapsibleCard from "./CollapsibleCard";
+import CollapsibleCard from './CollapsibleCard'
 
-export default CollapsibleCard;
+export default CollapsibleCard

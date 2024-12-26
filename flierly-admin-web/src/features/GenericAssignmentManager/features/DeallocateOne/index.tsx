@@ -1,3 +1,3 @@
-import DeallocateOne from "./DeallocateOne";
+import DeallocateOne from './DeallocateOne'
 
-export default DeallocateOne;
+export default DeallocateOne

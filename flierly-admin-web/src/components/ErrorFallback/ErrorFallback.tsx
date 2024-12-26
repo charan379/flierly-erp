@@ -1,10 +1,10 @@
-import { Button, Result } from "antd";
-import React from "react";
+import { Button, Result } from 'antd'
+import React from 'react'
 
 // Define the types for the props
 interface ErrorFallbackProps {
-  error: Error;
-  resetErrorBoundary: () => void;
+  error: Error
+  resetErrorBoundary: () => void
 }
 
 const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetErrorBoundary }) => {
@@ -19,7 +19,7 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetErrorBoundary
         </Button>
       }
     />
-  );
-};
+  )
+}
 
-export default ErrorFallback;
+export default ErrorFallback

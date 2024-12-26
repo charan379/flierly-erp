@@ -1,3 +1,3 @@
-import UnAuthorized from "./UnAuthorized";
+import UnAuthorized from './UnAuthorized'
 
-export default UnAuthorized;
+export default UnAuthorized

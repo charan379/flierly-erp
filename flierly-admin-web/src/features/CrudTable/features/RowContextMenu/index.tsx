@@ -1,3 +1,3 @@
-import RowContextMenu from "./RowContextMenu";
+import RowContextMenu from './RowContextMenu'
 
-export default RowContextMenu;
+export default RowContextMenu

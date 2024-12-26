@@ -1,3 +1,3 @@
-import useCrudModuleContext from "./useCrudModuleContext";
+import useCrudModuleContext from './useCrudModuleContext'
 
-export default useCrudModuleContext;
+export default useCrudModuleContext

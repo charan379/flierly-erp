@@ -1,3 +1,3 @@
-import Clear from "./Clear";
+import Clear from './Clear'
 
-export default Clear;
+export default Clear

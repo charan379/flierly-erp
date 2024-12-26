@@ -1,32 +1,32 @@
-import { ConfigProvider, MappingAlgorithm, theme } from "antd";
-import React, { ReactNode, useMemo } from "react";
-import useTheme from "./hooks/useTheme";
-import enUS from "antd/locale/en_US";
+import { ConfigProvider, MappingAlgorithm, theme } from 'antd'
+import React, { ReactNode, useMemo } from 'react'
+import useTheme from './hooks/useTheme'
+import enUS from 'antd/locale/en_US'
 
 type Props = {
-  children: ReactNode;
-};
+  children: ReactNode
+}
 
 const AntdConfigProvider: React.FC<Props> = React.memo(({ children }) => {
-  const { theme: localThemeMode, isCompactTheme } = useTheme();
+  const { theme: localThemeMode, isCompactTheme } = useTheme()
 
   // Memoize the theme algorithms to avoid unnecessary recalculations
   const antThemeAlgorithms: MappingAlgorithm[] = useMemo(() => {
-    const algorithms = new Set<MappingAlgorithm>();
+    const algorithms = new Set<MappingAlgorithm>()
 
-    if (localThemeMode === "dark") {
-      algorithms.add(theme.darkAlgorithm);
-    } else if (localThemeMode === "light") {
-      algorithms.add(theme.defaultAlgorithm);
+    if (localThemeMode === 'dark') {
+      algorithms.add(theme.darkAlgorithm)
+    } else if (localThemeMode === 'light') {
+      algorithms.add(theme.defaultAlgorithm)
     }
 
     if (isCompactTheme) {
-      algorithms.add(theme.compactAlgorithm);
+      algorithms.add(theme.compactAlgorithm)
     }
 
     // Filter out undefined and ensure a flat array
-    return Array.from(algorithms);
-  }, [localThemeMode, isCompactTheme]);
+    return Array.from(algorithms)
+  }, [localThemeMode, isCompactTheme])
 
   return (
     <ConfigProvider
@@ -35,19 +35,19 @@ const AntdConfigProvider: React.FC<Props> = React.memo(({ children }) => {
         algorithm: antThemeAlgorithms,
         components: {
           Menu: {
-            darkSubMenuItemBg: "inherit",
-            darkItemBg: "inherit",
-            darkPopupBg: "var(--bg-color-secondary-flierly)",
+            darkSubMenuItemBg: 'inherit',
+            darkItemBg: 'inherit',
+            darkPopupBg: 'var(--bg-color-secondary-flierly)',
           },
           Dropdown: {
-            colorBgElevated: "var(--popup-bg-color)"
-          }
+            colorBgElevated: 'var(--popup-bg-color)',
+          },
         },
       }}
     >
       {children} {/* Render child components wrapped by ConfigProvider */}
     </ConfigProvider>
-  );
-});
+  )
+})
 
-export default AntdConfigProvider;
+export default AntdConfigProvider

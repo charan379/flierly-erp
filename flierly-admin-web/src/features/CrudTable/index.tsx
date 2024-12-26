@@ -1,3 +1,3 @@
-import CrudTable from "./CrudTable";
+import CrudTable from './CrudTable'
 
-export default CrudTable;
+export default CrudTable

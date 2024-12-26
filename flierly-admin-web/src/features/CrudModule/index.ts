@@ -1,3 +1,3 @@
-import CrudModule from "./CrudModule";
+import CrudModule from './CrudModule'
 
-export default CrudModule;
+export default CrudModule

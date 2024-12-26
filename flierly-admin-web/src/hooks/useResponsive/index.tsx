@@ -1,3 +1,3 @@
-import useResponsive from "./useResponsive"
+import useResponsive from './useResponsive'
 
-export default useResponsive;
+export default useResponsive

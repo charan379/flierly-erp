@@ -1,111 +1,111 @@
-import { FormFieldConfig } from "@/components/FormField";
-import entityExistenceValidator from "@/utils/entityExistenceValidator";
-import { activeFieldOptions } from "@/constants/select-options.constant";
+import { FormFieldConfig } from '@/components/FormField'
+import entityExistenceValidator from '@/utils/entityExistenceValidator'
+import { activeFieldOptions } from '@/constants/select-options.constant'
 
 const userUpdateFields: FormFieldConfig<User>[] = [
-    // id
-    {
-        name: "id",
-        label: "id",
-        hidden: false,
-        disabled: true,
-        hasFeedback: false,
-        allowClear: false,
-        input: {
-            type: "Text",
-        },
+  // id
+  {
+    name: 'id',
+    label: 'id',
+    hidden: false,
+    disabled: true,
+    hasFeedback: false,
+    allowClear: false,
+    input: {
+      type: 'Text',
     },
-    // name
-    {
-        name: "username",
-        label: "name",
-        hasFeedback: true,
-        allowClear: false,
-        rules: [
-            { type: "string", min: 5, max: 30, required: true },
-            ({ getFieldValue }) => ({
-                validator(_, value) {
-                    if (value === undefined) return Promise.resolve();
-                    return entityExistenceValidator("user-name-validation-u-1", {
-                        entity: "user",
-                        filters: {
-                            id: { $notEqualTo: getFieldValue("id") },
-                            username: { $ilike: value },
-                        },
-                    });
-                },
-            }),
-        ],
-        input: {
-            type: "Text",
+  },
+  // name
+  {
+    name: 'username',
+    label: 'name',
+    hasFeedback: true,
+    allowClear: false,
+    rules: [
+      { type: 'string', min: 5, max: 30, required: true },
+      ({ getFieldValue }) => ({
+        validator(_, value) {
+          if (value === undefined) return Promise.resolve()
+          return entityExistenceValidator('user-name-validation-u-1', {
+            entity: 'user',
+            filters: {
+              id: { $notEqualTo: getFieldValue('id') },
+              username: { $ilike: value },
+            },
+          })
         },
+      }),
+    ],
+    input: {
+      type: 'Text',
     },
-    // email
-    {
-        name: "email",
-        label: "email",
-        hasFeedback: true,
-        allowClear: false,
-        rules: [
-            { type: "email", required: true },
-            ({ getFieldValue }) => ({
-                validator(_, value) {
-                    if (value === undefined) return Promise.resolve();
-                    return entityExistenceValidator("user-email-validation-u-1", {
-                        entity: "user",
-                        filters: { id: { $notEqualTo: getFieldValue("id") }, email: value },
-                        rejectionMessage: "user_with_same_email_already_exists",
-                    });
-                },
-            }),
-        ],
-        input: {
-            type: "Text",
+  },
+  // email
+  {
+    name: 'email',
+    label: 'email',
+    hasFeedback: true,
+    allowClear: false,
+    rules: [
+      { type: 'email', required: true },
+      ({ getFieldValue }) => ({
+        validator(_, value) {
+          if (value === undefined) return Promise.resolve()
+          return entityExistenceValidator('user-email-validation-u-1', {
+            entity: 'user',
+            filters: { id: { $notEqualTo: getFieldValue('id') }, email: value },
+            rejectionMessage: 'user_with_same_email_already_exists',
+          })
         },
+      }),
+    ],
+    input: {
+      type: 'Text',
     },
-    // mobile
-    {
-        name: "mobile",
-        label: "mobile",
-        hasFeedback: true,
-        allowClear: false,
-        rules: [
-            { type: "string", min: 10, max: 15, required: true },
-            ({ getFieldValue }) => ({
-                validator(_, value) {
-                    if (value === undefined) return Promise.resolve();
-                    return entityExistenceValidator("user-mobile-validation-u-1", {
-                        entity: "user",
-                        filters: { id: { $notEqualTo: getFieldValue("id") }, mobile: value },
-                        rejectionMessage: "user_with_same_mobile_already_exists",
-                    });
-                },
-            }),
-        ],
-        input: {
-            type: "Text",
+  },
+  // mobile
+  {
+    name: 'mobile',
+    label: 'mobile',
+    hasFeedback: true,
+    allowClear: false,
+    rules: [
+      { type: 'string', min: 10, max: 15, required: true },
+      ({ getFieldValue }) => ({
+        validator(_, value) {
+          if (value === undefined) return Promise.resolve()
+          return entityExistenceValidator('user-mobile-validation-u-1', {
+            entity: 'user',
+            filters: { id: { $notEqualTo: getFieldValue('id') }, mobile: value },
+            rejectionMessage: 'user_with_same_mobile_already_exists',
+          })
         },
+      }),
+    ],
+    input: {
+      type: 'Text',
     },
-    // isActive
-    {
-        name: "isActive",
-        label: "active",
-        allowClear: false,
-        rules: [],
-        input: {
-            type: "Select",
-            options: activeFieldOptions
-        },
-        convertValue: (value) => {
-            if (value === true) {
-                return "true";
-            } else if (value === false) {
-                return "false";
-            } else {
-                return value;
-            }
-        }
-    }
-];
+  },
+  // isActive
+  {
+    name: 'isActive',
+    label: 'active',
+    allowClear: false,
+    rules: [],
+    input: {
+      type: 'Select',
+      options: activeFieldOptions,
+    },
+    convertValue: (value) => {
+      if (value === true) {
+        return 'true'
+      } else if (value === false) {
+        return 'false'
+      } else {
+        return value
+      }
+    },
+  },
+]
 
-export default userUpdateFields;
+export default userUpdateFields

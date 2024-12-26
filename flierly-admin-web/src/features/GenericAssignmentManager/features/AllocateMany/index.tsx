@@ -1,3 +1,3 @@
-import AllocateMany from "./AllocateMany";
+import AllocateMany from './AllocateMany'
 
-export default AllocateMany;
+export default AllocateMany

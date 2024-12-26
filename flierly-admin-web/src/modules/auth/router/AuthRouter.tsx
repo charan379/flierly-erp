@@ -1,8 +1,8 @@
-import React from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
-import PageNotFound from "@/pages/PageNotFound";
-import Login from "../pages/Login";
-import SignUp from "../pages/SignUp";
+import React from 'react'
+import { Navigate, Route, Routes } from 'react-router-dom'
+import PageNotFound from '@/pages/PageNotFound'
+import Login from '../pages/Login'
+import SignUp from '../pages/SignUp'
 
 /**
  * AuthRouter component to define the routes for authentication-related pages.
@@ -21,7 +21,7 @@ const AuthRouter: React.FC = () => {
       {/* Route for any undefined paths, rendering the PageNotFound component */}
       <Route path="*" element={<PageNotFound />} />
     </Routes>
-  );
-};
+  )
+}
 
-export default AuthRouter;
+export default AuthRouter

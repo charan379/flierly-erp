@@ -1,11 +1,11 @@
-import React from "react";
-import UnAuthorized from "@/components/UnAuthorized";
+import React from 'react'
+import UnAuthorized from '@/components/UnAuthorized'
 
 /**
  * PageUnAuthorized component to display an unauthorized access page.
  */
 const PageUnAuthorized: React.FC = () => {
-  return <UnAuthorized />;
-};
+  return <UnAuthorized />
+}
 
-export default PageUnAuthorized;
+export default PageUnAuthorized

@@ -1,3 +1,3 @@
-import Privileges from "./Privileges";
+import Privileges from './Privileges'
 
-export default Privileges;
+export default Privileges

@@ -1,6 +1,6 @@
-import FormField from "./FormField";
-import { FormFieldConfig as FFC } from "./FormField";
+import FormField from './FormField'
+import { FormFieldConfig as FFC } from './FormField'
 
-export type FormFieldConfig<T = Record<string, any>> = FFC<T>;
+export type FormFieldConfig<T = Record<string, any>> = FFC<T>
 
-export default FormField;
+export default FormField

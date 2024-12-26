@@ -1,3 +1,3 @@
-import LangSelector from "./LangSelector";
+import LangSelector from './LangSelector'
 
-export default LangSelector;
+export default LangSelector

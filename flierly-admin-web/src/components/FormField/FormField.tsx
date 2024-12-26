@@ -1,105 +1,104 @@
-import React, { Suspense } from "react";
-import { Col, ColProps, Select, SelectProps, Skeleton } from "antd";
-import { ProFormFieldProps, ProFormItemProps } from "@ant-design/pro-components";
-import useLocale from "@/features/Locale/hooks/useLocale";
-import { useAuth } from "@/modules/auth/hooks/useAuth";
-import { pick } from "lodash";
+import React, { Suspense } from 'react'
+import { Col, ColProps, Select, SelectProps, Skeleton } from 'antd'
+import { ProFormFieldProps, ProFormItemProps } from '@ant-design/pro-components'
+import useLocale from '@/features/Locale/hooks/useLocale'
+import { useAuth } from '@/modules/auth/hooks/useAuth'
+import { pick } from 'lodash'
 
-const ProFormItem = React.lazy(() => import("@ant-design/pro-components").then((module) => ({ default: module.ProFormItem })));
-const SelectRemoteOptions = React.lazy(() => import("@/features/SelectRemoteOptions"));
-const ProFormDatePicker = React.lazy(() => import("@ant-design/pro-components").then((module) => ({ default: module.ProFormDatePicker })));
-const ProFormDateRangePicker = React.lazy(() => import("@ant-design/pro-components").then((module) => ({ default: module.ProFormDateRangePicker })));
-const ProFormDigit = React.lazy(() => import("@ant-design/pro-components").then((module) => ({ default: module.ProFormDigit })));
-const ProFormSwitch = React.lazy(() => import("@ant-design/pro-components").then((module) => ({ default: module.ProFormSwitch })));
-const ProFormText = React.lazy(() => import("@ant-design/pro-components").then((module) => ({ default: module.ProFormText })));
-const ProFormTextArea = React.lazy(() => import("@ant-design/pro-components").then((module) => ({ default: module.ProFormTextArea })));
-const ProFormDigitRange = React.lazy(() => import("@ant-design/pro-components").then((module) => ({ default: module.ProFormDigitRange })));
-
+const ProFormItem = React.lazy(() => import('@ant-design/pro-components').then((module) => ({ default: module.ProFormItem })))
+const SelectRemoteOptions = React.lazy(() => import('@/features/SelectRemoteOptions'))
+const ProFormDatePicker = React.lazy(() => import('@ant-design/pro-components').then((module) => ({ default: module.ProFormDatePicker })))
+const ProFormDateRangePicker = React.lazy(() => import('@ant-design/pro-components').then((module) => ({ default: module.ProFormDateRangePicker })))
+const ProFormDigit = React.lazy(() => import('@ant-design/pro-components').then((module) => ({ default: module.ProFormDigit })))
+const ProFormSwitch = React.lazy(() => import('@ant-design/pro-components').then((module) => ({ default: module.ProFormSwitch })))
+const ProFormText = React.lazy(() => import('@ant-design/pro-components').then((module) => ({ default: module.ProFormText })))
+const ProFormTextArea = React.lazy(() => import('@ant-design/pro-components').then((module) => ({ default: module.ProFormTextArea })))
+const ProFormDigitRange = React.lazy(() => import('@ant-design/pro-components').then((module) => ({ default: module.ProFormDigitRange })))
 
 type InputConfig =
-  | { type: "Text" | "TextArea" | "Number" | "NumberRange" | "DatePicker" | "DateRange" | "Switch" }
+  | { type: 'Text' | 'TextArea' | 'Number' | 'NumberRange' | 'DatePicker' | 'DateRange' | 'Switch' }
   | {
-    type: "Decimal";
-    precision?: number;
-    step?: number;
-    min?: number;
-    max?: number;
-  }
+      type: 'Decimal'
+      precision?: number
+      step?: number
+      min?: number
+      max?: number
+    }
   | {
-    type: "Select";
-    options?: SelectProps["options"];
-    mode?: SelectProps["mode"];
-  }
+      type: 'Select'
+      options?: SelectProps['options']
+      mode?: SelectProps['mode']
+    }
   | {
-    type: "SelectRemoteOptions";
-    asyncOptionsFetcher: (value: string) => Promise<any>;
-    labelRender?: SelectProps["labelRender"];
-    debounceTimeout?: number;
-    mode?: SelectProps["mode"];
-  };
+      type: 'SelectRemoteOptions'
+      asyncOptionsFetcher: (value: string) => Promise<any>
+      labelRender?: SelectProps['labelRender']
+      debounceTimeout?: number
+      mode?: SelectProps['mode']
+    }
 
 type AccessConfig = {
-  permission?: RegExp;
-  ifNoAccess?: "hide" | "disable";
-};
+  permission?: RegExp
+  ifNoAccess?: 'hide' | 'disable'
+}
 
-export type FormFieldConfig<T = Record<string, any>> = Omit<ProFormFieldProps<T>, "name" | "fieldProps"> & {
-  name?: keyof T;
-  input: InputConfig;
-  access?: AccessConfig;
-  onChange?: (value: any) => void;
-  value?: any;
+export type FormFieldConfig<T = Record<string, any>> = Omit<ProFormFieldProps<T>, 'name' | 'fieldProps'> & {
+  name?: keyof T
+  input: InputConfig
+  access?: AccessConfig
+  onChange?: (value: any) => void
+  value?: any
   formInfo?: {
-    isFormItem?: boolean;
-    gridForm?: boolean;
-  };
-};
+    isFormItem?: boolean
+    gridForm?: boolean
+  }
+}
 
 export type FormFieldProps<T = Record<string, any>> = {
-  fieldKey?: string;
-  config: FormFieldConfig<T>;
-  showLabel?: boolean;
-};
+  fieldKey?: string
+  config: FormFieldConfig<T>
+  showLabel?: boolean
+}
 
 const WrapUnderCol: React.FC<{
-  colProps?: ColProps;
-  formInfo?: FormFieldConfig["formInfo"];
-  children: React.ReactNode;
+  colProps?: ColProps
+  formInfo?: FormFieldConfig['formInfo']
+  children: React.ReactNode
 }> = ({ colProps, formInfo, children }) => {
-  const { isFormItem = true, gridForm = true } = formInfo || {};
+  const { isFormItem = true, gridForm = true } = formInfo || {}
   if (isFormItem && gridForm) {
     return (
       <Col xs={24} {...colProps}>
         {children}
       </Col>
-    );
+    )
   }
-  return <>{children}</>;
-};
+  return <>{children}</>
+}
 
 const allowedProFormItemProps: (keyof ProFormItemProps)[] = [
-  "name",
-  "label",
-  "valuePropName",
-  "rules",
-  "dependencies",
-  "hidden",
-  "shouldUpdate",
-  "initialValue",
-  "tooltip",
-  "validateTrigger",
-  "getValueProps",
-  "normalize",
-  "preserve",
-  "convertValue",
-  "transform",
-];
+  'name',
+  'label',
+  'valuePropName',
+  'rules',
+  'dependencies',
+  'hidden',
+  'shouldUpdate',
+  'initialValue',
+  'tooltip',
+  'validateTrigger',
+  'getValueProps',
+  'normalize',
+  'preserve',
+  'convertValue',
+  'transform',
+]
 
 const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
-  const { input, onChange: handleChange, formInfo, colProps, value, ...restProps } = props;
-  const isStandalone = !formInfo?.isFormItem;
+  const { input, onChange: handleChange, formInfo, colProps, value, ...restProps } = props
+  const isStandalone = !formInfo?.isFormItem
   switch (input.type) {
-    case "Text":
+    case 'Text':
       return (
         <Suspense fallback={<Skeleton.Input active block />}>
           <ProFormText
@@ -110,8 +109,8 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
             }}
           />
         </Suspense>
-      );
-    case "TextArea":
+      )
+    case 'TextArea':
       return (
         <Suspense fallback={<Skeleton.Input active block />}>
           <ProFormTextArea
@@ -122,8 +121,8 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
             }}
           />
         </Suspense>
-      );
-    case "Number":
+      )
+    case 'Number':
       return (
         <Suspense fallback={<Skeleton.Input active block />}>
           <ProFormDigit
@@ -134,8 +133,8 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
             }}
           />
         </Suspense>
-      );
-    case "NumberRange":
+      )
+    case 'NumberRange':
       return (
         <Suspense fallback={<Skeleton.Input active block />}>
           <ProFormDigitRange
@@ -146,8 +145,8 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
             }}
           />
         </Suspense>
-      );
-    case "DatePicker":
+      )
+    case 'DatePicker':
       return (
         <Suspense fallback={<Skeleton.Input active block />}>
           <ProFormDatePicker
@@ -158,8 +157,8 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
             }}
           />
         </Suspense>
-      );
-    case "DateRange":
+      )
+    case 'DateRange':
       return (
         <Suspense fallback={<Skeleton.Input active block />}>
           <ProFormDateRangePicker
@@ -170,8 +169,8 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
             }}
           />
         </Suspense>
-      );
-    case "Switch":
+      )
+    case 'Switch':
       return (
         <Suspense fallback={<Skeleton.Input active block />}>
           <ProFormSwitch
@@ -183,8 +182,8 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
             }}
           />
         </Suspense>
-      );
-    case "Decimal":
+      )
+    case 'Decimal':
       return (
         <Suspense fallback={<Skeleton.Input active block />}>
           <ProFormDigit
@@ -199,8 +198,8 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
             }}
           />
         </Suspense>
-      );
-    case "Select":
+      )
+    case 'Select':
       return (
         <WrapUnderCol formInfo={formInfo} colProps={colProps}>
           <Suspense fallback={<Skeleton.Input active block />}>
@@ -209,19 +208,19 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
                 mode={input.mode}
                 placeholder="Please select"
                 options={input.options}
-                maxTagCount={"responsive"}
+                maxTagCount={'responsive'}
                 allowClear={restProps.allowClear}
                 disabled={restProps.hidden || restProps.disabled}
-                style={{ width: restProps.width ?? "100%", textAlign: "left" }}
-                dropdownStyle={{ textAlign: "left" }}
+                style={{ width: restProps.width ?? '100%', textAlign: 'left' }}
+                dropdownStyle={{ textAlign: 'left' }}
                 {...(isStandalone && value !== undefined ? { value } : {})}
                 {...(isStandalone && handleChange ? { onChange: (v) => handleChange(v) } : {})}
               />
             </ProFormItem>
           </Suspense>
         </WrapUnderCol>
-      );
-    case "SelectRemoteOptions":
+      )
+    case 'SelectRemoteOptions':
       return (
         <WrapUnderCol formInfo={formInfo} colProps={colProps}>
           <Suspense fallback={<Skeleton.Input active block />}>
@@ -240,52 +239,48 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
             </ProFormItem>
           </Suspense>
         </WrapUnderCol>
-      );
+      )
     default:
-      console.warn(`Unsupported input '${JSON.stringify(input)}' in FormField.`);
-      return null;
+      console.warn(`Unsupported input '${JSON.stringify(input)}' in FormField.`)
+      return null
   }
-};
+}
 
-const FormField = <T extends Record<string, any>>({
-  fieldKey,
-  config,
-  showLabel = true,
-}: FormFieldProps<T>) => {
-  const { translate } = useLocale();
-  const { hasPermission } = useAuth();
-  const { name = "fieldName", label = "fieldLabel", hidden, disabled, access, onChange, value } = config;
+const FormField = <T extends Record<string, any>>({ fieldKey, config, showLabel = true }: FormFieldProps<T>) => {
+  const { translate } = useLocale()
+  const { hasPermission } = useAuth()
+  const { name = 'fieldName', label = 'fieldLabel', hidden, disabled, access, onChange, value } = config
 
-  const { permission, ifNoAccess } = access || {};
-  let doNotRender = false;
-  let isHidden = hidden;
-  let isDisabled = disabled;
+  const { permission, ifNoAccess } = access || {}
+  let doNotRender = false
+  let isHidden = hidden
+  let isDisabled = disabled
 
   if (permission && !hasPermission(permission)) {
     switch (ifNoAccess) {
-      case "hide":
-        isHidden = true;
-        break;
-      case "disable":
-        isDisabled = true;
-        break;
+      case 'hide':
+        isHidden = true
+        break
+      case 'disable':
+        isDisabled = true
+        break
       default:
-        doNotRender = true;
+        doNotRender = true
     }
   }
 
-  if (doNotRender || !name || !label) return null;
+  if (doNotRender || !name || !label) return null
 
   const componentProps: FormFieldConfig<T> = {
     ...config,
-    label: showLabel ? (typeof label === "string" ? translate(label) : label) : undefined,
+    label: showLabel ? (typeof label === 'string' ? translate(label) : label) : undefined,
     hidden: isHidden,
     disabled: isDisabled,
     onChange,
     value,
-  };
+  }
 
-  return <FormComponent key={`${fieldKey}-${String(name)}`} {...componentProps} />;
-};
+  return <FormComponent key={`${fieldKey}-${String(name)}`} {...componentProps} />
+}
 
-export default FormField;
+export default FormField

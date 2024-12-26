@@ -1,3 +1,3 @@
-import UserPasswordUpdate from "./UserPasswordUpdate";
+import UserPasswordUpdate from './UserPasswordUpdate'
 
-export default UserPasswordUpdate;
+export default UserPasswordUpdate

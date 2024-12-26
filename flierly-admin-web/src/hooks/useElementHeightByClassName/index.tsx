@@ -1,3 +1,3 @@
-import useElementHeightByClassName from "./useElementHeightByClassName";
+import useElementHeightByClassName from './useElementHeightByClassName'
 
-export default useElementHeightByClassName;
+export default useElementHeightByClassName

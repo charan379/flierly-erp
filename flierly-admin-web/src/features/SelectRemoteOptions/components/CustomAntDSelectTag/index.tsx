@@ -1,3 +1,3 @@
-import CustomAntDSelectTag from "./CustomAntDSelectTag";
+import CustomAntDSelectTag from './CustomAntDSelectTag'
 
-export default CustomAntDSelectTag;
+export default CustomAntDSelectTag

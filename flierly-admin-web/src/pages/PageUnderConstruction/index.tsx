@@ -1,3 +1,3 @@
-import PageUnderConstruction from "./PageUnderConstruction";
+import PageUnderConstruction from './PageUnderConstruction'
 
-export default PageUnderConstruction;
+export default PageUnderConstruction

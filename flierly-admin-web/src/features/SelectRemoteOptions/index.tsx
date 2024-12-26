@@ -1,3 +1,3 @@
-import SelectRemoteOptions from "./SelectRemoteOptions";
+import SelectRemoteOptions from './SelectRemoteOptions'
 
-export default SelectRemoteOptions;
+export default SelectRemoteOptions

@@ -1,3 +1,3 @@
-import useElementWidth from "./useElementWidth";
+import useElementWidth from './useElementWidth'
 
-export default useElementWidth;
+export default useElementWidth

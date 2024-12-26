@@ -1,3 +1,3 @@
-import ResizableDrawer from "./ResizableDrawer";
+import ResizableDrawer from './ResizableDrawer'
 
-export default ResizableDrawer;
+export default ResizableDrawer

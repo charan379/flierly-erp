@@ -1,3 +1,3 @@
-import SearchableMenu from "./SearchableMenu";
+import SearchableMenu from './SearchableMenu'
 
-export default SearchableMenu;
+export default SearchableMenu

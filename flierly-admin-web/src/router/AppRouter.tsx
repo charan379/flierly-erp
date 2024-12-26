@@ -1,11 +1,11 @@
-import ProtectedRoute from "@/features/ProtectedRoute/ProtectedRoute";
-import Dashboard from "@/layout/Dashboard";
-import Login from "@/modules/auth/pages/Login";
-import SignUp from "@/modules/auth/pages/SignUp";
-import IamRoutes from "@/modules/iam/router/IamRoutes";
-import PageNotFound from "@/pages/PageNotFound";
-import PageUnderConstruction from "@/pages/PageUnderConstruction";
-import { Route, Routes } from "react-router-dom";
+import ProtectedRoute from '@/features/ProtectedRoute/ProtectedRoute'
+import Dashboard from '@/layout/Dashboard'
+import Login from '@/modules/auth/pages/Login'
+import SignUp from '@/modules/auth/pages/SignUp'
+import IamRoutes from '@/modules/iam/router/IamRoutes'
+import PageNotFound from '@/pages/PageNotFound'
+import PageUnderConstruction from '@/pages/PageUnderConstruction'
+import { Route, Routes } from 'react-router-dom'
 
 const AppRouter = () => {
   return (
@@ -24,7 +24,7 @@ const AppRouter = () => {
       {/* Catch-all for 404 */}
       <Route path="*" element={<PageNotFound />} />
     </Routes>
-  );
-};
+  )
+}
 
-export default AppRouter;
+export default AppRouter

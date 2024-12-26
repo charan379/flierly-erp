@@ -1,3 +1,3 @@
-import ParentComponent from "./Test";
+import ParentComponent from './Test'
 
-export default ParentComponent;
+export default ParentComponent
