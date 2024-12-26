@@ -6,6 +6,7 @@ import JoiSchemaValidator from '@/lib/joi/joi-schema.validator';
 import { validate } from 'class-validator';
 import { Request, Response } from 'express';
 import { EntityTarget, ObjectLiteral } from 'typeorm';
+import FlierlyException from '@/lib/flierly.exception';
 
 /**
  * Creates a new entity record in the database.
@@ -37,7 +38,7 @@ const create = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Re
   // Perform class-validator validation
   const errors = await validate(newRow);
   if (errors.length > 0) {
-    return res.status(400).json({ message: 'Validation failed', errors });
+    throw new FlierlyException(errors.map(e => e.constraints ? Object.values(e.constraints) : "").join(", "), HttpCodes.BAD_REQUEST, "Data validation failed", JSON.stringify(errors));
   }
 
   // Save the validated entity to database
