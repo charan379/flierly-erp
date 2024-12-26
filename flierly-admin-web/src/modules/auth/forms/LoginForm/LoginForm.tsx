@@ -6,6 +6,7 @@ import Loading from '@/components/Loading'
 import { useAuth } from '../../hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
 import { LoadingTypes } from '../../@types/loading'
+import regexConstants from '@/constants/regex.constants'
 
 interface LoginFormProps {
   redirectOnLogin?: boolean
@@ -31,7 +32,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false, isForPop
       navigate(targetPath, { replace: true })
     }
 
-    return () => {}
+    return () => { }
   }, [isLoggedIn, loading, navigate, redirectOnLogin, isForPopup, callback, isTokenExpired])
 
   return (
@@ -51,7 +52,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false, isForPop
           <Form.Item
             label={translate('username')}
             name="username"
-            rules={[{ required: true, message: translate('username_is_required') }, { type: 'string' }]}
+            rules={[{ required: true, message: translate('username_is_required') }, { pattern: regexConstants.username }, { min: 5, max: 20 },
+            ]}
             tooltip={{
               title: translate('username_is_required'),
               icon: <InfoCircleOutlined />,
@@ -65,7 +67,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false, isForPop
             name="password"
             rules={[
               { required: true, message: translate('password_is_required') },
-              { pattern: /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,26})$/, message: 'invalid_password' },
+              { pattern: regexConstants.password, message: 'invalid_password' },
               { max: 28, min: 8 },
             ]}
             tooltip={{

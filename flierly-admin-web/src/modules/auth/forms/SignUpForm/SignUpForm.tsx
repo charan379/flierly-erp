@@ -3,6 +3,7 @@ import useLocale from '@/features/Locale/hooks/useLocale'
 import { InfoCircleOutlined, LockOutlined, MailOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Checkbox, Flex, Form, Input } from 'antd'
 import Loading from '@/components/Loading'
+import regexConstants from '@/constants/regex.constants'
 
 interface FormValues {
   username: string
@@ -41,7 +42,7 @@ const SignUpForm: React.FC = () => {
             name="username"
             rules={[
               { required: true, message: translate('username_is_required') },
-              { pattern: /^[a-z0-9_]+$/, message: 'invalid_username' },
+              { pattern: regexConstants.username, message: 'invalid_username' },
               { min: 5, max: 20 },
             ]}
             tooltip={{
@@ -70,7 +71,7 @@ const SignUpForm: React.FC = () => {
             rules={[
               { required: true, message: translate('email_is_required') },
               { type: 'string' },
-              { pattern: /^\+\d{1,3}[\s][6-9]\d{9}$/, message: 'invalid_mobile' },
+              { pattern: regexConstants.mobile, message: 'invalid_mobile' },
             ]}
             hasFeedback
           >
@@ -83,7 +84,7 @@ const SignUpForm: React.FC = () => {
             name="password"
             rules={[
               { required: true, message: translate('password_is_required') },
-              { pattern: /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,26})$/, message: 'invalid_password' },
+              { pattern: regexConstants.password, message: 'invalid_password' },
               { max: 28, min: 8 },
             ]}
             tooltip={{
@@ -102,7 +103,7 @@ const SignUpForm: React.FC = () => {
             dependencies={['password']}
             rules={[
               { required: true, message: translate('confirm_password_is_required') },
-              { pattern: /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,26})$/, message: 'invalid_password' },
+              { pattern: regexConstants.password, message: 'invalid_password' },
               { max: 28, min: 8 },
               ({ getFieldValue }) => ({
                 async validator(_, value) {
