@@ -47,6 +47,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false, isForPop
         name="login"
         className="auth-form"
         id="login-form"
+        size="middle"
         initialValues={{ remember: true }}
         onFinish={(values) => {
           login(values);
@@ -68,14 +69,13 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false, isForPop
             <Input
               prefix={<UserOutlined className="site-form-item-icon" />}
               placeholder={translate("username")}
-              size="large"
             />
           </Form.Item>
 
           <Form.Item
             label={translate("password")}
             name="password"
-            rules={[{ required: true, message: translate("password_is_required") }]}
+            rules={[{ required: true, message: translate("password_is_required") }, { pattern: /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,26})$/, message: "invalid_password" }, { max: 28, min: 8 }]}
             tooltip={{
               title: translate("password_is_required"),
               icon: <InfoCircleOutlined />,
@@ -84,7 +84,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false, isForPop
             <Input.Password
               prefix={<LockOutlined className="site-form-item-icon" />}
               placeholder={translate("password")}
-              size="large"
             />
           </Form.Item>
 
@@ -110,7 +109,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false, isForPop
             htmlType="submit"
             className="auth-form-button"
             loading={loading === LoadingTypes.PENDING}
-            size="large"
           >
             {translate("sign_in")}
           </Button>

@@ -10,10 +10,15 @@ const userCreateFields: FormFieldConfig<User>[] = [
         hasFeedback: true,
         allowClear: true,
         rules: [
-            { type: "string", min: 5, max: 30, required: true },
-            ({ }) => ({
-                validator(_, value) {
-                    if (value === undefined) return Promise.resolve();
+            { type: "string", min: 5, max: 20, required: true },
+            { pattern: /^[a-z0-9_]+$/, message: "invalid_username" },
+            () => ({
+                validator: (_, value) => {
+                    // Check if previous validations passed
+                    if (!value || value.length < 5 || value.length > 20 || !/^[a-z0-9_]+$/.test(value)) {
+                        return Promise.resolve();
+                    }
+                    // Run entity existence validation
                     return entityExistenceValidator("user-name-validation-c-1", {
                         entity: "user",
                         filters: { username: { $ilike: value } },
@@ -33,7 +38,7 @@ const userCreateFields: FormFieldConfig<User>[] = [
         allowClear: true,
         rules: [
             { type: "email", required: true },
-            ({ }) => ({
+            () => ({
                 validator(_, value) {
                     if (value === undefined) return Promise.resolve();
                     return entityExistenceValidator("user-email-validation-c-1", {
@@ -55,8 +60,9 @@ const userCreateFields: FormFieldConfig<User>[] = [
         hasFeedback: true,
         allowClear: true,
         rules: [
-            { type: "string", min: 10, max: 15, required: true },
-            ({ }) => ({
+            { type: "string", required: true },
+            { pattern: /^\+\d{1,3}[\s][6-9]\d{9}$/, message: "invalid_mobile" },
+            () => ({
                 validator(_, value) {
                     if (value === undefined) return Promise.resolve();
                     return entityExistenceValidator("user-mobile-validation-c-1", {

@@ -1,8 +1,7 @@
 import React from "react";
 import useLocale from "@/features/Locale/hooks/useLocale";
-import { InfoCircleOutlined, LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
+import { InfoCircleOutlined, LockOutlined, MailOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Flex, Form, Input } from "antd";
-import { useNavigate } from "react-router-dom";
 import Loading from "@/components/Loading";
 
 interface FormValues {
@@ -18,7 +17,6 @@ interface FormValues {
  */
 const SignUpForm: React.FC = () => {
   const { translate, langDirection } = useLocale(); // Using custom hook to get translation function and language direction.
-  const navigate = useNavigate();
 
   return (
     <Loading isLoading={false}>
@@ -30,6 +28,7 @@ const SignUpForm: React.FC = () => {
         initialValues={{
           terms: false,
         }}
+        size="middle"
         onFinish={(values) => {
           console.log("Submitted values:", values);
         }}
@@ -42,7 +41,8 @@ const SignUpForm: React.FC = () => {
             name="username"
             rules={[
               { required: true, message: translate("username_is_required") },
-              { type: "string" },
+              { pattern: /^[a-z0-9_]+$/, message: "invalid_username" },
+              { min: 5, max: 20 }
             ]}
             tooltip={{
               title: translate("username_is_required"),
@@ -53,7 +53,6 @@ const SignUpForm: React.FC = () => {
             <Input
               prefix={<UserOutlined className="site-form-item-icon" />}
               placeholder={translate("username")}
-              size="large"
             />
           </Form.Item>
 
@@ -71,7 +70,24 @@ const SignUpForm: React.FC = () => {
               prefix={<MailOutlined className="site-form-item-icon" />}
               placeholder={translate("email")}
               type="email"
-              size="large"
+            />
+          </Form.Item>
+
+          {/* Email */}
+          <Form.Item
+            label={translate("mobile")}
+            name="mobile"
+            rules={[
+              { required: true, message: translate("email_is_required") },
+              { type: "string" },
+              { pattern: /^\+\d{1,3}[\s][6-9]\d{9}$/, message: "invalid_mobile" },
+            ]}
+            hasFeedback
+          >
+            <Input
+              prefix={<PhoneOutlined className="site-form-item-icon" />}
+              placeholder={translate("mobile")}
+              type="string"
             />
           </Form.Item>
 
@@ -79,7 +95,7 @@ const SignUpForm: React.FC = () => {
           <Form.Item
             label={translate("password")}
             name="password"
-            rules={[{ required: true, message: translate("password_is_required") }]}
+            rules={[{ required: true, message: translate("password_is_required") }, { pattern: /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,26})$/, message: "invalid_password" }, { max: 28, min: 8 }]}
             tooltip={{
               title: translate("password_is_required"),
               icon: <InfoCircleOutlined />,
@@ -89,7 +105,6 @@ const SignUpForm: React.FC = () => {
             <Input.Password
               prefix={<LockOutlined className="site-form-item-icon" />}
               placeholder={translate("password")}
-              size="large"
             />
           </Form.Item>
 
@@ -100,6 +115,8 @@ const SignUpForm: React.FC = () => {
             dependencies={["password"]}
             rules={[
               { required: true, message: translate("confirm_password_is_required") },
+              { pattern: /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,26})$/, message: "invalid_password" },
+              { max: 28, min: 8 },
               ({ getFieldValue }) => ({
                 async validator(_, value) {
                   return !value || getFieldValue("password") === value
@@ -113,7 +130,6 @@ const SignUpForm: React.FC = () => {
             <Input.Password
               prefix={<LockOutlined className="site-form-item-icon" />}
               placeholder={translate("confirm_password")}
-              size="large"
             />
           </Form.Item>
 
@@ -129,8 +145,8 @@ const SignUpForm: React.FC = () => {
                     value
                       ? Promise.resolve()
                       : Promise.reject(
-                          new Error(translate("terms_and_conditions_must_be_accepted"))
-                        ),
+                        new Error(translate("terms_and_conditions_must_be_accepted"))
+                      ),
                 },
               ]}
             >
@@ -147,13 +163,12 @@ const SignUpForm: React.FC = () => {
         </div>
 
         {/* Form Submission */}
-        <Form.Item style={{margin: "5px 0px 5px 0px"}}>
+        <Form.Item style={{ margin: "5px 0px 5px 0px" }}>
           <Button
             type="primary"
             htmlType="submit"
             className="auth-form-button"
             loading={false}
-            size="large"
           >
             {translate("sign_up")}
           </Button>
