@@ -8,7 +8,7 @@ const languages = {
 
 // Function to get the language object by passing the language key
 export function getLanguageObject(languageKey: string) {
-  if (!languages.hasOwnProperty(languageKey)) {
+  if (!Object.prototype.hasOwnProperty.call(languages, languageKey)) {
     return {}
   }
   return languages[languageKey as keyof typeof languages]

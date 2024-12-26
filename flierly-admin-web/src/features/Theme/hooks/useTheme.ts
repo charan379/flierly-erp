@@ -1,6 +1,6 @@
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux'
 import { useEffect, useState, useCallback } from 'react'
-import { CHANGE_THEME_MODE, CHANGE_THEME_PREFERENCE, TOGGLE_THEME_COMPACTIBILITY } from '../redux/themeSlice'
+import { CHANGE_THEME_MODE, CHANGE_THEME_PREFERENCE, TOGGLE_THEME_COMPACTIBILITY } from '../redux/theme.slice'
 import throttle from '@/utils/throttle'
 import darkTheme from '../config/dark'
 import lightTheme from '../config/light'

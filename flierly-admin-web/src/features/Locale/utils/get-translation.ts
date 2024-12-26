@@ -24,7 +24,7 @@ export default function getTranslation(translation: Record<string, string>, key:
     } else {
       throw new Error(`No translation available for ${lowerCaseKey}`)
     }
-  } catch (error) {
+  } catch (_error) {
     // Log the error message
     // console.log((error as Error).message);
 

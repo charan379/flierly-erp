@@ -61,7 +61,7 @@ function formatDateToLocaleTimezone(
 
     // Format the adjusted date
     return adjustedDate.format(format)
-  } catch (error) {
+  } catch (_error) {
     return ''
   }
 }

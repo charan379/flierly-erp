@@ -5,7 +5,7 @@ import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashCanArrowUp } from '@fortawesome/free-solid-svg-icons'
 import { ActionType } from '@ant-design/pro-components'
-import crudService from '../../../CrudModule/service/crudService'
+import crudService from '../../../CrudModule/service/crud-module.service'
 
 type RestoreProps = {
   entity: string // Name of the entity to be restored
@@ -15,11 +15,9 @@ type RestoreProps = {
 }
 
 const Restore: React.FC<RestoreProps> = ({ entity, actions, rows, render }) => {
-  if (!render) return null
-  if (!actions) return null
-  if (rows.selectedRowKeys === undefined) return
-
   const { translate } = useLocale()
+
+  if (!render || !actions || rows.selectedRowKeys === undefined) return null
 
   const buttonStyle = rows.selectedRowKeys.length <= 0 ? {} : { backgroundColor: '#009688', borderColor: '#009688' }
 
@@ -52,7 +50,7 @@ const Restore: React.FC<RestoreProps> = ({ entity, actions, rows, render }) => {
             style={buttonStyle}
             key={`restore-selected-rows-trigger`}
             shape="circle"
-            size="middle"
+            size="small"
             icon={<FontAwesomeIcon icon={faTrashCanArrowUp} size="1x" />}
             disabled={rows.selectedRowKeys.length <= 0}
           />

@@ -1,4 +1,4 @@
-import reverseQueryTransformers from './reverseQueryTransformers'
+import reverseQueryTransformers from './reverse-query-transformers'
 
 // Define a type for the query object
 type Query = Record<string, any> | undefined

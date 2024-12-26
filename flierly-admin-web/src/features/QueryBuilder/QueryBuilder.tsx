@@ -1,7 +1,7 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react'
 import { Button, Card, Row, Col, Select, Space, Divider, Typography, Form, Tooltip, Flex, Checkbox } from 'antd'
 import FormField, { FormFieldConfig } from '@/components/FormField'
-import queryTransformers, { TransformerKey } from '@/utils/queryTransformers'
+import queryTransformers, { TransformerKey } from '@/utils/query-transformers'
 import CollapsibleCard from './components/CollapsibleCard'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons'

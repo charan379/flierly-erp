@@ -2,21 +2,24 @@ import CrudModule from '@/features/CrudModule'
 import React, { ComponentType, LazyExoticComponent, Suspense } from 'react'
 import PageLoader from '@/components/PageLoader'
 import { CrudTableProps } from '@/features/CrudTable/CrudTable'
-import userCreateFields from '../../config/user/createFormFields'
-import userUpdateFields from '../../config/user/updateFormFields'
-import userQueryFields from '../../config/user/queryFormFields'
-import userTableColumns from '../../config/user/tableColumns'
+import userCreateFormFields from '../../config/user/user-create-form-fields'
+import userUpdateFormFields from '../../config/user/user-update-form-fields'
+import userQueryFormFields from '../../config/user/user-query-form-fields'
+import createUserTableColumns from '../../config/user/create-user-table-columns'
+import useLocale from '@/features/Locale/hooks/useLocale'
 
 // Lazy load CrudTable
 const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<User>>> = React.lazy(() => import('@/features/CrudTable'))
 
 const Users: React.FC = () => {
+  const { translate } = useLocale();
+
   return (
     <CrudModule header title={'users'} menuKeys={['iam']}>
       <Suspense fallback={<PageLoader />}>
         <CrudTable
           entity="user"
-          columns={userTableColumns}
+          columns={createUserTableColumns(translate)}
           dataSource={[]}
           tableKey="user-table"
           rowKey="id"
@@ -41,9 +44,9 @@ const Users: React.FC = () => {
               },
             },
           }}
-          createFormFields={userCreateFields}
-          updateFormFields={userUpdateFields}
-          queryFormFields={userQueryFields}
+          createFormFields={userCreateFormFields}
+          updateFormFields={userUpdateFormFields}
+          queryFormFields={userQueryFormFields}
         />
       </Suspense>
     </CrudModule>

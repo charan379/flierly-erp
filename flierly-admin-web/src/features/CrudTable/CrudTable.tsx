@@ -11,7 +11,7 @@ import Clear from './features/Clear'
 import BinModeToggle from './features/BinModeToggle'
 import Update from './forms/Update'
 import useCrudModuleContext from '../CrudModule/hooks/useCrudModuleContext'
-import crudService from '../CrudModule/service/crudService'
+import crudService from '../CrudModule/service/crud-module.service'
 import Search from './forms/Search'
 import { FormFieldConfig } from '@/components/FormField'
 import { QueryFieldConfig } from '../QueryBuilder/QueryBuilder'
@@ -114,6 +114,8 @@ const CrudTable = <T extends Record<string, any>>({
         type: 'checkbox',
         preserveSelectedRowKeys: true,
       }}
+      // size
+      // row key
       rowKey={rowKey as string}
       // Configuration for table alert section
       tableAlertRender={false}

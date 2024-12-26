@@ -1,7 +1,7 @@
 import { FormFieldConfig } from '@/components/FormField'
 import { activeFieldOptions } from '@/constants/select-options.constant'
 
-const roleAssociatedEntityQueryFields: {
+const roleAssociatedEntityQueryFormFields: {
   label: string
   name: keyof Role
   formField: FormFieldConfig<Role>
@@ -26,4 +26,4 @@ const roleAssociatedEntityQueryFields: {
   },
 ]
 
-export default roleAssociatedEntityQueryFields
+export default roleAssociatedEntityQueryFormFields

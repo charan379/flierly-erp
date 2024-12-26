@@ -1,6 +1,6 @@
 import { serverConfig } from '@/config/server.config'
-import { getToken, listenToAuthChanges } from '@/modules/auth/service/authStateService'
-import handleResponse from '@/utils/handlers/apiResponsehandler'
+import { getToken, listenToAuthChanges } from '@/modules/auth/service/auth-state.service'
+import handleApiResponse from '@/utils/handlers/api-response.handler'
 import axios from 'axios'
 
 // Create Axios instance with default headers
@@ -17,7 +17,7 @@ const userService = {
    */
   updateUserPassword: async <T>({ userId, newPassword, signal }: { newPassword: string; signal?: AbortSignal; userId: number }) => {
     const promise = api.post<ApiResponse<T>>(`/user/update-password`, { userId, password: newPassword }, { signal })
-    return handleResponse<T>({ promise, notifyOnSuccess: true })
+    return handleApiResponse<T>({ promise, notifyOnSuccess: true })
   },
 }
 

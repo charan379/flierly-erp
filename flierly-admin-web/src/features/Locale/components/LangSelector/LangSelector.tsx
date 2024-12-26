@@ -2,7 +2,7 @@ import React from 'react'
 import { Select } from 'antd'
 import useResponsive from '@/hooks/useResponsive'
 import useLocale from '@/features/Locale/hooks/useLocale'
-import languageOptions from '../../config/languageOptions'
+import languageOptions from '../../config/language-options'
 
 const LangSelector: React.FC = () => {
   const { isMobile } = useResponsive()

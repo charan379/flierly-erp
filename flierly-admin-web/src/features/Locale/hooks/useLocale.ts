@@ -1,7 +1,7 @@
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux'
 import { RootState, AppDispatch } from '@/redux/store' // Ensure AppDispatch is exported from your store file
-import getTranslation from '../utils/getTranslation'
-import { RESET, CHANGE_LANGUAGE, CHANGE_LANG_DIRECTION } from '../redux/localeSlice'
+import getTranslation from '../utils/get-translation'
+import { RESET, CHANGE_LANGUAGE, CHANGE_LANG_DIRECTION } from '../redux/locale.slice'
 
 export default function useLocale() {
   // Accessing locale state from Redux store

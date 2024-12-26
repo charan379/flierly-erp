@@ -1,9 +1,9 @@
 import { FormFieldConfig } from '@/components/FormField'
 import { accessOptions, activeFieldOptions } from '@/constants/select-options.constant'
-import fetchEntityOptions from '@/features/SelectRemoteOptions/utils/fetchEntityOptions'
-import queryTransformers from '@/utils/queryTransformers'
+import fetchEntityOptions from '@/features/SelectRemoteOptions/utils/fetch-entity-options'
+import queryTransformers from '@/utils/query-transformers'
 
-const privilegeAssociatedEntityQueryFields: {
+const privilegeAssociatedEntityQueryFormFields: {
   label: string
   name: keyof Privilege
   formField: FormFieldConfig<Privilege>
@@ -50,4 +50,4 @@ const privilegeAssociatedEntityQueryFields: {
   },
 ]
 
-export default privilegeAssociatedEntityQueryFields
+export default privilegeAssociatedEntityQueryFormFields

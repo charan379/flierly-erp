@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios'
 import { serverConfig } from '@/config/server.config'
-import { getToken, listenToAuthChanges } from '@/modules/auth/service/authStateService'
-import handleResponse from '@/utils/handlers/apiResponsehandler'
+import { getToken, listenToAuthChanges } from '@/modules/auth/service/auth-state.service'
+import handleApiResponse from '@/utils/handlers/api-response.handler'
 
 // Define types for the service methods
 interface EntityRequestParams {
@@ -35,7 +35,7 @@ const selectRemoteOptionsService = {
       params: { keyword, limit },
       signal, // Pass the signal to the request
     })
-    return handleResponse({ promise })
+    return handleApiResponse({ promise })
   },
 
   /**
@@ -47,7 +47,7 @@ const selectRemoteOptionsService = {
       { filters, limit },
       { signal }, // Pass the signal to the request
     )
-    return handleResponse({ promise })
+    return handleApiResponse({ promise })
   },
 }
 

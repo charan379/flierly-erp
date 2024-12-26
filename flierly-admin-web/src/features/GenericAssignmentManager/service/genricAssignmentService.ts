@@ -1,6 +1,6 @@
 import { serverConfig } from '@/config/server.config'
-import { getToken, listenToAuthChanges } from '@/modules/auth/service/authStateService'
-import handleResponse from '@/utils/handlers/apiResponsehandler'
+import { getToken, listenToAuthChanges } from '@/modules/auth/service/auth-state.service'
+import handleApiResponse from '@/utils/handlers/api-response.handler'
 import axios from 'axios'
 
 // Create Axios instance with default headers
@@ -25,7 +25,7 @@ const genricAssignmentService = {
     signal,
   }: EntitiesPageRequest) => {
     const promise = api.post<ApiResponse<T>>(`/${entity}/page`, { filters, pagination, sort, loadRelations, binMode }, { signal })
-    return handleResponse<T>({ promise })
+    return handleApiResponse<T>({ promise })
   },
 
   /**
@@ -48,7 +48,7 @@ const genricAssignmentService = {
       { owningEntity, owningEntityId, inverseSideField, owningSideField, filters, pagination, sort, type },
       { signal },
     )
-    return handleResponse<T>({ promise })
+    return handleApiResponse<T>({ promise })
   },
 
   /**
@@ -70,7 +70,7 @@ const genricAssignmentService = {
       { owningEntityId, newArray, inverseField, addOne, addMultiple, removeOne, removeMultiple },
       { signal },
     )
-    return handleResponse<T>({ promise, notifyOnSuccess: true })
+    return handleApiResponse<T>({ promise, notifyOnSuccess: true })
   },
 }
 

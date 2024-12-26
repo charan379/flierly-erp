@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import statePersist from '@/redux/statePersist'
+import statePersist from '@/redux/state-persist'
 
 // Initial state for the theme slice
 const INITIAL_STATE: ThemeState = {

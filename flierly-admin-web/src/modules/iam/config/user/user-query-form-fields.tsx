@@ -1,7 +1,7 @@
 import { QueryFieldConfig } from '@/features/QueryBuilder/QueryBuilder'
 import { activeFieldOptions } from '@/constants/select-options.constant'
 
-const userQueryFields: QueryFieldConfig<User>[] = [
+const userQueryFormFields: QueryFieldConfig<User>[] = [
   // id
   {
     field: { label: 'ID', namePath: 'id' },
@@ -198,4 +198,4 @@ const userQueryFields: QueryFieldConfig<User>[] = [
   },
 ]
 
-export default userQueryFields
+export default userQueryFormFields

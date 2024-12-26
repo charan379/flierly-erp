@@ -12,7 +12,6 @@ type BinModeToggleProps = {
 }
 
 const BinModeToggle: React.FC<BinModeToggleProps> = ({ actions, isActive, activate, deactivate, render }) => {
-  if (!render) return null
 
   const handleChange = useCallback((checked: boolean) => (checked ? activate() : deactivate()), [activate, deactivate])
 
@@ -27,9 +26,11 @@ const BinModeToggle: React.FC<BinModeToggleProps> = ({ actions, isActive, activa
     debouncedReload() // Call the debounced function when isActive changes
   }, [isActive])
 
+  if (!render) return null
+
   return (
     <Tooltip title="Toggle Bin Mode">
-      <Switch checked={isActive} onChange={handleChange} />
+      <Switch checked={isActive} onChange={handleChange} size='small' />
     </Tooltip>
   )
 }

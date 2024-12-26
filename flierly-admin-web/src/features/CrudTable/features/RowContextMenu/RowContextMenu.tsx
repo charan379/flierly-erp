@@ -8,7 +8,7 @@ import useLocale from '@/features/Locale/hooks/useLocale'
 import useEscapeKey from '@/hooks/useEscapeKey'
 import Loading from '@/components/Loading'
 import useCrudModuleContext from '../../../CrudModule/hooks/useCrudModuleContext'
-import crudService from '../../../CrudModule/service/crudService'
+import crudService from '../../../CrudModule/service/crud-module.service'
 import useOnOutsideClick from '@/hooks/useOnOutsideClick'
 import { ActionType } from '@ant-design/pro-components'
 
@@ -24,8 +24,6 @@ interface RowContextMenuProps {
 }
 
 const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record, recordTitleKey, open, position, close, render }) => {
-  if (!render) return null
-  if (actions === undefined) return null
 
   const { theme } = useTheme()
   const { translate } = useLocale()
@@ -35,9 +33,8 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record
 
   const { CrudModuleContextHandler } = useCrudModuleContext()
 
-  const menuItemStyle = { fontSize: '12px' }
-
   const items = useMemo(() => {
+    const menuItemStyle = { fontSize: '12px' }
     const baseItems = [
       {
         label: translate('view'),
@@ -53,17 +50,17 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record
       },
       record?.isActive
         ? {
-            label: translate('inactivate'),
-            key: 'inactivate',
-            icon: <StopOutlined style={menuItemStyle} />,
-            style: { color: '#9E9E9E', ...menuItemStyle },
-          }
+          label: translate('inactivate'),
+          key: 'inactivate',
+          icon: <StopOutlined style={menuItemStyle} />,
+          style: { color: '#9E9E9E', ...menuItemStyle },
+        }
         : {
-            label: translate('activate'),
-            key: 'activate',
-            icon: <CheckCircleOutlined style={menuItemStyle} />,
-            style: { color: '#4CAF50', ...menuItemStyle },
-          },
+          label: translate('activate'),
+          key: 'activate',
+          icon: <CheckCircleOutlined style={menuItemStyle} />,
+          style: { color: '#4CAF50', ...menuItemStyle },
+        },
       {
         label: translate('delete'),
         key: 'delete',
@@ -128,7 +125,7 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record
       }
 
       if (result?.success) {
-        actions.reload?.()
+        actions?.reload?.()
         close()
       }
 
@@ -168,7 +165,7 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record
         setCountdown(120)
       } // Cleanup the timer
     }
-  }, [open])
+  }, [open, close])
 
   // Adjust position logic with cleanup
   useEffect(() => {
@@ -207,6 +204,8 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record
     }
   }, [open, position])
 
+  if (!render || !actions) return null
+
   return (
     <Popover
       id="row-popover-menu"
@@ -214,7 +213,7 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record
         <Flex justify="space-between" align="center" wrap="nowrap" gap="large">
           <Typography.Text>{record[recordTitleKey] ?? translate('row_menu')}</Typography.Text>
           <Tooltip title={translate('close_menu')}>
-            <Button shape="default" danger icon={<FontAwesomeIcon icon={faXmark} size="2xl" />} onClick={close} />
+            <Button size='small' shape="default" danger icon={<FontAwesomeIcon icon={faXmark} size="xl" />} onClick={close} />
           </Tooltip>
         </Flex>
       }

@@ -1,5 +1,5 @@
 import store from '@/redux/store'
-import getTranslation from '../utils/getTranslation'
+import getTranslation from '../utils/get-translation'
 
 /**
  * Listens to locale state changes and executes the callback..

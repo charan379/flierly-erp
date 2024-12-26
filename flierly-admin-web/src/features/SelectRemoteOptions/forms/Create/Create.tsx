@@ -4,7 +4,7 @@ import { useAuth } from '@/modules/auth/hooks/useAuth'
 import { PlusOutlined } from '@ant-design/icons'
 import { DrawerForm } from '@ant-design/pro-components'
 import { Button, Empty, Form } from 'antd'
-import crudService from '@/features/CrudModule/service/crudService'
+import crudService from '@/features/CrudModule/service/crud-module.service'
 
 interface CreateProps {
   entity: string
@@ -15,15 +15,16 @@ interface CreateProps {
 }
 
 const Create: React.FC<CreateProps> = ({ entity, formFields, title = 'add', initialValues, permissionCode }) => {
-  if (!formFields) return null
 
   const { hasPermission } = useAuth()
-
-  if (permissionCode && !hasPermission(permissionCode)) return <Empty />
 
   const { translate } = useLocale()
 
   const [formInstance] = Form.useForm()
+
+  if (permissionCode && !hasPermission(permissionCode)) return <Empty />
+
+  if (!formFields) return null
 
   const onFinish = async (values: Record<string, any>): Promise<boolean> => {
     const response = await crudService.create({ entity, data: values })

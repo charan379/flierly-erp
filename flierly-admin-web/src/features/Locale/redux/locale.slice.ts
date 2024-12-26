@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import languages, { getLanguageObject } from '../config/languages'
-import statePersist from '@/redux/statePersist'
+import statePersist from '@/redux/state-persist'
 
 // Initial state for the locale slice
 const INITIAL_STATE: LocaleState = {

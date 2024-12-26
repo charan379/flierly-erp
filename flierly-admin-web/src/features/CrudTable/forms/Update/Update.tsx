@@ -2,7 +2,7 @@ import { Button, Form, Skeleton, Space, Tooltip } from 'antd'
 import { EditFilled } from '@ant-design/icons'
 import { ActionType, DrawerForm } from '@ant-design/pro-components'
 import useLocale from '@/features/Locale/hooks/useLocale'
-import crudService from '../../../CrudModule/service/crudService'
+import crudService from '../../../CrudModule/service/crud-module.service'
 import FormField, { FormFieldConfig } from '@/components/FormField'
 import { useState } from 'react'
 import './update.css'
@@ -31,13 +31,11 @@ const Update = <T extends Record<string, any>>({
   render,
   actions,
 }: UpdateProps<T>): JSX.Element | null => {
-  if (!render) return null
-  if (!formFields) return null
-  if (!actions) return null
+  const { translate } = useLocale();
+  const [formInstance] = Form.useForm<T>();
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(isOpen);
 
-  const { translate } = useLocale()
-  const [formInstance] = Form.useForm<T>()
-  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(isOpen)
+  if (!render || !formFields || !actions) return null
 
   const onFinish = async (values: T): Promise<boolean | void> => {
     const response = await crudService.update<T>({ entity, data: values, id })
@@ -65,7 +63,7 @@ const Update = <T extends Record<string, any>>({
             key={`drawer-update-form-trigger`}
             icon={<EditFilled />}
             shape="circle"
-            size="middle"
+            size="small"
             style={{ backgroundColor: '#FF9800' }}
             disabled={formFields.length > 0 ? false : true}
           />

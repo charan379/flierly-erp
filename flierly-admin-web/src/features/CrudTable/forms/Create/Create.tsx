@@ -2,7 +2,7 @@ import { Button, Form, Skeleton, Space, Tooltip } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { ActionType, DrawerForm } from '@ant-design/pro-components'
 import useLocale from '@/features/Locale/hooks/useLocale'
-import crudService from '../../../CrudModule/service/crudService'
+import crudService from '../../../CrudModule/service/crud-module.service'
 import FormField, { FormFieldConfig } from '@/components/FormField'
 import { useState } from 'react'
 import './create.css'
@@ -17,7 +17,6 @@ interface CreateProps<T = Record<string, any>> {
 }
 
 const Create = <T extends Record<string, any>>({ entity, formFields, title = 'add', render, actions }: CreateProps<T>): JSX.Element | null => {
-  if (!render || !formFields || !actions) return null
 
   const { translate } = useLocale()
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -31,12 +30,15 @@ const Create = <T extends Record<string, any>>({ entity, formFields, title = 'ad
     const response = await crudService.create({ entity, data: values })
 
     if (response?.success) {
-      actions.reload()
+      actions?.reload()
       setIsLoading(false)
       return true
     }
     setIsLoading(false)
   }
+
+  if (!render || !formFields || !actions) return null
+
 
   return (
     <DrawerForm<T>
@@ -47,7 +49,7 @@ const Create = <T extends Record<string, any>>({ entity, formFields, title = 'ad
       id="crud-table-create-form"
       trigger={
         <Tooltip title={translate('add_data')}>
-          <Button type="primary" icon={<PlusOutlined />} shape="circle" size="middle" style={{ backgroundColor: 'teal' }} disabled={formFields.length === 0} />
+          <Button type="primary" icon={<PlusOutlined />} shape="circle" size="small" style={{ backgroundColor: 'teal' }} disabled={formFields.length === 0} />
         </Tooltip>
       }
       loading={isLoading}

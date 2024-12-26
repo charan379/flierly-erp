@@ -1,6 +1,6 @@
 import { serverConfig } from '@/config/server.config'
-import { getToken, listenToAuthChanges } from '@/modules/auth/service/authStateService'
-import handleResponse from '@/utils/handlers/apiResponsehandler'
+import { getToken, listenToAuthChanges } from '@/modules/auth/service/auth-state.service'
+import handleApiResponse from '@/utils/handlers/api-response.handler'
 import axios from 'axios'
 
 // Create Axios instance with default headers
@@ -17,7 +17,7 @@ const crudService = {
    */
   page: async <T>({ entity, binMode = false, pagination = { limit: 10, page: 1 }, filters = {}, sort = {}, signal }: EntitiesPageRequest) => {
     const promise = api.post<ApiResponse<T>>(`/${entity}/page`, { filters, pagination, sort, binMode }, { signal })
-    return handleResponse<T>({ promise })
+    return handleApiResponse<T>({ promise })
   },
 
   /**
@@ -25,7 +25,7 @@ const crudService = {
    */
   create: async <T>({ entity, data, signal }: CreateEntityRequest<T>) => {
     const promise = api.post(`/${entity}/create`, data, { signal })
-    return handleResponse<T>({ promise, notifyOnSuccess: true })
+    return handleApiResponse<T>({ promise, notifyOnSuccess: true })
   },
 
   /**
@@ -33,7 +33,7 @@ const crudService = {
    */
   update: async <T>({ entity, id, data, signal }: UpdateEntityRequest<T>) => {
     const promise = api.put(`/${entity}/update/${id}`, data, { signal })
-    return handleResponse<T>({ promise, notifyOnSuccess: true })
+    return handleApiResponse<T>({ promise, notifyOnSuccess: true })
   },
 
   /**
@@ -41,7 +41,7 @@ const crudService = {
    */
   isExists: async ({ entity, filters = {}, signal }: EntityRecordExistsRequest) => {
     const promise = api.post(`/${entity}/is-exists`, { filters, withDeleted: true }, { signal })
-    return handleResponse({ promise })
+    return handleApiResponse({ promise })
   },
 
   /**
@@ -52,7 +52,7 @@ const crudService = {
       data: ids,
       signal,
     })
-    return handleResponse({ promise, notifyOnSuccess: true })
+    return handleApiResponse({ promise, notifyOnSuccess: true })
   },
 
   /**
@@ -60,7 +60,7 @@ const crudService = {
    */
   activate: async ({ entity, ids = [], signal }: EntityRecordsActivateRequest) => {
     const promise = api.patch(`/${entity}/activate`, ids, { signal })
-    return handleResponse({ promise, notifyOnSuccess: true })
+    return handleApiResponse({ promise, notifyOnSuccess: true })
   },
 
   /**
@@ -68,7 +68,7 @@ const crudService = {
    */
   inactivate: async ({ entity, ids = [], signal }: EntityRecordsInactivateRequest) => {
     const promise = api.patch(`/${entity}/inactivate`, ids, { signal })
-    return handleResponse({ promise, notifyOnSuccess: true })
+    return handleApiResponse({ promise, notifyOnSuccess: true })
   },
 
   /**
@@ -76,7 +76,7 @@ const crudService = {
    */
   restore: async ({ entity, ids = [], signal }: EntityRecordsRestoreRequest) => {
     const promise = api.patch(`/${entity}/restore`, ids, { signal })
-    return handleResponse({ promise, notifyOnSuccess: true })
+    return handleApiResponse({ promise, notifyOnSuccess: true })
   },
 }
 

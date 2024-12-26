@@ -1,4 +1,4 @@
-import { logout, setExpiredTrue } from '@/modules/auth/service/authStateService'
+import { logout, setExpiredTrue } from '@/modules/auth/service/auth-state.service'
 
 /**
  * Handles JWT expiration by logging the user out and redirecting to the login page.

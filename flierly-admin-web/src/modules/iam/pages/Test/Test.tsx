@@ -1,7 +1,7 @@
 import AssociationManager from '@/features/GenericAssignmentManager/GenericAssignmentManager'
 import ResizableDrawer from '@/components/ResizableDrawer'
-import privilegeTableColumns from '../../config/privilege/tableColumns'
-import fetchEntityOptions from '@/features/SelectRemoteOptions/utils/fetchEntityOptions'
+import createPrivilegeTableColumns from '../../config/privilege/create-privilege-table-columns'
+import fetchEntityOptions from '@/features/SelectRemoteOptions/utils/fetch-entity-options'
 
 const ParentComponent = () => {
   const parentEntity: Role = {
@@ -23,7 +23,7 @@ const ParentComponent = () => {
         owningSideField="roles"
         associatedEntity="privilege"
         associatedSideField="privileges"
-        associatedEntityColumns={privilegeTableColumns.filter((column) => ['id', 'name', 'code', 'entity', 'access'].includes(column.dataIndex as string))}
+        associatedEntityColumns={createPrivilegeTableColumns.filter((column) => ['id', 'name', 'code', 'entity', 'access'].includes(column.dataIndex as string))}
         associatedEntityQueryConfig={[
           { label: 'Name', name: 'name', formField: { input: { type: 'Text' } } },
           { label: 'Code', name: 'code', formField: { input: { type: 'Text' } } },

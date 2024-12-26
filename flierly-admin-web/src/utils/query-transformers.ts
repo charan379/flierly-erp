@@ -232,7 +232,7 @@ const queryTransformers: Record<TransformerKey, SearchTransformKeyFn> = {
       try {
         const regex = new RegExp(value)
         return { [namePath]: { $notRegex: regex } }
-      } catch (e) {
+      } catch (_e) {
         return null // Invalid regex pattern
       }
     }
@@ -251,7 +251,7 @@ const queryTransformers: Record<TransformerKey, SearchTransformKeyFn> = {
       try {
         const regex = new RegExp(value, 'i') // Case-insensitive regex
         return { [namePath]: { $notRegexi: regex } }
-      } catch (e) {
+      } catch (_e) {
         return null // Invalid regex pattern
       }
     }

@@ -1,8 +1,8 @@
 import { FormFieldConfig } from '@/components/FormField'
-import entityExistenceValidator from '@/utils/entityExistenceValidator'
+import entityExistenceValidator from '@/utils/entity-existence.validator'
 import { activeFieldOptions } from '@/constants/select-options.constant'
 
-const roleCreateFields: FormFieldConfig<Role>[] = [
+const roleCreateFormFields: FormFieldConfig<Role>[] = [
   // name
   {
     name: 'name',
@@ -73,4 +73,4 @@ const roleCreateFields: FormFieldConfig<Role>[] = [
   },
 ]
 
-export default roleCreateFields
+export default roleCreateFormFields

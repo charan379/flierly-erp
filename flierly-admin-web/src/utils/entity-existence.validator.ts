@@ -1,6 +1,6 @@
-import crudService from '@/features/CrudModule/service/crudService'
-import debouncePromise from './debouncePromise'
-import { translate } from '@/features/Locale/service/localeStateService'
+import crudService from '@/features/CrudModule/service/crud-module.service'
+import debouncePromise from './debounce-promise'
+import { translate } from '@/features/Locale/service/locale-state.service'
 
 // Define the type for the parameters passed to the validator function
 interface EntityExistenceParams {
@@ -46,7 +46,7 @@ const entityExistenceValidator = debouncePromise(
 
       // Resolve if the entity does not exist
       return Promise.resolve()
-    } catch (error) {
+    } catch (_error) {
       // Reject in case of a server error or request failure
       return Promise.reject('Validation failed due to a server error.')
     }

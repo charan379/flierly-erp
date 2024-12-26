@@ -5,7 +5,7 @@ import React from 'react'
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ActionType } from '@ant-design/pro-components'
-import crudService from '../../../CrudModule/service/crudService'
+import crudService from '../../../CrudModule/service/crud-module.service'
 
 type DeleteProps = {
   entity: string // Name of the entity to be deleted
@@ -15,11 +15,10 @@ type DeleteProps = {
 }
 
 const Delete: React.FC<DeleteProps> = ({ entity, actions, rows, render }) => {
-  if (!render) return null
-  if (!actions) return null
-  if (rows.selectedRowKeys === undefined) return null
 
   const { translate } = useLocale()
+
+  if (!render || !actions || !rows.selectedRowKeys) return null
 
   return (
     <Tooltip title={`${translate('delete_selected')}`}>
@@ -50,7 +49,7 @@ const Delete: React.FC<DeleteProps> = ({ entity, actions, rows, render }) => {
             danger
             key="delete-selected-rows-trigger"
             shape="circle"
-            size="middle"
+            size="small"
             icon={<FontAwesomeIcon icon={faTrashCan} />}
             disabled={rows.selectedRowKeys.length <= 0}
           />

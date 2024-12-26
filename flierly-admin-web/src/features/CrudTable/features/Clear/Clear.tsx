@@ -11,11 +11,10 @@ type ClearProps = {
 }
 
 const Clear: React.FC<ClearProps> = ({ render, rows, actions }) => {
-  if (!render) return null
-  if (!actions === undefined) return null
-  if (rows.selectedRowKeys === undefined) return null
 
-  const { translate } = useLocale()
+  const { translate } = useLocale();
+
+  if (!render || !actions || !rows.selectedRowKeys) return null;
 
   return (
     <Tooltip title={`${translate('clear_selected')}`}>
@@ -25,7 +24,7 @@ const Clear: React.FC<ClearProps> = ({ render, rows, actions }) => {
           key="clear-selected-rows-trigger"
           icon={<ClearOutlined />}
           shape="circle"
-          size="middle"
+          size="small"
           disabled={rows.selectedRowKeys.length <= 0}
           onClick={() => actions?.clearSelected?.()} // Safely call clearSelected if it exists
         />

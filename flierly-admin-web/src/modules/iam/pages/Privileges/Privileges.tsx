@@ -1,21 +1,24 @@
 import CrudModule from '@/features/CrudModule'
 import React, { ComponentType, LazyExoticComponent, Suspense } from 'react'
-import privilegeTableColumns from '../../config/privilege/tableColumns'
-import privilegeCreateFields from '../../config/privilege/createFormFields'
-import privilegeUpdateFields from '../../config/privilege/updateFormFields'
-import privilegeQueryFields from '../../config/privilege/queryFormFields'
+import createPrivilegeTableColumns from '../../config/privilege/create-privilege-table-columns'
+import privilegeCreateFormFields from '../../config/privilege/privilege-create-form-fields'
+import privilegeUpdateFormFields from '../../config/privilege/privilege-update-form-fields'
+import privilegeQueryFormFields from '../../config/privilege/privilege-query-form-fields'
 import { CrudTableProps } from '@/features/CrudTable/CrudTable'
 import PageLoader from '@/components/PageLoader'
+import useLocale from '@/features/Locale/hooks/useLocale'
 
 const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<Privilege>>> = React.lazy(() => import('@/features/CrudTable'))
 
 const Privileges: React.FC = () => {
+  const { translate } = useLocale();
+
   return (
     <CrudModule header title={'privileges'} menuKeys={['iam']}>
       <Suspense fallback={<PageLoader />}>
         <CrudTable
           entity="privilege"
-          columns={privilegeTableColumns}
+          columns={createPrivilegeTableColumns(translate)}
           dataSource={[]}
           tableKey="privilege-table"
           rowKey="id"
@@ -40,9 +43,9 @@ const Privileges: React.FC = () => {
               },
             },
           }}
-          createFormFields={privilegeCreateFields}
-          updateFormFields={privilegeUpdateFields}
-          queryFormFields={privilegeQueryFields}
+          createFormFields={privilegeCreateFormFields}
+          updateFormFields={privilegeUpdateFormFields}
+          queryFormFields={privilegeQueryFormFields}
         />
       </Suspense>
     </CrudModule>

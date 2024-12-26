@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import useLocale from '@/features/Locale/hooks/useLocale'
 import { CheckCircleOutlined, QuestionCircleOutlined, StopOutlined } from '@ant-design/icons'
 import { Badge, Button, message, Popconfirm, Tooltip } from 'antd'
-import crudService from '../../../CrudModule/service/crudService'
+import crudService from '../../../CrudModule/service/crud-module.service'
 import { ActionType } from '@ant-design/pro-components'
 
 type ActivateProps = {
@@ -13,21 +13,18 @@ type ActivateProps = {
 }
 
 const Activate: React.FC<ActivateProps> = ({ entity, actions, rows, render }) => {
-  if (!render) return null
-  if (!actions) return null
-  if (rows.selectedRowKeys === undefined) return null
-  if (rows.selectedRows === undefined) return null
-
   const { translate } = useLocale()
 
   const activate = useMemo(() => checkActiveStatus(rows.selectedRows), [rows.selectedRows])
 
+  if (!render || !actions || !rows.selectedRowKeys || !rows.selectedRows) return null
+
   const buttonStyle =
     rows.selectedRowKeys.length > 0
       ? {
-          backgroundColor: activate ? '#4CAF50' : '#9E9E9E',
-          borderColor: activate ? '#4CAF50' : '#9E9E9E',
-        }
+        backgroundColor: activate ? '#4CAF50' : '#9E9E9E',
+        borderColor: activate ? '#4CAF50' : '#9E9E9E',
+      }
       : {}
 
   const handleConfirm = async () => {
@@ -61,7 +58,7 @@ const Activate: React.FC<ActivateProps> = ({ entity, actions, rows, render }) =>
             type="primary"
             style={buttonStyle}
             shape="circle"
-            size="middle"
+            size="small"
             icon={activate ? <CheckCircleOutlined /> : <StopOutlined />}
             disabled={rows.selectedRowKeys.length === 0}
           />
@@ -75,7 +72,11 @@ const checkActiveStatus = (rows: Array<{ isActive?: boolean }> | undefined): boo
   if (rows === undefined) return false
   const { activeCount, inactiveCount } = rows.reduce(
     (acc, row) => {
-      row?.isActive ? acc.activeCount++ : acc.inactiveCount++
+      if (row?.isActive) {
+        acc.activeCount++
+      } else {
+        acc.inactiveCount++
+      }
       return acc
     },
     { activeCount: 0, inactiveCount: 0 },

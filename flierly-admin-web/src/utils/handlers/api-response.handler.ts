@@ -1,10 +1,10 @@
 import { notification, message as antdMessage } from 'antd'
 import axios, { AxiosResponse, AxiosError } from 'axios'
-import handleJwtExpiration from './handleJwtExpiration'
+import handleJwtExpiration from './handle-jwt-expiration.handler'
 
 type NotificationType = 'toast' | 'message'
 
-type HandleResponse<T> = {
+type HandleApiResponse<T> = {
   promise: Promise<AxiosResponse<ApiResponse<T>>>
   notifyOnSuccess?: boolean
   notifyOnFailed?: boolean
@@ -108,12 +108,12 @@ const handleSpecificErrors = <T>(error: AxiosError<ApiResponse<T>>): ErrorDetail
 /**
  * Handles API responses with notifications and standardized return values.
  */
-const handleResponse = async <T>({
+const handleApiResponse = async <T>({
   promise,
   notifyOnSuccess = false,
   notifyOnFailed = true,
   notifyType = 'message',
-}: HandleResponse<T>): Promise<ApiResponse<T>> => {
+}: HandleApiResponse<T>): Promise<ApiResponse<T>> => {
   try {
     const response = await promise
     const { data, status } = response
@@ -210,4 +210,4 @@ const handleResponse = async <T>({
   }
 }
 
-export default handleResponse
+export default handleApiResponse

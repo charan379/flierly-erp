@@ -1,7 +1,7 @@
 import useTheme from '@/features/Theme/hooks/useTheme'
 import { Menu } from 'antd'
 import React from 'react'
-import filterEnabledItems from '../../utils/filterEnabledItems'
+import filterEnabledItems from '../../utils/filter-enabled-items'
 import getMenuItems from '@/layout/Dashboard/Navigation/utils/getMenuItems'
 
 const NavigationMenu: React.FC = () => {

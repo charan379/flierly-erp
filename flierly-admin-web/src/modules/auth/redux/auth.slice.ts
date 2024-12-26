@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { LoadingTypes } from '../@types/loading'
-import statePersist from '@/redux/statePersist'
+import statePersist from '@/redux/state-persist'
 
 // Initial state
 const INITIAL_STATE: AuthState = {

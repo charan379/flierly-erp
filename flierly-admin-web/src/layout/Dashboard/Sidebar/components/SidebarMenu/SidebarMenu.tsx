@@ -1,7 +1,7 @@
 import useTheme from '@/features/Theme/hooks/useTheme'
 import { Menu } from 'antd'
 import React from 'react'
-import filterEnabledItems from '../../../Navigation/utils/filterEnabledItems'
+import filterEnabledItems from '../../../Navigation/utils/filter-enabled-items'
 import getMenuItems from '@/layout/Dashboard/Navigation/utils/getMenuItems'
 
 const SidebarMenu: React.FC = () => {

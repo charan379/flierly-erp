@@ -1,7 +1,8 @@
 import { QueryFieldConfig } from '@/features/QueryBuilder/QueryBuilder'
-import { activeFieldOptions } from '@/constants/select-options.constant'
+import { accessOptions, activeFieldOptions } from '@/constants/select-options.constant'
+import fetchEntityOptions from '@/features/SelectRemoteOptions/utils/fetch-entity-options'
 
-const roleQueryFields: QueryFieldConfig<Role>[] = [
+const privilegeQueryFormFields: QueryFieldConfig<Privilege>[] = [
   // id
   {
     field: { label: 'ID', namePath: 'id' },
@@ -26,7 +27,7 @@ const roleQueryFields: QueryFieldConfig<Role>[] = [
   },
   // name
   {
-    field: { label: 'Role Name', namePath: 'name' },
+    field: { label: 'Privilege Name', namePath: 'name' },
     conditions: [
       {
         condition: { label: 'Equals to', namePath: 'equalTo' },
@@ -58,43 +59,83 @@ const roleQueryFields: QueryFieldConfig<Role>[] = [
       },
     ],
   },
-  // code
+  // entity
   {
-    field: { label: 'Role Code', namePath: 'code' },
+    field: { label: 'Entity', namePath: 'entity' },
     conditions: [
       {
         condition: { label: 'Equals to', namePath: 'equalTo' },
-        formField: { input: { type: 'Text' } },
+        formField: {
+          input: {
+            type: 'SelectRemoteOptions',
+            asyncOptionsFetcher: fetchEntityOptions,
+            debounceTimeout: 300,
+          },
+          rules: [{ type: 'string' }],
+        },
       },
       {
-        condition: { label: 'Contains', namePath: 'like' },
-        formField: { input: { type: 'Text' } },
+        condition: { label: 'Not equals to', namePath: 'notEqualTo' },
+        formField: {
+          input: {
+            type: 'SelectRemoteOptions',
+            asyncOptionsFetcher: fetchEntityOptions,
+            debounceTimeout: 300,
+          },
+          rules: [{ type: 'string' }],
+        },
       },
       {
-        condition: { label: 'Contains (case-insensitive)', namePath: 'ilike' },
-        formField: { input: { type: 'Text' } },
+        condition: { label: 'IN', namePath: 'inArray' },
+        formField: {
+          input: {
+            type: 'SelectRemoteOptions',
+            asyncOptionsFetcher: fetchEntityOptions,
+            debounceTimeout: 300,
+            mode: 'multiple',
+          },
+          rules: [{ type: 'array' }],
+        },
       },
       {
-        condition: { label: 'Regex', namePath: 'regex' },
-        formField: { input: { type: 'Text' }, rules: [{ type: 'regexp' }] },
+        condition: { label: 'Not IN', namePath: 'notInArray' },
+        formField: {
+          input: {
+            type: 'SelectRemoteOptions',
+            asyncOptionsFetcher: fetchEntityOptions,
+            debounceTimeout: 300,
+            mode: 'multiple',
+          },
+          rules: [{ type: 'array' }],
+        },
+      },
+    ],
+  },
+  // access
+  {
+    field: { label: 'Access', namePath: 'access' },
+    conditions: [
+      {
+        condition: { label: 'Equals to', namePath: 'equalTo' },
+        formField: { input: { type: 'Select', options: accessOptions }, rules: [{ type: 'string' }] },
       },
       {
-        condition: { label: 'Regex (case-insensitive)', namePath: 'regexi' },
-        formField: { input: { type: 'Text' }, rules: [{ type: 'regexp' }] },
+        condition: { label: 'Not equals to', namePath: 'notEqualTo' },
+        formField: { input: { type: 'Select', options: accessOptions }, rules: [{ type: 'string' }] },
       },
       {
-        condition: { label: 'Starts with', namePath: 'startsWith' },
-        formField: { input: { type: 'Text' }, rules: [{ type: 'string' }] },
+        condition: { label: 'IN', namePath: 'inArray' },
+        formField: { input: { type: 'Select', options: accessOptions, mode: 'multiple' }, rules: [{ type: 'array' }] },
       },
       {
-        condition: { label: 'Ends with', namePath: 'endsWith' },
-        formField: { input: { type: 'Text' }, rules: [{ type: 'string' }] },
+        condition: { label: 'Not IN', namePath: 'notInArray' },
+        formField: { input: { type: 'Select', options: accessOptions, mode: 'multiple' }, rules: [{ type: 'array' }] },
       },
     ],
   },
   // isActive
   {
-    field: { label: 'Role Status', namePath: 'isActive' },
+    field: { label: 'Privilege Status', namePath: 'isActive' },
     conditions: [
       {
         condition: { label: 'Equals to', namePath: 'trimTextValue' },
@@ -105,6 +146,40 @@ const roleQueryFields: QueryFieldConfig<Role>[] = [
           },
           rules: [{ type: 'string' }],
         },
+      },
+    ],
+  },
+  // code
+  {
+    field: { label: 'Privilege Code', namePath: 'code' },
+    conditions: [
+      {
+        condition: { label: 'Equals to', namePath: 'equalTo' },
+        formField: { input: { type: 'Text' } },
+      },
+      {
+        condition: { label: 'Contains', namePath: 'like' },
+        formField: { input: { type: 'Text' } },
+      },
+      {
+        condition: { label: 'Contains (case-insensitive)', namePath: 'ilike' },
+        formField: { input: { type: 'Text' } },
+      },
+      {
+        condition: { label: 'Regex', namePath: 'regex' },
+        formField: { input: { type: 'Text' }, rules: [{ type: 'regexp' }] },
+      },
+      {
+        condition: { label: 'Regex (case-insensitive)', namePath: 'regexi' },
+        formField: { input: { type: 'Text' }, rules: [{ type: 'regexp' }] },
+      },
+      {
+        condition: { label: 'Starts with', namePath: 'startsWith' },
+        formField: { input: { type: 'Text' }, rules: [{ type: 'string' }] },
+      },
+      {
+        condition: { label: 'Ends with', namePath: 'endsWith' },
+        formField: { input: { type: 'Text' }, rules: [{ type: 'string' }] },
       },
     ],
   },
@@ -164,4 +239,4 @@ const roleQueryFields: QueryFieldConfig<Role>[] = [
   },
 ]
 
-export default roleQueryFields
+export default privilegeQueryFormFields

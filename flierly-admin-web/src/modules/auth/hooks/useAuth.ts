@@ -1,7 +1,7 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '@/redux/store' // Adjust paths as necessary
-import { logout, setAuth, setLoading, setExpiredTrue } from '../redux/authSlice'
-import authService from '../service/authService'
+import { logout, setAuth, setLoading, setExpiredTrue } from '../redux/auth.slice'
+import authService from '../service/auth.service'
 import { LoadingTypes } from '../@types/loading'
 
 export function useAuth() {

@@ -1,3 +1,3 @@
-import selectRemoteOptionsService from './selectRemoteOptionsService'
+import selectRemoteOptionsService from './select-remote-options.service'
 
 export default selectRemoteOptionsService

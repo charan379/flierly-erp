@@ -8,7 +8,7 @@ import useCrudModuleContext from '../../../CrudModule/hooks/useCrudModuleContext
 import { QueryBuilderRef, QueryFieldConfig } from '@/features/QueryBuilder/QueryBuilder'
 import ResizableDrawer from '@/components/ResizableDrawer'
 
-const QueryBuilder = React.lazy(() => import('@/features/QueryBuilder/QueryBuilder'))
+const QueryBuilder = React.lazy(() => import('@/features/QueryBuilder'))
 
 // Define types for the component props
 interface SearchProps {
@@ -19,13 +19,14 @@ interface SearchProps {
 }
 
 const Search: React.FC<SearchProps> = ({ title = 'filter_data', render, actions, queryFieldsConfig }) => {
-  if (!render || !actions || !queryFieldsConfig) return null
 
   const { translate } = useLocale()
   const { CrudModuleContextHandler } = useCrudModuleContext()
   const queryBuilderRef = useRef<QueryBuilderRef | null>(null)
 
   const [drawerOpen, setDrawerOpen] = useState(false)
+
+  if (!render || !actions || !queryFieldsConfig) return null
 
   const onApplyFilters = () => {
     // Simulate filter application
@@ -71,7 +72,7 @@ const Search: React.FC<SearchProps> = ({ title = 'filter_data', render, actions,
               type="primary"
               icon={<FontAwesomeIcon icon={faFilter} />}
               shape="circle"
-              size="middle"
+              size="small"
               style={{ backgroundColor: '#722ed1' }}
               disabled={queryFieldsConfig?.length > 0 ? false : true}
             />
