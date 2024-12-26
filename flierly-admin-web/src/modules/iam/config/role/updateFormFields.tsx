@@ -25,7 +25,7 @@ const roleUpdateFields: FormFieldConfig<Role>[] = [
       { type: 'string', min: 5, max: 30, required: true },
       ({ getFieldValue }) => ({
         validator(_, value) {
-          if (value === undefined) return Promise.resolve()
+          if (!value || value?.length < 5 || value?.length > 30) return Promise.resolve()
           return entityExistenceValidator('role-name-validation-u-1', {
             entity: 'role',
             filters: {
@@ -47,11 +47,11 @@ const roleUpdateFields: FormFieldConfig<Role>[] = [
     hasFeedback: true,
     allowClear: false,
     rules: [
-      { type: 'string', pattern: /^[a-z]+\-[a-z0-9]+$/, message: 'invalid_code' },
+      { type: 'string', pattern: /^[a-z]+-[a-z0-9]+$/, message: 'invalid_code' },
       { min: 5, max: 25, required: true },
       ({ getFieldValue }) => ({
         validator(_, value) {
-          if (value === undefined) return Promise.resolve()
+          if (!value || /^[a-z]+-[a-z0-9]+$/.test(value) || value?.length < 5 || value.length > 25) return Promise.resolve()
           return entityExistenceValidator('role-code-validation-u-1', {
             entity: 'role',
             filters: { id: { $notEqualTo: getFieldValue('id') }, code: value },

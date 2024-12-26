@@ -14,11 +14,9 @@ const userCreateFields: FormFieldConfig<User>[] = [
       { pattern: /^[a-z0-9_]+$/, message: 'invalid_username' },
       () => ({
         validator: (_, value) => {
-          // Check if previous validations passed
           if (!value || value.length < 5 || value.length > 20 || !/^[a-z0-9_]+$/.test(value)) {
             return Promise.resolve()
           }
-          // Run entity existence validation
           return entityExistenceValidator('user-name-validation-c-1', {
             entity: 'user',
             filters: { username: { $ilike: value } },
@@ -40,7 +38,9 @@ const userCreateFields: FormFieldConfig<User>[] = [
       { type: 'email', required: true },
       () => ({
         validator(_, value) {
-          if (value === undefined) return Promise.resolve()
+          if (!value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+            return Promise.resolve()
+          }
           return entityExistenceValidator('user-email-validation-c-1', {
             entity: 'user',
             filters: { email: value },
@@ -64,7 +64,9 @@ const userCreateFields: FormFieldConfig<User>[] = [
       { pattern: /^\+\d{1,3}[\s][6-9]\d{9}$/, message: 'invalid_mobile' },
       () => ({
         validator(_, value) {
-          if (value === undefined) return Promise.resolve()
+          if (!value || !/^\+\d{1,3}[\s][6-9]\d{9}$/.test(value)) {
+            return Promise.resolve()
+          }
           return entityExistenceValidator('user-mobile-validation-c-1', {
             entity: 'user',
             filters: { mobile: value },

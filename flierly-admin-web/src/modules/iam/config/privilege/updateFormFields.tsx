@@ -27,7 +27,7 @@ const privilegeUpdateFields: FormFieldConfig<Privilege>[] = [
       { type: 'string', min: 5, max: 30, required: true },
       ({ getFieldValue }) => ({
         validator(_, value) {
-          if (value === undefined) return Promise.resolve()
+          if (!value || value?.length < 5 || value?.length > 30) return Promise.resolve()
           return entityExistenceValidator('privilege-name-validation-u-1', {
             entity: 'privilege',
             filters: {
@@ -107,7 +107,7 @@ const privilegeUpdateFields: FormFieldConfig<Privilege>[] = [
       { min: 5, max: 25, required: true },
       ({ getFieldValue }) => ({
         validator(_, value) {
-          if (value === undefined) return Promise.resolve()
+          if (!value || /^[a-z-]+\.[a-z-]+$/.test(value) || value?.length < 5 || value?.length > 25) return Promise.resolve()
           return entityExistenceValidator('privilege-code-validation-u-1', {
             entity: 'privilege',
             filters: { id: { $notEqualTo: getFieldValue('id') }, code: value },

@@ -12,9 +12,9 @@ const privilegeCreateFields: FormFieldConfig<Privilege>[] = [
     allowClear: true,
     rules: [
       { type: 'string', min: 5, max: 30, required: true },
-      ({}) => ({
+      () => ({
         validator(_, value) {
-          if (value === undefined) return Promise.resolve()
+          if (!value || value.length < 5 || value.length > 30) return Promise.resolve()
           return entityExistenceValidator('privilege-name-validation-c-1', {
             entity: 'privilege',
             filters: { name: { $ilike: value } },
@@ -80,9 +80,9 @@ const privilegeCreateFields: FormFieldConfig<Privilege>[] = [
     rules: [
       { type: 'string', pattern: /^[a-z-]+\.[a-z-]+$/, message: 'invalid_code' },
       { min: 5, max: 25, required: true },
-      ({}) => ({
+      () => ({
         validator(_, value) {
-          if (value === undefined) return Promise.resolve()
+          if (!value || !/^[a-z-]+\.[a-z-]+$/.test(value) || value.length < 5 || value.length > 25) return Promise.resolve()
           return entityExistenceValidator('privilege-code-validation-c-1', {
             entity: 'privilege',
             filters: { code: value },

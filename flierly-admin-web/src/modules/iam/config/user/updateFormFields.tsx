@@ -22,10 +22,12 @@ const userUpdateFields: FormFieldConfig<User>[] = [
     hasFeedback: true,
     allowClear: false,
     rules: [
-      { type: 'string', min: 5, max: 30, required: true },
+      { type: 'string', min: 5, max: 20, required: true },
       ({ getFieldValue }) => ({
         validator(_, value) {
-          if (value === undefined) return Promise.resolve()
+          if (!value || value.length < 5 || value.length > 20) {
+            return Promise.resolve()
+          }
           return entityExistenceValidator('user-name-validation-u-1', {
             entity: 'user',
             filters: {
@@ -50,7 +52,9 @@ const userUpdateFields: FormFieldConfig<User>[] = [
       { type: 'email', required: true },
       ({ getFieldValue }) => ({
         validator(_, value) {
-          if (value === undefined) return Promise.resolve()
+          if (!value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+            return Promise.resolve()
+          }
           return entityExistenceValidator('user-email-validation-u-1', {
             entity: 'user',
             filters: { id: { $notEqualTo: getFieldValue('id') }, email: value },
@@ -73,7 +77,9 @@ const userUpdateFields: FormFieldConfig<User>[] = [
       { type: 'string', min: 10, max: 15, required: true },
       ({ getFieldValue }) => ({
         validator(_, value) {
-          if (value === undefined) return Promise.resolve()
+          if (!value || value.length < 10 || value.length > 15) {
+            return Promise.resolve()
+          }
           return entityExistenceValidator('user-mobile-validation-u-1', {
             entity: 'user',
             filters: { id: { $notEqualTo: getFieldValue('id') }, mobile: value },
