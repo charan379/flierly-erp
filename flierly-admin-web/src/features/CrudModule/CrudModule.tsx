@@ -2,10 +2,11 @@ import React, { ReactNode, CSSProperties } from 'react'
 import ErrorFallback from '@/components/ErrorFallback'
 import { Layout, Menu, Typography } from 'antd'
 import { ErrorBoundary } from 'react-error-boundary'
-import getMenuItems from '../../layout/Dashboard/Navigation/utils/getMenuItems'
+import createMenuItems from '../../layout/Dashboard/Navigation/utils/create-menu-items'
 import useTheme from '@/features/Theme/hooks/useTheme'
 import useLocale from '@/features/Locale/hooks/useLocale'
 import CrudModuleContextProvider from './context/CrudModuleContextProvider'
+import { useAuth } from '@/modules/auth/hooks/useAuth'
 
 const { Header, Content, Footer } = Layout
 
@@ -25,6 +26,7 @@ type CrudModuleProps = {
 const CrudModule: React.FC<CrudModuleProps> = ({ header, footer, extra, title, menuKeys, children }) => {
   const { theme } = useTheme()
   const { translate } = useLocale()
+  const { hasPermission } = useAuth();
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
@@ -52,7 +54,7 @@ const CrudModule: React.FC<CrudModuleProps> = ({ header, footer, extra, title, m
                   <Menu
                     theme={theme}
                     className="no-scrollbar"
-                    items={getMenuItems().filter((m) => menuKeys.includes(m.key))}
+                    items={createMenuItems(translate, hasPermission).filter((m) => menuKeys.includes(m.key))}
                     mode="horizontal"
                     selectable={false}
                     style={{
