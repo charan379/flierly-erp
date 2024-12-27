@@ -15,7 +15,6 @@ import crudService from '../CrudModule/service/crud-module.service'
 import Search from './forms/Search'
 import { FormFieldConfig } from '@/components/FormField'
 import { QueryFieldConfig } from '../QueryBuilder/QueryBuilder'
-import shortid from 'shortid'
 
 export interface CrudTableProps<T = Record<string, any>> {
   entity: string
@@ -72,6 +71,8 @@ const CrudTable = <T extends Record<string, any>>({
   const [data, setData] = useState<T[]>(dataSource)
 
   const { CrudModuleContextHandler } = useCrudModuleContext()
+
+  const binMode = CrudModuleContextHandler.binMode.isActive();
 
   const actionRef = useRef<ActionType>()
 
@@ -145,7 +146,7 @@ const CrudTable = <T extends Record<string, any>>({
           filters: CrudModuleContextHandler.filters.get(),
           pagination: { limit: params?.pageSize ?? 10, page: params?.current ?? 1 },
           sort: sort,
-          binMode: CrudModuleContextHandler.binMode.isActive(),
+          binMode: binMode,
         })
 
         return {
@@ -167,9 +168,7 @@ const CrudTable = <T extends Record<string, any>>({
       // toolbar controls configuration
       toolBarRender={(action, rows) => [
         <Search actions={action} queryFieldsConfig={queryFormFields} render={render.search} title="search" />,
-        <div></div>,
-        <Create<T> entity={entity} formFields={createFormFields} title={translate('add_from')} render={render.create} actions={action} />,
-        <div></div>,
+        <Create<T> entity={entity} formFields={createFormFields} title={translate('add_from')} render={!binMode && render.create} actions={action} />,
         <Update<T>
           entity={entity}
           formFields={updateFormFields}
@@ -177,44 +176,27 @@ const CrudTable = <T extends Record<string, any>>({
           id={CrudModuleContextHandler.updateForm.getId()}
           isOpen={CrudModuleContextHandler.updateForm.isOpen()}
           title={translate('update_form')}
-          render={render.update}
+          render={!binMode && render.update}
           actions={action}
           close={() => CrudModuleContextHandler.updateForm.close()}
         />,
-        <div></div>,
-        <Restore entity={entity} actions={action} rows={rows} key={'restore_selected'} render={render.restore} />,
-        <div></div>,
-        <Delete entity={entity} actions={action} rows={rows} key={'delete_selected'} render={render.delete} />,
-        <div></div>,
-        <Activate entity={entity} actions={action} rows={rows} key={'activate_selected'} render={render.activate} />,
-        <div></div>,
+        <Restore entity={entity} actions={action} rows={rows} key={'restore_selected'} render={binMode && render.restore} />,
+        <Delete entity={entity} actions={action} rows={rows} key={'delete_selected'} render={!binMode && render.delete} />,
+        <Activate entity={entity} actions={action} rows={rows} key={'activate_selected'} render={!binMode && render.activate} />,
         <Clear actions={action} rows={rows} render={render.clear} key={'clear_selected'} />,
-        <div></div>,
+        <BinModeToggle
+          render={render.bin}
+          actions={actionRef.current}
+          isActive={CrudModuleContextHandler.binMode.isActive()}
+          activate={() => CrudModuleContextHandler.binMode.activate()}
+          deactivate={() => CrudModuleContextHandler.binMode.deactivate()}
+        />
       ]}
-      // toolbar
-      toolbar={{
-        menu: {
-          type: 'inline',
-          items: [
-            {
-              label: (
-                <BinModeToggle
-                  render={render.bin}
-                  actions={actionRef.current}
-                  isActive={CrudModuleContextHandler.binMode.isActive()}
-                  activate={() => CrudModuleContextHandler.binMode.activate()}
-                  deactivate={() => CrudModuleContextHandler.binMode.deactivate()}
-                />
-              ),
-              key: '1',
-            },
-          ],
-        },
-      }}
       // table extra render components
       tableExtraRender={() => (
         <RowContextMenu
-          key={shortid()}
+          binMode={binMode}
+          key={'row-context-menu'}
           render={render.menu}
           entity={entity}
           recordTitleKey={rowTitleKey as string}

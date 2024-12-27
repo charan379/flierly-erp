@@ -20,10 +20,11 @@ interface RowContextMenuProps {
   open: boolean
   position: { x: number; y: number }
   close: () => void
-  render: boolean
+  render: boolean,
+  binMode: boolean,
 }
 
-const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record, recordTitleKey, open, position, close, render }) => {
+const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record, recordTitleKey, open, position, close, render, binMode }) => {
 
   const { theme } = useTheme()
   const { translate } = useLocale()
@@ -68,6 +69,21 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record
         danger: true,
       },
       {
+        label: `${translate('close')} (${translate('auto_close_in')} ${countdown}s)`,
+        key: 'close',
+        icon: <FontAwesomeIcon icon={faCircleXmark} style={menuItemStyle} />,
+        danger: true,
+      },
+    ]
+
+    const binModeItems = [
+      {
+        label: translate('view'),
+        key: 'view',
+        icon: <FontAwesomeIcon icon={faEye} style={menuItemStyle} />,
+        style: { color: '#2196F3', ...menuItemStyle },
+      },
+      {
         label: translate('restore'),
         key: 'restore',
         icon: <FontAwesomeIcon icon={faTrashCanArrowUp} style={menuItemStyle} />,
@@ -79,9 +95,15 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record
         icon: <FontAwesomeIcon icon={faCircleXmark} style={menuItemStyle} />,
         danger: true,
       },
-    ]
-    return baseItems
-  }, [record, translate, countdown])
+    ];
+
+    if (binMode) {
+      return binModeItems;
+    } else {
+      return baseItems;
+    }
+
+  }, [record, translate, countdown, binMode])
 
   const onMenuItemClick = useCallback(
     async ({ key }: { key: string }) => {

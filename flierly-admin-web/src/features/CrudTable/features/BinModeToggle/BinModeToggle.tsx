@@ -1,7 +1,9 @@
 import debounce from '@/utils/debounce'
-import { Switch, Tooltip } from 'antd'
+import { Button, Tooltip } from 'antd'
 import React, { useEffect, useCallback } from 'react'
 import { ActionType } from '@ant-design/pro-components'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faRecycle } from '@fortawesome/free-solid-svg-icons'
 
 type BinModeToggleProps = {
   actions: ActionType | undefined
@@ -13,7 +15,13 @@ type BinModeToggleProps = {
 
 const BinModeToggle: React.FC<BinModeToggleProps> = ({ actions, isActive, activate, deactivate, render }) => {
 
-  const handleChange = useCallback((checked: boolean) => (checked ? activate() : deactivate()), [activate, deactivate])
+  const handleToggle = useCallback(() => {
+    if (isActive) {
+      deactivate()
+    } else {
+      activate()
+    }
+  }, [isActive, activate, deactivate])
 
   const debouncedReload = debounce(() => {
     if (actions) {
@@ -29,8 +37,15 @@ const BinModeToggle: React.FC<BinModeToggleProps> = ({ actions, isActive, activa
   if (!render) return null
 
   return (
-    <Tooltip title="Toggle Bin Mode">
-      <Switch checked={isActive} onChange={handleChange} size='small' />
+    <Tooltip title={isActive ? 'Deactivate Bin Mode' : 'Activate Bin Mode'}>
+      <Button
+        type={isActive ? 'default' : 'primary'} // Change button style based on state
+        key="bin-mode-toggle"
+        shape="circle"
+        size="small"
+        icon={<FontAwesomeIcon icon={faRecycle} />}
+        onClick={handleToggle}
+      />
     </Tooltip>
   )
 }

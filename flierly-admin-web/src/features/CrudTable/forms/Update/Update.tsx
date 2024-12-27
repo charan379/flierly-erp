@@ -1,5 +1,4 @@
-import { Button, Form, Skeleton, Space, Tooltip } from 'antd'
-import { EditFilled } from '@ant-design/icons'
+import { Form, Skeleton, Space } from 'antd'
 import { ActionType, DrawerForm } from '@ant-design/pro-components'
 import useLocale from '@/features/Locale/hooks/useLocale'
 import crudService from '../../../CrudModule/service/crud-module.service'
@@ -56,19 +55,6 @@ const Update = <T extends Record<string, any>>({
       onFinish={onFinish}
       open={isOpen}
       initialValues={data}
-      trigger={
-        <Tooltip title={translate('update_data')}>
-          <Button
-            type="primary"
-            key={`drawer-update-form-trigger`}
-            icon={<EditFilled />}
-            shape="circle"
-            size="small"
-            style={{ backgroundColor: '#FF9800' }}
-            disabled={formFields.length > 0 ? false : true}
-          />
-        </Tooltip>
-      }
       resize={{
         maxWidth: window.innerWidth * 0.9,
         minWidth: window.innerWidth * 0.5,
