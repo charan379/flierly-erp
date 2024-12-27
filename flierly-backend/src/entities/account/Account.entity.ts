@@ -26,13 +26,15 @@ export class Account {
   @Column({ type: 'boolean', default: true, name: 'is_active' })
   isActive: boolean;
 
-  @ManyToOne(() => AccountType, { eager: false, nullable: false })
+  @ManyToOne(() => AccountType, { eager: true, nullable: false })
   @JoinColumn({ name: 'account_type_id' })
-  accountType: AccountType;
+  @IsNotEmpty({ message: 'Account type must be specified' })
+  type: AccountType;
 
-  @ManyToOne(() => AccountSubtype, { eager: false, nullable: false })
+  @ManyToOne(() => AccountSubtype, { eager: true, nullable: false })
   @JoinColumn({ name: 'account_subtype_id' })
-  accountSubtype: AccountSubtype;
+  @IsNotEmpty({ message: 'Account subtype must be specified' })
+  subtype: AccountSubtype;
 
   @Column({ type: 'boolean', default: false, name: 'is_vip' })
   isVip: boolean;
@@ -105,8 +107,8 @@ export class Account {
           await transactionalEntityManager.update(Address, this.primaryAddress.id, {
             account: this, // Update the address with the account reference
           });
-        } catch (error) {
-          console.error('Transaction failed, rolling back:', error);
+        } catch (_error) {
+          // console.error('Transaction failed, rolling back:', error);
           throw new Error('Failed to update address during account creation or update.');
         }
       });

@@ -1,13 +1,15 @@
 import { IsNotEmpty, Length, IsOptional, Matches } from 'class-validator';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, JoinColumn, ManyToOne } from 'typeorm';
 import { Brand } from './Brand.entity';
+import { ProductCategory } from './ProductCategory.entity';
+import { ProductSubCategory } from './ProductSubCategory.entity';
 
 @Entity('products')
 export class Product {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
-  @Column({ type: 'varchar', length: 255, unique: true })
+  @Column({ type: 'varchar', length: 100, unique: true })
   @IsNotEmpty({ message: 'Name must not be empty.' })
   @Length(3, 90, { message: 'Name must be between 3 and 90 characters.' })
   name: string;
@@ -22,7 +24,7 @@ export class Product {
   @Matches(/^[A-Z0-9_-]{3,50}$/, { message: 'SKU is not valid only capital letters, numbers, underscores and hyphens allowed.' })
   sku: string;
 
-  @Column({ type: 'int', unique: true, nullable: true })
+  @Column({ type: 'int', unique: false, nullable: true })
   @IsOptional()
   hsn: number;
 
@@ -43,6 +45,16 @@ export class Product {
   @JoinColumn({ name: 'brand_id' })
   @IsNotEmpty({ message: 'Brand must be specified' })
   brand: Brand;
+
+  @ManyToOne(() => ProductCategory, { eager: true, nullable: false })
+  @JoinColumn({ name: 'category_id' })
+  @IsNotEmpty({ message: 'Category must be specified' })
+  category: ProductCategory;
+
+  @ManyToOne(() => ProductSubCategory, { eager: true, nullable: false })
+  @JoinColumn({ name: 'sub_category_id' })
+  @IsNotEmpty({ message: 'SubCategory must be specified' })
+  subCategory: ProductSubCategory;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;

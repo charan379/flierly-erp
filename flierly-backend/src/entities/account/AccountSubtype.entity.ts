@@ -24,8 +24,9 @@ export class AccountSubtype {
   name: string;
 
   @ManyToOne(() => AccountType, { eager: false, nullable: false })
-  @JoinColumn({ name: 'account_type_id' })
-  accountType: AccountType;
+  @JoinColumn({ name: 'parent_account_type_id' })
+  @IsNotEmpty({ message: 'AccountType must be specified.' })
+  parentAccountType: AccountType;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;
