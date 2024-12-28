@@ -25,6 +25,7 @@ const createPrivilegeTableColumns = (translate: (value: string) => string): ProC
       order: 1,
       valueType: 'text',
       sorter: true,
+      width: 250
     },
     // entity
     {
@@ -34,6 +35,7 @@ const createPrivilegeTableColumns = (translate: (value: string) => string): ProC
       order: 2,
       valueType: 'text',
       sorter: true,
+      width: 180
     },
     // access
     {
@@ -41,6 +43,8 @@ const createPrivilegeTableColumns = (translate: (value: string) => string): ProC
       dataIndex: 'access',
       key: 'access',
       order: 3,
+      width: 100,
+      align: 'center',
       render: (_dom, entity) => {
         switch (entity.access) {
           case 'Create':
@@ -68,7 +72,7 @@ const createPrivilegeTableColumns = (translate: (value: string) => string): ProC
       filters: true,
       onFilter: true,
       align: 'center',
-      width: '80px',
+      width: 80,
       render: (_text, entity) => {
         return !entity.isActive ? <Tag color="red">InActive</Tag> : <Tag color="green">Active</Tag>
       },
@@ -80,6 +84,7 @@ const createPrivilegeTableColumns = (translate: (value: string) => string): ProC
       key: 'code',
       order: 5,
       valueType: 'text',
+      width: 250
     },
     // updatedAt
     {
@@ -89,6 +94,7 @@ const createPrivilegeTableColumns = (translate: (value: string) => string): ProC
       order: 6,
       valueType: 'text',
       sorter: true,
+      width: 150,
       renderText(text, _record, _index, _action) {
         return formatDateToLocaleTimezone(text, 'DD-MM-YYYY HH:mm:ss', true)
       },
@@ -101,6 +107,7 @@ const createPrivilegeTableColumns = (translate: (value: string) => string): ProC
       order: 7,
       valueType: 'text',
       sorter: true,
+      width: 150,
       renderText(text, _record, _index, _action) {
         return formatDateToLocaleTimezone(text, 'DD-MM-YYYY HH:mm:ss', true)
       },
@@ -113,6 +120,7 @@ const createPrivilegeTableColumns = (translate: (value: string) => string): ProC
       order: 8,
       valueType: 'text',
       sorter: true,
+      width: 150,
       renderText(text, _record, _index, _action) {
         return formatDateToLocaleTimezone(text, 'DD-MM-YY HH:mm:ss', true)
       },
