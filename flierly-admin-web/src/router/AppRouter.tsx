@@ -3,6 +3,7 @@ import Dashboard from '@/layout/Dashboard'
 import Login from '@/modules/auth/pages/Login'
 import SignUp from '@/modules/auth/pages/SignUp'
 import IamRoutes from '@/modules/iam/router/IamRoutes'
+import ProductRouter from '@/modules/product/router/ProductRouter'
 import PageNotFound from '@/pages/PageNotFound'
 import PageUnderConstruction from '@/pages/PageUnderConstruction'
 import { Route, Routes } from 'react-router-dom'
@@ -16,6 +17,7 @@ const AppRouter = () => {
       <Route path="/erp" element={<ProtectedRoute element={<Dashboard />} />}>
         <Route path="" element={<PageUnderConstruction />} />
         <Route path="iam/*" element={<IamRoutes />} />
+        <Route path="product/*" element={<ProductRouter />} />
       </Route>
       {/* Login and Register routes */}
       <Route path="/login" element={<Login />} />

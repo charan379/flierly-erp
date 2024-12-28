@@ -1,5 +1,5 @@
 import { DashboardOutlined } from "@ant-design/icons";
-import { faAddressBook, faUsersLine, faTags, faChartBar, faRulerCombined, faExchangeAlt, faIdBadge, faMapLocationDot, faFingerprint, faUsersGear, faUserTag, faKey, faBoxArchive } from "@fortawesome/free-solid-svg-icons";
+import { faAddressBook, faUsersLine, faTags, faChartBar, faRulerCombined, faExchangeAlt, faIdBadge, faMapLocationDot, faFingerprint, faUsersGear, faUserTag, faKey, faBoxArchive, faBoxOpen, faThList, faSitemap, faBoxesPacking } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
@@ -79,16 +79,6 @@ const createSiteMapItems = (translate: (value: string) => string, hasPermission:
             resourcePath: '/erp/inventory',
         },
         {
-            id: 'products',
-            name: translate('products'),
-            isDisabled: !hasPermission(/^product\.[a-z]+$/),
-            icon: <FontAwesomeIcon icon={faTags} style={menuIconStyle} />,
-            keywords: ['products', translate('products')],
-            permission: /^product\.[a-z]+$/,
-            resourcePath: '/erp/inventory/products',
-            parentItemId: 'inventory'
-        },
-        {
             id: 'stocks',
             name: translate('stocks'),
             isDisabled: !hasPermission(/^stock\.[a-z]+$/),
@@ -117,6 +107,55 @@ const createSiteMapItems = (translate: (value: string) => string, hasPermission:
             permission: /^uom-conversion\.[a-z]+$/,
             resourcePath: '/erp/inventory/uom-conversions',
             parentItemId: 'inventory'
+        },
+        {
+            id: 'product',
+            name: translate('product'),
+            isDisabled: !hasPermission(/^product\.[a-z]+$/),
+            icon: <FontAwesomeIcon icon={faBoxesPacking} style={menuIconStyle} />,
+            keywords: ['product', translate('product')],
+            permission: /^product\.[a-z]+$/,
+            resourcePath: '/erp/product',
+        },
+        {
+            id: 'products',
+            name: translate('products'),
+            isDisabled: !hasPermission(/^product\.[a-z]+$/),
+            icon: <FontAwesomeIcon icon={faTags} style={menuIconStyle} />,
+            keywords: ['products', translate('products')],
+            permission: /^product\.[a-z]+$/,
+            resourcePath: '/erp/product/products',
+            parentItemId: 'product'
+        },
+        {
+            id: 'brands',
+            name: translate('brands'),
+            isDisabled: !hasPermission(/^brand\.[a-z]+$/),
+            icon: <FontAwesomeIcon icon={faBoxOpen} style={menuIconStyle} />,
+            keywords: ['brands', translate('brands')],
+            permission: /^brand\.[a-z]+$/,
+            resourcePath: '/erp/product/brands',
+            parentItemId: 'product'
+        },
+        {
+            id: 'categories',
+            name: translate('categories'),
+            isDisabled: !hasPermission(/^product-category\.[a-z]+$/),
+            icon: <FontAwesomeIcon icon={faThList} style={menuIconStyle} />,
+            keywords: ['categories', translate('categories')],
+            permission: /^product-category\.[a-z]+$/,
+            resourcePath: '/erp/product/categories',
+            parentItemId: 'product'
+        },
+        {
+            id: 'sub-categories',
+            name: translate('sub-categories'),
+            isDisabled: !hasPermission(/^product-sub-category\.[a-z]+$/),
+            icon: <FontAwesomeIcon icon={faSitemap} style={menuIconStyle} />,
+            keywords: ['sub-categories', translate('sub-categories')],
+            permission: /^product-sub-category\.[a-z]+$/,
+            resourcePath: '/erp/product/sub-categories',
+            parentItemId: 'product'
         },
         {
             id: 'tax-identities',
@@ -175,6 +214,7 @@ const createSiteMapItems = (translate: (value: string) => string, hasPermission:
             resourcePath: '/erp/iam/privileges',
             parentItemId: 'iam'
         },
+
     ]
 
     return siteMapItems;
