@@ -106,6 +106,9 @@ const CrudTable = <T extends Record<string, any>>({
       columnsState={{
         persistenceType: 'localStorage',
         persistenceKey: `${tableKey}_columns`,
+        value: {
+          deletedAt: { show: binMode }
+        }
       }}
       // table search configuration
       search={false}
