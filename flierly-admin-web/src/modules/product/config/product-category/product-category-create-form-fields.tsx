@@ -13,17 +13,6 @@ const productCategoryCreateFormFields: FormFieldConfig<ProductCategory>[] = [
       type: 'Text',
     },
   },
-  // code
-  {
-    name: 'code',
-    label: 'code',
-    hasFeedback: true,
-    allowClear: true,
-    rules: [{ type: 'string', min: 3, max: 50, required: true }],
-    input: {
-      type: 'Text',
-    },
-  },
   // description
   {
     name: 'description',
@@ -46,7 +35,6 @@ const productCategoryCreateFormFields: FormFieldConfig<ProductCategory>[] = [
       options: activeFieldOptions,
     },
   },
-  // Add form fields for ProductCategory
 ]
 
 export default productCategoryCreateFormFields
