@@ -51,7 +51,7 @@ const ReAuthenticate: React.FC<ReAuthenticate> = ({ tokenExpiresAt, onExpiryNavi
 
     // Cleanup the interval on component unmount
     return () => clearInterval(intervalId)
-  }, [tokenExpiresAt, isClosedRecently])
+  }, [tokenExpiresAt, isClosedRecently, navigate, onExpiryNavigateToURL])
 
   // Format the time left as a countdown string
   const formatTimeLeft = () => {
