@@ -1,60 +1,28 @@
 import ResizableDrawer from '@/components/ResizableDrawer'
 import AssociationManager from '@/features/GenericAssignmentManager'
 import { ProColumns } from '@ant-design/pro-components'
-import { Button, Tag } from 'antd'
+import { Button } from 'antd'
 import createPrivilegeTableColumns from '../privilege/create-privilege-table-columns'
-import formatDateToLocaleTimezone from '@/utils/format-date-time-to-locale-timezone'
-import _ from 'lodash'
 import privilegeAssociatedEntityQueryFormFields from '../privilege/privilege-associated-entity-query-form-fields'
+import { createBooleanColumn, createCodeColumn, createDescriptionColumn, createIdColumn, createNameColumn, createTimeStampColumn } from '@/utils/create-table-column'
 
 const createRoleTableColumns = (translate: (value: string) => string): ProColumns<Role>[] => {
   return [
     // id
-    {
-      title: translate('id'),
-      dataIndex: 'id',
-      key: 'id',
-      order: 0,
-      valueType: 'digit',
-      search: false,
-      width: 80,
-      sorter: true,
-      defaultSortOrder: 'ascend',
-    },
+    createIdColumn(translate),
     // name
-    {
-      title: translate('name'),
-      dataIndex: 'name',
-      key: 'name',
-      order: 1,
-      valueType: 'text',
-      sorter: true,
-    },
+    createNameColumn(translate),
     // code
-    {
-      title: translate('code'),
-      dataIndex: 'code',
-      key: 'code',
-      order: 2,
-      valueType: 'text',
-      sorter: true,
-      copyable: true,
-    },
+    createCodeColumn(translate),
     // description
-    {
-      title: translate('description'),
-      dataIndex: 'description',
-      key: 'description',
-      order: 3,
-      valueType: 'text',
-      ellipsis: true,
-    },
+    createDescriptionColumn(translate),
     // privileges
     {
       title: translate('privileges'),
       dataIndex: 'privileges',
       key: 'privileges',
-      order: 4,
+      width: 150,
+      align: 'center',
       render: (_, entity) => {
         return (
           <ResizableDrawer
@@ -81,56 +49,13 @@ const createRoleTableColumns = (translate: (value: string) => string): ProColumn
       },
     },
     // isActive
-    {
-      title: translate('status'),
-      dataIndex: 'isActive',
-      key: 'isActive',
-      order: 5,
-      valueType: 'switch',
-      filters: true,
-      onFilter: true,
-      align: 'center',
-      width: '80px',
-      render: (_text, entity) => {
-        return !entity.isActive ? <Tag color="red">InActive</Tag> : <Tag color="green">Active</Tag>
-      },
-    },
+    createBooleanColumn(translate, { dataIndex: 'isActive' }),
     // updatedAt
-    {
-      title: translate('updated_at'),
-      dataIndex: 'updatedAt',
-      key: 'updatedAt',
-      order: 6,
-      valueType: 'text',
-      sorter: true,
-      renderText(text, _record, _index, _action) {
-        return formatDateToLocaleTimezone(text, 'DD-MM-YYYY HH:mm:ss', true)
-      },
-    },
+    createTimeStampColumn(translate, { title: translate('updated_at'), dataIndex: 'updatedAt' }),
     // createdAt
-    {
-      title: translate('created_at'),
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      order: 7,
-      valueType: 'text',
-      sorter: true,
-      renderText(text, _record, _index, _action) {
-        return formatDateToLocaleTimezone(text, 'DD-MM-YY HH:mm:ss', true)
-      },
-    },
+    createTimeStampColumn(translate, { title: translate('created_at'), dataIndex: 'createdAt' }),
     // deletedAt
-    {
-      title: translate('deleted_at'),
-      dataIndex: 'deletedAt',
-      key: 'deletedAt',
-      order: 8,
-      valueType: 'text',
-      sorter: true,
-      renderText(text, _record, _index, _action) {
-        return formatDateToLocaleTimezone(text, 'DD-MM-YYYY HH:mm:ss', true)
-      },
-    },
+    createTimeStampColumn(translate, { title: translate('deleted_at'), dataIndex: 'deletedAt' }),
   ]
 }
 

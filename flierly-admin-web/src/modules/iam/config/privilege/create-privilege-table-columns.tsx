@@ -1,4 +1,4 @@
-import formatDateToLocaleTimezone from '@/utils/format-date-time-to-locale-timezone'
+import { createBooleanColumn, createCodeColumn, createEntityColumn, createIdColumn, createNameColumn, createTimeStampColumn } from '@/utils/create-table-column'
 import { ProColumns } from '@ant-design/pro-components'
 import { Tag } from 'antd'
 
@@ -6,43 +6,16 @@ const createPrivilegeTableColumns = (translate: (value: string) => string): ProC
 
   return [
     // id
-    {
-      title: translate("id"),
-      dataIndex: 'id',
-      key: 'id',
-      order: 0,
-      valueType: 'digit',
-      search: false,
-      width: 80,
-      sorter: true,
-      defaultSortOrder: 'ascend',
-    },
+    createIdColumn(translate),
     // name
-    {
-      title: translate('privilege_name'),
-      dataIndex: 'name',
-      key: 'name',
-      order: 1,
-      valueType: 'text',
-      sorter: true,
-      width: 250
-    },
+    createNameColumn(translate),
     // entity
-    {
-      title: translate('entity'),
-      dataIndex: 'entity',
-      key: 'entity',
-      order: 2,
-      valueType: 'text',
-      sorter: true,
-      width: 180
-    },
+    createEntityColumn(translate),
     // access
     {
       title: translate('access_type'),
       dataIndex: 'access',
       key: 'access',
-      order: 3,
       width: 100,
       align: 'center',
       render: (_dom, entity) => {
@@ -62,69 +35,16 @@ const createPrivilegeTableColumns = (translate: (value: string) => string): ProC
         }
       },
     },
-    // isActive
-    {
-      title: translate("status"),
-      dataIndex: 'isActive',
-      key: 'isActive',
-      order: 4,
-      valueType: 'switch',
-      filters: true,
-      onFilter: true,
-      align: 'center',
-      width: 80,
-      render: (_text, entity) => {
-        return !entity.isActive ? <Tag color="red">InActive</Tag> : <Tag color="green">Active</Tag>
-      },
-    },
+    // status
+    createBooleanColumn(translate, { dataIndex: 'isActive' }),
     // code
-    {
-      title: translate('code'),
-      dataIndex: 'code',
-      key: 'code',
-      order: 5,
-      valueType: 'text',
-      width: 250
-    },
+    createCodeColumn(translate, { width: 200 }),
     // updatedAt
-    {
-      title: translate('updated_at'),
-      dataIndex: 'updatedAt',
-      key: 'updatedAt',
-      order: 6,
-      valueType: 'text',
-      sorter: true,
-      width: 150,
-      renderText(text, _record, _index, _action) {
-        return formatDateToLocaleTimezone(text, 'DD-MM-YYYY HH:mm:ss', true)
-      },
-    },
+    createTimeStampColumn(translate, { title: translate('updated_at'), dataIndex: 'updatedAt' }),
     // createdAt
-    {
-      title: translate('created_at'),
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      order: 7,
-      valueType: 'text',
-      sorter: true,
-      width: 150,
-      renderText(text, _record, _index, _action) {
-        return formatDateToLocaleTimezone(text, 'DD-MM-YYYY HH:mm:ss', true)
-      },
-    },
+    createTimeStampColumn(translate, { title: translate('created_at'), dataIndex: 'createdAt' }),
     // deletedAt
-    {
-      title: translate('deleted_at'),
-      dataIndex: 'deletedAt',
-      key: 'deletedAt',
-      order: 8,
-      valueType: 'text',
-      sorter: true,
-      width: 150,
-      renderText(text, _record, _index, _action) {
-        return formatDateToLocaleTimezone(text, 'DD-MM-YY HH:mm:ss', true)
-      },
-    },
+    createTimeStampColumn(translate, { title: translate('deleted_at'), dataIndex: 'deletedAt' }),
   ]
 }
 
