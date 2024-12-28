@@ -16,7 +16,7 @@ const privilegeAssociatedEntityQueryFormFields: {
       rules: [{ required: true, message: '' }],
     },
   },
-  { label: 'Name', name: 'name', formField: { input: { type: 'Text' }, rules: [{ required: true, message: '' }] } },
+  { label: 'Name', name: 'name', formField: { input: { type: 'Text' }, rules: [{ required: true, message: '' }], transform : queryTransformers.ilike} },
   { label: 'Code', name: 'code', formField: { input: { type: 'Text' }, rules: [{ required: true, message: '' }] } },
   {
     label: 'Entity',
