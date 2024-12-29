@@ -132,7 +132,7 @@ const createSiteMapItems = (translate: (value: string) => string, hasPermission:
             name: translate('brands'),
             isDisabled: !hasPermission(/^brand\.[a-z]+$/),
             icon: <FontAwesomeIcon icon={faBoxOpen} style={menuIconStyle} />,
-            keywords: ['brands', translate('brands')],
+            keywords: ['brands', translate('brands'), translate('products')],
             permission: /^brand\.[a-z]+$/,
             resourcePath: '/erp/product/brands',
             parentItemId: 'product'
@@ -142,7 +142,7 @@ const createSiteMapItems = (translate: (value: string) => string, hasPermission:
             name: translate('categories'),
             isDisabled: !hasPermission(/^product-category\.[a-z]+$/),
             icon: <FontAwesomeIcon icon={faThList} style={menuIconStyle} />,
-            keywords: ['categories', translate('categories')],
+            keywords: ['categories', translate('categories'), translate('products')],
             permission: /^product-category\.[a-z]+$/,
             resourcePath: '/erp/product/categories',
             parentItemId: 'product'
@@ -152,7 +152,7 @@ const createSiteMapItems = (translate: (value: string) => string, hasPermission:
             name: translate('sub-categories'),
             isDisabled: !hasPermission(/^product-sub-category\.[a-z]+$/),
             icon: <FontAwesomeIcon icon={faSitemap} style={menuIconStyle} />,
-            keywords: ['sub-categories', translate('sub-categories')],
+            keywords: ['sub-categories', translate('sub-categories'), translate('products')],
             permission: /^product-sub-category\.[a-z]+$/,
             resourcePath: '/erp/product/sub-categories',
             parentItemId: 'product'
