@@ -22,4 +22,4 @@ const createProductCategoryTableColumns = (translate: (value: string) => string)
   ]
 }
 
-export default createProductCategoryTableColumns
+export default createProductCategoryTableColumns;
