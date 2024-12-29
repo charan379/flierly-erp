@@ -3,7 +3,7 @@ import AssociationManager from '@/features/GenericAssignmentManager'
 import { ProColumns } from '@ant-design/pro-components'
 import { Button } from 'antd'
 import createPrivilegeTableColumns from '../privilege/create-privilege-table-columns'
-import privilegeAssociatedEntityQueryFormFields from '../privilege/privilege-associated-entity-query-form-fields'
+import createPrivilegeAMQueryFields from '../privilege/create-privilege-am-queryfields'
 import roleAssociatedEntityQueryFormFields from '../role/role-associated-entity-query-form-fields'
 import createRoleTableColumns from '../role/create-role-table-columns'
 import UserPasswordUpdate from '../../features/UserPasswordUpdate'
@@ -54,7 +54,7 @@ const createUserTableColumns = (translate: (value: string) => string, _hasPermis
               associatedEntity="privilege"
               associatedSideField="additionalPrivileges"
               associatedEntityColumns={createPrivilegeTableColumns(translate, _hasPermission).filter((column) => ['id', 'name', 'code', 'entity', 'access'].includes(column.dataIndex as string))}
-              associatedEntityQueryConfig={privilegeAssociatedEntityQueryFormFields}
+              associatedEntityQueryConfig={createPrivilegeAMQueryFields(translate)}
             />
           </ResizableDrawer>
         )
@@ -86,7 +86,7 @@ const createUserTableColumns = (translate: (value: string) => string, _hasPermis
               associatedEntity="privilege"
               associatedSideField="restrictedPrivileges"
               associatedEntityColumns={createPrivilegeTableColumns(translate, _hasPermission).filter((column) => ['id', 'name', 'code', 'entity', 'access'].includes(column.dataIndex as string))}
-              associatedEntityQueryConfig={privilegeAssociatedEntityQueryFormFields}
+              associatedEntityQueryConfig={createPrivilegeAMQueryFields(translate)}
             />
           </ResizableDrawer>
         )
