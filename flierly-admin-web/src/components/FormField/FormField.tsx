@@ -31,7 +31,7 @@ type InputConfig =
     }
   | {
       type: 'SelectRemoteOptions'
-      asyncOptionsFetcher: (value: string) => Promise<any>
+      asyncOptionsFetcher: (value: string) => Promise<{ label: string; value: string }[]>
       labelRender?: SelectProps['labelRender']
       debounceTimeout?: number
       mode?: SelectProps['mode']

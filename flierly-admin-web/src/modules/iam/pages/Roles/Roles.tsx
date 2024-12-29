@@ -7,19 +7,21 @@ import roleCreateFormFields from '../../config/role/role-create-form-fields'
 import roleUpdateFormFields from '../../config/role/role-update-form-fields'
 import roleQueryFormFields from '../../config/role/role-query-form-fields'
 import useLocale from '@/features/Locale/hooks/useLocale'
+import { useAuth } from '@/modules/auth/hooks/useAuth'
 
 // Lazy load CrudTable
 const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<Role>>> = React.lazy(() => import('@/features/CrudTable'))
 
 const Roles: React.FC = () => {
   const { translate } = useLocale();
+  const { hasPermission } = useAuth();
 
   return (
     <CrudModule header title={'roles'} menuKeys={['iam']}>
       <Suspense fallback={<PageLoader />}>
         <CrudTable
           entity="role"
-          columns={createRoleTableColumns(translate)}
+          columns={createRoleTableColumns(translate, hasPermission)}
           dataSource={[]}
           tableKey="role-table"
           rowKey="id"

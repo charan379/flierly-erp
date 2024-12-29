@@ -2,8 +2,7 @@ import { createBooleanColumn, createCodeColumn, createEntityColumn, createIdColu
 import { ProColumns } from '@ant-design/pro-components'
 import { Tag } from 'antd'
 
-const createPrivilegeTableColumns = (translate: (value: string) => string): ProColumns<Privilege>[] => {
-
+const createPrivilegeTableColumns = (translate: (value: string) => string, _hasPermission: (requiredPermissionRegex: RegExp) => boolean): ProColumns<Privilege>[] => {
   return [
     // id
     createIdColumn(translate),

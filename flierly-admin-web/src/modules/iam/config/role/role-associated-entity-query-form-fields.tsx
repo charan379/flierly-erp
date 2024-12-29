@@ -1,5 +1,5 @@
 import { FormFieldConfig } from '@/components/FormField'
-import { activeFieldOptions } from '@/constants/select-options.constant'
+import { booleanSelectFieldOptions } from '@/constants/select-options.constant'
 
 const roleAssociatedEntityQueryFormFields: {
   label: string
@@ -20,7 +20,7 @@ const roleAssociatedEntityQueryFormFields: {
     label: 'Status',
     name: 'isActive',
     formField: {
-      input: { type: 'Select', options: activeFieldOptions },
+      input: { type: 'Select', options: booleanSelectFieldOptions },
       rules: [{ type: 'string', required: true, message: '' }],
     },
   },

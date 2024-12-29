@@ -1,7 +1,7 @@
 import { FormFieldConfig } from '@/components/FormField'
 import fetchEntityOptions from '@/features/SelectRemoteOptions/utils/fetch-entity-options'
 import entityExistenceValidator from '@/utils/entity-existence.validator'
-import { accessOptions, activeFieldOptions } from '@/constants/select-options.constant'
+import { accessOptions, booleanSelectFieldOptions } from '@/constants/select-options.constant'
 
 const privilegeCreateFormFields: FormFieldConfig<Privilege>[] = [
   // name
@@ -67,7 +67,7 @@ const privilegeCreateFormFields: FormFieldConfig<Privilege>[] = [
     rules: [{ type: 'string' }],
     input: {
       type: 'Select',
-      options: activeFieldOptions,
+      options: booleanSelectFieldOptions,
     },
   },
   // code

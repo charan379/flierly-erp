@@ -1,6 +1,6 @@
 import { FormFieldConfig } from '@/components/FormField'
 import entityExistenceValidator from '@/utils/entity-existence.validator'
-import { activeFieldOptions } from '@/constants/select-options.constant'
+import { booleanSelectFieldOptions } from '@/constants/select-options.constant'
 
 const roleCreateFormFields: FormFieldConfig<Role>[] = [
   // name
@@ -68,7 +68,7 @@ const roleCreateFormFields: FormFieldConfig<Role>[] = [
     rules: [{ type: 'string' }],
     input: {
       type: 'Select',
-      options: activeFieldOptions,
+      options: booleanSelectFieldOptions,
     },
   },
 ]

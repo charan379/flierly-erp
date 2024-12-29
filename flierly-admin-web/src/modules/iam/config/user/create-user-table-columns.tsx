@@ -9,7 +9,7 @@ import createRoleTableColumns from '../role/create-role-table-columns'
 import UserPasswordUpdate from '../../features/UserPasswordUpdate'
 import { createBooleanColumn, createEmailColumn, createIdColumn, createMobileColumn, createTimeStampColumn } from '@/utils/create-table-column'
 
-const createUserTableColumns = (translate: (value: string) => string): ProColumns<User>[] => {
+const createUserTableColumns = (translate: (value: string) => string, _hasPermission: (requiredPermissionRegex: RegExp) => boolean): ProColumns<User>[] => {
   return [
     // id
     createIdColumn(translate),
@@ -53,7 +53,7 @@ const createUserTableColumns = (translate: (value: string) => string): ProColumn
               owningSideField="usersWithAdditionalPrivileges"
               associatedEntity="privilege"
               associatedSideField="additionalPrivileges"
-              associatedEntityColumns={createPrivilegeTableColumns(translate).filter((column) => ['id', 'name', 'code', 'entity', 'access'].includes(column.dataIndex as string))}
+              associatedEntityColumns={createPrivilegeTableColumns(translate, _hasPermission).filter((column) => ['id', 'name', 'code', 'entity', 'access'].includes(column.dataIndex as string))}
               associatedEntityQueryConfig={privilegeAssociatedEntityQueryFormFields}
             />
           </ResizableDrawer>
@@ -85,7 +85,7 @@ const createUserTableColumns = (translate: (value: string) => string): ProColumn
               owningSideField="usersWithRestrictedPrivileges"
               associatedEntity="privilege"
               associatedSideField="restrictedPrivileges"
-              associatedEntityColumns={createPrivilegeTableColumns(translate).filter((column) => ['id', 'name', 'code', 'entity', 'access'].includes(column.dataIndex as string))}
+              associatedEntityColumns={createPrivilegeTableColumns(translate, _hasPermission).filter((column) => ['id', 'name', 'code', 'entity', 'access'].includes(column.dataIndex as string))}
               associatedEntityQueryConfig={privilegeAssociatedEntityQueryFormFields}
             />
           </ResizableDrawer>
@@ -117,7 +117,7 @@ const createUserTableColumns = (translate: (value: string) => string): ProColumn
               owningSideField="users"
               associatedEntity="role"
               associatedSideField="roles"
-              associatedEntityColumns={createRoleTableColumns(translate).filter((column) => ['id', 'name', 'code', 'active'].includes(column.dataIndex as string))}
+              associatedEntityColumns={createRoleTableColumns(translate, _hasPermission).filter((column) => ['id', 'name', 'code', 'active'].includes(column.dataIndex as string))}
               associatedEntityQueryConfig={roleAssociatedEntityQueryFormFields}
             />
           </ResizableDrawer>

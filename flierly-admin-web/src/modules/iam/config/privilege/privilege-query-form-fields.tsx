@@ -1,5 +1,5 @@
 import { QueryFieldConfig } from '@/features/QueryBuilder/QueryBuilder'
-import { accessOptions, activeFieldOptions } from '@/constants/select-options.constant'
+import { accessOptions, booleanSelectFieldOptions } from '@/constants/select-options.constant'
 import fetchEntityOptions from '@/features/SelectRemoteOptions/utils/fetch-entity-options'
 
 const privilegeQueryFormFields: QueryFieldConfig<Privilege>[] = [
@@ -142,7 +142,7 @@ const privilegeQueryFormFields: QueryFieldConfig<Privilege>[] = [
         formField: {
           input: {
             type: 'Select',
-            options: activeFieldOptions,
+            options: booleanSelectFieldOptions,
           },
           rules: [{ type: 'string' }],
         },

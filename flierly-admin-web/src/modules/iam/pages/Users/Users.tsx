@@ -7,19 +7,21 @@ import userUpdateFormFields from '../../config/user/user-update-form-fields'
 import userQueryFormFields from '../../config/user/user-query-form-fields'
 import createUserTableColumns from '../../config/user/create-user-table-columns'
 import useLocale from '@/features/Locale/hooks/useLocale'
+import { useAuth } from '@/modules/auth/hooks/useAuth'
 
 // Lazy load CrudTable
 const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<User>>> = React.lazy(() => import('@/features/CrudTable'))
 
 const Users: React.FC = () => {
   const { translate } = useLocale();
+  const { hasPermission } = useAuth();
 
   return (
     <CrudModule header title={'users'} menuKeys={['iam']}>
       <Suspense fallback={<PageLoader />}>
         <CrudTable
           entity="user"
-          columns={createUserTableColumns(translate)}
+          columns={createUserTableColumns(translate, hasPermission)}
           dataSource={[]}
           tableKey="user-table"
           rowKey="id"

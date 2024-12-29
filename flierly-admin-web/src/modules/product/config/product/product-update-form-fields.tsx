@@ -1,5 +1,5 @@
 import { FormFieldConfig } from '@/components/FormField'
-import { activeFieldOptions } from '@/constants/select-options.constant'
+import { booleanSelectFieldOptions } from '@/constants/select-options.constant'
 
 const productUpdateFormFields: FormFieldConfig<Product>[] = [
   // id
@@ -44,7 +44,7 @@ const productUpdateFormFields: FormFieldConfig<Product>[] = [
     rules: [{ type: 'string' }],
     input: {
       type: 'Select',
-      options: activeFieldOptions,
+      options: booleanSelectFieldOptions,
     },
   },
 ]

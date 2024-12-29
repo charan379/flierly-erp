@@ -7,18 +7,19 @@ import privilegeQueryFormFields from '../../config/privilege/privilege-query-for
 import { CrudTableProps } from '@/features/CrudTable/CrudTable'
 import PageLoader from '@/components/PageLoader'
 import useLocale from '@/features/Locale/hooks/useLocale'
+import { useAuth } from '@/modules/auth/hooks/useAuth'
 
 const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<Privilege>>> = React.lazy(() => import('@/features/CrudTable'))
 
 const Privileges: React.FC = () => {
   const { translate } = useLocale();
-
+  const { hasPermission } = useAuth();
   return (
     <CrudModule header title={'privileges'} menuKeys={['iam']}>
       <Suspense fallback={<PageLoader />}>
         <CrudTable
           entity="privilege"
-          columns={createPrivilegeTableColumns(translate)}
+          columns={createPrivilegeTableColumns(translate, hasPermission)}
           dataSource={[]}
           tableKey="privilege-table"
           rowKey="id"

@@ -1,5 +1,5 @@
 import { QueryFieldConfig } from '@/features/QueryBuilder/QueryBuilder'
-import { activeFieldOptions } from '@/constants/select-options.constant'
+import { booleanSelectFieldOptions } from '@/constants/select-options.constant'
 
 const brandQueryFormFields: QueryFieldConfig<Brand>[] = [
   // id
@@ -51,7 +51,7 @@ const brandQueryFormFields: QueryFieldConfig<Brand>[] = [
         formField: {
           input: {
             type: 'Select',
-            options: activeFieldOptions,
+            options: booleanSelectFieldOptions,
           },
           rules: [{ type: 'string' }],
         },

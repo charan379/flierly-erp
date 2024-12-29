@@ -6,7 +6,7 @@ import createPrivilegeTableColumns from '../privilege/create-privilege-table-col
 import privilegeAssociatedEntityQueryFormFields from '../privilege/privilege-associated-entity-query-form-fields'
 import { createBooleanColumn, createCodeColumn, createDescriptionColumn, createIdColumn, createNameColumn, createTimeStampColumn } from '@/utils/create-table-column'
 
-const createRoleTableColumns = (translate: (value: string) => string): ProColumns<Role>[] => {
+const createRoleTableColumns = (translate: (value: string) => string, _hasPermission: (requiredPermissionRegex: RegExp) => boolean): ProColumns<Role>[] => {
   return [
     // id
     createIdColumn(translate),
@@ -41,7 +41,7 @@ const createRoleTableColumns = (translate: (value: string) => string): ProColumn
               owningSideField="roles"
               associatedEntity="privilege"
               associatedSideField="privileges"
-              associatedEntityColumns={createPrivilegeTableColumns(translate).filter((column) => ['id', 'name', 'code', 'entity', 'access'].includes(column.dataIndex as string))}
+              associatedEntityColumns={createPrivilegeTableColumns(translate, _hasPermission).filter((column) => ['id', 'name', 'code', 'entity', 'access'].includes(column.dataIndex as string))}
               associatedEntityQueryConfig={privilegeAssociatedEntityQueryFormFields}
             />
           </ResizableDrawer>
