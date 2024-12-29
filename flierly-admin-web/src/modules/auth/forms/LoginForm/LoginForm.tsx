@@ -11,9 +11,10 @@ import regexConstants from '@/constants/regex.constants'
 interface LoginFormProps {
   redirectOnLogin?: boolean
   isForPopup?: boolean
+  onLoginSuccess?: () => void
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false, isForPopup = false }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false, isForPopup = false, onLoginSuccess }) => {
   const { translate, langDirection } = useLocale()
   const { loading, login, isLoggedIn, tokenExpiresAt } = useAuth()
   const navigate = useNavigate()
@@ -32,8 +33,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false, isForPop
       navigate(targetPath, { replace: true })
     }
 
+    if (onLoginSuccess && isForPopup && loading === LoadingTypes.SUCCEEDED && isLoggedIn && !isTokenExpired) {
+      onLoginSuccess();
+    }
+
     return () => { }
-  }, [isLoggedIn, loading, navigate, redirectOnLogin, isForPopup, callback, isTokenExpired])
+  }, [isLoggedIn, loading, navigate, redirectOnLogin, isForPopup, callback, isTokenExpired, onLoginSuccess])
 
   return (
     <Loading isLoading={loading === LoadingTypes.PENDING}>

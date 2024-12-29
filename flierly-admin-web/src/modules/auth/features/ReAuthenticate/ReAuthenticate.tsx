@@ -64,6 +64,10 @@ const ReAuthenticate: React.FC<ReAuthenticate> = ({ tokenExpiresAt, onExpiryNavi
     return `${hours}h ${minutes}m ${seconds}s left`
   }
 
+  const handleSuccessLogin = () => {
+    setShowModal(false);
+  };
+
   return (
     <Modal
       open={showModal}
@@ -102,7 +106,7 @@ const ReAuthenticate: React.FC<ReAuthenticate> = ({ tokenExpiresAt, onExpiryNavi
       }}
     >
       <Suspense fallback={<PageLoader />}>
-        <LoginForm redirectOnLogin={false} isForPopup />
+        <LoginForm redirectOnLogin={false} isForPopup onLoginSuccess={handleSuccessLogin} />
       </Suspense>
     </Modal>
   )
