@@ -1,6 +1,7 @@
 import { FormFieldConfig } from '@/components/FormField'
 import entityExistenceValidator from '@/utils/entity-existence.validator'
 import { statusFieldOptions } from '@/constants/select-options.constant'
+import regexConstants from '@/constants/regex.constants'
 
 const roleUpdateFormFields: FormFieldConfig<Role>[] = [
   // id
@@ -47,11 +48,11 @@ const roleUpdateFormFields: FormFieldConfig<Role>[] = [
     hasFeedback: true,
     allowClear: false,
     rules: [
-      { type: 'string', pattern: /^[a-z]+-[a-z0-9]+$/, message: 'invalid_code' },
+      { type: 'string', pattern: regexConstants.code, message: 'invalid_code' },
       { min: 5, max: 25, required: true },
       ({ getFieldValue }) => ({
         validator(_, value) {
-          if (!value || /^[a-z]+-[a-z0-9]+$/.test(value) || value?.length < 5 || value.length > 25) return Promise.resolve()
+          if (!value || !regexConstants.code.test(value) || value?.length < 5 || value.length > 25) return Promise.resolve()
           return entityExistenceValidator('role-code-validation-u-1', {
             entity: 'role',
             filters: { id: { $notEqualTo: getFieldValue('id') }, code: value },

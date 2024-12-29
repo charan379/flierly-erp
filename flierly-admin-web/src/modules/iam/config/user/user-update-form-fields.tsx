@@ -1,6 +1,7 @@
 import { FormFieldConfig } from '@/components/FormField'
 import entityExistenceValidator from '@/utils/entity-existence.validator'
 import { statusFieldOptions } from '@/constants/select-options.constant'
+import regexConstants from '@/constants/regex.constants'
 
 const userUpdateFormFields: FormFieldConfig<User>[] = [
   // id
@@ -18,16 +19,15 @@ const userUpdateFormFields: FormFieldConfig<User>[] = [
   // name
   {
     name: 'username',
-    label: 'name',
+    label: 'username',
     hasFeedback: true,
     allowClear: false,
     rules: [
       { type: 'string', min: 5, max: 20, required: true },
+      { pattern: regexConstants.username, message: 'invalid_username' },
       ({ getFieldValue }) => ({
         validator(_, value) {
-          if (!value || value.length < 5 || value.length > 20) {
-            return Promise.resolve()
-          }
+          if (!value || value.length < 5 || value.length > 20 || !regexConstants.username.test(value)) return Promise.resolve()
           return entityExistenceValidator('user-name-validation-u-1', {
             entity: 'user',
             filters: {
@@ -52,9 +52,7 @@ const userUpdateFormFields: FormFieldConfig<User>[] = [
       { type: 'email', required: true },
       ({ getFieldValue }) => ({
         validator(_, value) {
-          if (!value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-            return Promise.resolve()
-          }
+          if (!value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return Promise.resolve()
           return entityExistenceValidator('user-email-validation-u-1', {
             entity: 'user',
             filters: { id: { $notEqualTo: getFieldValue('id') }, email: value },
@@ -77,9 +75,7 @@ const userUpdateFormFields: FormFieldConfig<User>[] = [
       { type: 'string', min: 10, max: 15, required: true },
       ({ getFieldValue }) => ({
         validator(_, value) {
-          if (!value || value.length < 10 || value.length > 15) {
-            return Promise.resolve()
-          }
+          if (!value || value.length < 10 || value.length > 15 || !regexConstants.mobile.test(value)) return Promise.resolve()
           return entityExistenceValidator('user-mobile-validation-u-1', {
             entity: 'user',
             filters: { id: { $notEqualTo: getFieldValue('id') }, mobile: value },

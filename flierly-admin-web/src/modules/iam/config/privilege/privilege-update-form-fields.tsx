@@ -2,6 +2,7 @@ import { FormFieldConfig } from '@/components/FormField'
 import fetchEntityOptions from '@/features/SelectRemoteOptions/utils/fetch-entity-options'
 import entityExistenceValidator from '@/utils/entity-existence.validator'
 import { accessOptions, statusFieldOptions } from '@/constants/select-options.constant'
+import regexConstants from '@/constants/regex.constants'
 
 const privilegeUpdateFormFields: FormFieldConfig<Privilege>[] = [
   // id
@@ -103,11 +104,11 @@ const privilegeUpdateFormFields: FormFieldConfig<Privilege>[] = [
     allowClear: false,
     access: { permission: /^privilege\.manage$/, ifNoAccess: 'disable' },
     rules: [
-      { type: 'string', pattern: /^[a-z-]+\.[a-z-]+$/, message: 'invalid_code' },
+      { type: 'string', pattern: regexConstants.code, message: 'invalid_code' },
       { min: 5, max: 25, required: true },
       ({ getFieldValue }) => ({
         validator(_, value) {
-          if (!value || /^[a-z-]+\.[a-z-]+$/.test(value) || value?.length < 5 || value?.length > 25) return Promise.resolve()
+          if (!value || !regexConstants.code.test(value) || value?.length < 5 || value?.length > 25) return Promise.resolve()
           return entityExistenceValidator('privilege-code-validation-u-1', {
             entity: 'privilege',
             filters: { id: { $notEqualTo: getFieldValue('id') }, code: value },
