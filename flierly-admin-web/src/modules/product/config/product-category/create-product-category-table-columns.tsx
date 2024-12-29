@@ -1,78 +1,24 @@
-import formatDateToLocaleTimezone from '@/utils/format-date-time-to-locale-timezone'
+import { createBooleanColumn, createCodeColumn, createDescriptionColumn, createIdColumn, createNameColumn, createTimeStampColumn } from '@/utils/create-table-column'
 import { ProColumns } from '@ant-design/pro-components'
-import { Tag } from 'antd'
 
 const createProductCategoryTableColumns = (translate: (value: string) => string): ProColumns<ProductCategory>[] => {
   return [
     // id
-    {
-      title: translate("id"),
-      dataIndex: 'id',
-      key: 'id',
-      order: 0,
-      valueType: 'digit',
-      search: false,
-      width: 80,
-      sorter: true,
-      defaultSortOrder: 'ascend',
-    },
+    createIdColumn(translate),
     // name
-    {
-      title: translate('name'),
-      dataIndex: 'name',
-      key: 'name',
-      order: 1,
-      valueType: 'text',
-      sorter: true,
-    },
+    createNameColumn(translate, { width: 200 }),
+    // code
+    createCodeColumn(translate, { width: 120 }),
     // description
-    {
-      title: translate('description'),
-      dataIndex: 'description',
-      key: 'description',
-      order: 2,
-      valueType: 'text',
-      ellipsis: true,
-    },
+    createDescriptionColumn(translate, { width: 250 }),
     // isActive
-    {
-      title: translate("status"),
-      dataIndex: 'isActive',
-      key: 'isActive',
-      order: 3,
-      valueType: 'switch',
-      filters: true,
-      onFilter: true,
-      align: 'center',
-      width: '80px',
-      render: (_text, entity) => {
-        return !entity.isActive ? <Tag color="red">InActive</Tag> : <Tag color="green">Active</Tag>
-      },
-    },
+    createBooleanColumn(translate, { dataIndex: 'isActive', }),
     // updatedAt
-    {
-      title: translate('updated_at'),
-      dataIndex: 'updatedAt',
-      key: 'updatedAt',
-      order: 4,
-      valueType: 'text',
-      sorter: true,
-      renderText(text, _record, _index, _action) {
-        return formatDateToLocaleTimezone(text, 'DD-MM-YYYY HH:mm:ss', true)
-      },
-    },
+    createTimeStampColumn(translate, { dataIndex: 'updatedAt', title: translate('updated_at') }),
     // createdAt
-    {
-      title: translate('created_at'),
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      order: 5,
-      valueType: 'text',
-      sorter: true,
-      renderText(text, _record, _index, _action) {
-        return formatDateToLocaleTimezone(text, 'DD-MM-YYYY HH:mm:ss', true)
-      },
-    },
+    createTimeStampColumn(translate, { dataIndex: 'createdAt', title: translate('created_at') }),
+    // deletedAt
+    createTimeStampColumn(translate, { dataIndex: 'deletedAt', title: translate('deleted_at') }),
   ]
 }
 
