@@ -1,6 +1,6 @@
 import { FormFieldConfig } from '@/components/FormField'
 import entityExistenceValidator from '@/utils/entity-existence.validator'
-import { booleanSelectFieldOptions } from '@/constants/select-options.constant'
+import { statusFieldOptions } from '@/constants/select-options.constant'
 
 const roleUpdateFormFields: FormFieldConfig<Role>[] = [
   // id
@@ -83,7 +83,7 @@ const roleUpdateFormFields: FormFieldConfig<Role>[] = [
     rules: [],
     input: {
       type: 'Select',
-      options: booleanSelectFieldOptions,
+      options: statusFieldOptions,
     },
     convertValue: (value) => {
       if (value === true) {

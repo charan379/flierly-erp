@@ -1,5 +1,6 @@
 import { FormFieldConfig } from '@/components/FormField'
-import { booleanSelectFieldOptions } from '@/constants/select-options.constant'
+import { statusFieldOptions } from '@/constants/select-options.constant'
+import entityExistenceValidator from '@/utils/entity-existence.validator'
 
 const brandUpdateFormFields: FormFieldConfig<Brand>[] = [
   // id
@@ -20,7 +21,20 @@ const brandUpdateFormFields: FormFieldConfig<Brand>[] = [
     label: 'name',
     hasFeedback: true,
     allowClear: true,
-    rules: [{ type: 'string', min: 3, max: 50, required: true }],
+    rules: [{ type: 'string', min: 3, max: 50, required: true },
+    ({ getFieldValue }) => ({
+      validator(_, value) {
+        if (!value || value.length < 5 || value.length > 50) return Promise.resolve()
+        return entityExistenceValidator('brand-name-validation-c-1', {
+          entity: 'brand',
+          filters: {
+            id: { $notEqualTo: getFieldValue('id') },
+            name: { $ilike: value }
+          },
+        })
+      },
+    }),
+    ],
     input: {
       type: 'Text',
     },
@@ -41,10 +55,19 @@ const brandUpdateFormFields: FormFieldConfig<Brand>[] = [
     name: 'isActive',
     label: 'active',
     allowClear: false,
-    rules: [{ type: 'string' }],
+    rules: [],
     input: {
       type: 'Select',
-      options: booleanSelectFieldOptions,
+      options: statusFieldOptions,
+    },
+    convertValue: (value) => {
+      if (value === true) {
+        return 'true'
+      } else if (value === false) {
+        return 'false'
+      } else {
+        return value
+      }
     },
   },
 ]

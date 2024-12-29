@@ -6,7 +6,7 @@ export const accessOptions = [
   { label: 'Manage', value: 'Manage' },
 ]
 
-export const booleanSelectFieldOptions = [
+export const statusFieldOptions = [
   { label: 'Active', value: 'true' },
   { label: 'InActive', value: 'false' },
 ]

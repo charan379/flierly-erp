@@ -1,5 +1,5 @@
 import { FormFieldConfig } from '@/components/FormField'
-import { booleanSelectFieldOptions } from '@/constants/select-options.constant'
+import { statusFieldOptions } from '@/constants/select-options.constant'
 
 const productSubCategoryUpdateFormFields: FormFieldConfig<ProductSubCategory>[] = [
   // id
@@ -67,7 +67,7 @@ const productSubCategoryUpdateFormFields: FormFieldConfig<ProductSubCategory>[] 
     rules: [{ type: 'string' }],
     input: {
       type: 'Select',
-      options: booleanSelectFieldOptions,
+      options: statusFieldOptions,
     },
   },
   // Add form fields for ProductSubCategory

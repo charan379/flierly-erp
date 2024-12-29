@@ -6,7 +6,7 @@ import React, { ComponentType, LazyExoticComponent, Suspense } from 'react'
 import createBrandTableColumns from '../../config/brand/create-brand-table-columns';
 import brandCreateFormFields from '../../config/brand/brand-create-form-fields';
 import brandUpdateFormFields from '../../config/brand/brand-update-form-fields';
-import brandQueryFormFields from '../../config/brand/brand-query-form-fields';
+import createBrandQueryFields from '../../config/brand/create-brand-queryfields';
 
 const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<Brand>>> = React.lazy(() => import('@/features/CrudTable'))
 
@@ -45,7 +45,7 @@ const Brands: React.FC = () => {
                     }}
                     createFormFields={brandCreateFormFields}
                     updateFormFields={brandUpdateFormFields}
-                    queryFormFields={brandQueryFormFields}
+                    queryFormFields={createBrandQueryFields(translate)}
                 />
             </Suspense>
         </CrudModule>

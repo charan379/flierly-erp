@@ -1,6 +1,6 @@
 import { FormFieldConfig } from '@/components/FormField'
 import entityExistenceValidator from '@/utils/entity-existence.validator'
-import { booleanSelectFieldOptions } from '@/constants/select-options.constant'
+import { statusFieldOptions } from '@/constants/select-options.constant'
 
 const userUpdateFormFields: FormFieldConfig<User>[] = [
   // id
@@ -100,7 +100,7 @@ const userUpdateFormFields: FormFieldConfig<User>[] = [
     rules: [],
     input: {
       type: 'Select',
-      options: booleanSelectFieldOptions,
+      options: statusFieldOptions,
     },
     convertValue: (value) => {
       if (value === true) {
