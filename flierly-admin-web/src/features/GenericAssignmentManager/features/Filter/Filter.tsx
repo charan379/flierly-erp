@@ -70,7 +70,7 @@ const Filter = <T extends Record<string, any>>({ filterConfig, onFilter, onReset
             fieldProps={{ dropdownStyle: { textAlign: 'left' } }}
             rules={[{ required: true, message: '' }]}
             options={filterConfig.map((c) => ({
-              label: translate(c.label),
+              label: c.label,
               value: c.name as string,
             }))}
           />
