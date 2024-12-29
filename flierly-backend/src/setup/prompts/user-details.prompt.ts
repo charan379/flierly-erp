@@ -43,7 +43,7 @@ async function userDetailsPrompt (): Promise<{ username: string; password: strin
       type: 'text',
       name: 'mobile',
       message: (prev, values) => `Mobile number for user ${values.username} : `,
-      validate: (value) => (/^\d{10}$/.test(value) ? true : 'Invalid mobile number !'),
+      validate: (value) => (/^\+\d{1,3}[\s][6-9]\d{9}$/.test(value) ? true : 'Invalid mobile number !'),
     },
   ]);
 

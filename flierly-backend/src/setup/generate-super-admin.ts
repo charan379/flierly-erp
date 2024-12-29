@@ -10,7 +10,7 @@ async function generateSuperAdmin (): Promise<void> {
   const userRepository = AppDataSource.getRepository(User);
 
   // Check if Super Admin role exists
-  let superAdminRole = await roleRepository.findOne({ where: { code: 'super-admin' }, relations: ['privileges'] });
+  let superAdminRole = await roleRepository.findOne({ where: { code: 'super-admin.owner' }, relations: ['privileges'] });
 
   if (!superAdminRole) {
     superAdminRole = await generateSuperAdminRole();
@@ -45,7 +45,7 @@ async function generateSuperAdminRole (): Promise<Role> {
 
   // Create Super Admin role
   const superAdminRole = roleRepository.create({
-    code: 'super-admin',
+    code: 'super-admin.owner',
     name: 'Super Admin Role',
     description: 'Account Owner / Super Admin',
     privileges, // Assign all privileges to this role

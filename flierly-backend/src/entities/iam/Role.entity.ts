@@ -21,7 +21,7 @@ export class Role {
   @Column({ unique: true })
   @IsNotEmpty({ message: 'Role code is required.' })
   @Length(5, 25, { message: 'Role code must be between 4 and 25 characters.' }) // Min 5, Max 25
-  @Matches(/^[a-z]+\-[a-z0-9]+$/, { message: 'Role code must match the pattern /^[a-z]+\-[a-z0-9]+$/.' }) // Regex pattern
+  @Matches(/^[a-z-]+\.[a-z-]+$/, { message: 'Role code must match the pattern /^[a-z-]+\.[a-z-]+$/.' }) // Regex pattern
   code: string;
 
   @Column()
