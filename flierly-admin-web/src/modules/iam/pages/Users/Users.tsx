@@ -4,10 +4,10 @@ import PageLoader from '@/components/PageLoader'
 import { CrudTableProps } from '@/features/CrudTable/CrudTable'
 import userCreateFormFields from '../../config/user/user-create-form-fields'
 import userUpdateFormFields from '../../config/user/user-update-form-fields'
-import userQueryFormFields from '../../config/user/user-query-form-fields'
 import createUserTableColumns from '../../config/user/create-user-table-columns'
 import useLocale from '@/features/Locale/hooks/useLocale'
 import { useAuth } from '@/modules/auth/hooks/useAuth'
+import createUserQueryFields from '../../config/user/create-user-queryfields'
 
 // Lazy load CrudTable
 const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<User>>> = React.lazy(() => import('@/features/CrudTable'))
@@ -48,7 +48,7 @@ const Users: React.FC = () => {
           }}
           createFormFields={userCreateFormFields}
           updateFormFields={userUpdateFormFields}
-          queryFormFields={userQueryFormFields}
+          queryFormFields={createUserQueryFields(translate)}
         />
       </Suspense>
     </CrudModule>

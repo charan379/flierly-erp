@@ -87,13 +87,13 @@ const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config, i
       prev.map((cond) =>
         cond.id === id
           ? {
-              ...cond,
-              field: selectedField?.field,
-              condition: undefined,
-              value: null, // Reset value when field changes
-              formConfig: undefined,
-              isValid: false, // Reset validity when field changes
-            }
+            ...cond,
+            field: selectedField?.field,
+            condition: undefined,
+            value: null, // Reset value when field changes
+            formConfig: undefined,
+            isValid: false, // Reset validity when field changes
+          }
           : cond,
       ),
     )
@@ -203,6 +203,7 @@ const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config, i
                   style={{ width: '100%', textAlign: 'left' }}
                   dropdownStyle={{ textAlign: 'left' }}
                   labelInValue
+                  showSearch
                 />
               </Col>
               <Col span={conditionCardWidth > 500 ? 8 : 24}>
@@ -220,6 +221,7 @@ const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config, i
                   }
                   style={{ width: '100%', textAlign: 'left' }}
                   dropdownStyle={{ textAlign: 'left' }}
+                  showSearch
                 />
               </Col>
               <Col span={conditionCardWidth > 500 ? 8 : 24}>

@@ -5,7 +5,7 @@ import PageLoader from '@/components/PageLoader'
 import { CrudTableProps } from '@/features/CrudTable/CrudTable'
 import roleCreateFormFields from '../../config/role/role-create-form-fields'
 import roleUpdateFormFields from '../../config/role/role-update-form-fields'
-import roleQueryFormFields from '../../config/role/role-query-form-fields'
+import createRoleQueryFields from '../../config/role/create-role-queryfields'
 import useLocale from '@/features/Locale/hooks/useLocale'
 import { useAuth } from '@/modules/auth/hooks/useAuth'
 
@@ -48,7 +48,7 @@ const Roles: React.FC = () => {
           }}
           createFormFields={roleCreateFormFields}
           updateFormFields={roleUpdateFormFields}
-          queryFormFields={roleQueryFormFields}
+          queryFormFields={createRoleQueryFields(translate)}
         />
       </Suspense>
     </CrudModule>

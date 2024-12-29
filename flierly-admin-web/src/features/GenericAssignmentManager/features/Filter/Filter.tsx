@@ -73,6 +73,7 @@ const Filter = <T extends Record<string, any>>({ filterConfig, onFilter, onReset
               label: c.label,
               value: c.name as string,
             }))}
+            showSearch
           />
         </div>
         {/* Dependent Field */}

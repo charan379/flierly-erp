@@ -6,6 +6,7 @@ const telugu_in = {
   accept_terms_conditions: 'నిబంధనలు మరియు షరతులను అంగీకరించండి',
   username: 'వినియోగదారు పేరు',
   privilege_with_enity_access_already_exisits: 'ఎంటిటీ యాక్సెస్‌తో ప్రత్యేక హక్కు ఇప్పటికే ఉంది',
+  between: 'మధ్య',
 }
 
 export default telugu_in

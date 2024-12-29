@@ -9,12 +9,12 @@ const createPrivilegeAMQueryFields = (translate: (value: string) => string): {
   formField: FormFieldConfig<Privilege>
 }[] => {
   return [
-    createNumericAMQueryField<Privilege>(translate('id'), 'id'),
-    createTextAMQueryField<Privilege>(translate('name'), 'name'),
-    createTextAMQueryField<Privilege>(translate('code'), 'code'),
-    createSelectRemoteOptionsAMQueryField<Privilege>(translate('entity'), 'entity', fetchEntityOptions),
-    createSelectAMQueryField<Privilege>(translate('access'), 'access', accessOptions),
-    createBooleanAMQueryField<Privilege>(translate('status'), 'isActive', [translate('active'), translate('inactive')]),
+    createNumericAMQueryField(translate('id'), 'id'),
+    createTextAMQueryField(translate('name'), 'name'),
+    createTextAMQueryField(translate('code'), 'code'),
+    createSelectRemoteOptionsAMQueryField(translate('entity'), 'entity', fetchEntityOptions),
+    createSelectAMQueryField(translate('access'), 'access', accessOptions),
+    createBooleanAMQueryField(translate('status'), 'isActive', [translate('active'), translate('inactive')]),
   ]
 }
 

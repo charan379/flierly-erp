@@ -9,6 +9,7 @@ const english_us = {
   this_is_a_hidden_field: 'This is a hidden field !',
   id: 'ID',
   city: 'City',
+  between: 'Between',
 }
 
 export default english_us
