@@ -7,7 +7,7 @@ import createPrivilegeAMQueryFields from '../privilege/create-privilege-am-query
 import createRoleTableColumns from '../role/create-role-table-columns'
 import UserPasswordUpdate from '../../features/UserPasswordUpdate'
 import { createBooleanColumn, createEmailColumn, createIdColumn, createMobileColumn, createTimeStampColumn } from '@/utils/create-table-column'
-import createRoleAMQueryFields from '../role/create-role-am-queryfileds'
+import createRoleAMQueryFields from '../role/create-role-am-queryfields'
 
 const createUserTableColumns = (translate: (value: string) => string, _hasPermission: (requiredPermissionRegex: RegExp) => boolean): ProColumns<User>[] => {
   return [
