@@ -28,7 +28,7 @@ const BinModeToggle: React.FC<BinModeToggleProps> = ({ actions, isActive, activa
       actions.reset?.() // Safely call reset if it exists
       actions.reload?.() // Safely call reload if it exists
     }
-  }, 10) // Adjust the debounce delay as needed
+  }, 0) // Adjust the debounce delay as needed
 
   useEffect(() => {
     debouncedReload() // Call the debounced function when isActive changes

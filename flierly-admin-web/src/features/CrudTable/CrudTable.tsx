@@ -178,7 +178,7 @@ const CrudTable = <T extends Record<string, any>>({
           title={translate('update_form')}
           render={!binMode && render.update}
           actions={action}
-          close={() => CrudModuleContextHandler.updateForm.close()}
+          close={CrudModuleContextHandler.updateForm.close}
         />,
         <Restore entity={entity} actions={action} rows={rows} key={'restore_selected'} render={binMode && render.restore} />,
         <Delete entity={entity} actions={action} rows={rows} key={'delete_selected'} render={!binMode && render.delete} />,
@@ -188,8 +188,8 @@ const CrudTable = <T extends Record<string, any>>({
           render={render.bin}
           actions={actionRef.current}
           isActive={CrudModuleContextHandler.binMode.isActive()}
-          activate={() => CrudModuleContextHandler.binMode.activate()}
-          deactivate={() => CrudModuleContextHandler.binMode.deactivate()}
+          activate={CrudModuleContextHandler.binMode.activate}
+          deactivate={CrudModuleContextHandler.binMode.deactivate}
         />
       ]}
       // table extra render components
@@ -204,7 +204,7 @@ const CrudTable = <T extends Record<string, any>>({
           record={CrudModuleContextHandler.rowMenu.getCurrentRecord()}
           open={CrudModuleContextHandler.rowMenu.isOpen()}
           position={CrudModuleContextHandler.rowMenu.getPosition()}
-          close={() => CrudModuleContextHandler.rowMenu.close()}
+          close={CrudModuleContextHandler.rowMenu.close}
         />
       )}
     />
