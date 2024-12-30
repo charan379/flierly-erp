@@ -1,5 +1,5 @@
 import { FormFieldConfig } from "@/components/FormField";
-import { createBooleanAMQueryField, createNumericAMQueryField, createTextAMQueryField } from "@/utils/create-assignment-manager-query-field";
+import { createBooleanAMQueryField, createNumericAMQueryField, createTextAMQueryField } from "@/utils/create-assignment-manager-queryfield";
 
 const createRoleAMQueryFields = (translate: (value: string) => string): {
     label: string

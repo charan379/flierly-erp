@@ -2,9 +2,9 @@ import ResizableDrawer from '@/components/ResizableDrawer'
 import AssociationManager from '@/features/GenericAssignmentManager'
 import { ProColumns } from '@ant-design/pro-components'
 import { Button } from 'antd'
-import createPrivilegeTableColumns from '../privilege/create-privilege-table-columns'
+import createPrivilegeTableColumns from '../privilege/create-privilege-tablecolumns'
 import createPrivilegeAMQueryFields from '../privilege/create-privilege-am-queryfields'
-import { createBooleanColumn, createCodeColumn, createDescriptionColumn, createIdColumn, createNameColumn, createTimeStampColumn } from '@/utils/create-table-column'
+import { createBooleanColumn, createCodeColumn, createDescriptionColumn, createIdColumn, createNameColumn, createTimeStampColumn } from '@/utils/create-tablecolumn'
 
 const createRoleTableColumns = (translate: (value: string) => string, hasPermission: (requiredPermissionRegex: RegExp) => boolean): ProColumns<Role>[] => {
   return [

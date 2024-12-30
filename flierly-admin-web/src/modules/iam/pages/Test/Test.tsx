@@ -1,6 +1,6 @@
 import AssociationManager from '@/features/GenericAssignmentManager/GenericAssignmentManager'
 import ResizableDrawer from '@/components/ResizableDrawer'
-import createPrivilegeTableColumns from '../../config/privilege/create-privilege-table-columns'
+import createPrivilegeTableColumns from '../../config/privilege/create-privilege-tablecolumns'
 import fetchEntityOptions from '@/features/SelectRemoteOptions/utils/fetch-entity-options'
 
 const ParentComponent = () => {

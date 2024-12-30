@@ -1,7 +1,7 @@
 import { FormFieldConfig } from '@/components/FormField'
 import { accessOptions } from '@/constants/select-options.constant'
 import fetchEntityOptions from '@/features/SelectRemoteOptions/utils/fetch-entity-options'
-import { createBooleanAMQueryField, createNumericAMQueryField, createSelectAMQueryField, createSelectRemoteOptionsAMQueryField, createTextAMQueryField } from '@/utils/create-assignment-manager-query-field'
+import { createBooleanAMQueryField, createNumericAMQueryField, createSelectAMQueryField, createSelectRemoteOptionsAMQueryField, createTextAMQueryField } from '@/utils/create-assignment-manager-queryfield'
 
 const createPrivilegeAMQueryFields = (translate: (value: string) => string): {
   label: string

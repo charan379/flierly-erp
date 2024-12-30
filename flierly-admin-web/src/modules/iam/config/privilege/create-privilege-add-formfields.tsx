@@ -4,7 +4,7 @@ import entityExistenceValidator from '@/utils/entity-existence.validator'
 import { accessOptions, statusFieldOptions } from '@/constants/select-options.constant'
 import regexConstants from '@/constants/regex.constants'
 
-const privilegeCreateFormFields: FormFieldConfig<Privilege>[] = [
+const createPrivilegeAddFormFields: FormFieldConfig<Privilege>[] = [
   // name
   {
     name: 'name',
@@ -98,4 +98,4 @@ const privilegeCreateFormFields: FormFieldConfig<Privilege>[] = [
   },
 ]
 
-export default privilegeCreateFormFields
+export default createPrivilegeAddFormFields
