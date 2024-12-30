@@ -40,9 +40,6 @@ const ProductSubcategories: React.FC = () => {
                             },
                         },
                     }}
-                    // createFormFields={(translate)}
-                    // updateFormFields={productSubCategoryUpdateFormFields}
-                    // queryFormFields={productSubCategoryQueryFormFields}
                 />
             </Suspense>
         </CrudModule>
