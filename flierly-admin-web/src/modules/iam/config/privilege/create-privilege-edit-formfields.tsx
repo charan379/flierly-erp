@@ -1,12 +1,14 @@
 import { FormFieldConfig } from '@/components/FormField'
 import { accessOptions } from '@/constants/select-options.constant'
-import { createBooleanFormField, createCodeFormField, createEntityFormField, createNameFormField } from '@/utils/create-dynamic-formfield'
+import { createBooleanFormField, createCodeFormField, createEntityFormField, createIdFormField, createNameFormField } from '@/utils/create-dynamic-formfield'
 
-const createPrivilegeAddFormFields = (): FormFieldConfig<Privilege>[] => {
+const createPrivilegeEditFormFields = (): FormFieldConfig<Privilege>[] => {
 
   return [
+    // id
+    createIdFormField(),
     // name
-    createNameFormField({ access: { permission: /^privilege\.manage$/, ifNoAccess: 'disable' }, entity: 'privilege' }),
+    createNameFormField({ access: { permission: /^privilege\.update$/, ifNoAccess: 'disable' }, entity: 'privilege', forUpdateForm: true }),
     // entity
     createEntityFormField({ access: { permission: /^privilege\.manage$/, ifNoAccess: 'disable' } }),
     // access
@@ -30,9 +32,8 @@ const createPrivilegeAddFormFields = (): FormFieldConfig<Privilege>[] => {
     // isActive 
     createBooleanFormField({ access: { permission: /^privilege\.manage$/, ifNoAccess: 'disable' }, label: 'active', name: 'isActive', optionLabels: ['active', 'inactive'] }),
     // code
-    createCodeFormField({ access: { permission: /^privilege\.manage$/, ifNoAccess: 'disable' }, entity: 'privilege' }),
-
-  ];
+    createCodeFormField({ access: { permission: /^privilege\.manage$/, ifNoAccess: 'disable' }, entity: 'privilege', forUpdateForm: true }),
+  ]
 }
 
-export default createPrivilegeAddFormFields
+export default createPrivilegeEditFormFields

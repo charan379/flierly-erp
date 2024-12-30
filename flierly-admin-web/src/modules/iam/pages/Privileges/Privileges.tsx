@@ -2,7 +2,7 @@ import CrudModule from '@/features/CrudModule'
 import React, { ComponentType, LazyExoticComponent, Suspense } from 'react'
 import createPrivilegeTableColumns from '../../config/privilege/create-privilege-tablecolumns'
 import createPrivilegeAddFormFields from '../../config/privilege/create-privilege-add-formfields'
-import privilegeUpdateFormFields from '../../config/privilege/privilege-update-form-fields'
+import createPrivilegeEditFormFields from '../../config/privilege/create-privilege-edit-formfields'
 import createPrivilegeQueryFields from '../../config/privilege/create-privilege-queryfields'
 import { CrudTableProps } from '@/features/CrudTable/CrudTable'
 import PageLoader from '@/components/PageLoader'
@@ -44,8 +44,8 @@ const Privileges: React.FC = () => {
               },
             },
           }}
-          createFormFields={createPrivilegeAddFormFields}
-          updateFormFields={privilegeUpdateFormFields}
+          createFormFields={createPrivilegeAddFormFields()}
+          updateFormFields={createPrivilegeEditFormFields()}
           queryFormFields={createPrivilegeQueryFields(translate)}
         />
       </Suspense>

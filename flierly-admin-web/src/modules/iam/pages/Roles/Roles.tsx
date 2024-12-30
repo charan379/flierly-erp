@@ -1,13 +1,13 @@
 import CrudModule from '@/features/CrudModule'
 import React, { ComponentType, LazyExoticComponent, Suspense } from 'react'
-import createRoleTableColumns from '../../config/role/create-role-table-columns'
+import createRoleTableColumns from '../../config/role/create-role-tablecolumns'
 import PageLoader from '@/components/PageLoader'
 import { CrudTableProps } from '@/features/CrudTable/CrudTable'
-import roleCreateFormFields from '../../config/role/role-create-form-fields'
-import roleUpdateFormFields from '../../config/role/role-update-form-fields'
+import createRoleAddFormFields from '../../config/role/create-role-add-formfields'
 import createRoleQueryFields from '../../config/role/create-role-queryfields'
 import useLocale from '@/features/Locale/hooks/useLocale'
 import { useAuth } from '@/modules/auth/hooks/useAuth'
+import createRoleEditFormFields from '../../config/role/create-role-edit-formfields'
 
 // Lazy load CrudTable
 const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<Role>>> = React.lazy(() => import('@/features/CrudTable'))
@@ -46,8 +46,8 @@ const Roles: React.FC = () => {
               },
             },
           }}
-          createFormFields={roleCreateFormFields}
-          updateFormFields={roleUpdateFormFields}
+          createFormFields={createRoleAddFormFields()}
+          updateFormFields={createRoleEditFormFields()}
           queryFormFields={createRoleQueryFields(translate)}
         />
       </Suspense>
