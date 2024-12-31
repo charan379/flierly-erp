@@ -127,7 +127,7 @@ export const createSelectRemoteOptionsQueryBuilderField = <T,>(params: { label: 
     }
 };
 
-export const createAssociatedEntityRowQueryBuilderFiled = <T, AE>(params: { name: string, label: string, associatedEntity: string, getLabel: (row: AE) => string, getValue: (row: AE) => any, getFilters: (value: string) => Partial<Record<keyof AE, any>> }): QueryFieldConfig<any> => {
+export const createAssociatedEntityRowQueryBuilderFiled = <T, AE>(params: { name: keyof T, label: string, associatedEntity: string, getLabel: (row: AE) => string, getValue: (row: AE) => any, getFilters: (value: string) => Partial<Record<keyof AE, any>> }): QueryFieldConfig<any> => {
 
     const { associatedEntity, getFilters, getLabel, getValue, label, name } = params;
 
@@ -139,7 +139,7 @@ export const createAssociatedEntityRowQueryBuilderFiled = <T, AE>(params: { name
     );
 
     return {
-        field: { label, namePath: name as keyof T },
+        field: { label, namePath: name },
         conditions: [
             {
                 condition: { label: translate('equals_to'), namePath: 'equalTo' },

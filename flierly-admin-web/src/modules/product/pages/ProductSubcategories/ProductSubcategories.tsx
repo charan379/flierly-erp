@@ -23,6 +23,12 @@ const ProductSubcategories: React.FC = () => {
                     tableKey="brand-table"
                     rowKey="id"
                     loadRelations={['category']}
+                    processDataForUpdateForm={(data) => {
+                        return {
+                            ...data,
+                            category: data?.category?.id,
+                        }
+                    }}
                     render={{
                         activate: true,
                         bin: true,

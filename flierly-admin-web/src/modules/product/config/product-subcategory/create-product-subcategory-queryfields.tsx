@@ -21,7 +21,7 @@ const createProductSubcategoryQueryFields = (translate: (value: string) => strin
         // category
         createAssociatedEntityRowQueryBuilderFiled<ProductSubCategory, ProductCategory>({
             label: translate("category"),
-            name: "category.id",
+            name: "category",
             associatedEntity: "product-category",
             getFilters: (value) => ({
                 name: { $ilike: `%${value}%` },

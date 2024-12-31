@@ -12,7 +12,7 @@ const createProductSubcategoryAddFormFields = (): FormFieldConfig<ProductSubCate
             },
             entity: 'product-sub-category',
         }),
-        // parent-categoty
+        // categoty
         createAssociatedEntityRowFormField<ProductSubCategory, ProductCategory>({
             access: { permission: /^product-sub-category\.create$/, ifNoAccess: 'disable' },
             associatedEntity: "product-category",

@@ -32,7 +32,7 @@ type ProductSubCategory = {
     isActive: boolean;
     code: string;
     description: string;
-    category: ProductCategory;
+    category: ProductCategory | number;
 } & EntityTimeStamps;
 
 type ProductComponent = {

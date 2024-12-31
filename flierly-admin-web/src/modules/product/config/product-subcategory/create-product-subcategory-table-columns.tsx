@@ -1,6 +1,5 @@
 import { createBooleanColumn, createCodeColumn, createDescriptionColumn, createIdColumn, createNameColumn, createTimeStampColumn } from '@/utils/create-tablecolumn'
 import { ProColumns } from '@ant-design/pro-components'
-import { Tag } from 'antd'
 
 const createProductSubCategoryTableColumns = (translate: (value: string) => string): ProColumns<ProductSubCategory>[] => {
   return [
@@ -16,7 +15,11 @@ const createProductSubCategoryTableColumns = (translate: (value: string) => stri
       width: 150,
       ellipsis: true,
       render: (_text, entity) => {
-        return entity?.category?.name ? entity.category?.name : <Tag color="green">null</Tag>
+        if (typeof entity.category === 'number') return entity.category;// if it's a number, it's a category id
+        if (typeof entity.category === 'object' && entity.category !== null && 'name' in entity.category) {
+          return entity.category.name;
+        }
+        return null;
       },
     },
     // code

@@ -27,6 +27,7 @@ export interface CrudTableProps<T = Record<string, any>> {
   updateFormFields?: FormFieldConfig<T>[]
   queryFormFields?: QueryFieldConfig<T>[]
   loadRelations?: Array<keyof T>
+  processDataForUpdateForm?: (data: Record<string, any>) => Record<string, any>
   render: {
     restore: boolean
     delete: boolean
@@ -61,6 +62,7 @@ const CrudTable = <T extends Record<string, any>>({
   createFormFields,
   updateFormFields,
   queryFormFields,
+  processDataForUpdateForm,
   render,
 }: CrudTableProps<T>) => {
   const tableHeight = useElementHeightByClassName('crud-data-table-flierly-1')
@@ -175,7 +177,7 @@ const CrudTable = <T extends Record<string, any>>({
         <Update<T>
           entity={entity}
           formFields={updateFormFields}
-          data={CrudModuleContextHandler.updateForm.getData()}
+          data={processDataForUpdateForm?.(CrudModuleContextHandler.updateForm.getData()) ?? CrudModuleContextHandler.updateForm.getData()}
           id={CrudModuleContextHandler.updateForm.getId()}
           isOpen={CrudModuleContextHandler.updateForm.isOpen()}
           title={translate('update_form')}
