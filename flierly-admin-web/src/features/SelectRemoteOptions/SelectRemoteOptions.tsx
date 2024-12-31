@@ -1,23 +1,15 @@
-import React, { useRef, useState, useEffect } from 'react'
-import debounce from '@/utils/debounce'
-import { Empty, Select, SelectProps, Spin } from 'antd'
+import React, { useRef, useState, useEffect, useCallback } from 'react';
+import debounce from '@/utils/debounce';
+import { Empty, Select, Spin } from 'antd';
 
 interface SelectRemoteOptionsProps {
   asyncOptionsFetcher: (
     value: string,
     signal?: AbortSignal
-  ) => Promise<Array<{ label: string | JSX.Element; value: string }>>
-  debounceTimeout?: number
-  width?: string | number
-  mode?: SelectProps['mode']
-  onChange?: SelectProps['onChange']
-  value?: any
-  [key: string]: any // Additional props passed to Select
-}
-
-interface Option {
-  label: string | JSX.Element
-  value: string
+  ) => Promise<Array<{ label: string | JSX.Element; value: string }>>;
+  debounceTimeout?: number;
+  width?: string | number;
+  [key: string]: any; // Additional props passed to Select
 }
 
 const SelectRemoteOptions: React.FC<SelectRemoteOptionsProps> = ({
@@ -26,43 +18,38 @@ const SelectRemoteOptions: React.FC<SelectRemoteOptionsProps> = ({
   width = '100%',
   ...props
 }) => {
-  const [fetching, setFetching] = useState(false)
-  const [options, setOptions] = useState<Option[]>([])
-  const abortControllerRef = useRef<AbortController | null>(null)
-  const fetchIdRef = useRef(0)
+  const [fetching, setFetching] = useState(false);
+  const [options, setOptions] = useState<{ label: string | JSX.Element; value: string }[]>([]);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
-  const loadOptions = async (value: string) => {
-    fetchIdRef.current += 1
-    const fetchId = fetchIdRef.current
+  const loadOptions = useCallback(async (value: string) => {
 
     if (abortControllerRef.current) {
-      abortControllerRef.current.abort()
+      abortControllerRef.current.abort();
     }
-    const controller = new AbortController()
-    abortControllerRef.current = controller
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
 
-    setFetching(true)
+    setFetching(true);
 
     try {
-      const newOptions = await asyncOptionsFetcher(value, controller.signal)
-      if (fetchId === fetchIdRef.current) {
-        setOptions(newOptions)
-      }
-    } catch (_error) {
-      // Handle errors (e.g., log them)
+      const newOptions = await asyncOptionsFetcher(value, controller.signal);
+      setOptions(newOptions);
+    } catch {
+      // Handle errors if necessary
     } finally {
-      setFetching(false)
+      setFetching(false);
     }
-  }
+  }, [asyncOptionsFetcher]);
 
-  const debounceFetcher = debounce(loadOptions, debounceTimeout)
+  const debounceFetcher = debounce(loadOptions, debounceTimeout);
 
   useEffect(() => {
-    loadOptions('') // Initial load
+    loadOptions(''); // Initial load
     return () => {
-      abortControllerRef.current?.abort()
-    }
-  }, [])
+      abortControllerRef.current?.abort();
+    };
+  }, [loadOptions]);
 
   return (
     <Select
@@ -73,12 +60,12 @@ const SelectRemoteOptions: React.FC<SelectRemoteOptionsProps> = ({
       options={fetching ? [] : options}
       notFoundContent={fetching ? <Spin size="small" /> : <Empty />}
       onSearch={debounceFetcher}
-      onFocus={() => loadOptions('')}
+      // onFocus={() => loadOptions('')}
       style={{ width }}
       dropdownStyle={{ textAlign: 'left' }}
       loading={fetching}
     />
-  )
-}
+  );
+};
 
-export default SelectRemoteOptions
+export default SelectRemoteOptions;

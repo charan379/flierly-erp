@@ -34,17 +34,17 @@ const Update = <T extends Record<string, any>>({
   const [formInstance] = Form.useForm<T>();
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(isOpen);
 
-  if (!render || !formFields || !actions) return null
-
   const onFinish = async (values: T): Promise<boolean | void> => {
     const response = await crudService.update<T>({ entity, data: values, id })
 
     if (response?.success) {
-      actions.reload()
+      actions?.reload()
       close()
       return true
     }
   }
+
+  if (!render || !formFields || !actions) return null
 
   return (
     <DrawerForm

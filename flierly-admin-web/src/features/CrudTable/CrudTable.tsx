@@ -90,6 +90,22 @@ const CrudTable = <T extends Record<string, any>>({
     CrudModuleContextHandler.rowMenu.open()
   }
 
+  // Centralized data validation and error handling
+  const getDataForUpdateForm = (data: Record<string, any>) => {
+    if (!data || Object.keys(data).length === 0) {
+      // Handle empty data
+      return {};
+    }
+
+    try {
+      // Call the custom processing logic if provided
+      return processDataForUpdateForm?.(data) ?? data;
+    } catch (error) {
+      console.error("Error processing data for update form:", error);
+      return data; // Fallback to original data
+    }
+  };
+
   return (
     <ProTable<T>
       // classname
@@ -177,7 +193,7 @@ const CrudTable = <T extends Record<string, any>>({
         <Update<T>
           entity={entity}
           formFields={updateFormFields}
-          data={processDataForUpdateForm?.(CrudModuleContextHandler.updateForm.getData()) ?? CrudModuleContextHandler.updateForm.getData()}
+          data={getDataForUpdateForm(CrudModuleContextHandler.updateForm.getData())}
           id={CrudModuleContextHandler.updateForm.getId()}
           isOpen={CrudModuleContextHandler.updateForm.isOpen()}
           title={translate('update_form')}
