@@ -4,8 +4,8 @@ import { CrudTableProps } from '@/features/CrudTable/CrudTable';
 import useLocale from '@/features/Locale/hooks/useLocale';
 import React, { ComponentType, LazyExoticComponent, Suspense } from 'react'
 import createBrandTableColumns from '../../config/brand/create-brand-table-columns';
-import brandCreateFormFields from '../../config/brand/brand-create-form-fields';
-import brandUpdateFormFields from '../../config/brand/brand-update-form-fields';
+import createBrandAddFormFields from '../../config/brand/create-brand-add-formfields';
+import createBrandEditFormFields from '../../config/brand/create-brand-edit-formfields';
 import createBrandQueryFields from '../../config/brand/create-brand-queryfields';
 
 const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<Brand>>> = React.lazy(() => import('@/features/CrudTable'))
@@ -43,8 +43,8 @@ const Brands: React.FC = () => {
                             },
                         },
                     }}
-                    createFormFields={brandCreateFormFields}
-                    updateFormFields={brandUpdateFormFields}
+                    createFormFields={createBrandAddFormFields()}
+                    updateFormFields={createBrandEditFormFields()}
                     queryFormFields={createBrandQueryFields(translate)}
                 />
             </Suspense>

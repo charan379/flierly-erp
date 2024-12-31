@@ -3,7 +3,10 @@ import CrudModule from '@/features/CrudModule';
 import { CrudTableProps } from '@/features/CrudTable/CrudTable';
 import useLocale from '@/features/Locale/hooks/useLocale';
 import React, { ComponentType, LazyExoticComponent, Suspense } from 'react'
-import createProductCategoryTableColumns from '../../config/product-category/create-product-category-table-columns';
+import createProductCategoryTableColumns from '../../config/product-category/create-product-category-tablecolumns';
+import createProductCategoryAddFormFields from '../../config/product-category/create-product-category-add-formfields';
+import createProductCategoryQueryFields from '../../config/product-category/create-product-category-queryfields';
+import createProductCategoryEditFormFields from '../../config/product-category/create-product-category-edit-formfields';
 
 const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<ProductCategory>>> = React.lazy(() => import('@/features/CrudTable'))
 
@@ -40,6 +43,9 @@ const ProductCategories: React.FC = () => {
                             },
                         },
                     }}
+                    createFormFields={createProductCategoryAddFormFields()}
+                    queryFormFields={createProductCategoryQueryFields(translate)}
+                    updateFormFields={createProductCategoryEditFormFields()}
                 />
             </Suspense>
         </CrudModule>
