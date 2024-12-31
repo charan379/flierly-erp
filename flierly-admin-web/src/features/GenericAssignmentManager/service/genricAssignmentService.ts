@@ -23,7 +23,7 @@ const genricAssignmentService = {
     filters = {},
     sort = {},
     signal,
-  }: EntitiesPageRequest) => {
+  }: EntitiesPageRequest<T>) => {
     const promise = api.post<ApiResponse<T>>(`/${entity}/page`, { filters, pagination, sort, loadRelations, binMode }, { signal })
     return handleApiResponse<T>({ promise })
   },
@@ -64,7 +64,7 @@ const genricAssignmentService = {
     addMultiple,
     removeMultiple,
     signal,
-  }: UpdateAssociatedEntityRecordsRequest) => {
+  }: UpdateAssociatedEntityRecordsRequest<T>) => {
     const promise = api.patch<ApiResponse<T>>(
       `/${owningEntity}/update-associated-records`,
       { owningEntityId, newArray, inverseField, addOne, addMultiple, removeOne, removeMultiple },

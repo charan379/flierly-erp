@@ -12,7 +12,6 @@ const createRoleAddFormFields = (): FormFieldConfig<Role>[] => {
     createDescriptionFormField({ access: { permission: /^role\.create$/, ifNoAccess: 'disable' } }),
     // isActive
     createBooleanFormField({ access: { permission: /^role\.create$/, ifNoAccess: 'disable' }, label: 'active', name: 'isActive', optionLabels: ['active', 'inactive'] }),
-
   ]
 }
 

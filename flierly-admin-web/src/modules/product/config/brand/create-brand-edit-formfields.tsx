@@ -5,7 +5,7 @@ const createBrandEditFormFields = (): FormFieldConfig<Brand>[] => {
 
   return [
     // id
-    createIdFormField(),
+    createIdFormField({}),
     // name
     createNameFormField({ access: { permission: /^brand\.update$/, ifNoAccess: 'disable' }, entity: 'brand', forUpdateForm: true }),
     // description

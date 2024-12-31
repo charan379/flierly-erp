@@ -4,7 +4,7 @@ import { createBooleanFormField, createCodeFormField, createDescriptionFormField
 const createRoleEditFormFields = (): FormFieldConfig<Role>[] => {
   return [
     // id
-    createIdFormField(),
+    createIdFormField({}),
     // name
     createNameFormField({ access: { permission: /^role\.update$/, ifNoAccess: 'disable' }, entity: 'role', forUpdateForm: true }),
     // code

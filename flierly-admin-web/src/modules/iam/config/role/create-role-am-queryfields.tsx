@@ -1,17 +1,25 @@
-import { FormFieldConfig } from "@/components/FormField";
-import { createBooleanAMQueryField, createNumericAMQueryField, createTextAMQueryField } from "@/utils/create-assignment-manager-queryfield";
+import { AMQueryFieldConfig, createBooleanAMQueryField, createNumericAMQueryField, createTextAMQueryField } from "@/utils/create-assignment-manager-queryfield";
 
-const createRoleAMQueryFields = (translate: (value: string) => string): {
-    label: string
-    name: keyof Role
-    formField: FormFieldConfig<Role>
-}[] => {
+const createRoleAMQueryFields = (translate: (value: string) => string): AMQueryFieldConfig<Role>[] => {
 
     return [
-        createNumericAMQueryField(translate('id'), 'id'),
-        createTextAMQueryField(translate('name'), 'name'),
-        createTextAMQueryField(translate('code'), 'code'),
-        createBooleanAMQueryField(translate('status'), 'isActive', [translate('active'), translate('inactive')]),
+        createNumericAMQueryField({
+            label: translate('id'),
+            name: 'id'
+        }),
+        createTextAMQueryField({
+            label: translate('name'),
+            name: 'name'
+        }),
+        createTextAMQueryField({
+            label: translate('code'),
+            name: 'code'
+        }),
+        createBooleanAMQueryField({
+            label: translate('status'),
+            name: 'isActive',
+            optionLabels: [translate('active'), translate('inactive')]
+        }),
     ]
 };
 

@@ -4,6 +4,9 @@ import { CrudTableProps } from '@/features/CrudTable/CrudTable';
 import useLocale from '@/features/Locale/hooks/useLocale';
 import React, { ComponentType, LazyExoticComponent, Suspense } from 'react'
 import createProductSubCategoryTableColumns from '../../config/product-subcategory/create-product-subcategory-table-columns';
+import createProductSubcategoryAddFormFields from '../../config/product-subcategory/create-product-category-add-formfields';
+import createProductSubcategoryEditFormFields from '../../config/product-subcategory/create-product-subcategory-edit-formfields';
+import createProductSubcategoryQueryFields from '../../config/product-subcategory/create-product-subcategory-queryfields';
 
 const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<ProductSubCategory>>> = React.lazy(() => import('@/features/CrudTable'))
 
@@ -19,6 +22,7 @@ const ProductSubcategories: React.FC = () => {
                     dataSource={[]}
                     tableKey="brand-table"
                     rowKey="id"
+                    loadRelations={['category']}
                     render={{
                         activate: true,
                         bin: true,
@@ -40,6 +44,9 @@ const ProductSubcategories: React.FC = () => {
                             },
                         },
                     }}
+                    createFormFields={createProductSubcategoryAddFormFields()}
+                    updateFormFields={createProductSubcategoryEditFormFields()}
+                    queryFormFields={createProductSubcategoryQueryFields(translate)}
                 />
             </Suspense>
         </CrudModule>

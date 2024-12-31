@@ -20,9 +20,9 @@ type CrudModuleContextType = {
 }
 
 // Props type for the page function
-type EntitiesPageRequest = {
+type EntitiesPageRequest<T> = {
   entity: string
-  loadRelations?: []
+  loadRelations?: Array<keyof T>,
   binMode?: boolean
   pagination?: {
     limit: number
@@ -66,7 +66,7 @@ type UpdateEntityRequest<T = Record<string, any>> = {
 }
 
 // Props type for the update function
-type UpdateAssociatedEntityRecordsRequest<T = Record<string, any>> = {
+type UpdateAssociatedEntityRecordsRequest<_T = Record<string, any>> = {
   owningEntity: string
   owningEntityId: number
   inverseField: string
@@ -79,9 +79,9 @@ type UpdateAssociatedEntityRecordsRequest<T = Record<string, any>> = {
 }
 
 // Props type for the exists function
-type EntityRecordExistsRequest = {
+type EntityRecordExistsRequest<T> = {
   entity: string
-  filters?: Record<string, any>
+  filters?: Partial<Record<keyof T, any>>
   signal?: AbortSignal
 }
 

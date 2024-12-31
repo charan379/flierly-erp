@@ -2,12 +2,14 @@ import { FormFieldConfig } from "@/components/FormField";
 import entityExistenceValidator from "./entity-existence.validator";
 import fetchEntityOptions from "@/features/SelectRemoteOptions/utils/fetch-entity-options";
 import regexConstants from "@/constants/regex.constants";
+import fetchEntityRowsAsOptions from "@/features/SelectRemoteOptions/utils/fetch-entity-rows-as-options";
 
 // id
-export const createIdFormField = <T extends Record<'id', any>>(): FormFieldConfig<T> => {
+export const createIdFormField = <T extends Record<'id', any>>(params: { name?: keyof T, label?: string, }): FormFieldConfig<T> => {
+    const { label, name } = params;
     return {
-        name: 'id',
-        label: 'id',
+        name: name ?? 'id',
+        label: label ?? 'id',
         hidden: false,
         disabled: true,
         hasFeedback: false,
@@ -19,11 +21,11 @@ export const createIdFormField = <T extends Record<'id', any>>(): FormFieldConfi
 };
 
 // name
-export const createNameFormField = <T extends Record<'name', any>>(args: { access?: FormFieldConfig['access'], entity: string, forUpdateForm?: boolean }): FormFieldConfig<T> => {
-    const { access, entity, forUpdateForm } = args;
+export const createNameFormField = <T extends Record<'name', any>>(params: { name?: keyof T, label?: string, access?: FormFieldConfig['access'], entity: string, forUpdateForm?: boolean }): FormFieldConfig<T> => {
+    const { access, entity, forUpdateForm, label, name } = params;
     return {
-        name: 'name',
-        label: 'name',
+        name: name ?? 'name',
+        label: label ?? 'name',
         hasFeedback: true,
         allowClear: false,
         access,
@@ -50,12 +52,12 @@ export const createNameFormField = <T extends Record<'name', any>>(args: { acces
 };
 
 // entity
-export const createEntityFormField = <T extends Record<"entity", any>>(args: { access?: FormFieldConfig['access'] }): FormFieldConfig<T> => {
+export const createEntityFormField = <T extends Record<"entity", any>>(params: { name?: keyof T, label?: string, access?: FormFieldConfig['access'] }): FormFieldConfig<T> => {
 
-    const { access } = args;
+    const { access, label, name } = params;
     return {
-        name: 'entity',
-        label: 'entity',
+        name: name ?? 'entity',
+        label: label ?? 'entity',
         allowClear: false,
         hasFeedback: false,
         access,
@@ -68,9 +70,33 @@ export const createEntityFormField = <T extends Record<"entity", any>>(args: { a
     };
 };
 
+// associated entity row
+export const createAssociatedEntityRowFormField = <T, AE>(params: { access?: FormFieldConfig['access'], name: keyof T, label: string, associatedEntity: string, required?: boolean, getLabel: (row: AE) => string, getValue: (row: AE) => any, getFilters: (value: string) => Partial<Record<keyof AE, any>> }): FormFieldConfig<T> => {
+
+    const { access, associatedEntity, label, name, required, getLabel, getFilters, getValue } = params;
+    return {
+        name,
+        label,
+        allowClear: false,
+        hasFeedback: false,
+        access,
+        rules: [{ required }],
+        input: {
+            type: 'SelectRemoteOptions',
+            asyncOptionsFetcher: (value) => fetchEntityRowsAsOptions<AE>(
+                associatedEntity,
+                getFilters(value),
+                10,
+                (rows) => rows.map((row) => ({ label: getLabel(row), value: getValue(row) }))
+            ),
+            debounceTimeout: 300,
+        },
+    };
+}
+
 // boolean field
-export const createBooleanFormField = <T extends Record<string, any>>(args: { access?: FormFieldConfig['access'], optionLabels: Array<string>, name: keyof T, label: string }): FormFieldConfig<T> => {
-    const { access, optionLabels, label, name } = args;
+export const createBooleanFormField = <T extends Record<string, any>>(params: { access?: FormFieldConfig['access'], optionLabels: Array<string>, name: keyof T, label: string }): FormFieldConfig<T> => {
+    const { access, optionLabels, label, name } = params;
     return {
         name,
         label,
@@ -94,13 +120,13 @@ export const createBooleanFormField = <T extends Record<string, any>>(args: { ac
 };
 
 // code
-export const createCodeFormField = <T extends Record<'code', any>>(args: { access?: FormFieldConfig['access'], entity: string, forUpdateForm?: boolean }): FormFieldConfig<T> => {
+export const createCodeFormField = <T extends Record<'code', any>>(params: { name?: keyof T, label?: string, access?: FormFieldConfig['access'], entity: string, forUpdateForm?: boolean }): FormFieldConfig<T> => {
 
-    const { access, entity, forUpdateForm } = args;
+    const { access, entity, forUpdateForm, label, name } = params;
 
     return {
-        name: 'code',
-        label: 'code',
+        name: name ?? 'code',
+        label: label ?? 'code',
         hasFeedback: true,
         allowClear: false,
         access,
@@ -128,13 +154,13 @@ export const createCodeFormField = <T extends Record<'code', any>>(args: { acces
 };
 
 // description
-export const createDescriptionFormField = <T extends Record<'description', any>>(args: { access?: FormFieldConfig['access'] }): FormFieldConfig<T> => {
+export const createDescriptionFormField = <T extends Record<'description', any>>(params: { name?: keyof T, label?: string, access?: FormFieldConfig['access'] }): FormFieldConfig<T> => {
 
-    const { access } = args;
+    const { access, label, name } = params;
 
     return {
-        name: 'description',
-        label: 'description',
+        name: name ?? 'description',
+        label: label ?? 'description',
         hasFeedback: true,
         allowClear: true,
         access,
@@ -145,13 +171,13 @@ export const createDescriptionFormField = <T extends Record<'description', any>>
     };
 };
 
-export const createEmailFormField = <T extends Record<'email', any>>(args: { access?: FormFieldConfig['access'], entity: string, forUpdateForm?: boolean }): FormFieldConfig<T> => {
+export const createEmailFormField = <T extends Record<'email', any>>(params: { name?: keyof T, label?: string, access?: FormFieldConfig['access'], entity: string, forUpdateForm?: boolean }): FormFieldConfig<T> => {
 
-    const { access, entity, forUpdateForm } = args;
+    const { access, entity, forUpdateForm, label, name } = params;
 
     return {
-        name: 'email',
-        label: 'email',
+        name: name ?? 'email',
+        label: label ?? 'email',
         hasFeedback: true,
         allowClear: false,
         access,
@@ -177,13 +203,13 @@ export const createEmailFormField = <T extends Record<'email', any>>(args: { acc
     };
 };
 
-export const createMobileFormField = <T extends Record<'mobile', any>>(args: { access?: FormFieldConfig['access'], entity: string, forUpdateForm?: boolean }): FormFieldConfig<T> => {
+export const createMobileFormField = <T extends Record<'mobile', any>>(params: { name?: keyof T, label?: string, access?: FormFieldConfig['access'], entity: string, forUpdateForm?: boolean }): FormFieldConfig<T> => {
 
-    const { access, entity, forUpdateForm } = args;
+    const { access, entity, forUpdateForm, label, name } = params;
 
     return {
-        name: 'mobile',
-        label: 'mobile',
+        name: name ?? 'mobile',
+        label: label ?? 'mobile',
         hasFeedback: true,
         allowClear: false,
         access,

@@ -15,9 +15,9 @@ const crudService = {
   /**
    * Fetch paginated data
    */
-  page: async <T>({ entity, binMode = false, pagination = { limit: 10, page: 1 }, filters = {}, sort = {}, signal }: EntitiesPageRequest) => {
-    const promise = api.post<ApiResponse<T>>(`/${entity}/page`, { filters, pagination, sort, binMode }, { signal })
-    return handleApiResponse<T>({ promise })
+  page: async <T>({ entity, binMode = false, pagination = { limit: 10, page: 1 }, loadRelations, filters = {}, sort = {}, signal }: EntitiesPageRequest<T>) => {
+    const promise = api.post<ApiResponse<PageData<T>>>(`/${entity}/page`, { filters, pagination, loadRelations, sort, binMode }, { signal })
+    return handleApiResponse<PageData<T>>({ promise })
   },
 
   /**
@@ -39,7 +39,7 @@ const crudService = {
   /**
    * Check if an entity exists
    */
-  isExists: async ({ entity, filters = {}, signal }: EntityRecordExistsRequest) => {
+  isExists: async <T>({ entity, filters = {}, signal }: EntityRecordExistsRequest<T>) => {
     const promise = api.post(`/${entity}/is-exists`, { filters, withDeleted: true }, { signal })
     return handleApiResponse({ promise })
   },

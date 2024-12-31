@@ -26,6 +26,7 @@ export interface CrudTableProps<T = Record<string, any>> {
   createFormFields?: FormFieldConfig<T>[]
   updateFormFields?: FormFieldConfig<T>[]
   queryFormFields?: QueryFieldConfig<T>[]
+  loadRelations?: Array<keyof T>
   render: {
     restore: boolean
     delete: boolean
@@ -56,6 +57,7 @@ const CrudTable = <T extends Record<string, any>>({
   rowTitleKey = 'name' as keyof T,
   columns,
   dataSource = [],
+  loadRelations,
   createFormFields,
   updateFormFields,
   queryFormFields,
@@ -141,10 +143,11 @@ const CrudTable = <T extends Record<string, any>>({
       dataSource={data}
       // data request
       request={async (params, sort) => {
-        const { result, success } = await crudService.page<PageData<T>>({
+        const { result, success } = await crudService.page<T>({
           entity,
           filters: CrudModuleContextHandler.filters.get(),
           pagination: { limit: params?.pageSize ?? 10, page: params?.current ?? 1 },
+          loadRelations,
           sort: sort,
           binMode: binMode,
         })

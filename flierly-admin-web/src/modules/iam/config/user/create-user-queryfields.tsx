@@ -1,19 +1,37 @@
 import { QueryFieldConfig } from "@/features/QueryBuilder/QueryBuilder";
-import { createDateQueryBuilderField, createNumberQueryBuilderField, createTextQueryBuilderField } from "@/utils/create-query-builder-field";
+import { createBooleanQueryBuilderField, createDateQueryBuilderField, createNumberQueryBuilderField, createTextQueryBuilderField } from "@/utils/create-query-builder-field";
 
 const createUserQueryFields = (translate: (value: string) => string): QueryFieldConfig<User>[] => [
   // id
-  createNumberQueryBuilderField(translate('id'), 'id'),
-  // name
-  createTextQueryBuilderField(translate('username'), 'username'),
+  createNumberQueryBuilderField({
+    label: translate('id'),
+    name: 'id'
+  }),  // name
+  createTextQueryBuilderField({
+    label: translate('username'),
+    name: 'username'
+  }),
   // isActive
-  createTextQueryBuilderField(translate('status'), 'isActive'),
+  createBooleanQueryBuilderField({
+    label: translate('status'),
+    name: 'isActive',
+    optionLabels: [translate('active'), translate('inactive')]
+  }),
   // createdAt
-  createDateQueryBuilderField(translate('created_at'), 'createdAt'),
+  createDateQueryBuilderField({
+    label: translate('created_at'),
+    name: 'createdAt'
+  }),
   // updatedAt
-  createDateQueryBuilderField(translate('updated_at'), 'updatedAt'),
+  createDateQueryBuilderField({
+    label: translate('updated_at'),
+    name: 'updatedAt'
+  }),
   // deletedAt
-  createDateQueryBuilderField(translate('deleted_at'), 'deletedAt'),
+  createDateQueryBuilderField({
+    label: translate('deleted_at'),
+    name: 'deletedAt'
+  }),
 ];
 
 export default createUserQueryFields;

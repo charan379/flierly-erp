@@ -7,10 +7,10 @@ const createProductCategoryAddFormFields = (): FormFieldConfig<ProductCategory>[
         // name
         createNameFormField({
             access: { permission: /^product-category\.create$/, ifNoAccess: 'disable' },
-            entity: 'brand',
+            entity: 'product-category',
         }),
         // code
-        createCodeFormField({ access: { permission: /^product-category\.create$/, ifNoAccess: 'disable' }, entity: 'role', }),
+        createCodeFormField({ access: { permission: /^product-category\.create$/, ifNoAccess: 'disable' }, entity: 'product-category', }),
         // description
         createDescriptionFormField({ access: { permission: /^product-category\.create$/, ifNoAccess: 'disable' } }),
         // isActive

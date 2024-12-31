@@ -9,7 +9,7 @@ import { ObjectLiteral, SelectQueryBuilder } from 'typeorm';
  * @param {any} condition - The condition value.
  * @param {'andWhere' | 'orWhere'} whereMethod - The method to use for applying the condition.
  */
-function qbWhereCondition<T extends ObjectLiteral> (qb: SelectQueryBuilder<T>, alias: string, field: string, condition: any, whereMethod: 'andWhere' | 'orWhere' = 'andWhere') {
+function qbWhereCondition<T extends ObjectLiteral> (qb: SelectQueryBuilder<T>, alias: string, field: string, condition: any, whereMethod: 'andWhere' | 'orWhere' = 'andWhere'): void {
   if (typeof condition === 'object' && !Array.isArray(condition)) {
     // Handle special operators like $in, $gte, $lte, $between, etc.
     Object.keys(condition).forEach((operator) => {
@@ -64,7 +64,7 @@ function qbWhereCondition<T extends ObjectLiteral> (qb: SelectQueryBuilder<T>, a
           qb[whereMethod](`${alias}.${field} NOT LIKE :${field}`, { [field]: condition[operator] });
           break;
         case '$ilike': // Handle ILIKE (case-insensitive LIKE) condition
-          qb[whereMethod](`${alias}.${field} ILIKE :${field}`, { [field]: condition[operator] });
+          qb[whereMethod](`${alias}.${field} ilike :${field}`, { [field]: condition[operator] });
           break;
         case '$notIlike': // Handle NOT ILIKE (case-insensitive NOT LIKE) condition
           qb[whereMethod](`${alias}.${field} NOT ILIKE :${field}`, { [field]: condition[operator] });

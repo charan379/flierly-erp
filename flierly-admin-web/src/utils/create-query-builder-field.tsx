@@ -1,7 +1,9 @@
 import { translate } from "@/features/Locale/service/locale-state.service";
 import { QueryFieldConfig } from "@/features/QueryBuilder/QueryBuilder"
+import fetchEntityRowsAsOptions from "@/features/SelectRemoteOptions/utils/fetch-entity-rows-as-options";
 
-export const createTextQueryBuilderField = <T,>(label: string, name: keyof T): QueryFieldConfig<T> => {
+export const createTextQueryBuilderField = <T,>(params: { label: string, name: keyof T }): QueryFieldConfig<T> => {
+    const { label, name } = params;
     return {
         field: { label, namePath: name },
         conditions: [
@@ -37,7 +39,8 @@ export const createTextQueryBuilderField = <T,>(label: string, name: keyof T): Q
     }
 };
 
-export const createNumberQueryBuilderField = <T,>(label: string, name: keyof T): QueryFieldConfig<T> => {
+export const createNumberQueryBuilderField = <T,>(params: { label: string, name: keyof T }): QueryFieldConfig<T> => {
+    const { label, name } = params;
     return {
         field: { label, namePath: name },
         conditions: [
@@ -61,7 +64,8 @@ export const createNumberQueryBuilderField = <T,>(label: string, name: keyof T):
     }
 };
 
-export const createSelectQueryBuilderField = <T,>(label: string, name: keyof T, options: { label: string, value: string }[]): QueryFieldConfig<T> => {
+export const createSelectQueryBuilderField = <T,>(params: { label: string, name: keyof T, options: { label: string, value: string }[] }): QueryFieldConfig<T> => {
+    const { label, name, options } = params;
     return {
         field: { label, namePath: name },
         conditions: [
@@ -85,7 +89,8 @@ export const createSelectQueryBuilderField = <T,>(label: string, name: keyof T, 
     }
 };
 
-export const createBooleanQueryBuilderField = <T,>(label: string, name: keyof T, optionLabels: Array<string>): QueryFieldConfig<T> => {
+export const createBooleanQueryBuilderField = <T,>(params: { label: string, name: keyof T, optionLabels: Array<string> }): QueryFieldConfig<T> => {
+    const { label, name, optionLabels } = params;
     return {
         field: { label, namePath: name },
         conditions: [
@@ -97,7 +102,8 @@ export const createBooleanQueryBuilderField = <T,>(label: string, name: keyof T,
     }
 };
 
-export const createSelectRemoteOptionsQueryBuilderField = <T,>(label: string, name: keyof T, asyncOptionsFetcher: (value: string) => Promise<{ label: string, value: string }[]>): QueryFieldConfig<T> => {
+export const createSelectRemoteOptionsQueryBuilderField = <T,>(params: { label: string, name: keyof T, asyncOptionsFetcher: (value: string) => Promise<{ label: string, value: string }[]> }): QueryFieldConfig<T> => {
+    const { asyncOptionsFetcher, label, name } = params;
     return {
         field: { label, namePath: name },
         conditions: [
@@ -121,7 +127,41 @@ export const createSelectRemoteOptionsQueryBuilderField = <T,>(label: string, na
     }
 };
 
-export const createDateQueryBuilderField = <T,>(label: string, name: keyof T): QueryFieldConfig<T> => {
+export const createAssociatedEntityRowQueryBuilderFiled = <T, AE>(params: { name: string, label: string, associatedEntity: string, getLabel: (row: AE) => string, getValue: (row: AE) => any, getFilters: (value: string) => Partial<Record<keyof AE, any>> }): QueryFieldConfig<any> => {
+
+    const { associatedEntity, getFilters, getLabel, getValue, label, name } = params;
+
+    const asyncOptionsFetcher = (value: string) => fetchEntityRowsAsOptions<AE>(
+        associatedEntity,
+        getFilters(value),
+        10,
+        (rows) => rows.map((row) => ({ label: getLabel(row), value: getValue(row) }))
+    );
+
+    return {
+        field: { label, namePath: name as keyof T },
+        conditions: [
+            {
+                condition: { label: translate('equals_to'), namePath: 'equalTo' },
+                formField: { input: { type: 'SelectRemoteOptions', asyncOptionsFetcher, debounceTimeout: 300 } },
+            },
+            {
+                condition: { label: translate('not_equals_to'), namePath: 'notEqualTo' },
+                formField: { input: { type: 'SelectRemoteOptions', asyncOptionsFetcher, debounceTimeout: 300 } },
+            },
+            {
+                condition: { label: translate('in'), namePath: 'inArray' },
+                formField: { input: { type: 'SelectRemoteOptions', asyncOptionsFetcher, debounceTimeout: 300, mode: 'multiple' }, rules: [{ type: 'array' }] },
+            },
+            {
+                condition: { label: translate('not_in'), namePath: 'notInArray' },
+                formField: { input: { type: 'SelectRemoteOptions', asyncOptionsFetcher, debounceTimeout: 300, mode: 'multiple' }, rules: [{ type: 'array' }] },
+            },
+        ],
+    }
+}
+export const createDateQueryBuilderField = <T,>(params: { label: string, name: keyof T }): QueryFieldConfig<T> => {
+    const { label, name } = params;
     return {
         field: { label, namePath: name },
         conditions: [
@@ -139,4 +179,5 @@ export const createDateQueryBuilderField = <T,>(label: string, name: keyof T): Q
             },
         ],
     }
-}
+};
+

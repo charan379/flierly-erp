@@ -5,7 +5,7 @@ import { createBooleanFormField, createEmailFormField, createIdFormField, create
 
 const createUserEditFormFields = (): FormFieldConfig<User>[] => [
   // id
-  createIdFormField(),
+  createIdFormField({}),
   // name
   {
     name: 'username',

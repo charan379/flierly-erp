@@ -6,7 +6,7 @@ const createPrivilegeEditFormFields = (): FormFieldConfig<Privilege>[] => {
 
   return [
     // id
-    createIdFormField(),
+    createIdFormField({}),
     // name
     createNameFormField({ access: { permission: /^privilege\.update$/, ifNoAccess: 'disable' }, entity: 'privilege', forUpdateForm: true }),
     // entity

@@ -1,8 +1,7 @@
 import { QueryFieldConfig } from "@/features/QueryBuilder/QueryBuilder"
-import { createBooleanQueryBuilderField, createDateQueryBuilderField, createNumberQueryBuilderField, createTextQueryBuilderField } from "@/utils/create-query-builder-field"
+import { createAssociatedEntityRowQueryBuilderFiled, createBooleanQueryBuilderField, createDateQueryBuilderField, createNumberQueryBuilderField, createTextQueryBuilderField } from "@/utils/create-query-builder-field"
 
-
-const createProductCategoryQueryFields = (translate: (value: string) => string): QueryFieldConfig<ProductCategory>[] => {
+const createProductSubcategoryQueryFields = (translate: (value: string) => string): QueryFieldConfig<ProductSubCategory>[] => {
     return [
         // id
         createNumberQueryBuilderField({
@@ -18,6 +17,17 @@ const createProductCategoryQueryFields = (translate: (value: string) => string):
         createTextQueryBuilderField({
             label: translate('code'),
             name: 'code'
+        }),
+        // category
+        createAssociatedEntityRowQueryBuilderFiled<ProductSubCategory, ProductCategory>({
+            label: translate("category"),
+            name: "category.id",
+            associatedEntity: "product-category",
+            getFilters: (value) => ({
+                name: { $ilike: `%${value}%` },
+            }),
+            getLabel: (pc) => pc.name,
+            getValue: (pc) => pc.id,
         }),
         // isActive
         createBooleanQueryBuilderField({
@@ -43,4 +53,4 @@ const createProductCategoryQueryFields = (translate: (value: string) => string):
     ]
 };
 
-export default createProductCategoryQueryFields;
+export default createProductSubcategoryQueryFields;

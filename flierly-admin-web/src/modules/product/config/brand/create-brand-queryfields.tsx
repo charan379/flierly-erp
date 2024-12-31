@@ -4,17 +4,36 @@ import { createBooleanQueryBuilderField, createDateQueryBuilderField, createNumb
 const createBrandQueryFields = (translate: (value: string) => string): QueryFieldConfig<Brand>[] => {
     return [
         // id
-        createNumberQueryBuilderField(translate('id'), 'id'),
+        createNumberQueryBuilderField({
+            label: translate('id'),
+            name: 'id'
+        }),
         // name
-        createTextQueryBuilderField(translate('name'), 'name'),
+        createTextQueryBuilderField({
+            label: translate('name'),
+            name: 'name'
+        }),
         // isActive
-        createBooleanQueryBuilderField(translate('status'), 'isActive', [translate('active'), translate('inactive')]),
+        createBooleanQueryBuilderField({
+            label: translate('status'),
+            name: 'isActive',
+            optionLabels: [translate('active'), translate('inactive')]
+        }),
         // createdAt
-        createDateQueryBuilderField(translate('created_at'), 'createdAt'),
+        createDateQueryBuilderField({
+            label: translate('created_at'),
+            name: 'createdAt'
+        }),
         // updatedAt
-        createDateQueryBuilderField(translate('updated_at'), 'updatedAt'),
+        createDateQueryBuilderField({
+            label: translate('updated_at'),
+            name: 'updatedAt'
+        }),
         // deletedAt
-        createDateQueryBuilderField(translate('deleted_at'), 'deletedAt'),
+        createDateQueryBuilderField({
+            label: translate('deleted_at'),
+            name: 'deletedAt'
+        }),
     ]
 }
 

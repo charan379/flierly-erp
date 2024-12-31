@@ -2,11 +2,14 @@ import { FormFieldConfig } from "@/components/FormField";
 import { Rule } from "antd/es/form";
 import queryTransformers from "./query-transformers";
 
-export const createNumericAMQueryField = <T,>(label: string, name: keyof T, rules?: Rule[]): {
+export interface AMQueryFieldConfig<T> {
     label: string
     name: keyof T
     formField: FormFieldConfig<T>
-} => {
+};
+
+export const createNumericAMQueryField = <T,>(params: { label: string, name: keyof T, rules?: Rule[] }): AMQueryFieldConfig<T> => {
+    const { label, name, rules } = params
     return {
         label,
         name,
@@ -17,11 +20,8 @@ export const createNumericAMQueryField = <T,>(label: string, name: keyof T, rule
     };
 };
 
-export const createTextAMQueryField = <T,>(label: string, name: keyof T, rules?: Rule[]): {
-    label: string
-    name: keyof T
-    formField: FormFieldConfig<T>
-} => {
+export const createTextAMQueryField = <T,>(params: { label: string, name: keyof T, rules?: Rule[] }): AMQueryFieldConfig<T> => {
+    const { label, name, rules } = params;
     return {
         label,
         name,
@@ -33,11 +33,8 @@ export const createTextAMQueryField = <T,>(label: string, name: keyof T, rules?:
     };
 };
 
-export const createBooleanAMQueryField = <T,>(label: string, name: keyof T, optionLabels: Array<string>, rules?: Rule[]): {
-    label: string
-    name: keyof T
-    formField: FormFieldConfig<T>
-} => {
+export const createBooleanAMQueryField = <T,>(params: { label: string, name: keyof T, optionLabels: Array<string>, rules?: Rule[] }): AMQueryFieldConfig<T> => {
+    const { label, name, optionLabels, rules } = params;
     return {
         label,
         name,
@@ -48,11 +45,8 @@ export const createBooleanAMQueryField = <T,>(label: string, name: keyof T, opti
     };
 };
 
-export const createSelectAMQueryField = <T,>(label: string, name: keyof T, options: Array<{ label: string, value: string }>, rules?: Rule[]): {
-    label: string
-    name: keyof T
-    formField: FormFieldConfig<T>
-} => {
+export const createSelectAMQueryField = <T,>(params: { label: string, name: keyof T, options: Array<{ label: string, value: string }>, rules?: Rule[] }): AMQueryFieldConfig<T> => {
+    const { label, name, options, rules } = params;
     return {
         label,
         name,
@@ -63,11 +57,8 @@ export const createSelectAMQueryField = <T,>(label: string, name: keyof T, optio
     };
 };
 
-export const createSelectRemoteOptionsAMQueryField = <T,>(label: string, name: keyof T, asyncOptionsFetcher: (value: string) => Promise<Array<{ label: string, value: string }>>, isMultiSelect?: boolean, rules?: Rule[]): {
-    label: string
-    name: keyof T
-    formField: FormFieldConfig<T>
-} => {
+export const createSelectRemoteOptionsAMQueryField = <T,>(params: { label: string, name: keyof T, asyncOptionsFetcher: (value: string) => Promise<Array<{ label: string, value: string }>>, isMultiSelect?: boolean, rules?: Rule[] }): AMQueryFieldConfig<T> => {
+    const { asyncOptionsFetcher, label, name, isMultiSelect, rules } = params;
     return {
         label,
         name,

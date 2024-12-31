@@ -1,20 +1,36 @@
-import { FormFieldConfig } from '@/components/FormField'
 import { accessOptions } from '@/constants/select-options.constant'
 import fetchEntityOptions from '@/features/SelectRemoteOptions/utils/fetch-entity-options'
-import { createBooleanAMQueryField, createNumericAMQueryField, createSelectAMQueryField, createSelectRemoteOptionsAMQueryField, createTextAMQueryField } from '@/utils/create-assignment-manager-queryfield'
+import { AMQueryFieldConfig, createBooleanAMQueryField, createNumericAMQueryField, createSelectAMQueryField, createSelectRemoteOptionsAMQueryField, createTextAMQueryField } from '@/utils/create-assignment-manager-queryfield'
 
-const createPrivilegeAMQueryFields = (translate: (value: string) => string): {
-  label: string
-  name: keyof Privilege
-  formField: FormFieldConfig<Privilege>
-}[] => {
+const createPrivilegeAMQueryFields = (translate: (value: string) => string): AMQueryFieldConfig<Privilege>[] => {
   return [
-    createNumericAMQueryField(translate('id'), 'id'),
-    createTextAMQueryField(translate('name'), 'name'),
-    createTextAMQueryField(translate('code'), 'code'),
-    createSelectRemoteOptionsAMQueryField(translate('entity'), 'entity', fetchEntityOptions),
-    createSelectAMQueryField(translate('access'), 'access', accessOptions),
-    createBooleanAMQueryField(translate('status'), 'isActive', [translate('active'), translate('inactive')]),
+    createNumericAMQueryField({
+      label: translate('id'),
+      name: 'id'
+    }),
+    createTextAMQueryField({
+      label: translate('name'),
+      name: 'name'
+    }),
+    createTextAMQueryField({
+      label: translate('code'),
+      name: 'code'
+    }),
+    createSelectRemoteOptionsAMQueryField({
+      label: translate('entity'),
+      name: 'entity',
+      asyncOptionsFetcher: fetchEntityOptions
+    }),
+    createSelectAMQueryField({
+      label: translate('access'),
+      name: 'access',
+      options: accessOptions
+    }),
+    createBooleanAMQueryField({
+      label: translate('status'),
+      name: 'isActive',
+      optionLabels: [translate('active'), translate('inactive')]
+    }),
   ]
 }
 

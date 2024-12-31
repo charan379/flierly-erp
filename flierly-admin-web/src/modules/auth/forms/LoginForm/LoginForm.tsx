@@ -16,7 +16,7 @@ interface LoginFormProps {
 
 const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false, isForPopup = false, onLoginSuccess }) => {
   const { translate, langDirection } = useLocale()
-  const { loading, login, isLoggedIn, tokenExpiresAt } = useAuth()
+  const { loading, login, isLoggedIn, tokenExpiresAt, } = useAuth()
   const navigate = useNavigate()
 
   const callbackParam = new URLSearchParams(window.location.search).get('callback')
@@ -33,10 +33,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false, isForPop
       navigate(targetPath, { replace: true })
     }
 
-    if (onLoginSuccess && isForPopup && loading === LoadingTypes.SUCCEEDED && isLoggedIn && !isTokenExpired) {
-      onLoginSuccess();
-    }
-
     return () => { }
   }, [isLoggedIn, loading, navigate, redirectOnLogin, isForPopup, callback, isTokenExpired, onLoginSuccess])
 
@@ -50,7 +46,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false, isForPop
         size="middle"
         initialValues={{ remember: true }}
         onFinish={(values) => {
-          login(values)
+          login(values).then(() => onLoginSuccess?.()
+          )
         }}
       >
         <div style={{ direction: langDirection }}>

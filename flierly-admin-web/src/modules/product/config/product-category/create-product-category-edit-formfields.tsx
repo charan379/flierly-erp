@@ -7,7 +7,7 @@ const createProductCategoryEditFormFields = (): FormFieldConfig<ProductCategory>
         // name
         createNameFormField({
             access: { permission: /^product-category\.update$/, ifNoAccess: 'disable' },
-            entity: 'brand',
+            entity: 'product-category',
             forUpdateForm: true,
         }),
         // code

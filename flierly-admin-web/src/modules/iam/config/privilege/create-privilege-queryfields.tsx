@@ -6,23 +6,53 @@ import { createBooleanQueryBuilderField, createDateQueryBuilderField, createNumb
 const createPrivilegeQueryFields = (translate: (value: string) => string): QueryFieldConfig<Privilege>[] => {
   return [
     // id
-    createNumberQueryBuilderField(translate('id'), 'id'),
+    createNumberQueryBuilderField({
+      label: translate('id'),
+      name: 'id'
+    }),
     // name
-    createTextQueryBuilderField(translate('name'), 'name'),
-    // entity
-    createSelectRemoteOptionsQueryBuilderField(translate('entity'), 'entity', fetchEntityOptions),
-    // access
-    createSelectQueryBuilderField(translate('access'), 'access', accessOptions),
-    // isActive
-    createBooleanQueryBuilderField(translate('status'), 'isActive', [translate('active'), translate('inactive')]),
+    createTextQueryBuilderField({
+      label: translate('name'),
+      name: 'name'
+    }),
     // code
-    createTextQueryBuilderField(translate('code'), 'code'),
+    createTextQueryBuilderField({
+      label: translate('code'),
+      name: 'code'
+    }),
+    // isActive
+    createBooleanQueryBuilderField({
+      label: translate('status'),
+      name: 'isActive',
+      optionLabels: [translate('active'), translate('inactive')]
+    }),
+    // entity
+    createSelectRemoteOptionsQueryBuilderField({
+      label: translate('entity'),
+      name: 'entity',
+      asyncOptionsFetcher: fetchEntityOptions
+    }),
+    // access
+    createSelectQueryBuilderField({
+      label: translate('access'),
+      name: 'access',
+      options: accessOptions
+    }),
     // createdAt
-    createDateQueryBuilderField(translate('created_at'), 'createdAt'),
+    createDateQueryBuilderField({
+      label: translate('created_at'),
+      name: 'createdAt'
+    }),
     // updatedAt
-    createDateQueryBuilderField(translate('updated_at'), 'updatedAt'),
+    createDateQueryBuilderField({
+      label: translate('updated_at'),
+      name: 'updatedAt'
+    }),
     // deletedAt
-    createDateQueryBuilderField(translate('deleted_at'), 'deletedAt'),
+    createDateQueryBuilderField({
+      label: translate('deleted_at'),
+      name: 'deletedAt'
+    }),
   ]
 }
 

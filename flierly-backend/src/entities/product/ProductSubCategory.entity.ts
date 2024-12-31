@@ -27,8 +27,8 @@ export class ProductSubCategory {
 
     @ManyToOne(() => ProductCategory, { eager: false, nullable: false })
     @JoinColumn({ name: 'category_id' })
-    @IsNotEmpty({ message: 'Category must be specified.' })
-    parentCategory: ProductCategory;
+    @IsNotEmpty({ message: 'Product Category must be specified.' })
+    category: ProductCategory;
 
     @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
     createdAt: Date;
