@@ -26,7 +26,7 @@ const ProductSubcategories: React.FC = () => {
                     processDataForUpdateForm={(data) => ({
                         ...data,
                         category: data?.category?.id ?? null, // Only specific logic here
-                      })}
+                    })}
                     render={{
                         activate: true,
                         bin: true,
