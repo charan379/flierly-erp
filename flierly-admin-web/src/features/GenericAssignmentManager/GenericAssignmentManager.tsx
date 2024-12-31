@@ -164,7 +164,7 @@ const GenericAssignmentManager = <OE extends { id: number }, IE extends { id: nu
               dataSource={allocatedItems}
               columns={tableColumns}
               request={async (params, sort, _filter) => {
-                const { result, success } = await genricAssignmentService.relatedEntitiespage<PageData<IE>>({
+                const { result, success } = await genricAssignmentService.relatedEntitiespage<IE>({
                   owningEntity,
                   owningEntityId: owningEntityRow.id,
                   inverseEntity: associatedEntity,
@@ -233,7 +233,7 @@ const GenericAssignmentManager = <OE extends { id: number }, IE extends { id: nu
               dataSource={availableItems}
               columns={tableColumns}
               request={async (params, sort, _filter) => {
-                const { result, success } = await genricAssignmentService.relatedEntitiespage<PageData<IE>>({
+                const { result, success } = await genricAssignmentService.relatedEntitiespage<IE>({
                   owningEntity,
                   owningEntityId: owningEntityRow.id,
                   inverseEntity: associatedEntity,

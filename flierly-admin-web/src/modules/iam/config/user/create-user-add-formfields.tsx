@@ -18,7 +18,7 @@ const createUserAddFormFields = (): FormFieldConfig<User>[] => {
         ({ getFieldValue }) => ({
           validator(_, value) {
             if (!value || value.length < 5 || value.length > 20 || !regexConstants.username.test(value)) return Promise.resolve()
-            return entityExistenceValidator('username-validation-u-1', {
+            return entityExistenceValidator<User>('username-validation-u-1', {
               entity: 'user',
               filters: {
                 id: { $notEqualTo: getFieldValue('id') },

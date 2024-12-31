@@ -24,8 +24,8 @@ const genricAssignmentService = {
     sort = {},
     signal,
   }: EntitiesPageRequest<T>) => {
-    const promise = api.post<ApiResponse<T>>(`/${entity}/page`, { filters, pagination, sort, loadRelations, binMode }, { signal })
-    return handleApiResponse<T>({ promise })
+    const promise = api.post<ApiResponse<PageData<T>>>(`/${entity}/page`, { filters, pagination, sort, loadRelations, binMode }, { signal })
+    return handleApiResponse<PageData<T>>({ promise })
   },
 
   /**
@@ -43,18 +43,18 @@ const genricAssignmentService = {
     type,
     signal,
   }: RelatedEntitiesPageRequest) => {
-    const promise = api.post<ApiResponse<T>>(
+    const promise = api.post<ApiResponse<PageData<T>>>(
       `/${inverseEntity}/associated-entity-records-page`,
       { owningEntity, owningEntityId, inverseSideField, owningSideField, filters, pagination, sort, type },
       { signal },
     )
-    return handleApiResponse<T>({ promise })
+    return handleApiResponse<PageData<T>>({ promise })
   },
 
   /**
    * updated update-associated-records
    */
-  udateAssociatedRecords: async <T>({
+  updateAssociatedRecords: async <T>({
     owningEntity,
     owningEntityId,
     inverseField,

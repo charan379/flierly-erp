@@ -24,7 +24,7 @@ const AllocateMany: React.FC<AllocateManyProps> = (props) => {
     event.stopPropagation()
     setIsLoading(true)
 
-    const { success } = await genricAssignmentService.udateAssociatedRecords({
+    const { success } = await genricAssignmentService.updateAssociatedRecords({
       owningEntity,
       owningEntityId,
       inverseField,

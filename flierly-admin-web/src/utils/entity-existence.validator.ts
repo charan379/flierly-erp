@@ -3,9 +3,9 @@ import debouncePromise from './debounce-promise'
 import { translate } from '@/features/Locale/service/locale-state.service'
 
 // Define the type for the parameters passed to the validator function
-interface EntityExistenceParams {
+interface EntityExistenceParams<T> {
   entity: string // The name of the entity (e.g., 'privilege', 'user')
-  filters?: Record<string, any> // The filters used to query the entity (e.g., { name: { $ilike: "value" }})
+  filters?: Partial<Record<keyof T, any>> // The filters used to query the entity (e.g., { name: { $ilike: "value" }})
   rejectionMessage?: string // Custom rejection message if the entity already exists
 }
 
@@ -29,7 +29,7 @@ function isExistsResult(result: any): result is ExistsResult {
  * @returns {Promise} - Resolves if the entity does not exist, rejects if the entity exists or if there is an error.
  */
 const entityExistenceValidator = debouncePromise(
-  async ({ entity, filters = {}, rejectionMessage = 'entity_already_exists' }: EntityExistenceParams): Promise<void> => {
+  async <T>({ entity, filters, rejectionMessage = 'entity_already_exists' }: EntityExistenceParams<T>): Promise<void> => {
     try {
       // Call the exists method from crudService with the provided entity and filters
       const { result } = await crudService.isExists({ entity, filters })
