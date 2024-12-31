@@ -2,8 +2,8 @@ import CrudModule from '@/features/CrudModule'
 import React, { ComponentType, LazyExoticComponent, Suspense } from 'react'
 import PageLoader from '@/components/PageLoader'
 import { CrudTableProps } from '@/features/CrudTable/CrudTable'
-import userCreateFormFields from '../../config/user/user-create-form-fields'
-import userUpdateFormFields from '../../config/user/user-update-form-fields'
+import createUserAddFormFields from '../../config/user/create-user-add-formfields'
+import createUserEditFormFields from '../../config/user/create-user-edit-formfields'
 import createUserTableColumns from '../../config/user/create-user-table-columns'
 import useLocale from '@/features/Locale/hooks/useLocale'
 import { useAuth } from '@/modules/auth/hooks/useAuth'
@@ -46,8 +46,8 @@ const Users: React.FC = () => {
               },
             },
           }}
-          createFormFields={userCreateFormFields}
-          updateFormFields={userUpdateFormFields}
+          createFormFields={createUserAddFormFields()}
+          updateFormFields={createUserEditFormFields()}
           queryFormFields={createUserQueryFields(translate)}
         />
       </Suspense>

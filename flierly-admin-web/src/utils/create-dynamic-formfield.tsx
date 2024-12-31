@@ -143,4 +143,68 @@ export const createDescriptionFormField = <T extends Record<'description', any>>
             type: 'TextArea',
         },
     };
-}
+};
+
+export const createEmailFormField = <T extends Record<'email', any>>(args: { access?: FormFieldConfig['access'], entity: string, forUpdateForm?: boolean }): FormFieldConfig<T> => {
+
+    const { access, entity, forUpdateForm } = args;
+
+    return {
+        name: 'email',
+        label: 'email',
+        hasFeedback: true,
+        allowClear: false,
+        access,
+        rules: [
+            { type: 'email', required: true },
+            ({ getFieldValue }) => ({
+                validator(_, value) {
+                    if (!value || !regexConstants.email.test(value)) return Promise.resolve()
+                    return entityExistenceValidator(`${entity}-email-validation`, {
+                        entity,
+                        filters: {
+                            ...(forUpdateForm && getFieldValue('id') ? { id: { $notEqualTo: getFieldValue('id') } } : {}),
+                            email: value
+                        },
+                        rejectionMessage: 'email_already_exists',
+                    })
+                },
+            }),
+        ],
+        input: {
+            type: 'Text',
+        },
+    };
+};
+
+export const createMobileFormField = <T extends Record<'mobile', any>>(args: { access?: FormFieldConfig['access'], entity: string, forUpdateForm?: boolean }): FormFieldConfig<T> => {
+
+    const { access, entity, forUpdateForm } = args;
+
+    return {
+        name: 'mobile',
+        label: 'mobile',
+        hasFeedback: true,
+        allowClear: false,
+        access,
+        rules: [
+            { type: 'string', min: 10, max: 15, required: true },
+            ({ getFieldValue }) => ({
+                validator(_, value) {
+                    if (!value || value?.length < 10 || value?.length > 15 || !regexConstants.mobile.test(value)) return Promise.resolve()
+                    return entityExistenceValidator(`${entity}-mobile-validation`, {
+                        entity,
+                        filters: {
+                            ...(forUpdateForm && getFieldValue('id') ? { id: { $notEqualTo: getFieldValue('id') } } : {}),
+                            mobile: value
+                        },
+                        rejectionMessage: 'mobile_already_exists',
+                    })
+                },
+            }),
+        ],
+        input: {
+            type: 'Text',
+        },
+    };
+};
