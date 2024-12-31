@@ -39,7 +39,6 @@ const Create = <T extends Record<string, any>>({ entity, formFields, title = 'ad
 
   if (!render || !formFields || !actions) return null
 
-
   return (
     <DrawerForm<T>
       form={form} // Pass the form instance here
