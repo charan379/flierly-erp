@@ -1,5 +1,5 @@
 import { ProColumns } from "@ant-design/pro-components"
-import { Tag } from "antd";
+import { Checkbox } from "antd";
 import formatDateToLocaleTimezone from "./format-date-time-to-locale-timezone";
 
 export const createIdColumn = (translate: (value: string) => string, config?: { width?: number }): ProColumns => {
@@ -92,14 +92,14 @@ export const createEmailColumn = (translate: (value: string) => string, config?:
 
 export const createBooleanColumn = (translate: (value: string) => string, config?: { width?: number, title?: string, dataIndex?: string }): ProColumns => {
     return {
-        title: config?.title ?? translate('status'),
+        title: config?.title ?? translate('is_active'),
         dataIndex: config?.dataIndex ?? 'isActive',
         key: config?.dataIndex ?? 'isActive',
-        valueType: 'switch',
-        width: config?.width ?? 80,
+        valueType: 'checkbox',
+        width: config?.width ?? 55,
         align: 'center',
         render: (_text, entity) => {
-            return !entity.isActive ? <Tag color="red">{translate("in_active")}</Tag> : <Tag color="green">{translate('active')}</Tag>
+            return <Checkbox checked={entity[config?.dataIndex ? config.dataIndex : 'isActive']} />
         },
     };
 };
