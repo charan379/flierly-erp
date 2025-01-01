@@ -4,7 +4,7 @@ import { CrudTableProps } from '@/features/CrudTable/CrudTable';
 import useLocale from '@/features/Locale/hooks/useLocale';
 import React, { ComponentType, LazyExoticComponent, Suspense } from 'react'
 import createProductSubCategoryTableColumns from '../../config/product-subcategory/create-product-subcategory-table-columns';
-import createProductSubcategoryAddFormFields from '../../config/product-subcategory/create-product-category-add-formfields';
+import createProductSubcategoryAddFormFields from '../../config/product-subcategory/create-product-subcategory-add-formfields';
 import createProductSubcategoryEditFormFields from '../../config/product-subcategory/create-product-subcategory-edit-formfields';
 import createProductSubcategoryQueryFields from '../../config/product-subcategory/create-product-subcategory-queryfields';
 

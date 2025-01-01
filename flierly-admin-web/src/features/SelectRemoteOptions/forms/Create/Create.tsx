@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import useLocale from '@/features/Locale/hooks/useLocale';
 import { useAuth } from '@/modules/auth/hooks/useAuth';
 import { PlusOutlined } from '@ant-design/icons';
 import { DrawerForm } from '@ant-design/pro-components';
-import { Button, Empty, Form, Skeleton, Space, Tooltip } from 'antd';
+import { Button, Empty, Form, Skeleton, Space } from 'antd';
 import crudService from '@/features/CrudModule/service/crud-module.service';
 import './create.css';
 import FormField, { FormFieldConfig } from '@/components/FormField';
+import useLocale from '@/features/Locale/hooks/useLocale';
 
 interface CreateProps {
   entity: string;
@@ -14,7 +14,7 @@ interface CreateProps {
   title?: string;
   initialValues?: Record<string, any>;
   permissionCode?: RegExp;
-  onCreateSuccess: (keyword: string) => void;
+  onCreateSuccess: (result: Record<string, any> | null) => void;
 }
 
 const Create: React.FC<CreateProps> = ({ entity, formFields, title = 'add', initialValues, permissionCode, onCreateSuccess }) => {
@@ -35,7 +35,7 @@ const Create: React.FC<CreateProps> = ({ entity, formFields, title = 'add', init
     if (response?.success) {
       setIsLoading(false); // Stop loading
       setIsDrawerOpen(false); // Close the drawer
-      onCreateSuccess(response?.result?.id)
+      onCreateSuccess(response?.result)
       return true;
     }
     setIsLoading(false); // Stop loading even if the request fails
@@ -54,9 +54,9 @@ const Create: React.FC<CreateProps> = ({ entity, formFields, title = 'add', init
       loading={isLoading}
       id="select-remote-options-create-form"
       trigger={
-        <Tooltip title={translate('add_new_option')}>
-          <Button type="primary" icon={<PlusOutlined />} shape="circle" size="small" style={{ backgroundColor: 'teal' }} disabled={formFields.length === 0} />
-        </Tooltip>
+        <Button type="primary" icon={<PlusOutlined />} size="middle" style={{ backgroundColor: 'teal', width: "100%", marginTop: "2px" }} disabled={formFields.length === 0}>
+          {title}
+        </Button>
       }
       resize={{
         maxWidth: window.innerWidth * 0.9,

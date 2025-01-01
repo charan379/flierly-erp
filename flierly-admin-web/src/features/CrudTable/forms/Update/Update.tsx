@@ -76,7 +76,7 @@ const Update = <T extends Record<string, any>>({
       }}
     >
       {isDrawerOpen ? (
-        formFields.map((field) => <FormField key={`${entity}-${String(field.name)}`} config={field} fieldKey={`${entity}-${String(field.name)}`} />)
+        formFields.map((field) => <FormField key={`${entity}-${String(field.name)}`} config={{ ...field, formInfo: { ...field.formInfo, formInstance: formInstance } }} fieldKey={`${entity}-${String(field.name)}`} />)
       ) : (
         <Space direction="vertical" style={{ width: '100%' }} size={16}>
           {formFields?.map((_, index) => {

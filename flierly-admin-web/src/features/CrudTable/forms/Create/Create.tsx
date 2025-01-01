@@ -72,7 +72,7 @@ const Create = <T extends Record<string, any>>({ entity, formFields, title = 'ad
       }}
     >
       {isDrawerOpen ? (
-        formFields.map((field) => <FormField key={`${entity}-${String(field.name)}`} config={field} fieldKey={`${entity}-${String(field.name)}`} />)
+        formFields.map((field) => <FormField key={`${entity}-${String(field.name)}`} config={{ ...field, formInfo: { ...field.formInfo, formInstance: form } }} fieldKey={`${entity}-${String(field.name)}`} />)
       ) : (
         <Space direction="vertical" style={{ width: '100%' }} size={16}>
           {formFields?.map((_, index) => {

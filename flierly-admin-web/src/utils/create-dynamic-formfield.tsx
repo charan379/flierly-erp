@@ -3,6 +3,7 @@ import entityExistenceValidator from "./entity-existence.validator";
 import fetchEntityOptions from "@/features/SelectRemoteOptions/utils/fetch-entity-options";
 import regexConstants from "@/constants/regex.constants";
 import fetchEntityRowsAsOptions from "@/features/SelectRemoteOptions/utils/fetch-entity-rows-as-options";
+import { SelectRemoteOptionsProps } from "@/features/SelectRemoteOptions/SelectRemoteOptions";
 
 // id
 export const createIdFormField = <T extends Record<'id', any>>(params: { name?: keyof T, label?: string, }): FormFieldConfig<T> => {
@@ -71,9 +72,9 @@ export const createEntityFormField = <T extends Record<"entity", any>>(params: {
 };
 
 // associated entity row
-export const createAssociatedEntityRowFormField = <T, AE>(params: { access?: FormFieldConfig['access'], name: keyof T, label: string, associatedEntity: string, required?: boolean, getLabel: (row: AE) => string, getValue: (row: AE) => any, getFilters: (value: string) => Partial<Record<keyof AE, any>> }): FormFieldConfig<T> => {
+export const createAssociatedEntityRowFormField = <T, AE>(params: { access?: FormFieldConfig['access'], name: keyof T, label: string, associatedEntity: string, required?: boolean, getLabel: (row: AE) => string, getValue: (row: AE) => any, getFilters: (value: string) => Partial<Record<keyof AE, any>>, optionCreatorConfig?: SelectRemoteOptionsProps['optionCreatorConfig'] }): FormFieldConfig<T> => {
 
-    const { access, associatedEntity, label, name, required, getLabel, getFilters, getValue } = params;
+    const { access, associatedEntity, optionCreatorConfig, label, name, required, getLabel, getFilters, getValue } = params;
     return {
         name,
         label,
@@ -90,6 +91,7 @@ export const createAssociatedEntityRowFormField = <T, AE>(params: { access?: For
                 (rows) => rows.map((row) => ({ label: getLabel(row), value: getValue(row) }))
             ),
             debounceTimeout: 300,
+            optionCreatorConfig,
         },
     };
 }

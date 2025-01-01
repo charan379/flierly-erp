@@ -1,5 +1,6 @@
 import { FormFieldConfig } from "@/components/FormField";
 import { createAssociatedEntityRowFormField, createBooleanFormField, createCodeFormField, createDescriptionFormField, createNameFormField } from "@/utils/create-dynamic-formfield";
+import createProductCategoryAddFormFields from "../product-category/create-product-category-add-formfields";
 
 const createProductSubcategoryEditFormFields = (): FormFieldConfig<ProductSubCategory>[] => {
 
@@ -26,6 +27,14 @@ const createProductSubcategoryEditFormFields = (): FormFieldConfig<ProductSubCat
             }),
             getLabel: (pc) => pc.name,
             getValue: (pc) => pc.id,
+            optionCreatorConfig: {
+                permissionCode: /^product-category\.create$/,
+                entity: "product-category",
+                formFields: createProductCategoryAddFormFields() as FormFieldConfig[],
+                title: "Add Product Category",
+                onCreateSuccessSetValue: (entity) => entity.id,
+                onCreateSuccessSearchKeyword: (entity) => entity.name,
+            }
         }),
         // code
         createCodeFormField({

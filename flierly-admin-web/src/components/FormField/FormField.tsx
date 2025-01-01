@@ -4,6 +4,8 @@ import { ProFormFieldProps, ProFormItemProps } from '@ant-design/pro-components'
 import useLocale from '@/features/Locale/hooks/useLocale'
 import { useAuth } from '@/modules/auth/hooks/useAuth'
 import { pick } from 'lodash'
+import { SelectRemoteOptionsProps } from '@/features/SelectRemoteOptions/SelectRemoteOptions'
+import { FormInstance } from 'antd/lib'
 
 const ProFormItem = React.lazy(() => import('@ant-design/pro-components').then((module) => ({ default: module.ProFormItem })))
 const SelectRemoteOptions = React.lazy(() => import('@/features/SelectRemoteOptions'))
@@ -18,24 +20,25 @@ const ProFormDigitRange = React.lazy(() => import('@ant-design/pro-components').
 type InputConfig =
   | { type: 'Text' | 'TextArea' | 'Number' | 'NumberRange' | 'DatePicker' | 'DateRange' | 'Switch' }
   | {
-      type: 'Decimal'
-      precision?: number
-      step?: number
-      min?: number
-      max?: number
-    }
+    type: 'Decimal'
+    precision?: number
+    step?: number
+    min?: number
+    max?: number
+  }
   | {
-      type: 'Select'
-      options?: SelectProps['options']
-      mode?: SelectProps['mode']
-    }
+    type: 'Select'
+    options?: SelectProps['options']
+    mode?: SelectProps['mode']
+  }
   | {
-      type: 'SelectRemoteOptions'
-      asyncOptionsFetcher: (value: string) => Promise<{ label: string; value: string }[]>
-      labelRender?: SelectProps['labelRender']
-      debounceTimeout?: number
-      mode?: SelectProps['mode']
-    }
+    type: 'SelectRemoteOptions'
+    asyncOptionsFetcher: SelectRemoteOptionsProps['asyncOptionsFetcher']
+    labelRender?: SelectProps['labelRender']
+    debounceTimeout?: number
+    mode?: SelectProps['mode']
+    optionCreatorConfig?: SelectRemoteOptionsProps['optionCreatorConfig']
+  }
 
 type AccessConfig = {
   permission?: RegExp
@@ -50,8 +53,9 @@ export type FormFieldConfig<T = Record<string, any>> = Omit<ProFormFieldProps<T>
   value?: any
   formInfo?: {
     isFormItem?: boolean
-    gridForm?: boolean
-  }
+    gridForm?: boolean,
+    formInstance?: FormInstance<any>;
+  };
 }
 
 export type FormFieldProps<T = Record<string, any>> = {
@@ -226,6 +230,7 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
           <Suspense fallback={<Skeleton.Input active block />}>
             <ProFormItem {...pick(restProps, allowedProFormItemProps)}>
               <SelectRemoteOptions
+                name={restProps.name}
                 asyncOptionsFetcher={input.asyncOptionsFetcher}
                 debounceTimeout={input.debounceTimeout}
                 labelRender={input.labelRender}
@@ -233,6 +238,8 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
                 width={restProps.width}
                 allowClear={restProps.allowClear}
                 disabled={restProps.hidden || restProps.disabled}
+                optionCreatorConfig={input.optionCreatorConfig}
+                formInstance={formInfo?.formInstance}
                 {...(isStandalone && value !== undefined ? { value } : {})}
                 {...(isStandalone && handleChange ? { onChange: (v: any) => handleChange(v) } : {})}
               />
