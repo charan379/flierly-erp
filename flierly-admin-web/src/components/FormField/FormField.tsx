@@ -234,7 +234,7 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
                 allowClear={restProps.allowClear}
                 disabled={restProps.hidden || restProps.disabled}
                 {...(isStandalone && value !== undefined ? { value } : {})}
-                {...(isStandalone && handleChange ? { onChange: (v) => handleChange(v) } : {})}
+                {...(isStandalone && handleChange ? { onChange: (v: any) => handleChange(v) } : {})}
               />
             </ProFormItem>
           </Suspense>
