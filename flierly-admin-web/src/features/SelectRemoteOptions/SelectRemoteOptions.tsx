@@ -1,6 +1,9 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import debounce from '@/utils/debounce';
 import { Empty, Select, Spin } from 'antd';
+import Create from './forms/Create/Create';
+import createProductCategoryAddFormFields from '@/modules/product/config/product-category/create-product-category-add-formfields';
+import { FormFieldConfig } from '@/components/FormField';
 
 interface SelectRemoteOptionsProps {
   asyncOptionsFetcher: (
@@ -51,6 +54,10 @@ const SelectRemoteOptions: React.FC<SelectRemoteOptionsProps> = ({
     };
   }, [loadOptions]);
 
+  const onCreateSuccess = (keyword: string) => {
+    loadOptions(keyword);
+  };
+
   return (
     <Select
       {...props}
@@ -60,10 +67,10 @@ const SelectRemoteOptions: React.FC<SelectRemoteOptionsProps> = ({
       options={fetching ? [] : options}
       notFoundContent={fetching ? <Spin size="small" /> : <Empty />}
       onSearch={debounceFetcher}
-      // onFocus={() => loadOptions('')}
       style={{ width }}
       dropdownStyle={{ textAlign: 'left' }}
       loading={fetching}
+      suffixIcon={<Create entity='product-category' onCreateSuccess={onCreateSuccess} formFields={createProductCategoryAddFormFields() as FormFieldConfig[]} title='add=p-c' permissionCode={/product-category\.create$/} />}
     />
   );
 };

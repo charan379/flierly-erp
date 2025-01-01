@@ -1,35 +1,48 @@
-import React from 'react'
-import useLocale from '@/features/Locale/hooks/useLocale'
-import { useAuth } from '@/modules/auth/hooks/useAuth'
-import { PlusOutlined } from '@ant-design/icons'
-import { DrawerForm } from '@ant-design/pro-components'
-import { Button, Empty, Form } from 'antd'
-import crudService from '@/features/CrudModule/service/crud-module.service'
+import React, { useState } from 'react';
+import useLocale from '@/features/Locale/hooks/useLocale';
+import { useAuth } from '@/modules/auth/hooks/useAuth';
+import { PlusOutlined } from '@ant-design/icons';
+import { DrawerForm } from '@ant-design/pro-components';
+import { Button, Empty, Form, Skeleton, Space, Tooltip } from 'antd';
+import crudService from '@/features/CrudModule/service/crud-module.service';
+import './create.css';
+import FormField, { FormFieldConfig } from '@/components/FormField';
 
 interface CreateProps {
-  entity: string
-  formFields: React.ReactElement
-  title?: string
-  initialValues?: Record<string, any>
-  permissionCode?: RegExp
+  entity: string;
+  formFields?: FormFieldConfig[]; // Form fields configuration
+  title?: string;
+  initialValues?: Record<string, any>;
+  permissionCode?: RegExp;
+  onCreateSuccess: (keyword: string) => void;
 }
 
-const Create: React.FC<CreateProps> = ({ entity, formFields, title = 'add', initialValues, permissionCode }) => {
+const Create: React.FC<CreateProps> = ({ entity, formFields, title = 'add', initialValues, permissionCode, onCreateSuccess }) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
 
-  const { hasPermission } = useAuth()
+  const { hasPermission } = useAuth();
+  const { translate } = useLocale();
+  const [formInstance] = Form.useForm();
 
-  const { translate } = useLocale()
+  // If the user lacks permission, render an empty state
+  if (permissionCode && !hasPermission(permissionCode)) return <Empty />;
 
-  const [formInstance] = Form.useForm()
+  const onFinish = async (values: Record<string, any>): Promise<boolean | void> => {
+    setIsLoading(true); // Show loading indicator
+    const response = await crudService.create({ entity, data: values });
 
-  if (permissionCode && !hasPermission(permissionCode)) return <Empty />
+    if (response?.success) {
+      setIsLoading(false); // Stop loading
+      setIsDrawerOpen(false); // Close the drawer
+      onCreateSuccess(response?.result?.id)
+      return true;
+    }
+    setIsLoading(false); // Stop loading even if the request fails
+  };
 
-  if (!formFields) return null
-
-  const onFinish = async (values: Record<string, any>): Promise<boolean> => {
-    const response = await crudService.create({ entity, data: values })
-    return !!response?.success
-  }
+  // If no form fields are provided, render nothing
+  if (!formFields) return null;
 
   return (
     <DrawerForm
@@ -38,20 +51,28 @@ const Create: React.FC<CreateProps> = ({ entity, formFields, title = 'add', init
       title={title}
       grid={true}
       onFinish={onFinish}
+      loading={isLoading}
+      id="select-remote-options-create-form"
       trigger={
-        <Button type="link" key="drawer-create-form-trigger" icon={<PlusOutlined />} shape="default" size="large" style={{ width: '100%' }}>
-          {translate('add_new_option')}
-        </Button>
+        <Tooltip title={translate('add_new_option')}>
+          <Button type="primary" icon={<PlusOutlined />} shape="circle" size="small" style={{ backgroundColor: 'teal' }} disabled={formFields.length === 0} />
+        </Tooltip>
       }
       resize={{
         maxWidth: window.innerWidth * 0.9,
+        minWidth: window.innerWidth * 0.5,
       }}
       drawerProps={{
-        destroyOnClose: true,
+        destroyOnClose: true, // Destroy the drawer on close
         styles: {
           footer: { padding: '15px 15px 15px 15px' },
           header: { padding: '10px 5px 5px 5px' },
         },
+        onClick: (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        },
+        afterOpenChange: (change) => setIsDrawerOpen(change), // Update drawer open state
       }}
       submitter={{
         searchConfig: {
@@ -60,9 +81,23 @@ const Create: React.FC<CreateProps> = ({ entity, formFields, title = 'add', init
         },
       }}
     >
-      {React.cloneElement(formFields, { formInstance })}
+      {isDrawerOpen ? (
+        formFields.map((field) => (
+          <FormField
+            key={`${entity}-${String(field.name)}`}
+            config={field}
+            fieldKey={`${entity}-${String(field.name)}`}
+          />
+        ))
+      ) : (
+        <Space direction="vertical" style={{ width: '100%' }} size={16}>
+          {formFields?.map((_, index) => (
+            <Skeleton.Input active block key={index} />
+          ))}
+        </Space>
+      )}
     </DrawerForm>
-  )
-}
+  );
+};
 
-export default Create
+export default Create;
