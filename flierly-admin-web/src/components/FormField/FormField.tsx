@@ -253,7 +253,7 @@ const FormComponent: React.FC<FormFieldConfig<any>> = (props) => {
   }
 }
 
-const FormField = <T extends Record<string, any>>({ fieldKey, config, showLabel = true }: FormFieldProps<T>) => {
+const FormField = <T,>({ fieldKey, config, showLabel = true }: FormFieldProps<T>) => {
   const { translate } = useLocale()
   const { hasPermission } = useAuth()
   const { name = 'fieldName', label = 'fieldLabel', hidden, disabled, access, onChange, value } = config

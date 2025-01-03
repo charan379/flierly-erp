@@ -20,56 +20,56 @@ type CrudModuleContextType = {
 }
 
 // Props type for the page function
-type EntitiesPageRequest<T> = {
+type EntityRecordsPageRequest<E> = {
   entity: string
-  loadRelations?: Array<keyof T>,
+  loadRelations?: Array<keyof E>,
   binMode?: boolean
   pagination?: {
     limit: number
     page: number
   }
   filters?: Record<string, any>
-  sort?: Record<string, any>
+  sort?: Record<string, "descend" | "ascend" | null>
   signal?: AbortSignal
 }
 
 // Props type for the page function
-type RelatedEntitiesPageRequest = {
-  owningEntity: string
-  owningEntityId: number
-  inverseEntity: string
-  inverseSideField: string
-  owningSideField: string
+type AssociatedEntityRecordsPageRequest<E, AE> = {
+  entity: string
+  entityRecordId: number
+  associatedEntity: string
+  entitySideField: keyof E
+  associatedSideField: keyof AE
   pagination?: {
     limit: number
     page: number
   }
   filters?: Record<string, any>
-  sort?: Record<string, any>
+  sort?: Record<string, "descend" | "ascend" | null>
   type?: 'allocated' | 'unallocated'
   signal?: AbortSignal
 }
 
 // Props type for the create function
-type CreateEntityRequest<T = Record<string, any>> = {
+type CreateEntityRecordRequest<E = Record<string, any>> = {
   entity: string
-  data: T
+  data: E
   signal?: AbortSignal
 }
 
 // Props type for the update function
-type UpdateEntityRequest<T = Record<string, any>> = {
+type UpdateEntityRecordRequest<E = Record<string, any>> = {
   entity: string
   id: string | number
-  data: T
+  data: E
   signal?: AbortSignal
 }
 
 // Props type for the update function
-type UpdateAssociatedEntityRecordsRequest<_T = Record<string, any>> = {
-  owningEntity: string
-  owningEntityId: number
-  inverseField: string
+type UpdateAssociatedEntityRecordsRequest<E> = {
+  entity: string
+  entityRecordId: number
+  entitySideField: keyof E
   newArray?: number[]
   addOne?: number
   removeOne?: number
@@ -79,9 +79,9 @@ type UpdateAssociatedEntityRecordsRequest<_T = Record<string, any>> = {
 }
 
 // Props type for the exists function
-type EntityRecordExistsRequest<T> = {
+type EntityRecordExistsRequest<_E> = {
   entity: string
-  filters?: Partial<Record<keyof T, any>>
+  filters?: Record<string, any>
   signal?: AbortSignal
 }
 

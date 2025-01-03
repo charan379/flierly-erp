@@ -2,44 +2,50 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import debounce from '@/utils/debounce';
 import { Empty, FormInstance, Select, Spin } from 'antd';
 import Create from './forms/Create/Create';
-import { FormFieldConfig } from '@/components/FormField';
+import Loading from '@/components/Loading';
 
-export interface SelectRemoteOptionsProps {
+export interface SelectRemoteOptionsProps<T> {
   asyncOptionsFetcher: (
-    value: string,
+    value: string | "focus",
     signal?: AbortSignal
   ) => Promise<Array<{ label: string | JSX.Element; value: string }>>;
   debounceTimeout?: number;
   width?: string | number;
+  disabled?: boolean;
+  allowClear?: boolean;
   optionCreatorConfig?: {
-    onCreateSuccessSetValue: (result: Record<string, any>) => string;
-    onCreateSuccessSearchKeyword: (result: Record<string, any>) => string;
+    onCreateSuccess: (
+      result: T,
+      appendOptions: React.Dispatch<React.SetStateAction<{
+        label: string | JSX.Element;
+        value: string;
+      }[]>>) => void;
     entity: string;
-    formFields: FormFieldConfig[];
-    title: string;
+    formFields: React.ReactNode;
+    formInstance?: FormInstance<T>;
+    formInitialValues?: Partial<Record<keyof T, any>>,
+    title?: string;
     permissionCode: RegExp;
   };
-  name: FormFieldConfig<any>['name'];
-  formInstance?: FormInstance<any>;
+  name: keyof any;
   [key: string]: any; // Additional props passed to Select
 }
 
-const SelectRemoteOptions: React.FC<SelectRemoteOptionsProps> = ({
+const SelectRemoteOptions = <T,>({
   asyncOptionsFetcher,
   debounceTimeout = 500,
   width = '100%',
   optionCreatorConfig,
-  formInstance,
   name,
+  disabled,
+  allowClear,
   ...props
-}) => {
+}: SelectRemoteOptionsProps<T>) => {
   const [fetching, setFetching] = useState(false);
   const [options, setOptions] = useState<{ label: string | JSX.Element; value: string }[]>([]);
   const abortControllerRef = useRef<AbortController | null>(null);
-  const [searchValue, setSearchValue] = useState('');
 
   const handleSearch = (value: string) => {
-    setSearchValue(value);
     debounceFetcher(value);
   };
 
@@ -62,25 +68,20 @@ const SelectRemoteOptions: React.FC<SelectRemoteOptionsProps> = ({
     }
   }, [asyncOptionsFetcher]);
 
-  const debounceFetcher = useCallback(debounce(loadOptions, debounceTimeout), [loadOptions, debounceTimeout]);
+  const debounceFetcher = debounce(loadOptions, debounceTimeout);
+
+  const handleFocus = () => loadOptions('focus');
 
   useEffect(() => {
     loadOptions(''); // Initial load
-
     return () => {
       abortControllerRef.current?.abort();
     };
-  }, [loadOptions, name]);
+  }, [loadOptions, name, optionCreatorConfig, asyncOptionsFetcher]);
 
-
-  const onCreateSuccess = (result: Record<string, any> | null) => {
+  const handleCreateSuccess = (result: T | null) => {
     if (optionCreatorConfig && result) {
-      const value = optionCreatorConfig.onCreateSuccessSetValue(result);
-      setSearchValue(optionCreatorConfig.onCreateSuccessSearchKeyword(result));
-      loadOptions(searchValue);// Load options based on the result
-      if (formInstance) {
-        formInstance.setFieldValue(name, value);
-      };
+      optionCreatorConfig.onCreateSuccess(result, setOptions);
     }
   };
 
@@ -89,20 +90,34 @@ const SelectRemoteOptions: React.FC<SelectRemoteOptionsProps> = ({
       {...props}
       filterOption={false}
       showSearch
+      disabled={disabled}
+      autoClearSearchValue={false}
       placeholder="Please select"
-      options={fetching ? [] : options}
+      options={options}
+      allowClear={allowClear}
       notFoundContent={fetching ? <Spin size="small" /> : <Empty />}
       dropdownRender={(menu) => {
-        return <>
-          {menu}
-          {optionCreatorConfig && <Create entity={optionCreatorConfig.entity} onCreateSuccess={onCreateSuccess} formFields={optionCreatorConfig.formFields} title={optionCreatorConfig.title} permissionCode={optionCreatorConfig.permissionCode} />}
-        </>
+        return (
+          <Loading isLoading={fetching}>
+            {menu}
+            {optionCreatorConfig &&
+              <Create
+                formInstance={optionCreatorConfig.formInstance}
+                entity={optionCreatorConfig.entity}
+                onCreate={handleCreateSuccess}
+                formFields={optionCreatorConfig.formFields}
+                title={optionCreatorConfig.title}
+                initialValues={optionCreatorConfig?.formInitialValues}
+                permissionCode={optionCreatorConfig.permissionCode}
+              />}
+          </Loading>
+        )
       }}
       onSearch={handleSearch}
       style={{ width }}
       dropdownStyle={{ textAlign: 'left' }}
-      loading={fetching}
-      searchValue={searchValue}
+      onFocus={handleFocus}
+      {...(fetching ? { suffixIcon: <Spin spinning size='small' /> } : {})}
     />
   );
 };

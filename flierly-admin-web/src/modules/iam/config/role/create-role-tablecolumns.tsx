@@ -36,11 +36,11 @@ const createRoleTableColumns = (translate: (value: string) => string, hasPermiss
             trigger={<Button type="link">Manage Privileges</Button>}
           >
             <AssociationManager<Role, Privilege>
-              owningEntity="role"
-              owningEntityRow={entity}
-              owningSideField="roles"
+              entity="role"
+              entityRecord={entity}
+              entitySideField="privileges"
               associatedEntity="privilege"
-              associatedSideField="privileges"
+              associatedSideField="roles"
               associatedEntityColumns={createPrivilegeTableColumns(translate, hasPermission).filter((column) => ['id', 'name', 'code', 'entity', 'access', 'isActive'].includes(column.dataIndex as string))}
               associatedEntityQueryConfig={createPrivilegeAMQueryFields(translate)}
             />
@@ -49,7 +49,7 @@ const createRoleTableColumns = (translate: (value: string) => string, hasPermiss
       },
     },
     // isActive
-    createBooleanColumn(translate, { dataIndex: 'isActive' }),
+    createBooleanColumn(translate, { dataIndex: 'isActive', width: 80 }),
     // updatedAt
     createTimeStampColumn(translate, { title: translate('updated_at'), dataIndex: 'updatedAt' }),
     // createdAt

@@ -27,7 +27,7 @@ const createProductSubCategoryTableColumns = (translate: (value: string) => stri
     // description
     createDescriptionColumn(translate, { width: 250 }),
     // isActive
-    createBooleanColumn(translate, { dataIndex: 'isActive', }),
+    createBooleanColumn(translate, { dataIndex: 'isActive', width: 80 }),
     // updatedAt
     createTimeStampColumn(translate,
       {

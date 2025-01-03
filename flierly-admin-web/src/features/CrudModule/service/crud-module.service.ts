@@ -13,31 +13,31 @@ const api = axios.create({
 
 const crudService = {
   /**
-   * Fetch paginated data
+   * Fetch paginated entity records
    */
-  page: async <T>({ entity, binMode = false, pagination = { limit: 10, page: 1 }, loadRelations, filters = {}, sort = {}, signal }: EntitiesPageRequest<T>) => {
-    const promise = api.post<ApiResponse<PageData<T>>>(`/${entity}/page`, { filters, pagination, loadRelations, sort, binMode }, { signal })
-    return handleApiResponse<PageData<T>>({ promise })
+  page: async <E>({ entity, binMode = false, pagination = { limit: 10, page: 1 }, loadRelations, filters = {}, sort = {}, signal }: EntityRecordsPageRequest<E>) => {
+    const promise = api.post<ApiResponse<PageData<E>>>(`/${entity}/page`, { filters, pagination, loadRelations, sort, binMode }, { signal })
+    return handleApiResponse<PageData<E>>({ promise })
   },
 
   /**
-   * Create a new entity
+   * Create a new entity record
    */
-  create: async <T>({ entity, data, signal }: CreateEntityRequest<T>) => {
+  create: async <E>({ entity, data, signal }: CreateEntityRecordRequest<E>) => {
     const promise = api.post(`/${entity}/create`, data, { signal })
-    return handleApiResponse<T>({ promise, notifyOnSuccess: true })
+    return handleApiResponse<E>({ promise, notifyOnSuccess: true })
   },
 
   /**
-   * Update an existing entity
+   * Update an existing entity record
    */
-  update: async <T>({ entity, id, data, signal }: UpdateEntityRequest<T>) => {
+  update: async <E>({ entity, id, data, signal }: UpdateEntityRecordRequest<E>) => {
     const promise = api.put(`/${entity}/update/${id}`, data, { signal })
-    return handleApiResponse<T>({ promise, notifyOnSuccess: true })
+    return handleApiResponse<E>({ promise, notifyOnSuccess: true })
   },
 
   /**
-   * Check if an entity exists
+   * Check if an entity record exists
    */
   isExists: async <T>({ entity, filters = {}, signal }: EntityRecordExistsRequest<T>) => {
     const promise = api.post(`/${entity}/is-exists`, { filters, withDeleted: true }, { signal })
@@ -45,7 +45,7 @@ const crudService = {
   },
 
   /**
-   * Soft delete entities
+   * Soft delete entity records
    */
   delete: async ({ entity, ids = [], signal }: EntityRecordsDeleteRequest) => {
     const promise = api.delete(`/${entity}/delete`, {
@@ -56,7 +56,7 @@ const crudService = {
   },
 
   /**
-   * Activate entities
+   * Activate entity records
    */
   activate: async ({ entity, ids = [], signal }: EntityRecordsActivateRequest) => {
     const promise = api.patch(`/${entity}/activate`, ids, { signal })
@@ -64,7 +64,7 @@ const crudService = {
   },
 
   /**
-   * Inactivate entities
+   * Inactivate entity records
    */
   inactivate: async ({ entity, ids = [], signal }: EntityRecordsInactivateRequest) => {
     const promise = api.patch(`/${entity}/inactivate`, ids, { signal })
@@ -72,7 +72,7 @@ const crudService = {
   },
 
   /**
-   * Restore entities
+   * Restore entity records
    */
   restore: async ({ entity, ids = [], signal }: EntityRecordsRestoreRequest) => {
     const promise = api.patch(`/${entity}/restore`, ids, { signal })

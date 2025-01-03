@@ -15,7 +15,7 @@ const genricAssignmentService = {
   /**
    * Fetch paginated data
    */
-  page: async <T>({
+  entityPage: async <T>({
     entity,
     loadRelations = [],
     binMode = false,
@@ -23,7 +23,7 @@ const genricAssignmentService = {
     filters = {},
     sort = {},
     signal,
-  }: EntitiesPageRequest<T>) => {
+  }: EntityRecordsPageRequest<T>) => {
     const promise = api.post<ApiResponse<PageData<T>>>(`/${entity}/page`, { filters, pagination, sort, loadRelations, binMode }, { signal })
     return handleApiResponse<PageData<T>>({ promise })
   },
@@ -31,33 +31,33 @@ const genricAssignmentService = {
   /**
    * Fetch related entity paginated data
    */
-  relatedEntitiespage: async <T>({
-    owningEntity,
-    inverseEntity,
-    owningEntityId,
-    inverseSideField,
-    owningSideField,
+  associatedEntityPage: async <E, AE>({
+    associatedEntity,
+    associatedSideField,
+    entity,
+    entityRecordId,
+    entitySideField,
     pagination = { limit: 10, page: 1 },
     filters = {},
     sort = {},
     type,
     signal,
-  }: RelatedEntitiesPageRequest) => {
-    const promise = api.post<ApiResponse<PageData<T>>>(
-      `/${inverseEntity}/associated-entity-records-page`,
-      { owningEntity, owningEntityId, inverseSideField, owningSideField, filters, pagination, sort, type },
+  }: AssociatedEntityRecordsPageRequest<E, AE>) => {
+    const promise = api.post<ApiResponse<PageData<AE>>>(
+      `/${associatedEntity}/associated-entity-records-page`,
+      { entity, entityRecordId, associatedSideField, entitySideField, filters, pagination, sort, type },
       { signal },
     )
-    return handleApiResponse<PageData<T>>({ promise })
+    return handleApiResponse<PageData<AE>>({ promise })
   },
 
   /**
    * updated update-associated-records
    */
   updateAssociatedRecords: async <T>({
-    owningEntity,
-    owningEntityId,
-    inverseField,
+    entity,
+    entityRecordId,
+    entitySideField,
     newArray,
     addOne,
     removeOne,
@@ -66,8 +66,8 @@ const genricAssignmentService = {
     signal,
   }: UpdateAssociatedEntityRecordsRequest<T>) => {
     const promise = api.patch<ApiResponse<T>>(
-      `/${owningEntity}/update-associated-records`,
-      { owningEntityId, newArray, inverseField, addOne, addMultiple, removeOne, removeMultiple },
+      `/${entity}/update-associated-records`,
+      { entityRecordId, newArray, entitySideField, addOne, addMultiple, removeOne, removeMultiple },
       { signal },
     )
     return handleApiResponse<T>({ promise, notifyOnSuccess: true })

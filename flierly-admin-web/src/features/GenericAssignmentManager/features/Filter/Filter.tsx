@@ -5,17 +5,17 @@ import { ProForm, ProFormDependency, ProFormItem, ProFormSelect } from '@ant-des
 import { Button, Flex, Input, Tooltip } from 'antd'
 import { useRef } from 'react'
 
-interface FilterProps<T = Record<string, any>> {
+interface FilterProps<AE> {
   filterConfig: {
     label: string
-    name: keyof T
-    formField: FormFieldConfig<T>
+    name: keyof AE
+    formField: FormFieldConfig<AE>
   }[]
-  onFilter: (filter: { queryField: string; query: any }) => void
+  onFilter: (filter: { queryField: keyof AE; query: any }) => void
   onReset: () => void
 }
 
-const Filter = <T extends Record<string, any>>({ filterConfig, onFilter, onReset }: FilterProps<T>) => {
+const Filter = <AE,>({ filterConfig, onFilter, onReset }: FilterProps<AE>) => {
   const { translate } = useLocale()
 
   const formRef = useRef<any>()
@@ -83,7 +83,7 @@ const Filter = <T extends Record<string, any>>({ filterConfig, onFilter, onReset
             if (selectedField) {
               return (
                 <div className="query-form-item" style={{ width: '180px', maxWidth: '180px' }}>
-                  <FormField config={{ ...selectedField.formField, formInfo: { gridForm: false }, name: 'query' }} showLabel={false} />
+                  <FormField<AE> config={{ ...selectedField.formField, formInfo: { gridForm: false }, name: 'query' as keyof AE }} showLabel={false} />
                 </div>
               )
             }

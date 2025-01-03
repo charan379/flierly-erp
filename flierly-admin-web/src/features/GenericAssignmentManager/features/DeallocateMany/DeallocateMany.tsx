@@ -3,52 +3,54 @@ import { Button } from 'antd'
 import React, { useState } from 'react'
 import genricAssignmentService from '../../service/genricAssignmentService'
 import { ActionType } from '@ant-design/pro-components'
+import useLocale from '@/features/Locale/hooks/useLocale'
 
-interface DeallocateManyProps {
-  owningEntity: string
-  owningEntityId: number
-  inverseField: string
-  inverseIdsToDisassociate: number[]
+interface DeallocateManyProps<E> {
+  entity: string
+  entityRecordId: number
+  entitySideField: keyof E
+  idsToDisassociate: number[]
   actionRef?: ActionType
 }
 
-const DeallocateMany: React.FC<DeallocateManyProps> = (props) => {
-  const { owningEntity, owningEntityId, inverseField, inverseIdsToDisassociate, actionRef } = props
+const DeallocateMany = <E,>(props: DeallocateManyProps<E>) => {
+  const { entity, entityRecordId, entitySideField, idsToDisassociate, actionRef } = props
 
-  const [isLoding, setIsLoading] = useState(false)
+  const { translate: t } = useLocale();
+  const [isLoding, setIsLoading] = useState(false);
 
-  const buttonStyle = props.inverseIdsToDisassociate.length <= 0 ? {} : { backgroundColor: '#FF9800', borderColor: '#FF9800' }
+  const buttonStyle = idsToDisassociate.length <= 0 ? {} : { backgroundColor: '#FF9800', borderColor: '#FF9800' }
 
   const handleDeallocateMany: React.MouseEventHandler = async (event) => {
-    event.preventDefault()
-    event.stopPropagation()
-    setIsLoading(true)
+    event.preventDefault();
+    event.stopPropagation();
+    setIsLoading(true);
 
     const { success } = await genricAssignmentService.updateAssociatedRecords({
-      owningEntity,
-      owningEntityId,
-      inverseField,
-      removeMultiple: inverseIdsToDisassociate,
+      entity,
+      entityRecordId,
+      entitySideField,
+      removeMultiple: idsToDisassociate,
     })
 
     if (success) {
-      actionRef?.reload?.()
-      actionRef?.clearSelected?.()
+      actionRef?.reload?.();
+      actionRef?.clearSelected?.();
     }
 
-    setIsLoading(false)
+    setIsLoading(false);
   }
 
   return (
     <Button
       onClick={handleDeallocateMany}
       loading={isLoding}
-      disabled={isLoding || inverseIdsToDisassociate.length <= 0}
+      disabled={isLoding || idsToDisassociate.length <= 0}
       icon={<CloseOutlined />}
       style={buttonStyle}
       type="primary"
     >
-      Deallocate Selected ({inverseIdsToDisassociate.length})
+      {t('action.button.allocateSelected')} ({idsToDisassociate.length})
     </Button>
   )
 }

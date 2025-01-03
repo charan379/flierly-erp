@@ -4,21 +4,23 @@ import { CrudTableProps } from '@/features/CrudTable/CrudTable';
 import useLocale from '@/features/Locale/hooks/useLocale';
 import React, { ComponentType, LazyExoticComponent, Suspense } from 'react'
 import createProductCategoryTableColumns from '../../config/product-category/create-product-category-tablecolumns';
-import createProductCategoryAddFormFields from '../../config/product-category/create-product-category-add-formfields';
 import createProductCategoryQueryFields from '../../config/product-category/create-product-category-queryfields';
-import createProductCategoryEditFormFields from '../../config/product-category/create-product-category-edit-formfields';
+import { Form } from 'antd';
+import ProductCategoryFormFields from '../../form-fields/ProductCategoryFormFields';
 
 const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<ProductCategory>>> = React.lazy(() => import('@/features/CrudTable'))
 
 const ProductCategories: React.FC = () => {
-    const { translate } = useLocale();
+    const { translate: t } = useLocale();
+    const [addFormInstance] = Form.useForm<ProductCategory>();
+    const [editFormInstance] = Form.useForm<ProductCategory>();
 
     return (
         <CrudModule header title={'product-categories'} menuKeys={['product']}>
             <Suspense fallback={<PageLoader />}>
                 <CrudTable
                     entity="product-category"
-                    columns={createProductCategoryTableColumns(translate)}
+                    columns={createProductCategoryTableColumns(t)}
                     dataSource={[]}
                     tableKey="product-category-table"
                     rowKey="id"
@@ -43,9 +45,15 @@ const ProductCategories: React.FC = () => {
                             },
                         },
                     }}
-                    createFormFields={createProductCategoryAddFormFields()}
-                    queryFormFields={createProductCategoryQueryFields(translate)}
-                    updateFormFields={createProductCategoryEditFormFields()}
+                    addFormProps={{
+                        formFields: <ProductCategoryFormFields formInstance={addFormInstance} />,
+                        formInstance: addFormInstance
+                    }}
+                    editFormProps={{
+                        formFields: <ProductCategoryFormFields formInstance={editFormInstance} isEditForm />,
+                        formInstance: editFormInstance
+                    }}
+                    queryFormFields={createProductCategoryQueryFields(t)}
                 />
             </Suspense>
         </CrudModule>

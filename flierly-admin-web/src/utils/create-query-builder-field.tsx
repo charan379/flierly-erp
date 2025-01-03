@@ -1,6 +1,6 @@
 import { translate } from "@/features/Locale/service/locale-state.service";
 import { QueryFieldConfig } from "@/features/QueryBuilder/QueryBuilder"
-import fetchEntityRowsAsOptions from "@/features/SelectRemoteOptions/utils/fetch-entity-rows-as-options";
+import fetchEntityRecordsAsOptions from "@/features/SelectRemoteOptions/utils/fetch-entity-rows-as-options";
 
 export const createTextQueryBuilderField = <T,>(params: { label: string, name: keyof T }): QueryFieldConfig<T> => {
     const { label, name } = params;
@@ -131,7 +131,7 @@ export const createAssociatedEntityRowQueryBuilderFiled = <T, AE>(params: { name
 
     const { associatedEntity, getFilters, getLabel, getValue, label, name } = params;
 
-    const asyncOptionsFetcher = (value: string) => fetchEntityRowsAsOptions<AE>(
+    const asyncOptionsFetcher = (value: string) => fetchEntityRecordsAsOptions<AE>(
         associatedEntity,
         getFilters(value),
         10,

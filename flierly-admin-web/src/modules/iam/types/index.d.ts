@@ -6,6 +6,9 @@ type Privilege = {
   access: 'Create' | 'Read' | 'Update' | 'Delete' | 'Manage'
   entity: string
   code: string
+  roles?: Role[]
+  usersWithRestrictedPrivileges?: User[]
+  usersWithAdditionalPrivileges?: User[]
 } & EntityTimeStamps
 
 // Define a type based on the Role entity
@@ -16,6 +19,7 @@ type Role = {
   code: string
   description: string
   privileges?: Privilege[]
+  users?: User[]
 } & EntityTimeStamps
 
 type User = {

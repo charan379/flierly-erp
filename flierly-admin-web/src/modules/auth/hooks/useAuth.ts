@@ -3,6 +3,7 @@ import { AppDispatch, RootState } from '@/redux/store' // Adjust paths as necess
 import { logout, setAuth, setLoading, setExpiredTrue } from '../redux/auth.slice'
 import authService from '../service/auth.service'
 import { LoadingTypes } from '../@types/loading'
+import getPermissionRegex from '../utils/get-permission-regex.util'
 
 export function useAuth() {
   const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector
@@ -39,6 +40,7 @@ export function useAuth() {
     isExpired: auth.isExpired,
     isTokenExpiryDatePast,
     hasPermission,
+    getPermissionRegex,
     /**
      * Dispatch login action with credentials.
      * @param credentials - User credentials.

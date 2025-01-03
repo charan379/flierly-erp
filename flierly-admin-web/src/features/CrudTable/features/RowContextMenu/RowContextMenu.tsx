@@ -27,9 +27,9 @@ interface RowContextMenuProps {
 const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record, recordTitleKey, open, position, close, render, binMode }) => {
 
   const { theme } = useTheme()
-  const { translate } = useLocale()
+  const { translate: t } = useLocale()
   const [popoverPosition, setPopoverPosition] = useState<{ x: number; y: number }>(position)
-  const [countdown, setCountdown] = useState<number>(120) // Start with 120 seconds
+  const [countdown, setCountdown] = useState<number>(30) // Start with 30 seconds
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const { CrudModuleContextHandler } = useCrudModuleContext()
@@ -38,38 +38,38 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record
     const menuItemStyle = { fontSize: '12px' }
     const baseItems = [
       {
-        label: translate('view'),
+        label: t('rowMenu.label.view'),
         key: 'view',
         icon: <FontAwesomeIcon icon={faEye} style={menuItemStyle} />,
         style: { color: '#2196F3', ...menuItemStyle },
       },
       {
-        label: translate('edit'),
+        label: t('rowMenu.label.edit'),
         key: 'edit',
         icon: <FontAwesomeIcon icon={faPenToSquare} style={menuItemStyle} />,
         style: { color: '#FF9800', ...menuItemStyle },
       },
       record?.isActive
         ? {
-          label: translate('inactivate'),
+          label: t('rowMenu.label.inactivate'),
           key: 'inactivate',
           icon: <StopOutlined style={menuItemStyle} />,
           style: { color: '#9E9E9E', ...menuItemStyle },
         }
         : {
-          label: translate('activate'),
+          label: t('rowMenu.label.activate'),
           key: 'activate',
           icon: <CheckCircleOutlined style={menuItemStyle} />,
           style: { color: '#4CAF50', ...menuItemStyle },
         },
       {
-        label: translate('delete'),
+        label: t('rowMenu.label.delete'),
         key: 'delete',
         icon: <FontAwesomeIcon icon={faTrashCan} style={menuItemStyle} />,
         danger: true,
       },
       {
-        label: `${translate('close')} (${translate('auto_close_in')} ${countdown}s)`,
+        label: `${t('rowMenu.label.close')} (${countdown}s)`,
         key: 'close',
         icon: <FontAwesomeIcon icon={faCircleXmark} style={menuItemStyle} />,
         danger: true,
@@ -78,19 +78,19 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record
 
     const binModeItems = [
       {
-        label: translate('view'),
+        label: t('rowMenu.label.view'),
         key: 'view',
         icon: <FontAwesomeIcon icon={faEye} style={menuItemStyle} />,
         style: { color: '#2196F3', ...menuItemStyle },
       },
       {
-        label: translate('restore'),
+        label: t('rowMenu.label.restore'),
         key: 'restore',
         icon: <FontAwesomeIcon icon={faTrashCanArrowUp} style={menuItemStyle} />,
         style: { color: '#009688', ...menuItemStyle },
       },
       {
-        label: `${translate('close')} (${translate('auto_close_in')} ${countdown}s)`,
+        label: `${t('rowMenu.label.close')} (${countdown}s)`,
         key: 'close',
         icon: <FontAwesomeIcon icon={faCircleXmark} style={menuItemStyle} />,
         danger: true,
@@ -103,7 +103,7 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record
       return baseItems;
     }
 
-  }, [record, translate, countdown, binMode])
+  }, [record, t, countdown, binMode])
 
   const onMenuItemClick = useCallback(
     async ({ key }: { key: string }) => {
@@ -153,7 +153,7 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record
 
       setIsLoading(false)
     },
-    [entity, record, actions, close],
+    [entity, record, CrudModuleContextHandler.updateForm, close, actions],
   )
 
   // Use escape key to close the menu
@@ -184,7 +184,7 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record
     return () => {
       if (timer) {
         clearInterval(timer)
-        setCountdown(120)
+        setCountdown(30)
       } // Cleanup the timer
     }
   }, [open, close])
@@ -233,8 +233,8 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record
       id="row-popover-menu"
       title={
         <Flex justify="space-between" align="center" wrap="nowrap" gap="large">
-          <Typography.Text>{record[recordTitleKey] ?? translate('row_menu')}</Typography.Text>
-          <Tooltip title={translate('close_menu')}>
+          <Typography.Text>{record[recordTitleKey] ?? t('rowMenu.title')}</Typography.Text>
+          <Tooltip title={t('tooltip.menu.close')}>
             <Button size='small' shape="default" danger icon={<FontAwesomeIcon icon={faXmark} size="xl" />} onClick={close} />
           </Tooltip>
         </Flex>

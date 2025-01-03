@@ -12,44 +12,44 @@ import { FormFieldConfig } from '@/components/FormField'
 import DataTable from './features/DataTable'
 import Filter from './features/Filter'
 
-interface GenericAssignmentManagerProps<OE extends { id: number }, IE extends { id: number; disabled?: boolean }> {
-  owningEntityRow: OE
-  owningEntity: string
+interface AssociatedEntitiesManagerProps<E extends { id: number }, AE extends { id: number; disabled?: boolean }> {
+  entityRecord: E
+  entity: string
   associatedEntity: string
-  associatedEntityColumns: ProColumns<IE>[]
-  associatedSideField: string
-  owningSideField: string
+  associatedEntityColumns: ProColumns<AE>[]
+  associatedSideField: keyof AE
+  entitySideField: keyof E
   associatedEntityQueryConfig: {
     label: string
-    name: keyof IE
-    formField: FormFieldConfig<IE>
+    name: keyof AE
+    formField: FormFieldConfig<AE>
   }[]
 }
 
-const GenericAssignmentManager = <OE extends { id: number }, IE extends { id: number; disabled?: boolean }>({
-  owningEntityRow,
-  owningEntity,
+const GenericAssociationManager = <E extends { id: number }, AE extends { id: number; disabled?: boolean }>({
+  entityRecord,
+  entity,
   associatedEntity,
   associatedEntityColumns,
   associatedSideField,
-  owningSideField,
+  entitySideField,
   associatedEntityQueryConfig,
-}: GenericAssignmentManagerProps<OE, IE>) => {
+}: AssociatedEntitiesManagerProps<E, AE>) => {
   //
   const [tabKey, setTabKey] = useState<'allocatedItems' | 'availableItems'>('allocatedItems')
-  const [allocatedItems, setAllocatedItems] = useState<IE[]>([])
-  const [availableItems, setAvailableItems] = useState<IE[]>([])
-  const [itemsToAllocate, setItemsToAllocate] = useState<IE[]>([])
-  const [itemsToDeallocate, setItemsToDeallocate] = useState<IE[]>([])
-  const [allocatedItemsFilter, setAllocatedItemsFilter] = useState({})
-  const [availableItemsFilter, setAvailableItemsFilter] = useState({})
+  const [allocatedItems, setAllocatedItems] = useState<AE[]>([])
+  const [availableItems, setAvailableItems] = useState<AE[]>([])
+  const [itemsToAllocate, setItemsToAllocate] = useState<AE[]>([])
+  const [itemsToDeallocate, setItemsToDeallocate] = useState<AE[]>([])
+  const [allocatedItemsFilter, setAllocatedItemsFilter] = useState<Partial<Record<keyof AE, any>>>({})
+  const [availableItemsFilter, setAvailableItemsFilter] = useState<Partial<Record<keyof AE, any>>>({})
 
-  const { translate } = useLocale()
+  const { translate: t } = useLocale()
 
   const allocatedTableTableRef = useRef<ActionType>()
   const availableTableRef = useRef<ActionType>()
 
-  const tableColumns: ProColumns<IE>[] = [
+  const tableColumns: ProColumns<AE>[] = [
     ...associatedEntityColumns,
     {
       key: 'actions',
@@ -57,68 +57,70 @@ const GenericAssignmentManager = <OE extends { id: number }, IE extends { id: nu
       width: '40px',
       title: <SettingTwoTone />,
       align: 'center',
-      render: (_, entity) => {
+      render: (_, row) => {
         if (tabKey === 'allocatedItems') {
           return (
-            <DeallocateOne
-              owningEntity={owningEntity}
-              owningEntityId={owningEntityRow.id}
-              inverseField={associatedSideField}
-              inverseIdToDisassociate={entity.id}
+            <DeallocateOne<E>
+              entity={entity}
+              entityRecordId={entityRecord.id}
+              entitySideField={entitySideField}
+              idToDisassociate={row.id}
               tableActionRef={allocatedTableTableRef}
             />
           )
         } else if (tabKey === 'availableItems') {
           return (
-            <AllocateOne
-              owningEntity={owningEntity}
-              owningEntityId={owningEntityRow.id}
-              inverseField={associatedSideField}
-              inverseIdToAssociate={entity.id}
+            <AllocateOne<E>
+              entity={entity}
+              entityRecordId={entityRecord.id}
+              entitySideField={entitySideField}
+              idToAssociate={row.id}
               tableActionRef={availableTableRef}
             />
           )
         } else {
-          return null
+          return null;
         }
       },
     },
   ]
 
   const handleTabChange = (key: 'allocatedItems' | 'availableItems') => {
-    setTabKey(key)
+    setTabKey(key);
   }
 
-  const handleAllocatedItemsCardClick = (clickedItem: IE) => {
+  const handleAllocatedItemsCardClick = (clickedItem: AE) => {
     const isAlreadySelectedToDeallocate = itemsToDeallocate.some((item) => item.id === clickedItem.id)
     if (isAlreadySelectedToDeallocate) {
-      setItemsToDeallocate((prev) => prev.filter((item) => item.id !== clickedItem.id))
+      setItemsToDeallocate((prev) => prev.filter((item) => item.id !== clickedItem.id));
     } else {
-      setItemsToDeallocate((prev) => [...prev, clickedItem])
+      setItemsToDeallocate((prev) => [...prev, clickedItem]);
     }
   }
 
-  const handleAvailableItemsCardClick = (clickedItem: IE) => {
+  const handleAvailableItemsCardClick = (clickedItem: AE) => {
     const isAlreadySelectedToAllocate = itemsToAllocate.some((item) => item.id === clickedItem.id)
 
     if (isAlreadySelectedToAllocate) {
-      setItemsToAllocate((prev) => prev.filter((item) => item.id !== clickedItem.id))
+      setItemsToAllocate((prev) => prev.filter((item) => item.id !== clickedItem.id));
     } else {
-      setItemsToAllocate((prev) => [...prev, clickedItem])
+      setItemsToAllocate((prev) => [...prev, clickedItem]);
     }
   }
 
-  const handleFilter = (filter: { queryField: string; query: any }) => {
+  const handleFilter = (filter: { queryField: keyof AE; query: any }) => {
+    console.log('Filter applied:', filter, 'Current tab:', tabKey);
+
     if (tabKey === 'allocatedItems') {
-      setAllocatedItemsFilter({ [filter.queryField]: filter.query })
-      allocatedTableTableRef.current?.setPageInfo?.({ current: 1, total: 0 })
-      allocatedTableTableRef.current?.reload?.()
+      setAllocatedItemsFilter((prev) => ({ ...prev, [filter.queryField]: filter.query }));
+      allocatedTableTableRef.current?.setPageInfo?.({ current: 1, total: 0 });
+      allocatedTableTableRef.current?.reload?.();
     }
 
     if (tabKey === 'availableItems') {
-      setAvailableItemsFilter({ [filter.queryField]: filter.query })
-      availableTableRef.current?.setPageInfo?.({ current: 1, total: 0 })
-      availableTableRef.current?.reload?.()
+      setAvailableItemsFilter((prev) => ({ ...prev, [filter.queryField]: filter.query }));
+      availableTableRef.current?.setPageInfo?.({ current: 1, total: 0 });
+      availableTableRef.current?.reload?.();
     }
   }
 
@@ -155,21 +157,21 @@ const GenericAssignmentManager = <OE extends { id: number }, IE extends { id: nu
       items={[
         {
           key: 'allocatedItems',
-          label: `${translate('allocated')} ${associatedEntity}s`,
+          label: `${t('allocated')} ${associatedEntity}s`,
           children: (
-            <DataTable<IE>
+            <DataTable<AE>
               id="allocated-items-table"
               key={'allocated-items-table'}
               actionRef={allocatedTableTableRef}
               dataSource={allocatedItems}
               columns={tableColumns}
               request={async (params, sort, _filter) => {
-                const { result, success } = await genricAssignmentService.relatedEntitiespage<IE>({
-                  owningEntity,
-                  owningEntityId: owningEntityRow.id,
-                  inverseEntity: associatedEntity,
-                  inverseSideField: owningSideField,
-                  owningSideField: associatedSideField,
+                const { result, success } = await genricAssignmentService.associatedEntityPage<E, AE>({
+                  entity,
+                  entityRecordId: entityRecord.id,
+                  associatedEntity,
+                  entitySideField,
+                  associatedSideField,
                   pagination: {
                     limit: params?.pageSize ?? 10,
                     page: params?.current ?? 1,
@@ -184,7 +186,7 @@ const GenericAssignmentManager = <OE extends { id: number }, IE extends { id: nu
                   total: result?.totalResults,
                 }
               }}
-              postData={(data: IE[]) => {
+              postData={(data: AE[]) => {
                 setAllocatedItems((_prev) => [...data])
               }}
               rowSelection={{
@@ -200,15 +202,15 @@ const GenericAssignmentManager = <OE extends { id: number }, IE extends { id: nu
               toolbar={{
                 multipleLine: false,
                 className: 'genric-assignment-manager-pro-table-toolbar',
-                filter: <Filter<IE> filterConfig={associatedEntityQueryConfig} onFilter={handleFilter} onReset={handleFilterReset} />,
+                filter: <Filter<AE> filterConfig={associatedEntityQueryConfig} onFilter={handleFilter} onReset={handleFilterReset} />,
               }}
               toolBarRender={(action, rows) => [
-                <DeallocateMany
+                <DeallocateMany<E>
                   actionRef={action}
-                  owningEntity={owningEntity}
-                  owningEntityId={owningEntityRow.id}
-                  inverseField={associatedSideField}
-                  inverseIdsToDisassociate={rows.selectedRowKeys ? rows.selectedRowKeys.filter((id) => Number.isInteger(id)).map(Number) : []}
+                  entity={entity}
+                  entityRecordId={entityRecord.id}
+                  entitySideField={entitySideField}
+                  idsToDisassociate={rows.selectedRowKeys ? rows.selectedRowKeys.filter((id) => Number.isInteger(id)).map(Number) : []}
                 />,
                 <Button
                   type="primary"
@@ -224,21 +226,21 @@ const GenericAssignmentManager = <OE extends { id: number }, IE extends { id: nu
         },
         {
           key: 'availableItems',
-          label: `${translate('available')} ${associatedEntity}s`,
+          label: `${t('available')} ${associatedEntity}s`,
           children: (
-            <DataTable<IE>
+            <DataTable<AE>
               id="available-items-table"
               key={'available-items-table'}
               actionRef={availableTableRef}
               dataSource={availableItems}
               columns={tableColumns}
               request={async (params, sort, _filter) => {
-                const { result, success } = await genricAssignmentService.relatedEntitiespage<IE>({
-                  owningEntity,
-                  owningEntityId: owningEntityRow.id,
-                  inverseEntity: associatedEntity,
-                  inverseSideField: owningSideField,
-                  owningSideField: associatedSideField,
+                const { result, success } = await genricAssignmentService.associatedEntityPage<E, AE>({
+                  entity,
+                  entityRecordId: entityRecord.id,
+                  associatedEntity,
+                  entitySideField,
+                  associatedSideField,
                   pagination: {
                     limit: params?.pageSize ?? 10,
                     page: params?.current ?? 1,
@@ -254,7 +256,7 @@ const GenericAssignmentManager = <OE extends { id: number }, IE extends { id: nu
                   total: result?.totalResults,
                 }
               }}
-              postData={(data: IE[]) => {
+              postData={(data: AE[]) => {
                 setAvailableItems((_prev) => [...data])
               }}
               rowSelection={{
@@ -275,15 +277,15 @@ const GenericAssignmentManager = <OE extends { id: number }, IE extends { id: nu
               toolbar={{
                 multipleLine: false,
                 className: 'genric-assignment-manager-pro-table-toolbar',
-                filter: <Filter<IE> filterConfig={associatedEntityQueryConfig} onFilter={handleFilter} onReset={handleFilterReset} />,
+                filter: <Filter<AE> filterConfig={associatedEntityQueryConfig} onFilter={handleFilter} onReset={handleFilterReset} />,
               }}
               toolBarRender={(action, rows) => [
-                <AllocateMany
+                <AllocateMany<E>
                   actionRef={action}
-                  owningEntity={owningEntity}
-                  owningEntityId={owningEntityRow.id}
-                  inverseField={associatedSideField}
-                  inverseIdsToAssociate={rows.selectedRowKeys ? rows.selectedRowKeys.filter((id) => Number.isInteger(id)).map(Number) : []}
+                  entity={entity}
+                  entityRecordId={entityRecord.id}
+                  entitySideField={entitySideField}
+                  idsToAssociate={rows.selectedRowKeys ? rows.selectedRowKeys.filter((id) => Number.isInteger(id)).map(Number) : []}
                 />,
                 <Button
                   type="primary"
@@ -302,4 +304,4 @@ const GenericAssignmentManager = <OE extends { id: number }, IE extends { id: nu
   )
 }
 
-export default GenericAssignmentManager
+export default GenericAssociationManager

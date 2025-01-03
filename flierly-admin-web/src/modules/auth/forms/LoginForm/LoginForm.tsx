@@ -6,7 +6,7 @@ import Loading from '@/components/Loading'
 import { useAuth } from '../../hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
 import { LoadingTypes } from '../../@types/loading'
-import regexConstants from '@/constants/regex.constants'
+import regexConstants from '@/constants/validations.regex'
 
 interface LoginFormProps {
   redirectOnLogin?: boolean

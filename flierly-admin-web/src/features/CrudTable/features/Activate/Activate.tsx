@@ -13,7 +13,7 @@ type ActivateProps = {
 }
 
 const Activate: React.FC<ActivateProps> = ({ entity, actions, rows, render }) => {
-  const { translate } = useLocale()
+  const { translate: t } = useLocale()
 
   const activate = useMemo(() => checkActiveStatus(rows.selectedRows), [rows.selectedRows])
 
@@ -41,17 +41,17 @@ const Activate: React.FC<ActivateProps> = ({ entity, actions, rows, render }) =>
   }
 
   return (
-    <Tooltip title={translate(activate ? 'activate_selected' : 'inactivate_selected')}>
+    <Tooltip title={t(activate ? 'tooltip.activate.selected' : 'tooltip.inactivate.selected')}>
       <Badge count={rows.selectedRowKeys.length} overflowCount={99}>
         <Popconfirm
-          title={`${translate(activate ? 'activate' : 'inactivate')}_selected: ${rows.selectedRowKeys.length}`}
-          description={translate(`on_confirming_selected_items_will_be_${activate ? 'activated' : 'inactivated'}`)}
+          title={t(activate ? 'action.title.activate' : 'action.title.inactivate')}
+          description={`${t(activate ? 'confirm.activate.message' : 'confirm.inactivate.message')}: ${rows.selectedRowKeys.length}`}
           icon={<QuestionCircleOutlined style={{ color: activate ? '#4CAF50' : '#9E9E9E' }} />}
           okButtonProps={{ style: { backgroundColor: activate ? '#4CAF50' : '#9E9E9E' } }}
-          okText={translate('confirm')}
-          cancelText={translate('cancel')}
+          okText={t('action.button.confirm')}
+          cancelText={t('action.button.cancel')}
           cancelButtonProps={{ type: 'primary' }}
-          onCancel={() => message.warning(translate('request_cancelled'))}
+          onCancel={() => message.warning(t('action.message.cancelled'))}
           onConfirm={handleConfirm}
         >
           <Button

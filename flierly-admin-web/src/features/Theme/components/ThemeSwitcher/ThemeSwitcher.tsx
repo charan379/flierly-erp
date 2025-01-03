@@ -5,11 +5,11 @@ import React from 'react'
 import useTheme from '../../hooks/useTheme'
 
 const ThemeSwitcher: React.FC = () => {
-  const { themePreference, setThemePreference } = useTheme()
-  const { translate } = useLocale()
+  const { themePreference, setThemePreference } = useTheme();
+  const { translate: t } = useLocale();
 
   const onValueChange = (value: ThemePreference): void => {
-    setThemePreference(value)
+    setThemePreference(value);
   }
 
   const options = [
@@ -25,7 +25,7 @@ const ThemeSwitcher: React.FC = () => {
               opacity: themePreference === 'light' ? 1 : 0.5,
             }}
           />
-          <div>{translate('light-theme')}</div>
+          <div>{t('theme.light')}</div>
         </div>
       ),
       value: 'light' as ThemePreference,
@@ -42,7 +42,7 @@ const ThemeSwitcher: React.FC = () => {
               opacity: themePreference === 'dark' ? 1 : 0.5,
             }}
           />
-          <div>{translate('dark-theme')}</div>
+          <div>{t('theme.dark')}</div>
         </div>
       ),
       value: 'dark' as ThemePreference,
@@ -60,12 +60,12 @@ const ThemeSwitcher: React.FC = () => {
           >
             A
           </Avatar>
-          <div>{translate('system-theme')}</div>
+          <div>{t('theme.system')}</div>
         </div>
       ),
       value: 'system' as ThemePreference,
     },
-  ]
+  ];
 
   return <Segmented defaultValue={'light'} options={options} size="small" onChange={onValueChange} block value={themePreference} />
 }

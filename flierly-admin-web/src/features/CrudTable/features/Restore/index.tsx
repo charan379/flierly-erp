@@ -1,3 +1,3 @@
 import Restore from './Restore'
 
-export default Restore
+export default Restore;

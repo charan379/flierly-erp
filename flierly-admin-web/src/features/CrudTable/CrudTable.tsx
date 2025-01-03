@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react'
 import useElementHeightByClassName from '@/hooks/useElementHeightByClassName'
-import useLocale from '@/features/Locale/hooks/useLocale'
-import { ProTable, ProColumns, ActionType } from '@ant-design/pro-components'
+import { ProTable, ProColumns, ActionType, FormInstance } from '@ant-design/pro-components'
 import Create from './forms/Create'
 import Delete from './features/Delete'
 import Activate from './features/Activate'
@@ -13,7 +12,6 @@ import Update from './forms/Update'
 import useCrudModuleContext from '../CrudModule/hooks/useCrudModuleContext'
 import crudService from '../CrudModule/service/crud-module.service'
 import Search from './forms/Search'
-import { FormFieldConfig } from '@/components/FormField'
 import { QueryFieldConfig } from '../QueryBuilder/QueryBuilder'
 
 export interface CrudTableProps<T = Record<string, any>> {
@@ -23,11 +21,20 @@ export interface CrudTableProps<T = Record<string, any>> {
   rowTitleKey?: keyof T
   columns: ProColumns<T>[]
   dataSource?: T[]
-  createFormFields?: FormFieldConfig<T>[]
-  updateFormFields?: FormFieldConfig<T>[]
+  addFormProps?: {
+    title?: string | React.ReactNode
+    formFields?: React.ReactNode;
+    formInstance?: FormInstance<T>
+    handleFormValuesChange?: (changedValues: Record<string, any>, allValues: Record<string, any>) => void
+  }
+  editFormProps?: {
+    title?: string | React.ReactNode
+    formFields?: React.ReactNode;
+    formInstance?: FormInstance<T>;
+    processDataForFormInitialValues?: (data: Partial<T>) => Partial<T>
+  }
   queryFormFields?: QueryFieldConfig<T>[]
   loadRelations?: Array<keyof T>
-  processDataForUpdateForm?: (data: Record<string, any>) => Record<string, any>
   render: {
     restore: boolean
     delete: boolean
@@ -59,18 +66,15 @@ const CrudTable = <T extends Record<string, any>>({
   columns,
   dataSource = [],
   loadRelations,
-  createFormFields,
-  updateFormFields,
+  addFormProps,
+  editFormProps,
   queryFormFields,
-  processDataForUpdateForm,
   render,
 }: CrudTableProps<T>) => {
   const tableHeight = useElementHeightByClassName('crud-data-table-flierly-1')
   const tableHeadHeight = useElementHeightByClassName('ant-table-thead')
   const tableToolbarHeight = useElementHeightByClassName('ant-pro-table-list-toolbar')
   const tablePaginationHeight = useElementHeightByClassName('ant-table-pagination')
-
-  const { translate } = useLocale()
 
   const [data, setData] = useState<T[]>(dataSource)
 
@@ -91,7 +95,7 @@ const CrudTable = <T extends Record<string, any>>({
   }
 
   // Centralized data validation and error handling
-  const getDataForUpdateForm = (data: Record<string, any>) => {
+  const getDataForUpdateForm = (data: Partial<T>) => {
     if (!data || Object.keys(data).length === 0) {
       // Handle empty data
       return {};
@@ -99,7 +103,7 @@ const CrudTable = <T extends Record<string, any>>({
 
     try {
       // Call the custom processing logic if provided
-      return processDataForUpdateForm?.(data) ?? data;
+      return editFormProps?.processDataForFormInitialValues?.(data) ?? data;
     } catch (error) {
       console.error("Error processing data for update form:", error);
       return data; // Fallback to original data
@@ -166,7 +170,7 @@ const CrudTable = <T extends Record<string, any>>({
           filters: CrudModuleContextHandler.filters.get(),
           pagination: { limit: params?.pageSize ?? 10, page: params?.current ?? 1 },
           loadRelations,
-          sort: sort,
+          sort,
           binMode: binMode,
         })
 
@@ -189,14 +193,21 @@ const CrudTable = <T extends Record<string, any>>({
       // toolbar controls configuration
       toolBarRender={(action, rows) => [
         <Search actions={action} queryFieldsConfig={queryFormFields} render={render.search} title="search" />,
-        <Create<T> entity={entity} formFields={createFormFields} title={translate('add_from')} render={!binMode && render.create} actions={action} />,
-        <Update<T>
+        <Create<T>
+          title={addFormProps?.title}
+          formInstance={addFormProps?.formInstance}
           entity={entity}
-          formFields={updateFormFields}
-          data={getDataForUpdateForm(CrudModuleContextHandler.updateForm.getData())}
+          formFields={addFormProps?.formFields}
+          render={!binMode && render.create}
+          actions={action} />,
+        <Update<T>
+          title={editFormProps?.title}
+          formInstance={editFormProps?.formInstance}
+          entity={entity}
+          formFields={editFormProps?.formFields}
+          data={getDataForUpdateForm(CrudModuleContextHandler.updateForm.getData() as T)}
           id={CrudModuleContextHandler.updateForm.getId()}
           isOpen={CrudModuleContextHandler.updateForm.isOpen()}
-          title={translate('update_form')}
           render={!binMode && render.update}
           actions={action}
           close={CrudModuleContextHandler.updateForm.close}

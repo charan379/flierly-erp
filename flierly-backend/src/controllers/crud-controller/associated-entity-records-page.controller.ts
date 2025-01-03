@@ -12,10 +12,10 @@ import { EntityTarget, ObjectLiteral } from 'typeorm';
 
 // Define the request body schema for validation
 interface AssociatedEntityRecordsPageRequestBody {
-  owningEntityId: number;
-  owningEntity: string;
-  owningSideField: string;
-  inverseSideField: string;
+  entityRecordId: number;
+  entity: string;
+  entitySideField: string;
+  associatedSideField: string;
   pagination: { page: number; limit: number };
   sort: { [key: string]: 'ascend' | 'descend' };
   filters: FilterObject;
@@ -24,10 +24,10 @@ interface AssociatedEntityRecordsPageRequestBody {
 
 // Joi schema for validating incoming requests
 const associatedEntityRecordsPageQuerySchema: Joi.ObjectSchema<AssociatedEntityRecordsPageRequestBody> = Joi.object({
-  owningEntityId: Joi.number().integer().min(1).required(),
-  owningEntity: Joi.string().disallow('').required(),
-  inverseSideField: Joi.string().disallow('').required(),
-  owningSideField: Joi.string().disallow('').required(),
+  entityRecordId: Joi.number().integer().min(1).required(),
+  entity: Joi.string().disallow('').required(),
+  associatedSideField: Joi.string().disallow('').required(),
+  entitySideField: Joi.string().disallow('').required(),
   pagination: Joi.object({
     page: Joi.number().integer().min(1).default(1), // Default page: 1
     limit: Joi.number().integer().min(1).default(20), // Default limit: 20
@@ -44,14 +44,14 @@ const associatedEntityRecordsPageQuerySchema: Joi.ObjectSchema<AssociatedEntityR
 
 /**
  * Fetch a paginated list of associated entity records.
- * @param inverseEntity - The inverse entity.
+ * @param associatedEntity - The inverse entity.
  * @param req - The request object.
  * @param res - The response object.
  * @returns The paginated list of associated entity records.
  */
-const associatedEntityRecordsPage = async (inverseEntity: EntityTarget<ObjectLiteral>, req: Request, res: Response): Promise<Response> => {
+const associatedEntityRecordsPage = async (associatedEntity: EntityTarget<ObjectLiteral>, req: Request, res: Response): Promise<Response> => {
   // Validate and extract request data
-  const { owningEntityId, owningEntity, inverseSideField, owningSideField, filters, pagination, sort, type }: AssociatedEntityRecordsPageRequestBody =
+  const { entityRecordId, entity, associatedSideField, entitySideField, filters, pagination, sort, type }: AssociatedEntityRecordsPageRequestBody =
     await JoiSchemaValidator<AssociatedEntityRecordsPageRequestBody>(
       associatedEntityRecordsPageQuerySchema,
       req.body,
@@ -59,49 +59,49 @@ const associatedEntityRecordsPage = async (inverseEntity: EntityTarget<ObjectLit
       'dynamic-fetch-related-entities',
     );
 
-  const inverseRepo = AppDataSource.getRepository(inverseEntity); // Get the repository for the inverse entity
-  const inverseEntityAlias = inverseEntity.toString().toLowerCase(); // Determine alias for the inverse entity
+  const associatedEntityRepo = AppDataSource.getRepository(associatedEntity); // Get the repository for the associatedEntity
+  const associatedEntityAlias = associatedEntity.toString().toLowerCase(); // Determine alias for the associatedEntity
 
   // Build query: join inverse entity with owning entity and filter by owning entity ID
-  const qb = inverseRepo.createQueryBuilder(inverseEntityAlias);
+  const qb = associatedEntityRepo.createQueryBuilder(associatedEntityAlias);
 
   // If type is 'allocated', join with the owning entity to get rows that are allocated
   if (type === 'allocated') {
-    qb.innerJoin(`${inverseEntityAlias}.${inverseSideField}`, owningEntity, `${owningEntity}.id = ${owningEntityId}`); // Join the owning entity with the inverse entity
+    qb.innerJoin(`${associatedEntityAlias}.${associatedSideField}`, entity, `${entity}.id = ${entityRecordId}`); // Join the entity with the associated entity
   } else {
     const entities = await getEntityList();
-    const oe = entities.find((e) => e.code === owningEntity);
+    const e = entities.find((e) => e.code === entity);
 
-    if (oe === undefined) throw new FlierlyException('Invalid owning entity', HttpCodes.BAD_REQUEST);
+    if (e === undefined) throw new FlierlyException('Invalid entity', HttpCodes.BAD_REQUEST);
 
-    const metadata = AppDataSource.getMetadata(oe?.entity);
-    const relation = metadata.findRelationWithPropertyPath(owningSideField);
+    const metadata = AppDataSource.getMetadata(e?.entity);
+    const relation = metadata.findRelationWithPropertyPath(entitySideField);
 
-    if (!relation) throw new FlierlyException('Invalid owning side field', HttpCodes.BAD_REQUEST);
+    if (!relation) throw new FlierlyException('Invalid entity side field', HttpCodes.BAD_REQUEST);
 
     const joinTable = relation.joinTableName;
 
-    const referencedColumnId = relation.joinColumns.find((column) => column.referencedColumn?.propertyPath === 'id');
+    const entitySideReferencedColumnId = relation.joinColumns.find((column) => column.referencedColumn?.propertyPath === 'id');
 
-    const inverseSideReferencedColumnId = relation.inverseJoinColumns.find((column) => column.referencedColumn?.propertyPath === 'id');
+    const associatedSideReferencedColumnId = relation.inverseJoinColumns.find((column) => column.referencedColumn?.propertyPath === 'id');
 
-    if (!referencedColumnId) throw new FlierlyException('No ReferencedColumn with id at owning side', HttpCodes.BAD_REQUEST);
+    if (!entitySideReferencedColumnId) throw new FlierlyException('No ReferencedColumn with id at entity side', HttpCodes.BAD_REQUEST);
 
-    if (!inverseSideReferencedColumnId) throw new FlierlyException('No ReferencedColumn with id at inverse side', HttpCodes.BAD_REQUEST);
+    if (!associatedSideReferencedColumnId) throw new FlierlyException('No ReferencedColumn with id at associated side', HttpCodes.BAD_REQUEST);
 
     qb.leftJoin(
       `${joinTable}`, // Join the join table directly
       `${joinTable}`, // Alias for the join table
-      `${joinTable}.${inverseSideReferencedColumnId.databaseName} = ${inverseEntityAlias}.id AND ${joinTable}.${referencedColumnId.databaseName} = :owningEntityId`,
-      { owningEntityId },
-    ).where(`${joinTable}.${referencedColumnId.databaseName} IS NULL`); // Exclude allocated privileges
+      `${joinTable}.${associatedSideReferencedColumnId.databaseName} = ${associatedEntityAlias}.id AND ${joinTable}.${entitySideReferencedColumnId.databaseName} = :entityRecordId`,
+      { entityRecordId },
+    ).where(`${joinTable}.${entitySideReferencedColumnId.databaseName} IS NULL`); // Exclude allocated privileges
   }
 
   qb.skip((pagination.page - 1) * pagination.limit) // Apply pagination (offset)
     .take(pagination.limit); // Limit results
 
   qbSortOrder(qb, sort); // Apply sorting based on request
-  qbFilters(qb, inverseEntityAlias, filters); // Apply filters based on request
+  qbFilters(qb, associatedEntityAlias, filters); // Apply filters based on request
 
   // Execute the query and get paginated results
   const [results, total] = await qb.getManyAndCount();

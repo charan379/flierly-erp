@@ -10,7 +10,7 @@ import isExists from './is-exists.controller';
 import activate from './activate.controller';
 import restore from './restore.controller';
 import inactivate from './inactivate.controller';
-import updateEntityAssociatedRecords from './update-entity-associated-records.controller';
+import updateAssociatedEntityRecords from './update-entity-associated-records.controller';
 import associatedEntityRecordsPage from './associated-entity-records-page.controller';
 
 export interface ICRUDController {
@@ -25,7 +25,7 @@ export interface ICRUDController {
   activate: (req: Request, res: Response) => Promise<Response>;
   inactivate: (req: Request, res: Response) => Promise<Response>;
   restore: (req: Request, res: Response) => Promise<Response>;
-  updateEntityAssociatedRecords: (req: Request, res: Response) => Promise<Response>;
+  updateAssociatedEntityRecords: (req: Request, res: Response) => Promise<Response>;
 }
 
 /**
@@ -35,18 +35,18 @@ export interface ICRUDController {
  */
 const CRUDController = async (entity: EntityTarget<ObjectLiteral>): Promise<ICRUDController> => {
   const crudMethods = {
-    create: (req: Request, res: Response) => create(entity, req, res),
-    read: (req: Request, res: Response) => read(entity, req, res),
-    update: (req: Request, res: Response) => update(entity, req, res),
-    delete: (req: Request, res: Response) => softDelete(entity, req, res),
-    page: (req: Request, res: Response) => page(entity, req, res),
-    associatedEntityRecordsPage: (req: Request, res: Response) => associatedEntityRecordsPage(entity, req, res),
-    search: (req: Request, res: Response) => search(entity, req, res),
-    isExists: (req: Request, res: Response) => isExists(entity, req, res),
-    activate: (req: Request, res: Response) => activate(entity, req, res),
-    inactivate: (req: Request, res: Response) => inactivate(entity, req, res),
-    restore: (req: Request, res: Response) => restore(entity, req, res),
-    updateEntityAssociatedRecords: (req: Request, res: Response) => updateEntityAssociatedRecords(entity, req, res),
+    create: (req: Request, res: Response): Promise<Response> => create(entity, req, res),
+    read: (req: Request, res: Response): Promise<Response> => read(entity, req, res),
+    update: (req: Request, res: Response): Promise<Response> => update(entity, req, res),
+    delete: (req: Request, res: Response): Promise<Response> => softDelete(entity, req, res),
+    page: (req: Request, res: Response): Promise<Response> => page(entity, req, res),
+    associatedEntityRecordsPage: (req: Request, res: Response): Promise<Response> => associatedEntityRecordsPage(entity, req, res),
+    search: (req: Request, res: Response): Promise<Response> => search(entity, req, res),
+    isExists: (req: Request, res: Response): Promise<Response> => isExists(entity, req, res),
+    activate: (req: Request, res: Response): Promise<Response> => activate(entity, req, res),
+    inactivate: (req: Request, res: Response): Promise<Response> => inactivate(entity, req, res),
+    restore: (req: Request, res: Response): Promise<Response> => restore(entity, req, res),
+    updateAssociatedEntityRecords: (req: Request, res: Response): Promise<Response> => updateAssociatedEntityRecords(entity, req, res),
   };
 
   return crudMethods;

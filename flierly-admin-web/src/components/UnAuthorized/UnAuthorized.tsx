@@ -4,15 +4,15 @@ import { Button, Result } from 'antd'
 import { useNavigate } from 'react-router-dom'
 
 const UnAuthorized: React.FC = () => {
-  const { translate } = useLocale() // Custom hook for translations
+  const { translate: t } = useLocale() // Custom hook for translations
   const navigate = useNavigate() // Hook for navigation
 
   return (
     // Ant Design's Result component for 403 error page
     <Result
       status="403" // HTTP status for forbidden access
-      title={translate('error_403')} // Display translated title
-      subTitle={translate('sorry_your_not_authorized_to_access_this_page')} // Display translated subtitle
+      title={t('error.title.403')} // Display translated title
+      subTitle={t('error.message.403')} // Display translated subtitle
       extra={
         <Button
           type="primary" // Button styling as primary
@@ -21,7 +21,7 @@ const UnAuthorized: React.FC = () => {
             navigate(-1) // Navigate to home on click
           }}
         >
-          {translate('back')} {/* Translated button text */}
+          {t('navigate.back')} {/* Translated button text */}
         </Button>
       }
     />

@@ -1,3 +1,4 @@
+import useLocale from '@/features/Locale/hooks/useLocale'
 import { Button, Result } from 'antd'
 import React from 'react'
 
@@ -8,14 +9,15 @@ interface ErrorFallbackProps {
 }
 
 const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetErrorBoundary }) => {
+  const { translate: t } = useLocale();
   return (
     <Result
       status="500"
-      title="Sorry, something went wrong."
-      subTitle={error.message}
+      title={error?.name ?? t('error.title.500')}
+      subTitle={error?.message ?? t('error.title.500')}
       extra={
         <Button type="primary" onClick={resetErrorBoundary}>
-          Try Again
+          {t('navigate.retry')}
         </Button>
       }
     />

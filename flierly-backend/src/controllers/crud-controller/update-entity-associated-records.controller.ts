@@ -9,9 +9,9 @@ import { Request, Response } from 'express';
 import Joi from 'joi';
 import { EntityTarget, ObjectLiteral } from 'typeorm';
 
-interface UpdateEntityAssociatedRecordsRequestBody {
-  owningEntityId: number;
-  inverseField: string;
+interface UpdateAssociatedEntityRecordsRequestBody {
+  entityRecordId: number;
+  entitySideField: string;
   newArray?: number[];
   addOne?: number;
   removeOne?: number;
@@ -19,9 +19,9 @@ interface UpdateEntityAssociatedRecordsRequestBody {
   removeMultiple?: number[];
 }
 
-const updateEntityAssociatedRecordsRequestBodySchema: Joi.ObjectSchema<UpdateEntityAssociatedRecordsRequestBody> = Joi.object({
-  owningEntityId: idSchema,
-  inverseField: Joi.string().required().messages({
+const updateAssociatedEntityAssociatedRecordsRequestBodySchema: Joi.ObjectSchema<UpdateAssociatedEntityRecordsRequestBody> = Joi.object({
+  entityRecordId: idSchema,
+  entitySideField: Joi.string().required().messages({
     'any.required': 'The "inverseField" is required.',
   }),
   newArray: idArraySchema.optional(),
@@ -33,41 +33,41 @@ const updateEntityAssociatedRecordsRequestBodySchema: Joi.ObjectSchema<UpdateEnt
 
 /**
  * Update associated records of an entity.
- * @param owningEntity - The owning entity.
+ * @param entity - The entity.
  * @param req - The request object.
  * @param res - The response object.
  * @returns The response with the update result.
  */
-const updateEntityAssociatedRecords = async (owningEntity: EntityTarget<ObjectLiteral>, req: Request, res: Response): Promise<Response> => {
+const updateAssociatedEntityRecords = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Response): Promise<Response> => {
   // Validate request body
-  const { owningEntityId, inverseField, newArray, addOne, removeOne, addMultiple, removeMultiple }: UpdateEntityAssociatedRecordsRequestBody = await JoiSchemaValidator(
-    updateEntityAssociatedRecordsRequestBodySchema,
+  const { entityRecordId, entitySideField, newArray, addOne, removeOne, addMultiple, removeMultiple }: UpdateAssociatedEntityRecordsRequestBody = await JoiSchemaValidator(
+    updateAssociatedEntityAssociatedRecordsRequestBodySchema,
     req.body,
     { abortEarly: false },
     'dynamic-update-array-field-controller',
   );
 
-  const repo = AppDataSource.getRepository(owningEntity);
+  const repo = AppDataSource.getRepository(entity);
 
-  // Fetch relation columns and validate the inverse field
-  const inverseFieldMetadata = repo.metadata.relations.reduce((acc: Record<string, any>, column) => {
+  // Fetch relation columns and validate the entitySide field
+  const entitySideFieldMetadata = repo.metadata.relations.reduce((acc: Record<string, any>, column) => {
     acc[column.propertyName] = column.relationType;
     return acc;
   }, {});
 
-  if (!Object.keys(inverseFieldMetadata).includes(inverseField)) {
-    throw new FlierlyException(`${inverseField} does not exist in ${owningEntity.toString()}`, HttpCodes.BAD_REQUEST);
+  if (!Object.keys(entitySideFieldMetadata).includes(entitySideField)) {
+    throw new FlierlyException(`${entitySideField} does not exist in ${entity.toString()}`, HttpCodes.BAD_REQUEST);
   }
 
-  if (inverseFieldMetadata[inverseField] !== 'many-to-many') {
-    throw new FlierlyException(`${inverseField} is not many-to-many related to ${owningEntity.toString()}`, HttpCodes.BAD_REQUEST);
+  if (entitySideFieldMetadata[entitySideField] !== 'many-to-many') {
+    throw new FlierlyException(`${entitySideField} is not many-to-many related to ${entity.toString()}`, HttpCodes.BAD_REQUEST);
   }
 
   // Fetch the current field data with relations loaded
   const queryBuilder = repo.createQueryBuilder();
-  const owningEntityRow = await queryBuilder.where('id = :id', { id: owningEntityId }).loadAllRelationIds().getOneOrFail();
+  const entityRecord = await queryBuilder.where('id = :id', { id: entityRecordId }).loadAllRelationIds().getOneOrFail();
 
-  const existingArray: number[] = owningEntityRow[inverseField] ?? [];
+  const existingArray: number[] = entityRecord[entitySideField] ?? [];
 
   // Compute additions and removals based on request
   let idsToAdd: number[] = [];
@@ -98,16 +98,16 @@ const updateEntityAssociatedRecords = async (owningEntity: EntityTarget<ObjectLi
 
   // Execute transaction for updates
   await AppDataSource.transaction(async (entityManager) => {
-    const transactionRepo = entityManager.getRepository(owningEntity);
+    const transactionRepo = entityManager.getRepository(entity);
 
-    await transactionRepo.createQueryBuilder().relation(inverseField).of(owningEntityId).addAndRemove(idsToAdd, idsToRemove);
+    await transactionRepo.createQueryBuilder().relation(entitySideField).of(entityRecordId).addAndRemove(idsToAdd, idsToRemove);
   });
 
   return res.status(HttpCodes.OK).json(
     apiResponseBuilder({
       success: true,
-      result: `Updates for owning entity ${owningEntity.toString()} (ID: ${owningEntityId}, Relation: ${inverseField}): Added IDs: ${idsToAdd.join(', ') || 'none'}, Removed IDs: ${idsToRemove.join(', ') || 'none'}.`,
-      message: `Updated ${inverseField}: ${idsToAdd.length} added, ${idsToRemove.length} removed.`,
+      result: `Updates for entity ${entity.toString()} (ID: ${entityRecordId}, Relation: ${entitySideField}): Added IDs: ${idsToAdd.join(', ') || 'none'}, Removed IDs: ${idsToRemove.join(', ') || 'none'}.`,
+      message: `Updated ${entitySideField}: ${idsToAdd.length} added, ${idsToRemove.length} removed.`,
       controller: 'CRUD.UpdateArrayFieldController',
       httpCode: HttpCodes.OK,
       error: null,
@@ -117,4 +117,4 @@ const updateEntityAssociatedRecords = async (owningEntity: EntityTarget<ObjectLi
   );
 };
 
-export default updateEntityAssociatedRecords;
+export default updateAssociatedEntityRecords;

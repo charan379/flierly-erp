@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Drawer, Button, DrawerProps, Space } from 'antd'
+import useLocale from '@/features/Locale/hooks/useLocale'
 
 interface ResizableDrawerProps extends Omit<DrawerProps, 'width' | 'open' | 'onClose'> {
   trigger?: React.ReactNode // Button or trigger element to open the drawer
@@ -22,6 +23,7 @@ const ResizableDrawer: React.FC<ResizableDrawerProps> = ({
   initialWidth = 400,
   ...drawerProps
 }) => {
+  const { translate: t } = useLocale();
   const [defaultOpen, setDefaultOpen] = useState(false)
   const [drawerWidth, setDrawerWidth] = useState(initialWidth)
 
@@ -58,7 +60,7 @@ const ResizableDrawer: React.FC<ResizableDrawerProps> = ({
         React.cloneElement(trigger as React.ReactElement, { onClick: onOpen })
       ) : (
         <Button type="primary" onClick={onOpen}>
-          Open Drawer
+          {t('action.button.open')}
         </Button>
       )}
       <Drawer
@@ -69,7 +71,7 @@ const ResizableDrawer: React.FC<ResizableDrawerProps> = ({
         extra={
           <Space>
             <Button danger type="primary" onClick={onClose}>
-              Cancel
+              {t('action.button.close')}
             </Button>
           </Space>
         }

@@ -1,19 +1,22 @@
 import { CloseOutlined } from '@ant-design/icons'
-import { Button } from 'antd'
+import { Button, Tooltip } from 'antd'
 import React, { useState } from 'react'
 import genricAssignmentService from '../../service/genricAssignmentService'
 import { ActionType } from '@ant-design/pro-components'
+import useLocale from '@/features/Locale/hooks/useLocale'
 
-interface DeallocateOneProps {
-  owningEntity: string
-  owningEntityId: number
-  inverseField: string
-  inverseIdToDisassociate: number
+interface DeallocateOneProps<E> {
+  entity: string
+  entityRecordId: number
+  entitySideField: keyof E
+  idToDisassociate: number
   tableActionRef: React.MutableRefObject<ActionType | undefined>
 }
 
-const DeallocateOne: React.FC<DeallocateOneProps> = (props) => {
-  const { owningEntity, owningEntityId, inverseField, inverseIdToDisassociate, tableActionRef } = props
+const DeallocateOne = <E,>(props: DeallocateOneProps<E>) => {
+  const { entity, entityRecordId, entitySideField, idToDisassociate, tableActionRef } = props
+
+  const { translate: t } = useLocale();
 
   const [isLoding, setIsLoading] = useState(false)
 
@@ -23,10 +26,10 @@ const DeallocateOne: React.FC<DeallocateOneProps> = (props) => {
     setIsLoading(true)
 
     const { success } = await genricAssignmentService.updateAssociatedRecords({
-      owningEntity,
-      owningEntityId,
-      inverseField,
-      removeOne: inverseIdToDisassociate,
+      entity: entity,
+      entityRecordId,
+      entitySideField,
+      removeOne: idToDisassociate,
     })
 
     if (success) {
@@ -36,7 +39,15 @@ const DeallocateOne: React.FC<DeallocateOneProps> = (props) => {
     setIsLoading(false)
   }
 
-  return <Button onClick={handleDeallocate} loading={isLoding} disabled={isLoding} icon={<CloseOutlined />} type="link" />
+  return (
+    <Tooltip title={t('tooltip.remove')}>
+      <Button
+        onClick={handleDeallocate}
+        loading={isLoding}
+        disabled={isLoding}
+        icon={<CloseOutlined />}
+        type="link" />
+    </Tooltip>)
 }
 
 export default DeallocateOne

@@ -4,15 +4,15 @@ import { Button, Result } from 'antd'
 import { useNavigate } from 'react-router-dom'
 
 const NotFound: React.FC = () => {
-  const { translate } = useLocale() // Custom hook for translations
+  const { translate: t } = useLocale() // Custom hook for translations
   const navigate = useNavigate() // Hook for navigation
 
   return (
     // Ant Design's Result component for 404 error page
     <Result
       status="404" // HTTP status for not found
-      title={translate('error_404')} // Display translated title
-      subTitle={translate('sorry_the_page_you_requested_does_not_exist')} // Display translated subtitle
+      title={t('error.title.404')} // Display translated title
+      subTitle={t('error.message.404')} // Display translated subtitle
       extra={
         <Button
           type="primary" // Button styling as primary
@@ -21,7 +21,7 @@ const NotFound: React.FC = () => {
             navigate(-1) // Navigate to the previous page on click
           }}
         >
-          {translate('back')} {/* Translated button text */}
+          {t('navigate.back')} {/* Translated button text */}
         </Button>
       }
     />

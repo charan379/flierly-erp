@@ -15,24 +15,24 @@ type RestoreProps = {
 }
 
 const Restore: React.FC<RestoreProps> = ({ entity, actions, rows, render }) => {
-  const { translate } = useLocale()
+  const { translate: t } = useLocale()
 
   if (!render || !actions || rows.selectedRowKeys === undefined) return null
 
   const buttonStyle = rows.selectedRowKeys.length <= 0 ? {} : { backgroundColor: '#009688', borderColor: '#009688' }
 
   return (
-    <Tooltip title={`${translate('restore_selected')}`}>
+    <Tooltip title={`${t('tooltip.restore.selected')}`}>
       <Badge color="purple" count={rows.selectedRowKeys.length} overflowCount={99}>
         <Popconfirm
-          title={`${translate('restore_selected')} : ${rows.selectedRowKeys.length}`}
-          description={translate('on_confirming_selected_items_will_be_restored')}
+          title={t('action.title.restore')}
+          description={`${t('confirm.restore.message')}: ${rows.selectedRowKeys.length}`}
           icon={<QuestionCircleOutlined style={{ color: '#009688' }} />}
           okButtonProps={{ style: { backgroundColor: '#009688' } }}
-          okText={translate('confirm')}
-          cancelText={translate('cancel')}
+          okText={t('action.button.confirm')}
+          cancelText={t('action.button.cancel')}
           cancelButtonProps={{ type: 'primary' }}
-          onCancel={() => message.warning(translate('request_cancelled'))}
+          onCancel={() => message.warning(t('action.message.cancelled'))}
           onConfirm={async () => {
             const { success } = await crudService.restore({
               entity: entity,
@@ -60,4 +60,4 @@ const Restore: React.FC<RestoreProps> = ({ entity, actions, rows, render }) => {
   )
 }
 
-export default Restore
+export default Restore;

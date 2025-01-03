@@ -34,3 +34,10 @@ type EntityTimeStamps = {
   updatedAt: Date
   deletedAt: Date | null
 }
+
+type EntityDetails = {
+  entity: string;
+  code: string;
+  controller: string;
+  filePath: string;
+}

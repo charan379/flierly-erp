@@ -27,7 +27,7 @@ const createUserTableColumns = (translate: (value: string) => string, _hasPermis
     // email
     createEmailColumn(translate),
     // isActive
-    createBooleanColumn(translate, { dataIndex: 'isActive' }),
+    createBooleanColumn(translate, { dataIndex: 'isActive', width: 100 }),
     // Additional Privileges
     {
       title: `${translate('additional')} ${translate('privileges')}`,
@@ -48,11 +48,11 @@ const createUserTableColumns = (translate: (value: string) => string, _hasPermis
             trigger={<Button type="link">Manage</Button>}
           >
             <AssociationManager<User, Privilege>
-              owningEntity="user"
-              owningEntityRow={entity}
-              owningSideField="usersWithAdditionalPrivileges"
+              entity="user"
+              entityRecord={entity}
+              entitySideField="additionalPrivileges"
               associatedEntity="privilege"
-              associatedSideField="additionalPrivileges"
+              associatedSideField='usersWithAdditionalPrivileges'
               associatedEntityColumns={createPrivilegeTableColumns(translate, _hasPermission).filter((column) => ['id', 'name', 'code', 'entity', 'access', 'isActive'].includes(column.dataIndex as string))}
               associatedEntityQueryConfig={createPrivilegeAMQueryFields(translate)}
             />
@@ -80,11 +80,11 @@ const createUserTableColumns = (translate: (value: string) => string, _hasPermis
             trigger={<Button type="link">Manage</Button>}
           >
             <AssociationManager<User, Privilege>
-              owningEntity="user"
-              owningEntityRow={entity}
-              owningSideField="usersWithRestrictedPrivileges"
+              entity="user"
+              entityRecord={entity}
+              entitySideField="restrictedPrivileges"
               associatedEntity="privilege"
-              associatedSideField="restrictedPrivileges"
+              associatedSideField="usersWithRestrictedPrivileges"
               associatedEntityColumns={createPrivilegeTableColumns(translate, _hasPermission).filter((column) => ['id', 'name', 'code', 'entity', 'access', 'isActive'].includes(column.dataIndex as string))}
               associatedEntityQueryConfig={createPrivilegeAMQueryFields(translate)}
             />
@@ -112,11 +112,11 @@ const createUserTableColumns = (translate: (value: string) => string, _hasPermis
             trigger={<Button type="link">Manage</Button>}
           >
             <AssociationManager<User, Role>
-              owningEntity="user"
-              owningEntityRow={entity}
-              owningSideField="users"
+              entity="user"
+              entityRecord={entity}
+              entitySideField="roles"
               associatedEntity="role"
-              associatedSideField="roles"
+              associatedSideField="users"
               associatedEntityColumns={createRoleTableColumns(translate, _hasPermission).filter((column) => ['id', 'name', 'code', 'isActive'].includes(column.dataIndex as string))}
               associatedEntityQueryConfig={createRoleAMQueryFields(translate)}
             />

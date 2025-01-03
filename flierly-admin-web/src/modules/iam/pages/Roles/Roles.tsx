@@ -3,11 +3,11 @@ import React, { ComponentType, LazyExoticComponent, Suspense } from 'react'
 import createRoleTableColumns from '../../config/role/create-role-tablecolumns'
 import PageLoader from '@/components/PageLoader'
 import { CrudTableProps } from '@/features/CrudTable/CrudTable'
-import createRoleAddFormFields from '../../config/role/create-role-add-formfields'
 import createRoleQueryFields from '../../config/role/create-role-queryfields'
 import useLocale from '@/features/Locale/hooks/useLocale'
 import { useAuth } from '@/modules/auth/hooks/useAuth'
-import createRoleEditFormFields from '../../config/role/create-role-edit-formfields'
+import { Form } from 'antd'
+import RoleFormFields from '../../form-fields/RoleFormFields/RoleFormFields'
 
 // Lazy load CrudTable
 const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<Role>>> = React.lazy(() => import('@/features/CrudTable'))
@@ -15,6 +15,8 @@ const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<Role>>> = Reac
 const Roles: React.FC = () => {
   const { translate } = useLocale();
   const { hasPermission } = useAuth();
+  const [addFormInstance] = Form.useForm<Role>();
+  const [editFormInstace] = Form.useForm<Role>();
 
   return (
     <CrudModule header title={'roles'} menuKeys={['iam']}>
@@ -46,8 +48,14 @@ const Roles: React.FC = () => {
               },
             },
           }}
-          createFormFields={createRoleAddFormFields()}
-          updateFormFields={createRoleEditFormFields()}
+          addFormProps={{
+            formFields: <RoleFormFields formInstance={addFormInstance} />,
+            formInstance: addFormInstance
+          }}
+          editFormProps={{
+            formFields: <RoleFormFields formInstance={editFormInstace} isEditForm />,
+            formInstance: editFormInstace
+          }}
           queryFormFields={createRoleQueryFields(translate)}
         />
       </Suspense>

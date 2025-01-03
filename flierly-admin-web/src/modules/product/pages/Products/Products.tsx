@@ -3,22 +3,28 @@ import CrudModule from '@/features/CrudModule';
 import { CrudTableProps } from '@/features/CrudTable/CrudTable';
 import useLocale from '@/features/Locale/hooks/useLocale';
 import React, { ComponentType, LazyExoticComponent, Suspense } from 'react'
-import createProductTableColumns from '../../config/product/create-product-table-columns';
+import createProductTableColumns from '../../config/product/create-product-tablecolumns';
+import { Form } from 'antd';
+import ProductFormFields from '../../form-fields/ProductFormFields';
 
 const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<Product>>> = React.lazy(() => import('@/features/CrudTable'))
 
 const Products: React.FC = () => {
-    const { translate } = useLocale();
+    const { translate: t } = useLocale();
+    const [addFormInstance] = Form.useForm<Product>();
+    const [editFormInstace] = Form.useForm<Product>();
 
+    console.log("re-rendered-products")
     return (
         <CrudModule header title={'products'} menuKeys={['product']}>
             <Suspense fallback={<PageLoader />}>
                 <CrudTable
-                    entity="product"
-                    columns={createProductTableColumns(translate)}
-                    dataSource={[]}
                     tableKey="product-table"
                     rowKey="id"
+                    entity="product"
+                    columns={createProductTableColumns(t)}
+                    dataSource={[]}
+                    loadRelations={['brand', 'category', 'subCategory']}
                     render={{
                         activate: true,
                         bin: true,
@@ -38,6 +44,24 @@ const Products: React.FC = () => {
                                 search: false,
                                 setting: true,
                             },
+                        },
+                    }}
+                    addFormProps={{
+                        formFields: <ProductFormFields formInstance={addFormInstance} />,
+                        formInstance: addFormInstance,
+                        title: t('entity.add'),
+                    }}
+                    editFormProps={{
+                        formFields: <ProductFormFields formInstance={editFormInstace} isEditForm />,
+                        formInstance: editFormInstace,
+                        title: t("entity.update"),
+                        processDataForFormInitialValues(data) {
+                            return {
+                                ...data,
+                                brand: typeof data?.brand === 'number' ? data?.brand : data.brand?.id,
+                                category: typeof data?.category === 'number' ? data?.category : data.category?.id,
+                                subCategory: typeof data?.subCategory === 'number' ? data?.subCategory : data.subCategory?.id
+                            }
                         },
                     }}
                 />

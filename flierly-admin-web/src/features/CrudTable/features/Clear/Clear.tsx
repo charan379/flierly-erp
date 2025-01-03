@@ -12,12 +12,12 @@ type ClearProps = {
 
 const Clear: React.FC<ClearProps> = ({ render, rows, actions }) => {
 
-  const { translate } = useLocale();
+  const { translate: t } = useLocale();
 
   if (!render || !actions || !rows.selectedRowKeys) return null;
 
   return (
-    <Tooltip title={`${translate('clear_selected')}`}>
+    <Tooltip title={`${t('tooltip.clear.selected')}`}>
       <Badge color="pink" overflowCount={99} count={rows.selectedRowKeys.length}>
         <Button
           type="primary"

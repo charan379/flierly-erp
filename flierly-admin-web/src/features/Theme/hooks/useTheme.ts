@@ -47,15 +47,14 @@ function useTheme() {
   }, [preference, isDarkSystem, dispatch])
 
   // Event listener for system preference changes, throttled to limit frequency
-  const sysPreferenceListener = useCallback(
-    throttle((event: MediaQueryListEvent) => {
+  const sysPreferenceListener = useCallback((event: MediaQueryListEvent) => {
+    throttle(() => {
       setIsDarkSystem(event.matches)
       if (preference === 'system') {
         dispatch(CHANGE_THEME_MODE(event.matches ? 'dark' : 'light'))
       }
-    }, 200),
-    [preference, dispatch],
-  )
+    }, 200)()
+  }, [preference, dispatch])
 
   useEffect(() => {
     initTheme() // Initialize theme on component mount

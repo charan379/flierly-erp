@@ -7,7 +7,7 @@ import { Router } from 'express';
 
 const crudRouter = Router();
 
-const routeGenerator = (entityCode: string, controller: ICRUDController) => {
+const routeGenerator = (entityCode: string, controller: ICRUDController): void => {
   crudRouter.post(`/${entityCode}/create`, authorize(`${entityCode}.create`), controllerErrorBoundary(controller.create, entityCode));
   crudRouter.post(`/${entityCode}/read`, authorize(`${entityCode}.read`), controllerErrorBoundary(controller['read'], entityCode));
   crudRouter.post(`/${entityCode}/search`, authorize(`${entityCode}.read`), controllerErrorBoundary(controller['search'], entityCode));
@@ -19,7 +19,7 @@ const routeGenerator = (entityCode: string, controller: ICRUDController) => {
   crudRouter.patch(`/${entityCode}/inactivate`, authorize(`${entityCode}.manage`), controllerErrorBoundary(controller['inactivate'], entityCode));
   crudRouter.delete(`/${entityCode}/delete`, authorize(`${entityCode}.delete`), controllerErrorBoundary(controller['delete'], entityCode));
   crudRouter.patch(`/${entityCode}/restore`, authorize(`${entityCode}.delete`), controllerErrorBoundary(controller['restore'], entityCode));
-  crudRouter.patch(`/${entityCode}/update-associated-records`, authorize(`${entityCode}.manage`), controllerErrorBoundary(controller['updateEntityAssociatedRecords'], entityCode));
+  crudRouter.patch(`/${entityCode}/update-associated-records`, authorize(`${entityCode}.manage`), controllerErrorBoundary(controller['updateAssociatedEntityRecords'], entityCode));
 };
 
 getEntityList().then(async (entities) => {

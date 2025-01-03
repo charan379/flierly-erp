@@ -4,6 +4,7 @@ import React, { useEffect, useCallback } from 'react'
 import { ActionType } from '@ant-design/pro-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRecycle } from '@fortawesome/free-solid-svg-icons'
+import useLocale from '@/features/Locale/hooks/useLocale'
 
 type BinModeToggleProps = {
   actions: ActionType | undefined
@@ -14,6 +15,8 @@ type BinModeToggleProps = {
 }
 
 const BinModeToggle: React.FC<BinModeToggleProps> = ({ actions, isActive, activate, deactivate, render }) => {
+
+  const { translate: t } = useLocale();
 
   const handleToggle = useCallback(() => {
     if (isActive) {
@@ -28,7 +31,7 @@ const BinModeToggle: React.FC<BinModeToggleProps> = ({ actions, isActive, activa
       actions.reset?.() // Safely call reset if it exists
       actions.reload?.() // Safely call reload if it exists
     }
-  }, 0) // Adjust the debounce delay as needed
+  }, 100) // Adjust the debounce delay as needed
 
   useEffect(() => {
     debouncedReload() // Call the debounced function when isActive changes
@@ -37,11 +40,12 @@ const BinModeToggle: React.FC<BinModeToggleProps> = ({ actions, isActive, activa
   if (!render) return null
 
   return (
-    <Tooltip title={isActive ? 'Deactivate Bin Mode' : 'Activate Bin Mode'}>
+    <Tooltip title={!isActive ? t('tooltip.binMode.activate') : t('tooltip.binMode.deactivate')}>
       <Button
-        type={isActive ? 'default' : 'primary'} // Change button style based on state
+        type={!isActive ? 'default' : 'primary'} // Change button style based on state
         key="bin-mode-toggle"
         shape="circle"
+        danger
         size="small"
         icon={<FontAwesomeIcon icon={faRecycle} />}
         onClick={handleToggle}

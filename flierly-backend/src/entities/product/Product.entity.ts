@@ -18,7 +18,7 @@ export class Product {
   @IsOptional()
   isActive: boolean;
 
-  @Column({ type: 'varchar', length: 100, unique: true })
+  @Column({ type: 'varchar', length: 100, unique: true, nullable: false })
   @IsNotEmpty({ message: 'SKU must not be empty.' })
   @Length(3, 25, { message: 'SKU must be between 3 and 25 characters.' })
   @Matches(/^[A-Z0-9_-]{3,50}$/, { message: 'SKU is not valid only capital letters, numbers, underscores and hyphens allowed.' })

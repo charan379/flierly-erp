@@ -25,7 +25,7 @@ type CrudModuleProps = {
  */
 const CrudModule: React.FC<CrudModuleProps> = ({ header, footer, extra, title, menuKeys, children }) => {
   const { theme } = useTheme()
-  const { translate } = useLocale()
+  const { translate: t } = useLocale()
   const { hasPermission } = useAuth();
 
   return (
@@ -36,7 +36,7 @@ const CrudModule: React.FC<CrudModuleProps> = ({ header, footer, extra, title, m
             <Header style={styles.header}>
               {typeof title === 'string' ? (
                 <Typography.Title level={4} style={{ marginBottom: '1em' }}>
-                  {translate(title)}
+                  {title}
                 </Typography.Title>
               ) : (
                 title
@@ -54,7 +54,7 @@ const CrudModule: React.FC<CrudModuleProps> = ({ header, footer, extra, title, m
                   <Menu
                     theme={theme}
                     className="no-scrollbar"
-                    items={createMenuItems(translate, hasPermission).filter((m) => menuKeys.includes(m.key))}
+                    items={createMenuItems(t, hasPermission).filter((m) => menuKeys.includes(m.key))}
                     mode="horizontal"
                     selectable={false}
                     style={{

@@ -16,22 +16,22 @@ type DeleteProps = {
 
 const Delete: React.FC<DeleteProps> = ({ entity, actions, rows, render }) => {
 
-  const { translate } = useLocale()
+  const { translate: t } = useLocale()
 
   if (!render || !actions || !rows.selectedRowKeys) return null
 
   return (
-    <Tooltip title={`${translate('delete_selected')}`}>
+    <Tooltip title={`${t('tooltip.delete.selected')}`}>
       <Badge color="blue" count={rows.selectedRowKeys.length} overflowCount={99}>
         <Popconfirm
-          title={`${translate('delete_selected')} : ${rows.selectedRowKeys.length}`}
-          description={translate('on_confirming_selected_items_will_be_deleted')}
+          title={t('action.title.delete')}
+          description={`${t('confirm.delete.message')}: ${rows.selectedRowKeys.length}`}
           icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
           okButtonProps={{ danger: true }}
-          okText={translate('confirm')}
-          cancelText={translate('cancel')}
+          okText={t('action.button.confirm')}
+          cancelText={t('action.button.cancel')}
           cancelButtonProps={{ type: 'primary' }}
-          onCancel={() => message.warning(translate('request_cancelled'))}
+          onCancel={() => message.warning(t('action.message.cancelled'))}
           onConfirm={async () => {
             const { success } = await crudService.delete({
               entity: entity,
@@ -59,4 +59,4 @@ const Delete: React.FC<DeleteProps> = ({ entity, actions, rows, render }) => {
   )
 }
 
-export default Delete
+export default Delete;

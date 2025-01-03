@@ -15,7 +15,9 @@ type Product = {
     isComposite: boolean;
     description: string;
     price: number;
-    brand: Brand;
+    brand?: Brand | number;
+    category?: ProductCategory | number;
+    subCategory?: ProductSubCategory | number;
 } & EntityTimeStamps;
 
 type ProductCategory = {

@@ -3,7 +3,7 @@ import useLocale from '@/features/Locale/hooks/useLocale'
 import { InfoCircleOutlined, LockOutlined, MailOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Checkbox, Flex, Form, Input } from 'antd'
 import Loading from '@/components/Loading'
-import regexConstants from '@/constants/regex.constants'
+import regexConstants from '@/constants/validations.regex'
 
 interface FormValues {
   username: string

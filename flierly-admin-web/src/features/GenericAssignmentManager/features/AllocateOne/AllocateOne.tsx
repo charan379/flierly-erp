@@ -1,20 +1,22 @@
 import { PlusOutlined } from '@ant-design/icons'
-import { Button } from 'antd'
+import { Button, Tooltip } from 'antd'
 import React, { useState } from 'react'
 import genricAssignmentService from '../../service/genricAssignmentService'
 import { ActionType } from '@ant-design/pro-components'
+import useLocale from '@/features/Locale/hooks/useLocale'
 
-interface AllocateOneProps {
-  owningEntity: string
-  owningEntityId: number
-  inverseField: string
-  inverseIdToAssociate: number
+interface AllocateOneProps<E> {
+  entity: string
+  entityRecordId: number
+  entitySideField: keyof E
+  idToAssociate: number
   tableActionRef: React.MutableRefObject<ActionType | undefined>
 }
 
-const AllocateOne: React.FC<AllocateOneProps> = (props) => {
-  const { owningEntity, owningEntityId, inverseField, inverseIdToAssociate, tableActionRef } = props
+const AllocateOne = <E,>(props: AllocateOneProps<E>) => {
+  const { entity, entityRecordId, entitySideField, idToAssociate, tableActionRef } = props
 
+  const { translate: t } = useLocale();
   const [isLoding, setIsLoading] = useState(false)
 
   const handleAllocate: React.MouseEventHandler = async (event) => {
@@ -23,10 +25,10 @@ const AllocateOne: React.FC<AllocateOneProps> = (props) => {
     setIsLoading(true)
 
     const { success } = await genricAssignmentService.updateAssociatedRecords({
-      owningEntity,
-      owningEntityId,
-      inverseField,
-      addOne: inverseIdToAssociate,
+      entity,
+      entityRecordId,
+      entitySideField,
+      addOne: idToAssociate,
     })
 
     if (success) {
@@ -36,7 +38,15 @@ const AllocateOne: React.FC<AllocateOneProps> = (props) => {
     setIsLoading(false)
   }
 
-  return <Button onClick={handleAllocate} loading={isLoding} disabled={isLoding} icon={<PlusOutlined />} type="link" />
+  return (
+    <Tooltip title={t('tooltip.assign')}>
+      <Button
+        onClick={handleAllocate}
+        loading={isLoding}
+        disabled={isLoding}
+        icon={<PlusOutlined />}
+        type="link" />
+    </Tooltip>
+  )
 }
-
 export default AllocateOne

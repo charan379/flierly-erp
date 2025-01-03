@@ -10,7 +10,7 @@ interface ThemeTogglerProps {
 }
 
 const ThemeToggler: React.FC<ThemeTogglerProps> = ({ functional = true }) => {
-  const { themePreference, setThemePreference } = useTheme()
+  const { themePreference, setThemePreference } = useTheme();
 
   const themeIcon = () => {
     if (themePreference === 'system') return <Icon component={A} />

@@ -35,7 +35,7 @@ const createPrivilegeTableColumns = (translate: (value: string) => string, _hasP
       },
     },
     // status
-    createBooleanColumn(translate, { dataIndex: 'isActive' }),
+    createBooleanColumn(translate, { dataIndex: 'isActive', width: 80 }),
     // code
     createCodeColumn(translate, { width: 200 }),
     // updatedAt

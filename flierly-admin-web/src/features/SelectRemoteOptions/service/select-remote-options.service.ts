@@ -10,7 +10,7 @@ interface EntityRequestParams {
   signal?: AbortSignal
 }
 
-interface EntityRowsRequestParams {
+interface EntityRecordsRequestParams {
   entity: string
   filters: Record<string, any>
   limit?: number
@@ -41,13 +41,13 @@ const selectRemoteOptionsService = {
   /**
    * Fetch remote entity rows.
    */
-  entityRows: async ({ entity, filters, limit = 50, signal }: EntityRowsRequestParams): Promise<ApiResponse<any>> => {
-    const promise = api.post<ApiResponse<any>>(
+  entityRecords: async <T,>({ entity, filters, limit = 50, signal }: EntityRecordsRequestParams): Promise<ApiResponse<T>> => {
+    const promise = api.post<ApiResponse<T>>(
       `${entity}/search`,
       { filters, limit },
       { signal }, // Pass the signal to the request
     )
-    return handleApiResponse({ promise })
+    return handleApiResponse<T>({ promise })
   },
 }
 

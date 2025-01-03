@@ -3,6 +3,8 @@ import { Select } from 'antd'
 import useResponsive from '@/hooks/useResponsive'
 import useLocale from '@/features/Locale/hooks/useLocale'
 import languageOptions from '../../config/language-options'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faLanguage } from '@fortawesome/free-solid-svg-icons'
 
 const LangSelector: React.FC = () => {
   const { isMobile } = useResponsive()
@@ -14,11 +16,12 @@ const LangSelector: React.FC = () => {
       defaultValue={langCode}
       loading={false}
       options={languageOptions()}
+      suffixIcon={<FontAwesomeIcon icon={faLanguage} size='2x' />}
       onChange={(newLangCode: string) => setLanguage(newLangCode)}
       filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
       filterSort={(optionA, optionB) => (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())}
       style={{
-        width: isMobile ? '90px' : '130px',
+        width: isMobile ? '90px' : '110px',
         float: 'right',
         cursor: 'pointer',
         direction: 'ltr',

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { LayoutFilled } from '@ant-design/icons'
 
 const UnderConstruction: React.FC = () => {
-  const { translate } = useLocale() // Using the custom hook to get translation function
+  const { translate: t } = useLocale() // Using the custom hook to get translation function
   const navigate = useNavigate() // Using useNavigate to programmatically navigate
 
   return (
@@ -13,8 +13,8 @@ const UnderConstruction: React.FC = () => {
     <Result
       icon={<LayoutFilled />} // Displaying an icon
       status={'info'}
-      title={translate('page_under_construction')} // Translated title
-      subTitle={translate('sorry_the_page_you_requested_is_under_construction')} // Translated subtitle
+      title={t('info.title.UnderConstruction')} // Translated title
+      subTitle={t('info.message.UnderConstruction')} // Translated subtitle
       extra={
         <Button
           type="primary" // Primary type button
@@ -23,7 +23,7 @@ const UnderConstruction: React.FC = () => {
             navigate(-1) // Navigate back on button click
           }}
         >
-          {translate('back')} {/* Translated button text */}
+          {t('navigate.back')} {/* Translated button text */}
         </Button>
       }
     />
