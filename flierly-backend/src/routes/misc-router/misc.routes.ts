@@ -1,6 +1,9 @@
 import entities from '@/controllers/misc-controller/entities';
 import systemUsage from '@/controllers/misc-controller/systemUsage';
+import executeQueryWithParsedConditionsWithFind from '@/controllers/misc-controller/testExecuteQueryWithParsedConditionsFind';
+import executeQueryWithParsedConditions from '@/controllers/misc-controller/testExecuteQueryWithParsedConditionsQB';
 import testExecuteRawSQL from '@/controllers/misc-controller/testExecuteRawSQL';
+import testParseFilterConditions from '@/controllers/misc-controller/testParseFilterConditions';
 import testTypeORMActivate from '@/controllers/misc-controller/testTypeORMActivate';
 import testTypeORMCreate from '@/controllers/misc-controller/testTypeORMCreate';
 import testTypeORMDeactivate from '@/controllers/misc-controller/testTypeORMDeactivate';
@@ -34,5 +37,9 @@ miscRouter.patch('/test/type-orm-deactivate', controllerErrorBoundary(testTypeOR
 miscRouter.put('/test/type-orm-update/:id', controllerErrorBoundary(testTypeORMUpdate, 'Role'));
 miscRouter.post('/test/type-orm-exists', controllerErrorBoundary(testTypeORMExists, 'Role'));
 miscRouter.post('/test/type-orm-search', controllerErrorBoundary(testTypeORMSearch, 'Role'));
+miscRouter.post('/test/parse-conditions', controllerErrorBoundary(testParseFilterConditions, ''));
+miscRouter.post('/test/test-execute-query-with-parsed-conditions-qb', controllerErrorBoundary(executeQueryWithParsedConditions, ''));
+miscRouter.post('/test/test-execute-query-with-parsed-conditions-find', controllerErrorBoundary(executeQueryWithParsedConditionsWithFind, ''));
+
 
 export default miscRouter;

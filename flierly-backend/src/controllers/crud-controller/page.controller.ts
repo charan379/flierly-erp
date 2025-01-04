@@ -7,7 +7,7 @@ import { Request, Response } from 'express';
 import Joi from 'joi';
 import { EntityTarget, FindManyOptions, IsNull, Not, ObjectLiteral } from 'typeorm';
 import sortOrder from '@/lib/typeorm/utils/sort-order.util';
-import whereCondition from '@/lib/typeorm/utils/where-condintion.util';
+import parseCondition from '@/lib/typeorm/utils/parse-condition.util';
 
 interface PageRequestBody {
   loadRelations: string[];
@@ -67,7 +67,7 @@ const page = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Resp
 
   // Apply filters to where clause
   Object.keys(filters).forEach((field) => {
-    findOptions.where = { ...findOptions.where, ...whereCondition(findOptions.where, field, filters[field]) };
+    findOptions.where = { ...findOptions.where, [field]: parseCondition({ conditionFor: "find", condition: filters[field], fieldAlias: field }) };
   });
 
   // Get the paginated and filtered rows
