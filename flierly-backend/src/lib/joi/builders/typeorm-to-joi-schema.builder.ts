@@ -8,12 +8,12 @@ const generateJoiSchemaFromTypeORM = (entityDefinition: Record<string, any>, _en
   Object.keys(entityDefinition).forEach((field) => {
     const fieldType = entityDefinition[field];
     // Handle JavaScript function types like `String`, `Number`, `Boolean`, etc.
-    if (typeof fieldType === 'function') {
+    if (typeof fieldType === 'function' && field !== "options") {
       const jsType = fieldType.name;
       schema[field] = typeORMToJoiMapping[jsType] || Joi.any();
     }
     // If we have a mapping for this field type, apply the corresponding Joi validation
-    else if (typeORMToJoiMapping[fieldType]) {
+    else if (typeORMToJoiMapping[fieldType] && field !== "options") {
       schema[field] = typeORMToJoiMapping[fieldType] as Joi.Schema;
     }
     // If no known mapping, default to Joi.any()
