@@ -38,6 +38,7 @@ const Create = <T extends Record<string, any>>({
     setIsLoading(false);
     if (response?.success) {
       actions.reload();
+      setIsDrawerOpen(false)
       return true;
     }
     return false;
