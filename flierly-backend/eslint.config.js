@@ -41,7 +41,7 @@ module.exports = [
       // General rules
       'no-console': 'warn',
       eqeqeq: 'error',
-      'space-before-function-paren': ['error', 'always'],
+      'space-before-function-paren': ['warn', 'off'],
       'comma-dangle': ['error', 'always-multiline'],
       semi: ['error', 'always'],
 
