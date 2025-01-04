@@ -128,6 +128,16 @@ const createSiteMapItems = (translate: (value: string) => string, hasPermission:
             parentItemId: 'product'
         },
         {
+            id: 'tags-metadata',
+            name: translate('tags-metadata'),
+            isDisabled: !hasPermission(/^tag-metadata\.[a-z]+$/),
+            icon: <FontAwesomeIcon icon={faTags} style={menuIconStyle} />,
+            keywords: ['tags-metadata', translate('tag-metadata')],
+            permission: /^tag-metadata\.[a-z]+$/,
+            resourcePath: '/erp/product/tags-metadata',
+            parentItemId: 'product'
+        },
+        {
             id: 'brands',
             name: translate('brands'),
             isDisabled: !hasPermission(/^brand\.[a-z]+$/),

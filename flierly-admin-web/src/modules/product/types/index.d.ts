@@ -50,3 +50,13 @@ type SerializedProduct = {
     serialNumber: string;
     status: 'AVAILABLE' | 'SOLD' | 'RETURNED'
 } & EntityTimeStamps;
+
+
+type TagMetadata = {
+    id: number;
+    entity: string;
+    name: string;
+    datatype: "string" | "number" | "boolean" | "enum"; // Enum values replaced with actual strings
+    options?: { label: string; value: string; color: string }[]; // For ENUM types
+    description?: string; // Optional field
+} & EntityTimeStamps;
