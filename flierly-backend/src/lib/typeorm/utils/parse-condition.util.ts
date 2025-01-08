@@ -77,7 +77,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
     }
 
     // Generate a unique prefix for parameter aliases
-    // const pp = uuid().replace(/-/g, '_');
+    const uniqueId = uuid().replace(/-/g, '_');
 
     // Basic validation: Check if alias is a non-empty string
     if ((typeof a !== 'string' || a.trim().length === 0) && conditionFor === 'qb') {
@@ -113,8 +113,8 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
             throw new Error(`${conditionOperator} operator cannot have undefined or null value`);
         }
 
-        // Get the parameter prefix for the condition operator
-        const pp = conditionOperator.replace(/\$/, "");
+        // Get the parameter prefix for parameter aliases along opreator 
+        const pp = `${uniqueId}_${conditionOperator.replace(/\$/, "")}`;
 
         // Check if the condition operator is a valid operator
         switch (conditionOperator) {
@@ -125,7 +125,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                     return (conditionFor === "qb")
                         ?
                         // Return a FindOperatorQB object for the 'qb' condition
-                        { query: `${a} IN (:...${pp}_${a}_values)`, parameters: { [`${pp}_${a}_values`]: conditionValue } }
+                        { query: `${a} IN (:...${pp}_${a})`, parameters: { [`${pp}_${a}`]: conditionValue } }
                         :
                         // Return a Raw object for the 'find' condition
                         In(conditionValue);
@@ -139,7 +139,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                     return (conditionFor === "qb")
                         ?
                         // Return a FindOperatorQB object for the 'qb' condition
-                        { query: `${a} NOT IN (:...${pp}_${a}_values)`, parameters: { [`${pp}_${a}_values`]: conditionValue } }
+                        { query: `${a} NOT IN (:...${pp}_${a})`, parameters: { [`${pp}_${a}`]: conditionValue } }
                         :
                         // Return a Raw object for the 'find' condition
                         Not(In(conditionValue))
@@ -152,7 +152,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                     return (conditionFor === "qb")
                         ?
                         // Return a FindOperatorQB object for the 'qb' condition
-                        { query: `${a} >= :${pp}_${a}_value`, parameters: { [`${pp}_${a}_value`]: conditionValue } }
+                        { query: `${a} >= :${pp}_${a}`, parameters: { [`${pp}_${a}`]: conditionValue } }
                         :
                         // Return a Raw object for the 'find' condition
                         MoreThanOrEqual(conditionValue);
@@ -165,7 +165,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                     return (conditionFor === "qb")
                         ?
                         // Return a FindOperatorQB object for the 'qb' condition
-                        { query: `${a} <= :${pp}_${a}_value`, parameters: { [`${pp}_${a}_value`]: conditionValue } }
+                        { query: `${a} <= :${pp}_${a}`, parameters: { [`${pp}_${a}`]: conditionValue } }
                         :
                         // Return a Raw object for the 'find' condition
                         LessThanOrEqual(conditionValue);
@@ -178,7 +178,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                     return (conditionFor === "qb")
                         ?
                         // Return a FindOperatorQB object for the 'qb' condition
-                        { query: `${a} > :${pp}_${a}_value`, parameters: { [`${pp}_${a}_value`]: conditionValue } }
+                        { query: `${a} > :${pp}_${a}`, parameters: { [`${pp}_${a}`]: conditionValue } }
                         :
                         // Return a Raw object for the 'find' condition
                         MoreThan(conditionValue);
@@ -190,7 +190,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                 if (['number', 'string'].includes(typeof conditionValue) || conditionValue instanceof Date) {
                     return (conditionFor === "qb")
                         // Return a FindOperatorQB object for the 'qb' condition
-                        ? { query: `${a} < :${pp}_${a}_value`, parameters: { [`${pp}_${a}_value`]: conditionValue } }
+                        ? { query: `${a} < :${pp}_${a}`, parameters: { [`${pp}_${a}`]: conditionValue } }
                         // Return a Raw object for the 'find' condition
                         : LessThan(conditionValue);
                 } else {
@@ -218,8 +218,8 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                 // Check if the condition value is a string
                 if (typeof conditionValue === 'string') {
                     return (conditionFor === "qb")
-                        ? { query: `${a} LIKE :${pp}_${a}_value`, parameters: { [`${pp}_${a}_value`]: conditionValue } }
-                        : Like(conditionValue);
+                        ? { query: `${a} LIKE :${pp}_${a}`, parameters: { [`${pp}_${a}`]: `%${conditionValue}%` } }
+                        : Like(`%${conditionValue}%`);
                 } else {
                     throw new Error(`${conditionOperator} operator must have a string value`);
                 }
@@ -227,8 +227,8 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                 // Check if the condition value is a string
                 if (typeof conditionValue === 'string') {
                     return (conditionFor === "qb")
-                        ? { query: `${a} NOT LIKE :${pp}_${a}_value`, parameters: { [`${pp}_${a}_value`]: conditionValue } }
-                        : Not(Like(conditionValue));
+                        ? { query: `${a} NOT LIKE :${pp}_${a}`, parameters: { [`${pp}_${a}`]: `%${conditionValue}%` } }
+                        : Not(Like(`%${conditionValue}%`));
                 } else {
                     throw new Error(`${conditionOperator} operator must have a string value`);
                 }
@@ -236,8 +236,8 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                 // Check if the condition value is a string
                 if (typeof conditionValue === 'string') {
                     return (conditionFor === "qb")
-                        ? { query: `${a} ILIKE :${pp}_${a}_value`, parameters: { [`${pp}_${a}_value`]: conditionValue } }
-                        : ILike(conditionValue);
+                        ? { query: `${a} ILIKE :${pp}_${a}`, parameters: { [`${pp}_${a}`]: `%${conditionValue}%` } }
+                        : ILike(`%${conditionValue}%`);
                 } else {
                     throw new Error(`${conditionOperator} operator must have a string value`);
                 }
@@ -245,8 +245,8 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                 // Check if the condition value is a string
                 if (typeof conditionValue === 'string') {
                     return (conditionFor === "qb")
-                        ? { query: `${a} NOT ILIKE :${pp}_${a}_value`, parameters: { [`${pp}_${a}_value`]: conditionValue } }
-                        : Not(ILike(conditionValue));
+                        ? { query: `${a} NOT ILIKE :${pp}_${a}`, parameters: { [`${pp}_${a}`]: `%${conditionValue}%` } }
+                        : Not(ILike(`%${conditionValue}%`));
                 } else {
                     throw new Error(`${conditionOperator} operator must have a string value`);
                 }
@@ -254,7 +254,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                 // Check if the condition value is a string
                 if (typeof conditionValue === 'string') {
                     return (conditionFor === "qb")
-                        ? { query: `${a} LIKE :${pp}_${a}_value`, parameters: { [`${pp}_${a}_value`]: `${conditionValue}%` } }
+                        ? { query: `${a} LIKE :${pp}_${a}`, parameters: { [`${pp}_${a}`]: `${conditionValue}%` } }
                         : Like(`${conditionValue}%`);
                 } else {
                     throw new Error(`${conditionOperator} operator must have a string value`);
@@ -263,7 +263,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                 // Check if the condition value is a string
                 if (typeof conditionValue === 'string') {
                     return (conditionFor === "qb")
-                        ? { query: `${a} NOT LIKE :${pp}_${a}_value`, parameters: { [`${pp}_${a}_value`]: `${conditionValue}%` } }
+                        ? { query: `${a} NOT LIKE :${pp}_${a}`, parameters: { [`${pp}_${a}`]: `${conditionValue}%` } }
                         : Not(Like(`${conditionValue}%`));
                 } else {
                     throw new Error(`${conditionOperator} operator must have a string value`);
@@ -272,7 +272,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                 // Check if the condition value is a string
                 if (typeof conditionValue === 'string') {
                     return (conditionFor === "qb")
-                        ? { query: `${a} LIKE :${pp}_${a}_value`, parameters: { [`${pp}_${a}_value`]: `%${conditionValue}` } }
+                        ? { query: `${a} LIKE :${pp}_${a}`, parameters: { [`${pp}_${a}`]: `%${conditionValue}` } }
                         : Like(`%${conditionValue}`);
                 } else {
                     throw new Error(`${conditionOperator} operator must have a string value`);
@@ -281,7 +281,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                 // Check if the condition value is a string
                 if (typeof conditionValue === 'string') {
                     return (conditionFor === "qb")
-                        ? { query: `${a} NOT LIKE :${pp}_${a}_value`, parameters: { [`${pp}_${a}_value`]: `%${conditionValue}` } }
+                        ? { query: `${a} NOT LIKE :${pp}_${a}`, parameters: { [`${pp}_${a}`]: `%${conditionValue}` } }
                         : Not(Like(`%${conditionValue}`));
                 } else {
                     throw new Error(`${conditionOperator} operator must have a string value`);
@@ -290,7 +290,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                 // Check if the condition value is a string, number, boolean, or Date
                 if ((typeof conditionValue === 'string' || typeof conditionValue === 'number' || typeof conditionValue === 'boolean' || conditionValue instanceof Date)) {
                     return (conditionFor === "qb")
-                        ? { query: `${a} = :${pp}_${a}_value`, parameters: { [`${pp}_${a}_value`]: conditionValue } }
+                        ? { query: `${a} = :${pp}_${a}`, parameters: { [`${pp}_${a}`]: conditionValue } }
                         : Equal(conditionValue);
                 } else {
                     throw new Error(`${conditionOperator} operator must have a string, number, boolean, or Date value`);
@@ -299,7 +299,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                 // Check if the condition value is a string, number, boolean, or Date
                 if ((typeof conditionValue === 'string' || typeof conditionValue === 'number' || typeof conditionValue === 'boolean' || conditionValue instanceof Date)) {
                     return (conditionFor === "qb")
-                        ? { query: `${a} != :${pp}_${a}_value`, parameters: { [`${pp}_${a}_value`]: conditionValue } }
+                        ? { query: `${a} != :${pp}_${a}`, parameters: { [`${pp}_${a}`]: conditionValue } }
                         : Not(Equal(conditionValue));
                 } else {
                     throw new Error(`${conditionOperator} operator must have a string, number, boolean, or Date value`);
@@ -309,10 +309,10 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                 if (typeof conditionValue === 'string') {
                     if (conditionFor === "qb") {
                         // Return a FindOperatorQB object for the 'qb' condition
-                        return { query: `${a} ~ :${pp}_${a}_value`, parameters: { [`${pp}_${a}_value`]: conditionValue } };
+                        return { query: `${a} ~ :${pp}_${a}`, parameters: { [`${pp}_${a}`]: conditionValue } };
                     } else {
                         // Return a Raw object for the 'find' condition
-                        return Raw((alias: string) => `${alias} ~ :${pp}_${a}_value`, { [`${pp}_${a}_value`]: conditionValue });
+                        return Raw((alias: string) => `${alias} ~ :${pp}_${a}`, { [`${pp}_${a}`]: conditionValue });
                     }
                 } else {
                     throw new Error(`${conditionOperator} operator must have a string value`);
@@ -322,10 +322,10 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                 if (typeof conditionValue === 'string') {
                     if (conditionFor === "qb") {
                         // Return a FindOperatorQB object for the 'qb' condition
-                        return { query: `${a} !~ :${pp}_${a}_value`, parameters: { [`${pp}_${a}_value`]: conditionValue } };
+                        return { query: `${a} !~ :${pp}_${a}`, parameters: { [`${pp}_${a}`]: conditionValue } };
                     } else {
                         // Return a Raw object for the 'find' condition
-                        return Raw((alias: string) => `${alias} !~ :${pp}_${a}_value`, { [`${pp}_${a}_value`]: conditionValue });
+                        return Raw((alias: string) => `${alias} !~ :${pp}_${a}`, { [`${pp}_${a}`]: conditionValue });
                     }
                 } else {
                     throw new Error(`${conditionOperator} operator must have a string value`);
@@ -335,10 +335,10 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                 if (typeof conditionValue === 'string') {
                     if (conditionFor === "qb") {
                         // Return a FindOperatorQB object for the 'qb' condition
-                        return { query: `${a} ~* :${pp}_${a}_value`, parameters: { [`${pp}_${a}_value`]: conditionValue } };
+                        return { query: `${a} ~* :${pp}_${a}`, parameters: { [`${pp}_${a}`]: conditionValue } };
                     } else {
                         // Return a Raw object for the 'find' condition
-                        return Raw((alias: string) => `${alias} ~* :${pp}_${a}_value`, { [`${pp}_${a}_value`]: conditionValue });
+                        return Raw((alias: string) => `${alias} ~* :${pp}_${a}`, { [`${pp}_${a}`]: conditionValue });
                     }
                 } else {
                     throw new Error(`${conditionOperator} operator must have a string value`);
@@ -348,10 +348,10 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                 if (typeof conditionValue === 'string') {
                     if (conditionFor === "qb") {
                         // Return a FindOperatorQB object for the 'qb' condition
-                        return { query: `${a} !~* :${pp}_${a}_value`, parameters: { [`${pp}_${a}_value`]: conditionValue } };
+                        return { query: `${a} !~* :${pp}_${a}`, parameters: { [`${pp}_${a}`]: conditionValue } };
                     } else {
                         // Return a Raw object for the 'find' condition
-                        return Raw((alias: string) => `${alias} !~* :${pp}_${a}_value`, { [`${pp}_${a}_value`]: conditionValue });
+                        return Raw((alias: string) => `${alias} !~* :${pp}_${a}`, { [`${pp}_${a}`]: conditionValue });
                     }
                 } else {
                     throw new Error(`${conditionOperator} operator must have a string value`);
@@ -359,26 +359,26 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
             case '$jsonContains':
                 if (conditionFor === "qb") {
                     // Return a FindOperatorQB object for the 'qb' condition
-                    return { query: `${a} @> :${pp}_${a}_value`, parameters: { [`${pp}_${a}_value`]: JSON.stringify(conditionValue) } };
+                    return { query: `${a} @> :${pp}_${a}`, parameters: { [`${pp}_${a}`]: JSON.stringify(conditionValue) } };
                 } else {
                     // Return a Raw object for the 'find' condition
-                    return Raw((alias: string) => `${alias} @> :${pp}_${a}_value`, { [`${pp}_${a}_value`]: JSON.stringify(conditionValue) });
+                    return Raw((alias: string) => `${alias} @> :${pp}_${a}`, { [`${pp}_${a}`]: JSON.stringify(conditionValue) });
                 }
             case '$jsonContained':
                 if (conditionFor === "qb") {
                     // Return a FindOperatorQB object for the 'qb' condition
-                    return { query: `${a} <@ :${pp}_${a}_value`, parameters: { [`${pp}_${a}_value`]: JSON.stringify(conditionValue) } };
+                    return { query: `${a} <@ :${pp}_${a}`, parameters: { [`${pp}_${a}`]: JSON.stringify(conditionValue) } };
                 } else {
                     // Return a Raw object for the 'find' condition
-                    return Raw((alias: string) => `${alias} <@ :${pp}_${a}_value`, { [`${pp}_${a}_value`]: JSON.stringify(conditionValue) });
+                    return Raw((alias: string) => `${alias} <@ :${pp}_${a}`, { [`${pp}_${a}`]: JSON.stringify(conditionValue) });
                 }
             case '$jsonEquals':
                 if (conditionFor === "qb") {
                     // Return a FindOperatorQB object for the 'qb' condition
-                    return { query: `${a} = :${pp}_${a}_value`, parameters: { [`${pp}_${a}_value`]: JSON.stringify(conditionValue) } };
+                    return { query: `${a} = :${pp}_${a}`, parameters: { [`${pp}_${a}`]: JSON.stringify(conditionValue) } };
                 } else {
                     // Return a Raw object for the 'find' condition
-                    return Raw((alias: string) => `${alias} = :${pp}_${a}_value`, { [`${pp}_${a}_value`]: JSON.stringify(conditionValue) });
+                    return Raw((alias: string) => `${alias} = :${pp}_${a}`, { [`${pp}_${a}`]: JSON.stringify(conditionValue) });
                 }
             case '$jsonHasKey':
                 if (conditionFor === "qb") {
@@ -398,7 +398,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
         return (conditionFor === "qb")
             ?
             // Return a FindOperatorQB object for the 'qb' condition
-            { query: `${a} IN (:...${a}_values)`, parameters: { [`${a}_values`]: condition } }
+            { query: `${a} IN (:...${uniqueId}_in_${a})`, parameters: { [`${uniqueId}_in_${a}`]: condition } }
             :
             // Return a Raw object for the 'find' condition
             In(condition);
@@ -426,7 +426,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
         return (conditionFor === "qb")
             ?
             // Return a FindOperatorQB object for the 'qb' condition
-            { query: `${a} = :${a}_value`, parameters: { [`${a}_value`]: condition } }
+            { query: `${a} = :${uniqueId}_eq_${a}`, parameters: { [`${uniqueId}_eq_${a}`]: condition } }
             :
             // Return a Raw object for the 'find' condition
             Equal(condition);

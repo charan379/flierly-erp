@@ -53,7 +53,6 @@ type ErrorMessage = {
   name: String;
   message: string;
   httpCode: number;
-  reason: string;
   stack?: string;
 };
 

@@ -26,7 +26,7 @@ async function getEntityList (): Promise<EntityDetails[]> {
     const entityFileNameWithoutExtension: string = basename(file).split('.')[0];
     return {
       entity: entityFileNameWithoutExtension,
-      filePath: file,
+      filePath: file.replace(/\.ts/, ".{ts,js}"),
       code: camelToKebabCase(entityFileNameWithoutExtension),
       controller: `${pascalToKebabCase(entityFileNameWithoutExtension)}-controller`,
     };

@@ -4,80 +4,79 @@ import { QueryFailedError } from 'typeorm';
 import HttpCodes from '@/constants/http-codes.enum';
 import FlierlyException from '@/lib/flierly.exception';
 import { EnvConfig } from '@/config/env';
+import { getMessage as m } from '../get-message.util';
+import buildValidationErrorsResult from './validation-errors-result.builder';
 
-// Helper to format Validation Errors from class-validator
-function formatValidationErrors (error: ValidationError): string {
-  return Object.values(error.constraints || {}).join(', ') || 'Validation error';
+/**
+ * Builds a standardized error message from various error types.
+ *
+ * @param {Error|HttpError|FlierlyException|ValidationError|QueryFailedError} error
+ * @returns {ErrorMessage}
+ */
+function errorMessageBuilder(error: Error | HttpError | FlierlyException | ValidationError | QueryFailedError): ErrorMessage {
+  let errorMessage: ErrorMessage;
+
+  // Handle specific error types
+  if (error instanceof FlierlyException) {
+    errorMessage = handleFlierlyException(error);
+  } else if (error instanceof HttpError) {
+    errorMessage = handleHttpError(error);
+  } else if (error instanceof ValidationError) {
+    errorMessage = handleValidationError(error);
+  } else if (error instanceof QueryFailedError) {
+    errorMessage = handleQueryFailedError(error);
+  } else {
+    // General Error handling
+    errorMessage = handleGeneralError(error);
+  }
+
+  return { ...errorMessage, stack: EnvConfig.NODE_ENV === 'development' ? errorMessage.stack : undefined };
 }
 
-// Type guard to check if the error is one of the custom error types
-function isInstance<T> (error: any, type: new (...args: any[]) => T): error is T {
-  return error instanceof type;
-}
-
-function errrorMessageBuilder (error: Error | HttpError | FlierlyException | ValidationError | QueryFailedError): ErrorMessage {
-  // Default error message structure
-  const errorMessage: ErrorMessage = {
-    name: 'UnknownError',
-    httpCode: HttpCodes.INTERNAL_SERVER_ERROR,
-    reason: '',
-    stack: EnvConfig.NODE_ENV === 'development' && !isInstance(error, ValidationError) ? error.stack : undefined,
-    message: 'INTERNAL SERVER ERROR',
+// Helper functions to handle specific error types
+function handleFlierlyException(error: FlierlyException): ErrorMessage {
+  return {
+    name: FlierlyException.name,
+    httpCode: error.httpCode,
+    message: error.message,
+    stack: error.stack,
   };
-
-  // Handle FlierlyException
-  if (isInstance(error, FlierlyException)) {
-    return {
-      ...errorMessage,
-      name: error.name,
-      httpCode: error.httpCode,
-      reason: error.reason,
-      message: error.message,
-    };
-  }
-
-  // Handle HttpError
-  if (isInstance(error, HttpError)) {
-    return {
-      ...errorMessage,
-      name: error.name,
-      httpCode: error.statusCode,
-      message: error.message,
-    };
-  }
-
-  // Handle ValidationError
-  if (isInstance(error, ValidationError)) {
-    return {
-      ...errorMessage,
-      name: 'ValidationError',
-      httpCode: HttpCodes.BAD_REQUEST,
-      reason: formatValidationErrors(error),
-      message: 'Validation failed',
-    };
-  }
-
-  // Handle QueryFailedError
-  if (isInstance(error, QueryFailedError)) {
-    return {
-      ...errorMessage,
-      name: 'QueryFailedError',
-      httpCode: HttpCodes.BAD_REQUEST,
-      reason: error.message,
-      message: 'Database query failed',
-    };
-  }
-
-  // General Error handling
-  if (error instanceof Error) {
-    return {
-      ...errorMessage,
-      name: error.name,
-      message: error.message,
-    };
-  }
-
-  return errorMessage;
 }
 
-export default errrorMessageBuilder;
+function handleHttpError(error: HttpError): ErrorMessage {
+  return {
+    name: HttpError.name,
+    httpCode: error.statusCode,
+    message: error.message,
+    stack: error.stack,
+  };
+}
+
+function handleValidationError(error: ValidationError): ErrorMessage {
+  return {
+    name: ValidationError.name,
+    httpCode: HttpCodes.BAD_REQUEST,
+    message: m('unhandledValidationError'),
+    stack: JSON.stringify(buildValidationErrorsResult([error])),
+  };
+}
+
+function handleQueryFailedError(error: QueryFailedError): ErrorMessage {
+  return {
+    name: QueryFailedError.name,
+    httpCode: HttpCodes.BAD_REQUEST,
+    message: error.message,
+    stack: error.stack,
+  };
+}
+
+function handleGeneralError(error: Error): ErrorMessage {
+  return {
+    name: m('500'),
+    message: m('unknownError'),
+    stack: error.stack,
+    httpCode: HttpCodes.INTERNAL_SERVER_ERROR,
+  };
+}
+
+export default errorMessageBuilder;

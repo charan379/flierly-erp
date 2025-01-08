@@ -5,7 +5,7 @@ import FlierlyException from '@/lib/flierly.exception';
 import apiResponseBuilder from '@/utils/builders/api-response.builder';
 import JoiSchemaValidator from '@/lib/joi/joi-schema.validator';
 import pageResponseBuilder from '@/utils/builders/page-response.builder';
-import { qbFilters, qbSortOrder } from '@/lib/typeorm/utils';
+import { qbFilters, applySortOrderQB } from '@/lib/typeorm/utils';
 import { Request, Response } from 'express';
 import Joi from 'joi';
 import { EntityTarget, ObjectLiteral } from 'typeorm';
@@ -100,7 +100,7 @@ const associatedEntityRecordsPage = async (associatedEntity: EntityTarget<Object
   qb.skip((pagination.page - 1) * pagination.limit) // Apply pagination (offset)
     .take(pagination.limit); // Limit results
 
-  qbSortOrder(qb, sort); // Apply sorting based on request
+  applySortOrderQB(qb, sort); // Apply sorting based on request
   qbFilters(qb, associatedEntityAlias, filters); // Apply filters based on request
 
   // Execute the query and get paginated results

@@ -4,7 +4,6 @@ import create from './create.controller';
 import read from './read.controller';
 import update from './update.controller';
 import softDelete from './delete.controller';
-import page from './page.controller';
 import search from './search.controller';
 import isExists from './is-exists.controller';
 import activate from './activate.controller';
@@ -12,6 +11,7 @@ import restore from './restore.controller';
 import inactivate from './inactivate.controller';
 import updateAssociatedEntityRecords from './update-entity-associated-records.controller';
 import associatedEntityRecordsPage from './associated-entity-records-page.controller';
+import page from './page.controller';
 
 export interface ICRUDController {
   create: (req: Request, res: Response) => Promise<Response>;

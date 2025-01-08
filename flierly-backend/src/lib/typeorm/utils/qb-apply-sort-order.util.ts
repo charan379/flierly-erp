@@ -13,7 +13,7 @@ type SortOrder = 'ascend' | 'descend' | 'asc' | 'desc' | 'ascending' | 'descendi
  *   - Values can be: 'ascend', 'descend', 'asc', 'desc', 'ascending', 'descending', 1, or -1.
  * @returns {SelectQueryBuilder<T>} - The updated Query Builder with applied sorting.
  */
-function qbSortOrder<T extends ObjectLiteral> (queryBuilder: SelectQueryBuilder<T>, sort: Record<string, SortOrder>): SelectQueryBuilder<T> {
+function applySortOrderQB<T extends ObjectLiteral> (queryBuilder: SelectQueryBuilder<T>, sort: Record<string, SortOrder>): SelectQueryBuilder<T> {
   Object.entries(sort).forEach(([key, value]) => {
     const order = value === 'ascend' || value === 'asc' || value === 'ascending' || value === 1 ? 'ASC' : 'DESC'; // Default to DESC if not ascending
 
@@ -24,4 +24,4 @@ function qbSortOrder<T extends ObjectLiteral> (queryBuilder: SelectQueryBuilder<
   return queryBuilder;
 }
 
-export default qbSortOrder;
+export default applySortOrderQB;

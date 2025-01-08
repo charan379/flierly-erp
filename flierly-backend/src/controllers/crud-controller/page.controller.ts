@@ -1,37 +1,13 @@
 import HttpCodes from '@/constants/http-codes.enum';
 import { AppDataSource } from '@/lib/typeorm/app-datasource';
 import apiResponseBuilder from '@/utils/builders/api-response.builder';
-import JoiSchemaValidator from '@/lib/joi/joi-schema.validator';
 import pageResponseBuilder from '@/utils/builders/page-response.builder';
 import { Request, Response } from 'express';
-import Joi from 'joi';
-import { EntityTarget, FindManyOptions, IsNull, Not, ObjectLiteral } from 'typeorm';
-import sortOrder from '@/lib/typeorm/utils/sort-order.util';
-import parseCondition from '@/lib/typeorm/utils/parse-condition.util';
-
-interface PageRequestBody {
-  loadRelations: string[];
-  binMode: boolean;
-  pagination: { page: number; limit: number };
-  sort: { [key: string]: 'ascend' | 'descend' };
-  filters: FilterObject;
-}
-
-const pageQuerySchema: Joi.ObjectSchema<PageRequestBody> = Joi.object({
-  loadRelations: Joi.array().items(Joi.string().disallow('').disallow(null)).unique(),
-  binMode: Joi.boolean().default(false), // Default: false
-  pagination: Joi.object({
-    page: Joi.number().integer().min(1).default(1), // Default: 1
-    limit: Joi.number().integer().min(1).default(20), // Default: 20
-  }).default({ page: 1, limit: 20 }), // Default pagination object
-  sort: Joi.object()
-    .pattern(
-      Joi.string(), // Any key allowed
-      Joi.string().valid('ascend', 'descend'), // Values: 'ascend' or 'descend'
-    )
-    .default({ id: 'ascend' }), // Default sort by 'id' ascending
-  filters: Joi.object().default({}), // Default: empty filter object
-});
+import { EntityTarget, ObjectLiteral } from 'typeorm';
+import PageRequestBody from '@/dto/requests/PageRequestBody.dto';
+import { pascalToSnakeCase } from '@/utils/case-converters';
+import applyWhereConditionsQB from '@/lib/typeorm/utils/qb-appy-where-conditions.util';
+import { applySortOrderQB } from '@/lib/typeorm/utils';
 
 /**
  * Fetch a paginated list of entities.
@@ -41,52 +17,50 @@ const pageQuerySchema: Joi.ObjectSchema<PageRequestBody> = Joi.object({
  * @returns The paginated list of entities.
  */
 const page = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Response): Promise<Response> => {
-  const { filters, pagination, loadRelations, binMode, sort }: PageRequestBody = await JoiSchemaValidator<PageRequestBody>(
-    pageQuerySchema,
-    req.body,
-    { abortEarly: false, allowUnknown: false },
-    'dynamic-page',
-  );
+    //  destructure the request body as PageRequestBody
+    const { withDeleted, filters, limit, page, sort, loadRelations } = req.body as PageRequestBody;
+    // get entity repository 
+    const entityRepository = AppDataSource.getRepository(entity);
+    // declare alias for entity to use in the query
+    const entityAlias = pascalToSnakeCase(entity.toString());
+    // create query builder 
+    const queryBuilder = entityRepository.createQueryBuilder(entityAlias);
+    // if withDeleted is true, then allow soft deleted records to be in the results
+    if (withDeleted) {
+        queryBuilder.withDeleted();
+    }
+    // apply realations to be loaded to the query builder
+    if (loadRelations && loadRelations.length > 0) {
+        loadRelations.forEach((relation) => {
+            queryBuilder.innerJoinAndSelect(`${entityAlias}.${relation}`, `${relation}`)
+        });
+    };
 
-  const repo = AppDataSource.getRepository(entity);
+    // apply filters to the query builder
+    applyWhereConditionsQB(queryBuilder, 'andWhere', filters, entityAlias);
 
-  // Initialize FindManyOptions
-  const findOptions: FindManyOptions<ObjectLiteral> = {
-    relations: loadRelations?.length > 0 ? [...loadRelations] : [], // Load relations if required
-    relationLoadStrategy: 'join',
-    where: {}, // Initialize where clause
-    order: sortOrder(sort), // Initialize order clause
-    skip: (pagination.page - 1) * pagination.limit,
-    take: pagination.limit,
-    withDeleted: binMode,
-  };
+    // apply sort order to the query builder
+    applySortOrderQB(queryBuilder, sort);
 
-  if (binMode) {
-    findOptions.where = { ...findOptions.where, deletedAt: Not(IsNull()) };
-  }
+    // Get the paginated and filtered records
+    const [results, total] = await queryBuilder.getManyAndCount();
 
-  // Apply filters to where clause
-  Object.keys(filters).forEach((field) => {
-    findOptions.where = { ...findOptions.where, [field]: parseCondition({ conditionFor: "find", condition: filters[field], fieldAlias: field }) };
-  });
+    // build paginated results response
+    const pageResponse: Page<object> = await pageResponseBuilder(results, page, limit, total, sort);
 
-  // Get the paginated and filtered rows
-  const [results, total] = await repo.findAndCount(findOptions);
-
-  const page: Page<object> = await pageResponseBuilder(results, pagination.page, pagination.limit, total, sort);
-
-  return res.status(HttpCodes.OK).json(
-    apiResponseBuilder({
-      success: true,
-      result: page,
-      controller: 'CRUD.PageController',
-      message: 'Page fetched successfully',
-      httpCode: HttpCodes.OK,
-      error: null,
-      req,
-      res,
-    }),
-  );
+    return res.status(HttpCodes.OK).json(
+        // build api response to be sent in JSON format
+        apiResponseBuilder({
+            success: true,
+            result: pageResponse,
+            controller: 'CRUD.PageController',
+            message: 'Page fetched successfully',
+            httpCode: HttpCodes.OK,
+            error: null,
+            req,
+            res,
+        }),
+    );
 };
 
 export default page;

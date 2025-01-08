@@ -30,7 +30,7 @@ const entities = async (req: Request, res: Response): Promise<Response> => {
     queryKey: 'entity',
   });
 
-  entities.forEach((entity) => (entity.filePath = '[REDACTED]'));
+  // entities.forEach((entity) => (entity.filePath = '[REDACTED]'));
 
   return res.status(HttpCodes.OK).json(
     apiResponseBuilder({

@@ -18,7 +18,6 @@ export function controllerErrorBoundary (
       await fn(req, res, next);
     } catch (error: any) {
       const errorDetails: ErrorMessage = errrorMessageBuilder(error);
-
       return res.status(errorDetails.httpCode).json(
         apiResponseBuilder({
           success: false,

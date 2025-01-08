@@ -15,8 +15,8 @@ const crudService = {
   /**
    * Fetch paginated entity records
    */
-  page: async <E>({ entity, binMode = false, pagination = { limit: 10, page: 1 }, loadRelations, filters = {}, sort = {}, signal }: EntityRecordsPageRequest<E>) => {
-    const promise = api.post<ApiResponse<PageData<E>>>(`/${entity}/page`, { filters, pagination, loadRelations, sort, binMode }, { signal })
+  page: async <E>({ entity, binMode = false, limit, page, loadRelations, filters = {}, sort = {}, signal }: EntityRecordsPageRequest<E>) => {
+    const promise = api.post<ApiResponse<PageData<E>>>(`/${entity}/page`, { filters, limit, page, loadRelations, sort, withDeleted: binMode }, { signal })
     return handleApiResponse<PageData<E>>({ promise })
   },
 

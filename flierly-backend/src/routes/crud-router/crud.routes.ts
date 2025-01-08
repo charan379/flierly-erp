@@ -1,8 +1,10 @@
 import controllers from '@/controllers';
 import { ICRUDController } from '@/controllers/crud-controller';
+import PageRequestBody from '@/dto/requests/PageRequestBody.dto';
 import getEntityList from '@/entities';
 import { authorize } from '@/middlewares/authorization.middleware';
 import { controllerErrorBoundary } from '@/middlewares/controller-error-boundary.middleware';
+import { requestValidator } from '@/middlewares/request-validator.middleware';
 import { Router } from 'express';
 
 const crudRouter = Router();
@@ -12,7 +14,7 @@ const routeGenerator = (entityCode: string, controller: ICRUDController): void =
   crudRouter.post(`/${entityCode}/read`, authorize(`${entityCode}.read`), controllerErrorBoundary(controller['read'], entityCode));
   crudRouter.post(`/${entityCode}/search`, authorize(`${entityCode}.read`), controllerErrorBoundary(controller['search'], entityCode));
   crudRouter.post(`/${entityCode}/is-exists`, authorize(`${entityCode}.read`), controllerErrorBoundary(controller['isExists'], entityCode));
-  crudRouter.post(`/${entityCode}/page`, authorize(`${entityCode}.read`), controllerErrorBoundary(controller['page'], entityCode));
+  crudRouter.post(`/${entityCode}/page`, requestValidator(PageRequestBody, "body"), authorize(`${entityCode}.read`), controllerErrorBoundary(controller['page'], entityCode));
   crudRouter.post(`/${entityCode}/associated-entity-records-page`, authorize(`${entityCode}.read`), controllerErrorBoundary(controller['associatedEntityRecordsPage'], entityCode));
   crudRouter.put(`/${entityCode}/update/:id`, authorize(`${entityCode}.update`), controllerErrorBoundary(controller['update'], entityCode));
   crudRouter.patch(`/${entityCode}/activate`, authorize(`${entityCode}.manage`), controllerErrorBoundary(controller['activate'], entityCode));

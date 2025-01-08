@@ -2,7 +2,7 @@ import parseCondition from '@/lib/typeorm/utils/parse-condition.util';
 import { AppDataSource } from '@/lib/typeorm/app-datasource';
 import { Request, Response } from 'express';
 import apiResponseBuilder from '@/utils/builders/api-response.builder';
-import { FindManyOptions, FindOperator, ObjectLiteral, Raw } from 'typeorm';
+import { FindManyOptions, ObjectLiteral } from 'typeorm';
 import whereCondition from '@/lib/typeorm/utils/where-condintion.util';
 
 /**
@@ -27,41 +27,30 @@ const executeQueryWithParsedConditionsWithFind = async (req: Request, res: Respo
     // Track invalid conditions with error messages
     const invalidConditions = new Map<string, string>();
 
-    // const genWhere = (condition: any): FindOperator<any> => {
-    // let parameters: ObjectLiteral = {};
-    // return Raw((alias: string) => {
-    //     // console.log({ alias, condition });
-    //     const { query, parameters: parsedParameters } = parseCondition({ fieldAlias: alias, condition });
-    //     parameters = { ...parameters, ...parsedParameters };
-    //     // console.log(parameters)
-    //     return query;
-    // }, { ...parameters });
-
-    // return Raw((alias: string) => parseCondition({ fieldAlias: alias, condition }).query, {});
-    // };
-
-    for (const field in filterConditions) {
-        if (Object.prototype.hasOwnProperty.call(filterConditions, field)) {
-            const condition = filterConditions[field];
-            try {
-                // Parse the condition and add it to the query
-                const w = whereCondition(findOptions.where, field, filterConditions[field]);
-                // const f = genWhere(filterConditions[field]);
-                // console.log({ field, w, f });
-                // findOptions.where = { ...findOptions.where, ...whereCondition(findOptions.where, field, filterConditions[field]) };
-                findOptions.where = { ...findOptions.where, [field]: parseCondition({ conditionFor: "find", condition, fieldAlias: field }) }
-            } catch (error) {
-                console.error(`Error parsing condition for field "${field}":`, error);
-                invalidConditions.set(field, `${(error as Error).message}`);
+    const processConditions = (conditions: any, where: any) => {
+        for (const field in conditions) {
+            if (Object.prototype.hasOwnProperty.call(conditions, field)) {
+                const condition = conditions[field];
+                try {
+                    if (field === '$and' || field === '$or') {
+                        const nestedConditions = condition.map((nestedCondition: any) => processConditions(nestedCondition, {}));
+                        where[field === '$and' ? '$and' : '$or'] = nestedConditions;
+                    } else {
+                        where[field] = parseCondition({ conditionFor: "find", condition, fieldAlias: field });
+                    }
+                } catch (error) {
+                    console.error(`Error parsing condition for field "${field}":`, error);
+                    invalidConditions.set(field, `${(error as Error).message}`);
+                }
             }
         }
-    }
+    };
 
-    // Get the paginated and filtered rows
-    const results = await repository.find(findOptions);
+    processConditions(filterConditions, findOptions.where);
 
     try {
-        // Execute the query and get results
+        // Get the paginated and filtered rows
+        const results = await repository.find(findOptions);
 
         // Build and send the response
         return res.status(200).json(

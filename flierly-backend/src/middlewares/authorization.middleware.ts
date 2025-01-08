@@ -5,68 +5,110 @@ import FlierlyException from '@/lib/flierly.exception';
 import { CustomJwtPayload, verifyJwtToken } from '@/lib/jwt';
 import getUserPrivilegeCodes from '@/service/iam/get-user-privilege-codes.service';
 import { NextFunction, Request, Response } from 'express';
+import { getMessage as m } from '@/utils/get-message.util';
 
-export function authorize (privilegeCode: string = ''): (req: Request, res: Response, next: NextFunction) => Promise<void | Response> {
+/**
+ * Middleware to authorize requests based on JWT tokens and user privileges.
+ *
+ * This middleware performs the following steps:
+ * 1. Validates the presence and format of the authorization header or signed cookie.
+ * 2. Decodes and verifies the provided JWT token.
+ * 3. Validates the existence and status of the associated user in the database.
+ * 4. Checks if the user has the required privilege code (if provided).
+ * 5. Attaches `username` and `userId` to the request object for downstream usage.
+ *
+ * @param privilegeCode - Optional privilege code required for the request. If empty, only token validation is performed.
+ * @returns Middleware function for authorization.
+ */
+export function authorize(privilegeCode: string = ''): (req: Request, res: Response, next: NextFunction) => Promise<void | Response> {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // Get authorization header value from request
+      // Extract authorization header or signed cookie
       const authHeader: string = req?.headers?.authorization || req?.signedCookies?.auth;
-      // if authorization header not present throw exception
-      if (!authHeader)
+
+      // If authorization token is not present, throw an exception
+      if (!authHeader) {
         throw new FlierlyException(
-          'Invalid request headers',
+          m('invalidAuthorizationHeader'),
           HttpCodes.UNAUTHORIZED,
-          'Token Not Provided at headers or cookies',
-          'Invalid-authorization-header-authorization-middleware',
+          "Authorization header or signedCookies.auth not provided !",
+          'Invalid-authorization-header-authorization-middleware'
         );
-      // bearer authorization header value regex
-      const bearerTokenRegex: RegExp = new RegExp('^Bearer [A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+$');
-      // if bearer token not present | or not in format then throw exception
-      if (!authHeader.match(bearerTokenRegex))
+      }
+
+      // Regex pattern to validate Bearer token format
+      const bearerTokenRegex: RegExp = /^Bearer [A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/;
+
+      // Validate the format of the authorization token
+      if (!authHeader.match(bearerTokenRegex)) {
         throw new FlierlyException(
-          'Invalid Authorization token',
+          m('invalidAuthorizationToken'),
           HttpCodes.UNAUTHORIZED,
-          'Authorization headers are not in bearer format',
-          'Invalid-authorization-header-authorization-middleware',
+          'Authorization headers are not in Bearer format',
+          'Invalid-authorization-header-authorization-middleware'
         );
-      // extract bearer token from authorization header
+      }
+
+      // Extract the actual token from the Bearer header
       const bearerToken: string = authHeader.split(' ')[1];
-      // verifyJwtToken and de-code token details
+
+      // Verify the JWT token and decode its payload
       const deCodedToken: CustomJwtPayload = await verifyJwtToken(bearerToken);
-      // extract username from de-coded token details
-      const _jwtUserName: string | undefined = deCodedToken.username;
-      // extract userIf from de-coded token details
+
+      // Extract username and userId from the decoded token
+      const jwtUserName: string | undefined = deCodedToken.username;
       const jwtUserId: number | undefined = deCodedToken.userId;
-      // fetch user details from DB using username
+
+      // Fetch user details from the database using the decoded userId
       const user: User | null = await AppDataSource.getRepository(User).findOneBy({ id: jwtUserId });
-      // Throw error if user does not exist
-      if (user === null) throw new FlierlyException('Invalid userId', HttpCodes.UNAUTHORIZED, "Can't find user with provided userId", 'authorization-middleware-invalid-userId');
-      // assign username to request so that it can be used in further flow
+
+      // If no user is found, throw an exception
+      if (!user) {
+        throw new FlierlyException(
+          m('userNotFound'),
+          HttpCodes.UNAUTHORIZED,
+          m('userNotFound', { userId: String(jwtUserId) }),
+          'authorization-middleware-invalid-userId'
+        );
+      }
+
+      // Attach `username` and `userId` to the request object for further processing
       req.username = user.username;
-      // assign userId to request so that it can be used in further flow
       req.userId = user.id;
-      // Throw error if user is inactive
-      if (!user.isActive) throw new FlierlyException('Inactive user', HttpCodes.UNAUTHORIZED, 'User is not activated', 'authorization-middleware-inactive-user');
-      // Check if permissions to be checked
+
+      // If the user is inactive, throw an exception
+      if (!user.isActive) {
+        throw new FlierlyException(
+          m('userInactive'),
+          HttpCodes.UNAUTHORIZED,
+          m('userInactive'),
+          'authorization-middleware-inactive-user'
+        );
+      }
+
+      // If no privilege code is provided, skip privilege validation and proceed
       if (privilegeCode === '') {
-        next();
+        return next();
       } else {
-        // extract permissions from user permissions, user roles and remove excluded permissions of user from extracted permissions
+        // Retrieve all privilege codes assigned to the user
         const userPrivilegeCodes: Set<string> = await getUserPrivilegeCodes(user.id);
-        // if permissions contain required permission code then continue to next function
-        if (userPrivilegeCodes.has(privilegeCode)) next();
-        else
-          // if permissions does not contain required permission code then throw exception
+
+        // If the user has the required privilege, proceed
+        if (userPrivilegeCodes.has(privilegeCode)) {
+          return next();
+        } else {
+          // If the user lacks the required privilege, throw an exception
           throw new FlierlyException(
-            'Insufficient Permissions, Access Blocked !',
+            m('insufficientPermissions'),
             HttpCodes.UNAUTHORIZED,
-            "User doen't contain the required permissions",
-            'authorization-middleware-insufficient-permissions',
+            m('privilegeCheckFailed', { privilege: privilegeCode }),
+            'authorization-middleware-insufficient-permissions'
           );
+        }
       }
     } catch (error) {
-      // if any error happens pass it to next function
-      next(error);
+      // Pass any error to the next middleware for handling
+      return next(error);
     }
   };
 }

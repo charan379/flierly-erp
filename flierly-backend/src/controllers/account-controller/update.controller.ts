@@ -5,7 +5,7 @@ import apiResponseBuilder from '@/utils/builders/api-response.builder';
 import JoiSchemaValidator from '@/lib/joi/joi-schema.validator';
 import { Request, Response } from 'express';
 import FlierlyException from '@/lib/flierly.exception';
-import { Account } from '@/entities/account/Account.entity';
+import Account from '@/entities/account/Account.entity';
 import { Address } from '@/entities/address/Address.entity'; // Import Address entity
 import Joi from 'joi';
 

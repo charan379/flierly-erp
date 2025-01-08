@@ -168,7 +168,8 @@ const CrudTable = <T extends Record<string, any>>({
         const { result, success } = await crudService.page<T>({
           entity,
           filters: CrudModuleContextHandler.filters.get(),
-          pagination: { limit: params?.pageSize ?? 10, page: params?.current ?? 1 },
+          limit: params.pageSize ?? 10,
+          page: params.current ?? 1,
           loadRelations,
           sort,
           binMode: binMode,

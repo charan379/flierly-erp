@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, DeleteDateColumn } from 'typeorm';
 import { IsNotEmpty, IsNumber, IsOptional, Length, Matches, ValidationError } from 'class-validator';
-import { Account } from '../account/Account.entity';
+import Account from '../account/Account.entity';
 
 @Entity('addresses')
 export class Address {

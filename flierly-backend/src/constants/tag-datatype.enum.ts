@@ -1,3 +1,7 @@
+
+/**
+ * TagDataType ENUM
+ */
 export enum TagDataType {
     STRING = "string",
     NUMBER = "number",

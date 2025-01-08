@@ -13,13 +13,14 @@ import {
 } from 'typeorm';
 import { Address } from '../address/Address.entity';
 import { TaxIdentity } from '../taxation/TaxIdentity.entity';
-import { IsEmail, IsNotEmpty, IsOptional, Length, Matches } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, Length, Matches, ValidateNested } from 'class-validator';
 import { AccountType } from './AccountType.entity';
 import { AccountSubtype } from './AccountSubtype.entity';
 import { AppDataSource } from '@/lib/typeorm/app-datasource';
+import { Type } from 'class-transformer';
 
 @Entity('accounts')
-export class Account {
+export default class Account {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
@@ -29,11 +30,15 @@ export class Account {
   @ManyToOne(() => AccountType, { eager: true, nullable: false })
   @JoinColumn({ name: 'account_type_id' })
   @IsNotEmpty({ message: 'Account type must be specified' })
+  @ValidateNested()
+  @Type(() => AccountType)
   type: AccountType;
 
   @ManyToOne(() => AccountSubtype, { eager: true, nullable: false })
   @JoinColumn({ name: 'account_subtype_id' })
   @IsNotEmpty({ message: 'Account subtype must be specified' })
+  @ValidateNested()
+  @Type(() => AccountSubtype)
   subtype: AccountSubtype;
 
   @Column({ type: 'boolean', default: false, name: 'is_vip' })
@@ -64,14 +69,20 @@ export class Account {
 
   @ManyToOne(() => TaxIdentity, { eager: true, nullable: false })
   @JoinColumn({ name: 'tax_identity_id' })
+  @ValidateNested()
+  @Type(() => TaxIdentity)
   taxIdentity: TaxIdentity;
 
   @ManyToOne(() => Account, { eager: false, nullable: true })
   @JoinColumn({ name: 'parent_id' })
+  @ValidateNested()
+  @Type(() => Account)
   parent: Account;
 
   @OneToOne(() => Address, { eager: true, nullable: false })
   @JoinColumn({ name: 'primary_address_id' })
+  @ValidateNested()
+  @Type(() => Address)
   primaryAddress: Address;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
@@ -85,7 +96,7 @@ export class Account {
 
   // Hook that runs before inserting or updating an account
   @BeforeInsert()
-  async updatePrimaryAddress (): Promise<void> {
+  async updatePrimaryAddress(): Promise<void> {
     // Check if the account has a primary address that needs to be updated
     if (this.primaryAddress) {
       const repository: Repository<Address> = AppDataSource.getRepository(Address);

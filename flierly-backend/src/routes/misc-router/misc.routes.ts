@@ -15,14 +15,16 @@ import testTypeORMRestore from '@/controllers/misc-controller/testTypeORMRestore
 import testTypeORMSearch from '@/controllers/misc-controller/testTypeORMSearch';
 import testTypeORMUpdate from '@/controllers/misc-controller/testTypeORMUpdate';
 import uploadFileController from '@/controllers/upload-controller/upload-file.controller';
+import PageRequestBody from '@/dto/requests/PageRequestBody.dto';
 import { authorize } from '@/middlewares/authorization.middleware';
 import { controllerErrorBoundary } from '@/middlewares/controller-error-boundary.middleware';
 import { upload } from '@/middlewares/multer.middleware';
+import { requestValidator } from '@/middlewares/request-validator.middleware';
 import { Router } from 'express';
 
 const miscRouter = Router();
 
-miscRouter.get(`/entities`, authorize(), controllerErrorBoundary(entities, 'misc'));
+miscRouter.get(`/entities`, controllerErrorBoundary(entities, 'misc'));
 miscRouter.post(`/misc/test-upload`, upload.single('file'), authorize(), controllerErrorBoundary(uploadFileController, 'misc'));
 
 miscRouter.get(`/system-usage`, controllerErrorBoundary(systemUsage, 'misc'));
@@ -38,7 +40,7 @@ miscRouter.put('/test/type-orm-update/:id', controllerErrorBoundary(testTypeORMU
 miscRouter.post('/test/type-orm-exists', controllerErrorBoundary(testTypeORMExists, 'Role'));
 miscRouter.post('/test/type-orm-search', controllerErrorBoundary(testTypeORMSearch, 'Role'));
 miscRouter.post('/test/parse-conditions', controllerErrorBoundary(testParseFilterConditions, ''));
-miscRouter.post('/test/test-execute-query-with-parsed-conditions-qb', controllerErrorBoundary(executeQueryWithParsedConditions, ''));
+miscRouter.post('/test/test-execute-query-with-parsed-conditions-qb', requestValidator("account", 'body'), controllerErrorBoundary(executeQueryWithParsedConditions, ''));
 miscRouter.post('/test/test-execute-query-with-parsed-conditions-find', controllerErrorBoundary(executeQueryWithParsedConditionsWithFind, ''));
 
 

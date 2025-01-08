@@ -2,6 +2,8 @@ import parseCondition from '@/lib/typeorm/utils/parse-condition.util';
 import { AppDataSource } from '@/lib/typeorm/app-datasource';
 import { Request, Response } from 'express';
 import apiResponseBuilder from '@/utils/builders/api-response.builder';
+import { Brackets, ObjectLiteral, SelectQueryBuilder, WhereExpressionBuilder } from 'typeorm';
+import applyWhereConditionsQB from '@/lib/typeorm/utils/qb-appy-where-conditions.util';
 
 /**
  * Executes a query with parsed filter conditions using the query builder.
@@ -10,33 +12,26 @@ import apiResponseBuilder from '@/utils/builders/api-response.builder';
  * @param res - The Express response object to send the response.
  */
 const executeQueryWithParsedConditions = async (req: Request, res: Response): Promise<Response> => {
-    const filterConditions: { [key: string]: any } = req.body;
+    const { filters, page, limit } = req.body;
+    let relations: string[] = req.query?.relations?.toString().split(',') ?? [];
 
-    const repository = AppDataSource.getRepository('Privilege');
-    const queryBuilder = repository.createQueryBuilder('privilege');
+    console.log(relations);
+
+    const repository = AppDataSource.getRepository('Product');
+    const queryBuilder = repository.createQueryBuilder('product');
+
+    queryBuilder.withDeleted();
+
+    for (let relation of relations) {
+        queryBuilder.leftJoinAndSelect(`product.${relation}`, relation);
+    };
 
     // Track invalid conditions with error messages
     const invalidConditions = new Map<string, string>();
 
-    for (const field in filterConditions) {
-        if (Object.prototype.hasOwnProperty.call(filterConditions, field)) {
-            const condition = filterConditions[field];
-            try {
-                // Parse the condition and add it to the query
-                const pc = parseCondition({ conditionFor: 'qb', fieldAlias: `privilege.${field}`, condition });
+    // processConditions(queryBuilder, 'andWhere', filterConditions, 'product');
 
-                if ('query' in pc) {
-                    const { query: whereQuery, parameters } = pc
-                    queryBuilder.andWhere(whereQuery, parameters);
-                }
-
-            } catch (error) {
-                console.error(`Error parsing condition for field "${field}":`, error);
-                invalidConditions.set(field, `${(error as Error).message}`);
-            }
-        }
-    }
-    queryBuilder.withDeleted();
+    applyWhereConditionsQB(queryBuilder, 'andWhere', filters, 'product')
     try {
         // Execute the query and get results
         const results = await queryBuilder.getMany();

@@ -7,7 +7,7 @@ import JoiSchemaValidator from '@/lib/joi/joi-schema.validator';
 import FlierlyException from '@/lib/flierly.exception';
 import HttpCodes from '@/constants/http-codes.enum';
 import apiResponseBuilder from '@/utils/builders/api-response.builder';
-import updateUserPasswordService from '@/service/iam/update-user-password.service';
+import updateUserPassword from '@/service/iam/update-user-password.service';
 
 export const credentialsSchema: Joi.ObjectSchema = Joi.object({
   userId: idSchema,
@@ -31,7 +31,7 @@ const updatePassword = async (req: Request, res: Response): Promise<Response> =>
   }
 
   // Update user password
-  const message = await updateUserPasswordService(credentials.userId, credentials.password);
+  const message = await updateUserPassword(credentials.userId, credentials.password);
 
   // responde with newly registered user details.
   return res.status(HttpCodes.OK).json(

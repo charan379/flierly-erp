@@ -24,10 +24,8 @@ type EntityRecordsPageRequest<E> = {
   entity: string
   loadRelations?: Array<keyof E>,
   binMode?: boolean
-  pagination?: {
-    limit: number
-    page: number
-  }
+  limit: number
+  page: number
   filters?: Record<string, any>
   sort?: Record<string, "descend" | "ascend" | null>
   signal?: AbortSignal
