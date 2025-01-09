@@ -11,9 +11,6 @@ export default class UOM {
   @Length(3, 50, { message: 'Name must be between 3 and 50 characters.' })
   name: string;
 
-  @Column({ default: true, name: 'is_active' })
-  isActive: boolean;
-
   @Column({ type: 'varchar', length: 20, unique: true, nullable: false })
   @IsNotEmpty({ message: 'Short Name must not be empty.' })
   @Length(1, 15, { message: 'Short Name must be between 1 and 15 characters.' })

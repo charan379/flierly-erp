@@ -1,8 +1,9 @@
-import { IsNotEmpty, Length, IsOptional, Matches } from 'class-validator';
+import { IsNotEmpty, Length, IsOptional, Matches, IsNumber, IsPositive, Min } from 'class-validator';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, JoinColumn, ManyToOne } from 'typeorm';
 import Brand from './Brand.entity';
 import ProductCategory from './ProductCategory.entity';
 import ProductSubCategory from './ProductSubCategory.entity';
+import UOM from './UOM.entity';
 
 @Entity('products')
 export default class Product {
@@ -55,6 +56,47 @@ export default class Product {
   @JoinColumn({ name: 'sub_category_id' })
   @IsNotEmpty({ message: 'SubCategory must be specified' })
   subCategory: ProductSubCategory;
+
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @IsNumber({}, { message: 'Quantity must be a valid number' })
+  @IsPositive({ message: 'Quantity must be greater than zero' })
+  @Min(0, { message: 'Quantity cannot be negative' })
+  quantity: number;
+
+  @Column({ type: 'decimal', precision: 10, scale: 2, name: "min_quantity" })
+  @IsNumber({}, { message: 'Min quantity must be a valid number' })
+  @IsPositive({ message: 'Min quantity must be greater than zero' })
+  @Min(0, { message: 'Min quantity cannot be negative' })
+  minQuantity: number;
+
+  @Column({ type: 'decimal', precision: 10, scale: 2, name: "max_quantity" })
+  @IsNumber({}, { message: 'Max quantity must be a valid number' })
+  @IsPositive({ message: 'Max quantity must be greater than zero' })
+  @Min(0, { message: 'Max quantity cannot be negative' })
+  maxQuantity: number;
+
+  @Column({ type: 'decimal', precision: 10, scale: 2, name: "max_purchase_price" })
+  @IsNumber({}, { message: 'Max purchase price must be a valid number' })
+  @IsPositive({ message: 'Max purchase price must be greater than zero' })
+  @Min(0, { message: 'Max purchase price cannot be negative' })
+  maxPurchasePrice: number;
+
+  @Column({ type: 'decimal', precision: 10, scale: 2, name: "min_sale_price" })
+  @IsNumber({}, { message: 'Min sale price must be a valid number' })
+  @IsPositive({ message: 'Min sale price must be greater than zero' })
+  @Min(0, { message: 'Min sale price cannot be negative' })
+  minSalePrice: number;
+
+  @Column({ type: 'decimal', precision: 10, scale: 2, name: "sale_price" })
+  @IsNumber({}, { message: 'Sale price must be a valid number' })
+  @IsPositive({ message: 'Sale price must be greater than zero' })
+  @Min(0, { message: 'Sale price cannot be negative' })
+  salePrice: number;
+
+  @ManyToOne(() => UOM, { eager: false, nullable: false, })
+  @JoinColumn({ name: 'base_uom_id' })
+  @IsNotEmpty({ message: 'Unit of Measure (UOM) must be specified' })
+  baseUOM: UOM;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;

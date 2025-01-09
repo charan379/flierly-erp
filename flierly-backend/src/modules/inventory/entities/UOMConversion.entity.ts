@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsPositive, Length } from 'class-validator';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, Unique, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, JoinColumn } from 'typeorm';
-import Product from '@/modules/product/entities/Product.entity';
+import Product from './Product.entity';
 import UOM from './UOM.entity';
 
 @Entity('uom_conversions')
@@ -10,9 +10,6 @@ export class UOMConversion {
     type: 'bigint',
   })
   id: number;
-
-  @Column({ default: true, name: 'is_active' })
-  isActive: boolean;
 
   @ManyToOne(() => Product, { eager: false })
   @JoinColumn({ name: 'product_id' })

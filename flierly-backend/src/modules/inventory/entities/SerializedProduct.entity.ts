@@ -1,7 +1,7 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm';
 import Product from './Product.entity';
 import { IsNotEmpty, Length, Matches } from 'class-validator';
-import { SerializedProductStatus } from '@/modules/product/constants/serialized-product-status.enum';
+import { SerializedProductStatus } from '../constants/serialized-product-status.enum';
 
 @Entity('serialized_products')
 @Unique(['product', 'serialNumber'])
