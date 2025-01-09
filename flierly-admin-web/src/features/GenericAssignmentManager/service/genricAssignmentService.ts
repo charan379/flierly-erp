@@ -19,12 +19,13 @@ const genricAssignmentService = {
     entity,
     loadRelations = [],
     binMode = false,
-    pagination = { limit: 10, page: 1 },
+    limit,
+    page,
     filters = {},
     sort = {},
     signal,
   }: EntityRecordsPageRequest<T>) => {
-    const promise = api.post<ApiResponse<PageData<T>>>(`/${entity}/page`, { filters, pagination, sort, loadRelations, binMode }, { signal })
+    const promise = api.post<ApiResponse<PageData<T>>>(`/${entity}/page`, { filters, page, limit, sort, loadRelations, binMode }, { signal })
     return handleApiResponse<PageData<T>>({ promise })
   },
 
@@ -37,7 +38,8 @@ const genricAssignmentService = {
     entity,
     entityRecordId,
     entitySideField,
-    pagination = { limit: 10, page: 1 },
+    limit,
+    page,
     filters = {},
     sort = {},
     type,
@@ -45,7 +47,7 @@ const genricAssignmentService = {
   }: AssociatedEntityRecordsPageRequest<E, AE>) => {
     const promise = api.post<ApiResponse<PageData<AE>>>(
       `/${associatedEntity}/associated-entity-records-page`,
-      { entity, entityRecordId, associatedSideField, entitySideField, filters, pagination, sort, type },
+      { entity, entityRecordId, associatedSideField, entitySideField, filters, page, limit, sort, type },
       { signal },
     )
     return handleApiResponse<PageData<AE>>({ promise })

@@ -1,4 +1,4 @@
-import AccessType from '@/constants/access-types.enum';
+import AccessType from '@/modules/iam/constants/access-types.enum';
 import getEntityList from '@/entities';
 import { Privilege } from '@/entities/iam/Privilege.entity';
 import { AppDataSource } from '@/lib/typeorm/app-datasource';

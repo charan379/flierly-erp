@@ -67,9 +67,8 @@ const applyWhereConditionsQB = (
                 console.error(`Error parsing condition for field "${field}":`, error);
 
                 throw new FlierlyException(
-                    `${field}, ${(error as Error).message}`, // User-friendly error message
+                    `Error parsing condition for field "${field}": ${(error as Error).message}`, // User-friendly error message
                     HttpCodes.BAD_REQUEST,                 // HTTP status code for bad requests
-                    `Error parsing condition for field "${field}": ${(error as Error).message}`, // Detailed log message
                     JSON.stringify(error)                  // Serialized error details
                 );
             }

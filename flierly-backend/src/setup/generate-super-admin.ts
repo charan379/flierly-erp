@@ -3,7 +3,7 @@ import { AppDataSource } from '../lib/typeorm/app-datasource';
 import { Role } from '@/entities/iam/Role.entity';
 import { User } from '@/entities/iam/User.entity';
 import { Privilege } from '@/entities/iam/Privilege.entity';
-import updateUserPassword from '@/service/iam/update-user-password.service';
+import updateUserPassword from '@/modules/iam/services/user-service/update-user-password';
 
 async function generateSuperAdmin (): Promise<void> {
   const roleRepository = AppDataSource.getRepository(Role);

@@ -11,6 +11,7 @@ const messages = Object.freeze({
     privilegeCheckFailed: "User doesn't have the required permissions for ${privilege}.",
     "500": "INTERNAL SERVER ERROR",
     unhandledValidationError: "Unhandled Validation Error !.",
+    entityIdNotFound: "${entity} not found with ID: ${recordId}"
 });
 
 export default messages;

@@ -25,7 +25,7 @@ const ERROR_MESSAGES = {
 
 const jwtSecret: string = EnvConfig.JWT_SECRET ?? '';
 
-export async function generateJwtToken (userId: number, username: string): Promise<String> {
+export async function generateJwtToken(userId: number, username: string): Promise<string> {
   try {
     const signOptions: jwt.SignOptions = {
       expiresIn: '8h',
@@ -39,11 +39,11 @@ export async function generateJwtToken (userId: number, username: string): Promi
 
     return jwt.sign(payload, jwtSecret, signOptions);
   } catch (error: any) {
-    throw new FlierlyException(ERROR_MESSAGES.TOKEN_CREATION_FAILED, HttpCodes.INTERNAL_SERVER_ERROR, `JWT token creation failed for user: ${username}`, error.stack);
+    throw new FlierlyException(ERROR_MESSAGES.TOKEN_CREATION_FAILED, HttpCodes.INTERNAL_SERVER_ERROR, error.stack);
   }
 }
 
-export async function verifyJwtToken (jwtToken: string): Promise<CustomJwtPayload> {
+export async function verifyJwtToken(jwtToken: string): Promise<CustomJwtPayload> {
   try {
     const decodedToken = jwt.verify(jwtToken, jwtSecret) as CustomJwtPayload;
     return decodedToken;
@@ -52,20 +52,20 @@ export async function verifyJwtToken (jwtToken: string): Promise<CustomJwtPayloa
   }
 }
 
-function handleJwtError (error: any): never {
+function handleJwtError(error: any): never {
   switch (error.message) {
     case 'invalid signature': {
-      throw new FlierlyException(ERROR_MESSAGES.INVALID_SIGNATURE, HttpCodes.UNAUTHORIZED, ERROR_MESSAGES.INVALID_SIGNATURE, error.stack);
+      throw new FlierlyException(ERROR_MESSAGES.INVALID_SIGNATURE, HttpCodes.UNAUTHORIZED, error.stack);
     }
     case 'invalid token': {
-      throw new FlierlyException(ERROR_MESSAGES.INVALID_TOKEN, HttpCodes.UNAUTHORIZED, ERROR_MESSAGES.INVALID_TOKEN, error.stack);
+      throw new FlierlyException(ERROR_MESSAGES.INVALID_TOKEN, HttpCodes.UNAUTHORIZED, error.stack);
     }
     case 'jwt expired': {
-      throw new FlierlyException(ERROR_MESSAGES.AUTHENTICATION_EXPIRED, HttpCodes.UNAUTHORIZED, ERROR_MESSAGES.JWT_EXPIRED, error.stack);
+      throw new FlierlyException(ERROR_MESSAGES.AUTHENTICATION_EXPIRED, HttpCodes.UNAUTHORIZED, error.stack);
     }
 
     default: {
-      throw new FlierlyException(ERROR_MESSAGES.UNKNOWN_ERROR, HttpCodes.UNAUTHORIZED, ERROR_MESSAGES.UNKNOWN_ERROR, error.stack);
+      throw new FlierlyException(ERROR_MESSAGES.UNKNOWN_ERROR, HttpCodes.UNAUTHORIZED, error.stack);
     }
   }
 }

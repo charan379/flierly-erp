@@ -1,6 +1,5 @@
 import express, { Express } from 'express';
 import createHttpError from 'http-errors';
-import router from '@/routes';
 import HttpCodes from '@/constants/http-codes.enum';
 import errorHandler from '@/middlewares/error-handler.middleware';
 import dotenv from 'dotenv';
@@ -8,6 +7,7 @@ import cors from 'cors';
 import ReqResLogger from '@/middlewares/req-res-logger.middlerware';
 import { EnvConfig } from '@/config/env';
 import { CorsConfig } from '@/config/cors';
+import appRoutes from './router';
 
 dotenv.config();
 
@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(ReqResLogger);
 
-app.use(router);
+app.use(appRoutes);
 
 app.all('/*', (req, res, next) => {
   // console.debug(req.path);

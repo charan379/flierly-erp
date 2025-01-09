@@ -172,10 +172,8 @@ const GenericAssociationManager = <E extends { id: number }, AE extends { id: nu
                   associatedEntity,
                   entitySideField,
                   associatedSideField,
-                  pagination: {
-                    limit: params?.pageSize ?? 10,
-                    page: params?.current ?? 1,
-                  },
+                  limit: params?.pageSize ?? 10,
+                  page: params?.current ?? 1,
                   sort,
                   filters: allocatedItemsFilter,
                 })
@@ -241,10 +239,8 @@ const GenericAssociationManager = <E extends { id: number }, AE extends { id: nu
                   associatedEntity,
                   entitySideField,
                   associatedSideField,
-                  pagination: {
-                    limit: params?.pageSize ?? 10,
-                    page: params?.current ?? 1,
-                  },
+                  limit: params?.pageSize ?? 10,
+                  page: params?.current ?? 1,
                   sort,
                   filters: availableItemsFilter,
                   type: 'unallocated',

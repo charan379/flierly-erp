@@ -1,9 +1,9 @@
 import HttpCodes from '@/constants/http-codes.enum';
-import { User } from '@/entities/iam/User.entity';
+import User from '@/modules/iam/entities/User.entity';
 import { AppDataSource } from '@/lib/typeorm/app-datasource';
 import FlierlyException from '@/lib/flierly.exception';
 import { CustomJwtPayload, verifyJwtToken } from '@/lib/jwt';
-import getUserPrivilegeCodes from '@/service/iam/get-user-privilege-codes.service';
+import getUserPrivilegeCodes from '@/modules/iam/services/user-service/get-user-privilege-codes';
 import { NextFunction, Request, Response } from 'express';
 import { getMessage as m } from '@/utils/get-message.util';
 
@@ -32,7 +32,6 @@ export function authorize(privilegeCode: string = ''): (req: Request, res: Respo
           m('invalidAuthorizationHeader'),
           HttpCodes.UNAUTHORIZED,
           "Authorization header or signedCookies.auth not provided !",
-          'Invalid-authorization-header-authorization-middleware'
         );
       }
 
@@ -45,7 +44,6 @@ export function authorize(privilegeCode: string = ''): (req: Request, res: Respo
           m('invalidAuthorizationToken'),
           HttpCodes.UNAUTHORIZED,
           'Authorization headers are not in Bearer format',
-          'Invalid-authorization-header-authorization-middleware'
         );
       }
 
@@ -68,7 +66,6 @@ export function authorize(privilegeCode: string = ''): (req: Request, res: Respo
           m('userNotFound'),
           HttpCodes.UNAUTHORIZED,
           m('userNotFound', { userId: String(jwtUserId) }),
-          'authorization-middleware-invalid-userId'
         );
       }
 
@@ -82,7 +79,6 @@ export function authorize(privilegeCode: string = ''): (req: Request, res: Respo
           m('userInactive'),
           HttpCodes.UNAUTHORIZED,
           m('userInactive'),
-          'authorization-middleware-inactive-user'
         );
       }
 
@@ -102,7 +98,6 @@ export function authorize(privilegeCode: string = ''): (req: Request, res: Respo
             m('insufficientPermissions'),
             HttpCodes.UNAUTHORIZED,
             m('privilegeCheckFailed', { privilege: privilegeCode }),
-            'authorization-middleware-insufficient-permissions'
           );
         }
       }

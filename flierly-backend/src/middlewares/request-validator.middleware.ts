@@ -1,6 +1,6 @@
 import { EnvConfig } from "@/config/env";
 import HttpCodes from "@/constants/http-codes.enum";
-import getEntityList from "@/entities";
+import { getEntityList } from "@/modules";
 import FlierlyException from "@/lib/flierly.exception";
 import apiResponseBuilder from "@/utils/builders/api-response.builder";
 import buildValidationErrorsResult from "@/utils/builders/validation-errors-result.builder";

@@ -38,10 +38,8 @@ type AssociatedEntityRecordsPageRequest<E, AE> = {
   associatedEntity: string
   entitySideField: keyof E
   associatedSideField: keyof AE
-  pagination?: {
-    limit: number
-    page: number
-  }
+  limit: number
+  page: number
   filters?: Record<string, any>
   sort?: Record<string, "descend" | "ascend" | null>
   type?: 'allocated' | 'unallocated'

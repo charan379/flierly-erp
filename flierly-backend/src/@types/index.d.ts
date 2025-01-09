@@ -22,16 +22,6 @@ type SortBy = {
   [key: string]: 'desc' | 'asc';
 };
 
-type ModelSortBy<T> = {
-  [key: keyof T]: 'desc' | 'asc';
-};
-
-type PageRequest = {
-  page: number;
-  size: number;
-  sort: SortBy;
-};
-
 type ApiResponse<T> = {
   // Indicates if the request was successful
   success: boolean;
@@ -61,6 +51,8 @@ type ResLocals = { success: boolean; message: string; controller: string };
 type FilterValue = string | number | boolean | Date | FilterObject | FilterArray;
 
 type FilterObject = { [key: string]: FilterValue };
+
+type SortObject = { [key: string]: 'ascend' | 'descend' };
 
 type FilterArray = FilterValue[];
 

@@ -11,7 +11,7 @@ export const AppDataSource = new DataSource({
   password: EnvConfig.DB_PASSWORD,
   database: EnvConfig.DB_NAME,
   synchronize: true,
-  logging: !isProduction,
+  logging: isProduction,
   entities: isProduction ? ['dist/**/*.entity.js'] : ['src/**/*.entity.ts'],
   migrations: ['src/migration/**/*.{ts,js}'],
   subscribers: ['src/subscriber/**/*.{ts,js}'],

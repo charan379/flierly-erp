@@ -31,7 +31,7 @@ const selectRemoteOptionsService = {
    * Fetch remote options for entities.
    */
   entities: async ({ keyword, limit = 50, signal }: EntityRequestParams): Promise<ApiResponse<any>> => {
-    const promise = api.get<ApiResponse<any>>(`entities`, {
+    const promise = api.get<ApiResponse<any>>(`misc/entities`, {
       params: { keyword, limit },
       signal, // Pass the signal to the request
     })
