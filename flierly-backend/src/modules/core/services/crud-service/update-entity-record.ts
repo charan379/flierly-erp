@@ -31,12 +31,8 @@ const updateEntityRecord = async (entity: EntityTarget<ObjectLiteral>, recordId:
                 throw new FlierlyException(Object.keys(errorMessages).map((key) => `${key}: ${errorMessages[key]}`).join(", \n"), HttpCodes.BAD_REQUEST, JSON.stringify(errorMessages));
             };
             
-            console.log({existingEntity, updateDataInstance});
-
             // Merge the update data with the existing entity
             const updatedEntity = repo.merge(existingEntity, updateDataInstance);
-            
-            console.log(updatedEntity);
             
             // Save the updated entity (this triggers @BeforeUpdate hooks)
             await repo.save(updatedEntity);
