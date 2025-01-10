@@ -3,6 +3,7 @@ import Product from "./Product.entity";
 import { InventoryLedgerTransactionType } from "../constants/inventory-ledger-transaction-type.enum";
 import { IsNumber, IsOptional, IsPositive, Length, Matches, Min } from "class-validator";
 import { InventoryLedgerStockType } from "../constants/inventory-ledger-stock-type.enum";
+import { DecimalTransformer } from "@/lib/typeorm/utils/DecimalTransformer";
 
 @Entity("inventory_ledger")
 export default class InventoryLedger {
@@ -39,7 +40,7 @@ export default class InventoryLedger {
     @Length(10, 250, { message: 'Description must be between 10 and 250 characters.' })
     description: string;
 
-    @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+    @Column({ type: 'decimal', precision: 10, scale: 2, default: 0, transformer: DecimalTransformer })
     @IsNumber({}, { message: 'Quantity must be a valid number' })
     quantity: number; // Total quantity change - or +
 

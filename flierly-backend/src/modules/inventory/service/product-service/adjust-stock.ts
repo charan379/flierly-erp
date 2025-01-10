@@ -6,9 +6,9 @@ import HttpCodes from "@/constants/http-codes.enum";
 import InventoryLedger from "../../entities/InventoryLedger.entity";
 import { InventoryLedgerTransactionType } from "../../constants/inventory-ledger-transaction-type.enum";
 
-
 const adjustStock = async (productId: number, stockAdjustType: InventoryLedgerStockType, quantity: number): Promise<ProductStock> => {
     try {
+        console.log({ quantity , stockAdjustType, productId });
         const result = await AppDataSource.transaction(async (entityManager) => {
 
             const productStockRepository = entityManager.getRepository(ProductStock);
@@ -23,16 +23,16 @@ const adjustStock = async (productId: number, stockAdjustType: InventoryLedgerSt
 
             switch (stockAdjustType) {
                 case InventoryLedgerStockType.ON_HAND:
-                    productStock.onHand = Number(productStock.onHand) + Number(quantity);
+                    productStock.onHand += quantity;
                     break;
                 case InventoryLedgerStockType.DEFECTIVE:
-                    productStock.defective = Number(productStock.defective) + Number(quantity);;
+                    productStock.defective += quantity
                     break;
                 case InventoryLedgerStockType.ON_ORDER:
-                    productStock.onOrder = Number(productStock.onOrder) + Number(quantity);;
+                    productStock.onOrder += quantity
                     break;
                 case InventoryLedgerStockType.RESERVED:
-                    productStock.reserved = Number(productStock.reserved) + Number(quantity);;
+                    productStock.reserved += quantity
                     break
                 default:
                     throw new FlierlyException('Invalid stock type', HttpCodes.BAD_REQUEST);
