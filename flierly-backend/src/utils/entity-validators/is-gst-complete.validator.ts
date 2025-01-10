@@ -1,5 +1,5 @@
+import TaxIdentity from '@/modules/taxation/entities/TaxIdentity.entity';
 import { registerDecorator, ValidationOptions, ValidatorConstraint, ValidatorConstraintInterface, ValidationArguments } from 'class-validator';
-import { TaxIdentity } from '@/entities/taxation/TaxIdentity.entity';
 
 // Custom constraint that works on a class level
 @ValidatorConstraint({ async: false })

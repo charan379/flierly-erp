@@ -1,8 +1,8 @@
 import AccessType from '@/modules/iam/constants/access-types.enum';
-import getEntityList from '@/entities';
-import { Privilege } from '@/entities/iam/Privilege.entity';
 import { AppDataSource } from '@/lib/typeorm/app-datasource';
 import getDifferenceFromArrayOfObjects from '@/utils/get-difference-from-arary-of-objects.util';
+import Privilege from '@/modules/iam/entities/Privilege.entity';
+import { getEntityList } from '@/modules';
 
 // Function to generate privilege array based on entities and access types
 async function generatePrivilegesArray (): Promise<Partial<Privilege>[]> {

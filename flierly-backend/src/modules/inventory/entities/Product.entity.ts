@@ -57,37 +57,37 @@ export default class Product {
   @IsNotEmpty({ message: 'SubCategory must be specified' })
   subCategory: ProductSubCategory;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   @IsNumber({}, { message: 'Quantity must be a valid number' })
   @IsPositive({ message: 'Quantity must be greater than zero' })
   @Min(0, { message: 'Quantity cannot be negative' })
   quantity: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, name: "min_quantity" })
+  @Column({ type: 'decimal', precision: 10, scale: 2, name: "min_quantity", default: 0 })
   @IsNumber({}, { message: 'Min quantity must be a valid number' })
   @IsPositive({ message: 'Min quantity must be greater than zero' })
   @Min(0, { message: 'Min quantity cannot be negative' })
   minQuantity: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, name: "max_quantity" })
+  @Column({ type: 'decimal', precision: 10, scale: 2, name: "max_quantity", default: 0 })
   @IsNumber({}, { message: 'Max quantity must be a valid number' })
   @IsPositive({ message: 'Max quantity must be greater than zero' })
   @Min(0, { message: 'Max quantity cannot be negative' })
   maxQuantity: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, name: "max_purchase_price" })
+  @Column({ type: 'decimal', precision: 10, scale: 2, name: "max_purchase_price", default: 0 })
   @IsNumber({}, { message: 'Max purchase price must be a valid number' })
   @IsPositive({ message: 'Max purchase price must be greater than zero' })
   @Min(0, { message: 'Max purchase price cannot be negative' })
   maxPurchasePrice: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, name: "min_sale_price" })
+  @Column({ type: 'decimal', precision: 10, scale: 2, name: "min_sale_price", default: 0 })
   @IsNumber({}, { message: 'Min sale price must be a valid number' })
   @IsPositive({ message: 'Min sale price must be greater than zero' })
   @Min(0, { message: 'Min sale price cannot be negative' })
   minSalePrice: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, name: "sale_price" })
+  @Column({ type: 'decimal', precision: 10, scale: 2, name: "sale_price", default: 0 })
   @IsNumber({}, { message: 'Sale price must be a valid number' })
   @IsPositive({ message: 'Sale price must be greater than zero' })
   @Min(0, { message: 'Sale price cannot be negative' })

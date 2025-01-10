@@ -9,7 +9,7 @@ async function userDetailsPrompt (): Promise<{ username: string; password: strin
       type: 'text',
       name: 'username',
       message: 'Username : ',
-      validate: (value) => (/^([a-z0-9&.-]){5,25}$/.test(value) ? true : 'Invalid username !'),
+      validate: (value) => (/^([a-z0-9_]){5,25}$/.test(value) ? true : 'Invalid username !'),
     },
     // Password prompt
     {

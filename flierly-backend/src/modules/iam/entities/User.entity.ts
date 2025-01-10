@@ -3,7 +3,7 @@ import { IsNotEmpty, IsEmail, Length, Matches } from 'class-validator';
 import Privilege from './Privilege.entity';
 import Role from './Role.entity';
 
-@Entity('iam_users')
+@Entity('users')
 @Index('idx_username', ['username'])
 @Index('idx_email', ['email'])
 @Index('idx_mobile', ['mobile'])
@@ -34,7 +34,7 @@ export default class User {
 
   @ManyToMany(() => Privilege, (privilege) => privilege.usersWithAdditionalPrivileges)
   @JoinTable({
-    name: 'iam_user_additional_privileges',
+    name: 'user_additional_privileges',
     joinColumn: {
       name: 'user_id',
       referencedColumnName: 'id',
@@ -48,7 +48,7 @@ export default class User {
 
   @ManyToMany(() => Privilege, (privilege) => privilege.usersWithRestrictedPrivileges)
   @JoinTable({
-    name: 'iam_user_restricted_privileges',
+    name: 'user_restricted_privileges',
     joinColumn: {
       name: 'user_id',
       referencedColumnName: 'id',
@@ -62,7 +62,7 @@ export default class User {
 
   @ManyToMany(() => Role, (role) => role.users)
   @JoinTable({
-    name: 'iam_user_roles',
+    name: 'user_roles',
     joinColumn: {
       name: 'user_id',
       referencedColumnName: 'id',

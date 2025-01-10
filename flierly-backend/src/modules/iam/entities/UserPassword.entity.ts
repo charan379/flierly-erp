@@ -1,14 +1,14 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { IsNotEmpty } from 'class-validator';
 
-@Entity('iam_user_passwords')
+@Entity('user_passwords')
 export default class UserPassword {
   @PrimaryGeneratedColumn({
     type: 'bigint',
   })
   id: number;
 
-  @Column({ unique: true })
+  @Column({ unique: true, name: "user_id" })
   @IsNotEmpty({ message: 'UserId is required for storing passwords' })
   userId: number;
 

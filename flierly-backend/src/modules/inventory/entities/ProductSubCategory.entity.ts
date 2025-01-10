@@ -15,12 +15,6 @@ export default class ProductSubCategory {
     @Column({ type: 'boolean', default: true, name: 'is_active' })
     isActive: boolean;
 
-    @Column({ unique: true })
-    @IsNotEmpty({ message: 'Product sub category code is required.' })
-    @Length(5, 25, { message: 'Product sub category code must be between 5 and 25 characters.' }) // Min 5, Max 25
-    @Matches(/^[a-z-]+\.[a-z-]+$/, { message: 'Product category code must match the pattern /^[a-z-]+\\.[a-z-]+$/.' }) // Regex pattern
-    code: string;
-
     @Column({ type: 'text', nullable: true })
     @Length(10, 250, { message: 'Description must be between 10 and 250 characters.' })
     description: string;

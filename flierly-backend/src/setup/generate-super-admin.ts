@@ -1,9 +1,9 @@
 import userDetailsPrompt from '@/setup/prompts/user-details.prompt';
 import { AppDataSource } from '../lib/typeorm/app-datasource';
-import { Role } from '@/entities/iam/Role.entity';
-import { User } from '@/entities/iam/User.entity';
-import { Privilege } from '@/entities/iam/Privilege.entity';
 import updateUserPassword from '@/modules/iam/services/user-service/update-user-password';
+import Role from '@/modules/iam/entities/Role.entity';
+import User from '@/modules/iam/entities/User.entity';
+import Privilege from '@/modules/iam/entities/Privilege.entity';
 
 async function generateSuperAdmin (): Promise<void> {
   const roleRepository = AppDataSource.getRepository(Role);
@@ -25,6 +25,8 @@ async function generateSuperAdmin (): Promise<void> {
     mobile: credsPrompt.mobile,
     roles: [superAdminRole],
   });
+
+  
   await userRepository.save(superAdmin);
 
   // Update or create password for Super Admin

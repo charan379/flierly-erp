@@ -4,7 +4,7 @@ import AccessType from '../constants/access-types.enum';
 import Role from './Role.entity';
 import User from './User.entity';
 
-@Entity('iam_privileges')
+@Entity('privileges')
 @Index('idx_entity', ['entity'])
 @Index('idx_entity_access', ['entity', 'access'], { unique: false }) // Index on 'entity' and 'access'
 export default class Privilege {

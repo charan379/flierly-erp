@@ -3,7 +3,7 @@ import { IsNotEmpty, Length, Matches } from 'class-validator';
 import Privilege from './Privilege.entity';
 import User from './User.entity';
 
-@Entity('iam_roles')
+@Entity('roles')
 export default class Role {
   @PrimaryGeneratedColumn({
     type: 'bigint',
@@ -31,7 +31,7 @@ export default class Role {
 
   @ManyToMany(() => Privilege, (privilege) => privilege.roles)
   @JoinTable({
-    name: 'iam_role_privileges',
+    name: 'role_privileges',
     joinColumn: {
       name: 'role_id',
       referencedColumnName: 'id',
