@@ -9,7 +9,7 @@ const readEntityRecord = async (entity: EntityTarget<ObjectLiteral>, request: En
 
     try {
 
-        const { entityRecordId, loadRelations } = request;
+        const { id: entityRecordId, loadRelations } = request;
 
         const repositoty = AppDataSource.getRepository(entity);
 

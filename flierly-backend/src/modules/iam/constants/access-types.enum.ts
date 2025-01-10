@@ -2,11 +2,11 @@
  * Access Codes Enum
  */
 enum AccessType {
-  CREATE = 'Create',
-  READ = 'Read',
-  UPDATE = 'Update',
-  DELETE = 'Delete',
-  MANAGE = 'Manage',
+  CREATE = 'create',
+  READ = 'read',
+  UPDATE = 'update',
+  DELETE = 'delete',
+  MANAGE = 'manage',
 }
 
 export default AccessType;

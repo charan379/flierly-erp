@@ -6,14 +6,10 @@ export default class Brand {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
-  @Column({ type: 'varchar', length: 255, unique: true })
+  @Column({ type: 'varchar', length: 100, unique: true })
   @IsNotEmpty({ message: 'Name must not be empty.' })
   @Length(3, 90, { message: 'Name must be between 3 and 90 characters.' })
   name: string;
-
-  @Column({ type: 'boolean', default: true, name: 'is_active' })
-  @IsOptional()
-  isActive: boolean;
 
   @Column({ type: 'text', nullable: true })
   @IsOptional()

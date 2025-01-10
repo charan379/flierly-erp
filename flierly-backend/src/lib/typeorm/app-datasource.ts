@@ -12,7 +12,7 @@ export const AppDataSource = new DataSource({
   database: EnvConfig.DB_NAME,
   synchronize: true,
   schema: 'dev',
-  logging: isProduction,
+  logging: !isProduction,
   entities: isProduction ? ['dist/**/*.entity.js'] : ['src/**/*.entity.ts'],
   migrations: ['src/migration/**/*.{ts,js}'],
   subscribers: ['src/subscriber/**/*.{ts,js}'],

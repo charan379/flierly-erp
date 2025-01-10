@@ -34,6 +34,9 @@ const entityRecordsPage = async (entity: EntityTarget<ObjectLiteral>, pageReques
         // apply sort order to the query builder
         applySortOrderQB(queryBuilder, sort);
 
+        // skip and take to get the correct page of results
+        queryBuilder.skip((page - 1) * limit).take(limit);
+
         // Get the paginated and filtered records
         const [results, total] = await queryBuilder.getManyAndCount();
 

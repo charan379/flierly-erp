@@ -19,7 +19,7 @@ export interface IsEntityRecordExistsRequestBody {
 
 export interface EntityReadRequestBody {
     loadRelations: string[];
-    entityRecordId: number;
+    id: number;
 };
 
 export interface SearchEntityRecordsRequestBody {

@@ -15,12 +15,8 @@ productCategoryRoutes.post(`/read`, authorize(`product-category.read`), crudCont
 productCategoryRoutes.post(`/search`, authorize(`product-category.read`), crudController.search);
 productCategoryRoutes.post(`/is-exists`, authorize(`product-category.read`), crudController.isExists);
 productCategoryRoutes.post(`/page`, authorize(`product-category.read`), crudController.page);
-productCategoryRoutes.post(`/associated-entity-records-page`, authorize(`product-category.read`), crudController.associatedEntityRecordsPage);
 productCategoryRoutes.put(`/update/:id`, requestValidator(ProductCategory, "body"), authorize(`product-category.update`), crudController.update);
-productCategoryRoutes.patch(`/activate`, authorize(`product-category.manage`), crudController.activate);
-productCategoryRoutes.patch(`/inactivate`, authorize(`product-category.manage`), crudController.inactivate);
 productCategoryRoutes.delete(`/delete`, authorize(`product-category.delete`), crudController.delete);
 productCategoryRoutes.patch(`/restore`, authorize(`product-category.delete`), crudController.restore);
-productCategoryRoutes.patch(`/update-associated-records`, authorize(`product-category.manage`), crudController.updateAssociatedEntityRecords);
 
 export default productCategoryRoutes;

@@ -21,7 +21,7 @@ const page = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Resp
         const reqBody: EntityRecordsPageRequestBody = await JoiSchemaValidator<EntityRecordsPageRequestBody>(entityRecordsPageRequestBodySchema, req.body, { abortEarly: false }, "CurdController.page")
 
         const pageResponse = await crudService.entityRecordsPage(entity, reqBody);
-
+        
         return res.status(HttpCodes.OK).json(
             // build api response to be sent in JSON format
             apiResponseBuilder({

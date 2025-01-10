@@ -4,7 +4,7 @@ import { idSchema } from "@/lib/joi/joi-schemas/common.joi.schema";
 
 const entityReadRequestBodySchema: Joi.ObjectSchema<EntityReadRequestBody> = Joi.object({
     loadRelations: Joi.array().items(Joi.string().disallow('').disallow(null)).unique(),
-    entityRecordId: idSchema.required(),
+    id: idSchema.required(),
 });
 
 export default entityReadRequestBodySchema;

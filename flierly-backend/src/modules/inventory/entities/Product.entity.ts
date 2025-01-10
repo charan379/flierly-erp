@@ -1,9 +1,12 @@
-import { IsNotEmpty, Length, IsOptional, Matches, IsNumber, IsPositive, Min } from 'class-validator';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, JoinColumn, ManyToOne } from 'typeorm';
+import { IsNotEmpty, Length, IsOptional, Matches } from 'class-validator';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import Brand from './Brand.entity';
 import ProductCategory from './ProductCategory.entity';
 import ProductSubCategory from './ProductSubCategory.entity';
 import UOM from './UOM.entity';
+import ProductPrice from './ProductPrice.entity';
+import ProductStock from './ProductStock.entity';
+import InventoryLedger from './InventoryLedger.entity';
 
 @Entity('products')
 export default class Product {
@@ -19,10 +22,10 @@ export default class Product {
   @IsOptional()
   isActive: boolean;
 
-  @Column({ type: 'varchar', length: 100, unique: true, nullable: false })
+  @Column({ type: 'varchar', length: 50, unique: true, nullable: false })
   @IsNotEmpty({ message: 'SKU must not be empty.' })
-  @Length(3, 25, { message: 'SKU must be between 3 and 25 characters.' })
-  @Matches(/^[A-Z0-9_-]{3,50}$/, { message: 'SKU is not valid only capital letters, numbers, underscores and hyphens allowed.' })
+  @Length(3, 30, { message: 'SKU must be between 3 and 25 characters.' })
+  @Matches(/^[A-Z0-9_-]{3,30}$/, { message: 'SKU is not valid only capital letters, numbers, underscores and hyphens allowed.' })
   sku: string;
 
   @Column({ type: 'int', unique: false, nullable: true })
@@ -42,11 +45,6 @@ export default class Product {
   @Length(20, 250, { message: 'Description must be between 20 and 250 characters.' })
   description: string;
 
-  @ManyToOne(() => Brand, { eager: false, nullable: false })
-  @JoinColumn({ name: 'brand_id' })
-  @IsNotEmpty({ message: 'Brand must be specified' })
-  brand: Brand;
-
   @ManyToOne(() => ProductCategory, { eager: false, nullable: false })
   @JoinColumn({ name: 'category_id' })
   @IsNotEmpty({ message: 'Category must be specified' })
@@ -57,46 +55,24 @@ export default class Product {
   @IsNotEmpty({ message: 'SubCategory must be specified' })
   subCategory: ProductSubCategory;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
-  @IsNumber({}, { message: 'Quantity must be a valid number' })
-  @IsPositive({ message: 'Quantity must be greater than zero' })
-  @Min(0, { message: 'Quantity cannot be negative' })
-  quantity: number;
+  @OneToMany(() => ProductPrice, (productPrice) => productPrice.product, { eager: false, nullable: true })
+  prices: ProductPrice[];
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, name: "min_quantity", default: 0 })
-  @IsNumber({}, { message: 'Min quantity must be a valid number' })
-  @IsPositive({ message: 'Min quantity must be greater than zero' })
-  @Min(0, { message: 'Min quantity cannot be negative' })
-  minQuantity: number;
-
-  @Column({ type: 'decimal', precision: 10, scale: 2, name: "max_quantity", default: 0 })
-  @IsNumber({}, { message: 'Max quantity must be a valid number' })
-  @IsPositive({ message: 'Max quantity must be greater than zero' })
-  @Min(0, { message: 'Max quantity cannot be negative' })
-  maxQuantity: number;
-
-  @Column({ type: 'decimal', precision: 10, scale: 2, name: "max_purchase_price", default: 0 })
-  @IsNumber({}, { message: 'Max purchase price must be a valid number' })
-  @IsPositive({ message: 'Max purchase price must be greater than zero' })
-  @Min(0, { message: 'Max purchase price cannot be negative' })
-  maxPurchasePrice: number;
-
-  @Column({ type: 'decimal', precision: 10, scale: 2, name: "min_sale_price", default: 0 })
-  @IsNumber({}, { message: 'Min sale price must be a valid number' })
-  @IsPositive({ message: 'Min sale price must be greater than zero' })
-  @Min(0, { message: 'Min sale price cannot be negative' })
-  minSalePrice: number;
-
-  @Column({ type: 'decimal', precision: 10, scale: 2, name: "sale_price", default: 0 })
-  @IsNumber({}, { message: 'Sale price must be a valid number' })
-  @IsPositive({ message: 'Sale price must be greater than zero' })
-  @Min(0, { message: 'Sale price cannot be negative' })
-  salePrice: number;
+  @OneToOne(() => ProductStock, (productStock) => productStock.product, { eager: false, nullable: true })
+  stock: ProductStock;
 
   @ManyToOne(() => UOM, { eager: false, nullable: false, })
   @JoinColumn({ name: 'base_uom_id' })
   @IsNotEmpty({ message: 'Unit of Measure (UOM) must be specified' })
   baseUOM: UOM;
+
+  @ManyToOne(() => Brand, { eager: false, nullable: false })
+  @JoinColumn({ name: 'brand_id' })
+  @IsNotEmpty({ message: 'Brand must be specified' })
+  brand: Brand;
+
+  @OneToMany(() => InventoryLedger, (inventoryLedger) => inventoryLedger.product, { eager: false, nullable: true })
+  ledgers: InventoryLedger[];
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;

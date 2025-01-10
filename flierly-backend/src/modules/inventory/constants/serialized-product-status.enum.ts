@@ -2,6 +2,6 @@
  * SerializedProductStatus
  */
 export enum SerializedProductStatus {
-  AVAILABLE = 'Available',
-  SOLD = 'Sold',
+  AVAILABLE = 'available',
+  SOLD = 'sold',
 }

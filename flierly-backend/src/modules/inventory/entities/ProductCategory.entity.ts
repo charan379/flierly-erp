@@ -11,9 +11,6 @@ export default class ProductCategory {
     @Length(3, 90, { message: 'Name must be between 3 and 90 characters.' })
     name: string;
 
-    @Column({ type: 'boolean', default: true, name: 'is_active' })
-    isActive: boolean;
-
     @Column({ type: 'text', nullable: true })
     @Length(10, 250, { message: 'Description must be between 10 and 250 characters.' })
     description: string;
