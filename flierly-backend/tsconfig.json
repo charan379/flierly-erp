@@ -116,5 +116,5 @@
     "src/**/*.ts",
     "src/**/*.sql" // include .sql files
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist"],
 }
