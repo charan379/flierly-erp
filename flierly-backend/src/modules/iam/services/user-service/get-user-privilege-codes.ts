@@ -9,7 +9,7 @@ import Privilege from '../../entities/Privilege.entity';
 async function getUserPrivilegeCodes(userId: number): Promise<Set<string>> {
   try {
     // Execute the query to get user privileges
-    const userPrivileges: Privilege[] = await executeQueryFromFile<Privilege[]>('src/lib/typeorm/sql-queries/iam/user-privileges.query.sql', [userId]);
+    const userPrivileges: Privilege[] = await executeQueryFromFile<Privilege[]>('lib/database/typeorm/sql-queries/iam/user-privileges.query.sql', [userId]);
 
     // Create a set of privilege codes
     const privilegeSet = new Set(userPrivileges.map((row: any) => row.code));

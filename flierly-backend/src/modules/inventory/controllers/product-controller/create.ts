@@ -1,7 +1,9 @@
 import HttpCodes from '@/constants/http-codes.enum';
 import apiResponseBuilder from '@/utils/builders/api-response.builder';
 import { NextFunction, Request, Response } from 'express';
-import prodcutService from '../../service/product-service';
+import iocContainer from '@/lib/di-ioc-container';
+import ProductService from '../../service/product-service/ProductService';
+import InventoryModuleBeanTypes from '../../ioc-config/bean.types';
 
 /**
  * Creates a new product record in the database.
@@ -16,14 +18,15 @@ import prodcutService from '../../service/product-service';
 const create = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
 
-        const result = await prodcutService.createProduct(req.body);
+        const prodcutService = iocContainer.get<ProductService>(InventoryModuleBeanTypes.ProdcutService);
+        await prodcutService.newProduct(req.body);
 
         // Return success response with created product
         return res.status(HttpCodes.CREATED).json(
             apiResponseBuilder({
                 success: true,
-                result,
-                message: `Product created successfully with ID: ${result?.id}`,
+                result: `Product created successfully !`,
+                message: `Product created successfully !`,
                 controller: 'ProductController.create',
                 httpCode: HttpCodes.CREATED,
                 error: null,

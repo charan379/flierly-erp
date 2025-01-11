@@ -2,11 +2,11 @@ import { Repository } from "typeorm";
 import InventoryLedgerService from "./InventoryLedgerService";
 import InventoryLedger from "../../entities/InventoryLedger.entity";
 import { inject, injectable } from "inversify";
-import BeanTypes from "@/lib/di-ioc-container/bean.types";
 import DatabaseService from "@/lib/database/database-service/DatabaseService";
 import { InventoryLedgerStockType } from "../../constants/inventory-ledger-stock-type.enum";
 import { InventoryLedgerTransactionType } from "../../constants/inventory-ledger-transaction-type.enum";
 import validateEntityInstance from "@/lib/class-validator/utils/validate-entity.util";
+import DatabaseModuleBeanTypes from "@/lib/database/ioc-config/bean.types";
 
 @injectable()
 class InventoryLedgerServiceImpl implements InventoryLedgerService {
@@ -14,7 +14,7 @@ class InventoryLedgerServiceImpl implements InventoryLedgerService {
     private readonly inventoryLedgerRepository: Repository<InventoryLedger>;
 
     constructor(
-        @inject(BeanTypes.DatabaseService) private readonly databaseService: DatabaseService
+        @inject(DatabaseModuleBeanTypes.DatabaseService) private readonly databaseService: DatabaseService
     ) {
         this.inventoryLedgerRepository = this.databaseService.getRepository(InventoryLedger);
     }

@@ -14,25 +14,21 @@ export default class ProductStock {
 
     @Column("decimal", { precision: 15, scale: 2, default: 0, name: "on_hand", transformer: DecimalTransformer })
     @IsNumber({}, { message: 'OnHand Quantity must be a valid number' })
-    @IsPositive({ message: 'OnHand Quantity must be greater than zero' })
     @Min(0, { message: 'OnHand Quantity cannot be negative' })
     onHand: number; // Total quantity physically present in inventory
 
     @Column("decimal", { precision: 15, scale: 2, default: 0, name: "on_order", transformer: DecimalTransformer })
     @IsNumber({}, { message: 'OnOrder Quantity must be a valid number' })
-    @IsPositive({ message: 'OnOrder Quantity must be greater than zero' })
     @Min(0, { message: 'OnOrder Quantity cannot be negative' })
     onOrder: number; // Total quantity in purchase orders
 
     @Column("decimal", { precision: 10, scale: 2, default: 0, transformer: DecimalTransformer })
     @IsNumber({}, { message: 'OnOrder Quantity must be a valid number' })
-    @IsPositive({ message: 'OnOrder Quantity must be greater than zero' })
     @Min(0, { message: 'OnOrder Quantity cannot be negative' })
     reserved: number; // Quantity reserved for orders or allocation
 
     @Column("decimal", { precision: 10, scale: 2, default: 0, transformer: DecimalTransformer })
     @IsNumber({}, { message: 'Defective Quantity must be a valid number' })
-    @IsPositive({ message: 'Defective Quantity must be greater than zero' })
     @Min(0, { message: 'Defectives Quantity cannot be negative' })
     defective: number; // Quantity marked as defective
 
@@ -42,4 +38,7 @@ export default class ProductStock {
 
     @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
     updatedAt: Date;
+
+    @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
+    createdAt: Date;
 }
