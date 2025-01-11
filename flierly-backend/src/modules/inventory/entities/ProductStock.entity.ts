@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToOne } from "typeorm";
 import Product from "./Product.entity";
-import { DecimalTransformer } from "@/lib/typeorm/utils/DecimalTransformer";
+import { DecimalTransformer } from "@/lib/database/typeorm/utils/DecimalTransformer";
 import { IsNumber, IsPositive, Min } from "class-validator";
 
 @Entity("product_stocks")

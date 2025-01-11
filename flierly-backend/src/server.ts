@@ -3,13 +3,17 @@ moduleAlias.addAliases({
   '@': `${__dirname}`,
 });
 import 'reflect-metadata';
+import './lib/di-ioc-container';
 import app from '@/app';
 import dotenv from 'dotenv';
 import http, { Server } from 'http';
 import { HttpError } from 'http-errors';
-import Database from './lib/database';
+import DatabaseServiceImpl from './lib/database/database-service/DatabaseServiceImpl';
 import { EnvConfig } from './config/env';
 import validateEnv from './lib/env-validator';
+import iocContainer from './lib/di-ioc-container';
+import DatabaseService from './lib/database/database-service/DatabaseService';
+import BeanTypes from './lib/di-ioc-container/bean.types';
 
 dotenv.config();
 
@@ -32,10 +36,16 @@ const server: Server = http.createServer(app);
  */
 server.listen(port);
 
+// get database service instance from ioc container
+const databaseService = iocContainer.get<DatabaseService>(BeanTypes.DatabaseService);
+
 /**
  * Event listener for HTTP server "error" event.
  */
 server.on('error', (error: HttpError) => {
+  // disconnect database connection
+  databaseService.disconnect();
+
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -57,7 +67,7 @@ server.on('error', (error: HttpError) => {
  */
 server.on('listening', async () => {
   // establish database connection
-  await Database.connect();
+  await databaseService.connect();
 
   console.info(`🚀 [server]: Server started is running on ${port}`);
 });
@@ -66,7 +76,7 @@ server.on('listening', async () => {
  * Normalize a port into a number, string, or false.
  * if port is not specified in environment, or if provided a string
  */
-function normalizePort (val: string | number): number {
+function normalizePort(val: string | number): number {
   const defaultPort = 3000;
 
   const port = parseInt(String(val), 10);

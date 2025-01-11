@@ -2,7 +2,7 @@ import { IStorage } from './IStorage.inerface';
 import { Storage } from '@google-cloud/storage';
 import EnvConfig from '@/config/env/env.config';
 import FileUpload from '@/modules/storage/entities/FileUpload.entity';
-import { AppDataSource } from '@/lib/typeorm/app-datasource';
+import { AppDataSource } from '@/lib/database/typeorm/app-datasource';
 
 export class GcpStorageService implements IStorage {
   private storage: Storage;

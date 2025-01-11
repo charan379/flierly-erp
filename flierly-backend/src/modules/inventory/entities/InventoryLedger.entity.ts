@@ -1,9 +1,9 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Table, UpdateDateColumn } from "typeorm";
 import Product from "./Product.entity";
 import { InventoryLedgerTransactionType } from "../constants/inventory-ledger-transaction-type.enum";
-import { IsNumber, IsOptional, IsPositive, Length, Matches, Min } from "class-validator";
+import { IsNumber, IsOptional, Length, Matches } from "class-validator";
 import { InventoryLedgerStockType } from "../constants/inventory-ledger-stock-type.enum";
-import { DecimalTransformer } from "@/lib/typeorm/utils/DecimalTransformer";
+import { DecimalTransformer } from "@/lib/database/typeorm/utils/DecimalTransformer";
 
 @Entity("inventory_ledger")
 export default class InventoryLedger {

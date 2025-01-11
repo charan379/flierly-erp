@@ -1,4 +1,4 @@
-import { AppDataSource } from "@/lib/typeorm/app-datasource";
+import { AppDataSource } from "@/lib/database/typeorm/app-datasource";
 import { EntityTarget, ObjectLiteral, UpdateResult } from "typeorm";
 
 

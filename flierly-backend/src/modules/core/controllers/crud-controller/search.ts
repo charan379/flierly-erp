@@ -1,6 +1,6 @@
 import HttpCodes from '@/constants/http-codes.enum';
-import { AppDataSource } from '@/lib/typeorm/app-datasource';
-import { qbFilters } from '@/lib/typeorm/utils';
+import { AppDataSource } from '@/lib/database/typeorm/app-datasource';
+import { qbFilters } from '@/lib/database/typeorm/utils';
 import apiResponseBuilder from '@/utils/builders/api-response.builder';
 import { pascalToSnakeCase } from '@/utils/case-converters';
 import JoiSchemaValidator from '@/lib/joi/joi-schema.validator';

@@ -1,5 +1,5 @@
 import { generateHash } from '@/lib/bcrypt';
-import { AppDataSource } from '@/lib/typeorm/app-datasource';
+import { AppDataSource } from '@/lib/database/typeorm/app-datasource';
 import UserPassword from '../../entities/UserPassword.entity';
 import User from '../../entities/User.entity';
 import FlierlyException from '@/lib/flierly.exception';

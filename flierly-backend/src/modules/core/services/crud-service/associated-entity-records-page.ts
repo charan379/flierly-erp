@@ -1,8 +1,8 @@
 import HttpCodes from "@/constants/http-codes.enum";
 import { getEntityList } from "@/modules";
 import FlierlyException from "@/lib/flierly.exception";
-import { AppDataSource } from "@/lib/typeorm/app-datasource";
-import { applySortOrderQB, qbFilters } from "@/lib/typeorm/utils";
+import { AppDataSource } from "@/lib/database/typeorm/app-datasource";
+import { applySortOrderQB, qbFilters } from "@/lib/database/typeorm/utils";
 import pageResponseBuilder from "@/utils/builders/page-response.builder";
 import { EntityTarget, ObjectLiteral } from "typeorm";
 import { AssociatedEntityRecordsPageRequestBody } from "../../@types/request-data.types";

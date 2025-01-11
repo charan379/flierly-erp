@@ -16,7 +16,7 @@ import TaxIdentity from '@/modules/taxation/entities/TaxIdentity.entity';
 import { IsEmail, IsNotEmpty, IsOptional, Length, Matches } from 'class-validator';
 import AccountType from './AccountType.entity';
 import AccountSubtype from './AccountSubtype.entity';
-import { AppDataSource } from '@/lib/typeorm/app-datasource';
+import { AppDataSource } from '@/lib/database/typeorm/app-datasource';
 
 @Entity('accounts')
 export default class Account {

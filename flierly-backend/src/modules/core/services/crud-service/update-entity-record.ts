@@ -1,6 +1,6 @@
 import HttpCodes from "@/constants/http-codes.enum";
 import FlierlyException from "@/lib/flierly.exception";
-import { AppDataSource } from "@/lib/typeorm/app-datasource";
+import { AppDataSource } from "@/lib/database/typeorm/app-datasource";
 import buildValidationErrorsResult from "@/utils/builders/validation-errors-result.builder";
 import { getMessage } from "@/utils/get-message.util";
 import { validate } from "class-validator";

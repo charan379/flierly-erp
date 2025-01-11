@@ -1,7 +1,7 @@
 import { IStorage } from './IStorage.inerface';
 import COS from 'cos-nodejs-sdk-v5';
 import FileUpload from '@/modules/storage/entities/FileUpload.entity';
-import { AppDataSource } from '@/lib/typeorm/app-datasource';
+import { AppDataSource } from '@/lib/database/typeorm/app-datasource';
 
 export class TencentCloudStorageService implements IStorage {
   private cos: COS;

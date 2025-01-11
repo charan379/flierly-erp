@@ -1,5 +1,5 @@
 import userDetailsPrompt from '@/setup/prompts/user-details.prompt';
-import { AppDataSource } from '../lib/typeorm/app-datasource';
+import { AppDataSource } from '../lib/database/typeorm/app-datasource';
 import updateUserPassword from '@/modules/iam/services/user-service/update-user-password';
 import Role from '@/modules/iam/entities/Role.entity';
 import User from '@/modules/iam/entities/User.entity';

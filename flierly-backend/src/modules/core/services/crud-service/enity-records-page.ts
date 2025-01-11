@@ -1,6 +1,6 @@
-import { AppDataSource } from "@/lib/typeorm/app-datasource";
-import { applySortOrderQB } from "@/lib/typeorm/utils";
-import applyWhereConditionsQB from "@/lib/typeorm/utils/qb-appy-where-conditions.util";
+import { AppDataSource } from "@/lib/database/typeorm/app-datasource";
+import { applySortOrderQB } from "@/lib/database/typeorm/utils";
+import applyWhereConditionsQB from "@/lib/database/typeorm/utils/qb-appy-where-conditions.util";
 import pageResponseBuilder from "@/utils/builders/page-response.builder";
 import { EntityTarget, ObjectLiteral } from "typeorm";
 import { EntityRecordsPageRequestBody } from "../../@types/request-data.types";

@@ -1,4 +1,4 @@
-import { AppDataSource } from "@/lib/typeorm/app-datasource";
+import { AppDataSource } from "@/lib/database/typeorm/app-datasource";
 import User from "../../entities/User.entity";
 import FlierlyException from "@/lib/flierly.exception";
 import HttpCodes from "@/constants/http-codes.enum";

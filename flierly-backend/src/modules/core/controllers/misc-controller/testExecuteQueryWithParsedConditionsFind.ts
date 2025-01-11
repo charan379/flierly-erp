@@ -1,9 +1,9 @@
-import parseCondition from '@/lib/typeorm/utils/parse-condition.util';
-import { AppDataSource } from '@/lib/typeorm/app-datasource';
+import parseCondition from '@/lib/database/typeorm/utils/parse-condition.util';
+import { AppDataSource } from '@/lib/database/typeorm/app-datasource';
 import { Request, Response } from 'express';
 import apiResponseBuilder from '@/utils/builders/api-response.builder';
 import { FindManyOptions, ObjectLiteral } from 'typeorm';
-import whereCondition from '@/lib/typeorm/utils/where-condintion.util';
+import whereCondition from '@/lib/database/typeorm/utils/where-condintion.util';
 
 /**
  * Executes a query with parsed filter conditions using the find function.

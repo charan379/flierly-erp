@@ -1,6 +1,4 @@
-import HttpCodes from "@/constants/http-codes.enum";
-import FlierlyException from "@/lib/flierly.exception";
-import { AppDataSource } from "@/lib/typeorm/app-datasource";
+import { AppDataSource } from "@/lib/database/typeorm/app-datasource";
 import Product from "../../entities/Product.entity";
 import ProductStock from "../../entities/ProductStock.entity";
 import validateEntity from "@/lib/class-validator/utils/validate-entity.util";

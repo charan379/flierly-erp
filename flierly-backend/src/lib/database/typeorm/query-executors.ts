@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 import { AppDataSource } from './app-datasource';
-import { getCache, setCache } from '../cache';
+import { getCache, setCache } from '../../cache';
 
 /**
  * Executes a SQL query from a file with the given parameters.

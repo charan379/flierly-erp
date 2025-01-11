@@ -1,7 +1,7 @@
 import HttpCodes from '@/constants/http-codes.enum';
 import User from '../../entities/User.entity';
 import { idSchema } from '@/lib/joi/joi-schemas/common.joi.schema';
-import { AppDataSource } from '@/lib/typeorm/app-datasource';
+import { AppDataSource } from '@/lib/database/typeorm/app-datasource';
 import FlierlyException from '@/lib/flierly.exception';
 import { generateJwtToken } from '@/lib/jwt';
 import getUserPrivilegeCodes from '@/modules/iam/services/user-service/get-user-privilege-codes';

@@ -1,9 +1,9 @@
-import parseCondition from '@/lib/typeorm/utils/parse-condition.util';
-import { AppDataSource } from '@/lib/typeorm/app-datasource';
+import parseCondition from '@/lib/database/typeorm/utils/parse-condition.util';
+import { AppDataSource } from '@/lib/database/typeorm/app-datasource';
 import { Request, Response } from 'express';
 import apiResponseBuilder from '@/utils/builders/api-response.builder';
 import { Brackets, ObjectLiteral, SelectQueryBuilder, WhereExpressionBuilder } from 'typeorm';
-import applyWhereConditionsQB from '@/lib/typeorm/utils/qb-appy-where-conditions.util';
+import applyWhereConditionsQB from '@/lib/database/typeorm/utils/qb-appy-where-conditions.util';
 
 /**
  * Executes a query with parsed filter conditions using the query builder.

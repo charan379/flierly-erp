@@ -1,5 +1,5 @@
 import HttpCodes from '@/constants/http-codes.enum';
-import { AppDataSource } from '@/lib/typeorm/app-datasource';
+import { AppDataSource } from '@/lib/database/typeorm/app-datasource';
 import FlierlyException from '@/lib/flierly.exception';
 import apiResponseBuilder from '@/utils/builders/api-response.builder';
 import getDiffFromArrayOfNumbers from '@/utils/get-diff-from-array-of-numbers.util';

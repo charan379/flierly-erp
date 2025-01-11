@@ -1,4 +1,4 @@
-import executeQueryFromFile from '@/lib/typeorm/query-executors';
+import executeQueryFromFile from '@/lib/database/typeorm/query-executors';
 import Privilege from '../../entities/Privilege.entity';
 
 /**

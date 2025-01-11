@@ -1,6 +1,6 @@
 import HttpCodes from '@/constants/http-codes.enum';
 import User from '@/modules/iam/entities/User.entity';
-import { AppDataSource } from '@/lib/typeorm/app-datasource';
+import { AppDataSource } from '@/lib/database/typeorm/app-datasource';
 import FlierlyException from '@/lib/flierly.exception';
 import { CustomJwtPayload, verifyJwtToken } from '@/lib/jwt';
 import getUserPrivilegeCodes from '@/modules/iam/services/user-service/get-user-privilege-codes';

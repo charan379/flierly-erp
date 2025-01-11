@@ -1,6 +1,6 @@
 import HttpCodes from '@/constants/http-codes.enum';
 import { idSchema } from '@/lib/joi/joi-schemas/common.joi.schema';
-import { AppDataSource } from '@/lib/typeorm/app-datasource';
+import { AppDataSource } from '@/lib/database/typeorm/app-datasource';
 import apiResponseBuilder from '@/utils/builders/api-response.builder';
 import JoiSchemaValidator from '@/lib/joi/joi-schema.validator';
 import { Request, Response } from 'express';

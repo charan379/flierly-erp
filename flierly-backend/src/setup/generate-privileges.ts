@@ -1,5 +1,5 @@
 import AccessType from '@/modules/iam/constants/access-types.enum';
-import { AppDataSource } from '@/lib/typeorm/app-datasource';
+import { AppDataSource } from '@/lib/database/typeorm/app-datasource';
 import getDifferenceFromArrayOfObjects from '@/utils/get-difference-from-arary-of-objects.util';
 import Privilege from '@/modules/iam/entities/Privilege.entity';
 import { getEntityList } from '@/modules';

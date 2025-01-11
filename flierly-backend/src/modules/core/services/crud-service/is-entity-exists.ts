@@ -1,7 +1,7 @@
 import { EntityTarget, ObjectLiteral } from "typeorm";
 import { IsEntityRecordExistsRequestBody } from "../../@types/request-data.types";
-import { AppDataSource } from "@/lib/typeorm/app-datasource";
-import applyWhereConditionsQB from "@/lib/typeorm/utils/qb-appy-where-conditions.util";
+import { AppDataSource } from "@/lib/database/typeorm/app-datasource";
+import applyWhereConditionsQB from "@/lib/database/typeorm/utils/qb-appy-where-conditions.util";
 
 
 const isEntityExists = async (entity: EntityTarget<ObjectLiteral>, request: IsEntityRecordExistsRequestBody): Promise<{ exists: boolean }> => {

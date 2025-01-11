@@ -2,7 +2,7 @@ import { IStorage } from './IStorage.inerface';
 import B2 from 'backblaze-b2';
 import EnvConfig from '@/config/env/env.config';
 import FileUpload from '@/modules/storage/entities/FileUpload.entity';
-import { AppDataSource } from '@/lib/typeorm/app-datasource';
+import { AppDataSource } from '@/lib/database/typeorm/app-datasource';
 
 export class BackblazeB2StorageService implements IStorage {
   private b2: B2;

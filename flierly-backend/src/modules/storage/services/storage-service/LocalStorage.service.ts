@@ -3,7 +3,7 @@ import fs from 'fs';
 import { IStorage } from './IStorage.inerface';
 import { v4 as uuidv4 } from 'uuid';
 import FileUpload from '@/modules/storage/entities/FileUpload.entity';
-import { AppDataSource } from '@/lib/typeorm/app-datasource';
+import { AppDataSource } from '@/lib/database/typeorm/app-datasource';
 
 export class LocalStorageService implements IStorage {
   private storagePath: string;

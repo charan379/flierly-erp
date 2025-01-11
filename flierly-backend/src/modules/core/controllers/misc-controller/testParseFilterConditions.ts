@@ -1,5 +1,5 @@
 import HttpCodes from "@/constants/http-codes.enum";
-import parseCondition from "@/lib/typeorm/utils/parse-condition.util";
+import parseCondition from "@/lib/database/typeorm/utils/parse-condition.util";
 import apiResponseBuilder from "@/utils/builders/api-response.builder";
 import { Request, Response } from "express";
 

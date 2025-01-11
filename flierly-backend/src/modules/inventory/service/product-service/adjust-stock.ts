@@ -1,9 +1,8 @@
-import { AppDataSource } from "@/lib/typeorm/app-datasource";
+import { AppDataSource } from "@/lib/database/typeorm/app-datasource";
 import { InventoryLedgerStockType } from "../../constants/inventory-ledger-stock-type.enum"
 import ProductStock from "../../entities/ProductStock.entity";
 import FlierlyException from "@/lib/flierly.exception";
 import HttpCodes from "@/constants/http-codes.enum";
-import InventoryLedger from "../../entities/InventoryLedger.entity";
 import { InventoryLedgerTransactionType } from "../../constants/inventory-ledger-transaction-type.enum";
 import inventoryLedgerService from "../inventory-ledger-service";
 

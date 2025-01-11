@@ -1,6 +1,6 @@
 import { EntityTarget, ObjectLiteral } from "typeorm";
 import { UpdateAssociatedEntityRecordsRequestBody } from "../../@types/request-data.types";
-import { AppDataSource } from "@/lib/typeorm/app-datasource";
+import { AppDataSource } from "@/lib/database/typeorm/app-datasource";
 import FlierlyException from "@/lib/flierly.exception";
 import HttpCodes from "@/constants/http-codes.enum";
 import getDiffFromArrayOfNumbers from "@/utils/get-diff-from-array-of-numbers.util";
