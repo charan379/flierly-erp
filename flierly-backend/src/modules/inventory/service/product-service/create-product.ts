@@ -1,7 +1,7 @@
 import { AppDataSource } from "@/lib/database/typeorm/app-datasource";
 import Product from "../../entities/Product.entity";
 import ProductStock from "../../entities/ProductStock.entity";
-import validateEntity from "@/lib/class-validator/utils/validate-entity.util";
+import validateEntityInstance from "@/lib/class-validator/utils/validate-entity.util";
 
 const createProduct = async (data: Record<string, any>): Promise<Product> => {
     try {
@@ -11,14 +11,14 @@ const createProduct = async (data: Record<string, any>): Promise<Product> => {
 
             // Create and validate the product
             const newProduct = productRepository.create(data);
-            await validateEntity(newProduct);
+            await validateEntityInstance(newProduct);
 
             // Save the product to the database
             const savedProduct = await productRepository.save(newProduct);
 
             // Create and validate the product stock
             const productStock = productStockRepository.create({ product: savedProduct });
-            await validateEntity(productStock);
+            await validateEntityInstance(productStock);
 
             // Save the product stock to the database
             await productStockRepository.save(productStock);

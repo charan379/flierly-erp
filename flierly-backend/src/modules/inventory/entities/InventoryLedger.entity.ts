@@ -30,10 +30,11 @@ export default class InventoryLedger {
     })
     stockType: InventoryLedgerStockType; // e.g., "oh_hand", "defective", etc.
 
-    @Column({ type: 'varchar', length: 50, unique: true, nullable: true })
+    @Column({ type: 'varchar', length: 50, unique: true, nullable: true, name: "reference_is" })
+    @IsOptional()
     @Length(1, 40, { message: 'ReferenceID must be between 1 and 40 characters.' })
     @Matches(/^[A-Z0-9_#-]{1,40}$/, { message: 'ReferenceID is not valid only capital letters, numbers, underscores and hyphens allowed.' })
-    referenceId: string;
+    referenceId?: string;
 
     @Column({ type: 'text', nullable: true })
     @IsOptional()

@@ -29,8 +29,10 @@ class DatabaseServiceImpl implements DatabaseService {
       if (this.dataSource.isInitialized) {
         console.info('🛢 [Database]: Database connection established successfully.');
       }
+
     } catch (error) {
       console.error('🛢 [Database]: Failed to establish database connection: ', error);
+      throw error;
     }
   }
 
@@ -46,6 +48,7 @@ class DatabaseServiceImpl implements DatabaseService {
       }
     } catch (error) {
       console.error('🛢 [Database]: Failed to destroy database connection: ', error);
+      throw error;
     }
   }
 

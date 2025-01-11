@@ -4,7 +4,6 @@ moduleAlias.addAliases({
 });
 import 'reflect-metadata';
 import './lib/di-ioc-container';
-import DatabaseServiceImpl from '@/lib/database/database-service/DatabaseServiceImpl';
 import dotenv from 'dotenv';
 import generateSuperAdmin from './setup/generate-super-admin';
 import generatePrivileges from './setup/generate-privileges';
@@ -34,6 +33,7 @@ async function setup(): Promise<void> {
   } catch (error) {
     console.error('⚙️ 🔴 [Setup]: Flierly application setup failed: ', error);
     console.log(error);
+    process.exit(1);
   } finally {
     await databaseService.disconnect();
   }

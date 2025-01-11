@@ -42,9 +42,9 @@ const databaseService = iocContainer.get<DatabaseService>(BeanTypes.DatabaseServ
 /**
  * Event listener for HTTP server "error" event.
  */
-server.on('error', (error: HttpError) => {
+server.on('error', async (error: HttpError) => {
   // disconnect database connection
-  databaseService.disconnect();
+  await databaseService.disconnect();
 
   if (error.syscall !== 'listen') {
     throw error;
@@ -58,7 +58,8 @@ server.on('error', (error: HttpError) => {
       console.error(`Port ${port} is already in use`);
       process.exit(1);
     default:
-      throw error;
+      console.log((error as Error)?.message);
+      process.exit(1);
   }
 });
 
@@ -66,8 +67,14 @@ server.on('error', (error: HttpError) => {
  * Event listener for HTTP server "listening" event.
  */
 server.on('listening', async () => {
-  // establish database connection
-  await databaseService.connect();
+
+  try {
+    // establish database connection
+    await databaseService.connect();
+  } catch (error) {
+    console.info(`🚀 [server]: Failed to start server.\n${(error as Error).name ?? "Error"}: ${(error as Error)?.message}`);
+    process.exit(1);
+  }
 
   console.info(`🚀 [server]: Server started is running on ${port}`);
 });

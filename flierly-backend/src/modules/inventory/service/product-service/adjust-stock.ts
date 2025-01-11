@@ -3,12 +3,12 @@ import { InventoryLedgerStockType } from "../../constants/inventory-ledger-stock
 import ProductStock from "../../entities/ProductStock.entity";
 import FlierlyException from "@/lib/flierly.exception";
 import HttpCodes from "@/constants/http-codes.enum";
-import { InventoryLedgerTransactionType } from "../../constants/inventory-ledger-transaction-type.enum";
-import inventoryLedgerService from "../inventory-ledger-service";
+import iocContainer from "@/lib/di-ioc-container";
+import BeanTypes from "@/lib/di-ioc-container/bean.types";
+import InventoryLedgerService from "../inventory-ledger-service/InventoryLedgerService";
 
 const adjustStock = async (productId: number, stockAdjustType: InventoryLedgerStockType, quantity: number): Promise<ProductStock> => {
     try {
-        console.log({ quantity, stockAdjustType, productId });
         const result = await AppDataSource.transaction(async (entityManager) => {
 
             const productStockRepository = entityManager.getRepository(ProductStock);
@@ -38,7 +38,9 @@ const adjustStock = async (productId: number, stockAdjustType: InventoryLedgerSt
 
             const updatedProductStock = await productStockRepository.save(productStock);
 
-            await inventoryLedgerService.addInventoryTranaction(productId, quantity, stockAdjustType, InventoryLedgerTransactionType.INVENTORY_ADJUSTMENT, `Stock adjustment of ${quantity} ${stockAdjustType} items`);
+            const inventoryLedgerService = iocContainer.get<InventoryLedgerService>(BeanTypes.InventoryLedgerService);
+
+            await inventoryLedgerService.newTransaction(productId, quantity, stockAdjustType);
 
             return updatedProductStock;
 
