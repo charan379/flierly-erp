@@ -1,7 +1,6 @@
-import { NextFunction, Request, Response, Router } from "express";
+import { NextFunction, Request, Response } from "express";
 
 interface ProductStockController {
-    router: Router;
     adjust(req: Request, res: Response, next: NextFunction): Promise<void | Response>;
 };
 

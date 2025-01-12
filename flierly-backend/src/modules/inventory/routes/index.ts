@@ -19,6 +19,6 @@ inventoryModuleRoutes.use("/brand", brandRoutes);
 inventoryModuleRoutes.use("/uom", uomRoutes);
 inventoryModuleRoutes.use("/product-category", productCategoryRoutes);
 inventoryModuleRoutes.use("/product-sub-category", productSubCategoryRoutes);
-inventoryModuleRoutes.use("/product-stock", productStockController.router);
+inventoryModuleRoutes.use("/product-stock", productStockRoutes);
 
 export default inventoryModuleRoutes;

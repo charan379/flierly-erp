@@ -8,24 +8,15 @@ import { AdjustStockRequestBody } from "../../@types/request-data.types";
 import HttpCodes from "@/constants/http-codes.enum";
 import apiResponseBuilder from "@/utils/builders/api-response.builder";
 import { inject, injectable } from "inversify";
-import { authorize } from "@/middlewares/authorization.middleware";
 
 @injectable()
 class ProductStockControllerImpl implements ProductStockController {
 
-    public router: Router;
-
     constructor(
         @inject(InventoryModuleBeanTypes.ProductStockService) private readonly productStockService: ProductStockService,
     ) {
-        // routes
-        this.router = Router();
-        this.initializeRoutes();
-    };
 
-    private initializeRoutes(): void {
-        this.router.patch("/adjust", authorize(`product-stock.read`), this.adjust.bind(this));
-    }
+    };
 
     async adjust(req: Request, res: Response, next: NextFunction): Promise<void | Response> {
         try {
