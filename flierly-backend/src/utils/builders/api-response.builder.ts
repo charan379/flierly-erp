@@ -4,9 +4,9 @@ interface ApiResponse {
   success: boolean;
   result: string | number | null | object | any[];
   message: string;
-  controller: string;
+  controller?: string;
   requestUrl: string;
-  error: string | Error | null | ErrorMessage;
+  error?: string | Error | null | ErrorMessage;
   httpCode: number;
 }
 
@@ -22,7 +22,7 @@ interface ApiResponse {
  * @param res - The Express response object.
  * @returns The standardized response object.
  */
-function apiResponseBuilder ({
+function apiResponseBuilder({
   success,
   result,
   message,
@@ -35,8 +35,8 @@ function apiResponseBuilder ({
   success: boolean;
   result: string | number | null | object | any[];
   message: string;
-  controller: string;
-  error: string | Error | null | ErrorMessage;
+  controller?: string;
+  error?: string | Error | null | ErrorMessage;
   httpCode: number;
   req: Request;
   res: Response;

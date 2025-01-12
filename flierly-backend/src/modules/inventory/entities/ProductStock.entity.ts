@@ -1,16 +1,21 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToOne } from "typeorm";
 import Product from "./Product.entity";
 import { DecimalTransformer } from "@/lib/database/typeorm/utils/DecimalTransformer";
-import { IsNumber, IsPositive, Min } from "class-validator";
+import { IsNumber, Min } from "class-validator";
+import Branch from "@/modules/organization/entities/Branch.entity";
 
 @Entity("product_stocks")
 export default class ProductStock {
     @PrimaryGeneratedColumn({ type: 'bigint' })
     id: number;
 
-    @OneToOne(() => Product, (product) => product.stock, { eager: false, nullable: false, })
+    @OneToOne(() => Product, { eager: false, nullable: false, })
     @JoinColumn({ name: "product_id", })
     product: Product;
+
+    @ManyToOne(() => Branch, { eager: false, nullable: false })
+    @JoinColumn({ name: "branch_id" })
+    branch: Branch;
 
     @Column("decimal", { precision: 15, scale: 2, default: 0, name: "on_hand", transformer: DecimalTransformer })
     @IsNumber({}, { message: 'OnHand Quantity must be a valid number' })
@@ -41,4 +46,7 @@ export default class ProductStock {
 
     @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
     createdAt: Date;
+
+    @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz' })
+    deletedAt: Date;
 }

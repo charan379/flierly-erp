@@ -12,7 +12,6 @@ const crudController = CRUDController(Product);
 
 // crud routes
 productRoutes.post(`/create`, requestValidator(Product, "body"), authorize(`product.create`), productController.create);
-productRoutes.patch(`/adjust-stock`, productController.adjustStock);
 productRoutes.post(`/read`, authorize(`product.read`), crudController.read);
 productRoutes.post(`/search`, authorize(`product.read`), crudController.search);
 productRoutes.post(`/is-exists`, authorize(`product.read`), crudController.isExists);

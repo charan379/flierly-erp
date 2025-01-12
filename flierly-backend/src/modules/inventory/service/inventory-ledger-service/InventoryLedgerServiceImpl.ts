@@ -19,12 +19,13 @@ class InventoryLedgerServiceImpl implements InventoryLedgerService {
         this.inventoryLedgerRepository = this.databaseService.getRepository(InventoryLedger);
     }
 
-    async newTransaction(productId: number, quantity: number, stockType: InventoryLedgerStockType): Promise<void>;
-    async newTransaction(productId: number, quantity: number, stockType: InventoryLedgerStockType, transactionType: InventoryLedgerTransactionType, reason: string, referenceId: string): Promise<void>;
-    async newTransaction(productId: number, quantity: number, stockType: InventoryLedgerStockType, transactionType?: InventoryLedgerTransactionType, reason?: string, referenceId?: string): Promise<void> {
+    async newTransaction(productId: number, branchId: number, quantity: number, stockType: InventoryLedgerStockType): Promise<void>;
+    async newTransaction(productId: number, branchId: number, quantity: number, stockType: InventoryLedgerStockType, transactionType: InventoryLedgerTransactionType, reason: string, referenceId: string): Promise<void>;
+    async newTransaction(productId: number, branchId: number, quantity: number, stockType: InventoryLedgerStockType, transactionType?: InventoryLedgerTransactionType, reason?: string, referenceId?: string): Promise<void> {
         try {
             const transaction = this.inventoryLedgerRepository.create({
                 product: { id: productId },
+                branch: { id: branchId },
                 stockType: stockType,
                 quantity: quantity,
                 transactionType: transactionType ?? InventoryLedgerTransactionType.STOCK_ADJUSTMENT,

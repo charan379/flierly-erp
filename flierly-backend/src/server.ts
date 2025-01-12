@@ -8,7 +8,6 @@ import app from '@/app';
 import dotenv from 'dotenv';
 import http, { Server } from 'http';
 import { HttpError } from 'http-errors';
-import DatabaseServiceImpl from './lib/database/database-service/DatabaseServiceImpl';
 import { EnvConfig } from './config/env';
 import validateEnv from './lib/env-validator';
 import iocContainer from './lib/di-ioc-container';

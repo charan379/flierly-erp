@@ -1,12 +1,9 @@
 import { IsNotEmpty, Length, IsOptional, Matches } from 'class-validator';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, JoinColumn, ManyToOne } from 'typeorm';
 import Brand from './Brand.entity';
 import ProductCategory from './ProductCategory.entity';
 import ProductSubCategory from './ProductSubCategory.entity';
 import UOM from './UOM.entity';
-import ProductPrice from './ProductPrice.entity';
-import ProductStock from './ProductStock.entity';
-import InventoryLedger from './InventoryLedger.entity';
 
 @Entity('products')
 export default class Product {
@@ -55,12 +52,6 @@ export default class Product {
   @IsNotEmpty({ message: 'SubCategory must be specified' })
   subCategory: ProductSubCategory;
 
-  @OneToMany(() => ProductPrice, (productPrice) => productPrice.product, { eager: false, nullable: true })
-  prices: ProductPrice[];
-
-  @OneToOne(() => ProductStock, (productStock) => productStock.product, { eager: false, nullable: true })
-  stock: ProductStock;
-
   @ManyToOne(() => UOM, { eager: false, nullable: false, })
   @JoinColumn({ name: 'base_uom_id' })
   @IsNotEmpty({ message: 'Unit of Measure (UOM) must be specified' })
@@ -70,9 +61,6 @@ export default class Product {
   @JoinColumn({ name: 'brand_id' })
   @IsNotEmpty({ message: 'Brand must be specified' })
   brand: Brand;
-
-  @OneToMany(() => InventoryLedger, (inventoryLedger) => inventoryLedger.product, { eager: false, nullable: true })
-  ledgers: InventoryLedger[];
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;

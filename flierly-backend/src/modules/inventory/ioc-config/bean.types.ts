@@ -1,8 +1,10 @@
 
 const InventoryModuleBeanTypes = {
     InventoryLedgerService: Symbol.for("inventoryLedgerService"),
-    ProdcutService: Symbol.for("prodcutService"),
+    ProductService: Symbol.for("productService"),
+    // ProductStock
     ProductStockService: Symbol.for("productStockService"),
+    ProductStockController: Symbol.for('productStockController'),
 };
 
 export default InventoryModuleBeanTypes;

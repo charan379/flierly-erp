@@ -5,7 +5,8 @@ import { InventoryLedgerStockType } from "../constants/inventory-ledger-stock-ty
 
 const adjustStockRequestBodySchema: Joi.ObjectSchema<AdjustStockRequestBody> = Joi.object({
     productId: Joi.number().required(),
-    stockAdjustType: Joi.string().valid(...Object.values(InventoryLedgerStockType)).required(),
+    branchId: Joi.number().required(),
+    stockType: Joi.string().valid(...Object.values(InventoryLedgerStockType)).required(),
     quantity: Joi.number().precision(10).required(),
 });
 

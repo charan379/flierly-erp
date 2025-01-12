@@ -23,8 +23,8 @@ export default class ProductPrice {
         default: ProductPriceType.SALE
     })
     type: ProductPriceType;
-    
-    @ManyToOne(() => Product, (product) => product.prices, { eager: false, nullable: false })
+
+    @ManyToOne(() => Product, { eager: false, nullable: false })
     @JoinColumn({ name: 'product_id' })
     product: Product;
 

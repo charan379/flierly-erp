@@ -29,18 +29,14 @@ const applyWhereConditionsQB = (
     conditions: any,
     alias: string
 ) => {
-    // Iterate over the conditions provided in the input object
     for (const field in conditions) {
         if (Object.prototype.hasOwnProperty.call(conditions, field)) {
-            const condition = conditions[field]; // Extract the condition for the current field
+            const condition = conditions[field];
 
             try {
-                // Check for logical operators ($and, $or)
                 if (field === '$and' || field === '$or') {
-                    // Create a new nested condition using Brackets
                     qb[whereMethod](
                         new Brackets((nestedQb) => {
-                            // Recursively process each nested condition
                             condition.forEach((nestedCondition: any) => {
                                 applyWhereConditionsQB(
                                     nestedQb,
@@ -52,24 +48,28 @@ const applyWhereConditionsQB = (
                         })
                     );
                 } else {
-                    // Handle atomic field conditions using `parseCondition`
+                    // Handle related entity fields dynamically
+                    let fieldAlias = `${alias}.${field}`;
+                    if (field.includes('.')) {
+                        const [relation, relatedField] = field.split('.');
+                        fieldAlias = `${relation}.${relatedField}`;
+                    }
+
                     const { query, parameters } = parseCondition({
-                        conditionFor: 'qb',          // Specify that this condition is for QueryBuilder
-                        fieldAlias: `${alias}.${field}`, // Add alias to the field name
-                        condition                    // The actual condition to parse
+                        conditionFor: 'qb',
+                        fieldAlias, // Dynamically handle nested aliases
+                        condition,
                     });
 
-                    // Apply the parsed condition to the QueryBuilder
                     qb[whereMethod](query, parameters);
                 }
             } catch (error) {
-                // Log and throw a custom exception if an error occurs during parsing
                 console.error(`Error parsing condition for field "${field}":`, error);
 
                 throw new FlierlyException(
-                    `Error parsing condition for field "${field}": ${(error as Error).message}`, // User-friendly error message
-                    HttpCodes.BAD_REQUEST,                 // HTTP status code for bad requests
-                    JSON.stringify(error)                  // Serialized error details
+                    `Error parsing condition for field "${field}": ${(error as Error).message}`,
+                    HttpCodes.BAD_REQUEST,
+                    JSON.stringify(error)
                 );
             }
         }

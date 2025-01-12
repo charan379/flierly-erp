@@ -18,7 +18,7 @@ import InventoryModuleBeanTypes from '../../ioc-config/bean.types';
 const create = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
 
-        const prodcutService = iocContainer.get<ProductService>(InventoryModuleBeanTypes.ProdcutService);
+        const prodcutService = iocContainer.get<ProductService>(InventoryModuleBeanTypes.ProductService);
         await prodcutService.newProduct(req.body);
 
         // Return success response with created product

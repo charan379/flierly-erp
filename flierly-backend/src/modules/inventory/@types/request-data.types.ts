@@ -2,6 +2,7 @@ import { InventoryLedgerStockType } from "../constants/inventory-ledger-stock-ty
 
 export interface AdjustStockRequestBody {
     productId: number,
-    stockAdjustType: InventoryLedgerStockType,
+    branchId: number,
+    stockType: InventoryLedgerStockType,
     quantity: number,
 }

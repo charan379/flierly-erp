@@ -1,18 +1,23 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Table, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import Product from "./Product.entity";
 import { InventoryLedgerTransactionType } from "../constants/inventory-ledger-transaction-type.enum";
 import { IsNumber, IsOptional, Length, Matches } from "class-validator";
 import { InventoryLedgerStockType } from "../constants/inventory-ledger-stock-type.enum";
 import { DecimalTransformer } from "@/lib/database/typeorm/utils/DecimalTransformer";
+import Branch from "@/modules/organization/entities/Branch.entity";
 
 @Entity("inventory_ledger")
 export default class InventoryLedger {
     @PrimaryGeneratedColumn({ type: "bigint" })
     id: number;
 
-    @ManyToOne(() => Product, (product) => product.ledgers, { nullable: false })
+    @ManyToOne(() => Product, { eager: false, nullable: false })
     @JoinColumn({ name: "product_id" })
     product: Product;
+
+    @ManyToOne(() => Branch, { eager: false, nullable: false })
+    @JoinColumn({ name: "branch_id" })
+    branch: Branch;
 
     @Column({
         type: 'enum',

@@ -53,23 +53,23 @@ class DatabaseServiceImpl implements DatabaseService {
   }
 
   public getRepository<T extends ObjectLiteral>(entity: EntityTarget<T>): Repository<T> {
-    if (!this.dataSource.isInitialized) {
-      throw new Error('🛢 [Database]: Database connection is not initialized.');
-    }
+    // if (!this.dataSource.isInitialized) {
+    //   throw new Error('🛢 [Database]: Database connection is not initialized.');
+    // }
     return this.dataSource.getRepository<T>(entity);
   }
 
   public getQueryRunner(): QueryRunner {
-    if (!this.dataSource.isInitialized) {
-      throw new Error('🛢 [Database]: Database connection is not initialized.');
-    }
+    // if (!this.dataSource.isInitialized) {
+    //   throw new Error('🛢 [Database]: Database connection is not initialized.');
+    // }
     return this.dataSource.createQueryRunner();
   }
 
   public async executeTransaction<T>(transactionFn: (manager: EntityManager) => Promise<T>): Promise<T> {
-    if (!this.dataSource.isInitialized) {
-      throw new Error('🛢 [Database]: Database connection is not initialized.');
-    }
+    // if (!this.dataSource.isInitialized) {
+    //   throw new Error('🛢 [Database]: Database connection is not initialized.');
+    // }
 
     return this.dataSource.transaction(async (manager) => {
       return transactionFn(manager);
@@ -77,16 +77,16 @@ class DatabaseServiceImpl implements DatabaseService {
   }
 
   public getQueryBuilder<T extends ObjectLiteral>(entity: EntityTarget<T>, alias: string): SelectQueryBuilder<T> {
-    if (!this.dataSource.isInitialized) {
-      throw new Error('🛢 [Database]: Database connection is not initialized.');
-    }
+    // if (!this.dataSource.isInitialized) {
+    //   throw new Error('🛢 [Database]: Database connection is not initialized.');
+    // }
     return this.dataSource.getRepository(entity).createQueryBuilder(alias);
   }
 
   public async executeRawQuery<T>(query: string, parameters?: any[]): Promise<T> {
-    if (!this.dataSource.isInitialized) {
-      throw new Error('🛢 [Database]: Database connection is not initialized.');
-    }
+    // if (!this.dataSource.isInitialized) {
+    //   throw new Error('🛢 [Database]: Database connection is not initialized.');
+    // }
 
     return this.dataSource.query(query, parameters);
   }
