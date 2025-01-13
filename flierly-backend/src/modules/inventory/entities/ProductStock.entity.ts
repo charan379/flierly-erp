@@ -1,10 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToOne, Index, Unique } from "typeorm";
 import Product from "./Product.entity";
 import { DecimalTransformer } from "@/lib/database/typeorm/utils/DecimalTransformer";
 import { IsNumber, Min } from "class-validator";
 import Branch from "@/modules/organization/entities/Branch.entity";
 
 @Entity("product_stocks")
+@Index(["product", "branch"], { unique: true })
+@Unique(["product", "branch"])
 export default class ProductStock {
     @PrimaryGeneratedColumn({ type: 'bigint' })
     id: number;
