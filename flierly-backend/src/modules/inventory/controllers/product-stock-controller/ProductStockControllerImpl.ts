@@ -1,5 +1,5 @@
 import ProductStockController from "./ProductStockController";
-import { Request, Response, NextFunction, Router } from "express";
+import { Request, Response, NextFunction } from "express";
 import InventoryModuleBeanTypes from "../../ioc-config/bean.types";
 import ProductStockService from "../../service/product-stock-service/ProductStockService";
 import JoiSchemaValidator from "@/lib/joi/joi-schema.validator";
@@ -32,7 +32,7 @@ class ProductStockControllerImpl implements ProductStockController {
                 req, res,
             }))
         } catch (error) {
-            next(error);
+            return next(error);
         }
     }
 };

@@ -8,10 +8,13 @@ import ProductStockService from "../service/product-stock-service/ProductStockSe
 import ProductStockServiceImpl from "../service/product-stock-service/ProductStockServiceImpl";
 import ProductStockController from "../controllers/product-stock-controller/ProductStockController";
 import ProductStockControllerImpl from "../controllers/product-stock-controller/ProductStockControllerImpl";
+import ProductController from "../controllers/product-controller/ProductController";
+import ProductControllerImpl from "../controllers/product-controller/ProductControllerImpl";
 
 const InventoryModuleBeans = new ContainerModule((bind) => {
     bind<InventoryLedgerService>(InventoryModuleBeanTypes.InventoryLedgerService).to(InventoryLedgerServiceImpl).inSingletonScope();
     bind<ProductService>(InventoryModuleBeanTypes.ProductService).to(ProductServiceImpl).inSingletonScope();
+    bind<ProductController>(InventoryModuleBeanTypes.ProductController).to(ProductControllerImpl).inSingletonScope();
     bind<ProductStockService>(InventoryModuleBeanTypes.ProductStockService).to(ProductStockServiceImpl).inSingletonScope();
     bind<ProductStockController>(InventoryModuleBeanTypes.ProductStockController).to(ProductStockControllerImpl).inSingletonScope();
 });

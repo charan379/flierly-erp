@@ -23,7 +23,7 @@ class ProductServiceImpl implements ProductService {
             const product = this.productRepository.create(data);
             // Validate product instance
             await validateEntityInstance(product);
-            await this.productRepository.save(product);
+            return await this.productRepository.save(product);
         } catch (error) {
             throw error;
         }

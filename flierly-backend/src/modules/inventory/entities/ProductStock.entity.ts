@@ -11,7 +11,7 @@ export default class ProductStock {
     @PrimaryGeneratedColumn({ type: 'bigint' })
     id: number;
 
-    @OneToOne(() => Product, { eager: false, nullable: false, })
+    @ManyToOne(() => Product, { eager: false, nullable: false, })
     @JoinColumn({ name: "product_id", })
     product: Product;
 
