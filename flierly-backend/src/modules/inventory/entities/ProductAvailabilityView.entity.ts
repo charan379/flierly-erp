@@ -6,6 +6,7 @@ import { PrimaryGeneratedColumn, Column, ViewEntity, DataSource } from 'typeorm'
     expression: (dataSource: DataSource) => dataSource.createQueryBuilder()
         .select('p.id', 'id')
         .addSelect('p.name', 'product_name')
+        .addSelect('p.type', 'product_type')
         .addSelect('pc.id', 'category_id')
         .addSelect('pc.name', 'category_name')
         .addSelect('psc.id', 'sub_category_id')
@@ -50,6 +51,9 @@ import { PrimaryGeneratedColumn, Column, ViewEntity, DataSource } from 'typeorm'
 export default class ProductAvailabilityViewEntity {
     @PrimaryGeneratedColumn()
     id: number;
+
+    @Column({ name: 'product_type' })
+    productType: string;
 
     @Column({ name: 'product_name' })
     productName: string;

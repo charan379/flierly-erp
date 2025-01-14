@@ -2,6 +2,7 @@ import { inject, injectable } from "inversify";
 import ProductStockService from "./ProductStockService";
 import { EntityManager, Repository } from "typeorm";
 import ProductStock from "../../entities/ProductStock.entity";
+import Product from "../../entities/Product.entity";
 import DatabaseModuleBeanTypes from "@/lib/database/ioc-config/bean.types";
 import DatabaseService from "@/lib/database/database-service/DatabaseService";
 import validateEntityInstance from "@/lib/class-validator/utils/validate-entity.util";
@@ -13,11 +14,13 @@ import HttpCodes from "@/constants/http-codes.enum";
 import SerializedProductService from "../serialized-product-service/SerializedProductService";
 import { SerializedProductStatus } from "../../constants/serialized-product-status.enum";
 import { InventoryStockTransactionType } from "../../constants/inventory-stock-transaction-type.enum";
+import { ProductType } from "../../constants/product-type.enum";
 
 @injectable()
 class ProductStockServiceImpl implements ProductStockService {
 
     private readonly productStockRepository: Repository<ProductStock>;
+    private readonly productRepository: Repository<Product>;
 
     constructor(
         @inject(DatabaseModuleBeanTypes.DatabaseService) private readonly databaseService: DatabaseService,
@@ -25,15 +28,22 @@ class ProductStockServiceImpl implements ProductStockService {
         @inject(InventoryModuleBeanTypes.SerializedProductService) private readonly serializedProductService: SerializedProductService,
     ) {
         this.productStockRepository = this.databaseService.getRepository(ProductStock);
+        this.productRepository = this.databaseService.getRepository(Product);
     };
 
     async initializeStock(productId: number, branchId: number, entityManager?: EntityManager): Promise<ProductStock> {
         try {
+            const product = await this.productRepository.findOne({ where: { id: productId } });
+
+            if (!product) {
+                throw new Error('Product not found');
+            }
+
             const productStock = this.productStockRepository.create({
                 product: { id: productId },
                 branch: { id: branchId },
                 defective: 0,
-                onHand: 0,
+                onHand: product.type === ProductType.INTANGIBLE ? 9999 : 0,
                 onOrder: 0,
                 reserved: 0,
             });
@@ -64,16 +74,45 @@ class ProductStockServiceImpl implements ProductStockService {
         try {
             const updatedProductStock = await this.databaseService.executeTransaction<ProductStock>(async (entityManager) => {
                 // Retrieve or initialize product stock
+                let isInitializedForFirstTime;
                 let productStock = await entityManager.findOne(ProductStock, {
                     where: { branch: { id: branchId }, product: { id: productId } },
                     relations: ['product', "branch"],
                 });
 
                 if (!productStock) {
-                    productStock = await this.initializeStock(productId, branchId, entityManager);
+                    await this.initializeStock(productId, branchId, entityManager);
+                    productStock = await entityManager.findOneOrFail(ProductStock, {
+                        where: { branch: { id: branchId }, product: { id: productId } },
+                        relations: ['product', "branch"],
+                    });
+                    isInitializedForFirstTime = true;
                 }
 
-                const isSerialized = productStock.product.isSerialized;
+                const product = productStock.product;
+
+                if (product.type === ProductType.INTANGIBLE) {
+                    if (isInitializedForFirstTime) {
+                        // Save updated stock and create ledger entry
+                        await validateEntityInstance(productStock);
+                        const updatedProductStock = await entityManager.save(productStock);
+                        await this.inventoryLedgerService.newTransaction(
+                            productId,
+                            branchId,
+                            9999,
+                            InventoryStockType.ON_HAND,
+                            undefined,
+                            InventoryStockTransactionType.STOCK_ADJUSTMENT,
+                            `Intangible product initialization.`,
+                            undefined
+                        );
+                        return updatedProductStock;
+                    } else {
+                        throw new FlierlyException('Cannot update stock for intangible products', HttpCodes.BAD_REQUEST);
+                    }
+                }
+
+                const isSerialized = product.isSerialized;
 
                 if (isSerialized) {
                     if (!serialNumber) {
@@ -263,8 +302,6 @@ class ProductStockServiceImpl implements ProductStockService {
             );
         }
     }
-
-
 };
 
 export default ProductStockServiceImpl;

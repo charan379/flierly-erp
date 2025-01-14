@@ -1,10 +1,11 @@
-import { IsNotEmpty, Length, IsOptional, Matches } from 'class-validator';
+import { IsNotEmpty, Length, IsOptional, Matches, IsEnum } from 'class-validator';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, JoinColumn, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
 import Brand from './Brand.entity';
 import ProductCategory from './ProductCategory.entity';
 import ProductSubCategory from './ProductSubCategory.entity';
 import UOM from './UOM.entity';
 import TaxRate from '@/modules/taxation/entities/Tax.entity';
+import { ProductType } from '../constants/product-type.enum';
 
 @Entity('products')
 export default class Product {
@@ -15,6 +16,10 @@ export default class Product {
   @IsNotEmpty({ message: 'Name must not be empty.' })
   @Length(3, 90, { message: 'Name must be between 3 and 90 characters.' })
   name: string;
+
+  @Column({ type: 'enum', enum: ProductType, default: ProductType.TANGIBLE, name: "type", update: false })
+  @IsEnum(ProductType, { message: 'Product type must be either tangible or intangible.' })
+  type: ProductType;
 
   @Column({ type: 'boolean', default: true, name: 'is_active' })
   @IsOptional()
