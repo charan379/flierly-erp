@@ -1,9 +1,10 @@
 import { IsNotEmpty, Length, IsOptional, Matches } from 'class-validator';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, JoinColumn, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, JoinColumn, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
 import Brand from './Brand.entity';
 import ProductCategory from './ProductCategory.entity';
 import ProductSubCategory from './ProductSubCategory.entity';
 import UOM from './UOM.entity';
+import TaxRate from '@/modules/taxation/entities/Tax.entity';
 
 @Entity('products')
 export default class Product {
@@ -61,6 +62,20 @@ export default class Product {
   @JoinColumn({ name: 'brand_id' })
   @IsNotEmpty({ message: 'Brand must be specified' })
   brand: Brand;
+
+  @ManyToMany(() => TaxRate, (taxRate) => taxRate.products)
+  @JoinTable({
+    name: 'product_tax_rates',
+    joinColumn: {
+      name: 'product_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'tax_rate_id',
+      referencedColumnName: 'id',
+    },
+  })
+  taxeRates: TaxRate[];
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;

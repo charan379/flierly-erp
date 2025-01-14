@@ -1,8 +1,8 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import Product from "./Product.entity";
-import { InventoryLedgerTransactionType } from "../constants/inventory-ledger-transaction-type.enum";
+import { InventoryStockTransactionType as InventoryStockTransactionType } from "../constants/inventory-stock-transaction-type.enum";
 import { IsNumber, IsOptional, Length, Matches } from "class-validator";
-import { InventoryLedgerStockType } from "../constants/inventory-ledger-stock-type.enum";
+import { InventoryStockType } from "../constants/inventory-stock-type.enum";
 import { DecimalTransformer } from "@/lib/database/typeorm/utils/DecimalTransformer";
 import Branch from "@/modules/organization/entities/Branch.entity";
 
@@ -21,21 +21,21 @@ export default class InventoryLedger {
 
     @Column({
         type: 'enum',
-        enum: InventoryLedgerTransactionType,
+        enum: InventoryStockTransactionType,
         name: "transaction_type",
         nullable: false,
     })
-    transactionType: InventoryLedgerTransactionType; // e.g., "sales_return_ok", "sales_return_defective", etc.
+    transactionType: InventoryStockTransactionType; // e.g., "sales_return_ok", "sales_return_defective", etc.
 
     @Column({
         type: 'enum',
-        enum: InventoryLedgerStockType,
+        enum: InventoryStockType,
         name: "stock_type",
         nullable: false,
     })
-    stockType: InventoryLedgerStockType; // e.g., "oh_hand", "defective", etc.
+    stockType: InventoryStockType; // e.g., "oh_hand", "defective", etc.
 
-    @Column({ type: 'varchar', length: 50, unique: true, nullable: true, name: "reference_is" })
+    @Column({ type: 'varchar', length: 50, unique: true, nullable: true, name: "reference_id" })
     @IsOptional()
     @Length(1, 40, { message: 'ReferenceID must be between 1 and 40 characters.' })
     @Matches(/^[A-Z0-9_#-]{1,40}$/, { message: 'ReferenceID is not valid only capital letters, numbers, underscores and hyphens allowed.' })
@@ -52,4 +52,10 @@ export default class InventoryLedger {
 
     @CreateDateColumn({ name: 'transaction_date', type: 'timestamptz' })
     transactionDate: Date;
+
+    @Column({ type: 'varchar', length: 100, name: 'product_serial_number', nullable: true })
+    @Length(5, 30, { message: 'Product Serial number must be between 3 and 30 characters.' })
+    @IsOptional()
+    @Matches(/^[A-Z0-9-]{5,30}$/, { message: 'Product Serial number is not valid only capital letters, numbers and hyphens allowed.' })
+    productSerialNumber: string;
 };

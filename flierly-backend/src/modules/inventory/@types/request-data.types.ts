@@ -1,8 +1,9 @@
-import { InventoryLedgerStockType } from "../constants/inventory-ledger-stock-type.enum";
+import { InventoryStockType } from "../constants/inventory-stock-type.enum";
 
 export interface AdjustStockRequestBody {
     productId: number,
     branchId: number,
-    stockType: InventoryLedgerStockType,
+    stockType: InventoryStockType,
     quantity: number,
+    serialNumber?: string,
 }

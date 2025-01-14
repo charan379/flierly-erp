@@ -20,9 +20,9 @@ class ProductStockControllerImpl implements ProductStockController {
 
     async adjust(req: Request, res: Response, next: NextFunction): Promise<void | Response> {
         try {
-            const { productId, branchId, quantity, stockType }: AdjustStockRequestBody = await JoiSchemaValidator(adjustStockRequestBodySchema, req.body, { abortEarly: false }, "ProductStockController.adjustStock");
+            const { productId, branchId, quantity, stockType, serialNumber }: AdjustStockRequestBody = await JoiSchemaValidator(adjustStockRequestBodySchema, req.body, { abortEarly: false }, "ProductStockController.adjustStock");
 
-            const result = await this.productStockService.adjustStock(productId, branchId, quantity, stockType);
+            const result = await this.productStockService.updateStock(productId, branchId, quantity, stockType, serialNumber);
 
             return res.status(HttpCodes.OK).json(apiResponseBuilder({
                 success: true,

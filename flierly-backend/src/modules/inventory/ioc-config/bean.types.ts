@@ -7,6 +7,8 @@ const InventoryModuleBeanTypes = {
     // ProductStock
     ProductStockService: Symbol.for("productStockService"),
     ProductStockController: Symbol.for('productStockController'),
+    // SerializedProduct
+    SerializedProductService: Symbol.for("serializedProductService"),
 };
 
 export default InventoryModuleBeanTypes;

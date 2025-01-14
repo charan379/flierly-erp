@@ -10,6 +10,8 @@ import ProductStockController from "../controllers/product-stock-controller/Prod
 import ProductStockControllerImpl from "../controllers/product-stock-controller/ProductStockControllerImpl";
 import ProductController from "../controllers/product-controller/ProductController";
 import ProductControllerImpl from "../controllers/product-controller/ProductControllerImpl";
+import SerializedProductService from "../service/serialized-product-service/SerializedProductService";
+import SerializedProductServiceImpl from "../service/serialized-product-service/SerializedProductServiceImpl";
 
 const InventoryModuleBeans = new ContainerModule((bind) => {
     bind<InventoryLedgerService>(InventoryModuleBeanTypes.InventoryLedgerService).to(InventoryLedgerServiceImpl).inSingletonScope();
@@ -17,6 +19,7 @@ const InventoryModuleBeans = new ContainerModule((bind) => {
     bind<ProductController>(InventoryModuleBeanTypes.ProductController).to(ProductControllerImpl).inSingletonScope();
     bind<ProductStockService>(InventoryModuleBeanTypes.ProductStockService).to(ProductStockServiceImpl).inSingletonScope();
     bind<ProductStockController>(InventoryModuleBeanTypes.ProductStockController).to(ProductStockControllerImpl).inSingletonScope();
+    bind<SerializedProductService>(InventoryModuleBeanTypes.SerializedProductService).to(SerializedProductServiceImpl).inSingletonScope();
 });
 
 export default InventoryModuleBeans;

@@ -39,10 +39,6 @@ export default class ProductStock {
     @Min(0, { message: 'Defectives Quantity cannot be negative' })
     defective: number; // Quantity marked as defective
 
-    @Column("decimal", { precision: 10, scale: 2, default: 0, transformer: DecimalTransformer })
-    @IsNumber({}, { message: 'Available Quantity must be a valid number' })
-    available: number; // Calculated as `onHandQuantity - reservedQuantity - defectiveQuantity`
-
     @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
     updatedAt: Date;
 

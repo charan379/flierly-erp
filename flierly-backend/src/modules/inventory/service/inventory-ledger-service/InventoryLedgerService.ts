@@ -1,9 +1,31 @@
-import { InventoryLedgerStockType } from "../../constants/inventory-ledger-stock-type.enum";
-import { InventoryLedgerTransactionType } from "../../constants/inventory-ledger-transaction-type.enum";
+import { InventoryStockType } from "../../constants/inventory-stock-type.enum";
+import { InventoryStockTransactionType } from "../../constants/inventory-stock-transaction-type.enum";
 
 interface InventoryLedgerService {
-    newTransaction(productId: number, branchId: number, quantity: number, stockType: InventoryLedgerStockType): Promise<void>;
-    newTransaction(productId: number, branchId: number, quantity: number, stockType: InventoryLedgerStockType, transactionType: InventoryLedgerTransactionType, reason: string, referenceId: string): Promise<void>;
-};
+    /**
+     * Basic transaction with required fields.
+     */
+    newTransaction(
+        productId: number,
+        branchId: number,
+        quantity: number,
+        stockType: InventoryStockType,
+        serialNumber?: string
+    ): Promise<void>;
+
+    /**
+     * Detailed transaction with additional metadata.
+     */
+    newTransaction(
+        productId: number,
+        branchId: number,
+        quantity: number,
+        stockType: InventoryStockType,
+        serialNumber?: string,
+        transactionType?: InventoryStockTransactionType,
+        reason?: string,
+        referenceId?: string
+    ): Promise<void>;
+}
 
 export default InventoryLedgerService;

@@ -12,7 +12,7 @@ const validateEntityInstance = async (entityInstance: any): Promise<void> => {
             .map(key => `${key}: ${errorMessages[key]}`)
             .join('.\n');
 
-        throw new FlierlyException(joinedMessagesTogether, HttpCodes.BAD_REQUEST);
+        throw new FlierlyException(joinedMessagesTogether, HttpCodes.BAD_REQUEST, JSON.stringify(errorMessages));
     }
 };
 

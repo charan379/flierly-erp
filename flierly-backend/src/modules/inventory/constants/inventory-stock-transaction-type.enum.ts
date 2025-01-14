@@ -1,7 +1,7 @@
 /**
- * Inventory Ledger Transaction type enum
+ * Inventory Stock Transaction type enum
  */
-export enum InventoryLedgerTransactionType {
+export enum InventoryStockTransactionType {
     STOCK_ADJUSTMENT = 'stock_adjustment',
     SALES_ORDER = 'sales_order',
     PURCHASE_ORDER = 'purchase_order',

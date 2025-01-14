@@ -1,3 +1,4 @@
+import { DecimalTransformer } from '@/lib/database/typeorm/utils/DecimalTransformer';
 import { PrimaryGeneratedColumn, Column, ViewEntity, DataSource } from 'typeorm';
 
 @ViewEntity({
@@ -23,7 +24,7 @@ import { PrimaryGeneratedColumn, Column, ViewEntity, DataSource } from 'typeorm'
         .addSelect('b.name', 'branch_name')
         .addSelect('ps.id', 'stock_id')
         .addSelect('ps.on_hand', 'on_hand')
-        .addSelect('ps.available', 'available')
+        .addSelect('ps.on_hand - ps.reserved - ps.defective', 'available')
         .addSelect('ps.on_order', 'on_order')
         .addSelect('ps.reserved', 'reserved')
         .addSelect('ps.defective', 'defective')
@@ -104,19 +105,19 @@ export default class ProductAvailabilityViewEntity {
     @Column({ name: 'stock_id' })
     stockId: number;
 
-    @Column({ name: 'on_hand' })
+    @Column({ name: 'on_hand', type: 'decimal', precision: 10, scale: 2, transformer: DecimalTransformer })
     onHand: number;
 
-    @Column({ name: 'available' })
+    @Column({ name: 'available', type: 'decimal', precision: 10, scale: 2, transformer: DecimalTransformer })
     available: number;
 
-    @Column({ name: 'on_order' })
+    @Column({ name: 'on_order', type: 'decimal', precision: 10, scale: 2, transformer: DecimalTransformer })
     onOrder: number;
 
-    @Column({ name: 'reserved' })
+    @Column({ name: 'reserved', type: 'decimal', precision: 10, scale: 2, transformer: DecimalTransformer })
     reserved: number;
 
-    @Column({ name: 'defective' })
+    @Column({ name: 'defective', type: 'decimal', precision: 10, scale: 2, transformer: DecimalTransformer })
     defective: number;
 
     @Column({ name: 'selling_price' })
