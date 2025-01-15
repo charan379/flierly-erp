@@ -16,7 +16,7 @@ interface SerializedProductService {
     newSerialNumber(productId: number, branchId: number, serialNumber: string, purchaseInvoiceId?: string, entityManager?: EntityManager): Promise<SerializedProduct>;
 
     /**
-     * Updates an existing serialized product's status to AVAILABLE if its status is ADJUSTED.
+     * Updates an existing serialized product's status to AVAILABLE if its status is DEISPOSED.
      * If the product does not exist, creates a new entry with status AVAILABLE.
      * Throws an error if the status is not ADJUSTED and the product exists.
      * @param productId - The ID of the product.
@@ -26,7 +26,7 @@ interface SerializedProductService {
      * @param entityManager - Optional TypeORM EntityManager for transactional operations.
      * @returns The updated or newly created SerializedProduct.
      */
-    updateAdjustedOrCreateNew(productId: number, branchId: number, serialNumber: string, purchaseInvoiceId?: string, entityManager?: EntityManager): Promise<"updated" | "created">;
+    pullBackDisposedOrCreateNew(productId: number, branchId: number, serialNumber: string, purchaseInvoiceId?: string, entityManager?: EntityManager): Promise<"updated" | "created">;
 
     /**
      * Updates the status of an existing serialized product.

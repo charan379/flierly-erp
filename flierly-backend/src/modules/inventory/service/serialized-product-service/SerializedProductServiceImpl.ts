@@ -57,6 +57,9 @@ export default class SerializedProductServiceImpl implements SerializedProductSe
         this.serializedProductRepository = this.databaseService.getRepository(SerializedProduct);
     }
 
+    /**
+     * Creates a new SerializedProduct instance.
+     */
     private createSerializedProduct(
         productId: number,
         branchId: number,
@@ -75,6 +78,9 @@ export default class SerializedProductServiceImpl implements SerializedProductSe
         return serializedProduct;
     }
 
+    /**
+     * Saves the SerializedProduct to the database.
+     */
     private async saveSerializedProduct(
         serializedProduct: SerializedProduct,
         entityManager?: EntityManager
@@ -86,7 +92,7 @@ export default class SerializedProductServiceImpl implements SerializedProductSe
     }
 
     /**
-     * Validate the status transition of a serialized product based on business rules.
+     * Validates the status transition of a serialized product based on business rules.
      */
     private validateStatusTransition(
         currentStatus: SerializedProductStatus,
@@ -109,6 +115,11 @@ export default class SerializedProductServiceImpl implements SerializedProductSe
         }
     }
 
+    /**
+     * Creates a new serialized product entry.
+     * - Checks if a serialized product already exists.
+     * - Validates and saves the new serialized product.
+     */
     async newSerialNumber(
         productId: number,
         branchId: number,
@@ -117,7 +128,7 @@ export default class SerializedProductServiceImpl implements SerializedProductSe
         entityManager?: EntityManager
     ): Promise<SerializedProduct> {
         try {
-
+            // Check if the serialized product already exists
             const existingSerializedProduct = await this.serializedProductRepository.findOne({
                 where: {
                     product: { id: productId },
@@ -127,9 +138,13 @@ export default class SerializedProductServiceImpl implements SerializedProductSe
             });
 
             if (existingSerializedProduct) {
-                throw new FlierlyException(`Serialized Product already existing for ${serialNumber}, with status ${existingSerializedProduct.status}`, HttpCodes.BAD_REQUEST);
-            };
+                throw new FlierlyException(
+                    `Serialized Product already existing for ${serialNumber}, with status ${existingSerializedProduct.status}`,
+                    HttpCodes.BAD_REQUEST
+                );
+            }
 
+            // Create and validate a new serialized product
             const serializedProduct = this.createSerializedProduct(
                 productId,
                 branchId,
@@ -140,6 +155,7 @@ export default class SerializedProductServiceImpl implements SerializedProductSe
 
             await validateEntityInstance(serializedProduct);
 
+            // Save the new serialized product
             return await this.saveSerializedProduct(serializedProduct, entityManager);
         } catch (error) {
             throw new FlierlyException(
@@ -150,6 +166,11 @@ export default class SerializedProductServiceImpl implements SerializedProductSe
         }
     }
 
+    /**
+     * Updates the status of an existing serialized product.
+     * - Validates the current status and the new status.
+     * - Saves the updated serialized product.
+     */
     async updateStatus(
         productId: number,
         branchId: number,
@@ -159,6 +180,7 @@ export default class SerializedProductServiceImpl implements SerializedProductSe
         entityManager?: EntityManager
     ): Promise<SerializedProduct> {
         try {
+            // Fetch the serialized product
             const serializedProduct = await this.serializedProductRepository.findOne({
                 where: {
                     product: { id: productId },
@@ -172,8 +194,10 @@ export default class SerializedProductServiceImpl implements SerializedProductSe
                 throw new FlierlyException("SerializedProduct not found", HttpCodes.BAD_REQUEST);
             }
 
+            // Validate the status transition
             this.validateStatusTransition(serializedProduct.status, status);
 
+            // Update the status and optional sales invoice ID
             serializedProduct.status = status;
             if (salesInvoiceId) {
                 serializedProduct.salesInvoice = salesInvoiceId;
@@ -181,6 +205,7 @@ export default class SerializedProductServiceImpl implements SerializedProductSe
 
             await validateEntityInstance(serializedProduct);
 
+            // Save the updated serialized product
             return await this.saveSerializedProduct(serializedProduct, entityManager);
         } catch (error) {
             throw new FlierlyException(
@@ -191,7 +216,12 @@ export default class SerializedProductServiceImpl implements SerializedProductSe
         }
     }
 
-    async updateAdjustedOrCreateNew(
+    /**
+     * Updates a disposed serialized product back to AVAILABLE or creates a new one.
+     * - Checks if the serialized product exists and is disposed.
+     * - Either updates the status or creates a new serialized product.
+     */
+    async pullBackDisposedOrCreateNew(
         productId: number,
         branchId: number,
         serialNumber: string,
@@ -200,6 +230,8 @@ export default class SerializedProductServiceImpl implements SerializedProductSe
     ): Promise<"created" | "updated"> {
         try {
             let action: "created" | "updated";
+
+            // Check if the serialized product exists
             let serializedProduct = await this.serializedProductRepository.findOne({
                 where: {
                     product: { id: productId },
@@ -210,13 +242,18 @@ export default class SerializedProductServiceImpl implements SerializedProductSe
             });
 
             if (serializedProduct) {
+                // Validate and update the status if the product is disposed
                 if (serializedProduct.status !== SerializedProductStatus.DISPOSED) {
-                    throw new FlierlyException(`Not able yo pull back serialized product to ${SerializedProductStatus.AVAILABLE} since it is in ${serializedProduct.status}, only ${SerializedProductStatus.DISPOSED} products can be pulled back to ${SerializedProductStatus.AVAILABLE}`, HttpCodes.BAD_REQUEST);
+                    throw new FlierlyException(
+                        `Not able to pull back serialized product to ${SerializedProductStatus.AVAILABLE} since it is in ${serializedProduct.status}, only ${SerializedProductStatus.DISPOSED} products can be pulled back to ${SerializedProductStatus.AVAILABLE}`,
+                        HttpCodes.BAD_REQUEST
+                    );
                 }
                 this.validateStatusTransition(serializedProduct.status, SerializedProductStatus.AVAILABLE);
                 serializedProduct.status = SerializedProductStatus.AVAILABLE;
-                action = "updated"
+                action = "updated";
             } else {
+                // Create a new serialized product
                 serializedProduct = this.createSerializedProduct(
                     productId,
                     branchId,
@@ -224,11 +261,12 @@ export default class SerializedProductServiceImpl implements SerializedProductSe
                     SerializedProductStatus.AVAILABLE,
                     purchaseInvoiceId
                 );
-                action = "created"
+                action = "created";
             }
 
             await validateEntityInstance(serializedProduct);
 
+            // Save the updated or new serialized product
             await this.saveSerializedProduct(serializedProduct, entityManager);
 
             return action;

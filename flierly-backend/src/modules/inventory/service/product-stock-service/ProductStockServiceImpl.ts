@@ -128,7 +128,7 @@ class ProductStockServiceImpl implements ProductStockService {
                     switch (stockType) {
                         case InventoryStockType.ON_HAND:
                             if (quantity > 0) {
-                                await serializedProductService.updateAdjustedOrCreateNew(
+                                await serializedProductService.pullBackDisposedOrCreateNew(
                                     productId,
                                     branchId,
                                     serialNumber,
