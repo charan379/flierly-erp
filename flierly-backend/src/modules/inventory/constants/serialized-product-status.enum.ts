@@ -9,5 +9,5 @@ export enum SerializedProductStatus {
   PURCHASE_RETURN = 'purchase_return',
   SALES_RETURN = 'sales_return',
   RESERVED = 'reserved',
-  ADJUSTED = 'adjusted'
+  DISPOSED = 'disposed'
 }

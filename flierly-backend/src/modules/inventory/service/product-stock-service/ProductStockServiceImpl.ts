@@ -143,7 +143,7 @@ class ProductStockServiceImpl implements ProductStockService {
                                     productId,
                                     branchId,
                                     serialNumber,
-                                    SerializedProductStatus.ADJUSTED,
+                                    SerializedProductStatus.DISPOSED,
                                     undefined,
                                     entityManager
                                 );

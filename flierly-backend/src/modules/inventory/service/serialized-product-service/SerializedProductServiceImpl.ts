@@ -18,7 +18,7 @@ const STATUS_TRANSITION_MAP: Record<SerializedProductStatus, SerializedProductSt
         SerializedProductStatus.DEFECTIVE,
         SerializedProductStatus.UNDER_PDI,
         SerializedProductStatus.RESERVED,
-        SerializedProductStatus.ADJUSTED,
+        SerializedProductStatus.DISPOSED,
     ],
     [SerializedProductStatus.SOLD]: [
         SerializedProductStatus.SALES_RETURN
@@ -33,7 +33,7 @@ const STATUS_TRANSITION_MAP: Record<SerializedProductStatus, SerializedProductSt
         SerializedProductStatus.DEFECTIVE,
         SerializedProductStatus.SOLD,
     ],
-    [SerializedProductStatus.ADJUSTED]: [
+    [SerializedProductStatus.DISPOSED]: [
         SerializedProductStatus.AVAILABLE
     ],
     [SerializedProductStatus.UNDER_PDI]: [
@@ -210,8 +210,8 @@ export default class SerializedProductServiceImpl implements SerializedProductSe
             });
 
             if (serializedProduct) {
-                if (serializedProduct.status !== SerializedProductStatus.ADJUSTED) {
-                    throw new FlierlyException(`Not able yo pull back serialized product to available since it is in ${serializedProduct.status}, only ${SerializedProductStatus.ADJUSTED} products can be pulled back to ${SerializedProductStatus.AVAILABLE}`, HttpCodes.BAD_REQUEST);
+                if (serializedProduct.status !== SerializedProductStatus.DISPOSED) {
+                    throw new FlierlyException(`Not able yo pull back serialized product to ${SerializedProductStatus.AVAILABLE} since it is in ${serializedProduct.status}, only ${SerializedProductStatus.DISPOSED} products can be pulled back to ${SerializedProductStatus.AVAILABLE}`, HttpCodes.BAD_REQUEST);
                 }
                 this.validateStatusTransition(serializedProduct.status, SerializedProductStatus.AVAILABLE);
                 serializedProduct.status = SerializedProductStatus.AVAILABLE;
