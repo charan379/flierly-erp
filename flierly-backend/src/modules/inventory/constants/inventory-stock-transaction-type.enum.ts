@@ -1,5 +1,5 @@
 /**
- * Inventory Stock Transaction type enum
+ * Inventory Stock Transaction Type Enum
  */
 export enum InventoryStockTransactionType {
     STOCK_ADJUSTMENT = 'stock_adjustment',
@@ -9,6 +9,9 @@ export enum InventoryStockTransactionType {
     PURCHASE_RETURN_OK = 'purchase_return_ok',
     PURCHASE_RETURN_DEFECTIVE = 'purchase_return_defective',
     SALES_RETURN_DEFECTIVE = 'sales_return_defective',
-    SALES_INVOICE = 'sales_invocie',
+    SALES_INVOICE = 'sales_invoice', // Fixed typo
     PURCHASE_INVOICE = 'purchase_invoice',
+    TRANSFER_OUT = 'transfer_out',
+    TRANSFER_IN = 'transfer_in',
+    STOCK_DISPOSAL = 'stock_disposal',
 }

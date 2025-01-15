@@ -39,7 +39,7 @@ export default class InventoryLedger {
     @IsOptional()
     @Length(1, 40, { message: 'ReferenceID must be between 1 and 40 characters.' })
     @Matches(/^[A-Z0-9_#-]{1,40}$/, { message: 'ReferenceID is not valid only capital letters, numbers, underscores and hyphens allowed.' })
-    referenceId?: string;
+    referenceId?: string; // sale invoice or purchase invoice number, etc.
 
     @Column({ type: 'text', nullable: true })
     @IsOptional()
