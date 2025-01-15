@@ -2,7 +2,7 @@
  * Inventory Stock Transaction Type Enum
  */
 export enum InventoryStockTransactionType {
-    STOCK_ADJUSTMENT = 'stock_adjustment',
+    MANUAL_ADJUSTMENT = 'manual_adjustment',
     SALES_ORDER = 'sales_order',
     PURCHASE_ORDER = 'purchase_order',
     SALES_RETURN_OK = 'sales_return_ok',

@@ -26,7 +26,7 @@ class InventoryLedgerServiceImpl implements InventoryLedgerService {
         quantity: number,
         stockType: InventoryStockType,
         serialNumber?: string,
-        transactionType: InventoryStockTransactionType = InventoryStockTransactionType.STOCK_ADJUSTMENT,
+        transactionType: InventoryStockTransactionType = InventoryStockTransactionType.MANUAL_ADJUSTMENT,
         reason: string = `Stock adjustment of ${quantity} for ${stockType} items`,
         referenceId?: string
     ): Promise<void> {
