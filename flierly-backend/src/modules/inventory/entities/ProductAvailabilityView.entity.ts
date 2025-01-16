@@ -48,7 +48,7 @@ import { PrimaryGeneratedColumn, Column, ViewEntity, DataSource } from 'typeorm'
         .innerJoin('uoms', 'uom', 'p.base_uom_id = uom.id')
         .innerJoin('brands', 'brand', 'p.brand_id = brand.id')
 })
-export default class ProductAvailabilityViewEntity {
+export default class ProductAvailabilityView {
     @PrimaryGeneratedColumn()
     id: number;
 
