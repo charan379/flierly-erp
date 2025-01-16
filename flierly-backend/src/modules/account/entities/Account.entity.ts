@@ -34,7 +34,6 @@ export default class Account {
   @ManyToOne(() => AccountSubtype, { eager: false, nullable: false })
   @JoinColumn({ name: 'account_subtype_id' })
   @IsNotEmpty({ message: 'Account subtype must be specified' })
-
   subtype: AccountSubtype;
 
   @Column({ type: 'boolean', default: false, name: 'is_vip' })
