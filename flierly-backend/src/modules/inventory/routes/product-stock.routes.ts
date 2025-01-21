@@ -17,6 +17,8 @@ productStockRoutes.post(`/read`, authorize(`product-stock.read`), crudController
 productStockRoutes.post(`/search`, authorize(`product-stock.read`), crudController.search);
 productStockRoutes.post(`/is-exists`, authorize(`product-stock.read`), crudController.isExists);
 productStockRoutes.post(`/page`, authorize(`product-stock.read`), crudController.page);
-productStockRoutes.patch("/adjust", authorize(`product-stock.read`), productStockController.adjust.bind(productStockController));
+productStockRoutes.patch("/update-defective", authorize(`product-stock.manage`), productStockController.updateDefective.bind(productStockController));
+productStockRoutes.patch("/update-on-hand", authorize(`product-stock.manage`), productStockController.updateOnHand.bind(productStockController));
+
 
 export default productStockRoutes;

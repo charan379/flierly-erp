@@ -1,18 +1,16 @@
 import { EntityManager } from "typeorm";
 import ProductStock from "../../entities/ProductStock.entity";
-import { InventoryStockType } from "../../constants/inventory-stock-type.enum";
 import { InventoryStockTransactionType } from "../../constants/inventory-stock-transaction-type.enum";
 
 interface ProductStockService {
     initializeStock(productId: number, branchId: number, transactionManager?: EntityManager): Promise<ProductStock>,
-    updateStock(productId: number, branchId: number, quantity: number, stockType: InventoryStockType, serialNumber?: string, transactionType?: InventoryStockTransactionType, reason?: string, referenceId?: string): Promise<ProductStock>;
     // 
     updateReserve(
         productId: number,
         branchId: number,
         quantity: number,
         updateType: "add" | "remove",
-        transactionType: InventoryStockTransactionType.SALES_ORDER | InventoryStockTransactionType.TRANSFER_OUT | InventoryStockTransactionType.TRANSFER_IN | InventoryStockTransactionType.MANUAL_ADJUSTMENT,
+        transactionType: InventoryStockTransactionType.SALES_ORDER | InventoryStockTransactionType.MANUAL_ADJUSTMENT,
         reason: string,
         referenceId: string,
         serialNumber?: string,

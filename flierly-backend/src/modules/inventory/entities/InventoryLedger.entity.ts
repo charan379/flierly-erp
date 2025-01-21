@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import Product from "./Product.entity";
 import { InventoryStockTransactionType as InventoryStockTransactionType } from "../constants/inventory-stock-transaction-type.enum";
 import { IsNumber, IsOptional, Length, Matches } from "class-validator";
@@ -7,6 +7,7 @@ import { DecimalTransformer } from "@/lib/database/typeorm/utils/DecimalTransfor
 import Branch from "@/modules/organization/entities/Branch.entity";
 
 @Entity("inventory_ledger")
+@Index(["product", "branch"], { unique: false })
 export default class InventoryLedger {
     @PrimaryGeneratedColumn({ type: "bigint" })
     id: number;
@@ -35,7 +36,8 @@ export default class InventoryLedger {
     })
     stockType: InventoryStockType; // e.g., "oh_hand", "defective", etc.
 
-    @Column({ type: 'varchar', length: 50, unique: true, nullable: true, name: "reference_id" })
+    @Column({ type: 'varchar', length: 50, unique: false, nullable: true, name: "reference_id" })
+    @Index()
     @IsOptional()
     @Length(1, 40, { message: 'ReferenceID must be between 1 and 40 characters.' })
     @Matches(/^[A-Z0-9_#-]{1,40}$/, { message: 'ReferenceID is not valid only capital letters, numbers, underscores and hyphens allowed.' })

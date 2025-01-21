@@ -11,8 +11,6 @@ import InventoryModuleBeanTypes from "../../ioc-config/bean.types";
 import InventoryLedgerService from "../inventory-ledger-service/InventoryLedgerService";
 import FlierlyException from "@/lib/flierly.exception";
 import HttpCodes from "@/constants/http-codes.enum";
-import SerializedProductService from "../serialized-product-service/SerializedProductService";
-import { SerializedProductStatus } from "../../constants/serialized-product-status.enum";
 import { InventoryStockTransactionType } from "../../constants/inventory-stock-transaction-type.enum";
 import { ProductType } from "../../constants/product-type.enum";
 
@@ -25,7 +23,6 @@ class ProductStockServiceImpl implements ProductStockService {
     constructor(
         @inject(DatabaseModuleBeanTypes.DatabaseService) private readonly databaseService: DatabaseService,
         @inject(InventoryModuleBeanTypes.InventoryLedgerService) private readonly inventoryLedgerService: InventoryLedgerService,
-        @inject(InventoryModuleBeanTypes.SerializedProductService) private readonly serializedProductService: SerializedProductService,
     ) {
         this.productStockRepository = this.databaseService.getRepository(ProductStock);
         this.productRepository = this.databaseService.getRepository(Product);
@@ -42,16 +39,6 @@ class ProductStockServiceImpl implements ProductStockService {
         }
 
         return productStock;
-    };
-
-    private validateSerializedProductContrainsts(quantity: number, serialNumber?: string): void {
-        if (!serialNumber) {
-            throw new FlierlyException('Serial number is required for serialized products', HttpCodes.BAD_REQUEST);
-        }
-
-        if (Math.abs(quantity) > 1) {
-            throw new FlierlyException('Serialized products stock can only be updated one at a time', HttpCodes.BAD_REQUEST);
-        }
     };
 
     private validatePostiveQty(quantity: number): void {
@@ -83,48 +70,21 @@ class ProductStockServiceImpl implements ProductStockService {
         branchId: number,
         quantity: number,
         updateType: "add" | "remove",
-        transactionType: InventoryStockTransactionType.SALES_ORDER | InventoryStockTransactionType.TRANSFER_OUT | InventoryStockTransactionType.MANUAL_ADJUSTMENT,
+        transactionType: InventoryStockTransactionType.SALES_ORDER | InventoryStockTransactionType.MANUAL_ADJUSTMENT,
         reason: string,
         referenceId: string,
         serialNumber?: string,
         transactionManager?: EntityManager
     ): Promise<void> {
-        await this.databaseService.executeTransaction<void>(async (entityManagerLocal) => {
-            this.validatePostiveQty(quantity);
+        try {
+            await this.databaseService.executeTransaction<void>(async (entityManagerLocal) => {
 
-            let entityManager = transactionManager || entityManagerLocal;
+                this.validatePostiveQty(quantity);
 
-            let productStock = await this.getProductStock(productId, branchId);
+                let entityManager = transactionManager || entityManagerLocal;
 
-            const product = productStock.product;
+                let productStock = await this.getProductStock(productId, branchId);
 
-            if (product.isSerialized) {
-                this.validateSerializedProductContrainsts(quantity, serialNumber);
-
-                if (updateType === "add") {
-                    this.validateAvailableStock(productStock, 1);
-                    await this.serializedProductService.updateStatus(
-                        productId,
-                        branchId,
-                        serialNumber!,
-                        SerializedProductStatus.RESERVED,
-                        referenceId,
-                        entityManager
-                    );
-                    productStock.reserved += quantity;
-                } else {
-                    this.validateReservedStock(productStock, quantity);
-                    await this.serializedProductService.updateStatus(
-                        productId,
-                        branchId,
-                        serialNumber!,
-                        SerializedProductStatus.AVAILABLE,
-                        referenceId,
-                        entityManager
-                    );
-                    productStock.reserved -= quantity;
-                }
-            } else {
                 if (updateType === "add") {
                     this.validateAvailableStock(productStock, quantity);
                     productStock.reserved += quantity;
@@ -132,25 +92,31 @@ class ProductStockServiceImpl implements ProductStockService {
                     this.validateReservedStock(productStock, quantity);
                     productStock.reserved -= quantity;
                 }
+
+                this.validateStockConsistency(productStock);
+
+                await validateEntityInstance(productStock);
+
+                await this.inventoryLedgerService.newTransaction(
+                    productId,
+                    branchId,
+                    updateType === "add" ? quantity : -quantity,
+                    InventoryStockType.RESERVED,
+                    serialNumber,
+                    transactionType,
+                    reason,
+                    referenceId
+                );
+
+                await entityManager.save(productStock);
+            });
+        } catch (error) {
+            if (error instanceof FlierlyException) {
+                throw error;
+            } else {
+                throw new FlierlyException((error as Error).message, HttpCodes.BAD_REQUEST);
             }
-
-            this.validateStockConsistency(productStock);
-
-            await validateEntityInstance(productStock);
-
-            await this.inventoryLedgerService.newTransaction(
-                productId,
-                branchId,
-                updateType === "add" ? quantity : -quantity,
-                InventoryStockType.RESERVED,
-                serialNumber,
-                transactionType,
-                reason,
-                referenceId
-            );
-
-            await entityManager.save(productStock);
-        });
+        }
     }
 
     async updateDefective(
@@ -164,80 +130,46 @@ class ProductStockServiceImpl implements ProductStockService {
         serialNumber?: string,
         transactionManager?: EntityManager
     ): Promise<void> {
-        await this.databaseService.executeTransaction<void>(async (entityManagerLocal) => {
-            this.validatePostiveQty(quantity);
+        try {
+            await this.databaseService.executeTransaction<void>(async (entityManagerLocal) => {
+                this.validatePostiveQty(quantity);
 
-            let entityManager = transactionManager || entityManagerLocal;
+                let entityManager = transactionManager || entityManagerLocal;
 
-            let productStock = await this.getProductStock(productId, branchId);
-
-            const product = productStock.product;
-
-            if (product.isSerialized) {
-                this.validateSerializedProductContrainsts(quantity, serialNumber);
+                let productStock = await this.getProductStock(productId, branchId);
 
                 if (updateType === "add") {
-                    if (![InventoryStockTransactionType.SALES_RETURN_DEFECTIVE, InventoryStockTransactionType.MANUAL_ADJUSTMENT].includes(transactionType)) {
-                        throw new Error(`Products cannot be added to ${InventoryStockType.DEFECTIVE} with ${transactionType} type.`);
-                    };
-                    this.validateAvailableStock(productStock, 1);
-                    await this.serializedProductService.updateStatus(
-                        productId,
-                        branchId,
-                        serialNumber!,
-                        SerializedProductStatus.DEFECTIVE,
-                        referenceId,
-                        entityManager
-                    );
-                    productStock.defective += quantity;
-                } else {
-                    if (![InventoryStockTransactionType.PURCHASE_RETURN_DEFECTIVE, InventoryStockTransactionType.MANUAL_ADJUSTMENT].includes(transactionType)) {
-                        throw new Error(`Products cannot be removed from ${InventoryStockType.DEFECTIVE} with ${transactionType} type.`);
-                    };
-                    this.validateDefectiveStock(productStock, quantity);
-                    await this.serializedProductService.updateStatus(
-                        productId,
-                        branchId,
-                        serialNumber!,
-                        SerializedProductStatus.AVAILABLE,
-                        referenceId,
-                        entityManager
-                    );
-                    productStock.defective -= quantity;
-                }
-            } else {
-                if (updateType === "add") {
-                    if (![InventoryStockTransactionType.SALES_RETURN_DEFECTIVE, InventoryStockTransactionType.MANUAL_ADJUSTMENT].includes(transactionType)) {
-                        throw new Error(`Products cannot be added to ${InventoryStockType.DEFECTIVE} with ${transactionType} type.`);
-                    };
                     this.validateAvailableStock(productStock, quantity);
                     productStock.defective += quantity;
                 } else {
-                    if (![InventoryStockTransactionType.PURCHASE_RETURN_DEFECTIVE, InventoryStockTransactionType.MANUAL_ADJUSTMENT].includes(transactionType)) {
-                        throw new Error(`Products cannot be removed from ${InventoryStockType.DEFECTIVE} with ${transactionType} type.`);
-                    };
                     this.validateDefectiveStock(productStock, quantity);
                     productStock.defective -= quantity;
                 }
+
+                this.validateStockConsistency(productStock);
+
+                await validateEntityInstance(productStock);
+
+                await this.inventoryLedgerService.newTransaction(
+                    productId,
+                    branchId,
+                    updateType === "add" ? quantity : -quantity,
+                    InventoryStockType.DEFECTIVE,
+                    serialNumber,
+                    transactionType,
+                    reason,
+                    referenceId
+                );
+
+                await entityManager.save(productStock);
+            });
+        } catch (error) {
+            if (error instanceof FlierlyException) {
+                throw error;
+            } else {
+                throw new FlierlyException((error as Error).message, HttpCodes.BAD_REQUEST);
             }
-
-            this.validateStockConsistency(productStock);
-
-            await validateEntityInstance(productStock);
-
-            await this.inventoryLedgerService.newTransaction(
-                productId,
-                branchId,
-                updateType === "add" ? quantity : -quantity,
-                InventoryStockType.DEFECTIVE,
-                serialNumber,
-                transactionType,
-                reason,
-                referenceId
-            );
-
-            await entityManager.save(productStock);
-        });
+        }
     };
 
     async updateOnHand(
@@ -245,7 +177,9 @@ class ProductStockServiceImpl implements ProductStockService {
         branchId: number,
         quantity: number,
         updateType: "add" | "remove",
-        transactionType: InventoryStockTransactionType.TRANSFER_IN
+        transactionType:
+            InventoryStockTransactionType.TRANSFER_IN
+            | InventoryStockTransactionType.TRANSFER_OUT
             | InventoryStockTransactionType.MANUAL_ADJUSTMENT
             | InventoryStockTransactionType.PURCHASE_INVOICE
             | InventoryStockTransactionType.PURCHASE_RETURN_OK
@@ -257,63 +191,14 @@ class ProductStockServiceImpl implements ProductStockService {
         serialNumber?: string,
         transactionManager?: EntityManager
     ): Promise<void> {
-        await this.databaseService.executeTransaction<void>(async (entityManagerLocal) => {
-            this.validatePostiveQty(quantity);
+        try {
+            await this.databaseService.executeTransaction<void>(async (entityManagerLocal) => {
+                this.validatePostiveQty(quantity);
 
-            let entityManager = transactionManager || entityManagerLocal;
+                let entityManager = transactionManager || entityManagerLocal;
 
-            let productStock = await this.getProductStock(productId, branchId);
+                let productStock = await this.getProductStock(productId, branchId);
 
-            const product = productStock.product;
-
-            if (product.isSerialized) {
-                this.validateSerializedProductContrainsts(quantity, serialNumber);
-
-                if (updateType === "add") {
-                    if (![
-                        InventoryStockTransactionType.TRANSFER_IN,
-                        InventoryStockTransactionType.MANUAL_ADJUSTMENT,
-                        InventoryStockTransactionType.PURCHASE_INVOICE,
-                        InventoryStockTransactionType.SALES_RETURN_OK,
-                    ].includes(transactionType)) {
-                        throw new Error(`Products cannot be added to ${InventoryStockType.ON_HAND} with ${transactionType} type.`);
-                    };
-
-                    await this.serializedProductService.updateStatus(
-                        productId,
-                        branchId,
-                        serialNumber!,
-                        SerializedProductStatus.AVAILABLE,
-                        referenceId,
-                        entityManager
-                    );
-                    productStock.onHand += quantity;
-                } else {
-                    this.validateAvailableStock(productStock, quantity);
-                    let serializedStatus: SerializedProductStatus | undefined;
-                    if ([InventoryStockTransactionType.STOCK_DISPOSAL].includes(transactionType)) {
-                        serializedStatus = SerializedProductStatus.DISPOSED;
-                    };
-                    if ([InventoryStockTransactionType.SALES_INVOICE].includes(transactionType)) {
-                        serializedStatus = SerializedProductStatus.SOLD;
-                    };
-                    if ([InventoryStockTransactionType.TRANSFER_OUT].includes(transactionType)) {
-                        serializedStatus = SerializedProductStatus.AVAILABLE
-                    };
-                    if (!serializedStatus) {
-                        throw new Error(`Products cannot be removed from ${InventoryStockType.ON_HAND} with ${transactionType} type.`);
-                    };
-                    await this.serializedProductService.updateStatus(
-                        productId,
-                        branchId,
-                        serialNumber!,
-                        serializedStatus,
-                        referenceId,
-                        entityManager
-                    );
-                    productStock.onHand -= quantity;
-                }
-            } else {
                 if (updateType === "add") {
                     if (![
                         InventoryStockTransactionType.TRANSFER_IN,
@@ -326,33 +211,40 @@ class ProductStockServiceImpl implements ProductStockService {
                     productStock.onHand += quantity;
                 } else {
                     if (![
+                        InventoryStockTransactionType.TRANSFER_OUT,
                         InventoryStockTransactionType.STOCK_DISPOSAL,
                         InventoryStockTransactionType.SALES_INVOICE,
-                        InventoryStockTransactionType.TRANSFER_OUT,
                     ].includes(transactionType)) {
                         throw new Error(`Products cannot be removed from ${InventoryStockType.ON_HAND} with ${transactionType} type.`);
                     };
                     this.validateAvailableStock(productStock, quantity);
                     productStock.onHand -= quantity;
                 }
+
+                this.validateStockConsistency(productStock);
+
+                await validateEntityInstance(productStock);
+                await entityManager.save(productStock);
+
+                await this.inventoryLedgerService.newTransaction(
+                    productId,
+                    branchId,
+                    updateType === "add" ? quantity : -quantity,
+                    InventoryStockType.ON_HAND,
+                    serialNumber,
+                    transactionType,
+                    reason,
+                    referenceId
+                );
+            });
+        } catch (error) {
+            if (error instanceof FlierlyException) {
+                throw error;
+            } else {
+                throw new FlierlyException((error as Error).message, HttpCodes.BAD_REQUEST);
             }
 
-            this.validateStockConsistency(productStock);
-
-            await validateEntityInstance(productStock);
-            await entityManager.save(productStock);
-
-            await this.inventoryLedgerService.newTransaction(
-                productId,
-                branchId,
-                updateType === "add" ? quantity : -quantity,
-                InventoryStockType.ON_HAND,
-                serialNumber,
-                transactionType,
-                reason,
-                referenceId
-            );
-        });
+        }
     };
 
     async initializeStock(productId: number, branchId: number, entityManager?: EntityManager): Promise<ProductStock> {
@@ -384,221 +276,6 @@ class ProductStockServiceImpl implements ProductStockService {
             throw error;
         }
     };
-
-    async updateStock(
-        productId: number,
-        branchId: number,
-        quantity: number,
-        stockType: InventoryStockType,
-        serialNumber?: string,
-        transactionType?: InventoryStockTransactionType,
-        reason?: string,
-        referenceId?: string
-    ): Promise<ProductStock> {
-        try {
-            const updatedProductStock = await this.databaseService.executeTransaction<ProductStock>(async (entityManager) => {
-                // Retrieve or initialize product stock
-                let isInitializedForFirstTime;
-                let productStock = await entityManager.findOne(ProductStock, {
-                    where: { branch: { id: branchId }, product: { id: productId } },
-                    relations: ['product', "branch"],
-                });
-
-                if (!productStock) {
-                    await this.initializeStock(productId, branchId, entityManager);
-                    productStock = await entityManager.findOneOrFail(ProductStock, {
-                        where: { branch: { id: branchId }, product: { id: productId } },
-                        relations: ['product', "branch"],
-                    });
-                    isInitializedForFirstTime = true;
-                }
-
-                const product = productStock.product;
-
-                if (product.type === ProductType.INTANGIBLE) {
-                    if (isInitializedForFirstTime) {
-                        // Save updated stock and create ledger entry
-                        await validateEntityInstance(productStock);
-                        const updatedProductStock = await entityManager.save(productStock);
-                        await this.inventoryLedgerService.newTransaction(
-                            productId,
-                            branchId,
-                            9999,
-                            InventoryStockType.ON_HAND,
-                            undefined,
-                            InventoryStockTransactionType.MANUAL_ADJUSTMENT,
-                            `Intangible product initialization.`,
-                            undefined
-                        );
-                        return updatedProductStock;
-                    } else {
-                        throw new FlierlyException('Cannot update stock for intangible products', HttpCodes.BAD_REQUEST);
-                    }
-                }
-
-                const isSerialized = product.isSerialized;
-
-                if (isSerialized) {
-                    if (!serialNumber) {
-                        throw new FlierlyException('Serial number is required for serialized products', HttpCodes.BAD_REQUEST);
-                    }
-
-                    if (Math.abs(quantity) > 1) {
-                        throw new FlierlyException('Serialized products stock can only be updated one at a time', HttpCodes.BAD_REQUEST);
-                    }
-
-                    const serializedProductService = this.serializedProductService;
-
-                    switch (stockType) {
-                        case InventoryStockType.ON_HAND:
-                            if (quantity > 0) {
-                                await serializedProductService.pullBackDisposedOrCreateNew(
-                                    productId,
-                                    branchId,
-                                    serialNumber,
-                                    undefined,
-                                    entityManager
-                                );
-
-                                productStock.onHand += quantity;
-
-                            } else {
-                                await serializedProductService.updateStatus(
-                                    productId,
-                                    branchId,
-                                    serialNumber,
-                                    SerializedProductStatus.DISPOSED,
-                                    undefined,
-                                    entityManager
-                                );
-                                productStock.onHand += quantity;
-                            }
-                            break;
-
-                        case InventoryStockType.RESERVED:
-                            if (quantity > 0) {
-                                this.validateAvailableStock(productStock, 1);
-                                await serializedProductService.updateStatus(
-                                    productId,
-                                    branchId,
-                                    serialNumber,
-                                    SerializedProductStatus.RESERVED,
-                                    undefined,
-                                    entityManager
-                                );
-                                productStock.reserved += quantity;
-                            } else {
-                                this.validateReservedStock(productStock, quantity);
-                                await serializedProductService.updateStatus(
-                                    productId,
-                                    branchId,
-                                    serialNumber,
-                                    SerializedProductStatus.AVAILABLE,
-                                    undefined,
-                                    entityManager
-                                );
-                                productStock.reserved += quantity;
-                            }
-                            break;
-
-                        case InventoryStockType.DEFECTIVE:
-                            if (quantity > 0) {
-                                this.validateAvailableStock(productStock, 1);
-                                await serializedProductService.updateStatus(
-                                    productId,
-                                    branchId,
-                                    serialNumber,
-                                    SerializedProductStatus.DEFECTIVE,
-                                    undefined,
-                                    entityManager
-                                );
-                                productStock.defective += quantity;
-                            } else {
-                                this.validateDefectiveStock(productStock, quantity);
-                                await serializedProductService.updateStatus(
-                                    productId,
-                                    branchId,
-                                    serialNumber,
-                                    SerializedProductStatus.AVAILABLE,
-                                    undefined,
-                                    entityManager
-                                );
-                                productStock.defective += quantity;
-                            }
-                            break;
-
-                        default:
-                            throw new FlierlyException('Invalid stock type for serialized products', HttpCodes.BAD_REQUEST);
-                    }
-                } else {
-                    // Handle non-serialized products
-                    this.adjustNonSerializedStock(productStock, stockType, quantity);
-                }
-
-                this.validateStockConsistency(productStock);
-
-                // Save updated stock and create ledger entry
-                await validateEntityInstance(productStock);
-                const updatedProductStock = await entityManager.save(productStock);
-
-                await this.inventoryLedgerService.newTransaction(
-                    productId,
-                    branchId,
-                    quantity,
-                    stockType,
-                    serialNumber,
-                    transactionType,
-                    reason,
-                    referenceId
-                );
-
-                return updatedProductStock;
-            });
-
-            return updatedProductStock;
-        } catch (error) {
-            throw new FlierlyException(
-                `Failed to adjust stock: ${(error as Error).message}`,
-                HttpCodes.BAD_REQUEST,
-                JSON.stringify(error)
-            );
-        }
-    }
-
-    private adjustNonSerializedStock(productStock: ProductStock, stockType: InventoryStockType, quantity: number): void {
-        switch (stockType) {
-            case InventoryStockType.ON_HAND:
-                productStock.onHand += quantity;
-                break;
-
-            case InventoryStockType.RESERVED:
-                if (quantity > 0) {
-                    this.validateAvailableStock(productStock, quantity);
-                    productStock.reserved += quantity;
-                } else {
-                    this.validateReservedStock(productStock, quantity);
-                    productStock.reserved += quantity;
-                }
-                break;
-
-            case InventoryStockType.DEFECTIVE:
-                if (quantity > 0) {
-                    this.validateAvailableStock(productStock, quantity);
-                    productStock.defective += quantity;
-                } else {
-                    this.validateDefectiveStock(productStock, quantity);
-                    productStock.defective += quantity;
-                }
-                break;
-
-            case InventoryStockType.ON_ORDER:
-                productStock.onOrder += quantity;
-                break;
-
-            default:
-                throw new FlierlyException('Invalid stock type for non-serialized products', HttpCodes.BAD_REQUEST);
-        }
-    }
 
     private validateStockConsistency(productStock: ProductStock): void {
         if (productStock.onHand < productStock.reserved + productStock.defective) {
