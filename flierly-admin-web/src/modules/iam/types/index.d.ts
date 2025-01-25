@@ -3,7 +3,7 @@ type Privilege = {
   id: number
   isActive: boolean
   name: string
-  access: 'Create' | 'Read' | 'Update' | 'Delete' | 'Manage'
+  access: 'create' | 'read' | 'update' | 'delete' | 'manage'
   entity: string
   code: string
   roles?: Role[]

@@ -1,9 +1,9 @@
 export const accessOptions = [
-  { label: 'Create', value: 'Create' },
-  { label: 'Read', value: 'Read' },
-  { label: 'Update', value: 'Update' },
-  { label: 'Delete', value: 'Delete' },
-  { label: 'Manage', value: 'Manage' },
+  { label: 'Create', value: 'create' },
+  { label: 'Read', value: 'read' },
+  { label: 'Update', value: 'update' },
+  { label: 'Delete', value: 'delete' },
+  { label: 'Manage', value: 'manage' },
 ]
 
 export const statusFieldOptions = [

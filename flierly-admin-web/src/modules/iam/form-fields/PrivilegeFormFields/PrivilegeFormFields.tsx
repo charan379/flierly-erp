@@ -59,11 +59,11 @@ const PrivilegeFormFields: React.FC<PrivilegeFormFieldsProps> = ({ disabledField
                 label={t('privilege.access')}
                 hasFeedback
                 options={[
-                    { label: t('privilege.access.create'), value: 'Create' },
-                    { label: t('privilege.access.read'), value: 'Read' },
-                    { label: t('privilege.access.update'), value: 'Update' },
-                    { label: t('privilege.access.delete'), value: 'Delete' },
-                    { label: t('privilege.access.manage'), value: 'Manage' },
+                    { label: t('privilege.access.create'), value: 'create' },
+                    { label: t('privilege.access.read'), value: 'read' },
+                    { label: t('privilege.access.update'), value: 'update' },
+                    { label: t('privilege.access.delete'), value: 'delete' },
+                    { label: t('privilege.access.manage'), value: 'manage' },
                 ]}
                 rules={[{ required: true, message: t('entity.accessRequired') }]}
                 disabled={(isEditForm && !hasPermission(pr('privilege.manage'))) || disabledFields?.includes('access')}
