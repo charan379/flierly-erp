@@ -18,10 +18,10 @@ export type TransformerKey =
   | 'notBetween'
   | 'isNull'
   | 'isNotNull'
-  | 'like'
-  | 'notLike'
-  | 'ilike'
-  | 'notIlike'
+  | 'contains'
+  | 'notContains'
+  | 'iContains'
+  | 'notIContains'
   | 'startsWith'
   | 'notStartsWith'
   | 'endsWith'
@@ -163,30 +163,30 @@ const queryTransformers: Record<TransformerKey, SearchTransformKeyFn> = {
     return null
   },
 
-  like: (value: string, namePath: string): Record<string, any> | null => {
+  contains: (value: string, namePath: string): Record<string, any> | null => {
     if (value && value?.trim?.()?.length > 0) {
-      return { [namePath]: { $like: `%${value}%` } }
+      return { [namePath]: { $contains: `%${value}%` } }
     }
     return null
   },
 
-  notLike: (value: string, namePath: string): Record<string, any> | null => {
+  notContains: (value: string, namePath: string): Record<string, any> | null => {
     if (value && value?.trim?.()?.length > 0) {
-      return { [namePath]: { $notLike: `%${value}%` } }
+      return { [namePath]: { $notContains: `%${value}%` } }
     }
     return null
   },
 
-  ilike: (value: string, namePath: string): Record<string, any> | null => {
+  iContains: (value: string, namePath: string): Record<string, any> | null => {
     if (value && value?.trim?.()?.length > 0) {
-      return { [namePath]: { $ilike: `%${value}%` } }
+      return { [namePath]: { $iContains: `%${value}%` } }
     }
     return null
   },
 
-  notIlike: (value: string, namePath: string): Record<string, any> | null => {
+  notIContains: (value: string, namePath: string): Record<string, any> | null => {
     if (value && value?.trim?.()?.length > 0) {
-      return { [namePath]: { $notIlike: `%${value}%` } }
+      return { [namePath]: { $notIContains: `%${value}%` } }
     }
     return null
   },

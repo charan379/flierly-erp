@@ -12,11 +12,19 @@ export const createTextQueryBuilderField = <T,>(params: { label: string, name: k
                 formField: { input: { type: 'Text' } },
             },
             {
-                condition: { label: translate('like'), namePath: 'like' },
+                condition: { label: translate('contains'), namePath: 'contains' },
                 formField: { input: { type: 'Text' } },
             },
             {
-                condition: { label: translate('ilike'), namePath: 'ilike' },
+                condition: { label: translate('notContains'), namePath: 'notContains' },
+                formField: { input: { type: 'Text' } },
+            },
+            {
+                condition: { label: translate('iContains'), namePath: 'iContains' },
+                formField: { input: { type: 'Text' } },
+            },
+            {
+                condition: { label: translate('notIContains'), namePath: 'notIContains' },
                 formField: { input: { type: 'Text' } },
             },
             {

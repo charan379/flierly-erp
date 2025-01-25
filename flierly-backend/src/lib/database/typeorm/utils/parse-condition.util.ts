@@ -17,10 +17,10 @@ const operatorMap: Record<string, string> = {
     $lt: '<',
     $between: 'BETWEEN',
     $notBetween: 'NOT BETWEEN',
-    $like: 'LIKE',
-    $notLike: 'NOT LIKE',
-    $ilike: 'ILIKE',
-    $notIlike: 'NOT ILIKE',
+    $contains: 'LIKE',
+    $notContains: 'NOT LIKE',
+    $iContains: 'ILIKE',
+    $notIContains: 'NOT ILIKE',
     $startsWith: 'LIKE',
     $notStartsWith: 'NOT LIKE',
     $endsWith: 'LIKE',
@@ -214,7 +214,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                 } else {
                     throw new Error(`${conditionOperator} operator must have an array with two values `);
                 }
-            case '$like':
+            case '$contains':
                 // Check if the condition value is a string
                 if (typeof conditionValue === 'string') {
                     return (conditionFor === "qb")
@@ -223,7 +223,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                 } else {
                     throw new Error(`${conditionOperator} operator must have a string value`);
                 }
-            case '$notLike':
+            case '$notContains':
                 // Check if the condition value is a string
                 if (typeof conditionValue === 'string') {
                     return (conditionFor === "qb")
@@ -232,7 +232,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                 } else {
                     throw new Error(`${conditionOperator} operator must have a string value`);
                 }
-            case '$ilike':
+            case '$iContains':
                 // Check if the condition value is a string
                 if (typeof conditionValue === 'string') {
                     return (conditionFor === "qb")
@@ -241,7 +241,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                 } else {
                     throw new Error(`${conditionOperator} operator must have a string value`);
                 }
-            case '$notIlike':
+            case '$notIContains':
                 // Check if the condition value is a string
                 if (typeof conditionValue === 'string') {
                     return (conditionFor === "qb")

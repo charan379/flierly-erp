@@ -1,6 +1,8 @@
+import { TransformerKey } from "./query-transformers"
+
 type QueryValue = string | number | Date | undefined
 
-const reverseQueryTransformers = {
+const reverseQueryTransformers: Record<TransformerKey, any> & { getProperty: any } = {
   // Helper function to safely access a nested property in an object
   getProperty<T extends object, K extends keyof T>(obj: T, key: K): T[K] | undefined {
     return obj && key in obj ? obj[key] : undefined
@@ -71,20 +73,20 @@ const reverseQueryTransformers = {
     return value?.$isNotNull === true ? true : undefined
   },
 
-  like: (value: { $like: string }): string | undefined => {
-    return typeof value?.$like === 'string' ? value.$like.replace(/%/g, '') : undefined
+  contains: (value: { $contains: string }): string | undefined => {
+    return typeof value?.$contains === 'string' ? value.$contains.replace(/%/g, '') : undefined
   },
 
-  notLike: (value: { $notLike: string }): string | undefined => {
-    return typeof value?.$notLike === 'string' ? value.$notLike.replace(/%/g, '') : undefined
+  notContains: (value: { $notContains: string }): string | undefined => {
+    return typeof value?.$notContains === 'string' ? value.$notContains.replace(/%/g, '') : undefined
   },
 
-  ilike: (value: { $ilike: string }): string | undefined => {
-    return typeof value?.$ilike === 'string' ? value.$ilike.replace(/%/g, '') : undefined
+  iContains: (value: { $iContains: string }): string | undefined => {
+    return typeof value?.$iContains === 'string' ? value.$iContains.replace(/%/g, '') : undefined
   },
 
-  notIlike: (value: { $notIlike: string }): string | undefined => {
-    return typeof value?.$notIlike === 'string' ? value.$notIlike.replace(/%/g, '') : undefined
+  notIContains: (value: { $notIContains: string }): string | undefined => {
+    return typeof value?.$notIContains === 'string' ? value.$notIContains.replace(/%/g, '') : undefined
   },
 
   startsWith: (value: { $startsWith: string }): string | undefined => {
@@ -117,6 +119,18 @@ const reverseQueryTransformers = {
 
   notRegexi: (value: { $notRegex: string }): string | undefined => {
     return typeof value?.$notRegex === 'string' ? value.$notRegex : undefined
+  },
+
+  textValue: (value: string): string | undefined => {
+    return typeof value === 'string' ? value : undefined
+  },
+
+  trimTextValue: (value: string): string | undefined => {
+    return typeof value === 'string' ? value.trim() : undefined
+  },
+
+  notInArray: (value: { $nin: unknown[] }): unknown[] | undefined => {
+    return Array.isArray(value?.$nin) ? value.$nin : undefined
   },
 }
 

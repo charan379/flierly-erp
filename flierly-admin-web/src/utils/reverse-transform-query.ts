@@ -57,17 +57,17 @@ const reverseTransformQuery = (query: Query): TransformedQuery | undefined => {
         case '$isNotNull':
           result[key] = reverseQueryTransformers.isNotNull(value)
           break
-        case '$like':
-          result[key] = reverseQueryTransformers.like(value)
+        case '$contains':
+          result[key] = reverseQueryTransformers.contains(value)
           break
-        case '$notLike':
-          result[key] = reverseQueryTransformers.notLike(value)
+        case '$notContains':
+          result[key] = reverseQueryTransformers.notContains(value)
           break
-        case '$ilike':
-          result[key] = reverseQueryTransformers.ilike(value)
+        case '$iContains':
+          result[key] = reverseQueryTransformers.iContains(value)
           break
-        case '$notIlike':
-          result[key] = reverseQueryTransformers.notIlike(value)
+        case '$notIContains':
+          result[key] = reverseQueryTransformers.notIContains(value)
           break
         case '$startsWith':
           result[key] = reverseQueryTransformers.startsWith(value)
