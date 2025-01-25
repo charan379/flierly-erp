@@ -24,7 +24,7 @@ const inactivate = async (entity: EntityTarget<ObjectLiteral>, req: Request, res
       apiResponseBuilder({
         success: true,
         result,
-        message: `${result.affected} ${entity}'s inactivated successfully.`,
+        message: `${result.affected} ${typeof entity === "function" ? entity.name : entity}'s inactivated successfully.`,
         controller: 'CRUDController.inactivate',
         httpCode: HttpCodes.OK,
         error: null,

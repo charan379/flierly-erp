@@ -1,6 +1,6 @@
 import { serverConfig } from '@/config/server.config'
 import { getToken, listenToAuthChanges } from '@/modules/auth/service/auth-state.service'
-import handleApiResponse from '@/utils/handlers/api-response.handler'
+import handleApiResponse from '@/modules/core/utils/handlers/api-response.handler'
 import axios from 'axios'
 
 // Create Axios instance with default headers

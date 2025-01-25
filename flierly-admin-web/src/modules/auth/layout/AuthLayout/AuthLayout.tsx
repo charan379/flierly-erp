@@ -1,11 +1,11 @@
 import React from 'react'
-import LangSelector from '@/features/Locale/components/LangSelector'
-import ThemeToggler from '@/features/Theme/components/ThemeToggler'
-import useLocale from '@/features/Locale/hooks/useLocale'
 import SideContent from '../../components/SideContent'
 import { Layout, Typography, Col, Divider, Row } from 'antd'
 import { ErrorBoundary } from 'react-error-boundary'
-import ErrorFallback from '@/components/ErrorFallback'
+import ErrorFallback from '@/modules/core/components/ErrorFallback'
+import useLocale from '@/modules/core/features/Locale/hooks/useLocale'
+import LangSelector from '@/modules/core/features/Locale/components/LangSelector'
+import ThemeToggler from '@/modules/core/features/Theme/components/ThemeToggler'
 
 const { Content, Header } = Layout
 const { Title } = Typography

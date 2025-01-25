@@ -1,6 +1,6 @@
 import { HttpError } from 'http-errors';
 import { ValidationError } from 'class-validator';
-import { QueryFailedError } from 'typeorm';
+import { QueryFailedError, TypeORMError } from 'typeorm';
 import HttpCodes from '@/constants/http-codes.enum';
 import FlierlyException from '@/lib/flierly.exception';
 import { EnvConfig } from '@/config/env';
@@ -10,10 +10,10 @@ import buildValidationErrorsResult from './validation-errors-result.builder';
 /**
  * Builds a standardized error message from various error types.
  *
- * @param {Error|HttpError|FlierlyException|ValidationError|QueryFailedError} error
+ * @param {Error|HttpError|FlierlyException|ValidationError|QueryFailedError|TypeORMError} error
  * @returns {ErrorMessage}
  */
-function errorMessageBuilder(error: Error | HttpError | FlierlyException | ValidationError | QueryFailedError): ErrorMessage {
+function errorMessageBuilder(error: Error | HttpError | FlierlyException | ValidationError | QueryFailedError | TypeORMError): ErrorMessage {
   let errorMessage: ErrorMessage;
 
   // Handle specific error types
@@ -25,6 +25,8 @@ function errorMessageBuilder(error: Error | HttpError | FlierlyException | Valid
     errorMessage = handleValidationError(error);
   } else if (error instanceof QueryFailedError) {
     errorMessage = handleQueryFailedError(error);
+  } else if (error instanceof TypeORMError) {
+    errorMessage = handleTypeORMError(error);
   } else {
     // General Error handling
     errorMessage = handleGeneralError(error);
@@ -47,6 +49,15 @@ function handleHttpError(error: HttpError): ErrorMessage {
   return {
     name: HttpError.name,
     httpCode: error.statusCode,
+    message: error.message,
+    stack: error.stack,
+  };
+}
+
+function handleTypeORMError(error: TypeORMError): ErrorMessage {
+  return {
+    name: TypeORMError.name,
+    httpCode: HttpCodes.BAD_REQUEST,
     message: error.message,
     stack: error.stack,
   };

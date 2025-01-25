@@ -1,4 +1,4 @@
-import { AMQueryFieldConfig, createBooleanAMQueryField, createNumericAMQueryField, createTextAMQueryField } from "@/utils/create-assignment-manager-queryfield";
+import { AMQueryFieldConfig, createBooleanAMQueryField, createNumericAMQueryField, createTextAMQueryField } from "@/modules/core/utils/create-assignment-manager-queryfield";
 
 const createRoleAMQueryFields = (translate: (value: string) => string): AMQueryFieldConfig<Role>[] => {
 

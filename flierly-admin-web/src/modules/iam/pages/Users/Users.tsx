@@ -1,16 +1,16 @@
-import CrudModule from '@/features/CrudModule'
 import React, { ComponentType, LazyExoticComponent, Suspense } from 'react'
-import PageLoader from '@/components/PageLoader'
-import { CrudTableProps } from '@/features/CrudTable/CrudTable'
+import PageLoader from '@/modules/core/components/PageLoader'
 import createUserTableColumns from '../../config/user/create-user-table-columns'
-import useLocale from '@/features/Locale/hooks/useLocale'
 import { useAuth } from '@/modules/auth/hooks/useAuth'
-import createUserQueryFields from '../../config/user/create-user-queryfields'
+import createUserQueryBuilderFields from '../../config/user/create-user-queryfields'
 import UserFormFields from '../../form-fields/UserFormFields/UserFormFields'
 import { Form } from 'antd'
+import { CrudTableProps } from '@/modules/core/features/CrudTable/CrudTable'
+import useLocale from '@/modules/core/features/Locale/hooks/useLocale'
+import CrudModule from '@/modules/core/features/CrudModule'
 
 // Lazy load CrudTable
-const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<User>>> = React.lazy(() => import('@/features/CrudTable'))
+const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<User>>> = React.lazy(() => import('@/modules/core/features/CrudTable'))
 
 const Users: React.FC = () => {
   const { translate } = useLocale();
@@ -56,7 +56,7 @@ const Users: React.FC = () => {
             formFields: <UserFormFields formInstance={editFormInstace} isEditForm />,
             formInstance: editFormInstace
           }}
-          queryFormFields={createUserQueryFields(translate)}
+          queryFormFields={createUserQueryBuilderFields(translate)}
         />
       </Suspense>
     </CrudModule>

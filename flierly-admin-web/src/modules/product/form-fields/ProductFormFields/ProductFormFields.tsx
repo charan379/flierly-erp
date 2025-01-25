@@ -1,14 +1,14 @@
-import useLocale from '@/features/Locale/hooks/useLocale';
-import SelectRemoteOptions from '@/features/SelectRemoteOptions';
-import fetchEntityRecordsAsOptions, { ProcessResultFunction } from '@/features/SelectRemoteOptions/utils/fetch-entity-rows-as-options';
+import useLocale from '@/modules/core/features/Locale/hooks/useLocale';
 import { useAuth } from '@/modules/auth/hooks/useAuth';
-import entityExistenceValidator from '@/utils/entity-existence.validator';
-import vr from '@/utils/get-validation-regex.util';
+import entityExistenceValidator from '@/modules/core/utils/entity-existence.validator';
+import vr from '@/modules/core/utils/get-validation-regex.util';
 import { ProFormDependency, ProFormDigit, ProFormItem, ProFormSwitch, ProFormText, ProFormTextArea } from '@ant-design/pro-components';
 import { Form, FormInstance } from 'antd';
 import React from 'react';
 import ProductCategoryFormFields from '../ProductCategoryFormFields';
 import ProductSubCategoryFormFields from '../ProductSubCategoryFormFields';
+import SelectRemoteOptions from '@/modules/core/features/SelectRemoteOptions';
+import fetchEntityRecordsAsOptions, { ProcessResultFunction } from '@/modules/core/features/SelectRemoteOptions/utils/fetch-entity-rows-as-options';
 
 export interface ProductFormFieldsProps {
     formInstance?: FormInstance<Product>;

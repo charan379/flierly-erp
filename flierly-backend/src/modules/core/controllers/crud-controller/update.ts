@@ -24,7 +24,7 @@ const update = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Re
       apiResponseBuilder({
         success: true,
         result,
-        message: `${entity} updated successfully with ID: ${id}`,
+        message: `${typeof entity === "function" ? entity.name : entity} updated successfully with ID: ${id}`,
         controller: 'CRUD.UpdateController',
         httpCode: HttpCodes.OK,
         error: null,

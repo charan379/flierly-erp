@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios'
 import { serverConfig } from '@/config/server.config'
-import handleApiResponse from '@/utils/handlers/api-response.handler'
+import handleApiResponse from '@/modules/core/utils/handlers/api-response.handler'
 
 // Create an axios instance with the base URL from server configuration
 const api: AxiosInstance = axios.create({

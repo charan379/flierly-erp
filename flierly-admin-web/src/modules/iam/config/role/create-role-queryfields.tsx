@@ -1,7 +1,7 @@
-import { QueryFieldConfig } from '@/features/QueryBuilder/QueryBuilder'
-import { createBooleanQueryBuilderField, createDateQueryBuilderField, createNumberQueryBuilderField, createTextQueryBuilderField } from '@/utils/create-query-builder-field'
+import { QueryBuilderFieldConfig } from '@/modules/core/features/QueryBuilder/QueryBuilder'
+import { createBooleanQueryBuilderField, createDateQueryBuilderField, createNumberQueryBuilderField, createTextQueryBuilderField } from '@/modules/core/utils/create-query-builder-field'
 
-const createRoleQueryFields = (translate: (value: string) => string): QueryFieldConfig<Role>[] => [
+const createRoleQueryBuilderFields = (translate: (value: string) => string): QueryBuilderFieldConfig<Role>[] => [
   // id
   createNumberQueryBuilderField({
     label: translate('id'),
@@ -40,4 +40,4 @@ const createRoleQueryFields = (translate: (value: string) => string): QueryField
   }),
 ]
 
-export default createRoleQueryFields
+export default createRoleQueryBuilderFields

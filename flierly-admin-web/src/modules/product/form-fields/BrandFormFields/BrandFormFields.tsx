@@ -1,10 +1,10 @@
-import useLocale from '@/features/Locale/hooks/useLocale';
 import { useAuth } from '@/modules/auth/hooks/useAuth';
 import { ProFormDigit, ProFormSwitch, ProFormText, ProFormTextArea } from '@ant-design/pro-components';
 import { FormInstance } from 'antd';
 import React from 'react';
-import vr from '@/utils/get-validation-regex.util';
-import entityExistenceValidator from '@/utils/entity-existence.validator';
+import vr from '@/modules/core/utils/get-validation-regex.util';
+import entityExistenceValidator from '@/modules/core/utils/entity-existence.validator';
+import useLocale from '@/modules/core/features/Locale/hooks/useLocale';
 
 
 export interface BrandFormFieldsProps {

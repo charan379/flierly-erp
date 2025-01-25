@@ -1,10 +1,10 @@
-import ProtectedRoute from '@/features/ProtectedRoute/ProtectedRoute'
-import PageUnderConstruction from '@/pages/PageUnderConstruction'
+import PageUnderConstruction from '@/modules/core/pages/PageUnderConstruction'
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Roles from '../pages/Roles'
 import Privileges from '../pages/Privileges'
 import Users from '../pages/Users'
+import ProtectedRoute from '@/modules/core/features/ProtectedRoute/ProtectedRoute'
 
 const IamRoutes: React.FC = () => {
   return (

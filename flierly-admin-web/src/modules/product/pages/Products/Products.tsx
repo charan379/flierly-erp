@@ -1,20 +1,19 @@
-import PageLoader from '@/components/PageLoader';
-import CrudModule from '@/features/CrudModule';
-import { CrudTableProps } from '@/features/CrudTable/CrudTable';
-import useLocale from '@/features/Locale/hooks/useLocale';
+import PageLoader from '@/modules/core/components/PageLoader';
 import React, { ComponentType, LazyExoticComponent, Suspense } from 'react'
 import createProductTableColumns from '../../config/product/create-product-tablecolumns';
 import { Form } from 'antd';
 import ProductFormFields from '../../form-fields/ProductFormFields';
+import { CrudTableProps } from '@/modules/core/features/CrudTable/CrudTable';
+import useLocale from '@/modules/core/features/Locale/hooks/useLocale';
+import CrudModule from '@/modules/core/features/CrudModule';
 
-const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<Product>>> = React.lazy(() => import('@/features/CrudTable'))
+const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<Product>>> = React.lazy(() => import('@/modules/core/features/CrudTable'));
 
 const Products: React.FC = () => {
     const { translate: t } = useLocale();
     const [addFormInstance] = Form.useForm<Product>();
     const [editFormInstace] = Form.useForm<Product>();
 
-    console.log("re-rendered-products")
     return (
         <CrudModule header title={'products'} menuKeys={['product']}>
             <Suspense fallback={<PageLoader />}>

@@ -3,7 +3,7 @@ import { ModalForm, ProFormText } from '@ant-design/pro-components'
 import { Button } from 'antd'
 import userService from '../../service/user.service'
 import { LockTwoTone } from '@ant-design/icons'
-import useLocale from '@/features/Locale/hooks/useLocale'
+import useLocale from '@/modules/core/features/Locale/hooks/useLocale'
 
 interface UserPasswordUpdateProps {
   userId: number

@@ -1,5 +1,5 @@
 import { QueryFieldConfig } from "@/features/QueryBuilder/QueryBuilder"
-import { createBooleanQueryBuilderField, createDateQueryBuilderField, createNumberQueryBuilderField, createTextQueryBuilderField } from "@/utils/create-query-builder-field"
+import { createBooleanQueryBuilderField, createDateQueryBuilderField, createNumberQueryBuilderField, createTextQueryBuilderField } from "@/modules/core/utils/create-query-builder-field"
 
 
 const createProductCategoryQueryFields = (translate: (value: string) => string): QueryFieldConfig<ProductCategory>[] => {

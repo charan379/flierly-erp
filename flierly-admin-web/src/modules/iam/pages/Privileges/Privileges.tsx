@@ -1,15 +1,15 @@
-import CrudModule from '@/features/CrudModule'
 import React, { ComponentType, LazyExoticComponent, Suspense } from 'react'
 import createPrivilegeTableColumns from '../../config/privilege/create-privilege-tablecolumns'
-import createPrivilegeQueryFields from '../../config/privilege/create-privilege-queryfields'
-import { CrudTableProps } from '@/features/CrudTable/CrudTable'
-import PageLoader from '@/components/PageLoader'
-import useLocale from '@/features/Locale/hooks/useLocale'
+import createPrivilegeBuilderQueryFields from '../../config/privilege/create-privilege-queryfields'
+import PageLoader from '@/modules/core/components/PageLoader'
 import { useAuth } from '@/modules/auth/hooks/useAuth'
 import { Form } from 'antd'
 import PrivilegeFormFields from '../../form-fields/PrivilegeFormFields'
+import { CrudTableProps } from '@/modules/core/features/CrudTable/CrudTable'
+import useLocale from '@/modules/core/features/Locale/hooks/useLocale'
+import CrudModule from '@/modules/core/features/CrudModule'
 
-const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<Privilege>>> = React.lazy(() => import('@/features/CrudTable'))
+const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<Privilege>>> = React.lazy(() => import('@/modules/core/features/CrudTable'))
 
 const Privileges: React.FC = () => {
   const { translate } = useLocale();
@@ -55,7 +55,7 @@ const Privileges: React.FC = () => {
             formFields: <PrivilegeFormFields formInstance={editFormInstance} isEditForm />,
             formInstance: editFormInstance,
           }}
-          queryFormFields={createPrivilegeQueryFields(translate)}
+          queryFormFields={createPrivilegeBuilderQueryFields(translate)}
         />
       </Suspense>
     </CrudModule>

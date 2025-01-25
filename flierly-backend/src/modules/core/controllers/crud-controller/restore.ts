@@ -25,7 +25,7 @@ const restore = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: R
       apiResponseBuilder({
         success: true,
         result,
-        message: `${result.affected} ${entity}'s restored successfully.`,
+        message: `${result.affected} ${typeof entity === "function" ? entity.name : entity}'s restored successfully.`,
         controller: 'CRUDController.restore',
         httpCode: HttpCodes.CREATED,
         error: null,

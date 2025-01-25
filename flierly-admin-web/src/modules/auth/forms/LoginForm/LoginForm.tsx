@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
-import useLocale from '@/features/Locale/hooks/useLocale'
 import { InfoCircleOutlined, LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Checkbox, Flex, Form, Input } from 'antd'
-import Loading from '@/components/Loading'
+import Loading from '@/modules/core/components/Loading'
 import { useAuth } from '../../hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
 import { LoadingTypes } from '../../@types/loading'
-import regexConstants from '@/constants/validations.regex'
+import regexConstants from '@/modules/core/constants/validations.regex'
+import useLocale from '@/modules/core/features/Locale/hooks/useLocale'
 
 interface LoginFormProps {
   redirectOnLogin?: boolean

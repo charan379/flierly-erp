@@ -1,4 +1,4 @@
-import { createDescriptionColumn, createEntityColumn, createIdColumn, createNameColumn, createTimeStampColumn } from '@/utils/create-tablecolumn'
+import { createDescriptionColumn, createEntityColumn, createIdColumn, createNameColumn, createTimeStampColumn } from '@/modules/core/utils/create-tablecolumn'
 import { ProColumns } from '@ant-design/pro-components'
 import { Tag } from 'antd'
 

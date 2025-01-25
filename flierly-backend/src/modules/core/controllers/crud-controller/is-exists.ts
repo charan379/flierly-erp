@@ -26,7 +26,7 @@ const isExists = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: 
         success: true,
         result,
         controller: 'CRUD.ExistsController',
-        message: 'exists fetched successfully',
+        message: 'Exists fetched successfully',
         httpCode: HttpCodes.OK,
         error: null,
         req,

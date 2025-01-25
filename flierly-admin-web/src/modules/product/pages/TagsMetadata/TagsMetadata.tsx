@@ -1,13 +1,13 @@
-import PageLoader from '@/components/PageLoader';
-import CrudModule from '@/features/CrudModule';
-import { CrudTableProps } from '@/features/CrudTable/CrudTable';
-import useLocale from '@/features/Locale/hooks/useLocale';
+import PageLoader from '@/modules/core/components/PageLoader';
 import React, { ComponentType, LazyExoticComponent, Suspense } from 'react'
 import { Form } from 'antd';
 import createTagMetadataTableColumns from '../../config/tag-metadata/create-tag-metadata-tablecolumns';
 import TagMetadataFormFields from '../../form-fields/TagMetadataFormFields';
+import { CrudTableProps } from '@/modules/core/features/CrudTable/CrudTable';
+import useLocale from '@/modules/core/features/Locale/hooks/useLocale';
+import CrudModule from '@/modules/core/features/CrudModule';
 
-const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<TagMetadata>>> = React.lazy(() => import('@/features/CrudTable'))
+const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<TagMetadata>>> = React.lazy(() => import('@/modules/core/features/CrudTable'));
 
 const TagsMetadata: React.FC = () => {
     const { translate: t } = useLocale();

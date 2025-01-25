@@ -1,4 +1,4 @@
-import store from '@/redux/store'
+import store from "@/redux/store"
 
 /**
  * Listens to authentication state changes and executes the callback.

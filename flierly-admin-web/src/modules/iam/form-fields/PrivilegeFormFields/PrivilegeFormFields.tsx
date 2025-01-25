@@ -1,12 +1,12 @@
 import React from 'react';
 import { ProFormDigit, ProFormItem, ProFormSelect, ProFormSwitch, ProFormText } from '@ant-design/pro-components';
 import { FormInstance } from 'antd';
-import useLocale from '@/features/Locale/hooks/useLocale';
+import useLocale from '@/modules/core/features/Locale/hooks/useLocale';
 import { useAuth } from '@/modules/auth/hooks/useAuth';
-import vr from '@/utils/get-validation-regex.util';
-import entityExistenceValidator from '@/utils/entity-existence.validator';
-import SelectRemoteOptions from '@/features/SelectRemoteOptions';
-import fetchEntityOptions from '@/features/SelectRemoteOptions/utils/fetch-entity-options';
+import vr from '@/modules/core/utils/get-validation-regex.util';
+import entityExistenceValidator from '@/modules/core/utils/entity-existence.validator';
+import SelectRemoteOptions from '@/modules/core/features/SelectRemoteOptions';
+import fetchEntityOptions from '@/modules/core/features/SelectRemoteOptions/utils/fetch-entity-options';
 
 export interface PrivilegeFormFieldsProps {
     formInstance?: FormInstance<Privilege>;

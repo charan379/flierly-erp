@@ -12,7 +12,7 @@ const getAssociatedEntityRecordsPage = async (associatedEntity: EntityTarget<Obj
     try {
         const { associatedSideField, entity, entityRecordId, entitySideField, filters, limit, page, sort, type, withDeleted } = pageRequest;
         const associatedEntityRepo = AppDataSource.getRepository(associatedEntity); // Get the repository for the associatedEntity
-        const associatedEntityAlias = associatedEntity.toString().toLowerCase(); // Determine alias for the associatedEntity
+        const associatedEntityAlias = typeof associatedEntity === "function" ? associatedEntity.name.toLowerCase() : associatedEntity.toString().toLowerCase(); // Determine alias for the associatedEntity
 
         // Build query: join inverse entity with owning entity and filter by owning entity ID
         const qb = associatedEntityRepo.createQueryBuilder(associatedEntityAlias);
@@ -56,7 +56,7 @@ const getAssociatedEntityRecordsPage = async (associatedEntity: EntityTarget<Obj
 
         applySortOrderQB(qb, sort); // Apply sorting based on request
         qbFilters(qb, associatedEntityAlias, filters); // Apply filters based on request
-
+        if (withDeleted) qb.withDeleted(); // Include deleted records if requested
         // Execute the query and get paginated results
         const [results, total] = await qb.getManyAndCount();
 

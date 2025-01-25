@@ -1,6 +1,6 @@
 import { Modal, Typography } from 'antd'
 import React, { Suspense, useEffect, useState } from 'react'
-import PageLoader from '../../../../components/PageLoader'
+import PageLoader from '../../../core/components/PageLoader'
 import { useNavigate } from 'react-router-dom'
 
 const LoginForm = React.lazy(() => import('@/modules/auth/forms/LoginForm'))

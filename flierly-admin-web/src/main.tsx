@@ -2,11 +2,11 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import { ErrorBoundary } from 'react-error-boundary'
-import ErrorFallback from './components/ErrorFallback'
+import ErrorFallback from './modules/core/components/ErrorFallback/index.tsx'
 import { Provider } from 'react-redux'
-import store from './redux/store.ts'
 import { BrowserRouter } from 'react-router-dom'
-import AntdConfigProvider from './features/Theme/AntdConfigProvider.tsx'
+import store from './redux/store.ts'
+import AntdConfigProvider from './modules/core/features/Theme/AntdConfigProvider.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

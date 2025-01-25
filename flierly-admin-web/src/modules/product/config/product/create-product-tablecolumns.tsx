@@ -1,4 +1,4 @@
-import { createBooleanColumn, createDescriptionColumn, createIdColumn, createNameColumn, createTimeStampColumn } from '@/utils/create-tablecolumn'
+import { createBooleanColumn, createDescriptionColumn, createIdColumn, createNameColumn, createTimeStampColumn } from '@/modules/core/utils/create-tablecolumn'
 import { ProColumns } from '@ant-design/pro-components'
 
 const createProductTableColumns = (translate: (value: string) => string): ProColumns<Product>[] => {

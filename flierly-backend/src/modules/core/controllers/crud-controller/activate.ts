@@ -24,7 +24,7 @@ const activate = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: 
       apiResponseBuilder({
         success: true,
         result,
-        message: `${result.affected} ${entity}'s activated successfully.`,
+        message: `${result.affected} ${typeof entity === "function" ? entity.name : entity}'s activated successfully.`,
         controller: 'CRUDController.activate',
         httpCode: HttpCodes.OK,
         error: null,

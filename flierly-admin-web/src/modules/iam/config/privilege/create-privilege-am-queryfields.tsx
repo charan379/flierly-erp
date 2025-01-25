@@ -1,6 +1,6 @@
-import { accessOptions } from '@/constants/select-options.constant'
-import fetchEntityOptions from '@/features/SelectRemoteOptions/utils/fetch-entity-options'
-import { AMQueryFieldConfig, createBooleanAMQueryField, createNumericAMQueryField, createSelectAMQueryField, createSelectRemoteOptionsAMQueryField, createTextAMQueryField } from '@/utils/create-assignment-manager-queryfield'
+import { accessOptions } from '@/modules/core/constants/select-options.constant'
+import fetchEntityOptions from '@/modules/core/features/SelectRemoteOptions/utils/fetch-entity-options'
+import { AMQueryFieldConfig, createBooleanAMQueryField, createNumericAMQueryField, createSelectAMQueryField, createSelectRemoteOptionsAMQueryField, createTextAMQueryField } from '@/modules/core/utils/create-assignment-manager-queryfield'
 
 const createPrivilegeAMQueryFields = (translate: (value: string) => string): AMQueryFieldConfig<Privilege>[] => {
   return [

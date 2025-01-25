@@ -1,6 +1,5 @@
 import HttpCodes from '@/constants/http-codes.enum';
 import { idArraySchema } from '@/lib/joi/joi-schemas/common.joi.schema';
-import { AppDataSource } from '@/lib/database/typeorm/app-datasource';
 import apiResponseBuilder from '@/utils/builders/api-response.builder';
 import JoiSchemaValidator from '@/lib/joi/joi-schema.validator';
 import { NextFunction, Request, Response } from 'express';
@@ -18,14 +17,14 @@ const softDelete = async (entity: EntityTarget<ObjectLiteral>, req: Request, res
   try {
     // Validate the IDs to soft delete
     const validatedIds: number[] = await JoiSchemaValidator(idArraySchema, req.body, {}, 'CRUDController.delete');
-   
+
     const result = await crudService.deleteEntityRecords(entity, validatedIds);
-    
+
     return res.status(HttpCodes.OK).json(
       apiResponseBuilder({
         success: true,
         result,
-        message: `${result.affected} ${AppDataSource.getRepository(entity).metadata.name}'s deleted successfully.`,
+        message: `${result.affected} ${typeof entity === "function" ? entity.name : entity}'s deleted successfully.`,
         controller: 'CRUDController.delete',
         httpCode: HttpCodes.OK,
         error: null,

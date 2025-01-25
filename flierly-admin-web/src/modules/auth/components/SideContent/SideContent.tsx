@@ -1,6 +1,6 @@
 import React from 'react'
-import useLocale from '@/features/Locale/hooks/useLocale'
 import { Divider, Layout, Space, Typography } from 'antd'
+import useLocale from '@/modules/core/features/Locale/hooks/useLocale'
 
 const { Content } = Layout
 const { Text, Title } = Typography

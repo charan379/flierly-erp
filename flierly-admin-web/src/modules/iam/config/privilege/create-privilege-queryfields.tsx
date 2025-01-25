@@ -1,59 +1,59 @@
-import { QueryFieldConfig } from '@/features/QueryBuilder/QueryBuilder'
-import { accessOptions } from '@/constants/select-options.constant'
-import fetchEntityOptions from '@/features/SelectRemoteOptions/utils/fetch-entity-options'
-import { createBooleanQueryBuilderField, createDateQueryBuilderField, createNumberQueryBuilderField, createSelectQueryBuilderField, createSelectRemoteOptionsQueryBuilderField, createTextQueryBuilderField } from '@/utils/create-query-builder-field'
+import { accessOptions } from '@/modules/core/constants/select-options.constant'
+import { QueryBuilderFieldConfig } from '@/modules/core/features/QueryBuilder/QueryBuilder'
+import fetchEntityOptions from '@/modules/core/features/SelectRemoteOptions/utils/fetch-entity-options'
+import { createBooleanQueryBuilderField, createDateQueryBuilderField, createNumberQueryBuilderField, createSelectQueryBuilderField, createSelectRemoteOptionsQueryBuilderField, createTextQueryBuilderField } from '@/modules/core/utils/create-query-builder-field'
 
-const createPrivilegeQueryFields = (translate: (value: string) => string): QueryFieldConfig<Privilege>[] => {
+const createPrivilegeBuilderQueryFields = (t: (value: string) => string): QueryBuilderFieldConfig<Privilege>[] => {
   return [
     // id
     createNumberQueryBuilderField({
-      label: translate('id'),
+      label: t('id'),
       name: 'id'
     }),
     // name
     createTextQueryBuilderField({
-      label: translate('name'),
+      label: t('name'),
       name: 'name'
     }),
     // code
     createTextQueryBuilderField({
-      label: translate('code'),
+      label: t('code'),
       name: 'code'
     }),
     // isActive
     createBooleanQueryBuilderField({
-      label: translate('status'),
+      label: t('status'),
       name: 'isActive',
-      optionLabels: [translate('active'), translate('inactive')]
+      optionLabels: [t('active'), t('inactive')]
     }),
     // entity
     createSelectRemoteOptionsQueryBuilderField({
-      label: translate('entity'),
+      label: t('entity'),
       name: 'entity',
       asyncOptionsFetcher: fetchEntityOptions
     }),
     // access
     createSelectQueryBuilderField({
-      label: translate('access'),
+      label: t('access'),
       name: 'access',
       options: accessOptions
     }),
     // createdAt
     createDateQueryBuilderField({
-      label: translate('created_at'),
+      label: t('created_at'),
       name: 'createdAt'
     }),
     // updatedAt
     createDateQueryBuilderField({
-      label: translate('updated_at'),
+      label: t('updated_at'),
       name: 'updatedAt'
     }),
     // deletedAt
     createDateQueryBuilderField({
-      label: translate('deleted_at'),
+      label: t('deleted_at'),
       name: 'deletedAt'
     }),
   ]
 }
 
-export default createPrivilegeQueryFields
+export default createPrivilegeBuilderQueryFields;

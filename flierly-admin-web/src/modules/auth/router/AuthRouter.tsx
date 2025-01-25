@@ -1,6 +1,6 @@
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import PageNotFound from '@/pages/PageNotFound'
+import PageNotFound from '@/modules/core/pages/PageNotFound'
 import Login from '../pages/Login'
 import SignUp from '../pages/SignUp'
 

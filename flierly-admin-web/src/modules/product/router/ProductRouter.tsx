@@ -1,5 +1,4 @@
-import ProtectedRoute from '@/features/ProtectedRoute/ProtectedRoute'
-import PageUnderConstruction from '@/pages/PageUnderConstruction'
+import PageUnderConstruction from '@/modules/core/pages/PageUnderConstruction'
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Products from '../pages/Products'
@@ -7,6 +6,7 @@ import Brands from '../pages/Brands'
 import ProductCategories from '../pages/ProductCategories'
 import ProductSubcategories from '../pages/ProductSubcategories'
 import TagsMetadata from '../pages/TagsMetadata'
+import ProtectedRoute from '@/modules/core/features/ProtectedRoute/ProtectedRoute'
 
 const ProductRouter: React.FC = () => {
     return (

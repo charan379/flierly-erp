@@ -25,7 +25,7 @@ const create = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Re
       apiResponseBuilder({
         success: true,
         result,
-        message: `${entity} created successfully with ID: ${result?.id}`,
+        message: `${typeof entity === "function" ? entity.name : entity} created successfully with ID: ${result?.id}`,
         controller: 'CRUDController.create',
         httpCode: HttpCodes.CREATED,
         error: null,

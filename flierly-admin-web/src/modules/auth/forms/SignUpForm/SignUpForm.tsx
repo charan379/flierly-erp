@@ -1,9 +1,9 @@
 import React from 'react'
-import useLocale from '@/features/Locale/hooks/useLocale'
 import { InfoCircleOutlined, LockOutlined, MailOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Checkbox, Flex, Form, Input } from 'antd'
-import Loading from '@/components/Loading'
-import regexConstants from '@/constants/validations.regex'
+import Loading from '@/modules/core/components/Loading'
+import regexConstants from '@/modules/core/constants/validations.regex'
+import useLocale from '@/modules/core/features/Locale/hooks/useLocale'
 
 interface FormValues {
   username: string

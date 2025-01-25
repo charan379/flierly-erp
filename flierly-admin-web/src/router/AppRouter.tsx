@@ -1,11 +1,11 @@
-import ProtectedRoute from '@/features/ProtectedRoute/ProtectedRoute'
-import Dashboard from '@/layout/Dashboard'
+import ProtectedRoute from '@/modules/core/features/ProtectedRoute/ProtectedRoute'
+import Dashboard from '@/modules/core/layouts/Dashboard'
 import Login from '@/modules/auth/pages/Login'
 import SignUp from '@/modules/auth/pages/SignUp'
 import IamRoutes from '@/modules/iam/router/IamRoutes'
 import ProductRouter from '@/modules/product/router/ProductRouter'
-import PageNotFound from '@/pages/PageNotFound'
-import PageUnderConstruction from '@/pages/PageUnderConstruction'
+import PageNotFound from '@/modules/core/pages/PageNotFound'
+import PageUnderConstruction from '@/modules/core/pages/PageUnderConstruction'
 import { Route, Routes } from 'react-router-dom'
 
 const AppRouter = () => {
