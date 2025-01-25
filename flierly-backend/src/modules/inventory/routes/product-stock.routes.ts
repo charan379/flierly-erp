@@ -19,6 +19,8 @@ productStockRoutes.post(`/is-exists`, authorize(`product-stock.read`), crudContr
 productStockRoutes.post(`/page`, authorize(`product-stock.read`), crudController.page);
 productStockRoutes.patch("/update-defective", authorize(`product-stock.manage`), productStockController.updateDefective.bind(productStockController));
 productStockRoutes.patch("/update-on-hand", authorize(`product-stock.manage`), productStockController.updateOnHand.bind(productStockController));
+productStockRoutes.patch("/update-on-order", authorize(`product-stock.manage`), productStockController.updateOnOrder.bind(productStockController));
+productStockRoutes.patch("/update-reserve", authorize(`product-stock.manage`), productStockController.updateReserve.bind(productStockController));
 
 
 export default productStockRoutes;

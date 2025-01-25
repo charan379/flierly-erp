@@ -10,7 +10,7 @@ interface ProductStockService {
         branchId: number,
         quantity: number,
         updateType: "add" | "remove",
-        transactionType: InventoryStockTransactionType.SALES_ORDER | InventoryStockTransactionType.MANUAL_ADJUSTMENT,
+        transactionType: InventoryStockTransactionType.SALES_ORDER | InventoryStockTransactionType.SALES_INVOICE | InventoryStockTransactionType.MANUAL_ADJUSTMENT,
         reason: string,
         referenceId: string,
         serialNumber?: string,
@@ -42,6 +42,20 @@ interface ProductStockService {
             | InventoryStockTransactionType.SALES_RETURN_OK
             | InventoryStockTransactionType.SALES_INVOICE
             | InventoryStockTransactionType.STOCK_DISPOSAL,
+        reason: string,
+        referenceId: string,
+        serialNumber?: string,
+        transactionManager?: EntityManager
+    ): Promise<void>
+    // 
+    updateOnOrder(
+        productId: number,
+        branchId: number,
+        quantity: number,
+        updateType: "add" | "remove",
+        transactionType: InventoryStockTransactionType.PURCHASE_ORDER |
+            InventoryStockTransactionType.PURCHASE_INVOICE |
+            InventoryStockTransactionType.MANUAL_ADJUSTMENT,
         reason: string,
         referenceId: string,
         serialNumber?: string,
