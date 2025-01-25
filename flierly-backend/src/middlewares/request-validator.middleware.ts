@@ -6,7 +6,7 @@ import apiResponseBuilder from "@/utils/builders/api-response.builder";
 import buildValidationErrorsResult from "@/utils/builders/validation-errors-result.builder";
 import { getMessage as m } from "@/utils/get-message.util";
 import { plainToInstance } from "class-transformer";
-import { validate } from "class-validator";
+import { validate, ValidationError } from "class-validator";
 import { NextFunction, Request, Response } from "express";
 
 /**
@@ -66,11 +66,17 @@ export function requestValidator(
             // If validation errors exist, build and return a 400 Bad Request response
             if (validationErrors.length > 0) {
                 const errorMessages = buildValidationErrorsResult(validationErrors);
+                const errorMessage: ErrorMessage = {
+                    name: ValidationError.name,
+                    httpCode: HttpCodes.BAD_REQUEST,
+                    message: JSON.stringify(errorMessages),
+                    stack: JSON.stringify(errorMessages),// JSON.stringify to avoid circular references
+                }
                 return res.status(HttpCodes.BAD_REQUEST).json(
                     apiResponseBuilder({
                         success: false,
                         controller: "",
-                        error: JSON.stringify(errorMessages),
+                        error: errorMessage,
                         httpCode: HttpCodes.BAD_REQUEST,
                         result: errorMessages,
                         message: m('requestValidationFail'),
