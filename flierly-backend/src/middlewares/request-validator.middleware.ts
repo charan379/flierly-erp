@@ -53,14 +53,14 @@ export function requestValidator(
 
                 ValidatorClass = EntityClass;
             }
-
             // Transform incoming request object into the DTO class
             const dtoObject = plainToInstance(ValidatorClass, req[requestObjectType]);
 
             // Validate the DTO object using class-validator
             const validationErrors = await validate(dtoObject, {
-                whitelist: true, // Remove extra fields not defined in the DTO
-                forbidUnknownValues: true, // Reject unknown values
+                forbidUnknownValues: true,
+                skipUndefinedProperties: true,
+                stopAtFirstError: false,
             });
 
             // If validation errors exist, build and return a 400 Bad Request response
@@ -82,7 +82,6 @@ export function requestValidator(
 
             // If validation passes, attach the validated object to the request
             req[requestObjectType] = dtoObject;
-
             // Pass control to the next middleware
             return next();
         } catch (error) {

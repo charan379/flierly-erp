@@ -1,17 +1,24 @@
 import { Entity, PrimaryGeneratedColumn, Column, Index, DeleteDateColumn, CreateDateColumn, UpdateDateColumn, ManyToMany } from 'typeorm';
-import { IsNotEmpty, Length, Matches } from 'class-validator';
+import { IsBoolean, IsInt, IsNotEmpty, IsOptional, Length, Matches } from 'class-validator';
 import AccessType from '../constants/access-types.enum';
 import Role from './Role.entity';
 import User from './User.entity';
+import { Expose, Type } from 'class-transformer';
 
 @Entity('privileges')
 @Index('idx_entity', ['entity'])
+@Expose()
 @Index('idx_entity_access', ['entity', 'access'], { unique: false }) // Index on 'entity' and 'access'
 export default class Privilege {
   @PrimaryGeneratedColumn()
+  @IsInt({ message: 'Privilege ID must be an integer.' })
+  @Type(() => Number)
+  @IsOptional()
   id: number;
 
   @Column({ type: 'boolean', default: true, name: 'is_active' })
+  @IsBoolean()
+  @Type(() => Boolean)
   isActive: boolean;
 
   @Column({ unique: true })

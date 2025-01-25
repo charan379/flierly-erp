@@ -30,10 +30,9 @@ const updateEntityRecord = async (entity: EntityTarget<ObjectLiteral>, recordId:
                 const errorMessages = buildValidationErrorsResult(errors);
                 throw new FlierlyException(Object.keys(errorMessages).map((key) => `${key}: ${errorMessages[key]}`).join(", \n"), HttpCodes.BAD_REQUEST, JSON.stringify(errorMessages));
             };
-            
+
             // Merge the update data with the existing entity
             const updatedEntity = repo.merge(existingEntity, updateDataInstance);
-            
             // Save the updated entity (this triggers @BeforeUpdate hooks)
             await repo.save(updatedEntity);
 

@@ -1,16 +1,22 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
-import { IsNotEmpty, Length, Matches } from 'class-validator';
+import { IsBoolean, IsInt, IsNotEmpty, IsNumber, IsOptional, Length, Matches } from 'class-validator';
 import Privilege from './Privilege.entity';
 import User from './User.entity';
+import { Transform, Type } from 'class-transformer';
 
 @Entity('roles')
 export default class Role {
   @PrimaryGeneratedColumn({
     type: 'bigint',
   })
+  @Type(() => Number)
+  @IsInt({ message: 'Role ID must be an integer.' })
+  @IsOptional()
   id: number;
 
   @Column({ type: 'boolean', default: true, name: 'is_active' })
+  @IsBoolean()
+  @Type(() => Boolean)
   isActive: boolean;
 
   @Column({ unique: true })
