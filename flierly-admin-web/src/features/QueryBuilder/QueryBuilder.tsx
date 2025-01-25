@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import useElementWidth from '@/hooks/useElementWidth'
 import { CloseCircleOutlined } from '@ant-design/icons'
+import { v1 as uuidv1 } from 'uuid';
 
 export type QueryFieldConfig<T = Record<string, any>> = {
   field: { label: string; namePath: keyof T }
@@ -17,7 +18,7 @@ export type QueryFieldConfig<T = Record<string, any>> = {
 }
 
 export type QueryCondition = {
-  id: number
+  id: string
   field?: { label: string; namePath: string }
   condition?: { label: string; namePath: TransformerKey }
   value?: any
@@ -38,7 +39,6 @@ export interface QueryBuilderRef {
 
 const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config, initialConditions = [] }, ref) => {
   const [conditions, setConditions] = useState<QueryCondition[]>(initialConditions)
-  const [conditionCount, setConditionCount] = useState(0)
   const [showQueryPreview, setShowQueryPreview] = useState(false) // State to toggle query preview
   const { ref: conditionCardRef, width: conditionCardWidth } = useElementWidth<HTMLDivElement>()
 
@@ -73,15 +73,14 @@ const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config, i
       setConditions([
         ...conditions,
         {
-          id: conditionCount,
+          id: uuidv1(), // Unique ID for each condition
           isValid: false, // New condition is initially invalid
         },
       ])
-      setConditionCount((prevCount) => prevCount + 1)
     }
   }
 
-  const handleFieldChange = (id: number, selected: { label: string; value: string }) => {
+  const handleFieldChange = (id: string, selected: { label: string; value: string }) => {
     const selectedField = config.find((field) => field.field.namePath === selected.value)
     setConditions((prev) =>
       prev.map((cond) =>
@@ -99,7 +98,7 @@ const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config, i
     )
   }
 
-  const handleConditionChange = (id: number, namePath: string) => {
+  const handleConditionChange = (id: string, namePath: string) => {
     setConditions((prev) =>
       prev.map((cond) => {
         if (cond.id === id) {
@@ -119,7 +118,7 @@ const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config, i
     )
   }
 
-  const handleValueChange = (id: number, value: any) => {
+  const handleValueChange = (id: string, value: any) => {
     setConditions((prev) =>
       prev.map((cond) => {
         const isValid = cond.field && cond.condition && value !== null && value !== undefined && value !== ''
@@ -128,9 +127,8 @@ const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config, i
     )
   }
 
-  const handleRemoveCondition = (id: number) => {
+  const handleRemoveCondition = (id: string) => {
     setConditions((prev) => prev.filter((cond) => cond.id !== id))
-    setConditionCount((prevCount) => prevCount - 1)
   }
 
   const getAvailableFields = (): QueryFieldConfig[] => {
@@ -143,7 +141,6 @@ const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config, i
     getQuery: () => generateQuery(conditions),
     resetQuery: () => {
       setConditions([])
-      setConditionCount(0)
     },
     getConditions: () => conditions, // Expose current conditions
   }))
