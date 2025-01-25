@@ -49,6 +49,7 @@ export function reducer(state: CrudModuleState, action: Action): CrudModuleState
       return {
         ...state,
         filters: initialState.filters,
+        conditions: initialState.conditions,
       }
     // Open or close the update form based on the action type
     case ActionTypes.OPEN_UPDATE_FORM:
