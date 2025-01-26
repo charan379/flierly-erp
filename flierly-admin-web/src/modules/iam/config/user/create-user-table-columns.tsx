@@ -2,11 +2,11 @@ import ResizableDrawer from '@/modules/core/components/ResizableDrawer'
 import { ProColumns } from '@ant-design/pro-components'
 import { Button } from 'antd'
 import createPrivilegeTableColumns from '../privilege/create-privilege-tablecolumns'
-import createPrivilegeAMQueryFields from '../privilege/create-privilege-am-queryfields'
+import createPrivilegeAMQueryBuilderFields from '../privilege/create-privilege-am-queryfields'
 import createRoleTableColumns from '../role/create-role-tablecolumns'
 import UserPasswordUpdate from '../../features/UserPasswordUpdate'
 import { createBooleanColumn, createEmailColumn, createIdColumn, createMobileColumn, createTimeStampColumn } from '@/modules/core/utils/create-tablecolumn'
-import createRoleAMQueryFields from '../role/create-role-am-queryfields'
+import createRoleAMQueryBuilderFields from '../role/create-role-am-queryfields'
 import AssociationManager from '@/modules/core/features/GenericAssignmentManager'
 
 const createUserTableColumns = (translate: (value: string) => string, _hasPermission: (requiredPermissionRegex: RegExp) => boolean): ProColumns<User>[] => {
@@ -54,7 +54,7 @@ const createUserTableColumns = (translate: (value: string) => string, _hasPermis
               associatedEntity="privilege"
               associatedSideField='usersWithAdditionalPrivileges'
               associatedEntityColumns={createPrivilegeTableColumns(translate, _hasPermission).filter((column) => ['id', 'name', 'code', 'entity', 'access', 'isActive'].includes(column.dataIndex as string))}
-              associatedEntityQueryConfig={createPrivilegeAMQueryFields(translate)}
+              associatedEntityQueryConfig={createPrivilegeAMQueryBuilderFields(translate)}
             />
           </ResizableDrawer>
         )
@@ -86,7 +86,7 @@ const createUserTableColumns = (translate: (value: string) => string, _hasPermis
               associatedEntity="privilege"
               associatedSideField="usersWithRestrictedPrivileges"
               associatedEntityColumns={createPrivilegeTableColumns(translate, _hasPermission).filter((column) => ['id', 'name', 'code', 'entity', 'access', 'isActive'].includes(column.dataIndex as string))}
-              associatedEntityQueryConfig={createPrivilegeAMQueryFields(translate)}
+              associatedEntityQueryConfig={createPrivilegeAMQueryBuilderFields(translate)}
             />
           </ResizableDrawer>
         )
@@ -118,7 +118,7 @@ const createUserTableColumns = (translate: (value: string) => string, _hasPermis
               associatedEntity="role"
               associatedSideField="users"
               associatedEntityColumns={createRoleTableColumns(translate, _hasPermission).filter((column) => ['id', 'name', 'code', 'isActive'].includes(column.dataIndex as string))}
-              associatedEntityQueryConfig={createRoleAMQueryFields(translate)}
+              associatedEntityQueryConfig={createRoleAMQueryBuilderFields(translate)}
             />
           </ResizableDrawer>
         )

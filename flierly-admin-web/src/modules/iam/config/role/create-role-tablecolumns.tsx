@@ -2,7 +2,7 @@ import ResizableDrawer from '@/modules/core/components/ResizableDrawer'
 import { ProColumns } from '@ant-design/pro-components'
 import { Button } from 'antd'
 import createPrivilegeTableColumns from '../privilege/create-privilege-tablecolumns'
-import createPrivilegeAMQueryFields from '../privilege/create-privilege-am-queryfields'
+import createPrivilegeAMQueryBuilderFields from '../privilege/create-privilege-am-queryfields'
 import { createBooleanColumn, createCodeColumn, createDescriptionColumn, createIdColumn, createNameColumn, createTimeStampColumn } from '@/modules/core/utils/create-tablecolumn'
 import AssociationManager from '@/modules/core/features/GenericAssignmentManager'
 
@@ -42,7 +42,7 @@ const createRoleTableColumns = (translate: (value: string) => string, hasPermiss
               associatedEntity="privilege"
               associatedSideField="roles"
               associatedEntityColumns={createPrivilegeTableColumns(translate, hasPermission).filter((column) => ['id', 'name', 'code', 'entity', 'access', 'isActive'].includes(column.dataIndex as string))}
-              associatedEntityQueryConfig={createPrivilegeAMQueryFields(translate)}
+              associatedEntityQueryConfig={createPrivilegeAMQueryBuilderFields(translate)}
             />
           </ResizableDrawer>
         )
