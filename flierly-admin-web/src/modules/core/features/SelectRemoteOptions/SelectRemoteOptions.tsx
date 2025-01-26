@@ -44,7 +44,6 @@ const SelectRemoteOptions = <T,>({
   const [fetching, setFetching] = useState(false);
   const [options, setOptions] = useState<{ label: string | JSX.Element; value: string }[]>([]);
   const abortControllerRef = useRef<AbortController | null>(null);
-
   const handleSearch = (value: string) => {
     debounceFetcher(value);
   };

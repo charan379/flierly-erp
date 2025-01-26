@@ -199,6 +199,7 @@ const FormComponent: React.FC<QueryFieldConfig<any>> = (props) => {
               disabled={restProps.hidden || restProps.disabled}
               optionCreatorConfig={input.optionCreatorConfig}
               maxTagCount={'responsive'}
+              rules={restProps.rules}
               {...(value !== undefined ? { value } : {})}
               {...(handleChange ? { onChange: (v: any) => handleChange(v) } : {})}
             />
@@ -244,7 +245,6 @@ const QueryField = <T,>({ fieldKey, config, showLabel = true }: QueryFieldProps<
     onChange,
     value,
   }
-
   return <FormComponent key={`${fieldKey}-${String(name)}`} {...componentProps} />
 }
 

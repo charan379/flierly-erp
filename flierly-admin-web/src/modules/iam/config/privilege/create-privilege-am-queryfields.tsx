@@ -10,7 +10,7 @@ const createPrivilegeAMQueryBuilderFields = (translate: (value: string) => strin
     }),
     createTextAMQueryField({
       label: translate('name'),
-      name: 'name'
+      name: 'name',
     }),
     createTextAMQueryField({
       label: translate('code'),
@@ -19,6 +19,7 @@ const createPrivilegeAMQueryBuilderFields = (translate: (value: string) => strin
     createSelectRemoteOptionsAMQueryField({
       label: translate('entity'),
       name: 'entity',
+      rules: [{ type: 'regexp', message: 'sdsd' }],
       asyncOptionsFetcher: fetchEntityOptions
     }),
     createSelectAMQueryField({
