@@ -5,6 +5,7 @@ import JoiSchemaValidator from '@/lib/joi/joi-schema.validator';
 import { NextFunction, Request, Response } from 'express';
 import Joi from 'joi';
 import { getEntityList } from '@/modules';
+import FlierlyException from '@/lib/flierly.exception';
 
 const entityQuerySchema: Joi.ObjectSchema = Joi.object({
   keyword: Joi.string().allow('').default(''),
@@ -21,31 +22,40 @@ const entities = async (req: Request, res: Response, next: NextFunction): Promis
       'misc-controller-get-entities',
     );
 
-    const matcher = new RegExp(String(keyword.trim()), 'ig');
+    try {
 
-    let entities: EntityDetails[] = await getEntityList();
+      const matcher = new RegExp(String(keyword.trim()), 'i');
 
-    entities = filterAndLimit<EntityDetails>({
-      data: entities,
-      limit,
-      matcher,
-      queryKey: 'entity',
-    });
+      let entities: EntityDetails[] = await getEntityList();
 
-    entities.forEach((entity) => (entity.filePath = '[REDACTED]'));
+      entities = filterAndLimit<EntityDetails>({
+        data: entities,
+        limit,
+        matcher,
+        queryKey: 'entity',
+      });
 
-    return res.status(HttpCodes.OK).json(
-      apiResponseBuilder({
-        success: true,
-        result: entities,
-        message: 'Entites fetched successfully',
-        controller: 'misc.entities',
-        error: null,
-        httpCode: HttpCodes.OK,
-        req,
-        res,
-      }),
-    );
+      entities.forEach((entity) => (entity.filePath = '[REDACTED]'));
+
+      return res.status(HttpCodes.OK).json(
+        apiResponseBuilder({
+          success: true,
+          result: entities,
+          message: 'Entites fetched successfully',
+          controller: 'misc.entities',
+          error: null,
+          httpCode: HttpCodes.OK,
+          req,
+          res,
+        }),
+      );
+    } catch (error) {
+      if (error instanceof FlierlyException) {
+        throw error;
+      } else {
+        throw new FlierlyException((error as Error).message, HttpCodes.BAD_REQUEST, JSON.stringify(error));
+      }
+    }
   } catch (error) {
 
     return next(error);
