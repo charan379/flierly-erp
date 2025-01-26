@@ -1,10 +1,15 @@
 import React from "react";
-import { Card, Button } from "antd";
-import { motion } from "motion/react";
-import { AppstoreOutlined, VideoCameraOutlined } from "@ant-design/icons";
-import "./AppsPage.css"; // Include your custom CSS file
+import { Card } from "antd";
+import { AppstoreOutlined } from "@ant-design/icons";
+import "./AppsPage.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFilm } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 const AppsPage: React.FC = () => {
+
+    const navigate = useNavigate();
+
     const apps = [
         {
             name: "ERP Application",
@@ -15,29 +20,19 @@ const AppsPage: React.FC = () => {
         {
             name: "Movie Library",
             description: "Browse and organize your favorite movies.",
-            icon: <VideoCameraOutlined style={{ fontSize: "2rem", color: "#2196F3" }} />,
+            icon: <FontAwesomeIcon icon={faFilm} style={{ fontSize: "2rem", color: "#2196F3" }} />,
             link: "/movies",
         },
     ];
 
     return (
-        <div className="landing-page">
-            <motion.h1
-                className="landing-title"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-            >
+        <div className="apps-page">
+            <h1 className="apps-title">
                 Welcome to the Multi-App Platform
-            </motion.h1>
+            </h1>
             <div className="app-grid">
                 {apps.map((app, index) => (
-                    <motion.div
-                        key={index}
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: index * 0.2, duration: 0.5 }}
-                    >
+                    <div key={index} className="app-card-wrapper">
                         <Card
                             hoverable
                             className="app-card"
@@ -46,25 +41,17 @@ const AppsPage: React.FC = () => {
                                     {app.icon}
                                 </div>
                             }
+                            onClick={() => navigate(app.link)}
                         >
                             <Card.Meta
                                 title={<span className="app-title">{app.name}</span>}
                                 description={<p className="app-description">{app.description}</p>}
                             />
-                            <div className="app-button-container">
-                                <Button
-                                    type="primary"
-                                    href={app.link}
-                                    style={{ backgroundColor: "#2196F3", borderColor: "#2196F3" }}
-                                >
-                                    Explore
-                                </Button>
-                            </div>
                         </Card>
-                    </motion.div>
+                    </div>
                 ))}
             </div>
-        </div>
+        </div >
     );
 };
 
