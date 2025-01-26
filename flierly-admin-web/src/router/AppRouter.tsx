@@ -7,12 +7,13 @@ import ProductRouter from '@/modules/product/router/ProductRouter'
 import PageNotFound from '@/modules/core/pages/PageNotFound'
 import PageUnderConstruction from '@/modules/core/pages/PageUnderConstruction'
 import { Route, Routes } from 'react-router-dom'
+import AppsPage from '@/modules/core/pages/AppsPage'
 
 const AppRouter = () => {
   return (
     <Routes>
       {/* Default route, page under construction */}
-      <Route path="/" element={<PageUnderConstruction />} />
+      <Route path="/" element={<AppsPage />} />
 
       <Route path="/erp" element={<ProtectedRoute element={<Dashboard />} />}>
         <Route path="" element={<PageUnderConstruction />} />
