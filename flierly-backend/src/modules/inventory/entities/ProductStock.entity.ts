@@ -7,7 +7,6 @@ import { Type } from "class-transformer";
 
 @Entity("product_stocks")
 @Index(["product", "branch"], { unique: true })
-@Unique(["product", "branch"])
 export default class ProductStock {
     @PrimaryGeneratedColumn({ type: 'bigint' })
     @IsInt({ message: 'Product Stock ID must be an integer.' })

@@ -33,8 +33,8 @@ class InventoryLedgerServiceImpl implements InventoryLedgerService {
         try {
             // Create the inventory ledger entry
             const transaction = this.inventoryLedgerRepository.create({
-                product: { id: productId },
-                branch: { id: branchId },
+                productId,
+                branchId,
                 stockType,
                 quantity,
                 transactionType,

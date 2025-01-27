@@ -62,8 +62,8 @@ export default class SerializedProductServiceImpl implements SerializedProductSe
         purchaseInvoiceId?: string
     ): SerializedProduct {
         return this.serializedProductRepository.create({
-            product: { id: productId },
-            branch: { id: branchId },
+            productId,
+            branchId,
             status,
             serialNumber,
             ...(purchaseInvoiceId && { purchaseInvoice: purchaseInvoiceId }),
@@ -86,7 +86,7 @@ export default class SerializedProductServiceImpl implements SerializedProductSe
             throw new FlierlyException("SerializedProduct status is already the same", HttpCodes.BAD_REQUEST);
         }
         if (!validTransitions.includes(newStatus)) {
-            throw new FlierlyException(`Transition from ${currentStatus} to ${newStatus} is not allowed`, HttpCodes .BAD_REQUEST);
+            throw new FlierlyException(`Transition from ${currentStatus} to ${newStatus} is not allowed`, HttpCodes.BAD_REQUEST);
         }
     }
 
@@ -100,8 +100,8 @@ export default class SerializedProductServiceImpl implements SerializedProductSe
         try {
             const existingSerializedProduct = await this.serializedProductRepository.findOne({
                 where: {
-                    product: { id: productId },
-                    branch: { id: branchId },
+                    productId,
+                    branchId,
                     serialNumber,
                 },
             });
@@ -143,8 +143,8 @@ export default class SerializedProductServiceImpl implements SerializedProductSe
         try {
             const serializedProduct = await this.serializedProductRepository.findOne({
                 where: {
-                    product: { id: productId },
-                    branch: { id: branchId },
+                    productId,
+                    branchId,
                     serialNumber,
                 },
                 relations: ["branch", "product"],
@@ -182,8 +182,8 @@ export default class SerializedProductServiceImpl implements SerializedProductSe
             let action: "created" | "updated";
             let serializedProduct = await this.serializedProductRepository.findOne({
                 where: {
-                    product: { id: productId },
-                    branch: { id: branchId },
+                    productId,
+                    branchId,
                     serialNumber,
                 },
                 relations: ["branch", "product"],
