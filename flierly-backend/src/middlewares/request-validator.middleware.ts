@@ -88,6 +88,7 @@ export function requestValidator(
 
             // If validation passes, attach the validated object to the request
             req[requestObjectType] = dtoObject;
+            console.log({dtoObject});
             // Pass control to the next middleware
             return next();
         } catch (error) {
