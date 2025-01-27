@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, Index, DeleteDateColumn, CreateDateColumn, UpdateDateColumn, ManyToMany } from 'typeorm';
-import { IsBoolean, IsInt, IsNotEmpty, IsOptional, Length, Matches } from 'class-validator';
+import { IsBoolean, IsEnum, IsInt, IsNotEmpty, IsOptional, Length, Matches } from 'class-validator';
 import AccessType from '../constants/access-types.enum';
 import Role from './Role.entity';
 import User from './User.entity';
@@ -30,6 +30,7 @@ export default class Privilege {
     type: 'enum',
     enum: AccessType,
   })
+  @IsEnum(AccessType, { message: 'Access type must be either "read" or "write".' })
   @IsNotEmpty({ message: 'Access type is required.' })
   access: AccessType;
 

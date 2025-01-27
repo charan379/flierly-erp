@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, CreateDa
 import { IsBoolean, IsInt, IsNotEmpty, IsNumber, IsOptional, Length, Matches } from 'class-validator';
 import Privilege from './Privilege.entity';
 import User from './User.entity';
-import { Transform, Type } from 'class-transformer';
+import { Type } from 'class-transformer';
 
 @Entity('roles')
 export default class Role {

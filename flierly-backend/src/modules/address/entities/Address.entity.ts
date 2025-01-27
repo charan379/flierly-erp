@@ -1,15 +1,21 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, DeleteDateColumn } from 'typeorm';
-import { IsNotEmpty, IsNumber, IsOptional, Length, Matches, ValidationError } from 'class-validator';
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, DeleteDateColumn, Index } from 'typeorm';
+import { IsBoolean, IsInt, IsNotEmpty, IsNumber, IsOptional, Length, Matches, ValidationError } from 'class-validator';
 import Account from '@/modules/account/entities/Account.entity';
+import { Type } from 'class-transformer';
 
 @Entity('addresses')
 export default class Address {
   @PrimaryGeneratedColumn({
     type: 'bigint',
   })
+  @IsInt()
+  @Type(() => Number)
+  @IsOptional()
   id: number;
 
   @Column({ default: true, name: 'is_active' })
+  @IsBoolean()
+  @Type(() => Boolean)
   isActive: boolean;
 
   @Column({ name: 'line_1' })
@@ -74,6 +80,7 @@ export default class Address {
     name: 'latitude',
   })
   @IsOptional()
+  @Type(() => Number)
   latitude: number;
 
   @IsNumber({}, { message: 'Longitude must be a number.' })
@@ -85,11 +92,19 @@ export default class Address {
     name: 'longitude',
   })
   @IsOptional()
+  @Type(() => Number)
   longitude: number;
 
   @ManyToOne(() => Account, { lazy: true, nullable: true })
   @JoinColumn({ name: 'account_id' })
+  @Type(() => Account)
   account: Account;
+
+  @Column({ name: 'account_id', type: 'bigint', nullable: true })
+  @Index()
+  @Type(() => Number)
+  @IsInt({ message: 'Account id must be an integer.' })
+  accountId: number;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;
@@ -102,7 +117,7 @@ export default class Address {
 
   @BeforeInsert()
   @BeforeUpdate()
-  async validateCoordinates (): Promise<void> {
+  async validateCoordinates(): Promise<void> {
     const hasLatitude = this.latitude !== null && this.latitude !== undefined;
     const hasLongitude = this.longitude !== null && this.longitude !== undefined;
 

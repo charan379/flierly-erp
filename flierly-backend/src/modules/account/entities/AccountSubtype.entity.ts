@@ -1,15 +1,21 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, DeleteDateColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { IsNotEmpty, Length, Matches } from 'class-validator';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, DeleteDateColumn, CreateDateColumn, UpdateDateColumn, Index } from 'typeorm';
+import { IsBoolean, IsInt, IsNotEmpty, IsOptional, Length, Matches } from 'class-validator';
 import AccountType from './AccountType.entity';
+import { Type } from 'class-transformer';
 
 @Entity('account_subtypes')
 export default class AccountSubtype {
   @PrimaryGeneratedColumn({
     type: 'bigint',
   })
+  @IsInt()
+  @Type(() => Number)
+  @IsOptional()
   id: number;
 
   @Column({ type: 'boolean', default: true, name: 'is_active' })
+  @IsBoolean()
+  @Type(() => Boolean)
   isActive: boolean;
 
   @Column({ unique: true })
@@ -26,7 +32,14 @@ export default class AccountSubtype {
   @ManyToOne(() => AccountType, { eager: false, nullable: false })
   @JoinColumn({ name: 'account_type_id' })
   @IsNotEmpty({ message: 'AccountType must be specified.' })
+  @Type(() => AccountType)
   type: AccountType;
+
+  @Column({ name: 'account_type_id', type: 'bigint' })
+  @IsInt({ message: 'Account type ID must be an integer.' })
+  @Type(() => Number)
+  @Index()
+  accountTypeId: number;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;

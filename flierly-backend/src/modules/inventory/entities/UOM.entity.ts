@@ -1,9 +1,13 @@
-import { IsNotEmpty, Length, Matches } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsInt, IsNotEmpty, IsOptional, Length, Matches } from 'class-validator';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
 
 @Entity('uoms')
 export default class UOM {
   @PrimaryGeneratedColumn({ type: 'bigint' })
+  @IsInt({ message: 'UOM ID must be an integer.' })
+  @Type(() => Number)
+  @IsOptional()
   id: number;
 
   @Column({ type: 'varchar', length: 100, unique: true })

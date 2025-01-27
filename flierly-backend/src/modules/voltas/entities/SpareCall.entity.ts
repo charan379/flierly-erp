@@ -1,7 +1,7 @@
 import Product from "@/modules/inventory/entities/Product.entity";
 import Branch from "@/modules/organization/entities/Branch.entity";
 import { Type } from "class-transformer";
-import { IsBoolean, IsDate, IsNotEmpty, IsOptional, Length, Matches } from "class-validator";
+import { IsBoolean, IsDate, IsInt, IsNotEmpty, IsOptional, Length, Matches } from "class-validator";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { SpareCallStatus } from "../constants/spare-call-status.enum";
 
@@ -11,6 +11,9 @@ export default class SpareCall {
     @PrimaryGeneratedColumn({
         type: 'bigint',
     })
+    @IsInt({ message: 'Spare Call ID must be an integer.' })
+    @Type(() => Number)
+    @IsOptional()
     id: number;
 
     @Column({ name: "customer_name", type: 'varchar', length: 100 })
@@ -57,6 +60,7 @@ export default class SpareCall {
     @Column({ name: 'product_id', type: 'bigint' })
     @Index()
     @Type(() => Number)
+    @IsInt({ message: 'Product ID must be an integer.' })
     productId: number;
 
     @ManyToOne(() => Branch, { eager: false, nullable: false })
@@ -66,6 +70,7 @@ export default class SpareCall {
     @Column({ name: 'branch_id', type: 'bigint' })
     @Index()
     @Type(() => Number)
+    @IsInt({ message: 'Branch ID must be an integer.' })
     branchId: number;
 
     @Column({ type: 'varchar', length: 50, unique: false, nullable: true, name: "reference_id" })

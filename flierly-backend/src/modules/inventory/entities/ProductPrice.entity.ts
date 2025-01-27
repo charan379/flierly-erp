@@ -10,13 +10,17 @@ import {
 } from 'typeorm';
 import { ProductPriceType } from '../constants/product-price-type.enum';
 import Product from './Product.entity';
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsPositive, Min } from 'class-validator';
+import { IsDate, IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, Min } from 'class-validator';
 import { DecimalTransformer } from '@/lib/database/typeorm/utils/DecimalTransformer';
+import { Type } from 'class-transformer';
 
 @Entity('product_prices')
 @Index(["type", "product", "effectiveDate"])
 export default class ProductPrice {
     @PrimaryGeneratedColumn({ type: 'bigint' })
+    @IsInt({ message: 'Product Price ID must be an integer.' })
+    @Type(() => Number)
+    @IsOptional()
     id: number;
 
     @Column({
@@ -32,14 +36,24 @@ export default class ProductPrice {
     @IsNotEmpty({ message: 'Product must be specified' })
     product: Product;
 
+    @Column({ name: 'product_id', type: 'bigint' })
+    @Index()
+    @Type(() => Number)
+    @IsInt({ message: 'Product ID must be an integer.' })
+    productId: number;
+
     @Column({ type: 'decimal', precision: 10, scale: 2, default: 0, transformer: DecimalTransformer })
     @IsNumber({}, { message: 'Price must be a valid number' })
     @IsPositive({ message: 'Price must be greater than zero' })
     @Min(0, { message: 'Price cannot be negative' })
+    @IsNumber()
+    @Type(() => Number)
     price: number;
 
     @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP', name: "effective_date" })
     @IsOptional()
+    @IsDate({ message: 'Effective date must be a valid date' })
+    @Type(() => Date)
     effectiveDate: Date;
 
     @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })

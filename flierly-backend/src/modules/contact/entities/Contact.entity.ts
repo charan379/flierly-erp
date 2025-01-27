@@ -1,15 +1,21 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
-import { IsNotEmpty, IsEmail, IsOptional, Matches, Length } from 'class-validator';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, Index } from 'typeorm';
+import { IsNotEmpty, IsEmail, IsOptional, Matches, Length, IsInt, IsBoolean } from 'class-validator';
 import Account from '@/modules/account/entities/Account.entity';
+import { Type } from 'class-transformer';
 
 @Entity('contacts')
 export default class Contact {
   @PrimaryGeneratedColumn({
     type: 'bigint',
   })
+  @IsInt()
+  @Type(() => Number)
+  @IsOptional()
   id: number;
 
   @Column({ type: 'boolean', default: true, name: 'is_active' })
+  @IsBoolean()
+  @Type(() => Boolean)
   isActive: boolean;
 
   @Column({ name: 'name' })
@@ -34,7 +40,14 @@ export default class Contact {
 
   @ManyToOne(() => Account)
   @JoinColumn({ name: 'account_id' })
+  @Type(() => Account)
   account: Account;
+
+  @Column({ name: 'account_id', type: 'bigint', nullable: true })
+  @Index()
+  @Type(() => Number)
+  @IsInt({ message: 'Account id must be an integer.' })
+  accountId: number;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;

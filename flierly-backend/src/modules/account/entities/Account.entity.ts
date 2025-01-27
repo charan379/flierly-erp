@@ -10,36 +10,60 @@ import {
   OneToOne,
   BeforeInsert,
   Repository,
+  Index,
 } from 'typeorm';
 import Address from '@/modules/address/entities/Address.entity';
 import TaxIdentity from '@/modules/taxation/entities/TaxIdentity.entity';
-import { IsEmail, IsNotEmpty, IsOptional, Length, Matches } from 'class-validator';
+import { IsBoolean, IsEmail, IsInt, IsNotEmpty, IsOptional, Length, Matches } from 'class-validator';
 import AccountType from './AccountType.entity';
 import AccountSubtype from './AccountSubtype.entity';
 import { AppDataSource } from '@/lib/database/typeorm/app-datasource';
+import { Type } from 'class-transformer';
 
 @Entity('accounts')
 export default class Account {
   @PrimaryGeneratedColumn({ type: 'bigint' })
+  @IsInt()
+  @Type(() => Number)
+  @IsOptional()
   id: number;
 
   @Column({ type: 'boolean', default: true, name: 'is_active' })
+  @IsBoolean({ message: 'Active status must be a boolean value.' })
+  @Type(() => Boolean)
   isActive: boolean;
 
   @ManyToOne(() => AccountType, { eager: false, nullable: false })
   @JoinColumn({ name: 'account_type_id' })
   @IsNotEmpty({ message: 'Account type must be specified' })
-  type: AccountType;
+  @Type(() => AccountType)
+  accountType: AccountType;
+
+  @Column({ name: 'account_type_id', type: 'bigint' })
+  @Index()
+  @Type(() => Number)
+  @IsInt({ message: 'Account type id must be an integer.' })
+  accountTypeId: number;
 
   @ManyToOne(() => AccountSubtype, { eager: false, nullable: false })
   @JoinColumn({ name: 'account_subtype_id' })
   @IsNotEmpty({ message: 'Account subtype must be specified' })
-  subtype: AccountSubtype;
+  accountSubtype: AccountSubtype;
+
+  @Column({ name: 'account_subtype_id', type: 'bigint' })
+  @Index()
+  @Type(() => Number)
+  @IsInt({ message: 'Account Sub type id must be an integer.' })
+  accountSubtypeId: number;
 
   @Column({ type: 'boolean', default: false, name: 'is_vip' })
+  @IsBoolean()
+  @Type(() => Boolean)
   isVip: boolean;
 
   @Column({ type: 'boolean', default: false, name: 'is_key' })
+  @IsBoolean()
+  @Type(() => Boolean)
   isKey: boolean;
 
   @Column()
@@ -64,15 +88,36 @@ export default class Account {
 
   @ManyToOne(() => TaxIdentity, { eager: false, nullable: false })
   @JoinColumn({ name: 'tax_identity_id' })
+  @Type(() => TaxIdentity)
   taxIdentity: TaxIdentity;
+
+  @Column({ name: 'tax_identity_id', type: 'bigint' })
+  @Index()
+  @Type(() => Number)
+  @IsInt({ message: 'Tax Identity id must be an integer.' })
+  taxIdentityId: number;
 
   @ManyToOne(() => Account, { eager: false, nullable: true })
   @JoinColumn({ name: 'parent_id' })
+  @Type(() => Account)
   parent: Account;
+
+  @Column({ name: 'parent_id', type: 'bigint', nullable: true })
+  @Index()
+  @Type(() => Number)
+  @IsInt({ message: 'Parent id must be an integer.' })
+  parentId: number;
 
   @OneToOne(() => Address, { eager: false, nullable: false })
   @JoinColumn({ name: 'primary_address_id' })
+  @Type(() => Address)
   primaryAddress: Address;
+
+  @Column({ name: 'primary_address_id', type: 'bigint' })
+  @Index()
+  @Type(() => Number)
+  @IsInt({ message: 'Primary Address id must be an integer.' })
+  primaryAddressId: number;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;

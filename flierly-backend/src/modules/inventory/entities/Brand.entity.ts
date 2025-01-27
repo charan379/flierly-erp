@@ -1,9 +1,13 @@
-import { IsNotEmpty, IsOptional, Length } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsInt, IsNotEmpty, IsOptional, Length } from 'class-validator';
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('brands')
 export default class Brand {
   @PrimaryGeneratedColumn({ type: 'bigint' })
+  @IsInt({ message: 'Brand ID must be an integer.' })
+  @Type(() => Number)
+  @IsOptional()
   id: number;
 
   @Column({ type: 'varchar', length: 100, unique: true })

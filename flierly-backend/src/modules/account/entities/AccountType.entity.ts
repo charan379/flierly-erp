@@ -1,14 +1,20 @@
 import { Entity, PrimaryGeneratedColumn, Column, DeleteDateColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { IsNotEmpty, Length, Matches } from 'class-validator';
+import { IsBoolean, IsInt, IsNotEmpty, IsOptional, Length, Matches } from 'class-validator';
+import { Type } from 'class-transformer';
 
 @Entity('account_types')
 export default class AccountType {
   @PrimaryGeneratedColumn({
     type: 'bigint',
   })
+  @IsInt()
+  @Type(() => Number)
+  @IsOptional()
   id: number;
 
   @Column({ type: 'boolean', default: true, name: 'is_active' })
+  @Type(() => Boolean)
+  @IsBoolean()
   isActive: boolean;
 
   @Column({ unique: true })

@@ -1,24 +1,42 @@
 import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import Product from "./Product.entity";
 import { InventoryStockTransactionType as InventoryStockTransactionType } from "../constants/inventory-stock-transaction-type.enum";
-import { IsNumber, IsOptional, Length, Matches } from "class-validator";
+import { IsDate, IsEnum, IsInt, IsNumber, IsOptional, Length, Matches } from "class-validator";
 import { InventoryStockType } from "../constants/inventory-stock-type.enum";
 import { DecimalTransformer } from "@/lib/database/typeorm/utils/DecimalTransformer";
 import Branch from "@/modules/organization/entities/Branch.entity";
+import { Type } from "class-transformer";
 
 @Entity("inventory_ledger")
 @Index(["product", "branch"], { unique: false })
 export default class InventoryLedger {
     @PrimaryGeneratedColumn({ type: "bigint" })
+    @IsInt({ message: "Inventory Ledger ID must be an integer." })
+    @Type(() => Number)
+    @IsOptional()
     id: number;
 
     @ManyToOne(() => Product, { eager: false, nullable: false })
     @JoinColumn({ name: "product_id" })
+    @Type(() => Product)
     product: Product;
+
+    @Column({ name: 'product_id', type: 'bigint' })
+    @Index()
+    @Type(() => Number)
+    @IsInt({ message: 'Product ID must be an integer.' })
+    productId: number;
 
     @ManyToOne(() => Branch, { eager: false, nullable: false })
     @JoinColumn({ name: "branch_id" })
+    @Type(() => Branch)
     branch: Branch;
+
+    @Column({ name: 'branch_id', type: 'bigint' })
+    @Index()
+    @Type(() => Number)
+    @IsInt({ message: 'Branch ID must be an integer.' })
+    branchId: number;
 
     @Column({
         type: 'enum',
@@ -26,6 +44,7 @@ export default class InventoryLedger {
         name: "transaction_type",
         nullable: false,
     })
+    @IsEnum(InventoryStockTransactionType, { message: 'Transaction type must be valid.' })
     transactionType: InventoryStockTransactionType; // e.g., "sales_return_ok", "sales_return_defective", etc.
 
     @Column({
@@ -34,6 +53,7 @@ export default class InventoryLedger {
         name: "stock_type",
         nullable: false,
     })
+    @IsEnum(InventoryStockType, { message: 'Stock type must be valid.' })
     stockType: InventoryStockType; // e.g., "oh_hand", "defective", etc.
 
     @Column({ type: 'varchar', length: 50, unique: false, nullable: true, name: "reference_id" })
@@ -50,6 +70,7 @@ export default class InventoryLedger {
 
     @Column({ type: 'decimal', precision: 10, scale: 2, default: 0, transformer: DecimalTransformer })
     @IsNumber({}, { message: 'Quantity must be a valid number' })
+    @Type(() => Number)
     quantity: number; // Total quantity change - or +
 
     @CreateDateColumn({ name: 'transaction_date', type: 'timestamptz' })

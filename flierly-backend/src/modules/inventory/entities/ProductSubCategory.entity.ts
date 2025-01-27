@@ -1,10 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { IsNotEmpty, Length, Matches } from 'class-validator';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, JoinColumn, Index } from 'typeorm';
+import { IsInt, IsNotEmpty, IsOptional, Length, Matches } from 'class-validator';
 import ProductCategory from './ProductCategory.entity';
+import { Type } from 'class-transformer';
 
 @Entity('product_sub_categories')
 export default class ProductSubCategory {
     @PrimaryGeneratedColumn({ type: 'bigint' })
+    @IsInt({ message: 'Product Sub Category ID must be an integer.' })
+    @Type(() => Number)
+    @IsOptional()
     id: number;
 
     @Column({ type: 'varchar', length: 100, unique: true })
@@ -20,6 +24,12 @@ export default class ProductSubCategory {
     @JoinColumn({ name: 'category_id' })
     @IsNotEmpty({ message: 'Parent Category must be specified.' })
     category: ProductCategory;
+
+    @Column({ name: 'category_id', type: 'bigint' })
+    @Index()
+    @Type(() => Number)
+    @IsInt({ message: 'Parent Category ID must be an integer.' })
+    categoryId: number;
 
     @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
     createdAt: Date;

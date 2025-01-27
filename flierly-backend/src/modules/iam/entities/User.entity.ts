@@ -1,7 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, Index, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
-import { IsNotEmpty, IsEmail, Length, Matches } from 'class-validator';
+import { IsNotEmpty, IsEmail, Length, Matches, IsInt, IsBoolean } from 'class-validator';
 import Privilege from './Privilege.entity';
 import Role from './Role.entity';
+import { Type } from 'class-transformer';
 
 @Entity('users')
 @Index('idx_username', ['username'])
@@ -11,9 +12,13 @@ export default class User {
   @PrimaryGeneratedColumn({
     type: 'bigint',
   })
+  @IsInt({ message: 'User ID must be an integer.' })
+  @Type(() => Number)
   id: number;
 
   @Column({ type: 'boolean', default: true, name: 'is_active' })
+  @IsBoolean()
+  @Type(() => Boolean)
   isActive: boolean;
 
   @Column({ unique: true })

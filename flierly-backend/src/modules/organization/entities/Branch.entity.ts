@@ -1,9 +1,13 @@
-import { IsNotEmpty, IsOptional, Length } from "class-validator";
+import { Type } from "class-transformer";
+import { IsInt, IsNotEmpty, IsOptional, Length } from "class-validator";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity('branches')
 export default class Branch {
-    @PrimaryGeneratedColumn({type: "bigint"})
+    @PrimaryGeneratedColumn({ type: "bigint" })
+    @IsInt()
+    @Type(() => Number)
+    @IsOptional()
     id: number;
 
     @Column({ type: 'varchar', length: 100, unique: true })
