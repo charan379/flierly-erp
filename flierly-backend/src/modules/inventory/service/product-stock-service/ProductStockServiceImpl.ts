@@ -106,7 +106,6 @@ class ProductStockServiceImpl implements ProductStockService {
     private async getProductStock(productId: number, branchId: number): Promise<ProductStock> {
         let productStock = await this.productStockRepository.findOne({
             where: { branch: { id: branchId }, product: { id: productId } },
-            relations: ['product', "branch"],
         });
 
         if (!productStock) {

@@ -1,10 +1,11 @@
+import { NumericTransformer } from '@/lib/database/typeorm/utils/NumericTransformer';
 import { Type } from 'class-transformer';
 import { IsInt, IsNotEmpty, IsOptional, Length, Matches } from 'class-validator';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
+import { Entity, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, PrimaryColumn } from 'typeorm';
 
 @Entity('uoms')
 export default class UOM {
-  @PrimaryGeneratedColumn({ type: 'bigint' })
+  @PrimaryColumn({ type: 'bigint', transformer: NumericTransformer, generated: true, update: false })
   @IsInt({ message: 'UOM ID must be an integer.' })
   @Type(() => Number)
   @IsOptional()
