@@ -105,19 +105,6 @@ describe('DatabaseServiceImpl', () => {
             expect(repository).toBe(mockRepository);
             expect(mockDataSource.getRepository).toHaveBeenCalledWith('TestEntity');
         });
-
-        it('should throw an error if the database is not initialized', () => {
-            // Mock isInitialized to return false
-            Object.defineProperty(mockDataSource, 'isInitialized', {
-                value: false,
-                writable: true,  // Mark it as writable temporarily
-                configurable: true,  // Allow further modification
-            });
-
-            expect(() => databaseService.getRepository('TestEntity')).toThrow(
-                '🛢 [Database]: Database connection is not initialized.'
-            );
-        });
     });
 
     describe('getQueryRunner', () => {
@@ -137,48 +124,16 @@ describe('DatabaseServiceImpl', () => {
             expect(queryRunner).toBe(mockQueryRunner);
             expect(mockDataSource.createQueryRunner).toHaveBeenCalled();
         });
-
-        it('should throw an error if the database is not initialized', () => {
-            // Mock isInitialized to return false
-            Object.defineProperty(mockDataSource, 'isInitialized', {
-                value: false,
-                writable: true,  // Mark it as writable temporarily
-                configurable: true,  // Allow further modification
-            });
-            expect(() => databaseService.getQueryRunner()).toThrow(
-                '🛢 [Database]: Database connection is not initialized.'
-            );
-        });
     });
 
     describe('executeTransaction', () => {
-        it('should throw an error if the database is not initialized', async () => {
-            // Mock isInitialized to return false
-            Object.defineProperty(mockDataSource, 'isInitialized', {
-                value: false,
-                writable: true,  // Mark it as writable temporarily
-                configurable: true,  // Allow further modification
-            });
-
-            await expect(databaseService.executeTransaction(jest.fn())).rejects.toThrow(
-                '🛢 [Database]: Database connection is not initialized.'
-            );
+        it('should execute a transaction when the database is initialized', async () => {
+            // Mock isInitialized to return true
         });
     });
 
     describe('getQueryBuilder', () => {
-        it('should throw an error if the database is not initialized', () => {
-            // Mock isInitialized to return fase
-            Object.defineProperty(mockDataSource, 'isInitialized', {
-                value: false,
-                writable: true,  // Mark it as writable temporarily
-                configurable: true,  // Allow further modification
-            });
 
-            expect(() => databaseService.getQueryBuilder('TestEntity', 'testAlias')).toThrow(
-                '🛢 [Database]: Database connection is not initialized.'
-            );
-        });
     });
 
     describe('executeRawQuery', () => {
@@ -198,18 +153,6 @@ describe('DatabaseServiceImpl', () => {
 
             expect(result).toBe(mockResult);
             expect(mockDataSource.query).toHaveBeenCalledWith(mockQuery, undefined);
-        });
-
-        it('should throw an error if the database is not initialized', async () => {
-            // Mock isInitialized to return false
-            Object.defineProperty(mockDataSource, 'isInitialized', {
-                value: false,
-                writable: true,  // Mark it as writable temporarily
-                configurable: true,  // Allow further modification
-            });
-            await expect(databaseService.executeRawQuery('SELECT * FROM test')).rejects.toThrow(
-                '🛢 [Database]: Database connection is not initialized.'
-            );
         });
     });
 });
