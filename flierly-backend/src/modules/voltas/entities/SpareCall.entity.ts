@@ -1,9 +1,9 @@
-import Product from "@/modules/inventory/entities/Product.entity";
 import Branch from "@/modules/organization/entities/Branch.entity";
 import { Type } from "class-transformer";
 import { IsBoolean, IsDate, IsInt, IsNotEmpty, IsOptional, Length, Matches } from "class-validator";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { SpareCallStatus } from "../constants/spare-call-status.enum";
+import Product from "@/modules/product/entities/Product.entity";
 
 
 @Entity('spare_calls')

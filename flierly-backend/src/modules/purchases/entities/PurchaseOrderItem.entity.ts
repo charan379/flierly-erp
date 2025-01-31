@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, JoinColumn } from 'typeorm';
 import { IsNotEmpty, IsOptional, Min } from 'class-validator';
 import PurchaseOrder from './PurchaseOrder.entity';
-import Product from '@/modules/inventory/entities/Product.entity';
+import Product from '@/modules/product/entities/Product.entity';
 
 @Entity('purchase_order_items')
 export default class PurchaseOrderItem {

@@ -1,4 +1,4 @@
-import Product from '@/modules/inventory/entities/Product.entity';
+import Product from '@/modules/product/entities/Product.entity';
 import { Type } from 'class-transformer';
 import { IsBoolean, IsInt, IsNumber, IsOptional } from 'class-validator';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToMany } from 'typeorm';
