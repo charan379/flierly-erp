@@ -26,7 +26,6 @@ export default class LoggerServiceImpl implements LoggerService {
                 format.errors({ stack: true }),
                 format.splat(),
                 format.json(),
-                customFormat
             ),
             defaultMeta: { service: 'LoggerService' },
             transports: [
