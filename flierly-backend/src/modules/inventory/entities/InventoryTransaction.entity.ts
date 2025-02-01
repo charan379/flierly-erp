@@ -1,14 +1,14 @@
 import { DecimalTransformer } from "@/lib/database/typeorm/utils/DecimalTransformer";
 import { Type } from "class-transformer";
 import { IsBoolean, IsEnum, IsInt, IsNumber, IsOptional, IsPositive, Length, Matches, Min } from "class-validator";
-import { Column, CreateDateColumn, Index, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Index, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { InventoryEntryType } from "../constants/inventory-entry-type.enum";
 import { InventoryTransactionType } from "../constants/inventory-transaction-type.enum";
 import { NumericTransformer } from "@/lib/database/typeorm/utils/NumericTransformer";
 
-export default class StockTransaction {
+export default class InventoryTransaction {
 
-    @PrimaryGeneratedColumn({ type: 'bigint' })
+    @PrimaryColumn({ type: 'bigint', transformer: NumericTransformer, generated: true, update: false })
     @IsInt({ message: 'Stock Transaction ID must be an integer.' })
     @Type(() => Number)
     @IsOptional()
@@ -19,6 +19,12 @@ export default class StockTransaction {
     @IsBoolean()
     @Type(() => Boolean)
     isRolledBack: boolean;
+
+    @Column({ type: 'boolean', default: false, name: 'is__a_roll_back' })
+    @IsOptional()
+    @IsBoolean()
+    @Type(() => Boolean)
+    isARollBack: boolean;
 
     @Column({ name: 'rollback_transaction_id', type: 'bigint', transformer: NumericTransformer, nullable: true })
     @Type(() => Number)

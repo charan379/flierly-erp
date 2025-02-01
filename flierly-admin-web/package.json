@@ -22,6 +22,7 @@
     "antd": "^5.22.1",
     "axios": "^1.7.7",
     "dayjs": "^1.11.13",
+    "flierly-admin-web": "file:",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
     "motion": "^12.0.5",

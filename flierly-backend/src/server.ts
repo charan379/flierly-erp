@@ -13,6 +13,7 @@ import validateEnv from './lib/env-validator';
 import iocContainer from './lib/di-ioc-container';
 import DatabaseService from './lib/database/database-service/DatabaseService';
 import BeanTypes from './lib/di-ioc-container/bean.types';
+import LoggerService from './modules/core/services/logger-service/LoggerService';
 
 dotenv.config();
 
@@ -38,6 +39,9 @@ server.listen(port);
 // get database service instance from ioc container
 const databaseService = iocContainer.get<DatabaseService>(BeanTypes.DatabaseService);
 
+// get logger service instance from ioc container
+const logger = iocContainer.get<LoggerService>(BeanTypes.LoggerService);
+const loggerMeta = { service: "Server" };
 /**
  * Event listener for HTTP server "error" event.
  */
@@ -51,13 +55,13 @@ server.on('error', async (error: HttpError) => {
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error(`Port ${port} requires elevated privileges`);
+      logger.error(`Port ${port} requires elevated privileges`, { error, loggerMeta });
       process.exit(1);
     case 'EADDRINUSE':
-      console.error(`Port ${port} is already in use`);
+      logger.error(`Port ${port} is already in use`, { error, loggerMeta });
       process.exit(1);
     default:
-      console.log((error as Error)?.message);
+      logger.error(`Error occurred: ${(error as Error)?.message}`, { error, loggerMeta });
       process.exit(1);
   }
 });
@@ -71,11 +75,11 @@ server.on('listening', async () => {
     // establish database connection
     await databaseService.connect();
   } catch (error) {
-    console.info(`🚀 [server]: Failed to start server.\n${(error as Error).name ?? "Error"}: ${(error as Error)?.message}`);
+    logger.error(`🚀 Failed to start server.\n${(error as Error).name ?? "Error"}: ${(error as Error)?.message}`, loggerMeta);
     process.exit(1);
   }
 
-  console.info(`🚀 [server]: Server started is running on ${port}`);
+  logger.info(`🚀 Server started is running on ${port}`, loggerMeta);
 });
 
 /**

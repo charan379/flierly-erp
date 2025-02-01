@@ -1,4 +1,4 @@
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import { AppDataSource } from '../typeorm/app-datasource';
 import {
   EntityTarget,
@@ -10,84 +10,72 @@ import {
   DataSource,
 } from 'typeorm';
 import DatabaseService from './DatabaseService';
+import BeanTypes from '@/lib/di-ioc-container/bean.types';
+import LoggerService from '@/modules/core/services/logger-service/LoggerService';
 
 @injectable()
 class DatabaseServiceImpl implements DatabaseService {
 
   private readonly dataSource: DataSource;
+  private loggerMeta = { service: 'DatabaseService' };
 
-  constructor() {
+  constructor(
+    @inject(BeanTypes.LoggerService) private readonly logger: LoggerService,
+  ) {
     this.dataSource = AppDataSource;
   }
 
   public async connect(): Promise<void> {
-    console.log('🛢 [Database]: Establishing Database connection...');
+    this.logger.info('🛢 Establishing Database connection...', this.loggerMeta);
 
     try {
       await this.dataSource.initialize();
 
       if (this.dataSource.isInitialized) {
-        console.info('🛢 [Database]: Database connection established successfully.');
+        this.logger.info('🛢 Database connection established successfully.', this.loggerMeta);
       }
 
     } catch (error) {
-      console.error('🛢 [Database]: Failed to establish database connection: ', error);
+      this.logger.error('🛢 Failed to establish database connection.', { error, ...this.loggerMeta });
       throw error;
     }
   }
 
   public async disconnect(): Promise<void> {
     try {
-      console.info('🛢 [Database]: Disconnecting database connection.');
+      this.logger.info('🛢 Disconnecting database connection.', this.loggerMeta);
 
       if (this.dataSource.isInitialized) {
         await this.dataSource.destroy();
-        console.info('🛢 [Database]: Database connection destroyed successfully.');
+        this.logger.info('🛢 Database connection destroyed successfully.', this.loggerMeta);
       } else {
-        console.info('🛢 [Database]: Database is not initialized.');
+        this.logger.warn('🛢 Database connection is not initialized.', this.loggerMeta);
       }
     } catch (error) {
-      console.error('🛢 [Database]: Failed to destroy database connection: ', error);
+      this.logger.error('🛢 Failed to destroy database connection.', { error, ...this.loggerMeta });
       throw error;
     }
   }
 
   public getRepository<T extends ObjectLiteral>(entity: EntityTarget<T>): Repository<T> {
-    // if (!this.dataSource.isInitialized) {
-    //   throw new Error('🛢 [Database]: Database connection is not initialized.');
-    // }
     return this.dataSource.getRepository<T>(entity);
   }
 
   public getQueryRunner(): QueryRunner {
-    // if (!this.dataSource.isInitialized) {
-    //   throw new Error('🛢 [Database]: Database connection is not initialized.');
-    // }
     return this.dataSource.createQueryRunner();
   }
 
   public async executeTransaction<T>(transactionFn: (manager: EntityManager) => Promise<T>): Promise<T> {
-    // if (!this.dataSource.isInitialized) {
-    //   throw new Error('🛢 [Database]: Database connection is not initialized.');
-    // }
-
     return this.dataSource.transaction(async (manager) => {
       return transactionFn(manager);
     });
   }
 
   public getQueryBuilder<T extends ObjectLiteral>(entity: EntityTarget<T>, alias: string): SelectQueryBuilder<T> {
-    // if (!this.dataSource.isInitialized) {
-    //   throw new Error('🛢 [Database]: Database connection is not initialized.');
-    // }
     return this.dataSource.getRepository(entity).createQueryBuilder(alias);
   }
 
   public async executeRawQuery<T>(query: string, parameters?: any[]): Promise<T> {
-    // if (!this.dataSource.isInitialized) {
-    //   throw new Error('🛢 [Database]: Database connection is not initialized.');
-    // }
-
     return this.dataSource.query(query, parameters);
   }
 }

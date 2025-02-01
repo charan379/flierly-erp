@@ -4,10 +4,15 @@ import ProductServiceImpl from "../service/product-service/ProductServiceImpl";
 import ProductController from "../controller/product-controller/ProductController";
 import ProductControllerImpl from "../controller/product-controller/ProductControllerImpl";
 import ProductModuleBeanTypes from "./bean.types";
+import ProductStockService from "../service/product-stock-service/ProductStockService";
+import ProductStockServiceImpl from "../service/product-stock-service/ProductStockServiceImpl";
 
 const ProductModuleBeans = new ContainerModule((bind) => {
+
     bind<ProductService>(ProductModuleBeanTypes.ProductService).to(ProductServiceImpl).inSingletonScope();
     bind<ProductController>(ProductModuleBeanTypes.ProductController).to(ProductControllerImpl).inSingletonScope();
+    bind<ProductStockService>(ProductModuleBeanTypes.ProductStockService).to(ProductStockServiceImpl).inSingletonScope();
+
 });
 
 export default ProductModuleBeans;

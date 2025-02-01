@@ -4,10 +4,10 @@ import HttpCodes from '@/constants/http-codes.enum';
 import errorHandler from '@/middlewares/error-handler.middleware';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import ReqResLogger from '@/middlewares/req-res-logger.middlerware';
 import { EnvConfig } from '@/config/env';
 import { CorsConfig } from '@/config/cors';
 import appRoutes from './router';
+import apiRequestResponseLogger from './middlewares/api-request-response-logger.middleware';
 
 dotenv.config();
 
@@ -23,7 +23,9 @@ app.use(cors(CorsConfig));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use(ReqResLogger);
+// pino logger
+// app.use(ReqResLogger);
+app.use(apiRequestResponseLogger);
 
 app.use(appRoutes);
 

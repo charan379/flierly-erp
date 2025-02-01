@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToOne, Index, Unique, PrimaryColumn } from "typeorm";
+import { Entity, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToOne, Index, Unique, PrimaryColumn } from "typeorm";
 import Product from "./Product.entity";
 import { DecimalTransformer } from "@/lib/database/typeorm/utils/DecimalTransformer";
 import { IsInt, IsNumber, IsOptional, Min } from "class-validator";
@@ -10,9 +10,9 @@ import Inventory from "@/modules/inventory/entities/Inventory.entity";
 @Index(["productId", "inventoryId"], { unique: true })
 export default class ProductStock {
 
+    @PrimaryColumn({ type: 'bigint', transformer: NumericTransformer, generated: true, update: false })
     @IsInt({ message: 'Product Stock ID must be an integer.' })
     @Type(() => Number)
-    @PrimaryColumn({ type: 'bigint', transformer: NumericTransformer, generated: true, update: false })
     @IsOptional()
     id: number;
 
@@ -20,7 +20,7 @@ export default class ProductStock {
     @JoinColumn({ name: "product_id", })
     @IsOptional()
     @Type(() => Product)
-    product: Product;
+    product!: Product;
 
     @Column({ name: 'product_id', type: 'bigint', transformer: NumericTransformer })
     @Index()
@@ -32,7 +32,7 @@ export default class ProductStock {
     @JoinColumn({ name: "inventory_id", })
     @IsOptional()
     @Type(() => Inventory)
-    inventory: Inventory;
+    inventory!: Inventory;
 
     @Column({ name: 'inventory_id', type: 'bigint', transformer: NumericTransformer, nullable: true })
     @Index()

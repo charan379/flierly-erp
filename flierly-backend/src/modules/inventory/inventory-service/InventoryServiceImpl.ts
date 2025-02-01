@@ -1,23 +1,34 @@
 import { EntityManager } from "typeorm";
-import { InventoryTransactionType } from "../constants/inventory-transaction-type.enum";
-import { InventoryType } from "../constants/inventory-type.enum";
 import Inventory from "../entities/Inventory.entity";
 import InventoryService from "./InventoryService";
-import { injectable } from "inversify";
+import { inject, injectable } from "inversify";
+import DatabaseService from "@/lib/database/database-service/DatabaseService";
+import BeanTypes from "@/lib/di-ioc-container/bean.types";
+import ProductStockService from "@/modules/product/service/product-stock-service/ProductStockService";
+import validateEntityInstance from "@/lib/class-validator/utils/validate-entity.util";
 
 @injectable()
 export default class InventoryServiceImpl implements InventoryService {
 
-    createInventory(inventory: Partial<Inventory>): Promise<Partial<Inventory>> {
-        throw new Error("Method not implemented.");
+    constructor(
+        @inject(BeanTypes.DatabaseService) private readonly DatabaseService: DatabaseService,
+        @inject(BeanTypes.ProductStockService) private readonly ProductStockService: ProductStockService,
+    ) {
+
     };
 
-    transferStockIntraBranch(sourceInventoryId: number, destinationInventoryId: number, branchId: number, productId: number, quantity: number, transactionType: InventoryTransactionType, costPerUnit: number, transactionManager?: EntityManager): Promise<void> {
-        throw new Error("Method not implemented.");
-    };
+    async createInventory(inventory: Partial<Inventory>, entityManager?: EntityManager): Promise<Partial<Inventory>> {
+        try {
+            const inventoryRepository = entityManager?.getRepository(Inventory) || this.DatabaseService.getRepository(Inventory);
 
-    transferStockInterBranch(sourceBranchId: number, sourceBranchInventoryId: number, destinationBranchId: number, destinationBranchInventoryId: number, productId: number, quantity: number, transactionType: InventoryTransactionType, costPerUnit: number, transactionManager?: EntityManager): Promise<void> {
-        throw new Error("Method not implemented.");
+            const newInventory = inventoryRepository.create(inventory);
+
+            await validateEntityInstance(newInventory);
+
+            return await inventoryRepository.save(newInventory);
+        } catch (error) {
+            throw error;
+        }
     };
 
 }
