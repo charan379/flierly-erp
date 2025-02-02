@@ -14,6 +14,8 @@ dotenv.config();
 // create express application instance
 const app: Express = express();
 
+app.use(apiRequestResponseLogger);
+
 // set app environment
 app.set('env', EnvConfig.NODE_ENV);
 
@@ -25,12 +27,10 @@ app.use(express.urlencoded({ extended: false }));
 
 // pino logger
 // app.use(ReqResLogger);
-app.use(apiRequestResponseLogger);
 
 app.use(appRoutes);
 
 app.all('/*', (req, res, next) => {
-  // console.debug(req.path);
   next(createHttpError(HttpCodes.NOT_FOUND));
 });
 

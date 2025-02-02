@@ -2,6 +2,9 @@ import { Brackets, WhereExpressionBuilder } from "typeorm";
 import parseCondition from "./parse-condition.util";
 import FlierlyException from "@/lib/flierly.exception";
 import HttpCodes from "@/constants/http-codes.enum";
+import iocContainer from "@/lib/di-ioc-container";
+import LoggerService from "@/modules/core/services/logger-service/LoggerService";
+import BeanTypes from "@/lib/di-ioc-container/bean.types";
 
 /**
  * Recursively applies filter conditions to a QueryBuilder's `where` clause.
@@ -29,6 +32,9 @@ const applyWhereConditionsQB = (
     conditions: any,
     alias: string
 ) => {
+    // get logger service instance from ioc container
+    const logger = iocContainer.get<LoggerService>(BeanTypes.LoggerService);
+    const loggerMeta = { service: "ApplyWhereConditionQB" };
     for (const field in conditions) {
         if (Object.prototype.hasOwnProperty.call(conditions, field)) {
             const condition = conditions[field];
@@ -64,8 +70,7 @@ const applyWhereConditionsQB = (
                     qb[whereMethod](query, parameters);
                 }
             } catch (error) {
-                console.error(`Error parsing condition for field "${field}":`, error);
-
+                logger.debug(`Error parsing condition for field "${field}": ${(error as Error).message}`, { ...loggerMeta, error: JSON.stringify(error) });
                 throw new FlierlyException(
                     `Error parsing condition for field "${field}": ${(error as Error).message}`,
                     HttpCodes.BAD_REQUEST,

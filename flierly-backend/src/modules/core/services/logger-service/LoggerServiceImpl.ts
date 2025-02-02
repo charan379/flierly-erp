@@ -5,22 +5,22 @@ import chalk from "chalk";
 
 export default class LoggerServiceImpl implements LoggerService {
     private logger: Logger;
-
+    private isProduction: boolean;
     constructor() {
         this.initializeLogger();
+        this.isProduction = EnvConfig.NODE_ENV === 'production';
     }
 
     private initializeLogger() {
-        const isProduction = EnvConfig.NODE_ENV === 'production';
 
         const customFormat = format.printf(({ level, message, timestamp, ...meta }) => {
             const levelColor = this.getLevelColor(level);
             const methodColor = meta.method ? this.getMethodColor(meta.method as string) : levelColor;
-            return `[${levelColor(level)}]: ${methodColor(meta.method || '')} ${message} ${JSON.stringify({ timestamp, ...meta })}`;
+            return `${chalk.gray(`${timestamp}`)} ${levelColor(level)} ${meta?.service !== "API" ? `${chalk.blue(meta?.service)}` : ""} ${methodColor(meta.method || '')} ${message}`;
         });
 
         this.logger = createLogger({
-            level: isProduction ? 'info' : 'debug',
+            level: this.isProduction ? 'info' : 'debug',
             format: format.combine(
                 format.timestamp(),
                 format.errors({ stack: true }),
@@ -40,7 +40,7 @@ export default class LoggerServiceImpl implements LoggerService {
             ],
         });
 
-        if (isProduction) {
+        if (this.isProduction) {
             this.logger.add(new transports.Console({
                 format: format.combine(
                     format.colorize({ all: true }),
@@ -89,6 +89,9 @@ export default class LoggerServiceImpl implements LoggerService {
      * @param meta - Optional metadata to include with the log message.
      */
     log(level: LogEntry['level'], message: string, meta?: LogEntry['meta']): void {
+        if (level === 'debug' && this.isProduction) {
+            return;
+        }
         this.logger.log(level, message, meta);
     }
 
@@ -125,6 +128,9 @@ export default class LoggerServiceImpl implements LoggerService {
      * @param meta - Optional metadata to include with the log message.
      */
     debug(message: string, meta?: LogEntry['meta']): void {
+        if (this.isProduction) {
+            return;
+        }
         this.logger.debug(message, meta);
     }
 

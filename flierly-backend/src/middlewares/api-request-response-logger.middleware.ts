@@ -12,10 +12,12 @@ const apiRequestResponseLogger = (req: Request, res: Response, next: NextFunctio
         // Log the response details
         logger.http(`${req.originalUrl} - ${res.statusCode} - ${duration} ms`, {
             method: req.method,
-            url: req.path,
-            duration,
+            url: req.originalUrl,
+            responseCode: res.statusCode,
+            responseTime: duration,
             userAgent: req.headers['user-agent'],
             ip: req.ip,
+            service: 'API'
         });
     });
 

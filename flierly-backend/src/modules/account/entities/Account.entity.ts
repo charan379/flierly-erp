@@ -153,7 +153,6 @@ export default class Account {
             account: this, // Update the address with the account reference
           });
         } catch (_error) {
-          // console.error('Transaction failed, rolling back:', error);
           throw new Error('Failed to update address during account creation or update.');
         }
       });

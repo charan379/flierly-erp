@@ -4,6 +4,9 @@ import { Request, Response } from 'express';
 import apiResponseBuilder from '@/utils/builders/api-response.builder';
 import { Brackets, ObjectLiteral, SelectQueryBuilder, WhereExpressionBuilder } from 'typeorm';
 import applyWhereConditionsQB from '@/lib/database/typeorm/utils/qb-appy-where-conditions.util';
+import iocContainer from '@/lib/di-ioc-container';
+import BeanTypes from '@/lib/di-ioc-container/bean.types';
+import LoggerService from '../../services/logger-service/LoggerService';
 
 /**
  * Executes a query with parsed filter conditions using the query builder.
@@ -15,7 +18,11 @@ const executeQueryWithParsedConditions = async (req: Request, res: Response): Pr
     const { filters, page, limit } = req.body;
     let relations: string[] = req.query?.relations?.toString().split(',') ?? [];
 
-    console.log(relations);
+    // get logger service instance from ioc container
+    const logger = iocContainer.get<LoggerService>(BeanTypes.LoggerService);
+    const loggerMeta = { service: "ExecuteQueryWithParsedConditions" };
+
+    logger.debug(`Received request to fetch data with filters:`, { ...loggerMeta, filters, page, limit, relations });
 
     const repository = AppDataSource.getRepository('Product');
     const queryBuilder = repository.createQueryBuilder('product');
@@ -57,7 +64,7 @@ const executeQueryWithParsedConditions = async (req: Request, res: Response): Pr
         );
     } catch (error) {
         // Handle any errors during query execution
-        console.error("Error executing query:", error);
+        logger.debug("Error executing query:", { ...loggerMeta, error });
         return res.status(500).json(
             apiResponseBuilder({
                 controller: "misc.testExecuteQueryWithParsedConditionsQB",

@@ -11,6 +11,7 @@ import validateEnv from './lib/env-validator';
 import DatabaseService from './lib/database/database-service/DatabaseService';
 import BeanTypes from './lib/di-ioc-container/bean.types';
 import iocContainer from './lib/di-ioc-container';
+import LoggerService from './modules/core/services/logger-service/LoggerService';
 
 dotenv.config();
 
@@ -19,9 +20,11 @@ validateEnv();
 
 async function setup(): Promise<void> {
   const databaseService = iocContainer.get<DatabaseService>(BeanTypes.DatabaseService);
+  // get logger service instance from ioc container
+  const logger = iocContainer.get<LoggerService>(BeanTypes.LoggerService);
+  const loggerMeta = { service: "Setup" };
   try {
-    // const databaseService: DatabaseService = iocContainer.get<BeanTypes>();
-    console.log('⚙️  [Setup]: Starting Flierly application setup...');
+    logger.info('⚙️ Starting Flierly application setup...', loggerMeta);
     // Establish Database
     await databaseService.connect();
 
@@ -31,8 +34,8 @@ async function setup(): Promise<void> {
     // Generate Super Admin
     await generateSuperAdmin();
   } catch (error) {
-    console.error('⚙️ 🔴 [Setup]: Flierly application setup failed: ', error);
-    console.log(error);
+    logger.error('⚙️ 🔴 Flierly application setup failed: ', { ...loggerMeta, error: JSON.stringify(error) });
+    logger.debug(`⚙️ 🔴 Flierly application setup failed: ${JSON.stringify(error)}`, { ...loggerMeta, error: JSON.stringify(error) });
     process.exit(1);
   } finally {
     await databaseService.disconnect();

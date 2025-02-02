@@ -8,6 +8,9 @@ import { getMessage as m } from "@/utils/get-message.util";
 import { plainToInstance } from "class-transformer";
 import { validate, ValidationError } from "class-validator";
 import { NextFunction, Request, Response } from "express";
+import iocContainer from "@/lib/di-ioc-container";
+import LoggerService from "@/modules/core/services/logger-service/LoggerService";
+import BeanTypes from "@/lib/di-ioc-container/bean.types";
 
 /**
  * Middleware for validating incoming requests using class-validator.
@@ -26,6 +29,9 @@ export function requestValidator(
     requestObjectType: "body" | "query" | "params"
 ): (req: Request, res: Response, next: NextFunction) => Promise<void | Response> {
     return async (req: Request, res: Response, next: NextFunction) => {
+        // get logger service instance from ioc container
+        const logger = iocContainer.get<LoggerService>(BeanTypes.LoggerService);
+        const loggerMeta = { service: "RequestValidator" };
         try {
             let ValidatorClass;
 
@@ -88,7 +94,7 @@ export function requestValidator(
 
             // If validation passes, attach the validated object to the request
             req[requestObjectType] = dtoObject;
-            console.log({dtoObject});
+            logger.debug(`Request validated successfully`, { ...loggerMeta, requestObjectType, dtoObject });
             // Pass control to the next middleware
             return next();
         } catch (error) {

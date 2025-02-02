@@ -4,6 +4,9 @@ import { Request, Response } from 'express';
 import apiResponseBuilder from '@/utils/builders/api-response.builder';
 import { FindManyOptions, ObjectLiteral } from 'typeorm';
 import whereCondition from '@/lib/database/typeorm/utils/where-condintion.util';
+import iocContainer from '@/lib/di-ioc-container';
+import LoggerService from '../../services/logger-service/LoggerService';
+import BeanTypes from '@/lib/di-ioc-container/bean.types';
 
 /**
  * Executes a query with parsed filter conditions using the find function.
@@ -15,6 +18,10 @@ const executeQueryWithParsedConditionsWithFind = async (req: Request, res: Respo
     const filterConditions: { [key: string]: any } = req.body;
 
     const repository = AppDataSource.getRepository('Privilege');
+
+    // get logger service instance from ioc container
+    const logger = iocContainer.get<LoggerService>(BeanTypes.LoggerService);
+    const loggerMeta = { service: "executeQueryWithParsedConditionsWithFind" };
 
     // Initialize FindManyOptions
     const findOptions: FindManyOptions<ObjectLiteral> = {
@@ -39,7 +46,7 @@ const executeQueryWithParsedConditionsWithFind = async (req: Request, res: Respo
                         where[field] = parseCondition({ conditionFor: "find", condition, fieldAlias: field });
                     }
                 } catch (error) {
-                    console.error(`Error parsing condition for field "${field}":`, error);
+                    logger.debug(`Error parsing condition for field "${field}":`, { ...loggerMeta, error });
                     invalidConditions.set(field, `${(error as Error).message}`);
                 }
             }
@@ -70,7 +77,7 @@ const executeQueryWithParsedConditionsWithFind = async (req: Request, res: Respo
         );
     } catch (error) {
         // Handle any errors during query execution
-        console.error("Error executing query:", error);
+        logger.debug("Error executing query:", { ...loggerMeta, error });
         return res.status(500).json(
             apiResponseBuilder({
                 controller: "misc.executeQueryWithParsedConditionsWithFind",

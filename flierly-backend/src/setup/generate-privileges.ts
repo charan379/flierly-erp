@@ -3,9 +3,12 @@ import { AppDataSource } from '@/lib/database/typeorm/app-datasource';
 import getDifferenceFromArrayOfObjects from '@/utils/get-difference-from-arary-of-objects.util';
 import Privilege from '@/modules/iam/entities/Privilege.entity';
 import { getEntityList } from '@/modules';
+import iocContainer from '@/lib/di-ioc-container';
+import LoggerService from '@/modules/core/services/logger-service/LoggerService';
+import BeanTypes from '@/lib/di-ioc-container/bean.types';
 
 // Function to generate privilege array based on entities and access types
-async function generatePrivilegesArray (): Promise<Partial<Privilege>[]> {
+async function generatePrivilegesArray(): Promise<Partial<Privilege>[]> {
   const privileges: Partial<Privilege>[] = [];
   const entities = await getEntityList();
 
@@ -34,7 +37,7 @@ async function generatePrivilegesArray (): Promise<Partial<Privilege>[]> {
 }
 
 // Function to generate and sync privileges with the database
-async function generatePrivileges () {
+async function generatePrivileges() {
   const privilegeRepository = AppDataSource.getRepository(Privilege);
 
   // Generate privilege array
@@ -47,22 +50,26 @@ async function generatePrivileges () {
   const privilegesToBeAdded: Partial<Privilege>[] = getDifferenceFromArrayOfObjects<Partial<Privilege>>(existingPrivileges, privileges, 'code');
   const privilegesToBeRemoved: Privilege[] = getDifferenceFromArrayOfObjects<Privilege>(privileges, existingPrivileges, 'code');
 
-  console.log(`🔑 [Generate Privileges]: \n
+  // get logger service instance from ioc container
+  const logger = iocContainer.get<LoggerService>(BeanTypes.LoggerService);
+  const loggerMeta = { service: "GeneratePrivilegesArray" };
+
+  logger.info(`🔑 [Generate Privileges]: \n
     New privileges to be added: ${privilegesToBeAdded.length} \n
     Old privileges to be removed: ${privilegesToBeRemoved.length} \n
-    `);
+    `, loggerMeta);
 
   // Delete privileges to be removed
   if (privilegesToBeRemoved.length > 0) {
     await privilegeRepository.remove(privilegesToBeRemoved);
-    console.log(`🔑 [Delete Privileges]: Deleted ${privilegesToBeRemoved.length} privileges.`);
+    logger.info(`🔑 [Delete Privileges]: Deleted ${privilegesToBeRemoved.length} privileges.`)
   }
 
   // Insert new privileges
   if (privilegesToBeAdded.length > 0) {
     const result = await privilegeRepository.save(privilegesToBeAdded);
-    console.log(`🔑 [Generate Privileges]: Generated ${result.length} privileges. \n
-         Generated privileges are: ${result.map((permission) => permission.code).join(', ')} \n`);
+    logger.info(`🔑 [Generate Privileges]: Generated ${result.length} privileges. \n
+         Generated privileges are: ${result.map((permission) => permission.code).join(', ')} \n`)
   }
 }
 

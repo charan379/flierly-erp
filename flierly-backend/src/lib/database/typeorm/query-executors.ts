@@ -2,6 +2,9 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { AppDataSource } from './app-datasource';
 import { getCache, setCache } from '../../cache';
+import LoggerService from '@/modules/core/services/logger-service/LoggerService';
+import BeanTypes from '@/lib/di-ioc-container/bean.types';
+import iocContainer from '@/lib/di-ioc-container';
 
 /**
  * Executes a SQL query from a file with the given parameters.
@@ -12,6 +15,9 @@ import { getCache, setCache } from '../../cache';
  */
 async function executeQueryFromFile<T>(relativeFilePath: string, params: any[], cacheDuration: number = 60000): Promise<T> {
   const queryRunner = AppDataSource.createQueryRunner();
+  // get logger service instance from ioc container
+  const logger = iocContainer.get<LoggerService>(BeanTypes.LoggerService);
+  const loggerMeta = { service: "QueryExecutor" };
   try {
     const cacheKey = `${relativeFilePath}:${JSON.stringify(params)}`;
 
@@ -35,7 +41,7 @@ async function executeQueryFromFile<T>(relativeFilePath: string, params: any[], 
 
     return result as T;
   } catch (error) {
-    console.error('Error executing query:', error);
+    logger.debug('Error executing query:', { ...loggerMeta, error: JSON.stringify(error) });
     throw error;
   } finally {
     await queryRunner.release()
