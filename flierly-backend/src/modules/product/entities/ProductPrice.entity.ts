@@ -46,7 +46,6 @@ export default class ProductPrice {
     @IsNumber({}, { message: 'Price must be a valid number' })
     @IsPositive({ message: 'Price must be greater than zero' })
     @Min(0, { message: 'Price cannot be negative' })
-    @IsNumber()
     @Type(() => Number)
     price: number;
 

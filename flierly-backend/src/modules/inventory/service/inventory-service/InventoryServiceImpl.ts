@@ -15,7 +15,6 @@ export default class InventoryServiceImpl implements InventoryService {
 
     constructor(
         @inject(BeanTypes.DatabaseService) private readonly DatabaseService: DatabaseService,
-        @inject(BeanTypes.ProductStockService) private readonly ProductStockService: ProductStockService,
     ) {
 
     };

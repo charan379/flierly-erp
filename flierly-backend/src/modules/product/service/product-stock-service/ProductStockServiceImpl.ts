@@ -13,6 +13,7 @@ import { InventoryTransactionType } from "@/modules/inventory/constants/inventor
 import InventoryTransactionService from "@/modules/inventory/service/inventory-transaction-service/InventoryTransactionService";
 import InventoryService from "@/modules/inventory/service/inventory-service/InventoryService";
 import { InventoryEntryType } from "@/modules/inventory/constants/inventory-entry-type.enum";
+import TransferStockIntraBranchDTO from "../../dto/TransferStockIntraBranch.dto";
 
 @injectable()
 export default class ProductStockServiceImpl implements ProductStockService {
@@ -20,7 +21,6 @@ export default class ProductStockServiceImpl implements ProductStockService {
     constructor(
         @inject(BeanTypes.DatabaseService) private readonly databaseService: DatabaseService,
         @inject(BeanTypes.InventoryTransactionService) private readonly inventoryTransactionService: InventoryTransactionService,
-        @inject(BeanTypes.InventoryService) private readonly inventoryService: InventoryService,
     ) {
 
     };
@@ -58,10 +58,11 @@ export default class ProductStockServiceImpl implements ProductStockService {
                 productStock.balance -= quantity;
             };
 
-            if (productStock.balance < 0) {
-                throw new FlierlyException("Insufficient stock", HttpCodes.BAD_REQUEST, JSON.stringify({ productId, inventoryId, quantity, operation }));
-            };
-
+            // if (productStock.balance < 0) {
+            //     throw new FlierlyException("Insufficient stock", HttpCodes.BAD_REQUEST, JSON.stringify({ productId, inventoryId, quantity, operation }));
+            // };
+            await validateEntityInstance(productStock);
+            
             return await productStockRepository.save(productStock);
 
         } catch (error) {
@@ -93,21 +94,64 @@ export default class ProductStockServiceImpl implements ProductStockService {
         }
     };
 
-    async transferStockIntraBranch(sourceInventoryId: number, destinationInventoryId: number, branchId: number, productId: number, quantity: number, transactionType: InventoryTransactionType, costPerUnit: number, entityManager?: EntityManager): Promise<void> {
+    async transferStockIntraBranch(transferStockIntraBranchDTO: TransferStockIntraBranchDTO, entityManager?: EntityManager): Promise<void> {
         try {
-            const sourceInventory = await this.databaseService.getRepository(Inventory).findOne({ where: { id: sourceInventoryId, branchId } });
-            const destinationInventory = await this.databaseService.getRepository(Inventory).findOne({ where: { id: destinationInventoryId, branchId } });
+            const { branchId, costPerUnit, destinationInventoryId, productId, productSerialNumber, quantity, referenceDocType, remarks, sourceInventoryId, transactionType, referenceDocId } = transferStockIntraBranchDTO;
 
-            if (!sourceInventory) {
-                throw new FlierlyException("Source inventory not found", HttpCodes.BAD_REQUEST, JSON.stringify({ sourceInventoryId, branchId }));
+            const executeTransfer = async (manager: EntityManager) => {
+                const sourceInventory = await manager.getRepository(Inventory).findOne({ where: { id: sourceInventoryId, branchId } });
+                const destinationInventory = await manager.getRepository(Inventory).findOne({ where: { id: destinationInventoryId, branchId } });
+
+                if (!sourceInventory) {
+                    throw new FlierlyException("Source inventory not found", HttpCodes.BAD_REQUEST, JSON.stringify({ sourceInventoryId, branchId }));
+                };
+
+                if (!destinationInventory) {
+                    throw new FlierlyException("Destination inventory not found", HttpCodes.BAD_REQUEST, JSON.stringify({ destinationInventoryId, branchId }));
+                };
+
+                await this.updateProductStockBalance(productId, sourceInventoryId, quantity, ProductStockOperationType.REMOVE, manager);
+
+                await this.inventoryTransactionService.logInventoryTransaction(
+                    {
+                        costPerUnit,
+                        entryType: InventoryEntryType.DEBIT,
+                        productSerialNumber,
+                        quantity,
+                        referenceDocId,
+                        referenceDocType,
+                        remarks,
+                        transactionType,
+                        inventoryId: sourceInventoryId
+                    }
+                    , manager
+                )
+
+                await this.updateProductStockBalance(productId, destinationInventoryId, quantity, ProductStockOperationType.ADD, manager);
+
+                await this.inventoryTransactionService.logInventoryTransaction(
+                    {
+                        costPerUnit,
+                        entryType: InventoryEntryType.CREDIT,
+                        productSerialNumber,
+                        quantity,
+                        referenceDocId,
+                        referenceDocType,
+                        remarks,
+                        transactionType,
+                        inventoryId: destinationInventoryId,
+                    }
+                    , manager
+                )
+            }
+
+            if (entityManager) {
+                await executeTransfer(entityManager);
+            } else {
+                await this.databaseService.executeTransaction(async entityManager => {
+                    await executeTransfer(entityManager);
+                })
             };
-
-            if (!destinationInventory) {
-                throw new FlierlyException("Destination inventory not found", HttpCodes.BAD_REQUEST, JSON.stringify({ destinationInventoryId, branchId }));
-            };
-
-            await this.updateProductStockBalance(productId, sourceInventoryId, quantity, ProductStockOperationType.REMOVE, entityManager);
-            await this.updateProductStockBalance(productId, destinationInventoryId, quantity, ProductStockOperationType.ADD, entityManager);
 
         } catch (error) {
             throw error;

@@ -2,6 +2,7 @@ import { EntityManager } from "typeorm";
 import ProductStock from "../../entities/ProductStock.entity";
 import { ProductStockOperationType } from "../../constants/product-stock-operation-type.enum";
 import { InventoryTransactionType } from "@/modules/inventory/constants/inventory-transaction-type.enum";
+import TransferStockIntraBranchDTO from "../../dto/TransferStockIntraBranch.dto";
 
 export default interface ProductStockService {
     /**
@@ -31,23 +32,11 @@ export default interface ProductStockService {
 
     /**
      * Transfer Stock between accounts within same branch
-     * @param sourceInventoryId 
-     * @param destinationInventoryId 
-     * @param branchId 
-     * @param productId 
-     * @param quantity 
-     * @param transactionType 
-     * @param costPerUnit 
+     * @param transferStockIntraBranchDTO 
      * @param entityManager 
      */
     transferStockIntraBranch(
-        sourceInventoryId: number,
-        destinationInventoryId: number,
-        branchId: number,
-        productId: number,
-        quantity: number,
-        transactionType: InventoryTransactionType,
-        costPerUnit: number,
+        transferStockIntraBranchDTO: TransferStockIntraBranchDTO,
         entityManager?: EntityManager
     ): Promise<void>;
 

@@ -42,7 +42,7 @@ export default class ProductStock {
 
     @Column("decimal", { precision: 15, scale: 2, default: 0, transformer: DecimalTransformer })
     @IsNumber({}, { message: 'Balance Quantity must be a valid number' })
-    @Min(0, { message: 'Balance Quantity cannot be negative' })
+    // @Min(0, { message: 'Balance Quantity cannot be negative' })
     @Type(() => Number)
     balance: number;
 

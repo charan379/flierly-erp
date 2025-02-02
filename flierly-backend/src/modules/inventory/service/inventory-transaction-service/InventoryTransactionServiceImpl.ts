@@ -25,7 +25,7 @@ export default class InventoryTransactionServiceImpl implements InventoryTransac
             const inventoryTransaction = InventoryTransactionRepository.create(transaction);
 
             await validateEntityInstance(inventoryTransaction);
-
+            this.loggerService.debug(JSON.stringify(inventoryTransaction))
             return await InventoryTransactionRepository.save(inventoryTransaction);
         } catch (error) {
             throw error;

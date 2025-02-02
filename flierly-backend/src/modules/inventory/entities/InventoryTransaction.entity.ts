@@ -1,12 +1,14 @@
 import { DecimalTransformer } from "@/lib/database/typeorm/utils/DecimalTransformer";
 import { Type } from "class-transformer";
-import { IsBoolean, IsEnum, IsInt, IsNumber, IsOptional, IsPositive, Length, Matches, Min } from "class-validator";
-import { Column, CreateDateColumn, Index, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { IsBoolean, IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, Length, Matches, Min } from "class-validator";
+import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { InventoryEntryType } from "../constants/inventory-entry-type.enum";
 import { InventoryTransactionType } from "../constants/inventory-transaction-type.enum";
 import { NumericTransformer } from "@/lib/database/typeorm/utils/NumericTransformer";
 import { InventoryTransactionRefDocType } from "../constants/inventory-transaction-ref-doc-type.enum";
+import Inventory from "./Inventory.entity";
 
+@Entity('inventory_transactions')
 export default class InventoryTransaction {
 
     @PrimaryColumn({ type: 'bigint', transformer: NumericTransformer, generated: true, update: false })
@@ -15,23 +17,36 @@ export default class InventoryTransaction {
     @IsOptional()
     id: number;
 
+    @ManyToOne(() => Inventory, { eager: false, nullable: false })
+    @JoinColumn({ name: "inventory_id" })
+    @IsOptional()
+    @Type(() => Inventory)
+    inventory: Inventory;
+
+    @Column({ name: 'inventory_id', type: 'bigint', transformer: NumericTransformer })
+    @Index()
+    @Type(() => Number)
+    @IsInt({ message: 'Inventory ID must be an integer.' })
+    @IsNotEmpty({ message: 'Inventory ID must not be empty.' })
+    inventoryId: number;
+
     @Column({ type: 'boolean', default: false, name: 'is_rolled_back' })
     @IsOptional()
     @IsBoolean()
     @Type(() => Boolean)
     isRolledBack: boolean;
 
-    @Column({ type: 'boolean', default: false, name: 'is__a_roll_back' })
+    @Column({ type: 'boolean', default: false, name: 'is_a_roll_back' })
     @IsOptional()
     @IsBoolean()
     @Type(() => Boolean)
     isARollBack: boolean;
 
-    @Column({ name: 'rollback_transaction_id', type: 'bigint', transformer: NumericTransformer, nullable: true })
-    @Type(() => Number)
+    @Column({ name: 'rollback_transaction_id', type: 'varchar', length: 20, default: null, nullable: true })
+    @Type(() => String)
     @IsInt({ message: 'Rollback transaction ID must be an integer.' })
     @IsOptional()
-    rollbackTransactionId: number;
+    rollbackTransactionId?: string;
 
     @Column("decimal", { precision: 15, scale: 2, default: 0, transformer: DecimalTransformer })
     @IsNumber({}, { message: 'Quantity must be a valid number' })
@@ -56,9 +71,10 @@ export default class InventoryTransaction {
     @IsEnum(InventoryTransactionType)
     transactionType: InventoryTransactionType;
 
-    @Column({ type: 'enum', enum: InventoryTransactionRefDocType, name: "reference_doc_type" })
+    @Column({ type: 'enum', enum: InventoryTransactionRefDocType, name: "reference_doc_type", nullable: true })
     @IsEnum(InventoryTransactionRefDocType)
-    referenceDocType: InventoryTransactionRefDocType;
+    @IsOptional()
+    referenceDocType?: InventoryTransactionRefDocType;
 
     @Column({ type: 'varchar', length: 50, unique: false, nullable: true, name: "reference_id" })
     @Index()
