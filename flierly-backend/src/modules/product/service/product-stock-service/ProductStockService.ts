@@ -30,16 +30,16 @@ export default interface ProductStockService {
     updateProductStock(productStockId: number, productStock: Partial<ProductStock>, entityManager?: EntityManager): Promise<Partial<ProductStock>>;
 
     /**
- * Transfer Stock between accounts within same branch
- * @param sourceInventoryId 
- * @param destinationInventoryId 
- * @param branchId 
- * @param productId 
- * @param quantity 
- * @param transactionType 
- * @param costPerUnit 
- * @param entityManager 
- */
+     * Transfer Stock between accounts within same branch
+     * @param sourceInventoryId 
+     * @param destinationInventoryId 
+     * @param branchId 
+     * @param productId 
+     * @param quantity 
+     * @param transactionType 
+     * @param costPerUnit 
+     * @param entityManager 
+     */
     transferStockIntraBranch(
         sourceInventoryId: number,
         destinationInventoryId: number,

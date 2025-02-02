@@ -52,7 +52,7 @@ async function generatePrivileges() {
 
   // get logger service instance from ioc container
   const logger = iocContainer.get<LoggerService>(BeanTypes.LoggerService);
-  const loggerMeta = { service: "GeneratePrivilegesArray" };
+  const loggerMeta = { service: "GeneratePrivileges" };
 
   logger.info(`🔑 [Generate Privileges]: \n
     New privileges to be added: ${privilegesToBeAdded.length} \n

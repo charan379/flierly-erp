@@ -23,7 +23,7 @@ export default class Inventory {
     @Column({ type: 'enum', enum: InventoryType, default: InventoryType.AVAILABLE, name: "inventory_type" })
     @IsEnum(InventoryType)
     @IsOptional()
-    inventoryType: InventoryType;
+    inventoryType: InventoryType = InventoryType.AVAILABLE;
 
     @ManyToOne(() => Branch, { eager: false, nullable: false })
     @JoinColumn({ name: "branch_id" })
@@ -35,6 +35,7 @@ export default class Inventory {
     @Index()
     @Type(() => Number)
     @IsInt({ message: 'Branch ID must be an integer.' })
+    @IsNotEmpty({ message: 'Branch ID must not be empty.' })
     branchId: number;
 
     @Column({ type: 'text', nullable: true })

@@ -11,6 +11,7 @@ import { NextFunction, Request, Response } from "express";
 import iocContainer from "@/lib/di-ioc-container";
 import LoggerService from "@/modules/core/services/logger-service/LoggerService";
 import BeanTypes from "@/lib/di-ioc-container/bean.types";
+import Inventory from "@/modules/inventory/entities/Inventory.entity";
 
 /**
  * Middleware for validating incoming requests using class-validator.
@@ -59,14 +60,16 @@ export function requestValidator(
 
                 ValidatorClass = EntityClass;
             }
+            
             // Transform incoming request object into the DTO class
-            const dtoObject = plainToInstance(ValidatorClass, req[requestObjectType]);
+            const dtoObject = plainToInstance(ValidatorClass, req[requestObjectType], {});
 
             // Validate the DTO object using class-validator
             const validationErrors = await validate(dtoObject, {
-                forbidUnknownValues: true,
-                skipUndefinedProperties: true,
                 stopAtFirstError: false,
+                forbidUnknownValues: true,
+                forbidNonWhitelisted: true,
+                whitelist: true,
             });
 
             // If validation errors exist, build and return a 400 Bad Request response

@@ -1,5 +1,6 @@
 import { DataSource, Repository, QueryRunner } from 'typeorm';
 import DatabaseServiceImpl from '../database-service/DatabaseServiceImpl';
+import LoggerServiceImpl from '@/modules/core/services/logger-service/LoggerServiceImpl';
 
 // Mock the DataSource and its methods
 jest.mock('typeorm', () => ({
@@ -24,7 +25,7 @@ describe('DatabaseServiceImpl', () => {
 
     beforeEach(() => {
         // Create a new instance of the service
-        databaseService = new DatabaseServiceImpl();
+        databaseService = new DatabaseServiceImpl(new LoggerServiceImpl());
 
         // Mock the DataSource instance
         mockDataSource = databaseService['dataSource'] as jest.Mocked<DataSource>;

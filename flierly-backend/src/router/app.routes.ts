@@ -4,6 +4,7 @@ import productModuleRoutes from "@/modules/product/routes";
 import organizationModuleRoutes from "@/modules/organization/routes";
 import voltasModuleRoutes from "@/modules/voltas/routes";
 import { Router } from "express";
+import inventoryModuleRoutes from "@/modules/inventory/routes";
 
 const appRoutes = Router();
 
@@ -12,5 +13,6 @@ appRoutes.use(coreModuleRoutes);
 appRoutes.use(productModuleRoutes);
 appRoutes.use(organizationModuleRoutes);
 appRoutes.use(voltasModuleRoutes);
+appRoutes.use(inventoryModuleRoutes);
 
 export default appRoutes;

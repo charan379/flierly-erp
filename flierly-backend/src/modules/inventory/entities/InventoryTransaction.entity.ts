@@ -5,6 +5,7 @@ import { Column, CreateDateColumn, Index, PrimaryColumn, PrimaryGeneratedColumn 
 import { InventoryEntryType } from "../constants/inventory-entry-type.enum";
 import { InventoryTransactionType } from "../constants/inventory-transaction-type.enum";
 import { NumericTransformer } from "@/lib/database/typeorm/utils/NumericTransformer";
+import { InventoryTransactionRefDocType } from "../constants/inventory-transaction-ref-doc-type.enum";
 
 export default class InventoryTransaction {
 
@@ -55,9 +56,9 @@ export default class InventoryTransaction {
     @IsEnum(InventoryTransactionType)
     transactionType: InventoryTransactionType;
 
-    @Column({ type: 'enum', enum: InventoryTransactionType, name: "reference_doc_type" })
-    @IsEnum(InventoryTransactionType)
-    referenceDocType: InventoryTransactionType;
+    @Column({ type: 'enum', enum: InventoryTransactionRefDocType, name: "reference_doc_type" })
+    @IsEnum(InventoryTransactionRefDocType)
+    referenceDocType: InventoryTransactionRefDocType;
 
     @Column({ type: 'varchar', length: 50, unique: false, nullable: true, name: "reference_id" })
     @Index()
@@ -65,6 +66,7 @@ export default class InventoryTransaction {
     @Length(1, 40, { message: 'ReferenceDocID must be between 1 and 40 characters.' })
     @Matches(/^[A-Z0-9_#-]{1,40}$/, { message: 'ReferenceID is not valid only capital letters, numbers, underscores and hyphens allowed.' })
     referenceDocId?: string; // sale invoice or purchase invoice number, etc.
+
     @Column({ type: 'text', nullable: true })
     @IsOptional()
     @Length(10, 250, { message: 'Description must be between 10 and 250 characters.' })
