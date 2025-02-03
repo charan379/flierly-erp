@@ -7,6 +7,7 @@ import { InventoryTransactionType } from "../constants/inventory-transaction-typ
 import { NumericTransformer } from "@/lib/database/typeorm/utils/NumericTransformer";
 import { InventoryTransactionRefDocType } from "../constants/inventory-transaction-ref-doc-type.enum";
 import Inventory from "./Inventory.entity";
+import Product from "@/modules/product/entities/Product.entity";
 
 @Entity('inventory_transactions')
 export default class InventoryTransaction {
@@ -29,6 +30,18 @@ export default class InventoryTransaction {
     @IsInt({ message: 'Inventory ID must be an integer.' })
     @IsNotEmpty({ message: 'Inventory ID must not be empty.' })
     inventoryId: number;
+
+    @ManyToOne(() => Product, { eager: false, nullable: false, })
+    @JoinColumn({ name: "product_id", })
+    @IsOptional()
+    @Type(() => Product)
+    product!: Product;
+
+    @Column({ name: 'product_id', type: 'bigint', transformer: NumericTransformer })
+    @Index()
+    @Type(() => Number)
+    @IsInt({ message: 'Product ID must be an integer.' })
+    productId: number;
 
     @Column({ type: 'boolean', default: false, name: 'is_rolled_back' })
     @IsOptional()

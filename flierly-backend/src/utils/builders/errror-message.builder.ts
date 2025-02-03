@@ -13,7 +13,7 @@ import buildValidationErrorsResult from './validation-errors-result.builder';
  * @param {Error|HttpError|FlierlyException|ValidationError|QueryFailedError|TypeORMError} error
  * @returns {ErrorMessage}
  */
-function errorMessageBuilder(error: Error | HttpError | FlierlyException | ValidationError | QueryFailedError | TypeORMError): ErrorMessage {
+function errorMessageBuilder(error: Error | HttpError | FlierlyException | ValidationError | QueryFailedError | TypeORMError | SyntaxError): ErrorMessage {
   let errorMessage: ErrorMessage;
 
   // Handle specific error types
@@ -27,6 +27,8 @@ function errorMessageBuilder(error: Error | HttpError | FlierlyException | Valid
     errorMessage = handleQueryFailedError(error);
   } else if (error instanceof TypeORMError) {
     errorMessage = handleTypeORMError(error);
+  } else if (error instanceof SyntaxError) {
+    errorMessage = handleSyntaxError(error);
   } else {
     // General Error handling
     errorMessage = handleGeneralError(error);
@@ -40,6 +42,16 @@ function handleFlierlyException(error: FlierlyException): ErrorMessage {
   return {
     name: FlierlyException.name,
     httpCode: error.httpCode,
+    message: error.message,
+    stack: error.stack,
+  };
+}
+
+// function to handle SyntaxError
+function handleSyntaxError(error: SyntaxError): ErrorMessage {
+  return {
+    name: SyntaxError.name,
+    httpCode: HttpCodes.BAD_REQUEST,
     message: error.message,
     stack: error.stack,
   };

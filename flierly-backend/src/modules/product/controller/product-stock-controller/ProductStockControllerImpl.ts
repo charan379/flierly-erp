@@ -9,6 +9,7 @@ import ProductStockService from "../../service/product-stock-service/ProductStoc
 import apiResponseBuilder from "@/utils/builders/api-response.builder";
 import HttpCodes from "@/constants/http-codes.enum";
 import LoggerService from "@/modules/core/services/logger-service/LoggerService";
+import AdjustProductStockBalanceDTO from "../../dto/AdjustProductStockBalance.dto";
 
 @injectable()
 export default class ProductStockControllerImpl implements ProductStockController {
@@ -39,6 +40,27 @@ export default class ProductStockControllerImpl implements ProductStockControlle
         } catch (error) {
             return next(error);
         }
-    }
+    };
+
+    async adjustStockBalance(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+        try {
+            const adjustProductStockBalanceDTO: AdjustProductStockBalanceDTO = plainToInstance(AdjustProductStockBalanceDTO, req.body);
+
+            await validateEntityInstance(adjustProductStockBalanceDTO);
+
+            await this.productStockService.adjustStockBalance(adjustProductStockBalanceDTO);
+
+            return res.status(HttpCodes.OK).json(apiResponseBuilder({
+                success: true,
+                message: "Stock balance adjusted successfully",
+                result: { message: "Stock balance adjusted successfully" },
+                httpCode: HttpCodes.OK,
+                req, res
+            }));
+
+        } catch (error) {
+            return next(error);
+        }
+    };
 
 }

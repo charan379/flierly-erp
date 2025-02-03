@@ -11,9 +11,9 @@ import FlierlyException from "@/lib/flierly.exception";
 import HttpCodes from "@/constants/http-codes.enum";
 import { InventoryTransactionType } from "@/modules/inventory/constants/inventory-transaction-type.enum";
 import InventoryTransactionService from "@/modules/inventory/service/inventory-transaction-service/InventoryTransactionService";
-import InventoryService from "@/modules/inventory/service/inventory-service/InventoryService";
 import { InventoryEntryType } from "@/modules/inventory/constants/inventory-entry-type.enum";
 import TransferStockIntraBranchDTO from "../../dto/TransferStockIntraBranch.dto";
+import AdjustProductStockBalanceDTO from "../../dto/AdjustProductStockBalance.dto";
 
 @injectable()
 export default class ProductStockServiceImpl implements ProductStockService {
@@ -22,7 +22,8 @@ export default class ProductStockServiceImpl implements ProductStockService {
         @inject(BeanTypes.DatabaseService) private readonly databaseService: DatabaseService,
         @inject(BeanTypes.InventoryTransactionService) private readonly inventoryTransactionService: InventoryTransactionService,
     ) {
-
+        this.databaseService = databaseService;
+        this.inventoryTransactionService = inventoryTransactionService;
     };
 
     async createProductStock(productStock: Partial<ProductStock>, entityManager?: EntityManager): Promise<ProductStock> {
@@ -34,36 +35,6 @@ export default class ProductStockServiceImpl implements ProductStockService {
             await validateEntityInstance(newProductStock);
 
             return await productStockRepository.save(newProductStock);
-
-        } catch (error) {
-            throw error;
-        }
-    };
-
-
-    async updateProductStockBalance(productId: number, inventoryId: number, quantity: number, operation: ProductStockOperationType, entityManager?: EntityManager): Promise<Partial<ProductStock>> {
-        try {
-
-            const productStockRepository = entityManager?.getRepository(ProductStock) || this.databaseService.getRepository(ProductStock);
-
-            let productStock = await productStockRepository.findOne({ where: { productId, inventoryId } });
-
-            if (!productStock) {
-                productStock = await this.createProductStock({ productId, inventoryId, balance: 0 }, entityManager);
-            };
-
-            if (operation === ProductStockOperationType.ADD) {
-                productStock.balance += quantity;
-            } else {
-                productStock.balance -= quantity;
-            };
-
-            // if (productStock.balance < 0) {
-            //     throw new FlierlyException("Insufficient stock", HttpCodes.BAD_REQUEST, JSON.stringify({ productId, inventoryId, quantity, operation }));
-            // };
-            await validateEntityInstance(productStock);
-            
-            return await productStockRepository.save(productStock);
 
         } catch (error) {
             throw error;
@@ -94,9 +65,78 @@ export default class ProductStockServiceImpl implements ProductStockService {
         }
     };
 
+
+    async updateProductStockBalance(productId: number, inventoryId: number, quantity: number, operation: ProductStockOperationType, entityManager?: EntityManager): Promise<Partial<ProductStock>> {
+        try {
+
+            const productStockRepository = entityManager?.getRepository(ProductStock) || this.databaseService.getRepository(ProductStock);
+
+            let productStock = await productStockRepository.findOne({ where: { productId, inventoryId } });
+
+            if (!productStock) {
+                productStock = await this.createProductStock({ productId, inventoryId, balance: 0 }, entityManager);
+            };
+
+            if (operation === ProductStockOperationType.ADD) {
+                productStock.balance += quantity;
+            } else {
+                productStock.balance -= quantity;
+            };
+
+            if (productStock.balance < 0) {
+                throw new FlierlyException("Insufficient stock", HttpCodes.BAD_REQUEST, JSON.stringify({ productId, inventoryId, quantity, operation }));
+            };
+
+            await validateEntityInstance(productStock);
+
+            return await productStockRepository.save(productStock);
+
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    async adjustStockBalance(adjustProductStockBalanceDTO: AdjustProductStockBalanceDTO, entityManager?: EntityManager): Promise<void> {
+        try {
+
+            const { costPerUnit, inventoryId, operationType, productId, productSerialNumber, quantity, referenceDocId, referenceDocType, remarks } = adjustProductStockBalanceDTO;
+
+            const executeAdjustment = async (manager: EntityManager) => {
+
+                await this.updateProductStockBalance(productId, inventoryId, quantity, operationType, manager);
+
+                await this.inventoryTransactionService.logInventoryTransaction(
+                    {
+                        costPerUnit,
+                        entryType: operationType === ProductStockOperationType.ADD ? InventoryEntryType.CREDIT : InventoryEntryType.DEBIT,
+                        productSerialNumber,
+                        quantity,
+                        referenceDocId,
+                        referenceDocType,
+                        remarks,
+                        transactionType: InventoryTransactionType.MANUAL_ADJUSTMENT,
+                        inventoryId,
+                        productId
+                    }
+                    , manager
+                )
+            };
+
+            if (entityManager) {
+                return executeAdjustment(entityManager);
+            } else {
+                return this.databaseService.executeTransaction(async entityManager => {
+                    return executeAdjustment(entityManager);
+                })
+            };
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async transferStockIntraBranch(transferStockIntraBranchDTO: TransferStockIntraBranchDTO, entityManager?: EntityManager): Promise<void> {
         try {
-            const { branchId, costPerUnit, destinationInventoryId, productId, productSerialNumber, quantity, referenceDocType, remarks, sourceInventoryId, transactionType, referenceDocId } = transferStockIntraBranchDTO;
+            const { branchId, costPerUnit, destinationInventoryId, productId, productSerialNumber, quantity, referenceDocType, remarks, sourceInventoryId, referenceDocId } = transferStockIntraBranchDTO;
 
             const executeTransfer = async (manager: EntityManager) => {
                 const sourceInventory = await manager.getRepository(Inventory).findOne({ where: { id: sourceInventoryId, branchId } });
@@ -110,6 +150,10 @@ export default class ProductStockServiceImpl implements ProductStockService {
                     throw new FlierlyException("Destination inventory not found", HttpCodes.BAD_REQUEST, JSON.stringify({ destinationInventoryId, branchId }));
                 };
 
+                if (sourceInventoryId === destinationInventoryId) {
+                    throw new FlierlyException("Source and destination inventory cannot be the same", HttpCodes.BAD_REQUEST, JSON.stringify({ sourceInventoryId, destinationInventoryId }));
+                };
+
                 await this.updateProductStockBalance(productId, sourceInventoryId, quantity, ProductStockOperationType.REMOVE, manager);
 
                 await this.inventoryTransactionService.logInventoryTransaction(
@@ -121,8 +165,9 @@ export default class ProductStockServiceImpl implements ProductStockService {
                         referenceDocId,
                         referenceDocType,
                         remarks,
-                        transactionType,
-                        inventoryId: sourceInventoryId
+                        transactionType: InventoryTransactionType.INTRA_BRANCH_TRANSFER,
+                        inventoryId: sourceInventoryId,
+                        productId
                     }
                     , manager
                 )
@@ -138,8 +183,9 @@ export default class ProductStockServiceImpl implements ProductStockService {
                         referenceDocId,
                         referenceDocType,
                         remarks,
-                        transactionType,
+                        transactionType: InventoryTransactionType.INTRA_BRANCH_TRANSFER,
                         inventoryId: destinationInventoryId,
+                        productId,
                     }
                     , manager
                 )

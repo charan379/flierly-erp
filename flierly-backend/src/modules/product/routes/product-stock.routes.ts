@@ -7,6 +7,7 @@ import ProductStockController from "../controller/product-stock-controller/Produ
 import BeanTypes from "@/lib/di-ioc-container/bean.types";
 import { requestValidator } from "@/middlewares/request-validator.middleware";
 import TransferStockIntraBranchDTO from "../dto/TransferStockIntraBranch.dto";
+import AdjustProductStockBalanceDTO from "../dto/AdjustProductStockBalance.dto";
 
 const productStockRoutes = Router();
 
@@ -19,6 +20,7 @@ productStockRoutes.post(`/read`, authorize(`product-stock.read`), crudController
 productStockRoutes.post(`/search`, authorize(`product-stock.read`), crudController.search);
 productStockRoutes.post(`/is-exists`, authorize(`product-stock.read`), crudController.isExists);
 productStockRoutes.post(`/page`, authorize(`product-stock.read`), crudController.page);
-productStockRoutes.post(`/intra-branch-transfer`, requestValidator(TransferStockIntraBranchDTO, "body"), authorize(`product-stock.manage`), productStockController.transferStockIntraBranch.bind(productStockController))
+productStockRoutes.post(`/intra-branch-transfer`, requestValidator(TransferStockIntraBranchDTO, "body"), authorize(`product-stock.manage`), productStockController.transferStockIntraBranch.bind(productStockController));
+productStockRoutes.post(`/adjust-balance`, requestValidator(AdjustProductStockBalanceDTO, "body"), authorize(`product-stock.manage`), productStockController.adjustStockBalance.bind(productStockController));
 
 export default productStockRoutes;

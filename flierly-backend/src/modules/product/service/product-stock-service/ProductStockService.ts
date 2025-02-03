@@ -3,6 +3,7 @@ import ProductStock from "../../entities/ProductStock.entity";
 import { ProductStockOperationType } from "../../constants/product-stock-operation-type.enum";
 import { InventoryTransactionType } from "@/modules/inventory/constants/inventory-transaction-type.enum";
 import TransferStockIntraBranchDTO from "../../dto/TransferStockIntraBranch.dto";
+import AdjustProductStockBalanceDTO from "../../dto/AdjustProductStockBalance.dto";
 
 export default interface ProductStockService {
     /**
@@ -29,6 +30,13 @@ export default interface ProductStockService {
      * @param entityManager
      */
     updateProductStock(productStockId: number, productStock: Partial<ProductStock>, entityManager?: EntityManager): Promise<Partial<ProductStock>>;
+
+    /**
+     * Update Product stock balance
+     * @param adjustProductStockBalanceDTO
+     * @param entityManager
+     */
+    adjustStockBalance(adjustProductStockBalanceDTO: AdjustProductStockBalanceDTO, entityManager?: EntityManager): Promise<void>;
 
     /**
      * Transfer Stock between accounts within same branch

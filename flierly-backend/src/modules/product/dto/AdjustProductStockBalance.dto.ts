@@ -1,26 +1,14 @@
 import { InventoryTransactionRefDocType } from '@/modules/inventory/constants/inventory-transaction-ref-doc-type.enum';
-import { InventoryTransactionType } from '@/modules/inventory/constants/inventory-transaction-type.enum';
 import { Type } from 'class-transformer';
 import { IsInt, IsPositive, IsEnum, IsNumber, IsNotEmpty, Length, IsOptional, Matches } from 'class-validator';
+import { ProductStockOperationType } from '../constants/product-stock-operation-type.enum';
 
-export default class TransferStockIntraBranchDTO {
-    @IsInt({ message: 'Source Inventory ID must be an integer.' })
+export default class AdjustProductStockBalanceDTO {
+    @IsInt({ message: 'Inventory ID must be an integer.' })
     @IsNotEmpty()
     @IsPositive()
     @Type(() => Number)
-    sourceInventoryId: number;
-
-    @IsInt({ message: 'Destination Inventory ID must be an integer.' })
-    @IsNotEmpty()
-    @IsPositive()
-    @Type(() => Number)
-    destinationInventoryId: number;
-
-    @IsInt({ message: 'Branch ID must be an integer.' })
-    @IsNotEmpty()
-    @IsPositive()
-    @Type(() => Number)
-    branchId: number;
+    inventoryId: number;
 
     @IsInt({ message: 'Product ID must be an integer.' })
     @IsNotEmpty()
@@ -33,6 +21,9 @@ export default class TransferStockIntraBranchDTO {
     @IsNotEmpty()
     @Type(() => Number)
     quantity: number;
+
+    @IsEnum(ProductStockOperationType)
+    operationType: ProductStockOperationType;
 
     @IsNumber({}, { message: 'Cost per unit must be a number.' })
     @IsPositive({ message: 'Cost per unit must be a positive number.' })
@@ -56,5 +47,4 @@ export default class TransferStockIntraBranchDTO {
     @IsOptional()
     @Matches(/^[A-Z0-9-]{5,30}$/, { message: 'Product Serial number is not valid only capital letters, numbers and hyphens allowed.' })
     productSerialNumber: string;
-
 }

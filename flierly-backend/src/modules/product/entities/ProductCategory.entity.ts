@@ -1,12 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
-import { IsInt, IsNotEmpty, Length, Matches } from 'class-validator';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, PrimaryColumn } from 'typeorm';
+import { IsInt, IsNotEmpty, IsOptional, Length, Matches } from 'class-validator';
 import { Type } from 'class-transformer';
+import { NumericTransformer } from '@/lib/database/typeorm/utils/NumericTransformer';
 
 @Entity('product_categories')
 export default class ProductCategory {
-    @PrimaryGeneratedColumn({ type: 'bigint' })
+    @PrimaryColumn({ type: 'bigint', transformer: NumericTransformer, generated: true, update: false })
     @IsInt({ message: 'Product Category ID must be an integer.' })
     @Type(() => Number)
+    @IsOptional()
     id: number;
 
     @Column({ type: 'varchar', length: 100, unique: true })

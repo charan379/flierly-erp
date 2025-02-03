@@ -1,11 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, JoinColumn, Index } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, JoinColumn, Index, PrimaryColumn } from 'typeorm';
 import { IsInt, IsNotEmpty, IsOptional, Length, Matches } from 'class-validator';
 import ProductCategory from './ProductCategory.entity';
 import { Type } from 'class-transformer';
+import { NumericTransformer } from '@/lib/database/typeorm/utils/NumericTransformer';
 
 @Entity('product_sub_categories')
 export default class ProductSubCategory {
-    @PrimaryGeneratedColumn({ type: 'bigint' })
+    @PrimaryColumn({ type: 'bigint', transformer: NumericTransformer, generated: true, update: false })
     @IsInt({ message: 'Product Sub Category ID must be an integer.' })
     @Type(() => Number)
     @IsOptional()
@@ -23,6 +24,7 @@ export default class ProductSubCategory {
     @ManyToOne(() => ProductCategory, { eager: false, nullable: false })
     @JoinColumn({ name: 'category_id' })
     @IsNotEmpty({ message: 'Parent Category must be specified.' })
+    @IsOptional()
     category: ProductCategory;
 
     @Column({ name: 'category_id', type: 'bigint' })
