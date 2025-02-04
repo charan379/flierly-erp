@@ -1,0 +1,5 @@
+{
+    "BRAND_NAME_REQUIRED": "Brand name is required.",
+    "BRAND_NAME_LENGTH": "Brand name must be between 3 and 50 characters.",
+    "BRAND_DESCRIPTION_LENGTH": "Description must be between 20 and 250 characters."
+}

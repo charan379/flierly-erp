@@ -29,94 +29,103 @@ export default class Account {
   id: number;
 
   @Column({ type: 'boolean', default: true, name: 'is_active' })
-  @IsBoolean({ message: 'Active status must be a boolean value.' })
+  @IsBoolean()
   @Type(() => Boolean)
-  isActive: boolean;
+  isActive: boolean = true;
 
   @ManyToOne(() => AccountType, { eager: false, nullable: false })
   @JoinColumn({ name: 'account_type_id' })
-  @IsNotEmpty({ message: 'Account type must be specified' })
   @Type(() => AccountType)
-  accountType: AccountType;
+  @IsOptional()
+  accountType?: AccountType;
 
   @Column({ name: 'account_type_id', type: 'bigint' })
   @Index()
   @Type(() => Number)
-  @IsInt({ message: 'Account type id must be an integer.' })
+  @IsInt()
+  @IsNotEmpty()
   accountTypeId: number;
 
   @ManyToOne(() => AccountSubtype, { eager: false, nullable: false })
   @JoinColumn({ name: 'account_subtype_id' })
-  @IsNotEmpty({ message: 'Account subtype must be specified' })
-  accountSubtype: AccountSubtype;
+  @IsOptional()
+  @Type(() => AccountSubtype)
+  accountSubtype?: AccountSubtype;
 
   @Column({ name: 'account_subtype_id', type: 'bigint' })
   @Index()
   @Type(() => Number)
-  @IsInt({ message: 'Account Sub type id must be an integer.' })
+  @IsInt()
+  @IsNotEmpty()
   accountSubtypeId: number;
 
   @Column({ type: 'boolean', default: false, name: 'is_vip' })
   @IsBoolean()
   @Type(() => Boolean)
-  isVip: boolean;
+  isVip: boolean = false;
 
   @Column({ type: 'boolean', default: false, name: 'is_key' })
   @IsBoolean()
   @Type(() => Boolean)
-  isKey: boolean;
+  isKey: boolean = false;
 
   @Column()
-  @IsNotEmpty({ message: 'Account name is required.' })
-  @Length(5, 90, { message: 'Account name must be between 5 and 90 characters.' })
+  @IsNotEmpty()
+  @Length(5, 90)
   name: string;
 
   @Column({ name: 'registered_phone', unique: true })
-  @IsNotEmpty({ message: 'Account registered phone is required.' })
-  @Matches(/^\+\d{1,3}[\s][6-9]\d{9}$/, { message: 'Registered Phone number is not valid' })
+  @IsNotEmpty()
+  @Matches(/^\+\d{1,3}[\s][6-9]\d{9}$/)
   registeredPhone: string;
 
   @Column({ nullable: true, name: 'alternate_phone' })
-  @Matches(/^\+\d{1,3}[\s][6-9]\d{9}$/, { message: 'Alternate Phone number is not valid' })
+  @Matches(/^\+\d{1,3}[\s][6-9]\d{9}$/)
   @IsOptional()
-  alternatePhone: string;
+  alternatePhone?: string;
 
   @Column({ unique: true })
-  @IsEmail({}, { message: 'Invalid email format.' })
-  @IsNotEmpty({ message: 'Account email is required.' })
+  @IsEmail()
+  @IsNotEmpty()
   email: string;
 
   @ManyToOne(() => TaxIdentity, { eager: false, nullable: false })
   @JoinColumn({ name: 'tax_identity_id' })
   @Type(() => TaxIdentity)
-  taxIdentity: TaxIdentity;
+  @IsOptional()
+  taxIdentity?: TaxIdentity;
 
   @Column({ name: 'tax_identity_id', type: 'bigint' })
   @Index()
   @Type(() => Number)
-  @IsInt({ message: 'Tax Identity id must be an integer.' })
+  @IsInt()
+  @IsNotEmpty()
   taxIdentityId: number;
 
   @ManyToOne(() => Account, { eager: false, nullable: true })
   @JoinColumn({ name: 'parent_id' })
   @Type(() => Account)
-  parent: Account;
+  @IsOptional()
+  parent?: Account;
 
   @Column({ name: 'parent_id', type: 'bigint', nullable: true })
   @Index()
   @Type(() => Number)
-  @IsInt({ message: 'Parent id must be an integer.' })
-  parentId: number;
+  @IsInt()
+  @IsOptional()
+  parentId?: number;
 
   @OneToOne(() => Address, { eager: false, nullable: false })
   @JoinColumn({ name: 'primary_address_id' })
   @Type(() => Address)
-  primaryAddress: Address;
+  @IsOptional()
+  primaryAddress?: Address;
 
   @Column({ name: 'primary_address_id', type: 'bigint' })
   @Index()
   @Type(() => Number)
-  @IsInt({ message: 'Primary Address id must be an integer.' })
+  @IsInt()
+  @IsNotEmpty()
   primaryAddressId: number;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
@@ -149,7 +158,7 @@ export default class Account {
       // Use a transaction to ensure consistency
       await AppDataSource.transaction(async (transactionalEntityManager) => {
         try {
-          await transactionalEntityManager.update(Address, this.primaryAddress.id, {
+          await transactionalEntityManager.update(Address, this.primaryAddressId, {
             account: this, // Update the address with the account reference
           });
         } catch (_error) {

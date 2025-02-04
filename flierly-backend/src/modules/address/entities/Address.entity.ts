@@ -16,62 +16,62 @@ export default class Address {
   @Column({ default: true, name: 'is_active' })
   @IsBoolean()
   @Type(() => Boolean)
-  isActive: boolean;
+  isActive: boolean = true;
 
   @Column({ name: 'line_1' })
-  @IsNotEmpty({ message: 'Address line 1 must not be empty.' })
+  @IsNotEmpty()
   line1: string;
 
   @Column({ name: 'line_2' })
-  @IsNotEmpty({ message: 'Address line 2 must not be empty.' })
+  @IsNotEmpty()
   line2: string;
 
   @Column({ nullable: true, name: 'line_3' })
   @IsOptional()
-  line3: string;
+  line3?: string;
 
   @Column({ name: 'landmark' })
-  @IsNotEmpty({ message: 'Landmark must not be empty.' })
+  @IsNotEmpty()
   landmark: string;
 
   @Column({ name: 'area' })
-  @IsNotEmpty({ message: 'Area must not be empty.' })
+  @IsNotEmpty()
   area: string;
 
   @Column({ name: 'city' })
-  @IsNotEmpty({ message: 'City must not be empty.' })
+  @IsNotEmpty()
   city: string;
 
   @Column({ name: 'district' })
-  @IsNotEmpty({ message: 'District must not be empty.' })
+  @IsNotEmpty()
   district: string;
 
   @Column({ name: 'state' })
-  @IsNotEmpty({ message: 'State must not be empty.' })
+  @IsNotEmpty()
   state: string;
 
   @Column({ name: 'pincode' })
-  @IsNotEmpty({ message: 'Pincode must not be empty.' })
-  @Matches(/^\d{6}$/, { message: 'Pincode must be a 6-digit number.' })
+  @IsNotEmpty()
+  @Matches(/^\d{6}$/)
   pincode: string;
 
   @Column({ nullable: true, name: 'contact_name' })
   @IsOptional()
-  @IsNotEmpty({ message: 'Contact name must not be empty.' })
-  @Length(5, 90, { message: 'Contact name must be between 5 and 90 characters.' })
-  contactName: string;
+  @IsNotEmpty()
+  @Length(5, 90)
+  contactName?: string;
 
   @Column({ nullable: true, name: 'contact_number' })
   @IsOptional()
-  @Matches(/^\+\d{1,3}[\s][6-9]\d{9}$/, { message: 'Contact number must be in the format: +<country_code> <10-digit_number>' })
-  contactNumber: string;
+  @Matches(/^\+\d{1,3}[\s][6-9]\d{9}$/)
+  contactNumber?: string;
 
   @Column({ nullable: true, name: 'address_instructions' })
   @IsOptional()
-  @IsNotEmpty({ message: 'Address instructions must not be empty.' })
-  addressInstructions: string;
+  @IsNotEmpty()
+  addressInstructions?: string;
 
-  @IsNumber({}, { message: 'Latitude must be a number.' })
+  @IsNumber({})
   @Column({
     nullable: true,
     type: 'decimal',
@@ -81,9 +81,9 @@ export default class Address {
   })
   @IsOptional()
   @Type(() => Number)
-  latitude: number;
+  latitude?: number;
 
-  @IsNumber({}, { message: 'Longitude must be a number.' })
+  @IsNumber({})
   @Column({
     nullable: true,
     type: 'decimal',
@@ -93,18 +93,20 @@ export default class Address {
   })
   @IsOptional()
   @Type(() => Number)
-  longitude: number;
+  longitude?: number;
 
   @ManyToOne(() => Account, { lazy: true, nullable: true })
   @JoinColumn({ name: 'account_id' })
   @Type(() => Account)
-  account: Account;
+  @IsOptional()
+  account?: Account;
 
   @Column({ name: 'account_id', type: 'bigint', nullable: true })
   @Index()
   @Type(() => Number)
-  @IsInt({ message: 'Account id must be an integer.' })
-  accountId: number;
+  @IsInt()
+  @IsOptional()
+  accountId?: number;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;

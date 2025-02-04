@@ -7,18 +7,18 @@ export default class UserPassword {
   @PrimaryGeneratedColumn({
     type: 'bigint',
   })
-  @IsInt({ message: 'User Password ID must be an integer.' })
+  @IsInt()
   @Type(() => Number)
   id: number;
 
   @Column({ unique: true, name: "user_id" })
-  @IsNotEmpty({ message: 'UserId is required for storing passwords' })
-  @IsInt({ message: 'User ID must be an integer.' })
+  @IsNotEmpty()
+  @IsInt()
   @Type(() => Number)
   userId: number;
 
   @Column()
-  @IsNotEmpty({ message: 'User password is required.' })
+  @IsNotEmpty()
   password: string;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })

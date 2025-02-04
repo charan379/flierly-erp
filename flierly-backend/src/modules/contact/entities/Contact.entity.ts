@@ -16,37 +16,39 @@ export default class Contact {
   @Column({ type: 'boolean', default: true, name: 'is_active' })
   @IsBoolean()
   @Type(() => Boolean)
-  isActive: boolean;
+  isActive: boolean = true;
 
   @Column({ name: 'name' })
-  @IsNotEmpty({ message: 'Contact name is required.' })
-  @Length(5, 90, { message: 'Contact name must be between 5 and 90 characters.' })
+  @IsNotEmpty()
+  @Length(5, 90)
   name: string;
 
   @Column({ nullable: true, name: 'email' })
   @IsOptional()
-  @IsEmail({}, { message: 'Invalid email format.' })
+  @IsEmail()
   email: string;
 
   @Column({ name: 'phone' })
-  @IsNotEmpty({ message: 'Contact phone is required.' })
-  @Matches(/^\+\d{1,3}[\s][6-9]\d{9}$/, { message: 'Contact phone must be in the format: +<country_code> <10-digit_number>' })
+  @IsNotEmpty()
+  @Matches(/^\+\d{1,3}[\s][6-9]\d{9}$/)
   phone: string;
 
   @Column({ nullable: true, name: 'alternate_phone' })
   @IsOptional()
-  @Matches(/^\+\d{1,3}[\s][6-9]\d{9}$/, { message: 'Alternate phone must be in the format: +<country_code> <10-digit_number>' })
+  @Matches(/^\+\d{1,3}[\s][6-9]\d{9}$/)
   alternatePhone: string;
 
-  @ManyToOne(() => Account)
+  @ManyToOne(() => Account, { nullable: true })
   @JoinColumn({ name: 'account_id' })
   @Type(() => Account)
-  account: Account;
+  @IsOptional()
+  account?: Account;
 
   @Column({ name: 'account_id', type: 'bigint', nullable: true })
   @Index()
   @Type(() => Number)
-  @IsInt({ message: 'Account id must be an integer.' })
+  @IsInt()
+  @IsOptional()
   accountId: number;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })

@@ -11,7 +11,7 @@ import { Expose, Type } from 'class-transformer';
 @Index('idx_entity_access', ['entity', 'access'], { unique: false }) // Index on 'entity' and 'access'
 export default class Privilege {
   @PrimaryGeneratedColumn()
-  @IsInt({ message: 'Privilege ID must be an integer.' })
+  @IsInt()
   @Type(() => Number)
   @IsOptional()
   id: number;
@@ -22,37 +22,37 @@ export default class Privilege {
   isActive: boolean;
 
   @Column({ unique: true })
-  @IsNotEmpty({ message: 'Privilege name is required.' })
-  @Length(5, 30, { message: 'Privilege name must be between 5 and 30 characters.' }) // Min 5, Max 30
+  @IsNotEmpty()
+  @Length(5, 30) // Min 5, Max 30
   name: string;
 
   @Column({
     type: 'enum',
     enum: AccessType,
   })
-  @IsEnum(AccessType, { message: 'Access type must be either "read" or "write".' })
-  @IsNotEmpty({ message: 'Access type is required.' })
+  @IsEnum(AccessType)
+  @IsNotEmpty()
   access: AccessType;
 
   @Column()
-  @IsNotEmpty({ message: 'Entity name is required.' })
-  @Length(3, 20, { message: 'Entity name must be between 3 and 20 characters.' }) // Min 3, Max 20
+  @IsNotEmpty()
+  @Length(3, 20) // Min 3, Max 20
   entity: string;
 
   @Column({ unique: true })
-  @IsNotEmpty({ message: 'Privilege code is required.' })
-  @Length(5, 25, { message: 'Privilege code must be between 5 and 25 characters.' }) // Min 5, Max 25
-  @Matches(/^[a-z-]+\.[a-z-]+$/, { message: 'Privilege code must match the pattern /^[a-z-]+\\.[a-z-]+$/.' }) // Regex pattern
+  @IsNotEmpty()
+  @Length(5, 25) // Min 5, Max 25
+  @Matches(/^[a-z-]+\.[a-z-]+$/) // Regex pattern
   code: string;
 
   @ManyToMany(() => Role, (role) => role.privileges)
-  roles: Role[];
+  roles?: Role[];
 
   @ManyToMany(() => User, (user) => user.additionalPrivileges)
-  usersWithAdditionalPrivileges: User[];
+  usersWithAdditionalPrivileges?: User[];
 
   @ManyToMany(() => User, (user) => user.restrictedPrivileges)
-  usersWithRestrictedPrivileges: User[];
+  usersWithRestrictedPrivileges?: User[];
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;

@@ -18,7 +18,7 @@ import { Type } from 'class-transformer';
 @Index(["type", "product", "effectiveDate"])
 export default class ProductPrice {
     @PrimaryGeneratedColumn({ type: 'bigint' })
-    @IsInt({ message: 'Product Price ID must be an integer.' })
+    @IsInt()
     @Type(() => Number)
     @IsOptional()
     id: number;
@@ -33,25 +33,27 @@ export default class ProductPrice {
 
     @ManyToOne(() => Product, { eager: false, nullable: false })
     @JoinColumn({ name: 'product_id' })
-    @IsNotEmpty({ message: 'Product must be specified' })
-    product: Product;
+    @IsOptional()
+    @Type(() => Product)
+    product?: Product;
 
     @Column({ name: 'product_id', type: 'bigint' })
     @Index()
     @Type(() => Number)
-    @IsInt({ message: 'Product ID must be an integer.' })
+    @IsInt()
+    @IsNotEmpty()
     productId: number;
 
     @Column({ type: 'decimal', precision: 10, scale: 2, default: 0, transformer: DecimalTransformer })
-    @IsNumber({}, { message: 'Price must be a valid number' })
-    @IsPositive({ message: 'Price must be greater than zero' })
-    @Min(0, { message: 'Price cannot be negative' })
+    @IsNumber()
+    @IsPositive()
+    @Min(0)
     @Type(() => Number)
     price: number;
 
     @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP', name: "effective_date" })
     @IsOptional()
-    @IsDate({ message: 'Effective date must be a valid date' })
+    @IsDate()
     @Type(() => Date)
     effectiveDate: Date;
 

@@ -12,12 +12,12 @@ export default class ProductComponent {
 
   @ManyToOne(() => Product, { eager: false, nullable: false })
   @JoinColumn({ name: 'composite_product_id' })
-  @IsNotEmpty({ message: 'CompositeProduct must be specified' })
+  @IsNotEmpty()
   compositeProduct: Product;
 
   @ManyToOne(() => Product, { eager: false, nullable: false })
   @JoinColumn({ name: 'component_product_id' })
-  @IsNotEmpty({ message: 'ComponentProduct must be specified' })
+  @IsNotEmpty()
   componentProduct: Product;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })

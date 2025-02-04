@@ -10,7 +10,7 @@ export default class Role {
     type: 'bigint',
   })
   @Type(() => Number)
-  @IsInt({ message: 'Role ID must be an integer.' })
+  @IsInt()
   @IsOptional()
   id: number;
 
@@ -20,19 +20,19 @@ export default class Role {
   isActive: boolean;
 
   @Column({ unique: true })
-  @IsNotEmpty({ message: 'Role name is required.' })
-  @Length(5, 30, { message: 'Role name must be between 5 and 30 characters.' }) // Min 5, Max 30
+  @IsNotEmpty()
+  @Length(5, 30) // Min 5, Max 30
   name: string;
 
   @Column({ unique: true })
-  @IsNotEmpty({ message: 'Role code is required.' })
-  @Length(5, 25, { message: 'Role code must be between 4 and 25 characters.' }) // Min 5, Max 25
-  @Matches(/^[a-z-]+\.[a-z-]+$/, { message: 'Role code must match the pattern /^[a-z-]+\.[a-z-]+$/.' }) // Regex pattern
+  @IsNotEmpty()
+  @Length(5, 25,) // Min 5, Max 25
+  @Matches(/^[a-z-]+\.[a-z-]+$/) // Regex pattern
   code: string;
 
   @Column()
-  @IsNotEmpty({ message: 'Role description is required.' })
-  @Length(10, 350, { message: 'Role description must be between 10 and 350 characters.' }) // Min 10, Max 350
+  @IsNotEmpty()
+  @Length(10, 350) // Min 10, Max 350
   description: string;
 
   @ManyToMany(() => Privilege, (privilege) => privilege.roles)
@@ -47,10 +47,10 @@ export default class Role {
       referencedColumnName: 'id',
     },
   })
-  privileges: Privilege[];
+  privileges?: Privilege[];
 
   @ManyToMany(() => User, (user) => user.roles)
-  users: User[];
+  users?: User[];
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;

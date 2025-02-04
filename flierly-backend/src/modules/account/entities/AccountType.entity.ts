@@ -15,17 +15,11 @@ export default class AccountType {
   @Column({ type: 'boolean', default: true, name: 'is_active' })
   @Type(() => Boolean)
   @IsBoolean()
-  isActive: boolean;
+  isActive: boolean = true;
 
   @Column({ unique: true })
-  @IsNotEmpty({ message: 'Account type code is required.' })
-  @Length(5, 25, { message: 'Account type code must be between 5 and 25 characters.' }) // Min 5, Max 25
-  @Matches(/^[a-z-]+\.[a-z-]+$/, { message: 'Account type code must match the pattern /^[a-z-]+\\.[a-z-]+$/.' }) // Regex pattern
-  code: string;
-
-  @Column({ unique: true })
-  @IsNotEmpty({ message: 'Account type name is required.' })
-  @Length(5, 30, { message: 'Account type name must be between 5 and 30 characters.' }) // Min 5, Max 30
+  @IsNotEmpty()
+  @Length(5, 30)
   name: string;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })

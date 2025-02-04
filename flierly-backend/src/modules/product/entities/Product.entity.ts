@@ -11,106 +11,106 @@ import UOM from '@/modules/uom/entities/UOM.entity';
 @Entity('products')
 export default class Product {
   @PrimaryGeneratedColumn({ type: 'bigint' })
-  @IsInt({ message: 'Product ID must be an integer.' })
+  @IsInt()
   @Type(() => Number)
   @IsOptional()
   id: number;
 
   @Column({ type: 'varchar', length: 100, unique: true })
-  @IsNotEmpty({ message: 'Name must not be empty.' })
-  @Length(3, 90, { message: 'Name must be between 3 and 90 characters.' })
+  @IsNotEmpty()
+  @Length(3, 90)
   name: string;
 
   @Column({ type: 'enum', enum: ProductType, default: ProductType.TANGIBLE, name: "type" })
-  @IsEnum(ProductType, { message: 'Product type must be either tangible or intangible.' })
+  @IsEnum(ProductType)
   @IsOptional()
-  type: ProductType;
+  type: ProductType = ProductType.TANGIBLE;
 
   @Column({ type: 'boolean', default: true, name: 'is_active' })
   @IsOptional()
   @IsBoolean()
   @Type(() => Boolean)
-  isActive: boolean;
+  isActive: boolean = true;
 
   @Column({ type: 'varchar', length: 50, unique: true, nullable: false })
-  @IsNotEmpty({ message: 'SKU must not be empty.' })
-  @Length(3, 30, { message: 'SKU must be between 3 and 25 characters.' })
-  @Matches(/^[A-Z0-9_-]{3,30}$/, { message: 'SKU is not valid only capital letters, numbers, underscores and hyphens allowed.' })
+  @IsNotEmpty()
+  @Length(3, 30)
+  @Matches(/^[A-Z0-9_-]{3,30}$/)
   sku: string;
 
   @Column({ type: 'int', unique: false, nullable: true })
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
-  hsn: number;
+  hsn?: number;
 
   @Column({ type: 'boolean', default: false, name: 'is_serialized' })
   @IsOptional()
   @IsBoolean()
   @Type(() => Boolean)
-  isSerialized: boolean;
+  isSerialized: boolean = false;
 
   @Column({ type: 'boolean', default: false, name: 'is_composite' })
   @IsOptional()
   @IsBoolean()
   @Type(() => Boolean)
-  isComposite: boolean;
+  isComposite: boolean = false;
 
   @Column({ type: 'text', nullable: true })
   @IsOptional()
-  @Length(20, 250, { message: 'Description must be between 20 and 250 characters.' })
+  @Length(20, 250)
   description: string;
 
   @ManyToOne(() => ProductCategory, { eager: false, nullable: false })
   @JoinColumn({ name: 'category_id' })
-  @IsNotEmpty({ message: 'Category must be specified' })
   @Type(() => ProductCategory)
   @IsOptional()
-  category: ProductCategory;
+  category?: ProductCategory;
 
   @Column({ name: 'category_id', type: 'bigint' })
   @Index()
   @Type(() => Number)
-  @IsInt({ message: 'Category ID must be an integer.' })
+  @IsInt()
+  @IsNotEmpty()
   categoryId: number;
 
   @ManyToOne(() => ProductSubCategory, { eager: false, nullable: false })
   @JoinColumn({ name: 'sub_category_id' })
-  @IsNotEmpty({ message: 'SubCategory must be specified' })
   @Type(() => ProductSubCategory)
   @IsOptional()
-  subCategory: ProductSubCategory;
+  subCategory?: ProductSubCategory;
 
   @Column({ name: 'sub_category_id', type: 'bigint' })
   @Index()
   @Type(() => Number)
-  @IsInt({ message: 'Sub Category ID must be an integer.' })
+  @IsInt()
+  @IsNotEmpty()
   subCategoryId: number;
 
   @ManyToOne(() => UOM, { eager: false, nullable: false, })
   @JoinColumn({ name: 'base_uom_id' })
-  @IsNotEmpty({ message: 'Unit of Measure (UOM) must be specified' })
   @Type(() => UOM)
   @IsOptional()
-  baseUOM: UOM;
+  baseUOM?: UOM;
 
   @Column({ name: 'base_uom_id', type: 'bigint' })
   @Index()
   @Type(() => Number)
-  @IsInt({ message: 'Base UOM ID must be an integer.' })
+  @IsInt()
+  @IsNotEmpty()
   baseUOMId: number;
 
   @ManyToOne(() => Brand, { eager: false, nullable: false })
   @JoinColumn({ name: 'brand_id' })
-  @IsNotEmpty({ message: 'Brand must be specified' })
   @Type(() => Brand)
   @IsOptional()
-  brand: Brand;
+  brand?: Brand;
 
   @Column({ name: 'brand_id', type: 'bigint', default: 1 })
   @Index()
   @Type(() => Number)
-  @IsInt({ message: 'Brand ID must be an integer.' })
+  @IsInt()
+  @IsNotEmpty()
   brandId: number;
 
   @ManyToMany(() => TaxRate, (taxRate) => taxRate.products)
@@ -125,7 +125,7 @@ export default class Product {
       referencedColumnName: 'id',
     },
   })
-  taxeRates: TaxRate[];
+  taxeRates?: TaxRate[];
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;
