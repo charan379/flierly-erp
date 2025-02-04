@@ -1,9 +1,0 @@
-.sidePanel {
-  border-right: 1px solid var(--border-color-primary-flierly);
-  background: var(--bg-color-primary-flierly);
-}
-
-.sidePanelContent {
-  transition: all 0.3s ease-in-out;
-  margin-top: 0;
-}

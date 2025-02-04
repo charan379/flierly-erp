@@ -28,7 +28,7 @@ type User = {
   username: string
   email: string
   mobile: string
-  additionalPrivileges: Privilege[]
-  restrictedPrivileges: Privilege[]
-  roles: Role[]
+  additionalPrivileges?: Privilege[]
+  restrictedPrivileges?: Privilege[]
+  roles?: Role[]
 } & EntityTimeStamps

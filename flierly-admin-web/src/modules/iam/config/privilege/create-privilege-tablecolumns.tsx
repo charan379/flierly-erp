@@ -20,17 +20,17 @@ const createPrivilegeTableColumns = (translate: (value: string) => string, _hasP
       render: (_dom, entity) => {
         switch (entity.access) {
           case 'create':
-            return <Tag color="#50C878">{entity.access}</Tag>
+            return <Tag color="#50C878">{translate(entity.access)}</Tag>
           case 'read':
-            return <Tag color="#008080">{entity.access}</Tag>
+            return <Tag color="#008080">{translate(entity.access)}</Tag>
           case 'update':
-            return <Tag color="#FF7F50">{entity.access}</Tag>
+            return <Tag color="#FF7F50">{translate(entity.access)}</Tag>
           case 'manage':
-            return <Tag color="#191970">{entity.access}</Tag>
+            return <Tag color="#191970">{translate(entity.access)}</Tag>
           case 'delete':
-            return <Tag color="#DC143C">{entity.access}</Tag>
+            return <Tag color="#DC143C">{translate(entity.access)}</Tag>
           default:
-            return <Tag>{entity.access}</Tag>
+            return <Tag>{translate(entity.access)}</Tag>
         }
       },
     },
