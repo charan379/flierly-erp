@@ -1,5 +1,5 @@
-import { IsNotEmpty, Length, IsOptional, Matches, IsEnum, IsInt, IsBoolean, isNumber, IsNumber } from 'class-validator';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, JoinColumn, ManyToOne, ManyToMany, JoinTable, Index } from 'typeorm';
+import { IsNotEmpty, Length, IsOptional, Matches, IsEnum, IsInt, IsBoolean, IsNumber } from 'class-validator';
+import { Entity, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, JoinColumn, ManyToOne, ManyToMany, JoinTable, Index, PrimaryColumn } from 'typeorm';
 import ProductCategory from './ProductCategory.entity';
 import ProductSubCategory from './ProductSubCategory.entity';
 import TaxRate from '@/modules/taxation/entities/Tax.entity';
@@ -7,10 +7,11 @@ import { Type } from 'class-transformer';
 import { ProductType } from '../constants/product-type.enum';
 import Brand from '@/modules/brand/entities/Brand.entity';
 import UOM from '@/modules/uom/entities/UOM.entity';
+import { NumericTransformer } from '@/lib/database/typeorm/utils/NumericTransformer';
 
 @Entity('products')
 export default class Product {
-  @PrimaryGeneratedColumn({ type: 'bigint' })
+  @PrimaryColumn({ type: 'bigint', transformer: NumericTransformer, generated: true, update: false })
   @IsInt()
   @Type(() => Number)
   @IsOptional()
@@ -67,7 +68,7 @@ export default class Product {
   @IsOptional()
   category?: ProductCategory;
 
-  @Column({ name: 'category_id', type: 'bigint' })
+  @Column({ name: 'category_id', type: 'bigint', transformer: NumericTransformer })
   @Index()
   @Type(() => Number)
   @IsInt()
@@ -80,7 +81,7 @@ export default class Product {
   @IsOptional()
   subCategory?: ProductSubCategory;
 
-  @Column({ name: 'sub_category_id', type: 'bigint' })
+  @Column({ name: 'sub_category_id', type: 'bigint', transformer: NumericTransformer })
   @Index()
   @Type(() => Number)
   @IsInt()
@@ -93,7 +94,7 @@ export default class Product {
   @IsOptional()
   baseUOM?: UOM;
 
-  @Column({ name: 'base_uom_id', type: 'bigint' })
+  @Column({ name: 'base_uom_id', type: 'bigint', transformer: NumericTransformer })
   @Index()
   @Type(() => Number)
   @IsInt()
@@ -106,7 +107,7 @@ export default class Product {
   @IsOptional()
   brand?: Brand;
 
-  @Column({ name: 'brand_id', type: 'bigint', default: 1 })
+  @Column({ name: 'brand_id', type: 'bigint', transformer: NumericTransformer })
   @Index()
   @Type(() => Number)
   @IsInt()

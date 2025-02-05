@@ -1,16 +1,15 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
+import { Entity, Column, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, PrimaryColumn } from 'typeorm';
 import { IsBoolean, IsInt, IsNotEmpty, IsNumber, IsOptional, Length, Matches } from 'class-validator';
 import Privilege from './Privilege.entity';
 import User from './User.entity';
 import { Type } from 'class-transformer';
+import { NumericTransformer } from '@/lib/database/typeorm/utils/NumericTransformer';
 
 @Entity('roles')
 export default class Role {
-  @PrimaryGeneratedColumn({
-    type: 'bigint',
-  })
-  @Type(() => Number)
+  @PrimaryColumn({ type: 'bigint', transformer: NumericTransformer, generated: true, update: false })
   @IsInt()
+  @Type(() => Number)
   @IsOptional()
   id: number;
 

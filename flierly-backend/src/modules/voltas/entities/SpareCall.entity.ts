@@ -1,16 +1,15 @@
 import Branch from "@/modules/organization/entities/Branch.entity";
 import { Type } from "class-transformer";
 import { IsBoolean, IsDate, IsInt, IsNotEmpty, IsOptional, Length, Matches } from "class-validator";
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { SpareCallStatus } from "../constants/spare-call-status.enum";
 import Product from "@/modules/product/entities/Product.entity";
+import { NumericTransformer } from "@/lib/database/typeorm/utils/NumericTransformer";
 
 
 @Entity('spare_calls')
 export default class SpareCall {
-    @PrimaryGeneratedColumn({
-        type: 'bigint',
-    })
+    @PrimaryColumn({ type: 'bigint', transformer: NumericTransformer, generated: true, update: false })
     @IsInt()
     @Type(() => Number)
     @IsOptional()

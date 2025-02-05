@@ -3,6 +3,8 @@ import { Router } from 'express';
 import CRUDController from '@/modules/core/controllers/crud-controller';
 import { requestValidator } from '@/middlewares/request-validator.middleware';
 import Privilege from '../entities/Privilege.entity';
+import PageRequestDTO from '@/modules/core/dto/PageRequest.dto';
+import AssociatedEntityRecordsPageRequestDTO from '@/modules/core/dto/AssociatedEntityRecordsPageRequest.dto';
 
 // privilege router
 const privilegeRoutes = Router();
@@ -14,8 +16,8 @@ privilegeRoutes.post(`/create`, requestValidator(Privilege, "body"), authorize(`
 privilegeRoutes.post(`/read`, authorize(`privilege.read`), crudController.read);
 privilegeRoutes.post(`/search`, authorize(`privilege.read`), crudController.search);
 privilegeRoutes.post(`/is-exists`, authorize(`privilege.read`), crudController.isExists);
-privilegeRoutes.post(`/page`, authorize(`privilege.read`), crudController.page);
-privilegeRoutes.post(`/associated-entity-records-page`, authorize(`privilege.read`), crudController.associatedEntityRecordsPage);
+privilegeRoutes.post(`/page`, requestValidator(PageRequestDTO, "body"), authorize(`privilege.read`), crudController.page);
+privilegeRoutes.post(`/associated-entity-records-page`, requestValidator(AssociatedEntityRecordsPageRequestDTO, "body"), authorize(`privilege.read`), crudController.associatedEntityRecordsPage);
 privilegeRoutes.put(`/update/:id`, requestValidator(Privilege, "body"), authorize(`privilege.update`), crudController.update);
 privilegeRoutes.patch(`/activate`, authorize(`privilege.manage`), crudController.activate);
 privilegeRoutes.patch(`/inactivate`, authorize(`privilege.manage`), crudController.inactivate);

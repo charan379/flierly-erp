@@ -1,12 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { IsInt, IsNotEmpty } from 'class-validator';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, PrimaryColumn } from 'typeorm';
+import { IsInt, IsNotEmpty, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
+import { NumericTransformer } from '@/lib/database/typeorm/utils/NumericTransformer';
 
 @Entity('user_passwords')
 export default class UserPassword {
-  @PrimaryGeneratedColumn({
-    type: 'bigint',
-  })
+  @PrimaryColumn({ type: 'bigint', transformer: NumericTransformer, generated: true, update: false })
+  @IsOptional()
   @IsInt()
   @Type(() => Number)
   id: number;

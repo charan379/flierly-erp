@@ -3,9 +3,9 @@ import apiResponseBuilder from '@/utils/builders/api-response.builder';
 import { NextFunction, Request, Response } from 'express';
 import { EntityTarget, ObjectLiteral } from 'typeorm';
 import crudService from '@/modules/core/services/crud-service';
-import { EntityRecordsPageRequestBody } from '../../@types/request-data.types';
-import JoiSchemaValidator from '@/lib/joi/joi-schema.validator';
-import entityRecordsPageRequestBodySchema from '../../validation-schemas/entity-records-page-request-body-schema';
+import PageRequestDTO from '../../dto/PageRequest.dto';
+import { plainToInstance } from 'class-transformer';
+import validateEntityInstance from '@/lib/class-validator/utils/validate-entity.util';
 
 /**
  * Fetch a paginated list of entities.
@@ -18,9 +18,11 @@ const page = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Resp
 
     try {
 
-        const reqBody: EntityRecordsPageRequestBody = await JoiSchemaValidator<EntityRecordsPageRequestBody>(entityRecordsPageRequestBodySchema, req.body, { abortEarly: false }, "CurdController.page")
+        const pageRequestDTO: PageRequestDTO = plainToInstance(PageRequestDTO, req.body, { enableImplicitConversion: true });
+        
+        await validateEntityInstance(pageRequestDTO);
 
-        const pageResponse = await crudService.entityRecordsPage(entity, reqBody);
+        const pageResponse = await crudService.entityRecordsPage(entity, pageRequestDTO);
         
         return res.status(HttpCodes.OK).json(
             // build api response to be sent in JSON format

@@ -1,13 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, Index } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, Index, PrimaryColumn } from 'typeorm';
 import { IsNotEmpty, IsEmail, IsOptional, Matches, Length, IsInt, IsBoolean } from 'class-validator';
 import Account from '@/modules/account/entities/Account.entity';
 import { Type } from 'class-transformer';
+import { NumericTransformer } from '@/lib/database/typeorm/utils/NumericTransformer';
 
 @Entity('contacts')
 export default class Contact {
-  @PrimaryGeneratedColumn({
-    type: 'bigint',
-  })
+  @PrimaryColumn({ type: 'bigint', transformer: NumericTransformer, generated: true, update: false })
   @IsInt()
   @Type(() => Number)
   @IsOptional()

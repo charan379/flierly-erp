@@ -23,7 +23,7 @@ export default class ProductStockControllerImpl implements ProductStockControlle
 
     async transferStockIntraBranch(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
         try {
-            const transferReqDTO: TransferStockIntraBranchDTO = plainToInstance(TransferStockIntraBranchDTO, req.body);
+            const transferReqDTO: TransferStockIntraBranchDTO = plainToInstance(TransferStockIntraBranchDTO, req.body, { enableImplicitConversion: true });
 
             await validateEntityInstance(transferReqDTO);
             this.logger.debug(`${JSON.stringify(transferReqDTO)}`)
@@ -44,7 +44,7 @@ export default class ProductStockControllerImpl implements ProductStockControlle
 
     async adjustStockBalance(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
         try {
-            const adjustProductStockBalanceDTO: AdjustProductStockBalanceDTO = plainToInstance(AdjustProductStockBalanceDTO, req.body);
+            const adjustProductStockBalanceDTO: AdjustProductStockBalanceDTO = plainToInstance(AdjustProductStockBalanceDTO, req.body, { enableImplicitConversion: true });
 
             await validateEntityInstance(adjustProductStockBalanceDTO);
 

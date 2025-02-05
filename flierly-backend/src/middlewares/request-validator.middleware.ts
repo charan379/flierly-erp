@@ -62,7 +62,7 @@ export function requestValidator(
             }
             
             // Transform incoming request object into the DTO class
-            const dtoObject = plainToInstance(ValidatorClass, req[requestObjectType], {});
+            const dtoObject = plainToInstance(ValidatorClass, req[requestObjectType], {enableImplicitConversion: true});
 
             // Validate the DTO object using class-validator
             const validationErrors = await validate(dtoObject, {
@@ -97,6 +97,7 @@ export function requestValidator(
 
             // If validation passes, attach the validated object to the request
             req[requestObjectType] = dtoObject;
+            // console.log(dtoObject);
             logger.debug(`Request validated successfully`, { ...loggerMeta, requestObjectType, dtoObject });
             // Pass control to the next middleware
             return next();

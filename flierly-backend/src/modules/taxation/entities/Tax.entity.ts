@@ -1,11 +1,12 @@
+import { NumericTransformer } from '@/lib/database/typeorm/utils/NumericTransformer';
 import Product from '@/modules/product/entities/Product.entity';
 import { Type } from 'class-transformer';
 import { IsBoolean, IsInt, IsNumber, IsOptional } from 'class-validator';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToMany } from 'typeorm';
+import { Entity, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToMany, PrimaryColumn } from 'typeorm';
 
 @Entity('tax_rates')
 export default class TaxRate {
-    @PrimaryGeneratedColumn()
+    @PrimaryColumn({ type: 'bigint', transformer: NumericTransformer, generated: true, update: false })
     @IsInt()
     @Type(() => Number)
     @IsOptional()

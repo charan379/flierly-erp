@@ -1,6 +1,6 @@
 import { Type } from "class-transformer";
 import { IsEnum, IsInt, IsNotEmpty, IsOptional, Length } from "class-validator";
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { InventoryType as InventoryType } from "../constants/inventory-type.enum";
 import { NumericTransformer } from "@/lib/database/typeorm/utils/NumericTransformer";
 import Branch from "@/modules/organization/entities/Branch.entity";
@@ -10,14 +10,14 @@ import Branch from "@/modules/organization/entities/Branch.entity";
 export default class Inventory {
 
     @PrimaryColumn({ type: 'bigint', transformer: NumericTransformer, generated: true, update: false })
-    @IsInt({ message: 'Inventory ID must be an integer.' })
+    @IsInt()
     @Type(() => Number)
     @IsOptional()
     id: number;
 
     @Column({ type: 'varchar', length: 100, unique: false })
-    @IsNotEmpty({ message: 'Name must not be empty.' })
-    @Length(3, 90, { message: 'Name must be between 3 and 90 characters.' })
+    @IsNotEmpty()
+    @Length(3, 90)
     name: string;
 
     @Column({ type: 'enum', enum: InventoryType, default: InventoryType.AVAILABLE, name: "inventory_type" })
@@ -29,18 +29,18 @@ export default class Inventory {
     @JoinColumn({ name: "branch_id" })
     @IsOptional()
     @Type(() => Branch)
-    branch: Branch;
+    branch?: Branch;
 
     @Column({ name: 'branch_id', type: 'bigint', transformer: NumericTransformer })
     @Index()
     @Type(() => Number)
-    @IsInt({ message: 'Branch ID must be an integer.' })
-    @IsNotEmpty({ message: 'Branch ID must not be empty.' })
+    @IsInt()
+    @IsNotEmpty()
     branchId: number;
 
     @Column({ type: 'text', nullable: true })
     @IsOptional()
-    @Length(10, 250, { message: 'Description must be between 10 and 250 characters.' })
+    @Length(10, 250)
     remarks: string;
 
     @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })

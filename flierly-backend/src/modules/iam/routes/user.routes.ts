@@ -6,6 +6,8 @@ import { Router } from 'express';
 import CRUDController from '@/modules/core/controllers/crud-controller';
 import User from '../entities/User.entity';
 import { requestValidator } from '@/middlewares/request-validator.middleware';
+import PageRequestDTO from '@/modules/core/dto/PageRequest.dto';
+import AssociatedEntityRecordsPageRequestDTO from '@/modules/core/dto/AssociatedEntityRecordsPageRequest.dto';
 
 // user router
 const userRoutes = Router();
@@ -21,8 +23,8 @@ userRoutes.post(`/create`, requestValidator(User, "body"), authorize(`user.creat
 userRoutes.post(`/read`, authorize(`user.read`), crudController.read);
 userRoutes.post(`/search`, authorize(`user.read`), crudController.search);
 userRoutes.post(`/is-exists`, authorize(`user.read`), crudController.isExists);
-userRoutes.post(`/page`, authorize(`user.read`), crudController.page);
-userRoutes.post(`/associated-entity-records-page`, authorize(`user.read`), crudController.associatedEntityRecordsPage);
+userRoutes.post(`/page`, requestValidator(PageRequestDTO, "body"), authorize(`user.read`), crudController.page);
+userRoutes.post(`/associated-entity-records-page`, requestValidator(AssociatedEntityRecordsPageRequestDTO, "body"), authorize(`user.read`), crudController.associatedEntityRecordsPage);
 userRoutes.put(`/update/:id`, requestValidator(User, "body"), authorize(`user.update`), crudController.update);
 userRoutes.patch(`/activate`, authorize(`user.manage`), crudController.activate);
 userRoutes.patch(`/inactivate`, authorize(`user.manage`), crudController.inactivate);

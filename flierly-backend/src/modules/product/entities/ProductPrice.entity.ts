@@ -1,23 +1,24 @@
 import {
     Entity,
-    PrimaryGeneratedColumn,
     Column,
     CreateDateColumn,
     ManyToOne,
     JoinColumn,
     DeleteDateColumn,
     Index,
+    PrimaryColumn,
 } from 'typeorm';
 import { ProductPriceType } from '../constants/product-price-type.enum';
 import Product from './Product.entity';
 import { IsDate, IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, Min } from 'class-validator';
 import { DecimalTransformer } from '@/lib/database/typeorm/utils/DecimalTransformer';
 import { Type } from 'class-transformer';
+import { NumericTransformer } from '@/lib/database/typeorm/utils/NumericTransformer';
 
 @Entity('product_prices')
 @Index(["type", "product", "effectiveDate"])
 export default class ProductPrice {
-    @PrimaryGeneratedColumn({ type: 'bigint' })
+    @PrimaryColumn({ type: 'bigint', transformer: NumericTransformer, generated: true, update: false })
     @IsInt()
     @Type(() => Number)
     @IsOptional()
@@ -37,7 +38,7 @@ export default class ProductPrice {
     @Type(() => Product)
     product?: Product;
 
-    @Column({ name: 'product_id', type: 'bigint' })
+    @Column({ name: 'product_id', type: 'bigint', transformer: NumericTransformer })
     @Index()
     @Type(() => Number)
     @IsInt()

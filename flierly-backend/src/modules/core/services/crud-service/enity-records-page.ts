@@ -3,10 +3,10 @@ import { applySortOrderQB } from "@/lib/database/typeorm/utils";
 import applyWhereConditionsQB from "@/lib/database/typeorm/utils/qb-appy-where-conditions.util";
 import pageResponseBuilder from "@/utils/builders/page-response.builder";
 import { EntityTarget, ObjectLiteral } from "typeorm";
-import { EntityRecordsPageRequestBody } from "../../@types/request-data.types";
+import PageRequestDTO from "../../dto/PageRequest.dto";
 
 
-const entityRecordsPage = async (entity: EntityTarget<ObjectLiteral>, pageRequest: EntityRecordsPageRequestBody): Promise<Page<object>> => {
+const entityRecordsPage = async (entity: EntityTarget<ObjectLiteral>, pageRequest: PageRequestDTO): Promise<Page<object>> => {
 
     try {
         //  destructure the pageRequest
@@ -32,8 +32,9 @@ const entityRecordsPage = async (entity: EntityTarget<ObjectLiteral>, pageReques
         applyWhereConditionsQB(queryBuilder, 'andWhere', filters, entityAlias);
 
         // apply sort order to the query builder
-        applySortOrderQB(queryBuilder, sort);
-
+        if (sort !== undefined) {
+            applySortOrderQB(queryBuilder, { [sort.property]: sort.order });
+        }
         // skip and take to get the correct page of results
         queryBuilder.skip((page - 1) * limit).take(limit);
 

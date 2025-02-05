@@ -1,17 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
-import { IsNotEmpty, IsEmail, Length, Matches, IsInt, IsBoolean } from 'class-validator';
+import { Entity, PrimaryGeneratedColumn, Column, Index, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, PrimaryColumn } from 'typeorm';
+import { IsNotEmpty, IsEmail, Length, Matches, IsInt, IsBoolean, IsOptional } from 'class-validator';
 import Privilege from './Privilege.entity';
 import Role from './Role.entity';
 import { Type } from 'class-transformer';
+import { NumericTransformer } from '@/lib/database/typeorm/utils/NumericTransformer';
 
 @Entity('users')
 @Index('idx_username', ['username'])
 @Index('idx_email', ['email'])
 @Index('idx_mobile', ['mobile'])
 export default class User {
-  @PrimaryGeneratedColumn({
-    type: 'bigint',
-  })
+  @PrimaryColumn({ type: 'bigint', transformer: NumericTransformer, generated: true, update: false })
+  @IsOptional()
   @IsInt()
   @Type(() => Number)
   id: number;

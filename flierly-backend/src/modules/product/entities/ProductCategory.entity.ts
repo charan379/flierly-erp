@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, PrimaryColumn } from 'typeorm';
-import { IsInt, IsNotEmpty, IsOptional, Length, Matches } from 'class-validator';
+import { Entity, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, PrimaryColumn } from 'typeorm';
+import { IsInt, IsNotEmpty, IsOptional, Length } from 'class-validator';
 import { Type } from 'class-transformer';
 import { NumericTransformer } from '@/lib/database/typeorm/utils/NumericTransformer';
 

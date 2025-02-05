@@ -1,12 +1,16 @@
+import { NumericTransformer } from "@/lib/database/typeorm/utils/NumericTransformer";
 import { TagDataType } from "../constants/tag-datatype.enum";
-import { IsNotEmpty, IsOptional, Length } from "class-validator";
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
+import { IsInt, IsNotEmpty, IsOptional, Length } from "class-validator";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryColumn, Unique, UpdateDateColumn } from "typeorm";
+import { Type } from "class-transformer";
 
 @Entity('tags_metadata')
 @Unique('uniqueNameAndEntity', ['name', 'entity'])
 export default class TagMetadata {
-    @PrimaryGeneratedColumn({ type: 'bigint' })
-    id: number;
+    @PrimaryColumn({ type: 'bigint', transformer: NumericTransformer, generated: true, update: false })
+    @IsInt()
+    @Type(() => Number)
+    @IsOptional() id: number;
 
     @Column()
     @IsNotEmpty({ message: 'Entity name is required.' })

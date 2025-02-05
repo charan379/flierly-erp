@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, JoinColumn, Index, PrimaryColumn } from 'typeorm';
-import { IsInt, IsNotEmpty, IsOptional, Length, Matches } from 'class-validator';
+import { Entity, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, JoinColumn, Index, PrimaryColumn } from 'typeorm';
+import { IsInt, IsNotEmpty, IsOptional, Length } from 'class-validator';
 import ProductCategory from './ProductCategory.entity';
 import { Type } from 'class-transformer';
 import { NumericTransformer } from '@/lib/database/typeorm/utils/NumericTransformer';
@@ -26,7 +26,7 @@ export default class ProductSubCategory {
     @IsOptional()
     category?: ProductCategory;
 
-    @Column({ name: 'category_id', type: 'bigint' })
+    @Column({ name: 'category_id', type: 'bigint', transformer: NumericTransformer })
     @Index()
     @Type(() => Number)
     @IsInt()

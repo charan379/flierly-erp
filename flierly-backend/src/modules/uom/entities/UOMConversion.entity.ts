@@ -1,15 +1,17 @@
 import { IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, Length } from 'class-validator';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, Unique, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, JoinColumn, Index } from 'typeorm';
+import { Entity, Column, ManyToOne, Unique, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, JoinColumn, Index, PrimaryColumn } from 'typeorm';
 import UOM from './UOM.entity';
 import { Type } from 'class-transformer';
 import Product from '@/modules/product/entities/Product.entity';
+import { NumericTransformer } from '@/lib/database/typeorm/utils/NumericTransformer';
+import { DecimalTransformer } from '@/lib/database/typeorm/utils/DecimalTransformer';
 
 @Entity('uom_conversions')
 @Unique(['product', 'fromUom', 'toUom'])
 export class UOMConversion {
-  @PrimaryGeneratedColumn({
-    type: 'bigint',
-  })
+  @PrimaryColumn({ type: 'bigint', transformer: NumericTransformer, generated: true, update: false })
+  @IsInt()
+  @Type(() => Number)
   @IsOptional()
   id: number;
 
@@ -30,7 +32,7 @@ export class UOMConversion {
   @IsOptional()
   fromUom?: UOM;
 
-  @Column({ name: 'from_uom_id', type: 'bigint' })
+  @Column({ name: 'from_uom_id', type: 'bigint', transformer: NumericTransformer })
   @Index()
   @Type(() => Number)
   @IsInt()
@@ -42,14 +44,14 @@ export class UOMConversion {
   @IsOptional()
   toUom?: UOM;
 
-  @Column({ name: 'to_uom_id', type: 'bigint' })
+  @Column({ name: 'to_uom_id', type: 'bigint', transformer: NumericTransformer })
   @Index()
   @Type(() => Number)
   @IsInt()
   @IsNotEmpty()
   toUomId: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 4, name: 'conversion_factor' })
+  @Column({ type: 'decimal', precision: 10, scale: 4, name: 'conversion_factor', transformer: DecimalTransformer })
   @IsNumber({ maxDecimalPlaces: 4 })
   @IsPositive()
   @Type(() => Number)

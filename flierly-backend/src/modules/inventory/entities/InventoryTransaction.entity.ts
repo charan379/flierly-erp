@@ -13,7 +13,7 @@ import Product from "@/modules/product/entities/Product.entity";
 export default class InventoryTransaction {
 
     @PrimaryColumn({ type: 'bigint', transformer: NumericTransformer, generated: true, update: false })
-    @IsInt({ message: 'Stock Transaction ID must be an integer.' })
+    @IsInt()
     @Type(() => Number)
     @IsOptional()
     id: number;
@@ -22,25 +22,25 @@ export default class InventoryTransaction {
     @JoinColumn({ name: "inventory_id" })
     @IsOptional()
     @Type(() => Inventory)
-    inventory: Inventory;
+    inventory?: Inventory;
 
     @Column({ name: 'inventory_id', type: 'bigint', transformer: NumericTransformer })
     @Index()
     @Type(() => Number)
-    @IsInt({ message: 'Inventory ID must be an integer.' })
-    @IsNotEmpty({ message: 'Inventory ID must not be empty.' })
+    @IsInt()
+    @IsNotEmpty()
     inventoryId: number;
 
     @ManyToOne(() => Product, { eager: false, nullable: false, })
     @JoinColumn({ name: "product_id", })
     @IsOptional()
     @Type(() => Product)
-    product!: Product;
+    product?: Product;
 
     @Column({ name: 'product_id', type: 'bigint', transformer: NumericTransformer })
     @Index()
     @Type(() => Number)
-    @IsInt({ message: 'Product ID must be an integer.' })
+    @IsInt()
     productId: number;
 
     @Column({ type: 'boolean', default: false, name: 'is_rolled_back' })
@@ -57,21 +57,21 @@ export default class InventoryTransaction {
 
     @Column({ name: 'rollback_transaction_id', type: 'varchar', length: 20, default: null, nullable: true })
     @Type(() => String)
-    @IsInt({ message: 'Rollback transaction ID must be an integer.' })
+    @IsInt()
     @IsOptional()
     rollbackTransactionId?: string;
 
     @Column("decimal", { precision: 15, scale: 2, default: 0, transformer: DecimalTransformer })
-    @IsNumber({}, { message: 'Quantity must be a valid number' })
-    @Min(0, { message: 'Quantity cannot be negative' })
+    @IsNumber()
+    @Min(0)
     @IsNumber()
     @Type(() => Number)
     quantity: number;
 
     @Column({ type: 'decimal', name: "cost_per_unit", precision: 10, scale: 2, default: 0, transformer: DecimalTransformer })
-    @IsNumber({}, { message: 'Cost per unit must be a valid number' })
-    @IsPositive({ message: 'Cost per unit must be greater than zero' })
-    @Min(0, { message: 'Cost per unit cannot be negative' })
+    @IsNumber()
+    @IsPositive()
+    @Min(0)
     @IsNumber()
     @Type(() => Number)
     costPerUnit: number;
@@ -92,19 +92,19 @@ export default class InventoryTransaction {
     @Column({ type: 'varchar', length: 50, unique: false, nullable: true, name: "reference_id" })
     @Index()
     @IsOptional()
-    @Length(1, 40, { message: 'ReferenceDocID must be between 1 and 40 characters.' })
-    @Matches(/^[A-Z0-9_#-]{1,40}$/, { message: 'ReferenceID is not valid only capital letters, numbers, underscores and hyphens allowed.' })
+    @Length(1, 40)
+    @Matches(/^[A-Z0-9_#-]{1,40}$/)
     referenceDocId?: string; // sale invoice or purchase invoice number, etc.
 
     @Column({ type: 'text', nullable: true })
     @IsOptional()
-    @Length(10, 250, { message: 'Description must be between 10 and 250 characters.' })
+    @Length(10, 250)
     remarks: string;
 
     @Column({ type: 'varchar', length: 100, name: 'product_serial_number', nullable: true })
-    @Length(5, 30, { message: 'Product Serial number must be between 3 and 30 characters.' })
+    @Length(5, 30)
     @IsOptional()
-    @Matches(/^[A-Z0-9-]{5,30}$/, { message: 'Product Serial number is not valid only capital letters, numbers and hyphens allowed.' })
+    @Matches(/^[A-Z0-9-]{5,30}$/)
     productSerialNumber: string;
 
     @CreateDateColumn({ name: 'transaction_date', type: 'timestamptz' })

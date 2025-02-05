@@ -1,16 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index, DeleteDateColumn, CreateDateColumn, UpdateDateColumn, ManyToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Index, DeleteDateColumn, CreateDateColumn, UpdateDateColumn, ManyToMany, PrimaryColumn } from 'typeorm';
 import { IsBoolean, IsEnum, IsInt, IsNotEmpty, IsOptional, Length, Matches } from 'class-validator';
 import AccessType from '../constants/access-types.enum';
 import Role from './Role.entity';
 import User from './User.entity';
 import { Expose, Type } from 'class-transformer';
+import { NumericTransformer } from '@/lib/database/typeorm/utils/NumericTransformer';
 
 @Entity('privileges')
 @Index('idx_entity', ['entity'])
 @Expose()
 @Index('idx_entity_access', ['entity', 'access'], { unique: false }) // Index on 'entity' and 'access'
 export default class Privilege {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn({ type: 'bigint', transformer: NumericTransformer, generated: true, update: false })
   @IsInt()
   @Type(() => Number)
   @IsOptional()

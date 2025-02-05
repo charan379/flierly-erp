@@ -1,3 +1,5 @@
+import SortDTO from "@/modules/core/dto/Sort.dto";
+
 /**
  * Builds a page response object with pagination metadata.
  *
@@ -9,7 +11,7 @@
  * @param {object} sort The sorting criteria for the data.
  * @returns {Page<T>} The page response object with pagination metadata.
  */
-function pageResponseBuilder<T>(data: T[], page: number, pageSize: number, totalResults: number, sort: object): Page<T> {
+function pageResponseBuilder<T>(data: T[], page: number, pageSize: number, totalResults: number, sort?: SortDTO): Page<T> {
   // Calculate the total number of pages based on the total results and page size.
   const totalPages = Math.ceil(totalResults / pageSize);
 

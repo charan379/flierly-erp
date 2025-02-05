@@ -1,8 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, DeleteDateColumn } from 'typeorm';
+import { NumericTransformer } from '@/lib/database/typeorm/utils/NumericTransformer';
+import { Type } from 'class-transformer';
+import { IsInt, IsOptional } from 'class-validator';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, DeleteDateColumn, PrimaryColumn } from 'typeorm';
 
 @Entity('file_uploads')
 export default class FileUpload {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn({ type: 'bigint', transformer: NumericTransformer, generated: true, update: false })
+  @IsInt()
+  @Type(() => Number)
+  @IsOptional()
   id: number;
 
   @Column({ name: 'original_name' })

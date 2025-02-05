@@ -1,4 +1,4 @@
-import coreModuleRoutes from "@/modules/core/routers";
+import coreModuleRoutes from "@/modules/core/routes";
 import iamModuleRoutes from "@/modules/iam/routes";
 import productModuleRoutes from "@/modules/product/routes";
 import organizationModuleRoutes from "@/modules/organization/routes";

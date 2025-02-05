@@ -1,11 +1,6 @@
 import { ObjectLiteral, SelectQueryBuilder } from 'typeorm';
 
 /**
- * Type representing possible sort order values.
- */
-type SortOrder = 'ascend' | 'descend' | 'asc' | 'desc' | 'ascending' | 'descending' | 1 | -1;
-
-/**
  * Applies sorting to a TypeORM Query Builder.
  *
  * @param {SelectQueryBuilder<T>} queryBuilder - The TypeORM Query Builder instance.

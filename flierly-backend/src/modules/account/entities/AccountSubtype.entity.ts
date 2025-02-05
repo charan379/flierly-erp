@@ -1,14 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, DeleteDateColumn, CreateDateColumn, UpdateDateColumn, Index, Unique } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, DeleteDateColumn, CreateDateColumn, UpdateDateColumn, Index, Unique, PrimaryColumn } from 'typeorm';
 import { IsBoolean, IsInt, IsNotEmpty, IsOptional, Length, Matches } from 'class-validator';
 import AccountType from './AccountType.entity';
 import { Type } from 'class-transformer';
+import { NumericTransformer } from '@/lib/database/typeorm/utils/NumericTransformer';
 
 @Entity('account_subtypes')
 @Unique(['name', 'accountTypeId'])
 export default class AccountSubtype {
-  @PrimaryGeneratedColumn({
-    type: 'bigint',
-  })
+
+  @PrimaryColumn({ type: 'bigint', transformer: NumericTransformer, generated: true, update: false })
   @IsInt()
   @Type(() => Number)
   @IsOptional()
@@ -30,7 +30,7 @@ export default class AccountSubtype {
   @IsOptional()
   accountType?: AccountType;
 
-  @Column({ name: 'account_type_id', type: 'bigint' })
+  @Column({ name: 'account_type_id', type: 'bigint', transformer: NumericTransformer })
   @IsInt()
   @Type(() => Number)
   @Index()

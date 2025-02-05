@@ -11,6 +11,7 @@ import {
   BeforeInsert,
   Repository,
   Index,
+  PrimaryColumn,
 } from 'typeorm';
 import Address from '@/modules/address/entities/Address.entity';
 import TaxIdentity from '@/modules/taxation/entities/TaxIdentity.entity';
@@ -19,10 +20,11 @@ import AccountType from './AccountType.entity';
 import AccountSubtype from './AccountSubtype.entity';
 import { AppDataSource } from '@/lib/database/typeorm/app-datasource';
 import { Type } from 'class-transformer';
+import { NumericTransformer } from '@/lib/database/typeorm/utils/NumericTransformer';
 
 @Entity('accounts')
 export default class Account {
-  @PrimaryGeneratedColumn({ type: 'bigint' })
+  @PrimaryColumn({ type: 'bigint', transformer: NumericTransformer, generated: true, update: false })
   @IsInt()
   @Type(() => Number)
   @IsOptional()
@@ -39,7 +41,7 @@ export default class Account {
   @IsOptional()
   accountType?: AccountType;
 
-  @Column({ name: 'account_type_id', type: 'bigint' })
+  @Column({ name: 'account_type_id', type: 'bigint', transformer: NumericTransformer })
   @Index()
   @Type(() => Number)
   @IsInt()
@@ -52,7 +54,7 @@ export default class Account {
   @Type(() => AccountSubtype)
   accountSubtype?: AccountSubtype;
 
-  @Column({ name: 'account_subtype_id', type: 'bigint' })
+  @Column({ name: 'account_subtype_id', type: 'bigint', transformer: NumericTransformer })
   @Index()
   @Type(() => Number)
   @IsInt()
@@ -95,7 +97,7 @@ export default class Account {
   @IsOptional()
   taxIdentity?: TaxIdentity;
 
-  @Column({ name: 'tax_identity_id', type: 'bigint' })
+  @Column({ name: 'tax_identity_id', type: 'bigint', transformer: NumericTransformer })
   @Index()
   @Type(() => Number)
   @IsInt()
@@ -108,7 +110,7 @@ export default class Account {
   @IsOptional()
   parent?: Account;
 
-  @Column({ name: 'parent_id', type: 'bigint', nullable: true })
+  @Column({ name: 'parent_id', type: 'bigint', nullable: true, transformer: NumericTransformer })
   @Index()
   @Type(() => Number)
   @IsInt()
@@ -121,7 +123,7 @@ export default class Account {
   @IsOptional()
   primaryAddress?: Address;
 
-  @Column({ name: 'primary_address_id', type: 'bigint' })
+  @Column({ name: 'primary_address_id', type: 'bigint', transformer: NumericTransformer })
   @Index()
   @Type(() => Number)
   @IsInt()

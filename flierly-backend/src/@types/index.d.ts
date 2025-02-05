@@ -54,6 +54,12 @@ type FilterObject = { [key: string]: FilterValue };
 
 type SortObject = { [key: string]: 'ascend' | 'descend' };
 
+/**
+ * Type representing possible sort order values.
+ */
+type SortOrder = 'ascend' | 'descend' | 'asc' | 'desc' | 'ascending' | 'descending' | 1 | -1;
+
+
 type FilterArray = FilterValue[];
 
 type FilterAndLimitArgs<T> = {
