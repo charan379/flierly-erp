@@ -4,7 +4,7 @@ import { Repository } from "typeorm";
 import Product from "../../entities/Product.entity";
 import DatabaseModuleBeanTypes from "@/lib/database/ioc-config/bean.types";
 import DatabaseService from "@/lib/database/database-service/DatabaseService";
-import validateEntityInstance from "@/lib/class-validator/utils/validate-entity.util";
+import validateClassInstance from "@/lib/class-validator/utils/validate-entity.util";
 
 @injectable()
 class ProductServiceImpl implements ProductService {
@@ -22,7 +22,7 @@ class ProductServiceImpl implements ProductService {
             // Use queryRunner.manager for transactional operations
             const product = this.productRepository.create(data);
             // Validate product instance
-            await validateEntityInstance(product);
+            await validateClassInstance(product);
             return await this.productRepository.save(product);
         } catch (error) {
             throw error;

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import ProductStockController from "./ProductStockController";
 import TransferStockIntraBranchDTO from "../../dto/TransferStockIntraBranch.dto";
-import validateEntityInstance from "@/lib/class-validator/utils/validate-entity.util";
+import validateClassInstance from "@/lib/class-validator/utils/validate-entity.util";
 import { plainToInstance } from "class-transformer";
 import { inject, injectable } from "inversify";
 import BeanTypes from "@/lib/di-ioc-container/bean.types";
@@ -25,7 +25,7 @@ export default class ProductStockControllerImpl implements ProductStockControlle
         try {
             const transferReqDTO: TransferStockIntraBranchDTO = plainToInstance(TransferStockIntraBranchDTO, req.body, { enableImplicitConversion: true });
 
-            await validateEntityInstance(transferReqDTO);
+            await validateClassInstance(transferReqDTO);
             this.logger.debug(`${JSON.stringify(transferReqDTO)}`)
             await this.productStockService.transferStockIntraBranch(transferReqDTO);
 
@@ -46,7 +46,7 @@ export default class ProductStockControllerImpl implements ProductStockControlle
         try {
             const adjustProductStockBalanceDTO: AdjustProductStockBalanceDTO = plainToInstance(AdjustProductStockBalanceDTO, req.body, { enableImplicitConversion: true });
 
-            await validateEntityInstance(adjustProductStockBalanceDTO);
+            await validateClassInstance(adjustProductStockBalanceDTO);
 
             await this.productStockService.adjustStockBalance(adjustProductStockBalanceDTO);
 

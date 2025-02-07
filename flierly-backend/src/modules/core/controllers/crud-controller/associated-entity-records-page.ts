@@ -16,9 +16,9 @@ import { plainToInstance } from 'class-transformer';
 const associatedEntityRecordsPage = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
 
-    const associatedEntityRecordsPageRequestDTO: AssociatedEntityRecordsPageRequestDTO = plainToInstance(AssociatedEntityRecordsPageRequestDTO, req.body, { enableImplicitConversion: true });
+    const requestBodyDTO: AssociatedEntityRecordsPageRequestDTO = plainToInstance(AssociatedEntityRecordsPageRequestDTO, req.body, { enableImplicitConversion: true });
 
-    const pageResponse = await crudService.getAssociatedEntityRecordsPage(entity, associatedEntityRecordsPageRequestDTO);
+    const pageResponse = await crudService.getAssociatedEntityRecordsPage(entity, requestBodyDTO);
 
     // Return successful response
     return res.status(HttpCodes.OK).json(
@@ -28,7 +28,6 @@ const associatedEntityRecordsPage = async (entity: EntityTarget<ObjectLiteral>, 
         controller: 'CRUDController.associatedEntityRecordsPage',
         message: 'Related entities page fetched successfully',
         httpCode: HttpCodes.OK,
-        error: null,
         req,
         res,
       }),

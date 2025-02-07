@@ -1,6 +1,6 @@
 import HttpCodes from "@/constants/http-codes.enum";
 import { getEntityList } from "@/modules";
-import FlierlyException from "@/lib/flierly.exception";
+import FlierlyException from "@/lib/errors/flierly.exception";
 import { AppDataSource } from "@/lib/database/typeorm/app-datasource";
 import { applySortOrderQB, qbFilters } from "@/lib/database/typeorm/utils";
 import pageResponseBuilder from "@/utils/builders/page-response.builder";

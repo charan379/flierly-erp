@@ -4,7 +4,7 @@ import { AppDataSource } from '@/lib/database/typeorm/app-datasource';
 import apiResponseBuilder from '@/utils/builders/api-response.builder';
 import JoiSchemaValidator from '@/lib/joi/joi-schema.validator';
 import { Request, Response } from 'express';
-import FlierlyException from '@/lib/flierly.exception';
+import FlierlyException from '@/lib/errors/flierly.exception';
 import Account from '@/modules/account/entities/Account.entity';
 import Address from '@/modules/address/entities/Address.entity'; // Import Address entity
 import Joi from 'joi';

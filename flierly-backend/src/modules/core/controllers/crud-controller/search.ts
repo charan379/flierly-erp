@@ -1,14 +1,11 @@
 import HttpCodes from '@/constants/http-codes.enum';
-import { AppDataSource } from '@/lib/database/typeorm/app-datasource';
-import { qbFilters } from '@/lib/database/typeorm/utils';
 import apiResponseBuilder from '@/utils/builders/api-response.builder';
-import { pascalToSnakeCase } from '@/utils/case-converters';
-import JoiSchemaValidator from '@/lib/joi/joi-schema.validator';
 import { NextFunction, Request, Response } from 'express';
 import { EntityTarget, ObjectLiteral } from 'typeorm';
-import { SearchEntityRecordsRequestBody } from '../../@types/request-data.types';
-import searchEntityRecordsRequestBodySchema from '../../validation-schemas/search-entity-records-request-body';
 import crudService from '../../services/crud-service';
+import { plainToInstance } from 'class-transformer';
+import SearchEntityRecordsRequestDTO from '../../dto/SearchEntityRecordsRequest.dto';
+import validateClassInstance from '@/lib/class-validator/utils/validate-entity.util';
 
 /**
  * Search for entities in the database.
@@ -19,15 +16,12 @@ import crudService from '../../services/crud-service';
  */
 const search = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
+    // convert to request object to DTO instance
+    const requestBodyDTO = plainToInstance(SearchEntityRecordsRequestDTO, req.body, { enableImplicitConversion: true });
+    // validate the request DTO
+    await validateClassInstance(requestBodyDTO);
 
-    const reqBody = await JoiSchemaValidator<SearchEntityRecordsRequestBody>(
-      searchEntityRecordsRequestBodySchema,
-      req.body,
-      { abortEarly: false },
-      'CRUDController.search',
-    );
-
-    const results = await crudService.searchEntityRecords(entity, reqBody);
+    const results = await crudService.searchEntityRecords(entity, requestBodyDTO);
 
     return res.status(HttpCodes.OK).json(
       apiResponseBuilder({
@@ -36,7 +30,6 @@ const search = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Re
         controller: 'CRUD.SearchController',
         message: 'Search fetched successfully',
         httpCode: HttpCodes.OK,
-        error: null,
         req,
         res,
       }),

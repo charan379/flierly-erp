@@ -1,10 +1,11 @@
 import HttpCodes from '@/constants/http-codes.enum';
-import { idArraySchema } from '@/lib/joi/joi-schemas/common.joi.schema';
 import apiResponseBuilder from '@/utils/builders/api-response.builder';
-import JoiSchemaValidator from '@/lib/joi/joi-schema.validator';
 import { NextFunction, Request, Response } from 'express';
 import { EntityTarget, ObjectLiteral } from 'typeorm';
 import crudService from '../../services/crud-service';
+import { plainToInstance } from 'class-transformer';
+import RequestWithIdsArrayDTO from '../../dto/RequestWithIdsArray.dto';
+import validateClassInstance from '@/lib/class-validator/utils/validate-entity.util';
 
 /**
  * Restore soft-deleted entities in the database.
@@ -16,10 +17,14 @@ import crudService from '../../services/crud-service';
 const restore = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
 
   try {
-    // Validate the IDs to restore
-    const validatedIds: number[] = await JoiSchemaValidator(idArraySchema, req.body, {}, 'CRUDController.restore');
 
-    const result = await crudService.restoreEntityRecords(entity, validatedIds);
+    // convert to request object to DTO instance
+    const requestBodyDTO = plainToInstance(RequestWithIdsArrayDTO, req.body, { enableImplicitConversion: true });
+
+    // validate the request DTO
+    await validateClassInstance(requestBodyDTO);
+
+    const result = await crudService.restoreEntityRecords(entity, requestBodyDTO.ids);
 
     return res.status(HttpCodes.OK).json(
       apiResponseBuilder({
@@ -28,7 +33,6 @@ const restore = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: R
         message: `${result.affected} ${typeof entity === "function" ? entity.name : entity}'s restored successfully.`,
         controller: 'CRUDController.restore',
         httpCode: HttpCodes.CREATED,
-        error: null,
         req,
         res,
       }),

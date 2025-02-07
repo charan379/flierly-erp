@@ -1,4 +1,4 @@
-type AuthenticatedUser = {
+interface AuthenticatedUser {
     user: any
     allowedAccess: string[],
     token: string,

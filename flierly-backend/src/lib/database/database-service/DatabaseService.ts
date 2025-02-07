@@ -51,6 +51,8 @@ interface DatabaseService {
      * @returns The results of the query.
      */
     executeRawQuery<T>(query: string, parameters?: any[]): Promise<T>;
+
+    createEntityManager(): EntityManager
 }
 
 export default DatabaseService;

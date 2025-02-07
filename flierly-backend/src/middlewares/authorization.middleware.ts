@@ -1,11 +1,14 @@
 import HttpCodes from '@/constants/http-codes.enum';
 import User from '@/modules/iam/entities/User.entity';
 import { AppDataSource } from '@/lib/database/typeorm/app-datasource';
-import FlierlyException from '@/lib/flierly.exception';
-import { CustomJwtPayload, verifyJwtToken } from '@/lib/jwt';
-import getUserPrivilegeCodes from '@/modules/iam/services/user-service/get-user-privilege-codes';
+import FlierlyException from '@/lib/errors/flierly.exception';
 import { NextFunction, Request, Response } from 'express';
 import { getMessage as m } from '@/utils/get-message.util';
+import { CustomJwtPayload } from '@/lib/jwt/@types';
+import iocContainer from '@/lib/di-ioc-container';
+import BeanTypes from '@/lib/di-ioc-container/bean.types';
+import JwtService from '@/lib/jwt/jwt-service/JwtService';
+import UserService from '@/modules/iam/services/user-service/UserService';
 
 /**
  * Middleware to authorize requests based on JWT tokens and user privileges.
@@ -23,6 +26,8 @@ import { getMessage as m } from '@/utils/get-message.util';
 export function authorize(privilegeCode: string = ''): (req: Request, res: Response, next: NextFunction) => Promise<void | Response> {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const JwtService = iocContainer.get<JwtService>(BeanTypes.JwtService);
+      const userService = iocContainer.get<UserService>(BeanTypes.UserSevice);
       // Extract authorization header or signed cookie
       const authHeader: string = req?.headers?.authorization || req?.signedCookies?.auth;
 
@@ -51,7 +56,7 @@ export function authorize(privilegeCode: string = ''): (req: Request, res: Respo
       const bearerToken: string = authHeader.split(' ')[1];
 
       // Verify the JWT token and decode its payload
-      const deCodedToken: CustomJwtPayload = await verifyJwtToken(bearerToken);
+      const deCodedToken: CustomJwtPayload = await JwtService.verifyToken(bearerToken);
 
       // Extract username and userId from the decoded token
       const jwtUserName: string | undefined = deCodedToken.username;
@@ -87,7 +92,7 @@ export function authorize(privilegeCode: string = ''): (req: Request, res: Respo
         return next();
       } else {
         // Retrieve all privilege codes assigned to the user
-        const userPrivilegeCodes: Set<string> = await getUserPrivilegeCodes(user.id);
+        const userPrivilegeCodes: Set<string> = await userService.getPrivilegeCodes(user.id);
 
         // If the user has the required privilege, proceed
         if (userPrivilegeCodes.has(privilegeCode)) {

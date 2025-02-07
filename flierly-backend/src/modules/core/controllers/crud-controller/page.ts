@@ -3,9 +3,9 @@ import apiResponseBuilder from '@/utils/builders/api-response.builder';
 import { NextFunction, Request, Response } from 'express';
 import { EntityTarget, ObjectLiteral } from 'typeorm';
 import crudService from '@/modules/core/services/crud-service';
-import PageRequestDTO from '../../dto/PageRequest.dto';
+import EntityRecordsPageRequestDTO from '../../dto/EntityRecordsPageRequest.dto';
 import { plainToInstance } from 'class-transformer';
-import validateEntityInstance from '@/lib/class-validator/utils/validate-entity.util';
+import validateClassInstance from '@/lib/class-validator/utils/validate-entity.util';
 
 /**
  * Fetch a paginated list of entities.
@@ -17,11 +17,11 @@ import validateEntityInstance from '@/lib/class-validator/utils/validate-entity.
 const page = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
 
     try {
-
-        const pageRequestDTO: PageRequestDTO = plainToInstance(PageRequestDTO, req.body, { enableImplicitConversion: true });
-        
-        await validateEntityInstance(pageRequestDTO);
-
+        // convert to request object to DTO instance
+        const pageRequestDTO: EntityRecordsPageRequestDTO = plainToInstance(EntityRecordsPageRequestDTO, req.body, { enableImplicitConversion: true });
+        // validate the request DTO
+        await validateClassInstance(pageRequestDTO);
+        // fetch the paginated list of entities
         const pageResponse = await crudService.entityRecordsPage(entity, pageRequestDTO);
         
         return res.status(HttpCodes.OK).json(

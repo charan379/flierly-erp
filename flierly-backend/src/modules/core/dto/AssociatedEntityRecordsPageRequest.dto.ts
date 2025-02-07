@@ -1,9 +1,9 @@
 import { IsEnum, IsInt, IsNotEmpty, IsPositive, IsString } from "class-validator";
-import PageRequestDTO from "./PageRequest.dto";
+import EntityRecordsPageRequestDTO from "./EntityRecordsPageRequest.dto";
 import { Exclude, Type } from "class-transformer";
 import { AssociatedEntityPageRequestType } from "../constants/associated-entity-page-requestatype.enum";
 
-export default class AssociatedEntityRecordsPageRequestDTO extends PageRequestDTO {
+export default class AssociatedEntityRecordsPageRequestDTO extends EntityRecordsPageRequestDTO {
 
     @IsInt()
     @IsPositive()

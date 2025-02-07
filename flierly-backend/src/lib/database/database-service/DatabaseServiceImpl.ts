@@ -78,6 +78,11 @@ class DatabaseServiceImpl implements DatabaseService {
   public async executeRawQuery<T>(query: string, parameters?: any[]): Promise<T> {
     return this.dataSource.query(query, parameters);
   }
+
+  public createEntityManager(): EntityManager {
+    return this.dataSource.createEntityManager();
+  };
+
 }
 
 export default DatabaseServiceImpl;

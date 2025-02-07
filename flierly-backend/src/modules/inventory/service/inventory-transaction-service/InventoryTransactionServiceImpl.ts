@@ -5,7 +5,7 @@ import InventoryTransaction from "../../entities/InventoryTransaction.entity";
 import BeanTypes from "@/lib/di-ioc-container/bean.types";
 import DatabaseService from "@/lib/database/database-service/DatabaseService";
 import LoggerService from "@/modules/core/services/logger-service/LoggerService";
-import validateEntityInstance from "@/lib/class-validator/utils/validate-entity.util";
+import validateClassInstance from "@/lib/class-validator/utils/validate-entity.util";
 
 
 @injectable()
@@ -24,7 +24,7 @@ export default class InventoryTransactionServiceImpl implements InventoryTransac
 
             const inventoryTransaction = InventoryTransactionRepository.create(transaction);
 
-            await validateEntityInstance(inventoryTransaction);
+            await validateClassInstance(inventoryTransaction);
             this.loggerService.debug(JSON.stringify(inventoryTransaction))
             return await InventoryTransactionRepository.save(inventoryTransaction);
         } catch (error) {

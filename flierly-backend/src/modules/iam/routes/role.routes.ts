@@ -4,7 +4,7 @@ import CRUDController from '@/modules/core/controllers/crud-controller';
 import { requestValidator } from '@/middlewares/request-validator.middleware';
 import Role from '../entities/Role.entity';
 import AssociatedEntityRecordsPageRequestDTO from '@/modules/core/dto/AssociatedEntityRecordsPageRequest.dto';
-import PageRequestDTO from '@/modules/core/dto/PageRequest.dto';
+import EntityRecordsPageRequestDTO from '@/modules/core/dto/EntityRecordsPageRequest.dto';
 
 // role router
 const roleRoutes = Router();
@@ -16,7 +16,7 @@ roleRoutes.post(`/create`, requestValidator(Role, "body"), authorize(`role.creat
 roleRoutes.post(`/read`, authorize(`role.read`), crudController.read);
 roleRoutes.post(`/search`, authorize(`role.read`), crudController.search);
 roleRoutes.post(`/is-exists`, authorize(`role.read`), crudController.isExists);
-roleRoutes.post(`/page`,requestValidator(PageRequestDTO, "body"), authorize(`role.read`), crudController.page);
+roleRoutes.post(`/page`,requestValidator(EntityRecordsPageRequestDTO, "body"), authorize(`role.read`), crudController.page);
 roleRoutes.post(`/associated-entity-records-page`, requestValidator(AssociatedEntityRecordsPageRequestDTO, "body"), authorize(`role.read`), crudController.associatedEntityRecordsPage);
 roleRoutes.put(`/update/:id`, requestValidator(Role, "body"), authorize(`role.update`), crudController.update);
 roleRoutes.patch(`/activate`, authorize(`role.manage`), crudController.activate);

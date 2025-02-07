@@ -1,4 +1,4 @@
-type Page<T> = {
+interface Page<T> {
   data: T[];
   page: number;
   pageSize: number;
@@ -11,18 +11,18 @@ type Page<T> = {
   sort?: object;
 };
 
-type EntityDetails = {
+interface EntityDetails {
   entity: string;
   code: string;
   controller: string;
   filePath: string;
 };
 
-type SortBy = {
+interface SortBy {
   [key: string]: 'desc' | 'asc';
 };
 
-type ApiResponse<T> = {
+interface ApiResponse<T> {
   // Indicates if the request was successful
   success: boolean;
   // The result of the API call, can be various types
@@ -39,7 +39,7 @@ type ApiResponse<T> = {
   httpCode: number;
 };
 
-type ErrorMessage = {
+interface ErrorMessage {
   name: String;
   message: string;
   httpCode: number;
@@ -62,7 +62,7 @@ type SortOrder = 'ascend' | 'descend' | 'asc' | 'desc' | 'ascending' | 'descendi
 
 type FilterArray = FilterValue[];
 
-type FilterAndLimitArgs<T> = {
+interface FilterAndLimitArgs<T> {
   matcher: RegExp; // Regular expression used for filtering items based on the value of queryKey
   limit: number; // Maximum number of items to return
   data: T[]; // Array of items to be filtered

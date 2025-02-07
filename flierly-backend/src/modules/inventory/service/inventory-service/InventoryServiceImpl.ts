@@ -5,9 +5,9 @@ import { inject, injectable } from "inversify";
 import DatabaseService from "@/lib/database/database-service/DatabaseService";
 import BeanTypes from "@/lib/di-ioc-container/bean.types";
 import ProductStockService from "@/modules/product/service/product-stock-service/ProductStockService";
-import validateEntityInstance from "@/lib/class-validator/utils/validate-entity.util";
+import validateClassInstance from "@/lib/class-validator/utils/validate-entity.util";
 import { error } from "console";
-import FlierlyException from "@/lib/flierly.exception";
+import FlierlyException from "@/lib/errors/flierly.exception";
 import HttpCodes from "@/constants/http-codes.enum";
 
 @injectable()
@@ -25,7 +25,7 @@ export default class InventoryServiceImpl implements InventoryService {
 
             const newInventory = inventoryRepository.create(inventory);
 
-            await validateEntityInstance(newInventory);
+            await validateClassInstance(newInventory);
 
             return await inventoryRepository.save(newInventory);
         } catch (error) {

@@ -3,11 +3,11 @@ import ProductStock from "../../entities/ProductStock.entity";
 import ProductStockService from "./ProductStockService";
 import { injectable, inject } from "inversify";
 import DatabaseService from "@/lib/database/database-service/DatabaseService";
-import validateEntityInstance from "@/lib/class-validator/utils/validate-entity.util";
+import validateClassInstance from "@/lib/class-validator/utils/validate-entity.util";
 import { ProductStockOperationType } from "../../constants/product-stock-operation-type.enum";
 import BeanTypes from "@/lib/di-ioc-container/bean.types";
 import Inventory from "@/modules/inventory/entities/Inventory.entity";
-import FlierlyException from "@/lib/flierly.exception";
+import FlierlyException from "@/lib/errors/flierly.exception";
 import HttpCodes from "@/constants/http-codes.enum";
 import { InventoryTransactionType } from "@/modules/inventory/constants/inventory-transaction-type.enum";
 import InventoryTransactionService from "@/modules/inventory/service/inventory-transaction-service/InventoryTransactionService";
@@ -32,7 +32,7 @@ export default class ProductStockServiceImpl implements ProductStockService {
 
             const newProductStock = productStockRepository.create(productStock);
 
-            await validateEntityInstance(newProductStock);
+            await validateClassInstance(newProductStock);
 
             return await productStockRepository.save(newProductStock);
 
@@ -57,7 +57,7 @@ export default class ProductStockServiceImpl implements ProductStockService {
 
             const updatedProductStock = productStockRepository.merge(existingProductStock, productStock);
 
-            await validateEntityInstance(updatedProductStock);
+            await validateClassInstance(updatedProductStock);
 
             return await productStockRepository.save(updatedProductStock);
         } catch (error) {
@@ -87,7 +87,7 @@ export default class ProductStockServiceImpl implements ProductStockService {
                 throw new FlierlyException("Insufficient stock", HttpCodes.BAD_REQUEST, JSON.stringify({ productId, inventoryId, quantity, operation }));
             };
 
-            await validateEntityInstance(productStock);
+            await validateClassInstance(productStock);
 
             return await productStockRepository.save(productStock);
 

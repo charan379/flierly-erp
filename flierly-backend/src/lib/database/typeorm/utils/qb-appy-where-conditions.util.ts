@@ -1,6 +1,6 @@
 import { Brackets, WhereExpressionBuilder } from "typeorm";
 import parseCondition from "./parse-condition.util";
-import FlierlyException from "@/lib/flierly.exception";
+import FlierlyException from "@/lib/errors/flierly.exception";
 import HttpCodes from "@/constants/http-codes.enum";
 import iocContainer from "@/lib/di-ioc-container";
 import LoggerService from "@/modules/core/services/logger-service/LoggerService";

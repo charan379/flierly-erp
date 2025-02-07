@@ -1,10 +1,11 @@
 import HttpCodes from '@/constants/http-codes.enum';
-import { idArraySchema } from '@/lib/joi/joi-schemas/common.joi.schema';
 import apiResponseBuilder from '@/utils/builders/api-response.builder';
-import JoiSchemaValidator from '@/lib/joi/joi-schema.validator';
 import { NextFunction, Request, Response } from 'express';
 import { EntityTarget, ObjectLiteral } from 'typeorm';
 import crudService from '@/modules/core/services/crud-service';
+import { plainToInstance } from 'class-transformer';
+import validateClassInstance from '@/lib/class-validator/utils/validate-entity.util';
+import RequestWithIdsArrayDTO from '../../dto/RequestWithIdsArray.dto';
 
 /**
  * Activate entities in the database.
@@ -15,10 +16,13 @@ import crudService from '@/modules/core/services/crud-service';
  */
 const activate = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
-    // Validate the IDs to activate
-    const validatedIds: number[] = await JoiSchemaValidator(idArraySchema, req.body, {}, 'dynamic-activate');
+    // convert to request object to DTO instance
+    const requestBodyDTO = plainToInstance(RequestWithIdsArrayDTO, req.body, { enableImplicitConversion: true });
 
-    const result = await crudService.activateEntityRecords(entity, validatedIds);
+    // validate the request DTO
+    await validateClassInstance(requestBodyDTO);
+
+    const result = await crudService.activateEntityRecords(entity, requestBodyDTO.ids);
 
     return res.status(HttpCodes.OK).json(
       apiResponseBuilder({
@@ -27,7 +31,6 @@ const activate = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: 
         message: `${result.affected} ${typeof entity === "function" ? entity.name : entity}'s activated successfully.`,
         controller: 'CRUDController.activate',
         httpCode: HttpCodes.OK,
-        error: null,
         req,
         res,
       }),

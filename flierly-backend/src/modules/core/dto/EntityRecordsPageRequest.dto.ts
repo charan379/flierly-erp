@@ -2,7 +2,7 @@ import { IsArray, IsBoolean, IsInt, IsObject, IsOptional, IsPositive, IsString, 
 import SortDTO from "./Sort.dto";
 import { Type } from "class-transformer";
 
-export default class PageRequestDTO {
+export default class EntityRecordsPageRequestDTO {
 
     @IsInt()
     @IsOptional()

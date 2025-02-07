@@ -1,11 +1,11 @@
 import HttpCodes from '@/constants/http-codes.enum';
-import JoiSchemaValidator from '@/lib/joi/joi-schema.validator';
 import { NextFunction, Request, Response } from 'express';
 import { EntityTarget, ObjectLiteral } from 'typeorm';
-import { EntityReadRequestBody } from '../../@types/request-data.types';
-import entityReadRequestBodySchema from '../../validation-schemas/entity-read-request-body-schema';
 import apiResponseBuilder from '@/utils/builders/api-response.builder';
 import crudService from '../../services/crud-service';
+import { plainToInstance } from 'class-transformer';
+import ReadEntityRecordRequestDTO from '../../dto/ReadEntityRecordRequest.dto';
+import validateClassInstance from '@/lib/class-validator/utils/validate-entity.util';
 
 /**
  * Read an entity from the database.
@@ -17,15 +17,18 @@ import crudService from '../../services/crud-service';
 const read = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
 
   try {
-    // Validate the request body
-    const reqBody: EntityReadRequestBody = await JoiSchemaValidator<EntityReadRequestBody>(entityReadRequestBodySchema, req.body, { abortEarly: false }, 'CRUDController.read');
+    // convert to request object to DTO instance
+    const requestBodyDTO = plainToInstance(ReadEntityRecordRequestDTO, req.body, { enableImplicitConversion: true });
 
-    const data = await crudService.readEntityRecord(entity, reqBody);
+    // validated the request DTO
+    await validateClassInstance(requestBodyDTO);
+
+    const result = await crudService.readEntityRecord(entity, requestBodyDTO);
 
     return res.status(HttpCodes.OK).json(
       apiResponseBuilder({
         success: true,
-        result: data,
+        result,
         message: 'Data fetched successfully',
         controller: 'CRUDController.read',
         httpCode: HttpCodes.OK,

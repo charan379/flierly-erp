@@ -1,10 +1,11 @@
 import HttpCodes from '@/constants/http-codes.enum';
-import { idSchema } from '@/lib/joi/joi-schemas/common.joi.schema';
 import apiResponseBuilder from '@/utils/builders/api-response.builder';
-import JoiSchemaValidator from '@/lib/joi/joi-schema.validator';
 import { NextFunction, Request, Response } from 'express';
 import { EntityTarget, ObjectLiteral } from 'typeorm';
 import crudService from '@/modules/core/services/crud-service';
+import { plainToInstance } from 'class-transformer';
+import RequestWithIdParamDTO from '../../dto/RequestWithIdParam.dto';
+import validateClassInstance from '@/lib/class-validator/utils/validate-entity.util';
 
 /**
  * Update an entity in the database.
@@ -15,16 +16,18 @@ import crudService from '@/modules/core/services/crud-service';
  */
 const update = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
-    // Validate the entity ID and request body
-    const id = await JoiSchemaValidator<number>(idSchema, req.params.id, { abortEarly: false, allowUnknown: false }, 'dynamic-update');
+    // convert to request object to DTO instance
+    const requestParamsDTO = plainToInstance(RequestWithIdParamDTO, req.params, { enableImplicitConversion: true });
+    // validate the request DTO
+    await validateClassInstance(requestParamsDTO);
 
-    const result = await crudService.updateEntityRecord(entity, id, req.body);
-    
+    const result = await crudService.updateEntityRecord(entity, requestParamsDTO.id, req.body);
+
     return res.status(HttpCodes.OK).json(
       apiResponseBuilder({
         success: true,
         result,
-        message: `${typeof entity === "function" ? entity.name : entity} updated successfully with ID: ${id}`,
+        message: `${typeof entity === "function" ? entity.name : entity} updated successfully with ID: ${requestParamsDTO.id}`,
         controller: 'CRUD.UpdateController',
         httpCode: HttpCodes.OK,
         error: null,

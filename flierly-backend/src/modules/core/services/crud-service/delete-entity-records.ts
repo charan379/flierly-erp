@@ -2,14 +2,15 @@ import { AppDataSource } from "@/lib/database/typeorm/app-datasource";
 import { EntityTarget, ObjectLiteral, UpdateResult } from "typeorm";
 
 
-const deleteEntityRecords = async (entity: EntityTarget<ObjectLiteral>, idsToDelete: Number[]): Promise<UpdateResult> => {
+const deleteEntityRecords = async (entity: EntityTarget<ObjectLiteral>, idsToDelete: number[]): Promise<UpdateResult> => {
     try {
 
         const result = await AppDataSource.transaction(async (entityManager) => {
-            const repo = entityManager.getRepository(entity);
+
+            const entityRepository = entityManager.getRepository(entity);
 
             // Soft delete the entities with the validated IDs
-            const updateResult = await repo
+            const updateResult = await entityRepository
                 .createQueryBuilder()
                 .update()
                 .set({

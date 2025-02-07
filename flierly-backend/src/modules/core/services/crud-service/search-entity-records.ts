@@ -1,22 +1,32 @@
 import { EntityTarget, ObjectLiteral } from "typeorm";
-import { SearchEntityRecordsRequestBody } from "../../@types/request-data.types";
 import { AppDataSource } from "@/lib/database/typeorm/app-datasource";
 import applyWhereConditionsQB from "@/lib/database/typeorm/utils/qb-appy-where-conditions.util";
+import SearchEntityRecordsRequestDTO from "../../dto/SearchEntityRecordsRequest.dto";
+import { applySortOrderQB } from "@/lib/database/typeorm/utils";
 
-const searchEntityRecords = async (entity: EntityTarget<ObjectLiteral>, request: SearchEntityRecordsRequestBody): Promise<ObjectLiteral[]> => {
+const searchEntityRecords = async (entity: EntityTarget<ObjectLiteral>, request: SearchEntityRecordsRequestDTO): Promise<ObjectLiteral[]> => {
     try {
 
-        const { filters, limit } = request;
+        const { filters, limit, withDeleted, sort } = request;
 
-        const repository = AppDataSource.getRepository(entity);
+        const entityRepository = AppDataSource.getRepository(entity);
 
         const entityAlias = "entity";
 
         // Create query builder for the entity
-        const queryBuilder = repository.createQueryBuilder(entityAlias);
+        const queryBuilder = entityRepository.createQueryBuilder(entityAlias);
+
+        if (withDeleted) {
+            queryBuilder.withDeleted();
+        };
 
         // Apply filters to the query builder
         applyWhereConditionsQB(queryBuilder, 'andWhere', filters, entityAlias);
+
+        // Apply sorting
+        if (sort) {
+            applySortOrderQB(queryBuilder, { [sort.property]: sort.order });
+        }
 
         // Apply (take for offset and limit)
         queryBuilder.take(limit);

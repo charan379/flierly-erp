@@ -1,7 +1,7 @@
 import { EnvConfig } from "@/config/env";
 import HttpCodes from "@/constants/http-codes.enum";
 import { getEntityList } from "@/modules";
-import FlierlyException from "@/lib/flierly.exception";
+import FlierlyException from "@/lib/errors/flierly.exception";
 import apiResponseBuilder from "@/utils/builders/api-response.builder";
 import buildValidationErrorsResult from "@/utils/builders/validation-errors-result.builder";
 import { getMessage as m } from "@/utils/get-message.util";
@@ -11,7 +11,6 @@ import { NextFunction, Request, Response } from "express";
 import iocContainer from "@/lib/di-ioc-container";
 import LoggerService from "@/modules/core/services/logger-service/LoggerService";
 import BeanTypes from "@/lib/di-ioc-container/bean.types";
-import Inventory from "@/modules/inventory/entities/Inventory.entity";
 
 /**
  * Middleware for validating incoming requests using class-validator.

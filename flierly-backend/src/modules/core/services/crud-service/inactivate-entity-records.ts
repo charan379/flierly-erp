@@ -2,15 +2,16 @@ import { AppDataSource } from "@/lib/database/typeorm/app-datasource";
 import { EntityTarget, ObjectLiteral, UpdateResult } from "typeorm";
 
 
-const inActivateEntityRecords = async (entity: EntityTarget<ObjectLiteral>, idsToInActivate: Number[]): Promise<UpdateResult> => {
+const inActivateEntityRecords = async (entity: EntityTarget<ObjectLiteral>, idsToInActivate: number[]): Promise<UpdateResult> => {
     try {
 
-        const repo = AppDataSource.getRepository(entity);
+        const entityRepository = AppDataSource.getRepository(entity);
 
         // InActivate the entities with the validated IDs
-        const result = await repo.createQueryBuilder().update().set({ isActive: false }).where('id IN (:...ids)', { ids: idsToInActivate }).execute();
+        const result = await entityRepository.createQueryBuilder().update().set({ isActive: false }).where('id IN (:...ids)', { ids: idsToInActivate }).execute();
 
         return result;
+        
     } catch (error) {
         throw error;
     }

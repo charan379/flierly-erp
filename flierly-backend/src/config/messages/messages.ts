@@ -11,7 +11,16 @@ const messages = Object.freeze({
     privilegeCheckFailed: "User doesn't have the required permissions for ${privilege}.",
     "500": "INTERNAL SERVER ERROR",
     unhandledValidationError: "Unhandled Validation Error !.",
-    entityIdNotFound: "${entity} not found with ID: ${recordId}"
+    entityIdNotFound: "${entity} not found with ID: ${recordId}",
+    // JWT
+    TOKEN_CREATION_FAILED: 'Token Creation Failed',
+    UNAUTHORIZED_LOGIN: 'Unauthorized Please Login!',
+    AUTHENTICATION_EXPIRED: 'Authentication Expired Please Login!',
+    INTERNAL_SERVER_ERROR: 'Internal Server Error',
+    INVALID_SIGNATURE: 'Token probably modified or signature changed: invalid signature',
+    INVALID_TOKEN: 'Token probably modified or signature changed: invalid token',
+    JWT_EXPIRED: 'Token Expired Re-authenticate',
+    UNKNOWN_ERROR: 'Unknown Error Occurred while decoding token',
 });
 
 export default messages;

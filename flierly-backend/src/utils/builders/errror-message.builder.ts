@@ -2,7 +2,7 @@ import { HttpError } from 'http-errors';
 import { ValidationError } from 'class-validator';
 import { QueryFailedError, TypeORMError } from 'typeorm';
 import HttpCodes from '@/constants/http-codes.enum';
-import FlierlyException from '@/lib/flierly.exception';
+import FlierlyException from '@/lib/errors/flierly.exception';
 import { EnvConfig } from '@/config/env';
 import { getMessage as m } from '../get-message.util';
 import buildValidationErrorsResult from './validation-errors-result.builder';

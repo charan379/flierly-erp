@@ -1,22 +1,23 @@
 import { EntityTarget, ObjectLiteral } from "typeorm";
-import { EntityReadRequestBody } from "../../@types/request-data.types";
 import { AppDataSource } from "@/lib/database/typeorm/app-datasource";
-import FlierlyException from "@/lib/flierly.exception";
+import FlierlyException from "@/lib/errors/flierly.exception";
 import HttpCodes from "@/constants/http-codes.enum";
+import ReadEntityRecordRequestDTO from "../../dto/ReadEntityRecordRequest.dto";
 
 
-const readEntityRecord = async (entity: EntityTarget<ObjectLiteral>, request: EntityReadRequestBody): Promise<ObjectLiteral> => {
+const readEntityRecord = async (entity: EntityTarget<ObjectLiteral>, request: ReadEntityRecordRequestDTO): Promise<ObjectLiteral> => {
 
     try {
 
-        const { id: entityRecordId, loadRelations } = request;
+        const { entityRecordId, loadRelations, withDeleted } = request;
 
-        const repositoty = AppDataSource.getRepository(entity);
+        const entityRepositoty = AppDataSource.getRepository(entity);
 
         // Find the entity by ID with the specified relations
-        const data = await repositoty.findOne({
+        const data = await entityRepositoty.findOne({
             where: { id: entityRecordId },
             relations: loadRelations?.length > 0 ? loadRelations : loadRelations,
+            withDeleted
         });
 
         if (data === null)

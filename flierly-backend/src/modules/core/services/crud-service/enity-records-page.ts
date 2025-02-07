@@ -3,10 +3,10 @@ import { applySortOrderQB } from "@/lib/database/typeorm/utils";
 import applyWhereConditionsQB from "@/lib/database/typeorm/utils/qb-appy-where-conditions.util";
 import pageResponseBuilder from "@/utils/builders/page-response.builder";
 import { EntityTarget, ObjectLiteral } from "typeorm";
-import PageRequestDTO from "../../dto/PageRequest.dto";
+import EntityRecordsPageRequestDTO from "../../dto/EntityRecordsPageRequest.dto";
 
 
-const entityRecordsPage = async (entity: EntityTarget<ObjectLiteral>, pageRequest: PageRequestDTO): Promise<Page<object>> => {
+const entityRecordsPage = async (entity: EntityTarget<ObjectLiteral>, pageRequest: EntityRecordsPageRequestDTO): Promise<Page<object>> => {
 
     try {
         //  destructure the pageRequest

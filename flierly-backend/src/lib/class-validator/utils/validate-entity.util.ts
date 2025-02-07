@@ -1,10 +1,10 @@
 import HttpCodes from "@/constants/http-codes.enum";
-import FlierlyException from "@/lib/flierly.exception";
+import FlierlyException from "@/lib/errors/flierly.exception";
 import buildValidationErrorsResult from "@/utils/builders/validation-errors-result.builder";
 import { validate } from "class-validator";
 
-const validateEntityInstance = async (entityInstance: any): Promise<void> => {
-    const errors = await validate(entityInstance);
+const validateClassInstance = async (classInstance: any): Promise<void> => {
+    const errors = await validate(classInstance);
     if (errors.length > 0) {
         const errorMessages = buildValidationErrorsResult(errors);
 
@@ -16,4 +16,4 @@ const validateEntityInstance = async (entityInstance: any): Promise<void> => {
     }
 };
 
-export default validateEntityInstance;
+export default validateClassInstance;

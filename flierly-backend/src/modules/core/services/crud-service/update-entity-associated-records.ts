@@ -1,20 +1,20 @@
 import { EntityTarget, ObjectLiteral } from "typeorm";
-import { UpdateAssociatedEntityRecordsRequestBody } from "../../@types/request-data.types";
 import { AppDataSource } from "@/lib/database/typeorm/app-datasource";
-import FlierlyException from "@/lib/flierly.exception";
+import FlierlyException from "@/lib/errors/flierly.exception";
 import HttpCodes from "@/constants/http-codes.enum";
 import getDiffFromArrayOfNumbers from "@/utils/get-diff-from-array-of-numbers.util";
+import UpdateEntityAssociatedRecordsRequestDTO from "../../dto/UpdateAssociatedEntityRecordsRequest.dto";
 
 
-const updateAssociatedEntityRecords = async (entity: EntityTarget<ObjectLiteral>, request: UpdateAssociatedEntityRecordsRequestBody): Promise<string[]> => {
+const updateAssociatedEntityRecords = async (entity: EntityTarget<ObjectLiteral>, request: UpdateEntityAssociatedRecordsRequestDTO): Promise<string[]> => {
     try {
 
-        const { entityRecordId, entitySideField, addMultiple, addOne, newArray, removeMultiple, removeOne } = request;
+        const { entityRecordId, entitySideField, addMultiple, addOne, replaceWith, removeMultiple, removeOne } = request;
 
-        const repository = AppDataSource.getRepository(entity);
+        const entityRepository = AppDataSource.getRepository(entity);
 
         // Fetch relation columns and validate the entitySide field
-        const entitySideFieldMetadata = repository.metadata.relations.reduce((acc: Record<string, any>, column) => {
+        const entitySideFieldMetadata = entityRepository.metadata.relations.reduce((acc: Record<string, any>, column) => {
             acc[column.propertyName] = column.relationType;
             return acc;
         }, {});
@@ -32,7 +32,7 @@ const updateAssociatedEntityRecords = async (entity: EntityTarget<ObjectLiteral>
         }
 
         // Fetch the current field data with relations loaded
-        const queryBuilder = repository.createQueryBuilder();
+        const queryBuilder = entityRepository.createQueryBuilder();
         const entityRecord = await queryBuilder.where('id = :id', { id: entityRecordId }).loadAllRelationIds().getOneOrFail();
 
         const existingArray: number[] = entityRecord[entitySideField] ?? [];
@@ -41,9 +41,9 @@ const updateAssociatedEntityRecords = async (entity: EntityTarget<ObjectLiteral>
         let idsToAdd: number[] = [];
         let idsToRemove: number[] = [];
 
-        if (newArray) {
+        if (replaceWith && replaceWith.length > 0) {
             // Sync array with newArray
-            const compareResult = getDiffFromArrayOfNumbers(existingArray, newArray);
+            const compareResult = getDiffFromArrayOfNumbers(existingArray, replaceWith);
             idsToAdd = compareResult.newEntries;
             idsToRemove = compareResult.removedEntries;
         } else {
@@ -51,11 +51,11 @@ const updateAssociatedEntityRecords = async (entity: EntityTarget<ObjectLiteral>
             if (addOne && !existingArray.includes(addOne)) idsToAdd.push(addOne); // Add if not already present
             if (removeOne && existingArray.includes(removeOne)) idsToRemove.push(removeOne); // Remove if exists
 
-            if (addMultiple) {
+            if (addMultiple?.length && addMultiple.length > 0) {
                 idsToAdd.push(...addMultiple.filter((item) => !existingArray.includes(item))); // Filter items not already present
             }
 
-            if (removeMultiple) {
+            if (removeMultiple && removeMultiple.length > 0) {
                 idsToRemove.push(...removeMultiple.filter((item) => existingArray.includes(item))); // Filter items that exist
             }
 
@@ -66,9 +66,9 @@ const updateAssociatedEntityRecords = async (entity: EntityTarget<ObjectLiteral>
 
         // Execute transaction for updates
         await AppDataSource.transaction(async (entityManager) => {
-            const transactionRepo = entityManager.getRepository(entity);
+            const transactionRepository = entityManager.getRepository(entity);
 
-            await transactionRepo.createQueryBuilder().relation(entitySideField).of(entityRecordId).addAndRemove(idsToAdd, idsToRemove);
+            await transactionRepository.createQueryBuilder().relation(entitySideField).of(entityRecordId).addAndRemove(idsToAdd, idsToRemove);
         });
 
         return [

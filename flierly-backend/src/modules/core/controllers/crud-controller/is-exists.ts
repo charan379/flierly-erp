@@ -1,11 +1,11 @@
 import HttpCodes from '@/constants/http-codes.enum';
 import apiResponseBuilder from '@/utils/builders/api-response.builder';
-import JoiSchemaValidator from '@/lib/joi/joi-schema.validator';
 import { NextFunction, Request, Response } from 'express';
 import { EntityTarget, ObjectLiteral } from 'typeorm';
-import isEntityRecordExistsRequestBodySchema from '../../validation-schemas/is-entity-record-exists-request-body-schema';
 import crudService from '../../services/crud-service';
-import { IsEntityRecordExistsRequestBody } from '../../@types/request-data.types';
+import IsEntityRecordExistsRequestDTO from '../../dto/IsEntityRecordExistsRequest.dto';
+import { plainToInstance } from 'class-transformer';
+import validateClassInstance from '@/lib/class-validator/utils/validate-entity.util';
 
 /**
  * Check if an entity exists in the database.
@@ -17,9 +17,13 @@ import { IsEntityRecordExistsRequestBody } from '../../@types/request-data.types
 const isExists = async (entity: EntityTarget<ObjectLiteral>, req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
 
   try {
-    const reqBody: IsEntityRecordExistsRequestBody = await JoiSchemaValidator(isEntityRecordExistsRequestBodySchema, req.body, { abortEarly: false }, 'CRUDController.is-exists');
+    // convert to request object to DTO instance
+    const requestBodyDTO: IsEntityRecordExistsRequestDTO = plainToInstance(IsEntityRecordExistsRequestDTO, req.body, { enableImplicitConversion: true });
 
-    const result = await crudService.isEntityExists(entity, reqBody);
+    // validate the request DTO
+    await validateClassInstance(requestBodyDTO);
+    // check if the entity exists
+    const result = await crudService.isEntityExists(entity, requestBodyDTO);
 
     return res.status(HttpCodes.OK).json(
       apiResponseBuilder({

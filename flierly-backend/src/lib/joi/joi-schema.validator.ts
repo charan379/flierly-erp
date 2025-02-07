@@ -1,5 +1,5 @@
 import HttpCodes from '@/constants/http-codes.enum';
-import FlierlyException from '@/lib/flierly.exception';
+import FlierlyException from '@/lib/errors/flierly.exception';
 import Joi, { AnySchema, ValidationOptions } from 'joi';
 
 /**
