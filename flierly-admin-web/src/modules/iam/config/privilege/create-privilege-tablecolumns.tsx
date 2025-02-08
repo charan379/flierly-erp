@@ -6,10 +6,10 @@ const createPrivilegeTableColumns = (translate: (value: string) => string, _hasP
   return [
     // id
     createIdColumn(translate),
+    // isActive
+    createBooleanColumn(translate, { dataIndex: 'isActive', width: 80 }),
     // name
     createNameColumn(translate),
-    // entity
-    createEntityColumn(translate),
     // access
     {
       title: translate('access_type'),
@@ -34,8 +34,8 @@ const createPrivilegeTableColumns = (translate: (value: string) => string, _hasP
         }
       },
     },
-    // status
-    createBooleanColumn(translate, { dataIndex: 'isActive', width: 80 }),
+    // entity
+    createEntityColumn(translate),
     // code
     createCodeColumn(translate, { width: 200 }),
     // updatedAt

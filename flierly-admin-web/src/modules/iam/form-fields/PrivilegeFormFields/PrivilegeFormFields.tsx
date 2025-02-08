@@ -27,6 +27,14 @@ const PrivilegeFormFields: React.FC<PrivilegeFormFieldsProps> = ({ disabledField
                 hidden={!isEditForm}
                 disabled
             />
+            
+            {/* isActive - Switch for active status */}
+            <ProFormSwitch
+                name="isActive"
+                label={t('entity.isActive')}
+                hasFeedback
+                disabled={(isEditForm && !hasPermission(pr('privilege.manage'))) || disabledFields?.includes('isActive')}
+            />
 
             {/* name - Input for privilege name */}
             <ProFormText
@@ -96,14 +104,6 @@ const PrivilegeFormFields: React.FC<PrivilegeFormFieldsProps> = ({ disabledField
                     { pattern: vr('code'), message: t('entity.codePattern') },
                 ]}
                 disabled={(isEditForm && !hasPermission(pr('privilege.manage'))) || disabledFields?.includes('code')}
-            />
-
-            {/* isActive - Switch for active status */}
-            <ProFormSwitch
-                name="isActive"
-                label={t('entity.isActive')}
-                hasFeedback
-                disabled={(isEditForm && !hasPermission(pr('privilege.manage'))) || disabledFields?.includes('isActive')}
             />
         </>
     );

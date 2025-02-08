@@ -26,6 +26,14 @@ const UserFormFields: React.FC<UserFormFieldsProps> = ({ disabledFields, formIns
                 disabled
             />
 
+            {/* isActive - Switch for active status */}
+            <ProFormSwitch
+                name="isActive"
+                label={t('entity.isActive')}
+                hasFeedback
+                disabled={(isEditForm && !hasPermission(pr('user.manage'))) || disabledFields?.includes('isActive')}
+            />
+
             {/* username - Input for username */}
             <ProFormText
                 name="username"
@@ -101,13 +109,6 @@ const UserFormFields: React.FC<UserFormFieldsProps> = ({ disabledFields, formIns
                 disabled={(isEditForm && !hasPermission(pr('user.manage'))) || disabledFields?.includes('mobile')}
             />
 
-            {/* isActive - Switch for active status */}
-            <ProFormSwitch
-                name="isActive"
-                label={t('entity.isActive')}
-                hasFeedback
-                disabled={(isEditForm && !hasPermission(pr('user.manage'))) || disabledFields?.includes('isActive')}
-            />
         </>
     );
 };

@@ -1,4 +1,4 @@
-type AuthState = {
+interface AuthState {
   user: User | null
   allowedAccess: string[]
   token: string
@@ -10,7 +10,7 @@ type AuthState = {
   error: ErrorDetails | null
 }
 
-type UserAuth = {
+interface UserAuth {
   user: User
   allowedAccess: string[]
   token: string
@@ -18,7 +18,7 @@ type UserAuth = {
   tokenExpiresAt: string
 }
 
-type LoginCredentials = {
+interface LoginCredentials {
   username: string
   password: string
 }

@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsArray, ArrayNotEmpty, ArrayMinSize, IsNumber, IsPositive } from 'class-validator';
+import { IsArray, ArrayNotEmpty, ArrayMinSize, IsNumber, IsPositive, IsNotEmpty } from 'class-validator';
 
 export default class RequestWithIdsArrayDTO {
     @IsArray()
@@ -8,5 +8,6 @@ export default class RequestWithIdsArrayDTO {
     @IsNumber({}, { each: true })
     @IsPositive({ each: true })
     @Type(() => Number)
+    @IsNotEmpty({ each: true })
     ids: number[];
 }

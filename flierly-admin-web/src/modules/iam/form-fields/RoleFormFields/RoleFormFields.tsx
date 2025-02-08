@@ -26,6 +26,15 @@ const RoleFormFields: React.FC<RoleFormFieldsProps> = ({ disabledFields, formIns
                 disabled
             />
 
+
+            {/* isActive - Switch for active status */}
+            <ProFormSwitch
+                name="isActive"
+                label={t('entity.isActive')}
+                hasFeedback
+                disabled={(isEditForm && !hasPermission(pr('role.manage'))) || disabledFields?.includes('isActive')}
+            />
+
             {/* name - Input for role name */}
             <ProFormText
                 name="name"
@@ -85,14 +94,6 @@ const RoleFormFields: React.FC<RoleFormFieldsProps> = ({ disabledFields, formIns
                     { pattern: vr('description'), message: t('entity.descriptionPattern') },
                 ]}
                 disabled={(isEditForm && !hasPermission(pr('role.update'))) || disabledFields?.includes('description')}
-            />
-
-            {/* isActive - Switch for active status */}
-            <ProFormSwitch
-                name="isActive"
-                label={t('entity.isActive')}
-                hasFeedback
-                disabled={(isEditForm && !hasPermission(pr('role.manage'))) || disabledFields?.includes('isActive')}
             />
         </>
     );

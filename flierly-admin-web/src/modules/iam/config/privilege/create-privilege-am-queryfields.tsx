@@ -4,33 +4,39 @@ import { AMQueryBuilderFieldConfig, createBooleanAMQueryField, createNumericAMQu
 
 const createPrivilegeAMQueryBuilderFields = (translate: (value: string) => string): AMQueryBuilderFieldConfig<Privilege>[] => {
   return [
+    // id
     createNumericAMQueryField({
       label: translate('id'),
       name: 'id'
     }),
+    // isActive
+    createBooleanAMQueryField({
+      label: translate('status'),
+      name: 'isActive',
+      optionLabels: [translate('active'), translate('inactive')]
+    }),
+    // name
     createTextAMQueryField({
       label: translate('name'),
       name: 'name',
     }),
-    createTextAMQueryField({
-      label: translate('code'),
-      name: 'code'
+    // access
+    createSelectAMQueryField({
+      label: translate('access'),
+      name: 'access',
+      options: accessOptions
     }),
+    // entity
     createSelectRemoteOptionsAMQueryField({
       label: translate('entity'),
       name: 'entity',
       rules: [{ type: 'regexp', message: 'sdsd' }],
       asyncOptionsFetcher: fetchEntityOptions
     }),
-    createSelectAMQueryField({
-      label: translate('access'),
-      name: 'access',
-      options: accessOptions
-    }),
-    createBooleanAMQueryField({
-      label: translate('status'),
-      name: 'isActive',
-      optionLabels: [translate('active'), translate('inactive')]
+    // code
+    createTextAMQueryField({
+      label: translate('code'),
+      name: 'code'
     }),
   ]
 }

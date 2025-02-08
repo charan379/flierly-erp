@@ -1,4 +1,4 @@
-type CrudModuleState = {
+interface CrudModuleState {
   rowMenu: {
     open: boolean
     position: { x: number; y: number }
@@ -14,25 +14,25 @@ type CrudModuleState = {
   }
 }
 
-type CrudModuleContextType = {
+interface CrudModuleContextType {
   state: CrudModuleState
   dispatcher?: React.Dispatch<Action>
 }
 
 // Props type for the page function
-type EntityRecordsPageRequest<E> = {
+interface EntityRecordsPageRequest<E> {
   entity: string
   loadRelations?: Array<keyof E>,
   binMode?: boolean
   limit: number
   page: number
   filters?: Record<string, any>
-  sort?: Record<string, "descend" | "ascend" | null>
+  sort?: { property: string, order: "desc" | "asc" }
   signal?: AbortSignal
 }
 
 // Props type for the page function
-type AssociatedEntityRecordsPageRequest<E, AE> = {
+interface AssociatedEntityRecordsPageRequest<E, AE> {
   entity: string
   entityRecordId: number
   associatedEntity: string
@@ -41,20 +41,20 @@ type AssociatedEntityRecordsPageRequest<E, AE> = {
   limit: number
   page: number
   filters?: Record<string, any>
-  sort?: Record<string, "descend" | "ascend" | null>
+  sort?: { property: string, order: "desc" | "asc" }
   type?: 'allocated' | 'unallocated'
   signal?: AbortSignal
 }
 
 // Props type for the create function
-type CreateEntityRecordRequest<E = Record<string, any>> = {
+interface CreateEntityRecordRequest<E = Record<string, any>> {
   entity: string
   data: E
   signal?: AbortSignal
 }
 
 // Props type for the update function
-type UpdateEntityRecordRequest<E = Record<string, any>> = {
+interface UpdateEntityRecordRequest<E = Record<string, any>> {
   entity: string
   id: string | number
   data: E
@@ -62,7 +62,7 @@ type UpdateEntityRecordRequest<E = Record<string, any>> = {
 }
 
 // Props type for the update function
-type UpdateAssociatedEntityRecordsRequest<E> = {
+interface UpdateAssociatedEntityRecordsRequest<E> {
   entity: string
   entityRecordId: number
   entitySideField: keyof E
@@ -75,35 +75,35 @@ type UpdateAssociatedEntityRecordsRequest<E> = {
 }
 
 // Props type for the exists function
-type EntityRecordExistsRequest<_E> = {
+interface EntityRecordExistsRequest<_E> {
   entity: string
   filters?: Record<string, any>
   signal?: AbortSignal
 }
 
 // Props type for the delete function
-type EntityRecordsDeleteRequest = {
+interface EntityRecordsDeleteRequest {
   entity: string
   ids: number[]
   signal?: AbortSignal
 }
 
 // Props type for the activate function
-type EntityRecordsActivateRequest = {
+interface EntityRecordsActivateRequest {
   entity: string
   ids: number[]
   signal?: AbortSignal
 }
 
 // Props type for the inactivate function
-type EntityRecordsInactivateRequest = {
+interface EntityRecordsInactivateRequest {
   entity: string
   ids: number[]
   signal?: AbortSignal
 }
 
 // Props type for the restore function
-type EntityRecordsRestoreRequest = {
+interface EntityRecordsRestoreRequest {
   entity: string
   ids: number[]
   signal?: AbortSignal

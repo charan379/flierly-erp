@@ -6,16 +6,27 @@ const createUserQueryBuilderFields = (translate: (value: string) => string): Que
   createNumberQueryBuilderField({
     label: translate('id'),
     name: 'id'
-  }),  // name
-  createTextQueryBuilderField({
-    label: translate('username'),
-    name: 'username'
   }),
   // isActive
   createBooleanQueryBuilderField({
     label: translate('status'),
     name: 'isActive',
     optionLabels: [translate('active'), translate('inactive')]
+  }),
+  // username
+  createTextQueryBuilderField({
+    label: translate('username'),
+    name: 'username'
+  }),
+  // email
+  createTextQueryBuilderField({
+    label: translate('email'),
+    name: 'email'
+  }),
+  // username
+  createTextQueryBuilderField({
+    label: translate('mobile'),
+    name: 'mobile'
   }),
   // createdAt
   createDateQueryBuilderField({

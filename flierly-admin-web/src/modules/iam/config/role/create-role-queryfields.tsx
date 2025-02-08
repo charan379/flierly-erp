@@ -7,6 +7,12 @@ const createRoleQueryBuilderFields = (translate: (value: string) => string): Que
     label: translate('id'),
     name: 'id'
   }),
+  // isActive
+  createBooleanQueryBuilderField({
+    label: translate('status'),
+    name: 'isActive',
+    optionLabels: [translate('active'), translate('inactive')]
+  }),
   // name
   createTextQueryBuilderField({
     label: translate('name'),
@@ -16,12 +22,6 @@ const createRoleQueryBuilderFields = (translate: (value: string) => string): Que
   createTextQueryBuilderField({
     label: translate('code'),
     name: 'code'
-  }),
-  // isActive
-  createBooleanQueryBuilderField({
-    label: translate('status'),
-    name: 'isActive',
-    optionLabels: [translate('active'), translate('inactive')]
   }),
   // createdAt
   createDateQueryBuilderField({

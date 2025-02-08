@@ -165,15 +165,24 @@ const CrudTable = <T extends Record<string, any>>({
       dataSource={data}
       // data request
       request={async (params, sort) => {
-        const { result, success } = await crudService.page<T>({
+
+        const pageRequest: EntityRecordsPageRequest<T> = {
           entity,
           filters: CrudModuleContextHandler.filters.get(),
           limit: params.pageSize ?? 10,
           page: params.current ?? 1,
           loadRelations,
-          sort,
           binMode: binMode,
-        })
+        };
+
+        if (Object.keys(sort).length > 0) {
+          pageRequest.sort = {
+            property: Object.keys(sort)[0],
+            order: Object.values(sort)[0] === 'ascend' ? 'asc' : 'desc',
+          };
+        }
+        
+        const { result, success } = await crudService.page<T>(pageRequest)
 
         return {
           data: result?.data,

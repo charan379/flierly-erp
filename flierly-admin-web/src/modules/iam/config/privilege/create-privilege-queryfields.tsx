@@ -10,21 +10,22 @@ const createPrivilegeBuilderQueryFields = (t: (value: string) => string): QueryB
       label: t('id'),
       name: 'id'
     }),
-    // name
-    createTextQueryBuilderField({
-      label: t('name'),
-      name: 'name'
-    }),
-    // code
-    createTextQueryBuilderField({
-      label: t('code'),
-      name: 'code'
-    }),
     // isActive
     createBooleanQueryBuilderField({
       label: t('status'),
       name: 'isActive',
       optionLabels: [t('active'), t('inactive')]
+    }),
+    // name
+    createTextQueryBuilderField({
+      label: t('name'),
+      name: 'name'
+    }),
+    // access
+    createSelectQueryBuilderField({
+      label: t('access'),
+      name: 'access',
+      options: accessOptions
     }),
     // entity
     createSelectRemoteOptionsQueryBuilderField({
@@ -32,11 +33,10 @@ const createPrivilegeBuilderQueryFields = (t: (value: string) => string): QueryB
       name: 'entity',
       asyncOptionsFetcher: fetchEntityOptions
     }),
-    // access
-    createSelectQueryBuilderField({
-      label: t('access'),
-      name: 'access',
-      options: accessOptions
+    // code
+    createTextQueryBuilderField({
+      label: t('code'),
+      name: 'code'
     }),
     // createdAt
     createDateQueryBuilderField({

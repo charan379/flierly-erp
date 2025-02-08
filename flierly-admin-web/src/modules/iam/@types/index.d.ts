@@ -1,5 +1,5 @@
-// Define a type based on the Privilege entity
-type Privilege = {
+// Define a interface based on the Privilege entity
+interface Privilege extends EntityTimeStamps {
   id: number
   isActive: boolean
   name: string
@@ -9,10 +9,14 @@ type Privilege = {
   roles?: Role[]
   usersWithRestrictedPrivileges?: User[]
   usersWithAdditionalPrivileges?: User[]
-} & EntityTimeStamps
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date | null;
 
-// Define a type based on the Role entity
-type Role = {
+}
+
+// Define a interface based on the Role entity
+interface Role extends EntityTimeStamps {
   id: number
   isActive: boolean
   name: string
@@ -20,9 +24,12 @@ type Role = {
   description: string
   privileges?: Privilege[]
   users?: User[]
-} & EntityTimeStamps
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date | null;
+}
 
-type User = {
+interface User extends EntityTimeStamps {
   id: number
   isActive: boolean
   username: string
@@ -31,4 +38,7 @@ type User = {
   additionalPrivileges?: Privilege[]
   restrictedPrivileges?: Privilege[]
   roles?: Role[]
-} & EntityTimeStamps
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date | null;
+} 

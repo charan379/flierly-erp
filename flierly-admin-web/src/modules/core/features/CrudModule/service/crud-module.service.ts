@@ -15,7 +15,7 @@ const crudService = {
   /**
    * Fetch paginated entity records
    */
-  page: async <E>({ entity, binMode = false, limit, page, loadRelations, filters = {}, sort = {}, signal }: EntityRecordsPageRequest<E>) => {
+  page: async <E>({ entity, binMode = false, limit, page, loadRelations, filters = {}, sort, signal }: EntityRecordsPageRequest<E>) => {
     const promise = api.post<ApiResponse<PageData<E>>>(`/${entity}/page`, { filters, limit, page, loadRelations, sort, withDeleted: binMode }, { signal })
     return handleApiResponse<PageData<E>>({ promise })
   },
@@ -49,7 +49,7 @@ const crudService = {
    */
   delete: async ({ entity, ids = [], signal }: EntityRecordsDeleteRequest) => {
     const promise = api.delete(`/${entity}/delete`, {
-      data: ids,
+      data: { ids },
       signal,
     })
     return handleApiResponse({ promise, notifyOnSuccess: true })
@@ -59,7 +59,7 @@ const crudService = {
    * Activate entity records
    */
   activate: async ({ entity, ids = [], signal }: EntityRecordsActivateRequest) => {
-    const promise = api.patch(`/${entity}/activate`, ids, { signal })
+    const promise = api.patch(`/${entity}/activate`, { ids }, { signal })
     return handleApiResponse({ promise, notifyOnSuccess: true })
   },
 
@@ -67,7 +67,7 @@ const crudService = {
    * Inactivate entity records
    */
   inactivate: async ({ entity, ids = [], signal }: EntityRecordsInactivateRequest) => {
-    const promise = api.patch(`/${entity}/inactivate`, ids, { signal })
+    const promise = api.patch(`/${entity}/inactivate`, { ids }, { signal })
     return handleApiResponse({ promise, notifyOnSuccess: true })
   },
 
@@ -75,7 +75,7 @@ const crudService = {
    * Restore entity records
    */
   restore: async ({ entity, ids = [], signal }: EntityRecordsRestoreRequest) => {
-    const promise = api.patch(`/${entity}/restore`, ids, { signal })
+    const promise = api.patch(`/${entity}/restore`, { ids }, { signal })
     return handleApiResponse({ promise, notifyOnSuccess: true })
   },
 }

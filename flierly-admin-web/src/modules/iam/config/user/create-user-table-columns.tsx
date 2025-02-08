@@ -13,7 +13,9 @@ const createUserTableColumns = (translate: (value: string) => string, _hasPermis
   return [
     // id
     createIdColumn(translate),
-    // name
+    // isActive
+    createBooleanColumn(translate, { dataIndex: 'isActive', width: 100 }),
+    // username
     {
       title: translate('username'),
       dataIndex: 'username',
@@ -22,12 +24,10 @@ const createUserTableColumns = (translate: (value: string) => string, _hasPermis
       sorter: true,
       width: 200,
     },
-    // mobile
-    createMobileColumn(translate),
     // email
     createEmailColumn(translate),
-    // isActive
-    createBooleanColumn(translate, { dataIndex: 'isActive', width: 100 }),
+    // mobile
+    createMobileColumn(translate),
     // Additional Privileges
     {
       title: `${translate('additional')} ${translate('privileges')}`,

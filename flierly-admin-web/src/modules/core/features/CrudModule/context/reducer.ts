@@ -1,4 +1,4 @@
-import { QueryCondition } from '@/features/QueryBuilder/QueryBuilder'
+import { QueryCondition } from '../../QueryBuilder/QueryBuilder';
 import { ActionTypes } from './action-types.enum'
 
 // Initial state for the CRUD table context

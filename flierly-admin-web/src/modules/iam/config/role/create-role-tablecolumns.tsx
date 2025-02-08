@@ -10,6 +10,8 @@ const createRoleTableColumns = (translate: (value: string) => string, hasPermiss
   return [
     // id
     createIdColumn(translate),
+    // isActive
+    createBooleanColumn(translate, { dataIndex: 'isActive', width: 80 }),
     // name
     createNameColumn(translate),
     // code
@@ -48,8 +50,6 @@ const createRoleTableColumns = (translate: (value: string) => string, hasPermiss
         )
       },
     },
-    // isActive
-    createBooleanColumn(translate, { dataIndex: 'isActive', width: 80 }),
     // updatedAt
     createTimeStampColumn(translate, { title: translate('updated_at'), dataIndex: 'updatedAt' }),
     // createdAt

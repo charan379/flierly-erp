@@ -59,9 +59,14 @@ export function requestValidator(
 
                 ValidatorClass = EntityClass;
             }
-            
+
+            // Check if the class instance is valid
+            if (req[requestObjectType] === null || req[requestObjectType] === undefined || Array.isArray(req[requestObjectType])) {
+                throw new FlierlyException('INVALID_CLASS_INSTACE_TO_VALIDATE', HttpCodes.BAD_REQUEST);
+            };
+
             // Transform incoming request object into the DTO class
-            const dtoObject = plainToInstance(ValidatorClass, req[requestObjectType], {enableImplicitConversion: true});
+            const dtoObject = plainToInstance(ValidatorClass, req[requestObjectType], { enableImplicitConversion: true });
 
             // Validate the DTO object using class-validator
             const validationErrors = await validate(dtoObject, {

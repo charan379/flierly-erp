@@ -8,10 +8,10 @@ const inActivateEntityRecords = async (entity: EntityTarget<ObjectLiteral>, idsT
         const entityRepository = AppDataSource.getRepository(entity);
 
         // InActivate the entities with the validated IDs
-        const result = await entityRepository.createQueryBuilder().update().set({ isActive: false }).where('id IN (:...ids)', { ids: idsToInActivate }).execute();
+        const result = await entityRepository.createQueryBuilder().update().set({ isActive: false }).where('id IN (:...ids)', { ids: idsToInActivate.map(String) }).execute();
 
         return result;
-        
+
     } catch (error) {
         throw error;
     }

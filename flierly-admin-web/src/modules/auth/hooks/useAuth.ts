@@ -1,9 +1,9 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '@/modules/core/redux/store' // Adjust paths as necessary
 import { logout, setAuth, setLoading, setExpiredTrue } from '../redux/auth.slice'
 import authService from '../service/auth.service'
 import { LoadingTypes } from '../@types/loading'
 import getPermissionRegex from '../utils/get-permission-regex.util'
+import { AppDispatch, RootState } from '@/redux/store'
 
 export function useAuth() {
   const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector

@@ -1,4 +1,4 @@
-type ApiResponse<T> = {
+interface ApiResponse<T> {
   success: boolean
   result: T | null
   message: string
@@ -8,7 +8,7 @@ type ApiResponse<T> = {
   httpCode: number
 }
 
-type PageData<T> = {
+interface PageData<T> {
   data: T[]
   page: number
   pageSize: number
@@ -21,7 +21,7 @@ type PageData<T> = {
   sort?: Record<string, any>
 }
 
-type ErrorDetails = {
+interface ErrorDetails {
   name: string
   httpCode: number
   reason: string
@@ -29,13 +29,13 @@ type ErrorDetails = {
   message: string
 }
 
-type EntityTimeStamps = {
+interface EntityTimeStamps {
   createdAt: Date
   updatedAt: Date
   deletedAt: Date | null
 }
 
-type EntityDetails = {
+interface EntityDetails {
   entity: string;
   code: string;
   controller: string;
