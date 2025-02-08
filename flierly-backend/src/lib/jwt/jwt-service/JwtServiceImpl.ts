@@ -4,7 +4,6 @@ import BeanTypes from "@/lib/di-ioc-container/bean.types";
 import LoggerService from "@/modules/core/services/logger-service/LoggerService";
 import { inject } from "inversify";
 import { EnvConfig } from "@/config/env";
-import { CustomJwtPayload } from '../@types';
 import FlierlyException from '@/lib/errors/flierly.exception';
 import HttpCodes from '@/constants/http-codes.enum';
 
@@ -35,7 +34,7 @@ export default class JwtServiceImpl implements JwtService {
                 algorithm: this.jwtAlgorithem,
             };
 
-            const payload: CustomJwtPayload = {
+            const payload: JwtPayload = {
                 userId,
                 username,
             };
@@ -48,7 +47,7 @@ export default class JwtServiceImpl implements JwtService {
 
     async verifyToken(jwtToken: string): Promise<JwtPayload> {
         try {
-            const decodedToken = jwt.verify(jwtToken, this.jwtSecret) as CustomJwtPayload;
+            const decodedToken = jwt.verify(jwtToken, this.jwtSecret) as JwtPayload;
             return decodedToken;
         } catch (error: any) {
             this.handleJwtError(error);

@@ -3,12 +3,11 @@ import User from '@/modules/iam/entities/User.entity';
 import { AppDataSource } from '@/lib/database/typeorm/app-datasource';
 import FlierlyException from '@/lib/errors/flierly.exception';
 import { NextFunction, Request, Response } from 'express';
-import { getMessage as m } from '@/utils/get-message.util';
-import { CustomJwtPayload } from '@/lib/jwt/@types';
 import iocContainer from '@/lib/di-ioc-container';
 import BeanTypes from '@/lib/di-ioc-container/bean.types';
 import JwtService from '@/lib/jwt/jwt-service/JwtService';
 import UserService from '@/modules/iam/services/user-service/UserService';
+import { JwtPayload } from 'jsonwebtoken';
 
 /**
  * Middleware to authorize requests based on JWT tokens and user privileges.
@@ -34,7 +33,7 @@ export function authorize(privilegeCode: string = ''): (req: Request, res: Respo
       // If authorization token is not present, throw an exception
       if (!authHeader) {
         throw new FlierlyException(
-          m('invalidAuthorizationHeader'),
+          "INVALID_AUTHORIZATION_HEADER",
           HttpCodes.UNAUTHORIZED,
           "Authorization header or signedCookies.auth not provided !",
         );
@@ -46,7 +45,7 @@ export function authorize(privilegeCode: string = ''): (req: Request, res: Respo
       // Validate the format of the authorization token
       if (!authHeader.match(bearerTokenRegex)) {
         throw new FlierlyException(
-          m('invalidAuthorizationToken'),
+          'INVALID_AUTHORIZATION_HEADER',
           HttpCodes.UNAUTHORIZED,
           'Authorization headers are not in Bearer format',
         );
@@ -56,7 +55,7 @@ export function authorize(privilegeCode: string = ''): (req: Request, res: Respo
       const bearerToken: string = authHeader.split(' ')[1];
 
       // Verify the JWT token and decode its payload
-      const deCodedToken: CustomJwtPayload = await JwtService.verifyToken(bearerToken);
+      const deCodedToken: JwtPayload = await JwtService.verifyToken(bearerToken);
 
       // Extract username and userId from the decoded token
       const jwtUserName: string | undefined = deCodedToken.username;
@@ -68,9 +67,9 @@ export function authorize(privilegeCode: string = ''): (req: Request, res: Respo
       // If no user is found, throw an exception
       if (!user) {
         throw new FlierlyException(
-          m('userNotFound'),
+          "USER_NOT_FOUND",
           HttpCodes.UNAUTHORIZED,
-          m('userNotFound', { userId: String(jwtUserId) }),
+          JSON.stringify({ userId: String(jwtUserId) }),
         );
       }
 
@@ -81,9 +80,9 @@ export function authorize(privilegeCode: string = ''): (req: Request, res: Respo
       // If the user is inactive, throw an exception
       if (!user.isActive) {
         throw new FlierlyException(
-          m('userInactive'),
+          'USER_INACTIVE',
           HttpCodes.UNAUTHORIZED,
-          m('userInactive'),
+          JSON.stringify({ userId: String(jwtUserId) }),
         );
       }
 
@@ -100,9 +99,9 @@ export function authorize(privilegeCode: string = ''): (req: Request, res: Respo
         } else {
           // If the user lacks the required privilege, throw an exception
           throw new FlierlyException(
-            m('insufficientPermissions'),
+            "INSUFFICIENT_PRIVILEGES",
             HttpCodes.UNAUTHORIZED,
-            m('privilegeCheckFailed', { privilege: privilegeCode }),
+            JSON.stringify({ userId: String(jwtUserId), privilegeCode }),
           );
         }
       }
