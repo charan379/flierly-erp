@@ -17,7 +17,7 @@ const crudController = CRUDController(User);
 const userController = iocContainer.get<UserController>(BeanTypes.UserController);
 userRoutes.post(`/authenticate`, userController.authenticate.bind(userController));
 userRoutes.get(`/refresh-access-token`, authorize(), userController.refreshAccessToken.bind(userController));
-userRoutes.post(`/update-password`, authorize('user.manage-password'), userController.updatePassword.bind(userController));
+userRoutes.post(`/:id/update-password`, authorize('user.manage-password'), userController.updatePassword.bind(userController));
 
 // crud routes
 userRoutes.post(`/create`, requestValidator(User, "body"), authorize(`user.create`), crudController.create);

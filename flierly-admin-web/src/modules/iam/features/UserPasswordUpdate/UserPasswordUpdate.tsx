@@ -1,24 +1,30 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ModalForm, ProFormText } from '@ant-design/pro-components'
-import { Button } from 'antd'
+import { Button, Form } from 'antd'
 import userService from '../../service/user.service'
 import { LockTwoTone } from '@ant-design/icons'
 import useLocale from '@/modules/core/features/Locale/hooks/useLocale'
+import Loading from '@/modules/core/components/Loading'
 
 interface UserPasswordUpdateProps {
-  userId: number
+  userId: number,
+  username: string,
 }
 
-const UserPasswordUpdate: React.FC<UserPasswordUpdateProps> = ({ userId }) => {
+const UserPasswordUpdate: React.FC<UserPasswordUpdateProps> = ({ userId, username }) => {
   const { translate } = useLocale()
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onFinish = async (values: { userId: string; password: string }) => {
-    const response = await userService.updateUserPassword({
-      userId: Number(values.userId),
-      newPassword: values.password,
+  const [form] = Form.useForm<{ userId: string; password: string, username: string }>();
+
+  const onSubmit = async (values: { userId: number; password: string, username: string }) => {
+    setIsLoading(true);
+    await userService.updateUserPassword({
+      userId: values.userId,
+      password: values.password,
+      username: values.username,
     })
-
-    return response?.success || false
+    setIsLoading(false);
   }
 
   // Prevent context menu propagation
@@ -58,8 +64,9 @@ const UserPasswordUpdate: React.FC<UserPasswordUpdateProps> = ({ userId }) => {
     <div onContextMenu={handleContextMenu}>
       <ModalForm
         title={translate('update_user_password')}
-        onFinish={onFinish}
-        initialValues={{ userId }}
+        form={form}
+        loading={isLoading}
+        initialValues={{ userId, username }}
         modalProps={{
           destroyOnClose: true,
           centered: true,
@@ -74,40 +81,58 @@ const UserPasswordUpdate: React.FC<UserPasswordUpdateProps> = ({ userId }) => {
             resetText: translate('reset'),
             submitText: translate('update'),
           },
-        }}
+          resetButtonProps: {
+            danger: true
+          },
+          async onSubmit(_) {
+            const formValues = form.getFieldsValue();
+            await onSubmit({ username: formValues.username, password: formValues.password, userId: parseInt(formValues.userId) })
+          }
+        }
+        }
       >
-        <ProFormText
-          name="userId"
-          label={translate('user_id')}
-          disabled
-          hidden
-          rules={[{ required: true, type: 'string' }, userIdValidator]}
-          placeholder={translate('enter_user_id')}
-        />
-        <ProFormText.Password
-          name="password"
-          label={translate('new_password')}
-          rules={[{ required: true, min: 8, max: 26 }, passwordRegex]}
-          placeholder={translate('enter_new_password')}
-        />
-        <ProFormText.Password
-          name="confirm"
-          label={translate('confirm_password')}
-          rules={[
-            { required: true, message: translate('confirm_password_required') },
-            ({ getFieldValue }) => ({
-              validator(_: any, value: string) {
-                if (!value || getFieldValue('password') === value) {
-                  return Promise.resolve()
-                }
-                return Promise.reject(new Error(translate('passwords_do_not_match')))
-              },
-            }),
-          ]}
-          placeholder={translate('confirm_new_password')}
-        />
+        <Loading isLoading={isLoading}>
+          <ProFormText
+            name="userId"
+            label={translate('user_id')}
+            disabled
+            hidden
+            rules={[{ required: true, type: 'string' }, userIdValidator]}
+            placeholder={translate('enter_user_id')}
+          />
+          <ProFormText
+            name="username"
+            label={translate('username')}
+            disabled
+            hidden
+            rules={[{ required: true, type: 'string' }]}
+            placeholder={translate('enter_username')}
+          />
+          <ProFormText.Password
+            name="password"
+            label={translate('new_password')}
+            rules={[{ required: true, min: 8, max: 26 }, passwordRegex]}
+            placeholder={translate('enter_new_password')}
+          />
+          <ProFormText.Password
+            name="confirm"
+            label={translate('confirm_password')}
+            rules={[
+              { required: true, message: translate('confirm_password_required') },
+              ({ getFieldValue }) => ({
+                validator(_: any, value: string) {
+                  if (!value || getFieldValue('password') === value) {
+                    return Promise.resolve()
+                  }
+                  return Promise.reject(new Error(translate('passwords_do_not_match')))
+                },
+              }),
+            ]}
+            placeholder={translate('confirm_new_password')}
+          />
+        </Loading>
       </ModalForm>
-    </div>
+    </div >
   )
 }
 

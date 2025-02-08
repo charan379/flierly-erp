@@ -131,7 +131,7 @@ const createUserTableColumns = (translate: (value: string) => string, _hasPermis
       align: 'center',
       width: 180,
       render: (_dom, entity, _index, _action, _schema) => {
-        return <UserPasswordUpdate userId={entity.id} />
+        return <UserPasswordUpdate userId={entity.id} username={entity.username} />
       },
     },
     // updatedAt

@@ -15,8 +15,8 @@ const userService = {
   /**
    * update-user-password
    */
-  updateUserPassword: async <T>({ userId, newPassword, signal }: { newPassword: string; signal?: AbortSignal; userId: number }) => {
-    const promise = api.post<ApiResponse<T>>(`/user/update-password`, { userId, password: newPassword }, { signal })
+  updateUserPassword: async <T>({ userId, username, password, signal }: { userId: number, username: string, password: string; signal?: AbortSignal }) => {
+    const promise = api.post<ApiResponse<T>>(`/user/${userId}/update-password`, { username, password }, { signal })
     return handleApiResponse<T>({ promise, notifyOnSuccess: true })
   },
 }
