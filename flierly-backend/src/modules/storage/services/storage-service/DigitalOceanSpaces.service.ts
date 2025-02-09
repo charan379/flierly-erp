@@ -49,7 +49,7 @@ export class DigitalOceanSpacesService implements IStorage {
     };
     const response = await this.s3.getObject(params).promise();
     if (!response.Body) {
-      throw new Error('File not found');
+      throw new Error('FILE_NOT_FOUND');
     }
     return response.Body as Buffer;
   }

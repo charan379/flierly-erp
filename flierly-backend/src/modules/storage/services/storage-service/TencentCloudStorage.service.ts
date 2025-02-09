@@ -51,7 +51,7 @@ export class TencentCloudStorageService implements IStorage {
     };
     const response = await this.cos.getObject(params);
     if (!response.Body) {
-      throw new Error('File not found');
+      throw new Error('FILE_NOT_FOUND');
     }
     return response.Body as Buffer;
   }

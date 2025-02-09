@@ -73,7 +73,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
 
     if (conditionFor !== 'qb' && conditionFor !== 'find') {
         // Throw an error if an unsupported `conditionFor` value is passed
-        throw new Error("Unsupported conditionFor value");
+        throw new Error("UNSUPPORTED_CONDITION_FOR_VALUE");
     }
 
     // Generate a unique prefix for parameter aliases
@@ -81,12 +81,12 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
 
     // Basic validation: Check if alias is a non-empty string
     if ((typeof a !== 'string' || a.trim().length === 0) && conditionFor === 'qb') {
-        throw new Error('Alias must be a non-empty string');
+        throw new Error('ALIAS_MUST_BE_A_NON_EMPTY_STRING');
     }
 
     // Validate condition is not undefined or null
     if (condition === undefined || condition === null) {
-        throw new Error('Condition cannot be undefined or null');
+        throw new Error('CONDITION_CANNOT_BE_UNDEFINED_OR_NULL');
     }
 
     // If the condition is an object, then it must have exactly one key
@@ -97,7 +97,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
         // e.g. { $in: [1, 2, 3] }
         // if no keys are found, then the object is not a valid condition
         if (Object.keys(condition).length !== 1) {
-            throw new Error('Condition object must have exactly one key');
+            throw new Error('CONDITION_OBJECT_MUST_HAVE_EXACTLY_ONE_KEY');
         }
 
         // Get the key and value of the condition object
@@ -105,12 +105,12 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
 
         // Check if the condition operator is a valid string
         if (typeof conditionOperator !== 'string') {
-            throw new Error('Condition operator must be a string');
+            throw new Error('CONDITION_OPERATOR_MUST_BE_A_STRING');
         }
 
         // Check if the condition value is valid for the given operator
         if (conditionValue === undefined || conditionValue === null) {
-            throw new Error(`${conditionOperator} operator cannot have undefined or null value`);
+            throw new Error("CONDITION_VALUE_CANNOT_BE_UNDEFINED_OR_NULL");
         }
 
         // Get the parameter prefix for parameter aliases along opreator 
@@ -131,7 +131,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                         In(conditionValue);
 
                 } else {
-                    throw new Error(`${conditionOperator} operator must have an array of strings or numbers`);
+                    throw new Error("$IN_OPERATOR_MUST_HAVE_AN_ARRAY_OF_STRINGS_OR_NUMBERS");
                 }
             case '$notIn':
                 // Check if the condition value is an array of strings or numbers or dates
@@ -144,7 +144,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                         // Return a Raw object for the 'find' condition
                         Not(In(conditionValue))
                 } else {
-                    throw new Error(`${conditionOperator} operator must have an array of strings or numbers`);
+                    throw new Error("$IN_OPERATOR_MUST_HAVE_AN_ARRAY_OF_STRINGS_OR_NUMBERS");
                 }
             case '$gte':
                 // Check if the condition value is a number, string, or Date
@@ -157,7 +157,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                         // Return a Raw object for the 'find' condition
                         MoreThanOrEqual(conditionValue);
                 } else {
-                    throw new Error(`${conditionOperator} operator must have a number, string, or Date value`);
+                    throw new Error("$GTE_OPERATOR_MUST_HAVE_A_NUMBER_STRING_OR_DATE");
                 }
             case '$lte':
                 // Check if the condition value is a number, string, or Date
@@ -170,7 +170,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                         // Return a Raw object for the 'find' condition
                         LessThanOrEqual(conditionValue);
                 } else {
-                    throw new Error(`${conditionOperator} operator must have a number, string, or Date value`);
+                    throw new Error("$LTE_OPERATOR_MUST_HAVE_A_NUMBER_STRING_OR_DATE");
                 }
             case '$gt':
                 // Check if the condition value is a number, string or Date
@@ -183,7 +183,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                         // Return a Raw object for the 'find' condition
                         MoreThan(conditionValue);
                 } else {
-                    throw new Error(`${conditionOperator} operator must have a number, string, or Date value`);
+                    throw new Error("$GT_OPERATOR_MUST_HAVE_A_NUMBER_STRING_OR_DATE");
                 }
             case '$lt':
                 // Check if the condition value is a number, string or Date
@@ -194,7 +194,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                         // Return a Raw object for the 'find' condition
                         : LessThan(conditionValue);
                 } else {
-                    throw new Error(`${conditionOperator} operator must have a number, string, or Date value`);
+                    throw new Error("$LT_OPERATOR_MUST_HAVE_A_NUMBER_STRING_OR_DATE");
                 }
             case '$between':
                 // Check if the condition value is an array with two values, each being a string, number, or Date
@@ -203,7 +203,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                         ? { query: `${a} BETWEEN :${pp}_${a}_start AND :${pp}_${a}_end`, parameters: { [`${pp}_${a}_start`]: conditionValue[0], [`${pp}_${a}_end`]: conditionValue[1] } }
                         : Between(conditionValue[0], conditionValue[1]);
                 } else {
-                    throw new Error(`${conditionOperator} operator must have an array with two values `);
+                    throw new Error("$BETWEEN_OPERATOR_MUST_HAVE_AN_ARRAY_WITH_TWO_VALUES");
                 }
             case '$notBetween':
                 // Check if the condition value is an array with two values, each being a string, number, or Date
@@ -212,7 +212,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                         ? { query: `${a} NOT BETWEEN :${pp}_${a}_start AND :${pp}_${a}_end`, parameters: { [`${pp}_${a}_start`]: conditionValue[0], [`${pp}_${a}_end`]: conditionValue[1] } }
                         : Not(Between(conditionValue[0], conditionValue[1]));
                 } else {
-                    throw new Error(`${conditionOperator} operator must have an array with two values `);
+                    throw new Error("$NOT_BETWEEN_OPERATOR_MUST_HAVE_AN_ARRAY_WITH_TWO_VALUES");
                 }
             case '$contains':
                 // Check if the condition value is a string
@@ -221,7 +221,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                         ? { query: `${a} LIKE :${pp}_${a}`, parameters: { [`${pp}_${a}`]: `%${conditionValue}%` } }
                         : Like(`%${conditionValue}%`);
                 } else {
-                    throw new Error(`${conditionOperator} operator must have a string value`);
+                    throw new Error('$CONTAINS_OPERATOR_MUST_HAVE_A_STRING_VALUE');
                 }
             case '$notContains':
                 // Check if the condition value is a string
@@ -230,7 +230,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                         ? { query: `${a} NOT LIKE :${pp}_${a}`, parameters: { [`${pp}_${a}`]: `%${conditionValue}%` } }
                         : Not(Like(`%${conditionValue}%`));
                 } else {
-                    throw new Error(`${conditionOperator} operator must have a string value`);
+                    throw new Error('$NOT_CONTAINS_OPERATOR_MUST_HAVE_A_STRING_VALUE');
                 }
             case '$iContains':
                 // Check if the condition value is a string
@@ -239,7 +239,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                         ? { query: `${a} ILIKE :${pp}_${a}`, parameters: { [`${pp}_${a}`]: `%${conditionValue}%` } }
                         : ILike(`%${conditionValue}%`);
                 } else {
-                    throw new Error(`${conditionOperator} operator must have a string value`);
+                    throw new Error('$I_CONTAINS_OPERATOR_MUST_HAVE_A_STRING_VALUE');
                 }
             case '$notIContains':
                 // Check if the condition value is a string
@@ -248,7 +248,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                         ? { query: `${a} NOT ILIKE :${pp}_${a}`, parameters: { [`${pp}_${a}`]: `%${conditionValue}%` } }
                         : Not(ILike(`%${conditionValue}%`));
                 } else {
-                    throw new Error(`${conditionOperator} operator must have a string value`);
+                    throw new Error('$NOT_I_CONTAINS_OPERATOR_MUST_HAVE_A_STRING_VALUE');
                 }
             case '$startsWith':
                 // Check if the condition value is a string
@@ -257,7 +257,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                         ? { query: `${a} LIKE :${pp}_${a}`, parameters: { [`${pp}_${a}`]: `${conditionValue}%` } }
                         : Like(`${conditionValue}%`);
                 } else {
-                    throw new Error(`${conditionOperator} operator must have a string value`);
+                    throw new Error('$STARTS_WITH_OPERATOR_MUST_HAVE_A_STRING_VALUE');
                 }
             case '$notStartsWith':
                 // Check if the condition value is a string
@@ -266,7 +266,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                         ? { query: `${a} NOT LIKE :${pp}_${a}`, parameters: { [`${pp}_${a}`]: `${conditionValue}%` } }
                         : Not(Like(`${conditionValue}%`));
                 } else {
-                    throw new Error(`${conditionOperator} operator must have a string value`);
+                    throw new Error('$NOT_STARTS_WITH_OPERATOR_MUST_HAVE_A_STRING_VALUE');
                 }
             case '$endsWith':
                 // Check if the condition value is a string
@@ -275,7 +275,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                         ? { query: `${a} LIKE :${pp}_${a}`, parameters: { [`${pp}_${a}`]: `%${conditionValue}` } }
                         : Like(`%${conditionValue}`);
                 } else {
-                    throw new Error(`${conditionOperator} operator must have a string value`);
+                    throw new Error('$ENDS_WITH_OPERATOR_MUST_HAVE_A_STRING_VALUE');
                 }
             case '$notEndsWith':
                 // Check if the condition value is a string
@@ -284,7 +284,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                         ? { query: `${a} NOT LIKE :${pp}_${a}`, parameters: { [`${pp}_${a}`]: `%${conditionValue}` } }
                         : Not(Like(`%${conditionValue}`));
                 } else {
-                    throw new Error(`${conditionOperator} operator must have a string value`);
+                    throw new Error('$NOT_ENDS_WITH_OPERATOR_MUST_HAVE_A_STRING_VALUE');
                 }
             case '$equalTo':
                 // Check if the condition value is a string, number, boolean, or Date
@@ -293,7 +293,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                         ? { query: `${a} = :${pp}_${a}`, parameters: { [`${pp}_${a}`]: conditionValue } }
                         : Equal(conditionValue);
                 } else {
-                    throw new Error(`${conditionOperator} operator must have a string, number, boolean, or Date value`);
+                    throw new Error("$EQUAL_TO_OPERATOR_MUST_HAVE_A_STRING_NUMBER_BOOLEAN_OR_DATE_VALUE");
                 }
             case '$notEqualTo':
                 // Check if the condition value is a string, number, boolean, or Date
@@ -302,7 +302,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                         ? { query: `${a} != :${pp}_${a}`, parameters: { [`${pp}_${a}`]: conditionValue } }
                         : Not(Equal(conditionValue));
                 } else {
-                    throw new Error(`${conditionOperator} operator must have a string, number, boolean, or Date value`);
+                    throw new Error("$NOT_EQUAL_TO_OPERATOR_MUST_HAVE_A_STRING_NUMBER_BOOLEAN_OR_DATE_VALUE");
                 }
             case '$regex':
                 // Check if the condition value is a string
@@ -315,7 +315,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                         return Raw((alias: string) => `${alias} ~ :${pp}_${a}`, { [`${pp}_${a}`]: conditionValue });
                     }
                 } else {
-                    throw new Error(`${conditionOperator} operator must have a string value`);
+                    throw new Error("$REGEX_OPERATOR_MUST_HAVE_A_STRING_VALUE");
                 }
             case '$notRegex':
                 // Check if the condition value is a string
@@ -328,7 +328,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                         return Raw((alias: string) => `${alias} !~ :${pp}_${a}`, { [`${pp}_${a}`]: conditionValue });
                     }
                 } else {
-                    throw new Error(`${conditionOperator} operator must have a string value`);
+                    throw new Error("$NOT_REGEX_OPERATOR_MUST_HAVE_A_STRING_VALUE");
                 }
             case '$regexi':
                 // Check if the condition value is a string
@@ -341,7 +341,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                         return Raw((alias: string) => `${alias} ~* :${pp}_${a}`, { [`${pp}_${a}`]: conditionValue });
                     }
                 } else {
-                    throw new Error(`${conditionOperator} operator must have a string value`);
+                    throw new Error("$REGEXI_OPERATOR_MUST_HAVE_A_STRING_VALUE");
                 }
             case '$notRegexi':
                 // Check if the condition value is a string
@@ -354,7 +354,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                         return Raw((alias: string) => `${alias} !~* :${pp}_${a}`, { [`${pp}_${a}`]: conditionValue });
                     }
                 } else {
-                    throw new Error(`${conditionOperator} operator must have a string value`);
+                    throw new Error("$NOT_REGEXI_OPERATOR_MUST_HAVE_A_STRING_VALUE");
                 }
             case '$jsonContains':
                 if (conditionFor === "qb") {
@@ -390,7 +390,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                 }
             default:
                 // If the condition operator is not a valid operator, then throw an error
-                throw new Error(`Unsupported operator: ${conditionOperator}`);
+                throw new Error("INVALID_CONDITION_OPERATOR");
         }
     }
     // If the condition is an array, then return the parsed condition object
@@ -433,7 +433,8 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
     }
     // If the condition is not a valid condition, then throw an error
     else {
-        throw new Error(`Invalid condition, must be an object, array, string, number, boolean, or Date`);
+        // throw new Error(`Invalid condition, must be an object, array, string, number, boolean, or Date`);
+        throw new Error("INVALID_CONDITION");
     }
 }
 export default parseCondition;

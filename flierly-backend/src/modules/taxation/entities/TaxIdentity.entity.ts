@@ -65,13 +65,13 @@ export default class TaxIdentity {
   // Hook for validation before insert
   @BeforeInsert()
   @BeforeUpdate()
-  async validateGSTDetails (): Promise<void> {
+  async validateGSTDetails(): Promise<void> {
     if (this.gst) {
       if (!this.gstRegistrationDate || !this.gstAddress) {
         const error = new ValidationError();
         error.property = 'gst';
         error.constraints = {
-          isComplete: 'GST Registration Date and GST Address must be provided if GST number is present.',
+          isComplete: 'GST_DETAILS_INCOMPLETE',
         };
         throw error;
       }

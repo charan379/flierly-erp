@@ -34,7 +34,7 @@ export default class ProductControllerImpl implements ProductController {
     };
 
     async availabilityPage(req: Request, res: Response, next: NextFunction): Promise<void | Response> {
-        throw new Error("Method not implemented.");
+        throw new Error("METHOD_NOT_IMPLEMENTED");
     }
 
 }

@@ -164,7 +164,7 @@ export default class Account {
             account: this, // Update the address with the account reference
           });
         } catch (_error) {
-          throw new Error('Failed to update address during account creation or update.');
+          throw new Error("FAILED_TO_UPDATE_OR_CREATE_PRIMARY_ADDRESS");
         }
       });
     }

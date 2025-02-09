@@ -18,7 +18,7 @@ export default class BcryptServiceImpl implements BcryptService {
     async generateHash(plainString: string): Promise<string> {
         // Validate that the input parameter is a string
         if (typeof plainString !== 'string') {
-            throw new Error('Plain string must be a string');
+            throw new Error("PLAIN_STRING_MUST_BE_STRING_VALUE");
         }
         try {
             // Generate a unique and strong salt
@@ -27,14 +27,14 @@ export default class BcryptServiceImpl implements BcryptService {
             const hashedString = await bcrypt.hash(plainString, salt);
             return hashedString;
         } catch (_error) {
-            throw new Error('Failed to generate hash');
+            throw new Error("FAILED_TO_GENERATE_HASH");
         }
     };
 
     async validateHash(plainString: string, hashedString: string): Promise<boolean> {
         // Validate that the input parameters are strings
         if (typeof plainString !== 'string' || typeof hashedString !== 'string') {
-            throw new Error('Plain string and hashed string must be strings');
+            throw new Error("PLAIN_STRING_AND_HASHED_STRING_MUST_BE_STRING_VALUES");
         }
 
         try {
@@ -42,7 +42,7 @@ export default class BcryptServiceImpl implements BcryptService {
             const isMatch: boolean = await bcrypt.compare(plainString, hashedString);
             return isMatch;
         } catch (_error) {
-            throw new Error('Failed to validate string hash');
+            throw new Error("FAILED_TO_VALIDATE_HASH");
         }
     };
 

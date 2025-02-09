@@ -49,7 +49,7 @@ export default class ProductStockServiceImpl implements ProductStockService {
             const existingProductStock = await productStockRepository.findOne({ where: { id: productStockId } });
 
             if (!existingProductStock) {
-                throw new Error("Product stock not found");
+                throw new Error("PRODUCT_STOCK_NOT_FOUND");
             }
 
             delete productStock.id;
@@ -205,7 +205,7 @@ export default class ProductStockServiceImpl implements ProductStockService {
     };
 
     async transferStockInterBranch(sourceBranchId: number, sourceBranchInventoryId: number, destinationBranchId: number, destinationBranchInventoryId: number, productId: number, quantity: number, transactionType: InventoryTransactionType, costPerUnit: number, entityManager?: EntityManager): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error("METHOD_NOT_IMPLEMENTED");
     }
 
 }

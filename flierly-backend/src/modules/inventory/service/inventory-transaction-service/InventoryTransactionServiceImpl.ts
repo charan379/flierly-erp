@@ -33,7 +33,7 @@ export default class InventoryTransactionServiceImpl implements InventoryTransac
     };
 
     rollbackInventoryTransaction(transactionId: number, entityManager?: EntityManager): Promise<InventoryTransaction> {
-        throw new Error("Method not implemented.");
+        throw new Error("METHOD_NOT_IMPLEMENTED");
     }
 
 

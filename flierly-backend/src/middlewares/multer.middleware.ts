@@ -7,7 +7,7 @@ export const upload = multer({
     if (allowedTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(new Error('Invalid file type'));
+      cb(new Error('INVALID_FILE_TYPE'));
     }
   },
 });

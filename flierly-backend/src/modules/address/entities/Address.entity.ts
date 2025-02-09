@@ -126,7 +126,7 @@ export default class Address {
       const error = new ValidationError();
       error.property = 'coordinates';
       error.constraints = {
-        isDefined: 'Both latitude and longitude must be provided together or not at all.',
+        isDefined: 'BOTH_COORDINATES_MUST_BE_DEFINED',
       };
       throw error;
     }
