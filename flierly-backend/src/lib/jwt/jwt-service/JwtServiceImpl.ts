@@ -41,7 +41,7 @@ export default class JwtServiceImpl implements JwtService {
 
             return jwt.sign(payload, this.jwtSecret, signOptions);
         } catch (error: any) {
-            throw new FlierlyException("TOKEN_CREATION_FAILED", HttpCodes.INTERNAL_SERVER_ERROR, error.stack);
+            throw new FlierlyException("JWT_TOKEN_CREATION_FAILED", HttpCodes.INTERNAL_SERVER_ERROR, error.stack);
         }
     };
 
@@ -58,16 +58,16 @@ export default class JwtServiceImpl implements JwtService {
     private handleJwtError(error: any): never {
         switch (error.message) {
             case 'invalid signature': {
-                throw new FlierlyException("INVALID_SIGNATURE", HttpCodes.UNAUTHORIZED, error.stack);
+                throw new FlierlyException("JWT_INVALID_SIGNATURE", HttpCodes.UNAUTHORIZED, error.stack);
             }
             case 'invalid token': {
-                throw new FlierlyException("INVALID_TOKEN", HttpCodes.UNAUTHORIZED, error.stack);
+                throw new FlierlyException("JWT_INVALID_TOKEN", HttpCodes.UNAUTHORIZED, error.stack);
             }
             case 'jwt expired': {
-                throw new FlierlyException("AUTHENTICATION_EXPIRED", HttpCodes.UNAUTHORIZED, error.stack);
+                throw new FlierlyException("JWT_AUTHENTICATION_EXPIRED", HttpCodes.UNAUTHORIZED, error.stack);
             }
             default: {
-                throw new FlierlyException("UNKNOWN_ERROR", HttpCodes.UNAUTHORIZED, error.stack);
+                throw new FlierlyException("JWT_UNKNOWN_ERROR", HttpCodes.UNAUTHORIZED, error.stack);
             }
         }
     }

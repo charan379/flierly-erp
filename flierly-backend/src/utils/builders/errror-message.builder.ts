@@ -79,7 +79,7 @@ function handleValidationError(error: ValidationError): ErrorMessage {
   return {
     name: ValidationError.name,
     httpCode: HttpCodes.BAD_REQUEST,
-    message: m('unhandledValidationError'),
+    message: m('UNHANDLED_VALIDATION_ERROR'),
     stack: JSON.stringify(buildValidationErrorsResult([error])),
   };
 }
@@ -96,7 +96,7 @@ function handleQueryFailedError(error: QueryFailedError): ErrorMessage {
 function handleGeneralError(error: Error): ErrorMessage {
   return {
     name: m('500'),
-    message: m('unknownError'),
+    message: m('UNHANDLED_ERROR'),
     stack: error.stack,
     httpCode: HttpCodes.INTERNAL_SERVER_ERROR,
   };

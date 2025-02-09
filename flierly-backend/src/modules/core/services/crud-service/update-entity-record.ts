@@ -2,7 +2,7 @@ import HttpCodes from "@/constants/http-codes.enum";
 import FlierlyException from "@/lib/errors/flierly.exception";
 import { AppDataSource } from "@/lib/database/typeorm/app-datasource";
 import buildValidationErrorsResult from "@/utils/builders/validation-errors-result.builder";
-import { getMessage } from "@/utils/get-message.util";
+import { getMessage as m } from "@/utils/get-message.util";
 import { validate } from "class-validator";
 import { EntityTarget, ObjectLiteral } from "typeorm";
 
@@ -18,7 +18,7 @@ const updateEntityRecord = async (entity: EntityTarget<ObjectLiteral>, recordId:
 
             if (!existingEntity)
                 throw new FlierlyException(
-                    getMessage("entityIdNotFound", { recordId, entity: repo.metadata.name }),
+                    m("ENTITY_ID_NOT_FOUND", { recordId, entity: repo.metadata.name }),
                     HttpCodes.BAD_REQUEST
                 );
 

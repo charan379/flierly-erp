@@ -52,7 +52,7 @@ export function requestValidator(
 
                 if (!EntityClass) {
                     throw new FlierlyException(
-                        m('classValidatorNotFound', { validator }),
+                        m('CLASS_VALIDATOR_NOT_FOUND', { validator }),
                         HttpCodes.BAD_REQUEST
                     );
                 }
@@ -92,7 +92,7 @@ export function requestValidator(
                         error: errorMessage,
                         httpCode: HttpCodes.BAD_REQUEST,
                         result: errorMessages,
-                        message: m('requestValidationFail'),
+                        message: m('REQUEST_VALIDATION_FAILED'),
                         req,
                         res,
                     })

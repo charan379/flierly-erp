@@ -1,4 +1,4 @@
-import messages from "@/config/messages/messages";
+import messages from "@/config/messages/app-messages.json";
 
 /**
  * Replaces placeholders in the message with the provided parameters.
@@ -18,7 +18,17 @@ function formatMessage(message: string, params: { [key: string]: string | number
  * @param params - An object containing key-value pairs for placeholders.
  * @returns The formatted message corresponding to the key.
  */
-export function getMessage(key: keyof typeof messages, params: { [key: string]: string | number } = {}): string {
-    const message = messages[key] || "Message not found.";
-    return formatMessage(message, params);
+export function getMessage(messageKey: string, params?: { [key: string]: string | number }): string {
+
+    const message = messages[messageKey as keyof typeof messages];
+
+    if (!message) {
+        return messageKey;
+    };
+
+    if (params) {
+        return formatMessage(message, params);
+    }
+
+    return message;
 };
