@@ -1,11 +1,10 @@
 import { useAuth } from '@/modules/auth/hooks/useAuth';
-import { ProFormDigit, ProFormSwitch, ProFormText, ProFormTextArea } from '@ant-design/pro-components';
+import { ProFormDigit, ProFormText, ProFormTextArea } from '@ant-design/pro-components';
 import { FormInstance } from 'antd';
 import React from 'react';
 import vr from '@/modules/core/utils/get-validation-regex.util';
 import entityExistenceValidator from '@/modules/core/utils/entity-existence.validator';
 import useLocale from '@/modules/core/features/Locale/hooks/useLocale';
-
 
 export interface BrandFormFieldsProps {
     formInstance?: FormInstance<Brand>;
@@ -61,16 +60,6 @@ const BrandFormFields: React.FC<BrandFormFieldsProps> = ({ disabledFields, formI
                 ]}
                 disabled={(isEditForm && !hasPermission(pr('brand.update'))) || disabledFields?.includes('description')}
             />
-
-
-            {/* isActive - Switch for active status */}
-            <ProFormSwitch
-                name={'isActive'}
-                label={t('entity.isActive')}
-                hasFeedback
-                disabled={(isEditForm && !hasPermission(pr('brand.manage'))) || disabledFields?.includes('isActive')}
-            />
-
         </>
     )
 }
