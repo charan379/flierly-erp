@@ -126,7 +126,7 @@ export default class Product {
       referencedColumnName: 'id',
     },
   })
-  taxeRates?: TaxRate[];
+  taxRates?: TaxRate[];
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;

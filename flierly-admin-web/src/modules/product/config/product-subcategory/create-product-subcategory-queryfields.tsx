@@ -1,7 +1,7 @@
-import { QueryFieldConfig } from "@/features/QueryBuilder/QueryBuilder"
-import { createAssociatedEntityRowQueryBuilderFiled, createBooleanQueryBuilderField, createDateQueryBuilderField, createNumberQueryBuilderField, createTextQueryBuilderField } from "@/modules/core/utils/create-query-builder-field"
+import { QueryBuilderFieldConfig } from "@/modules/core/features/QueryBuilder/QueryBuilder";
+import { createAssociatedEntityRowQueryBuilderFiled, createDateQueryBuilderField, createNumberQueryBuilderField, createTextQueryBuilderField } from "@/modules/core/utils/create-query-builder-field"
 
-const createProductSubcategoryQueryFields = (translate: (value: string) => string): QueryFieldConfig<ProductSubCategory>[] => {
+const createProductSubcategoryQueryFields = (translate: (value: string) => string): QueryBuilderFieldConfig<ProductSubCategory>[] => {
     return [
         // id
         createNumberQueryBuilderField({
@@ -13,27 +13,16 @@ const createProductSubcategoryQueryFields = (translate: (value: string) => strin
             label: translate('name'),
             name: 'name'
         }),
-        // code
-        createTextQueryBuilderField({
-            label: translate('code'),
-            name: 'code'
-        }),
         // category
         createAssociatedEntityRowQueryBuilderFiled<ProductSubCategory, ProductCategory>({
             label: translate("category"),
-            name: "category",
+            name: "categoryId",
             associatedEntity: "product-category",
             getFilters: (value) => ({
-                name: { $ilike: `%${value}%` },
+                name: { $iContains: `%${value}%` },
             }),
             getLabel: (pc) => pc.name,
             getValue: (pc) => pc.id,
-        }),
-        // isActive
-        createBooleanQueryBuilderField({
-            label: translate('status'),
-            name: 'isActive',
-            optionLabels: [translate('active'), translate('inactive')]
         }),
         // createdAt
         createDateQueryBuilderField({

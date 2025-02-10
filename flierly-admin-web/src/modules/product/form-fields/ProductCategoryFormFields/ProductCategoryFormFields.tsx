@@ -2,7 +2,7 @@ import { useAuth } from '@/modules/auth/hooks/useAuth';
 import useLocale from '@/modules/core/features/Locale/hooks/useLocale';
 import entityExistenceValidator from '@/modules/core/utils/entity-existence.validator';
 import vr from '@/modules/core/utils/get-validation-regex.util';
-import { ProFormDigit, ProFormSwitch, ProFormText, ProFormTextArea } from '@ant-design/pro-components';
+import { ProFormDigit, ProFormText, ProFormTextArea } from '@ant-design/pro-components';
 import { FormInstance } from 'antd';
 import React from 'react';
 
@@ -50,18 +50,6 @@ const ProductCategoryFormFields: React.FC<ProductCategoryFormFieldsProps> = ({ f
                 disabled={(isEditForm && !hasPermission(pr('productCategory.update'))) || disabledFields?.includes('name')}
             />
 
-            {/* code - Input for category code */}
-            <ProFormText
-                name={'code'}
-                label={t('entity.code')}
-                hasFeedback
-                rules={[
-                    { required: true, message: t('entity.codeRequired') },
-                    { pattern: vr('code'), message: t('entity.codePattern') },
-                ]}
-                disabled={(isEditForm && !hasPermission(pr('productCategory.manage'))) || disabledFields?.includes('code')}
-            />
-
             {/* description - Textarea for category description */}
             <ProFormTextArea
                 name={'description'}
@@ -71,14 +59,6 @@ const ProductCategoryFormFields: React.FC<ProductCategoryFormFieldsProps> = ({ f
                     { pattern: vr('description'), message: t('entity.descriptionPattern') },
                 ]}
                 disabled={(isEditForm && !hasPermission(pr('productCategory.update'))) || disabledFields?.includes('description')}
-            />
-
-            {/* isActive - Switch for active status */}
-            <ProFormSwitch
-                name={'isActive'}
-                label={t('entity.isActive')}
-                hasFeedback
-                disabled={(isEditForm && !hasPermission(pr('productCategory.manage'))) || disabledFields?.includes('isActive')}
             />
         </>
     );

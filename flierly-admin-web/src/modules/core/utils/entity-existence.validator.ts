@@ -5,7 +5,7 @@ import debouncePromise from './debounce-promise'
 // Define the type for the parameters passed to the validator function
 interface EntityExistenceParams<T> {
   entity: string // The name of the entity (e.g., 'privilege', 'user')
-  filters?: Partial<Record<keyof T, any>> // The filters used to query the entity (e.g., { name: { $ilike: "value" }})
+  filters?: Partial<Record<keyof T, any>> // The filters used to query the entity (e.g., { name: { $iContains: "value" }})
   rejectionMessage?: string // Custom rejection message if the entity already exists
 }
 
@@ -24,7 +24,7 @@ function isExistsResult(result: any): result is ExistsResult {
  *
  * @param {Object} params - The parameters for the validation.
  * @param {string} params.entity - The name of the entity (e.g., 'privilege', 'user').
- * @param {Object} [params.filters={}] - The filters used to query the entity (e.g., { name: { $ilike: "value" }}).
+ * @param {Object} [params.filters={}] - The filters used to query the entity (e.g., { name: { $iContains: "value" }}).
  * @param {string} [params.rejectionMessage="entity_already_exists"] - Custom message if the entity already exists.
  * @returns {Promise} - Resolves if the entity does not exist, rejects if the entity exists or if there is an error.
  */
@@ -61,7 +61,7 @@ export default entityExistenceValidator
 // This prevents the validation from running too frequently when the same key is used.
 // entityExistenceValidator("uniqueKey", {
 //   entity: "privilege",
-//   filters: { name: { $ilike: "someValue" } },
+//   filters: { name: { $iContains: "someValue" } },
 //   rejectionMessage: "This privilege name already exists."
 // }).then(() => {
 //   console.log("Entity does not exist");

@@ -58,7 +58,7 @@ function whereCondition<T extends ObjectLiteral> (where: FindOptionsWhere<T> | u
         case '$notLike': // Handle NOT LIKE condition
           conditionObject[field] = Not(Like(condition[operator]));
           break;
-        case '$ilike': // Handle ILIKE (case-insensitive LIKE) condition
+        case '$iContains': // Handle ILIKE (case-insensitive LIKE) condition
           conditionObject[field] = ILike(condition[operator]);
           break;
         case '$notIlike': // Handle NOT ILIKE (case-insensitive NOT LIKE) condition

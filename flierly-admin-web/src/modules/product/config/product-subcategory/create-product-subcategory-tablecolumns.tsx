@@ -1,4 +1,4 @@
-import { createBooleanColumn, createCodeColumn, createDescriptionColumn, createIdColumn, createNameColumn, createTimeStampColumn } from '@/modules/core/utils/create-tablecolumn'
+import { createDescriptionColumn, createIdColumn, createNameColumn, createTimeStampColumn } from '@/modules/core/utils/create-tablecolumn'
 import { ProColumns } from '@ant-design/pro-components'
 
 const createProductSubCategoryTableColumns = (translate: (value: string) => string): ProColumns<ProductSubCategory>[] => {
@@ -7,6 +7,13 @@ const createProductSubCategoryTableColumns = (translate: (value: string) => stri
     createIdColumn(translate),
     // name
     createNameColumn(translate, { width: 200 }),
+    // categoryId
+    {
+      title: translate('category_id'),
+      dataIndex: "categoryId",
+      key: 'categoryId',
+      width: 80,
+    },
     // category
     {
       title: translate('category'),
@@ -22,12 +29,8 @@ const createProductSubCategoryTableColumns = (translate: (value: string) => stri
         return null;
       },
     },
-    // code
-    createCodeColumn(translate, { width: 120 }),
     // description
     createDescriptionColumn(translate, { width: 250 }),
-    // isActive
-    createBooleanColumn(translate, { dataIndex: 'isActive', width: 80 }),
     // updatedAt
     createTimeStampColumn(translate,
       {

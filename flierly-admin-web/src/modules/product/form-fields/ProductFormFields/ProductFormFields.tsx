@@ -141,11 +141,11 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({ formInstance, isE
                         if (v === "focus") {
                             filters = brand
                                 ? { id: { $in: [brand, ...Array.from({ length: 9 }, (_, i) => i + 1)] } }
-                                : { name: { $ilike: `%` } };
+                                : { name: { $iContains: `%` } };
                         } else {
                             filters = brand && !v
                                 ? { id: { $equalTo: brand } }
-                                : { name: { $ilike: `%${v}%` } };
+                                : { name: { $iContains: `%${v}%` } };
                         }
 
                         const getLabel = (e: Brand) => e.name;
@@ -185,11 +185,11 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({ formInstance, isE
                         if (v === "focus") {
                             filters = category
                                 ? { id: { $in: [category, ...Array.from({ length: 9 }, (_, i) => i + 1)] } }
-                                : { name: { $ilike: `%` } };
+                                : { name: { $iContains: `%` } };
                         } else {
                             filters = category && !v
                                 ? { id: { $equalTo: category } }
-                                : { name: { $ilike: `%${v}%` } };
+                                : { name: { $iContains: `%${v}%` } };
                         }
 
                         const getLabel = (e: ProductCategory) => e.name;
@@ -247,11 +247,11 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({ formInstance, isE
                                     if (v === "focus") {
                                         filters = subCategory
                                             ? { id: { $in: [subCategory, ...Array.from({ length: 9 }, (_, i) => i + 1)] }, ...baseFilters }
-                                            : { name: { $ilike: `%` }, ...baseFilters };
+                                            : { name: { $iContains: `%` }, ...baseFilters };
                                     } else {
                                         filters = subCategory && !v
                                             ? { id: { $equalTo: subCategory }, ...baseFilters }
-                                            : { name: { $ilike: `%${v}%` }, ...baseFilters };
+                                            : { name: { $iContains: `%${v}%` }, ...baseFilters };
                                     }
 
                                     const getLabel = (e: ProductSubCategory) => e.name;

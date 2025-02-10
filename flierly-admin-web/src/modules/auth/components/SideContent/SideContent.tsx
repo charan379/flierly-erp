@@ -9,16 +9,16 @@ const { Text, Title } = Typography
  * SideContent component to display localized content on the side of the page.
  */
 const SideContent: React.FC = () => {
-  const { translate, langDirection } = useLocale()
+  const { translate: t, langDirection } = useLocale()
 
   const listItems = [
     {
-      line1: translate('all_in_one_tool'),
-      line2: translate('run_and_scale_your_erp_crm_apps'),
+      line1: t('all_in_one_tool'),
+      line2: t('run_and_scale_your_erp_crm_apps'),
     },
     {
-      line1: translate('easily_add_and_manage_your_services'),
-      line2: translate('it_brings_together_your_invoice_clients_and_leads'),
+      line1: t('easily_add_and_manage_your_services'),
+      line2: t('it_brings_together_your_invoice_clients_and_leads'),
     },
   ]
 
@@ -35,7 +35,7 @@ const SideContent: React.FC = () => {
       <div style={{ width: '100%', background: 'inherit' }}>
         <img src="/vite.svg" alt="Flierly" style={{ margin: '0 auto 40px', display: 'block' }} height={63} width={220} />
 
-        <Title level={3}>{translate('manage_your_company_with')}:</Title>
+        <Title level={3}>{t('manage_your_company_with')}:</Title>
 
         <ul className="list-checked" style={{ paddingRight: 0 }}>
           {listItems.map(({ line1, line2 }, index) => (

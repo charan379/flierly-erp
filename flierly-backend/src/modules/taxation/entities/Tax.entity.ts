@@ -25,7 +25,7 @@ export default class TaxRate {
     @Type(() => Boolean)
     isInclusive: boolean; // Indicates if the tax is included in the price
 
-    @ManyToMany(() => Product, (product) => product.taxeRates)
+    @ManyToMany(() => Product, (product) => product.taxRates)
     products: Product[];
 
     @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })

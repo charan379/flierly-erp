@@ -1,6 +1,6 @@
 import selectRemoteOptionsService from "../service";
 
-export type ProcessResultFunction<T> = (result: T[]) => Array<{ label: string; value: string }>
+export type ProcessResultFunction<T> = (result: T[]) => Array<{ label: string; value: string | number }>
 
 /**
  * Fetch entity rows and transform them into options for a select component.
@@ -18,7 +18,7 @@ async function fetchEntityRecordsAsOptions<T,>(
   limit: number,
   processResult: ProcessResultFunction<T>,
   signal?: AbortSignal,
-): Promise<Array<{ label: string; value: string }>> {
+): Promise<Array<{ label: string; value: string | number }>> {
   // Fetch data from the service
   const response: ApiResponse<T[]> = await selectRemoteOptionsService.entityRecords({ entity, filters, limit, signal })
 

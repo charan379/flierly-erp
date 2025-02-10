@@ -1,41 +1,46 @@
-type Brand = {
+interface Brand extends EntityTimeStamps {
     id: number;
     name: string;
     isActive: boolean;
     description: string;
-} & EntityTimeStamps;
+};
 
-type Product = {
+interface ProductCategory extends EntityTimeStamps {
     id: number;
     name: string;
+    description: string;
+};
+
+interface ProductSubCategory extends EntityTimeStamps {
+    id: number;
+    name: string;
+    description: string;
+    category?: ProductCategory;
+    categoryId: number;
+};
+
+interface Product extends EntityTimeStamps {
+    id: number;
+    name: string;
+    type: "tangible" | "intangible";
     isActive: boolean;
     sku: string;
-    hsn: number;
-    isSerialized: boolean;
+    hsn?: number;
+    isSerialized?: boolean;
     isComposite: boolean;
     description: string;
     price: number;
-    brand?: Brand | number;
-    category?: ProductCategory | number;
-    subCategory?: ProductSubCategory | number;
-} & EntityTimeStamps;
+    category?: ProductCategory;
+    categoryId: number;
+    subCategory?: ProductSubCategory;
+    subCategoryId: number;
+    baseUOM?: UOM;
+    baseUOMId: number;
+    brand?: Brand;
+    brandId: number;
+    taxRates?: TaxRate[];
+};
 
-type ProductCategory = {
-    id: number;
-    name: string;
-    isActive: boolean;
-    code: string;
-    description: string;
-} & EntityTimeStamps;
-
-type ProductSubCategory = {
-    id: number;
-    name: string;
-    isActive: boolean;
-    code: string;
-    description: string;
-    category: ProductCategory | number;
-} & EntityTimeStamps;
 
 type ProductComponent = {
     compositeProductId: number;

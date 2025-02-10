@@ -1,8 +1,8 @@
-import { QueryFieldConfig } from "@/features/QueryBuilder/QueryBuilder"
-import { createBooleanQueryBuilderField, createDateQueryBuilderField, createNumberQueryBuilderField, createTextQueryBuilderField } from "@/modules/core/utils/create-query-builder-field"
+import { QueryBuilderFieldConfig } from "@/modules/core/features/QueryBuilder/QueryBuilder";
+import { createDateQueryBuilderField, createNumberQueryBuilderField, createTextQueryBuilderField } from "@/modules/core/utils/create-query-builder-field"
 
 
-const createProductCategoryQueryFields = (translate: (value: string) => string): QueryFieldConfig<ProductCategory>[] => {
+const createProductCategoryQueryFields = (translate: (value: string) => string): QueryBuilderFieldConfig<ProductCategory>[] => {
     return [
         // id
         createNumberQueryBuilderField({
@@ -13,17 +13,6 @@ const createProductCategoryQueryFields = (translate: (value: string) => string):
         createTextQueryBuilderField({
             label: translate('name'),
             name: 'name'
-        }),
-        // code
-        createTextQueryBuilderField({
-            label: translate('code'),
-            name: 'code'
-        }),
-        // isActive
-        createBooleanQueryBuilderField({
-            label: translate('status'),
-            name: 'isActive',
-            optionLabels: [translate('active'), translate('inactive')]
         }),
         // createdAt
         createDateQueryBuilderField({

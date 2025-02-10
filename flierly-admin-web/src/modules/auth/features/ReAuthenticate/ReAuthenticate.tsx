@@ -2,6 +2,7 @@ import { Modal, Typography } from 'antd'
 import React, { Suspense, useEffect, useState } from 'react'
 import PageLoader from '../../../core/components/PageLoader'
 import { useNavigate } from 'react-router-dom'
+import useLocale from '@/modules/core/features/Locale/hooks/useLocale'
 
 const LoginForm = React.lazy(() => import('@/modules/auth/forms/LoginForm'))
 
@@ -15,6 +16,8 @@ const ReAuthenticate: React.FC<ReAuthenticate> = ({ tokenExpiresAt, onExpiryNavi
   const [timeLeft, setTimeLeft] = useState<number | null>(null)
   const [closeEnabled, setCloseEnabled] = useState(true)
   const [isClosedRecently, setIsClosedRecently] = useState(false)
+
+  const { translate: t } = useLocale();
 
   const navigate = useNavigate()
 
@@ -55,13 +58,13 @@ const ReAuthenticate: React.FC<ReAuthenticate> = ({ tokenExpiresAt, onExpiryNavi
 
   // Format the time left as a countdown string
   const formatTimeLeft = () => {
-    if (timeLeft === null || timeLeft <= 0) return 'Token expired.'
+    if (timeLeft === null || timeLeft <= 0) return t('token_expired')
 
     const hours = Math.floor(timeLeft / (1000 * 60 * 60))
     const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60))
     const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000)
 
-    return `${hours}h ${minutes}m ${seconds}s left`
+    return `${hours}h ${minutes}m ${seconds}s ${t('remaining')}`
   }
 
   const handleSuccessLogin = () => {
@@ -76,7 +79,7 @@ const ReAuthenticate: React.FC<ReAuthenticate> = ({ tokenExpiresAt, onExpiryNavi
         timeLeft !== null &&
         timeLeft > 0 && (
           <Typography.Paragraph type="danger" style={{ textAlign: 'left', display: 'block' }}>
-            {`Your session will expire soon: ${formatTimeLeft()}. Please Re-Authenticate !`}
+            {`${t('your_session_expires_soon')}: ${formatTimeLeft()}. Please Re-Authenticate !`}
             <br />
             If not Re-Authenticated before the time limit, You will to redirected to Login Page.
           </Typography.Paragraph>

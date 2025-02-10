@@ -8,7 +8,7 @@ export interface SelectRemoteOptionsProps<T> {
   asyncOptionsFetcher: (
     value: string | "focus",
     signal?: AbortSignal
-  ) => Promise<Array<{ label: string | JSX.Element; value: string }>>;
+  ) => Promise<Array<SelectRemoteOptionType>>;
   debounceTimeout?: number;
   width?: string | number;
   disabled?: boolean;
@@ -16,10 +16,7 @@ export interface SelectRemoteOptionsProps<T> {
   optionCreatorConfig?: {
     onCreateSuccess: (
       result: T,
-      appendOptions: React.Dispatch<React.SetStateAction<{
-        label: string | JSX.Element;
-        value: string;
-      }[]>>) => void;
+      appendOptions: React.Dispatch<React.SetStateAction<SelectRemoteOptionType[]>>) => void;
     entity: string;
     formFields: React.ReactNode;
     formInstance?: FormInstance<T>;
@@ -42,7 +39,7 @@ const SelectRemoteOptions = <T,>({
   ...props
 }: SelectRemoteOptionsProps<T>) => {
   const [fetching, setFetching] = useState(false);
-  const [options, setOptions] = useState<{ label: string | JSX.Element; value: string }[]>([]);
+  const [options, setOptions] = useState<SelectRemoteOptionType[]>([]);
   const abortControllerRef = useRef<AbortController | null>(null);
   const handleSearch = (value: string) => {
     debounceFetcher(value);

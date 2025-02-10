@@ -1,7 +1,7 @@
 import { useAuth } from '@/modules/auth/hooks/useAuth';
 import entityExistenceValidator from '@/modules/core/utils/entity-existence.validator';
 import vr from '@/modules/core/utils/get-validation-regex.util';
-import { ProFormDigit, ProFormItem, ProFormSwitch, ProFormText, ProFormTextArea } from '@ant-design/pro-components';
+import { ProFormDigit, ProFormItem, ProFormText, ProFormTextArea } from '@ant-design/pro-components';
 import { Form, FormInstance } from 'antd';
 import React from 'react';
 import ProductCategoryFormFields from '../ProductCategoryFormFields';
@@ -54,25 +54,14 @@ const ProductSubCategoryFormFields: React.FC<ProductSubCategoryFormFieldsProps> 
                 ]}
                 disabled={(isEditForm && !hasPermission(pr('productSubCategory.update'))) || disabledFields?.includes('name')}
             />
-            {/* code - Input for subcategory code */}
-            <ProFormText
-                name={'code'}
-                label={t('entity.code')}
-                hasFeedback
-                rules={[
-                    { required: true, message: t('entity.codeRequired') },
-                    { pattern: vr('code'), message: t('entity.codePattern') },
-                ]}
-                disabled={(isEditForm && !hasPermission(pr('productSubCategory.manage'))) || disabledFields?.includes('code')}
-            />
             {/* category - Select input for product category */}
             <ProFormItem
-                name={'category'}
+                name={'categoryId'}
                 label={t('product.category')}
                 rules={[{ required: true, message: t('product.categoryRequired') }]}
             >
                 <SelectRemoteOptions<ProductCategory>
-                    name={'category'}
+                    name={'categoryId'}
                     debounceTimeout={300}
                     allowClear
                     disabled={(isEditForm && !hasPermission(pr('product.manage'))) || disabledFields?.includes('category')}
@@ -82,29 +71,32 @@ const ProductSubCategoryFormFields: React.FC<ProductSubCategoryFormFieldsProps> 
                         formInstance: productCategoryFormInstance,
                         permissionCode: pr('productCategory.create'),
                         onCreateSuccess: (pc, appendOptions) => {
-                            formInstance?.setFieldValue('category', pc.id)
-                            appendOptions(prev => [...prev, { label: pc.name, value: String(pc.id) }])
+                            appendOptions(prev => [...prev, { label: pc.name, value: pc.id }]);
+                            formInstance?.setFieldValue('categoryId', pc.id)
                         }
                     }}
                     asyncOptionsFetcher={(v: string) => {
-                        const category = formInstance?.getFieldValue('category');
+                        const categoryId = formInstance?.getFieldValue('categoryId');
                         let filters;
 
                         // Filters logic based on input value
                         if (v === "focus") {
-                            filters = category
-                                ? { id: { $in: [category, ...Array.from({ length: 9 }, (_, i) => i + 1)] } }
-                                : { name: { $ilike: `%` } };
+                            filters = categoryId
+                                ? { id: { $in: [categoryId, ...Array.from({ length: 9 }, (_, i) => i + 1)] } }
+                                : { name: { $iContains: `%` } };
                         } else {
-                            filters = category && !v
-                                ? { id: { $equalTo: category } }
-                                : { name: { $ilike: `%${v}%` } };
+                            filters = categoryId && !v
+                                ? { id: { $equalTo: categoryId } }
+                                : { name: { $iContains: `%${v}%` } };
                         }
 
                         const getLabel = (e: ProductCategory) => e.name;
-                        const getValue = (e: ProductCategory) => String(e.id);
-                        const processBrandsAsOptions = (categories: ProductCategory[]) => categories.map((cat) => ({ label: getLabel(cat), value: getValue(cat) }));
-                        return fetchEntityRecordsAsOptions('product-category', filters, 10, processBrandsAsOptions);
+                        const getValue = (e: ProductCategory) => e.id;
+                        const processCategoriesAsOptions = (categories: ProductCategory[]) => {
+                            return categories.map(c => ({ label: getLabel(c), value: getValue(c) }))
+                        };
+
+                        return fetchEntityRecordsAsOptions('product-category', filters, 10, processCategoriesAsOptions);
                     }}
                 />
             </ProFormItem>
@@ -117,13 +109,6 @@ const ProductSubCategoryFormFields: React.FC<ProductSubCategoryFormFieldsProps> 
                     { pattern: vr('description'), message: t('entity.descriptionPattern') },
                 ]}
                 disabled={(isEditForm && !hasPermission(pr('productSubCategory.update'))) || disabledFields?.includes('description')}
-            />
-            {/* isActive - Switch for active status */}
-            <ProFormSwitch
-                name={'isActive'}
-                label={t('entity.isActive')}
-                hasFeedback
-                disabled={(isEditForm && !hasPermission(pr('productSubCategory.manage'))) || disabledFields?.includes('isActive')}
             />
         </>
     );
