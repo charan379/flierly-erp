@@ -1,14 +1,15 @@
 import AccessType from '@/modules/iam/constants/access-types.enum';
-import { AppDataSource } from '@/lib/database/typeorm/app-datasource';
 import getDifferenceFromArrayOfObjects from '@/utils/get-difference-from-arary-of-objects.util';
 import Privilege from '@/modules/iam/entities/Privilege.entity';
 import { getEntityList } from '@/modules';
 import iocContainer from '@/lib/di-ioc-container';
 import LoggerService from '@/modules/core/services/logger-service/LoggerService';
 import BeanTypes from '@/lib/di-ioc-container/bean.types';
+import DatabaseService from '@/lib/database/database-service/DatabaseService';
 
 // Function to generate privilege array based on entities and access types
 async function generatePrivilegesArray(): Promise<Partial<Privilege>[]> {
+
   const privileges: Partial<Privilege>[] = [];
   const entities = await getEntityList();
 
@@ -38,7 +39,10 @@ async function generatePrivilegesArray(): Promise<Partial<Privilege>[]> {
 
 // Function to generate and sync privileges with the database
 async function generatePrivileges() {
-  const privilegeRepository = AppDataSource.getRepository(Privilege);
+
+  const databaseService = iocContainer.get<DatabaseService>(BeanTypes.DatabaseService);
+
+  const privilegeRepository = databaseService.getRepository(Privilege);
 
   // Generate privilege array
   const privileges: Partial<Privilege>[] = await generatePrivilegesArray();

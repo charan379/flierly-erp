@@ -8,6 +8,7 @@ import {
   EntityManager,
   SelectQueryBuilder,
   DataSource,
+  EntityMetadata,
 } from 'typeorm';
 import DatabaseService from './DatabaseService';
 import BeanTypes from '@/lib/di-ioc-container/bean.types';
@@ -83,6 +84,9 @@ class DatabaseServiceImpl implements DatabaseService {
     return this.dataSource.createEntityManager();
   };
 
+  public getMetadata(target: EntityTarget<any>): EntityMetadata {
+    return this.dataSource.getMetadata(target);
+  }
 }
 
 export default DatabaseServiceImpl;

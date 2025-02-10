@@ -1,17 +1,21 @@
 import { EntityTarget, ObjectLiteral } from "typeorm";
-import { AppDataSource } from "@/lib/database/typeorm/app-datasource";
 import FlierlyException from "@/lib/errors/flierly.exception";
 import HttpCodes from "@/constants/http-codes.enum";
 import getDiffFromArrayOfNumbers from "@/utils/get-diff-from-array-of-numbers.util";
 import UpdateEntityAssociatedRecordsRequestDTO from "../../dto/UpdateAssociatedEntityRecordsRequest.dto";
+import iocContainer from "@/lib/di-ioc-container";
+import DatabaseService from "@/lib/database/database-service/DatabaseService";
+import BeanTypes from "@/lib/di-ioc-container/bean.types";
 
 
 const updateAssociatedEntityRecords = async (entity: EntityTarget<ObjectLiteral>, request: UpdateEntityAssociatedRecordsRequestDTO): Promise<string[]> => {
     try {
 
+        const databaseService = iocContainer.get<DatabaseService>(BeanTypes.DatabaseService);
+
         const { entityRecordId, entitySideField, addMultiple, addOne, replaceWith, removeMultiple, removeOne } = request;
 
-        const entityRepository = AppDataSource.getRepository(entity);
+        const entityRepository = databaseService.getRepository(entity);
 
         // Fetch relation columns and validate the entitySide field
         const entitySideFieldMetadata = entityRepository.metadata.relations.reduce((acc: Record<string, any>, column) => {
@@ -65,7 +69,7 @@ const updateAssociatedEntityRecords = async (entity: EntityTarget<ObjectLiteral>
         }
 
         // Execute transaction for updates
-        await AppDataSource.transaction(async (entityManager) => {
+        await databaseService.executeTransaction(async (entityManager) => {
             const transactionRepository = entityManager.getRepository(entity);
 
             await transactionRepository.createQueryBuilder().relation(entitySideField).of(entityRecordId).addAndRemove(idsToAdd, idsToRemove);

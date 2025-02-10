@@ -1,6 +1,8 @@
 import HttpCodes from "@/constants/http-codes.enum";
+import DatabaseService from "@/lib/database/database-service/DatabaseService";
+import iocContainer from "@/lib/di-ioc-container";
+import BeanTypes from "@/lib/di-ioc-container/bean.types";
 import FlierlyException from "@/lib/errors/flierly.exception";
-import { AppDataSource } from "@/lib/database/typeorm/app-datasource";
 import buildValidationErrorsResult from "@/utils/builders/validation-errors-result.builder";
 import { getMessage as m } from "@/utils/get-message.util";
 import { validate } from "class-validator";
@@ -8,9 +10,11 @@ import { EntityTarget, ObjectLiteral } from "typeorm";
 
 const updateEntityRecord = async (entity: EntityTarget<ObjectLiteral>, recordId: number, updateData: Record<string, any>): Promise<ObjectLiteral> => {
     try {
+        const databaseService = iocContainer.get<DatabaseService>(BeanTypes.DatabaseService);
+
         if (updateData?.id) delete updateData.id; // Ensure the ID field is not part of the update
 
-        const result = await AppDataSource.transaction(async (entityManager) => {
+        const result = await databaseService.executeTransaction(async (entityManager) => {
             const repo = entityManager.getRepository(entity);
 
             // Find the entity by ID to ensure it's loaded and managed

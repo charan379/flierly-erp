@@ -1,6 +1,5 @@
 import HttpCodes from '@/constants/http-codes.enum';
 import User from '@/modules/iam/entities/User.entity';
-import { AppDataSource } from '@/lib/database/typeorm/app-datasource';
 import FlierlyException from '@/lib/errors/flierly.exception';
 import { NextFunction, Request, Response } from 'express';
 import iocContainer from '@/lib/di-ioc-container';
@@ -8,6 +7,7 @@ import BeanTypes from '@/lib/di-ioc-container/bean.types';
 import JwtService from '@/lib/jwt/jwt-service/JwtService';
 import UserService from '@/modules/iam/services/user-service/UserService';
 import { JwtPayload } from 'jsonwebtoken';
+import DatabaseService from '@/lib/database/database-service/DatabaseService';
 
 /**
  * Middleware to authorize requests based on JWT tokens and user privileges.
@@ -25,8 +25,9 @@ import { JwtPayload } from 'jsonwebtoken';
 export function authorize(privilegeCode: string = ''): (req: Request, res: Response, next: NextFunction) => Promise<void | Response> {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const databaseService = iocContainer.get<DatabaseService>(BeanTypes.DatabaseService);
       const JwtService = iocContainer.get<JwtService>(BeanTypes.JwtService);
-      const userService = iocContainer.get<UserService>(BeanTypes.UserSevice);
+      const userService = iocContainer.get<UserService>(BeanTypes.UserService);
       // Extract authorization header or signed cookie
       const authHeader: string = req?.headers?.authorization || req?.signedCookies?.auth;
 
@@ -61,8 +62,9 @@ export function authorize(privilegeCode: string = ''): (req: Request, res: Respo
       const jwtUserName: string | undefined = deCodedToken.username;
       const jwtUserId: number | undefined = deCodedToken.userId;
 
+
       // Fetch user details from the database using the decoded userId
-      const user: User | null = await AppDataSource.getRepository(User).findOneBy({ id: jwtUserId });
+      const user: User | null = await databaseService.getRepository(User).findOneBy({ id: jwtUserId });
 
       // If no user is found, throw an exception
       if (!user) {

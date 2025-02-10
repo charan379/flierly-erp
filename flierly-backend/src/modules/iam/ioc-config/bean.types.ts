@@ -1,5 +1,5 @@
 const IamModuleBeanTypes = {
-    UserSevice: Symbol.for('UserSevice'),
+    UserService: Symbol.for('UserService'),
     UserController: Symbol.for('UserController'),
 };
 

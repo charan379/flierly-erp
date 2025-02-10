@@ -1,14 +1,18 @@
 import HttpCodes from "@/constants/http-codes.enum";
 import FlierlyException from "@/lib/errors/flierly.exception";
-import { AppDataSource } from "@/lib/database/typeorm/app-datasource";
 import { validate } from "class-validator";
 import { EntityTarget, ObjectLiteral } from "typeorm";
+import iocContainer from "@/lib/di-ioc-container";
+import DatabaseService from "@/lib/database/database-service/DatabaseService";
+import BeanTypes from "@/lib/di-ioc-container/bean.types";
 
 
 const createEntityRecord = async (entity: EntityTarget<ObjectLiteral>, data: Record<string, any>): Promise<ObjectLiteral> => {
     try {
+        const databaseService = iocContainer.get<DatabaseService>(BeanTypes.DatabaseService);
+
         // Get repository for the entity type
-        const entityRepository = AppDataSource.getRepository(entity);
+        const entityRepository = databaseService.getRepository(entity);
 
         // Create entity instance with validated data
 

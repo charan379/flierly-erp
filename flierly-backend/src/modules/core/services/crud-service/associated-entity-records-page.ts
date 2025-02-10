@@ -1,16 +1,20 @@
 import HttpCodes from "@/constants/http-codes.enum";
 import { getEntityList } from "@/modules";
 import FlierlyException from "@/lib/errors/flierly.exception";
-import { AppDataSource } from "@/lib/database/typeorm/app-datasource";
 import { applySortOrderQB, qbFilters } from "@/lib/database/typeorm/utils";
 import pageResponseBuilder from "@/utils/builders/page-response.builder";
 import { EntityTarget, ObjectLiteral } from "typeorm";
 import AssociatedEntityRecordsPageRequestDTO from "../../dto/AssociatedEntityRecordsPageRequest.dto";
 import { AssociatedEntityPageRequestType } from "../../constants/associated-entity-page-requestatype.enum";
+import iocContainer from "@/lib/di-ioc-container";
+import DatabaseService from "@/lib/database/database-service/DatabaseService";
+import BeanTypes from "@/lib/di-ioc-container/bean.types";
 
 // Fetch a paginated list of associated entity records.
 const getAssociatedEntityRecordsPage = async (entity: EntityTarget<ObjectLiteral>, pageRequest: AssociatedEntityRecordsPageRequestDTO): Promise<Page<object>> => {
     try {
+
+        const databaseService = iocContainer.get<DatabaseService>(BeanTypes.DatabaseService);
         // Destructure the pageRequest
         const { associatedEntitySideField, associatedEntityCode, entityRecordId, entitySideField, filters, limit, page, sort, type, withDeleted } = pageRequest;
         // Get the list of entities
@@ -22,20 +26,20 @@ const getAssociatedEntityRecordsPage = async (entity: EntityTarget<ObjectLiteral
         // Get the associated entity and repository
         const associatedEntity = associatedEntityDetails.entity;
         // Get the repository for the associated entity
-        const associatedEntityRepo = AppDataSource.getRepository(associatedEntity);
+        const associatedEntityRepo = databaseService.getRepository(associatedEntity);
         // Determine alias for the associated entity
         const associatedEntityAlias = associatedEntity.toString().toLowerCase();
         // Determine alias for the entity
         const entityAlias = typeof entity === 'function' ? entity.name.toLowerCase() : entity.toString().toLowerCase();
 
         // Get metadata for the entity and associated entity
-        const entityMetadata = AppDataSource.getMetadata(entity);
+        const entityMetadata = databaseService.getMetadata(entity);
         // Find the relation with the entity side field
         const entityRelationWithEntitySideField = entityMetadata.findRelationWithPropertyPath(entitySideField);
         // If no relation is found, throw an error
         if (!entityRelationWithEntitySideField) throw new FlierlyException('Invalid entity side field', HttpCodes.BAD_REQUEST);
         // Get metadata for the associated entity
-        const associatedEntityMetadata = AppDataSource.getMetadata(associatedEntity);
+        const associatedEntityMetadata = databaseService.getMetadata(associatedEntity);
         // Find the relation with the associated entity side field
         const associatedEntityRelationWithEntitySideField = associatedEntityMetadata.findRelationWithPropertyPath(associatedEntitySideField);
         // If no relation is found, throw an error

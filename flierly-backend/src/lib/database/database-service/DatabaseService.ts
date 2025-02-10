@@ -1,4 +1,4 @@
-import { EntityTarget, ObjectLiteral, Repository, QueryRunner, EntityManager, SelectQueryBuilder } from 'typeorm';
+import { EntityTarget, ObjectLiteral, Repository, QueryRunner, EntityManager, SelectQueryBuilder, EntityMetadata } from 'typeorm';
 
 interface DatabaseService {
     /**
@@ -53,6 +53,8 @@ interface DatabaseService {
     executeRawQuery<T>(query: string, parameters?: any[]): Promise<T>;
 
     createEntityManager(): EntityManager
+
+    getMetadata(target: EntityTarget<any>): EntityMetadata;
 }
 
 export default DatabaseService;

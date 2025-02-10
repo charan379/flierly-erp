@@ -1,11 +1,14 @@
-import { AppDataSource } from "@/lib/database/typeorm/app-datasource";
+import DatabaseService from "@/lib/database/database-service/DatabaseService";
+import iocContainer from "@/lib/di-ioc-container";
+import BeanTypes from "@/lib/di-ioc-container/bean.types";
 import { EntityTarget, ObjectLiteral, UpdateResult } from "typeorm";
-
 
 const restoreEntityRecords = async (entity: EntityTarget<ObjectLiteral>, idsToRestore: number[]): Promise<UpdateResult> => {
     try {
 
-        const result = await AppDataSource.transaction(async (entityManager) => {
+        const databaseService = iocContainer.get<DatabaseService>(BeanTypes.DatabaseService);
+
+        const result = await databaseService.executeTransaction(async (entityManager) => {
 
             const entityRepository = entityManager.getRepository(entity);
 
@@ -24,7 +27,7 @@ const restoreEntityRecords = async (entity: EntityTarget<ObjectLiteral>, idsToRe
     } catch (error) {
 
         throw error;
-        
+
     }
 };
 

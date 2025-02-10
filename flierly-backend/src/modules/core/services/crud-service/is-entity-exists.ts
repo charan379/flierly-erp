@@ -1,14 +1,18 @@
 import { EntityTarget, ObjectLiteral } from "typeorm";
-import { AppDataSource } from "@/lib/database/typeorm/app-datasource";
 import applyWhereConditionsQB from "@/lib/database/typeorm/utils/qb-appy-where-conditions.util";
 import IsEntityRecordExistsRequestDTO from "../../dto/IsEntityRecordExistsRequest.dto";
+import iocContainer from "@/lib/di-ioc-container";
+import DatabaseService from "@/lib/database/database-service/DatabaseService";
+import BeanTypes from "@/lib/di-ioc-container/bean.types";
 
 const isEntityExists = async (entity: EntityTarget<ObjectLiteral>, request: IsEntityRecordExistsRequestDTO): Promise<{ exists: boolean }> => {
     try {
 
+        const databaseService = iocContainer.get<DatabaseService>(BeanTypes.DatabaseService);
+
         const { filters, withDeleted } = request;
 
-        const entityRepository = AppDataSource.getRepository(entity);
+        const entityRepository = databaseService.getRepository(entity);
 
         const entityAlias = "entity"
 

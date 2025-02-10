@@ -1,17 +1,20 @@
 import { EntityTarget, ObjectLiteral } from "typeorm";
-import { AppDataSource } from "@/lib/database/typeorm/app-datasource";
 import FlierlyException from "@/lib/errors/flierly.exception";
 import HttpCodes from "@/constants/http-codes.enum";
 import ReadEntityRecordRequestDTO from "../../dto/ReadEntityRecordRequest.dto";
-
+import iocContainer from "@/lib/di-ioc-container";
+import DatabaseService from "@/lib/database/database-service/DatabaseService";
+import BeanTypes from "@/lib/di-ioc-container/bean.types";
 
 const readEntityRecord = async (entity: EntityTarget<ObjectLiteral>, request: ReadEntityRecordRequestDTO): Promise<ObjectLiteral> => {
 
     try {
 
+        const databaseService = iocContainer.get<DatabaseService>(BeanTypes.DatabaseService);
+
         const { entityRecordId, loadRelations, withDeleted } = request;
 
-        const entityRepositoty = AppDataSource.getRepository(entity);
+        const entityRepositoty = databaseService.getRepository(entity);
 
         // Find the entity by ID with the specified relations
         const data = await entityRepositoty.findOne({

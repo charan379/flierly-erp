@@ -1,18 +1,22 @@
-import { AppDataSource } from "@/lib/database/typeorm/app-datasource";
 import { applySortOrderQB } from "@/lib/database/typeorm/utils";
 import applyWhereConditionsQB from "@/lib/database/typeorm/utils/qb-appy-where-conditions.util";
 import pageResponseBuilder from "@/utils/builders/page-response.builder";
 import { EntityTarget, ObjectLiteral } from "typeorm";
 import EntityRecordsPageRequestDTO from "../../dto/EntityRecordsPageRequest.dto";
+import iocContainer from "@/lib/di-ioc-container";
+import DatabaseService from "@/lib/database/database-service/DatabaseService";
+import BeanTypes from "@/lib/di-ioc-container/bean.types";
 
 
 const entityRecordsPage = async (entity: EntityTarget<ObjectLiteral>, pageRequest: EntityRecordsPageRequestDTO): Promise<Page<object>> => {
 
     try {
+        const databaseService = iocContainer.get<DatabaseService>(BeanTypes.DatabaseService);
+
         //  destructure the pageRequest
         const { withDeleted, filters, limit, page, sort, loadRelations } = pageRequest;
         // get entity repository 
-        const entityRepository = AppDataSource.getRepository(entity);
+        const entityRepository = databaseService.getRepository(entity);
         // declare alias for entity to use in the query
         const entityAlias = "entity";
         // create query builder 

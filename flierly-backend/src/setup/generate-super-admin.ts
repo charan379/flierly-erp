@@ -1,16 +1,20 @@
 import userDetailsPrompt from '@/setup/prompts/user-details.prompt';
-import { AppDataSource } from '../lib/database/typeorm/app-datasource';
-import updateUserPassword from '@/modules/iam/services/user-service/update-user-password';
 import Role from '@/modules/iam/entities/Role.entity';
 import User from '@/modules/iam/entities/User.entity';
 import Privilege from '@/modules/iam/entities/Privilege.entity';
 import iocContainer from '@/lib/di-ioc-container';
 import LoggerService from '@/modules/core/services/logger-service/LoggerService';
 import BeanTypes from '@/lib/di-ioc-container/bean.types';
+import DatabaseService from '@/lib/database/database-service/DatabaseService';
+import UserService from '@/modules/iam/services/user-service/UserService';
+import UserCredentialsDTO from '@/modules/iam/dto/UserCredentials.dto';
 
 async function generateSuperAdmin(): Promise<void> {
-  const roleRepository = AppDataSource.getRepository(Role);
-  const userRepository = AppDataSource.getRepository(User);
+
+  const databaseService = iocContainer.get<DatabaseService>(BeanTypes.DatabaseService);
+  const userServices = iocContainer.get<UserService>(BeanTypes.UserService);
+  const roleRepository = databaseService.getRepository(Role);
+  const userRepository = databaseService.getRepository(User);
 
   // get logger service instance from ioc container
   const logger = iocContainer.get<LoggerService>(BeanTypes.LoggerService);
@@ -36,8 +40,12 @@ async function generateSuperAdmin(): Promise<void> {
 
   await userRepository.save(superAdmin);
 
+  const superAdminCreds: UserCredentialsDTO = {
+    username: superAdmin.username,
+    password: credsPrompt.password,
+  }
   // Update or create password for Super Admin
-  await updateUserPassword(superAdmin.id, credsPrompt.password);
+  await userServices.updatePassword(superAdmin.id, superAdminCreds);
 
   logger.info(`🔑 [Super-Admin]: Super Admin created and activated successfully with \n 
         username: ${superAdmin.username}
@@ -45,8 +53,11 @@ async function generateSuperAdmin(): Promise<void> {
 }
 
 async function generateSuperAdminRole(): Promise<Role> {
-  const privilegeRepository = AppDataSource.getRepository(Privilege);
-  const roleRepository = AppDataSource.getRepository(Role);
+
+  const databaseService = iocContainer.get<DatabaseService>(BeanTypes.DatabaseService);
+
+  const privilegeRepository = databaseService.getRepository(Privilege);
+  const roleRepository = databaseService.getRepository(Role);
 
   // Fetch all privileges
   const privileges = await privilegeRepository.find();

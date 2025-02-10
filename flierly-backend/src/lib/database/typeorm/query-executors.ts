@@ -1,10 +1,10 @@
 import { promises as fs } from 'fs';
 import path from 'path';
-import { AppDataSource } from './app-datasource';
 import { getCache, setCache } from '../../cache';
 import LoggerService from '@/modules/core/services/logger-service/LoggerService';
 import BeanTypes from '@/lib/di-ioc-container/bean.types';
 import iocContainer from '@/lib/di-ioc-container';
+import DatabaseService from '../database-service/DatabaseService';
 
 /**
  * Executes a SQL query from a file with the given parameters.
@@ -14,7 +14,10 @@ import iocContainer from '@/lib/di-ioc-container';
  * @returns A promise that resolves to the query result.
  */
 async function executeQueryFromFile<T>(relativeFilePath: string, params: any[], cacheDuration: number = 60000): Promise<T> {
-  const queryRunner = AppDataSource.createQueryRunner();
+
+  const databaseService = iocContainer.get<DatabaseService>(BeanTypes.DatabaseService);
+
+  const queryRunner = databaseService.getQueryRunner();
   // get logger service instance from ioc container
   const logger = iocContainer.get<LoggerService>(BeanTypes.LoggerService);
   const loggerMeta = { service: "QueryExecutor" };

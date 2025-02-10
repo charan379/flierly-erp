@@ -6,7 +6,7 @@ import UserController from "../controllers/user-controller/UserController";
 import UserControllerImpl from "../controllers/user-controller/UserControllerImpl";
 
 const IamModuleBeans = new ContainerModule((bind) => {
-    bind<UserService>(IamModuleBeanTypes.UserSevice).to(UserServiceImpl).inSingletonScope();
+    bind<UserService>(IamModuleBeanTypes.UserService).to(UserServiceImpl).inSingletonScope();
     bind<UserController>(IamModuleBeanTypes.UserController).to(UserControllerImpl).inSingletonScope();
 });
 

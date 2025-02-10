@@ -13,7 +13,7 @@ import BeanTypes from "@/lib/di-ioc-container/bean.types";
 export default class UserControllerImpl implements UserController {
 
     constructor(
-        @inject(BeanTypes.UserSevice) private userService: UserService,
+        @inject(BeanTypes.UserService) private userService: UserService,
     ) {
     };
 
