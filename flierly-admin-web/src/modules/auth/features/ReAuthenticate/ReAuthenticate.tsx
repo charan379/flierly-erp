@@ -79,9 +79,7 @@ const ReAuthenticate: React.FC<ReAuthenticate> = ({ tokenExpiresAt, onExpiryNavi
         timeLeft !== null &&
         timeLeft > 0 && (
           <Typography.Paragraph type="danger" style={{ textAlign: 'left', display: 'block' }}>
-            {`${t('your_session_expires_soon')}: ${formatTimeLeft()}. Please Re-Authenticate !`}
-            <br />
-            If not Re-Authenticated before the time limit, You will to redirected to Login Page.
+            {`${t('your_session_expires_soon')}: ${formatTimeLeft()}. ${t('please_reauthenticate')}`}
           </Typography.Paragraph>
         )
       }

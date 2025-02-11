@@ -13,12 +13,12 @@ const SideContent: React.FC = () => {
 
   const listItems = [
     {
-      line1: t('all_in_one_tool'),
-      line2: t('run_and_scale_your_erp_crm_apps'),
+      line1: t('text.all_in_one_tool'),
+      line2: t('text.run_and_scale_your_erp_crm_apps'),
     },
     {
-      line1: t('easily_add_and_manage_your_services'),
-      line2: t('it_brings_together_your_invoice_clients_and_leads'),
+      line1: t('text.easily_add_and_manage_your_services'),
+      line2: t('text.it_brings_together_your_invoice_clients_and_leads'),
     },
   ]
 

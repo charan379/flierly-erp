@@ -34,7 +34,6 @@ export const getToken = (): string => {
  */
 export const logout = (): void => {
   store.dispatch({ type: 'auth/logout' })
-  console.log('Logged out successfully')
 }
 
 /**

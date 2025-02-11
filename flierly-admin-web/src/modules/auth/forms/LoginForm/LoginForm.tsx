@@ -15,7 +15,7 @@ interface LoginFormProps {
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false, isForPopup = false, onLoginSuccess }) => {
-  const { translate, langDirection } = useLocale()
+  const { translate: t, langDirection } = useLocale()
   const { loading, login, isLoggedIn, tokenExpiresAt, } = useAuth()
   const navigate = useNavigate()
 
@@ -52,38 +52,38 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false, isForPop
       >
         <div style={{ direction: langDirection }}>
           <Form.Item
-            label={translate('username')}
+            label={t('username')}
             name="username"
-            rules={[{ required: true, message: translate('username_is_required') }, { pattern: regexConstants.username }, { min: 5, max: 20 },
+            rules={[{ required: true, message: t('username_is_required') }, { pattern: regexConstants.username }, { min: 5, max: 20 },
             ]}
             tooltip={{
-              title: translate('username_is_required'),
+              title: t('username_is_required'),
               icon: <InfoCircleOutlined />,
             }}
           >
-            <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder={translate('username')} />
+            <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder={t('username')} />
           </Form.Item>
 
           <Form.Item
-            label={translate('password')}
+            label={t('password')}
             name="password"
             rules={[
-              { required: true, message: translate('password_is_required') },
+              { required: true, message: t('password_is_required') },
               { pattern: regexConstants.password, message: 'invalid_password' },
               { max: 28, min: 8 },
             ]}
             tooltip={{
-              title: translate('password_is_required'),
+              title: t('password_is_required'),
               icon: <InfoCircleOutlined />,
             }}
           >
-            <Input.Password prefix={<LockOutlined className="site-form-item-icon" />} placeholder={translate('password')} />
+            <Input.Password prefix={<LockOutlined className="site-form-item-icon" />} placeholder={t('password')} />
           </Form.Item>
 
           {!isForPopup ? (
             <Flex justify="space-between">
               <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox>{translate('remember_me')}</Checkbox>
+                <Checkbox>{t('remember_me')}</Checkbox>
               </Form.Item>
               <a
                 id="login-form-forgot"
@@ -92,7 +92,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false, isForPop
                   marginLeft: langDirection === 'rtl' ? '220px' : undefined,
                 }}
               >
-                {translate('forgot_password')}
+                {t('forgot_password')}
               </a>
             </Flex>
           ) : null}
@@ -100,12 +100,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false, isForPop
 
         <Form.Item style={{ margin: '5px 0px 5px 0px' }}>
           <Button type="primary" htmlType="submit" className="auth-form-button" loading={loading === LoadingTypes.PENDING}>
-            {translate('sign_in')}
+            {t('sign_in')}
           </Button>
 
           {!isForPopup ? (
             <>
-              {translate('or')} <a href="/register">{translate('register_now')}</a>
+              {t('or')} <a href="/register">{t('register_now')}</a>
             </>
           ) : null}
         </Form.Item>

@@ -19,7 +19,7 @@ const AuthLayout: React.FC<{
   title: string
   isForSignUp?: boolean
 }> = ({ children, title, isForSignUp = false }) => {
-  const { translate, langDirection } = useLocale()
+  const { translate: t, langDirection } = useLocale()
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
@@ -82,7 +82,7 @@ const AuthLayout: React.FC<{
                 <img src="/vite.svg" alt="Flierly" style={{ margin: '0 auto 20px', display: 'block' }} height={63} width={220} />
                 <div className="space10" />
               </Col>
-              <Title level={1}>{translate(title)}</Title>
+              <Title level={1}>{t(title)}</Title>
               <Divider />
               <div className="site-layout-content">{children}</div>
             </Content>
