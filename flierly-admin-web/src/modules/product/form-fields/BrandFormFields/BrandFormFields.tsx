@@ -20,7 +20,7 @@ const BrandFormFields: React.FC<BrandFormFieldsProps> = ({ disabledFields, formI
             {/* id - Hidden field for edit form */}
             <ProFormDigit
                 name={'id'}
-                label={t('entity.id')}
+                label={t('record.id')}
                 hidden={!isEditForm}
                 disabled={true}
             />
@@ -28,21 +28,21 @@ const BrandFormFields: React.FC<BrandFormFieldsProps> = ({ disabledFields, formI
             {/* name - Input for name */}
             <ProFormText
                 name={'name'}
-                label={t('entity.name')}
+                label={t('record.name')}
                 hasFeedback
                 rules={[
-                    { required: true, message: t('entity.nameRequired') },
-                    { pattern: vr('name'), message: t('entity.namePattern') },
+                    { required: true, message: t('record.name.required') },
+                    { pattern: vr('record.name'), message: t('record.name.pattern') },
                     ({ getFieldValue }) => ({
                         validator(_, value) {
-                            if (!value || !vr('name').test(value)) return Promise.resolve();
-                            return entityExistenceValidator(`entity-name-validation`, {
+                            if (!value || !vr('record.name').test(value)) return Promise.resolve();
+                            return entityExistenceValidator(`record-name-validation`, {
                                 entity: "brand",
                                 filters: {
                                     ...(isEditForm && getFieldValue('id') ? { id: { $notEqualTo: getFieldValue('id') } } : {}),
                                     name: value
                                 },
-                                rejectionMessage: t('entity.nameAlreadyExists')
+                                rejectionMessage: t('record.name.alreadyExists')
                             });
                         },
                     })
@@ -53,10 +53,10 @@ const BrandFormFields: React.FC<BrandFormFieldsProps> = ({ disabledFields, formI
             {/* description - Textarea for description */}
             <ProFormTextArea
                 name={'description'}
-                label={t('entity.description')}
+                label={t('record.description')}
                 rules={[
-                    { required: true, message: t('entity.descriptionRequired') },
-                    { pattern: vr('description'), message: t('entity.descriptionPattern') },
+                    { required: true, message: t('record.description.required') },
+                    { pattern: vr('description'), message: t('entity.description.pattern') },
                 ]}
                 disabled={(isEditForm && !hasPermission(pr('brand.update'))) || disabledFields?.includes('description')}
             />

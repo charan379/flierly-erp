@@ -390,7 +390,7 @@ function parseCondition({ fieldAlias: a, condition, conditionFor }: { fieldAlias
                 }
             default:
                 // If the condition operator is not a valid operator, then throw an error
-                throw new Error("INVALID_CONDITION_OPERATOR");
+                throw new Error(`INVALID_CONDITION_OPERATOR ${conditionOperator}`);
         }
     }
     // If the condition is an array, then return the parsed condition object

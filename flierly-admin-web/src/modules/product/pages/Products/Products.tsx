@@ -15,7 +15,7 @@ const Products: React.FC = () => {
     const [editFormInstace] = Form.useForm<Product>();
 
     return (
-        <CrudModule header title={'products'} menuKeys={['product']}>
+        <CrudModule header title={t('products')} menuKeys={['product']}>
             <Suspense fallback={<PageLoader />}>
                 <CrudTable
                     tableKey="product-table"
@@ -48,18 +48,18 @@ const Products: React.FC = () => {
                     addFormProps={{
                         formFields: <ProductFormFields formInstance={addFormInstance} />,
                         formInstance: addFormInstance,
-                        title: t('entity.add'),
+                        title: t('record.add'),
                     }}
                     editFormProps={{
                         formFields: <ProductFormFields formInstance={editFormInstace} isEditForm />,
                         formInstance: editFormInstace,
-                        title: t("entity.update"),
+                        title: t("record.update"),
                         processDataForFormInitialValues(data) {
                             return {
                                 ...data,
-                                brand: typeof data?.brand === 'number' ? data?.brand : data.brand?.id,
-                                category: typeof data?.category === 'number' ? data?.category : data.category?.id,
-                                subCategory: typeof data?.subCategory === 'number' ? data?.subCategory : data.subCategory?.id
+                                brandId: data.brandId,
+                                categoryId: data.categoryId,
+                                subCategoryId: data.subCategoryId
                             }
                         },
                     }}
