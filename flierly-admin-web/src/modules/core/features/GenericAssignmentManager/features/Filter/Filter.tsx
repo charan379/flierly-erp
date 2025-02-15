@@ -16,7 +16,7 @@ interface FilterProps<AE> {
 }
 
 const Filter = <AE,>({ filterConfig, onFilter, onReset }: FilterProps<AE>) => {
-  const { translate } = useLocale()
+  const { translate: t } = useLocale()
 
   const formRef = useRef<any>()
 
@@ -36,7 +36,7 @@ const Filter = <AE,>({ filterConfig, onFilter, onReset }: FilterProps<AE>) => {
         render(props, _dom) {
           return (
             <Flex gap={0} wrap={'nowrap'} align="end">
-              <Tooltip title={translate('search')}>
+              <Tooltip title={t('tooltip.search')}>
                 <Button
                   key={'submit'}
                   onClick={props.submit}
@@ -45,7 +45,7 @@ const Filter = <AE,>({ filterConfig, onFilter, onReset }: FilterProps<AE>) => {
                   type="primary"
                 />
               </Tooltip>
-              <Tooltip title={translate('clear_filter')}>
+              <Tooltip title={t('tooltip.clear_filter')}>
                 <Button
                   key={'reset'}
                   onClick={props.reset}

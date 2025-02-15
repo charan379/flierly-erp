@@ -26,28 +26,28 @@ const ProductSubCategoryFormFields: React.FC<ProductSubCategoryFormFieldsProps> 
             {/* id - Hidden field for edit form */}
             <ProFormDigit
                 name={'id'}
-                label={t('entity.id')}
+                label={t('record.id')}
                 hidden={!isEditForm}
                 disabled={true}
             />
             {/* name - Input for subcategory name */}
             <ProFormText
                 name={'name'}
-                label={t('entity.name')}
+                label={t('record.name')}
                 hasFeedback
                 rules={[
-                    { required: true, message: t('entity.nameRequired') },
-                    { pattern: vr('name'), message: t('entity.namePattern') },
+                    { required: true, message: t('record.name.required') },
+                    { pattern: vr('record.name'), message: t('record.name.invalid') },
                     ({ getFieldValue }) => ({
                         validator(_, value) {
-                            if (!value || !vr('name').test(value)) return Promise.resolve();
-                            return entityExistenceValidator(`entity-name-validation`, {
+                            if (!value || !vr('record.name').test(value)) return Promise.resolve();
+                            return entityExistenceValidator(`record-name-validation`, {
                                 entity: "product-sub-category",
                                 filters: {
                                     ...(isEditForm && getFieldValue('id') ? { id: { $notEqualTo: getFieldValue('id') } } : {}),
-                                    name: value
+                                    name: { $iContains: value }
                                 },
-                                rejectionMessage: t('entity.nameAlreadyExists')
+                                rejectionMessage: t('record.name.already_exists')
                             });
                         },
                     })
@@ -58,7 +58,7 @@ const ProductSubCategoryFormFields: React.FC<ProductSubCategoryFormFieldsProps> 
             <ProFormItem
                 name={'categoryId'}
                 label={t('product.category')}
-                rules={[{ required: true, message: t('product.categoryRequired') }]}
+                rules={[{ required: true, message: t('product.category.required') }]}
             >
                 <SelectRemoteOptions<ProductCategory>
                     name={'categoryId'}
@@ -70,9 +70,9 @@ const ProductSubCategoryFormFields: React.FC<ProductSubCategoryFormFieldsProps> 
                         formFields: <ProductCategoryFormFields />,
                         formInstance: productCategoryFormInstance,
                         permissionCode: pr('productCategory.create'),
-                        onCreateSuccess: (pc, appendOptions) => {
-                            appendOptions(prev => [...prev, { label: pc.name, value: pc.id }]);
-                            formInstance?.setFieldValue('categoryId', pc.id)
+                        onCreateSuccess: (productCategory, appendOptions) => {
+                            appendOptions(prev => [...prev, { label: productCategory.name, value: productCategory.id }]);
+                            formInstance?.setFieldValue('categoryId', productCategory.id)
                         }
                     }}
                     asyncOptionsFetcher={(v: string) => {
@@ -90,10 +90,10 @@ const ProductSubCategoryFormFields: React.FC<ProductSubCategoryFormFieldsProps> 
                                 : { name: { $iContains: `%${v}%` } };
                         }
 
-                        const getLabel = (e: ProductCategory) => e.name;
-                        const getValue = (e: ProductCategory) => e.id;
+                        const getLabel = (record: ProductCategory) => record.name;
+                        const getValue = (record: ProductCategory) => record.id;
                         const processCategoriesAsOptions = (categories: ProductCategory[]) => {
-                            return categories.map(c => ({ label: getLabel(c), value: getValue(c) }))
+                            return categories.map(category => ({ label: getLabel(category), value: getValue(category) }))
                         };
 
                         return fetchEntityRecordsAsOptions('product-category', filters, 10, processCategoriesAsOptions);
@@ -103,10 +103,10 @@ const ProductSubCategoryFormFields: React.FC<ProductSubCategoryFormFieldsProps> 
             {/* description - Textarea for subcategory description */}
             <ProFormTextArea
                 name={'description'}
-                label={t('entity.description')}
+                label={t('record.description')}
                 rules={[
-                    { required: true, message: t('entity.descriptionRequired') },
-                    { pattern: vr('description'), message: t('entity.descriptionPattern') },
+                    { required: true, message: t('record.description.required') },
+                    { pattern: vr('record.description'), message: t('record.description.invalid') },
                 ]}
                 disabled={(isEditForm && !hasPermission(pr('productSubCategory.update'))) || disabledFields?.includes('description')}
             />

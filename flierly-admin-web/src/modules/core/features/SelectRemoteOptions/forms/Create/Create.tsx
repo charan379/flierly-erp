@@ -18,7 +18,7 @@ interface CreateProps<T> {
   onCreate: (result: T | null) => void;
 }
 
-const Create = <T,>({ entity, formFields, title = 'add', initialValues, permissionCode, onCreate, formInstance }: CreateProps<T>) => {
+const Create = <T,>({ entity, formFields, title, initialValues, permissionCode, onCreate, formInstance }: CreateProps<T>) => {
   const { translate: t } = useLocale();
   const { hasPermission } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -72,7 +72,7 @@ const Create = <T,>({ entity, formFields, title = 'add', initialValues, permissi
           style={{ backgroundColor: 'teal', width: "100%", marginTop: "2px" }}
           disabled={permissionCode && !hasPermission(permissionCode)}
         >
-          {title}
+          {title !== undefined ? title : t("button.create_new_record")}
         </Button>
       }
       resize={{
@@ -87,7 +87,7 @@ const Create = <T,>({ entity, formFields, title = 'add', initialValues, permissi
         extra: (
           <Space>
             <Button danger type="primary" onClick={handleOnClose}>
-              {t('action.button.close')}
+              {t('button.close')}
             </Button>
           </Space>
         ),
@@ -115,8 +115,8 @@ const Create = <T,>({ entity, formFields, title = 'add', initialValues, permissi
       }}
       submitter={{
         searchConfig: {
-          resetText: t('action.button.cancel'),
-          submitText: t('action.button.submit'),
+          resetText: t('button.cancel'),
+          submitText: t('button.submit'),
         },
       }}
     >

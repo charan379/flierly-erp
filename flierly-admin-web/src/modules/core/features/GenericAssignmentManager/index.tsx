@@ -1,3 +1,3 @@
 import AssociationManager from './GenericAssignmentManager'
 
-export default AssociationManager
+export default AssociationManager;

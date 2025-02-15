@@ -19,7 +19,7 @@ interface SearchProps {
 
 const Search: React.FC<SearchProps> = ({ title = 'filter_data', render, actions, queryBuilderFieldsConfig: queryFieldsConfig }) => {
 
-  const { translate } = useLocale()
+  const { translate: t } = useLocale()
   const { CrudModuleContextHandler } = useCrudModuleContext()
   const queryBuilderRef = useRef<QueryBuilderRef | null>(null)
 
@@ -65,7 +65,7 @@ const Search: React.FC<SearchProps> = ({ title = 'filter_data', render, actions,
       onClose={handleDrawerClose}
       onOpen={handleDrawerOpen}
       trigger={
-        <Tooltip title={translate('apply_filters')}>
+        <Tooltip title={t('tooltip.apply_filters')}>
           <Badge count={Object.keys(CrudModuleContextHandler.filters.get()).length} overflowCount={99}>
             <Button
               type="primary"
@@ -88,13 +88,13 @@ const Search: React.FC<SearchProps> = ({ title = 'filter_data', render, actions,
       footer={
         <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 16 }}>
           <Button onClick={onResetFilters} danger>
-            {translate('rest')}
+            {t('button.rest')}
           </Button>
           <Button type="default" onClick={handleDrawerClose} style={{ marginLeft: 8 }}>
-            {translate('cancel')}
+            {t('button.cancel')}
           </Button>
           <Button type="primary" onClick={onApplyFilters} style={{ marginLeft: 8 }}>
-            {translate('search')}
+            {t('button.search')}
           </Button>
         </div>
       }

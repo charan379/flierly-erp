@@ -17,7 +17,7 @@ const Clear: React.FC<ClearProps> = ({ render, rows, actions }) => {
   if (!render || !actions || !rows.selectedRowKeys) return null;
 
   return (
-    <Tooltip title={`${t('tooltip.clear.selected')}`}>
+    <Tooltip title={`${t('tooltip.clear_selected')}`}>
       <Badge color="pink" overflowCount={99} count={rows.selectedRowKeys.length}>
         <Button
           type="primary"

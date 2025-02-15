@@ -2,48 +2,48 @@ import { createBooleanColumn, createCodeColumn, createEntityColumn, createIdColu
 import { ProColumns } from '@ant-design/pro-components'
 import { Tag } from 'antd'
 
-const createPrivilegeTableColumns = (translate: (value: string) => string, _hasPermission: (requiredPermissionRegex: RegExp) => boolean): ProColumns<Privilege>[] => {
+const createPrivilegeTableColumns = (t: (value: string) => string, _hasPermission: (requiredPermissionRegex: RegExp) => boolean): ProColumns<Privilege>[] => {
   return [
     // id
-    createIdColumn(translate),
+    createIdColumn(t),
     // isActive
-    createBooleanColumn(translate, { dataIndex: 'isActive', width: 80 }),
+    createBooleanColumn(t, { dataIndex: 'isActive', width: 110 }),
     // name
-    createNameColumn(translate),
+    createNameColumn(t),
     // access
     {
-      title: translate('access_type'),
+      title: t('privilege.access'),
       dataIndex: 'access',
       key: 'access',
-      width: 100,
+      width: 120,
       align: 'center',
-      render: (_dom, entity) => {
-        switch (entity.access) {
+      render: (_dom, record) => {
+        switch (record.access) {
           case 'create':
-            return <Tag color="#50C878">{translate(entity.access)}</Tag>
+            return <Tag color="#50C878">{t(record.access)}</Tag>
           case 'read':
-            return <Tag color="#008080">{translate(entity.access)}</Tag>
+            return <Tag color="#008080">{t(record.access)}</Tag>
           case 'update':
-            return <Tag color="#FF7F50">{translate(entity.access)}</Tag>
+            return <Tag color="#FF7F50">{t(record.access)}</Tag>
           case 'manage':
-            return <Tag color="#191970">{translate(entity.access)}</Tag>
+            return <Tag color="#191970">{t(record.access)}</Tag>
           case 'delete':
-            return <Tag color="#DC143C">{translate(entity.access)}</Tag>
+            return <Tag color="#DC143C">{t(record.access)}</Tag>
           default:
-            return <Tag>{translate(entity.access)}</Tag>
+            return <Tag>{t(record.access)}</Tag>
         }
       },
     },
     // entity
-    createEntityColumn(translate),
+    createEntityColumn(t),
     // code
-    createCodeColumn(translate, { width: 200 }),
+    createCodeColumn(t, { width: 200 }),
     // updatedAt
-    createTimeStampColumn(translate, { title: translate('updated_at'), dataIndex: 'updatedAt' }),
+    createTimeStampColumn(t, { title: t('record.updated_at'), dataIndex: 'updatedAt' }),
     // createdAt
-    createTimeStampColumn(translate, { title: translate('created_at'), dataIndex: 'createdAt' }),
+    createTimeStampColumn(t, { title: t('record.created_at'), dataIndex: 'createdAt' }),
     // deletedAt
-    createTimeStampColumn(translate, { title: translate('deleted_at'), dataIndex: 'deletedAt' }),
+    createTimeStampColumn(t, { title: t('record.deleted_at'), dataIndex: 'deletedAt' }),
   ]
 }
 

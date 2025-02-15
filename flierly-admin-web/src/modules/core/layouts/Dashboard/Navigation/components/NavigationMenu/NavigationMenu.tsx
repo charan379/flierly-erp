@@ -8,13 +8,13 @@ import useTheme from '@/modules/core/features/Theme/hooks/useTheme'
 
 const NavigationMenu: React.FC = () => {
   const { theme } = useTheme();
-  const { translate } = useLocale();
+  const { translate: t } = useLocale();
   const { hasPermission } = useAuth();
 
   return (
     <Menu
       className={'custom-scrollbar-display'}
-      items={filterEnabledItems(createMenuItems(translate, hasPermission))}
+      items={filterEnabledItems(createMenuItems(t, hasPermission))}
       mode="inline"
       theme={theme}
       selectable={false}

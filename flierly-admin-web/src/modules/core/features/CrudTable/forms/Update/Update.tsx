@@ -81,7 +81,7 @@ const Update = <T extends Record<string, any>>({
         extra: (
           <Space>
             <Button danger type="primary" onClick={close}>
-              {t('action.button.close')}
+              {t('button.close')}
             </Button>
           </Space>
         ),
@@ -91,8 +91,8 @@ const Update = <T extends Record<string, any>>({
       }}
       submitter={{
         searchConfig: {
-          resetText: t('action.button.cancel'),
-          submitText: t('action.button.submit'),
+          resetText: t('button.cancel'),
+          submitText: t('button.submit'),
         },
       }}
     >

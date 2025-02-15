@@ -157,7 +157,7 @@ const GenericAssociationManager = <E extends { id: number }, AE extends { id: nu
       items={[
         {
           key: 'allocatedItems',
-          label: `${t('allocated')} ${associatedEntity}s`,
+          label: `${t('title.allocated_records')} ${associatedEntity}s`,
           children: (
             <DataTable<AE>
               id="allocated-items-table"
@@ -174,7 +174,10 @@ const GenericAssociationManager = <E extends { id: number }, AE extends { id: nu
                   associatedSideField,
                   limit: params?.pageSize ?? 10,
                   page: params?.current ?? 1,
-                  sort,
+                  sort: {
+                    property: Object.keys(sort)[0],
+                    order: Object.values(sort)[0] === 'ascend' ? 'asc' : 'desc',
+                  },
                   filters: allocatedItemsFilter,
                 })
 
@@ -216,7 +219,7 @@ const GenericAssociationManager = <E extends { id: number }, AE extends { id: nu
                   onClick={() => action?.clearSelected?.()}
                   icon={<ClearOutlined />}
                 >
-                  Clear Selected
+                  {t('button.clear')}
                 </Button>,
               ]}
             />
@@ -224,7 +227,7 @@ const GenericAssociationManager = <E extends { id: number }, AE extends { id: nu
         },
         {
           key: 'availableItems',
-          label: `${t('available')} ${associatedEntity}s`,
+          label: `${t('title.unallocated_records')} ${associatedEntity}s`,
           children: (
             <DataTable<AE>
               id="available-items-table"
@@ -241,7 +244,10 @@ const GenericAssociationManager = <E extends { id: number }, AE extends { id: nu
                   associatedSideField,
                   limit: params?.pageSize ?? 10,
                   page: params?.current ?? 1,
-                  sort,
+                  sort: {
+                    property: Object.keys(sort)[0],
+                    order: Object.values(sort)[0] === 'ascend' ? 'asc' : 'desc',
+                  },
                   filters: availableItemsFilter,
                   type: 'unallocated',
                 })
@@ -289,7 +295,7 @@ const GenericAssociationManager = <E extends { id: number }, AE extends { id: nu
                   onClick={() => action?.clearSelected?.()}
                   icon={<ClearOutlined />}
                 >
-                  Clear Selected
+                  {t("button.clear")}
                 </Button>,
               ]}
             />

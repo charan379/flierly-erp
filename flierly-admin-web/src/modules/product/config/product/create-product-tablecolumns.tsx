@@ -1,15 +1,15 @@
 import { createBooleanColumn, createDescriptionColumn, createIdColumn, createNameColumn, createTimeStampColumn } from '@/modules/core/utils/create-tablecolumn'
 import { ProColumns } from '@ant-design/pro-components'
 
-const createProductTableColumns = (translate: (value: string) => string): ProColumns<Product>[] => {
+const createProductTableColumns = (t: (value: string) => string): ProColumns<Product>[] => {
   return [
     // id
-    createIdColumn(translate),
+    createIdColumn(t),
     // name
-    createNameColumn(translate, { width: 200 }),
+    createNameColumn(t, { width: 200 }),
     // sku 
     {
-      title: translate('sku'),
+      title: t('product.sku'),
       dataIndex: 'sku',
       key: 'sku',
       valueType: 'text',
@@ -18,7 +18,7 @@ const createProductTableColumns = (translate: (value: string) => string): ProCol
     },
     // hsn 
     {
-      title: translate('hsn'),
+      title: t('product.hsn'),
       dataIndex: 'hsn',
       key: 'hsn',
       valueType: 'text',
@@ -27,74 +27,86 @@ const createProductTableColumns = (translate: (value: string) => string): ProCol
     },
     // category
     {
-      title: translate('category'),
+      title: t('product.category'),
       dataIndex: "category",
       key: 'category',
       width: 150,
       ellipsis: true,
-      render: (_text, entity) => {
-        if (typeof entity.category === 'number') return entity.category;// if it's a number, it's a category id
-        if (typeof entity.category === 'object' && entity.category !== null && 'name' in entity.category) {
-          return entity.category.name;
+      render: (_text, record) => {
+        if (typeof record.category === 'object' && record.category !== null && 'name' in record.category) {
+          return record.category.name;
         }
         return null;
       },
     },
     // category
     {
-      title: translate('subcategory'),
+      title: t('product.subcategory'),
       dataIndex: "subCategory",
       key: 'subCategory',
       width: 150,
       ellipsis: true,
-      render: (_text, entity) => {
-        if (typeof entity.subCategory === 'number') return entity.subCategory;// if it's a number, it's a subCategory id
-        if (typeof entity.subCategory === 'object' && entity.subCategory !== null && 'name' in entity.subCategory) {
-          return entity.subCategory.name;
+      render: (_text, record) => {
+        if (typeof record.subCategory === 'object' && record.subCategory !== null && 'name' in record.subCategory) {
+          return record.subCategory.name;
         }
         return null;
       },
     },
     // brand
     {
-      title: translate('brand'),
+      title: t('product.brand'),
       dataIndex: "brand",
       key: 'brand',
       width: 150,
       ellipsis: true,
-      render: (_text, entity) => {
-        if (typeof entity.brand === 'number') return entity.brand;// if it's a number, it's a brand id
-        if (typeof entity.brand === 'object' && entity.brand !== null && 'name' in entity.brand) {
-          return entity.brand.name;
+      render: (_text, record) => {
+        if (typeof record.brand === 'object' && record.brand !== null && 'name' in record.brand) {
+          return record.brand.name;
+        }
+        return null;
+      },
+    },
+    // baseUom
+    // category
+    {
+      title: t('product.base_uom'),
+      dataIndex: "baseUOM",
+      key: 'baseUOM',
+      width: 150,
+      ellipsis: true,
+      render: (_text, record) => {
+        if (typeof record.baseUOM === 'object' && record.baseUOM !== null && 'name' in record.baseUOM) {
+          return record.baseUOM.name;
         }
         return null;
       },
     },
     // description
-    createDescriptionColumn(translate, { width: 250 }),
+    createDescriptionColumn(t, { width: 250 }),
     // isActive
-    createBooleanColumn(translate, { dataIndex: 'isActive', width: 80, }),
-    createBooleanColumn(translate, { dataIndex: 'isComposite', width: 100, title: "is_composite" }),
-    createBooleanColumn(translate, { dataIndex: 'isSerialized', width: 100, title: "is_serialized" }),
+    createBooleanColumn(t, { dataIndex: 'isActive', width: 110, }),
+    createBooleanColumn(t, { dataIndex: 'isComposite', width: 140, title: t("product.is_composite") }),
+    createBooleanColumn(t, { dataIndex: 'isSerialized', width: 140, title: t("product.is_serialized") }),
     // updatedAt
-    createTimeStampColumn(translate,
+    createTimeStampColumn(t,
       {
         dataIndex: 'updatedAt',
-        title: translate('updated_at')
+        title: t('product.updated_at')
       }
     ),
     // createdAt
-    createTimeStampColumn(translate,
+    createTimeStampColumn(t,
       {
         dataIndex: 'createdAt',
-        title: translate('created_at')
+        title: t('product.created_at')
       }
     ),
     // deletedAt
-    createTimeStampColumn(translate,
+    createTimeStampColumn(t,
       {
         dataIndex: 'deletedAt',
-        title: translate('deleted_at')
+        title: t('product.deleted_at')
       }
     ),
   ]

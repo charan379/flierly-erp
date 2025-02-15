@@ -1,14 +1,16 @@
 import ProtectedRoute from '@/modules/core/features/ProtectedRoute/ProtectedRoute'
-import PageUnderConstruction from '@/modules/core/pages/PageUnderConstruction'
+import UnderConstructionPage from '@/modules/core/pages/UnderConstructionPage'
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import Uoms from '../pages/Uoms'
+import UomsPage from '../pages/UomsPage'
+import { useAuth } from '@/modules/auth/hooks/useAuth'
 
 const InventoryRouter: React.FC = () => {
+    const { getPermissionRegex: pr } = useAuth();
     return (
         <Routes>
-            <Route path="" element={<ProtectedRoute element={<PageUnderConstruction />} requiredPermissionRegex={/^inventory\.[a-z]+$/} />} />
-            <Route path="uoms" element={<ProtectedRoute element={<Uoms />} requiredPermissionRegex={/^uom\.[a-z]+$/} />} />
+            <Route path="" element={<ProtectedRoute element={<UnderConstructionPage />} requiredPermissionRegex={pr("inventory.*")} />} />
+            <Route path="uoms" element={<ProtectedRoute element={<UomsPage />} requiredPermissionRegex={pr('uom.*')} />} />
         </Routes>
     )
 }

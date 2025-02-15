@@ -22,17 +22,17 @@ const Restore: React.FC<RestoreProps> = ({ entity, actions, rows, render }) => {
   const buttonStyle = rows.selectedRowKeys.length <= 0 ? {} : { backgroundColor: '#009688', borderColor: '#009688' }
 
   return (
-    <Tooltip title={`${t('tooltip.restore.selected')}`}>
+    <Tooltip title={`${t('tooltip.restore_selected')}`}>
       <Badge color="purple" count={rows.selectedRowKeys.length} overflowCount={99}>
         <Popconfirm
-          title={t('action.title.restore')}
-          description={`${t('confirm.restore.message')}: ${rows.selectedRowKeys.length}`}
+          title={t('title.restore_selected')}
+          description={`${t('message.confirm_restore_selected')}: ${rows.selectedRowKeys.length}`}
           icon={<QuestionCircleOutlined style={{ color: '#009688' }} />}
           okButtonProps={{ style: { backgroundColor: '#009688' } }}
-          okText={t('action.button.confirm')}
-          cancelText={t('action.button.cancel')}
+          okText={t('button.confirm')}
+          cancelText={t('button.cancel')}
           cancelButtonProps={{ type: 'primary' }}
-          onCancel={() => message.warning(t('action.message.cancelled'))}
+          onCancel={() => message.warning(t('message.cancelled'))}
           onConfirm={async () => {
             const { success } = await crudService.restore({
               entity: entity,

@@ -9,6 +9,8 @@ import ProductCategoryFormFields from '../ProductCategoryFormFields';
 import ProductSubCategoryFormFields from '../ProductSubCategoryFormFields';
 import SelectRemoteOptions from '@/modules/core/features/SelectRemoteOptions';
 import fetchEntityRecordsAsOptions, { ProcessResultFunction } from '@/modules/core/features/SelectRemoteOptions/utils/fetch-entity-rows-as-options';
+import BrandFormFields from '../BrandFormFields/BrandFormFields';
+import UomFormFields from '@/modules/inventory/form-fields/UomFormFields';
 
 export interface ProductFormFieldsProps {
     formInstance?: FormInstance<Product>;
@@ -21,13 +23,15 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({ formInstance, isE
     const { hasPermission, getPermissionRegex: pr } = useAuth(); // Hook to check permissions
     const [productCategoryFormInstance] = Form.useForm<ProductCategory>();
     const [productSubCategoryFormInstance] = Form.useForm<ProductSubCategory>();
+    const [brandFormInstance] = Form.useForm<Brand>();
+    const [baseUomFormInstance] = Form.useForm<UOM>();
 
     return (
         <>
             {/* id - Hidden field for edit form */}
             <ProFormDigit
                 name={'id'}
-                label={t('entity.id')}
+                label={t('record.id')}
                 hidden={!isEditForm}
                 disabled={true}
             />
@@ -35,20 +39,20 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({ formInstance, isE
             {/* name - Input for product name */}
             <ProFormText
                 name={'name'}
-                label={t('entity.name')}
+                label={t('record.name')}
                 rules={[
-                    { required: true, message: t('entity.nameRequired') },
-                    { pattern: vr('name'), message: t('entity.namePattern') },
+                    { required: true, message: t('record.name.required') },
+                    { pattern: vr('record.name'), message: t('record.name.invalid') },
                     ({ getFieldValue }) => ({
                         validator(_, value) {
-                            if (!value || !vr('name').test(value)) return Promise.resolve();
-                            return entityExistenceValidator(`entity-name-validation`, {
+                            if (!value || !vr('record.name').test(value)) return Promise.resolve();
+                            return entityExistenceValidator(`record-name-validation`, {
                                 entity: "product",
                                 filters: {
                                     ...(isEditForm && getFieldValue('id') ? { id: { $notEqualTo: getFieldValue('id') } } : {}),
-                                    name: value
+                                    name: { $iContains: value }
                                 },
-                                rejectionMessage: t('entity.nameAlreadyExists')
+                                rejectionMessage: t('record.name.already_exists')
                             });
                         },
                     })
@@ -61,18 +65,18 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({ formInstance, isE
                 name={'sku'}
                 label={t('product.sku')}
                 rules={[
-                    { required: true, message: t('product.skuRequired') },
-                    { pattern: vr('sku'), message: t('entity.skuPattern') },
+                    { required: true, message: t('product.sku.required') },
+                    { pattern: vr('product.sku'), message: t('record.sku.invalid') },
                     ({ getFieldValue }) => ({
                         validator(_, value) {
-                            if (!value || !vr('sku').test(value)) return Promise.resolve();
+                            if (!value || !vr('product.sku').test(value)) return Promise.resolve();
                             return entityExistenceValidator(`product-sku-validation`, {
                                 entity: "product",
                                 filters: {
                                     ...(isEditForm && getFieldValue('id') ? { id: { $notEqualTo: getFieldValue('id') } } : {}),
-                                    sku: value
+                                    name: { $iContains: value }
                                 },
-                                rejectionMessage: t('product.skuAlreadyExists')
+                                rejectionMessage: t('product.sku.already_exists')
                             });
                         },
                     })
@@ -85,8 +89,8 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({ formInstance, isE
                 name={'hsn'}
                 label={t('product.hsn')}
                 rules={[
-                    { required: true, message: t('product.hsnRequired') },
-                    { pattern: vr('hsn'), message: t('product.hsnPattern') },
+                    { required: true, message: t('product.hsn.required') },
+                    { pattern: vr('product.hsn'), message: t('product.hsn.invalid') },
                 ]}
                 disabled={isEditForm && !hasPermission(pr('product.manage'))}
             />
@@ -94,10 +98,10 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({ formInstance, isE
             {/* description - Textarea for product description */}
             <ProFormTextArea
                 name={'description'}
-                label={t('entity.description')}
+                label={t('record.description')}
                 rules={[
-                    { required: true, message: t('entity.descriptionRequired') },
-                    { pattern: vr('description'), message: t('entity.descriptionPattern') },
+                    { required: true, message: t('record.description.required') },
+                    { pattern: vr('record.description'), message: t('record.description.invalid') },
                 ]}
                 disabled={disabledFields?.includes('description')}
             />
@@ -105,51 +109,61 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({ formInstance, isE
             {/* isActive - Switch for active status */}
             <ProFormSwitch
                 name={'isActive'}
-                label={t('entity.isActive')}
+                label={t('record.is_active')}
                 disabled={(isEditForm && !hasPermission(pr('product.manage'))) || disabledFields?.includes('isActive')}
             />
 
             {/* isComposite - Switch for composite product status */}
             <ProFormSwitch
                 name={'isComposite'}
-                label={t('product.isComposite')}
+                label={t('product.is_composite')}
                 disabled={(isEditForm && !hasPermission(pr('product.manage'))) || disabledFields?.includes('isComposite')}
             />
 
             {/* isSerialized - Switch for serialized product status */}
             <ProFormSwitch
                 name={'isSerialized'}
-                label={t('product.isSerialized')}
+                label={t('product.is_serialized')}
                 disabled={(isEditForm && !hasPermission(pr('product.manage'))) || disabledFields?.includes('isSerialized')}
             />
 
             {/* brand - Select input for product brand */}
             <ProFormItem
-                name={'brand'}
+                name={'brandId'}
                 label={t('product.brand')}
-                rules={[{ required: true, message: t('product.brandRequired') }]}
+                rules={[{ required: true, message: t('product.brand.required') }]}
             >
                 <SelectRemoteOptions
-                    name={'brand'}
+                    name={'brandId'}
                     debounceTimeout={300}
                     disabled={(isEditForm && !hasPermission(pr('product.manage'))) || disabledFields?.includes('brand')}
+                    optionCreatorConfig={{
+                        entity: "brand",
+                        formFields: <BrandFormFields />,
+                        formInstance: brandFormInstance,
+                        permissionCode: pr('brand.create'),
+                        onCreateSuccess: (brand, appendOptions) => {
+                            formInstance?.setFieldValue('brandId', brand.id)
+                            appendOptions(prev => [...prev, { label: brand.name, value: brand.id }])
+                        }
+                    }}
                     asyncOptionsFetcher={(v: string) => {
-                        const brand = formInstance?.getFieldValue('brand');
+                        const brandId = formInstance?.getFieldValue('brandId');
                         let filters;
 
                         // Filters logic based on input value
                         if (v === "focus") {
-                            filters = brand
-                                ? { id: { $in: [brand, ...Array.from({ length: 9 }, (_, i) => i + 1)] } }
+                            filters = brandId
+                                ? { id: { $in: [brandId, ...Array.from({ length: 9 }, (_, i) => i + 1)] } }
                                 : { name: { $iContains: `%` } };
                         } else {
-                            filters = brand && !v
-                                ? { id: { $equalTo: brand } }
+                            filters = brandId && !v
+                                ? { id: { $equalTo: brandId } }
                                 : { name: { $iContains: `%${v}%` } };
                         }
 
-                        const getLabel = (e: Brand) => e.name;
-                        const getValue = (e: Brand) => String(e.id);
+                        const getLabel = (brand: Brand) => brand.name;
+                        const getValue = (brand: Brand) => brand.id;
                         const processBrandsAsOptions: ProcessResultFunction<Brand> = (brands: Brand[]) => brands.map((brand) => ({ label: getLabel(brand), value: getValue(brand) }));
                         return fetchEntityRecordsAsOptions<Brand>('brand', filters, 10, processBrandsAsOptions);
                     }}
@@ -158,12 +172,12 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({ formInstance, isE
 
             {/* category - Select input for product category */}
             <ProFormItem
-                name={'category'}
+                name={'categoryId'}
                 label={t('product.category')}
-                rules={[{ required: true, message: t('product.categoryRequired') }]}
+                rules={[{ required: true, message: t('product.category.required') }]}
             >
                 <SelectRemoteOptions<ProductCategory>
-                    name={'category'}
+                    name={'categoryId'}
                     debounceTimeout={300}
                     allowClear
                     disabled={(isEditForm && !hasPermission(pr('product.manage'))) || disabledFields?.includes('category')}
@@ -172,29 +186,29 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({ formInstance, isE
                         formFields: <ProductCategoryFormFields />,
                         formInstance: productCategoryFormInstance,
                         permissionCode: pr('productCategory.create'),
-                        onCreateSuccess: (pc, appendOptions) => {
-                            formInstance?.setFieldValue('category', pc.id)
-                            appendOptions(prev => [...prev, { label: pc.name, value: String(pc.id) }])
+                        onCreateSuccess: (productCategory, appendOptions) => {
+                            formInstance?.setFieldValue('categoryId', productCategory.id)
+                            appendOptions(prev => [...prev, { label: productCategory.name, value: productCategory.id }])
                         }
                     }}
                     asyncOptionsFetcher={(v: string) => {
-                        const category = formInstance?.getFieldValue('category');
+                        const categoryId = formInstance?.getFieldValue('categoryId');
                         let filters;
 
                         // Filters logic based on input value
                         if (v === "focus") {
-                            filters = category
-                                ? { id: { $in: [category, ...Array.from({ length: 9 }, (_, i) => i + 1)] } }
+                            filters = categoryId
+                                ? { id: { $in: [categoryId, ...Array.from({ length: 9 }, (_, i) => i + 1)] } }
                                 : { name: { $iContains: `%` } };
                         } else {
-                            filters = category && !v
-                                ? { id: { $equalTo: category } }
+                            filters = categoryId && !v
+                                ? { id: { $equalTo: categoryId } }
                                 : { name: { $iContains: `%${v}%` } };
                         }
 
-                        const getLabel = (e: ProductCategory) => e.name;
-                        const getValue = (e: ProductCategory) => String(e.id);
-                        const processBrandsAsOptions = (categories: ProductCategory[]) => categories.map((cat) => ({ label: getLabel(cat), value: getValue(cat) }));
+                        const getLabel = (r: ProductCategory) => r.name;
+                        const getValue = (r: ProductCategory) => r.id;
+                        const processBrandsAsOptions = (categories: ProductCategory[]) => categories.map((category) => ({ label: getLabel(category), value: getValue(category) }));
                         return fetchEntityRecordsAsOptions('product-category', filters, 10, processBrandsAsOptions);
                     }}
                 />
@@ -202,63 +216,64 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({ formInstance, isE
 
             {/* subCategory - Select input for product subcategory */}
             <ProFormDependency
-                name={['category']}
+                name={['categoryId']}
                 shouldUpdate={(prevValues, currentValues) => {
-                    const update = prevValues?.category !== currentValues?.category;
+                    const update = prevValues?.categoryId !== currentValues?.categoryId;
 
                     if (update) {
-                        formInstance?.setFieldValue('subCategory', undefined);
-                        productSubCategoryFormInstance.setFieldValue('category', currentValues?.category)
+                        formInstance?.setFieldValue('subCategoryId', undefined);
+                        productSubCategoryFormInstance.setFieldValue('categoryId', currentValues?.categoryId)
                     }
+
                     return update;
                 }}
             >
-                {({ category }) => {
+                {({ categoryId }) => {
                     return (
                         <ProFormItem
-                            name={'subCategory'}
-                            label={t('product.subCategory')}
-                            rules={[{ required: true, message: t('product.subCategoryRequired') }]}
+                            name={'subCategoryId'}
+                            label={t('product.sub_category')}
+                            rules={[{ required: true, message: t('product.sub_category.required') }]}
                         >
                             <SelectRemoteOptions<ProductSubCategory>
                                 name={'subCategory'}
                                 debounceTimeout={300}
-                                disabled={(isEditForm && !hasPermission(pr('product.manage')) || !category) || disabledFields?.includes('subCategory')}  // Disable if no category selected
+                                disabled={(isEditForm && !hasPermission(pr('product.manage')) || !categoryId) || disabledFields?.includes('subCategory')}  // Disable if no category selected
                                 optionCreatorConfig={{
                                     entity: "product-sub-category",
                                     formFields: <ProductSubCategoryFormFields formInstance={productSubCategoryFormInstance} disabledFields={['category']} />,
                                     formInstance: productSubCategoryFormInstance,
-                                    formInitialValues: { category: category },
+                                    formInitialValues: { categoryId },
                                     permissionCode: pr('productSubCategory.create'),
-                                    onCreateSuccess: (pc, appendOptions) => {
-                                        formInstance?.setFieldValue('subCategory', pc.id)
-                                        appendOptions(prev => [...prev, { label: pc.name, value: String(pc.id) }])
+                                    onCreateSuccess: (productSubCategory, appendOptions) => {
+                                        formInstance?.setFieldValue('subCategoryId', productSubCategory.id)
+                                        appendOptions(prev => [...prev, { label: productSubCategory.name, value: productSubCategory.id }])
                                     }
                                 }}
                                 asyncOptionsFetcher={(v: string) => {
-                                    const subCategory = formInstance?.getFieldValue('subCategory');
+                                    const subCategoryId = formInstance?.getFieldValue('subCategoryId');
 
                                     const baseFilters = {
-                                        category: { $equalTo: category },
+                                        categoryId,
                                     };
 
                                     let filters;
 
                                     if (v === "focus") {
-                                        filters = subCategory
-                                            ? { id: { $in: [subCategory, ...Array.from({ length: 9 }, (_, i) => i + 1)] }, ...baseFilters }
+                                        filters = subCategoryId
+                                            ? { id: { $in: [subCategoryId, ...Array.from({ length: 9 }, (_, i) => i + 1)] }, ...baseFilters }
                                             : { name: { $iContains: `%` }, ...baseFilters };
                                     } else {
-                                        filters = subCategory && !v
-                                            ? { id: { $equalTo: subCategory }, ...baseFilters }
+                                        filters = subCategoryId && !v
+                                            ? { id: subCategoryId, ...baseFilters }
                                             : { name: { $iContains: `%${v}%` }, ...baseFilters };
                                     }
 
-                                    const getLabel = (e: ProductSubCategory) => e.name;
-                                    const getValue = (e: ProductSubCategory) => String(e.id);
+                                    const getLabel = (record: ProductSubCategory) => record.name;
+                                    const getValue = (record: ProductSubCategory) => record.id;
 
-                                    const processBrandsAsOptions: ProcessResultFunction<ProductSubCategory> = (pSubs: ProductSubCategory[]) =>
-                                        pSubs.map((pSub) => ({ label: getLabel(pSub), value: getValue(pSub) }));
+                                    const processBrandsAsOptions: ProcessResultFunction<ProductSubCategory> = (productSubCategories: ProductSubCategory[]) =>
+                                        productSubCategories.map((productSubCategory) => ({ label: getLabel(productSubCategory), value: getValue(productSubCategory) }));
 
                                     return fetchEntityRecordsAsOptions<ProductSubCategory>('product-sub-category', filters, 10, processBrandsAsOptions);
                                 }}
@@ -267,6 +282,50 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({ formInstance, isE
                     );
                 }}
             </ProFormDependency>
+
+            {/* baseUom */}
+            {/* brand - Select input for product brand */}
+            <ProFormItem
+                name={'baseUOMId'}
+                label={t('product.base_uom')}
+                rules={[{ required: true, message: t('product.baseuom.required') }]}
+            >
+                <SelectRemoteOptions
+                    name={'baseUOMId'}
+                    debounceTimeout={300}
+                    disabled={(isEditForm && !hasPermission(pr('product.manage'))) || disabledFields?.includes('baseUOM')}
+                    optionCreatorConfig={{
+                        entity: "uom",
+                        formFields: <UomFormFields />,
+                        formInstance: baseUomFormInstance,
+                        permissionCode: pr('uom.create'),
+                        onCreateSuccess: (baseUOM, appendOptions) => {
+                            formInstance?.setFieldValue('baseUOMId', baseUOM.id)
+                            appendOptions(prev => [...prev, { label: baseUOM.name, value: baseUOM.id }])
+                        }
+                    }}
+                    asyncOptionsFetcher={(v: string) => {
+                        const baseUOMId = formInstance?.getFieldValue('baseUOMId');
+                        let filters;
+
+                        // Filters logic based on input value
+                        if (v === "focus") {
+                            filters = baseUOMId
+                                ? { id: { $in: [baseUOMId, ...Array.from({ length: 9 }, (_, i) => i + 1)] } }
+                                : { name: { $iContains: `%` } };
+                        } else {
+                            filters = baseUOMId && !v
+                                ? { id: { $equalTo: baseUOMId } }
+                                : { name: { $iContains: `%${v}%` } };
+                        }
+
+                        const getLabel = (r: UOM) => r.name;
+                        const getValue = (r: UOM) => r.id;
+                        const processBrandsAsOptions: ProcessResultFunction<UOM> = (uom: UOM[]) => uom.map((brand) => ({ label: getLabel(brand), value: getValue(brand) }));
+                        return fetchEntityRecordsAsOptions<UOM>('uom', filters, 10, processBrandsAsOptions);
+                    }}
+                />
+            </ProFormItem>
         </>
     );
 };

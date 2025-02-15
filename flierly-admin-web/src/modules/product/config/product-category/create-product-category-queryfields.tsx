@@ -6,27 +6,27 @@ const createProductCategoryQueryFields = (translate: (value: string) => string):
     return [
         // id
         createNumberQueryBuilderField({
-            label: translate('id'),
+            label: translate('record.id'),
             name: 'id'
         }),
         // name
         createTextQueryBuilderField({
-            label: translate('name'),
+            label: translate('record.name'),
             name: 'name'
         }),
         // createdAt
         createDateQueryBuilderField({
-            label: translate('created_at'),
+            label: translate('record.created_at'),
             name: 'createdAt'
         }),
         // updatedAt
         createDateQueryBuilderField({
-            label: translate('updated_at'),
+            label: translate('record.updated_at'),
             name: 'updatedAt'
         }),
         // deletedAt
         createDateQueryBuilderField({
-            label: translate('deleted_at'),
+            label: translate('record.deleted_at'),
             name: 'deletedAt'
         }),
     ]

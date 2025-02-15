@@ -21,10 +21,9 @@ const createProductSubCategoryTableColumns = (translate: (value: string) => stri
       key: 'category',
       width: 150,
       ellipsis: true,
-      render: (_text, entity) => {
-        if (typeof entity.category === 'number') return entity.category;// if it's a number, it's a category id
-        if (typeof entity.category === 'object' && entity.category !== null && 'name' in entity.category) {
-          return entity.category.name;
+      render: (_text, record) => {
+        if (typeof record.category === 'object' && record.category !== null && 'name' in record.category) {
+          return record.category.name;
         }
         return null;
       },

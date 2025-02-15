@@ -40,7 +40,7 @@ const BinModeToggle: React.FC<BinModeToggleProps> = ({ actions, isActive, activa
   if (!render) return null
 
   return (
-    <Tooltip title={!isActive ? t('tooltip.binMode.activate') : t('tooltip.binMode.deactivate')}>
+    <Tooltip title={!isActive ? t('tooltip.activate_bin_mode') : t('tooltip.deactivate_bin_mode')}>
       <Button
         type={!isActive ? 'default' : 'primary'} // Change button style based on state
         key="bin-mode-toggle"

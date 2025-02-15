@@ -58,13 +58,13 @@ const ReAuthenticate: React.FC<ReAuthenticate> = ({ tokenExpiresAt, onExpiryNavi
 
   // Format the time left as a countdown string
   const formatTimeLeft = () => {
-    if (timeLeft === null || timeLeft <= 0) return t('token_expired')
+    if (timeLeft === null || timeLeft <= 0) return t('text.token_expired')
 
     const hours = Math.floor(timeLeft / (1000 * 60 * 60))
     const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60))
     const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000)
 
-    return `${hours}h ${minutes}m ${seconds}s ${t('remaining')}`
+    return `${hours}h ${minutes}m ${seconds}s ${t('text.time_remaining')}`
   }
 
   const handleSuccessLogin = () => {
@@ -79,7 +79,7 @@ const ReAuthenticate: React.FC<ReAuthenticate> = ({ tokenExpiresAt, onExpiryNavi
         timeLeft !== null &&
         timeLeft > 0 && (
           <Typography.Paragraph type="danger" style={{ textAlign: 'left', display: 'block' }}>
-            {`${t('your_session_expires_soon')}: ${formatTimeLeft()}. ${t('please_reauthenticate')}`}
+            {`${t('text.your_session_expires_soon')}: ${formatTimeLeft()}. ${t('text.please_reauthenticate')}`}
           </Typography.Paragraph>
         )
       }

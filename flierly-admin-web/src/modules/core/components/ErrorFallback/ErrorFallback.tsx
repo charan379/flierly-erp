@@ -13,11 +13,11 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetErrorBoundary
   return (
     <Result
       status="500"
-      title={error?.name ?? t('error.title.500')}
-      subTitle={error?.message ?? t('error.title.500')}
+      title={error?.name ?? t('title.error.500')}
+      subTitle={error?.message ?? t('message.error.500')}
       extra={
         <Button type="primary" onClick={resetErrorBoundary}>
-          {t('navigate.retry')}
+          {t('button.retry')}
         </Button>
       }
     />

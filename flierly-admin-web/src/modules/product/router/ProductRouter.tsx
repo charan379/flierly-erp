@@ -1,22 +1,22 @@
-import PageUnderConstruction from '@/modules/core/pages/PageUnderConstruction'
+import UnderConstructionPage from '@/modules/core/pages/UnderConstructionPage'
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import Products from '../pages/Products'
-import Brands from '../pages/Brands'
-import ProductCategories from '../pages/ProductCategories'
-import ProductSubcategories from '../pages/ProductSubcategories'
-import TagsMetadata from '../pages/TagsMetadata'
+import ProductsPage from '../pages/ProductsPage'
+import BrandsPage from '../pages/BrandsPage'
+import ProductCategoriesPage from '../pages/ProductCategoriesPage'
+import ProductSubcategoriesPage from '../pages/ProductSubcategoriesPage'
+import TagsMetadataPage from '../pages/TagsMetadataPage'
 import ProtectedRoute from '@/modules/core/features/ProtectedRoute/ProtectedRoute'
 
 const ProductRouter: React.FC = () => {
     return (
         <Routes>
-            <Route path="" element={<ProtectedRoute element={<PageUnderConstruction />} requiredPermissionRegex={/^product\.[a-z]+$/} />} />
-            <Route path="products" element={<ProtectedRoute element={<Products />} requiredPermissionRegex={/^product\.[a-z]+$/} />} />
-            <Route path="brands" element={<ProtectedRoute element={<Brands />} requiredPermissionRegex={/^brand\.[a-z]+$/} />} />
-            <Route path="categories" element={<ProtectedRoute element={<ProductCategories />} requiredPermissionRegex={/^product-category\.[a-z]+$/} />} />
-            <Route path="sub-categories" element={<ProtectedRoute element={<ProductSubcategories />} requiredPermissionRegex={/^product-sub-category\.[a-z]+$/} />} />
-            <Route path="tags-metadata" element={<ProtectedRoute element={<TagsMetadata />} requiredPermissionRegex={/^tag-metadata\.[a-z]+$/} />} />
+            <Route path="" element={<ProtectedRoute element={<UnderConstructionPage />} requiredPermissionRegex={/^product\.[a-z]+$/} />} />
+            <Route path="products" element={<ProtectedRoute element={<ProductsPage />} requiredPermissionRegex={/^product\.[a-z]+$/} />} />
+            <Route path="brands" element={<ProtectedRoute element={<BrandsPage />} requiredPermissionRegex={/^brand\.[a-z]+$/} />} />
+            <Route path="categories" element={<ProtectedRoute element={<ProductCategoriesPage />} requiredPermissionRegex={/^product-category\.[a-z]+$/} />} />
+            <Route path="sub-categories" element={<ProtectedRoute element={<ProductSubcategoriesPage />} requiredPermissionRegex={/^product-sub-category\.[a-z]+$/} />} />
+            <Route path="tags-metadata" element={<ProtectedRoute element={<TagsMetadataPage />} requiredPermissionRegex={/^tag-metadata\.[a-z]+$/} />} />
         </Routes>
     )
 }

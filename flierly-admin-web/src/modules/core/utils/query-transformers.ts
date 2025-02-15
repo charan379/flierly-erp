@@ -259,4 +259,4 @@ const queryTransformers: Record<TransformerKey, SearchTransformKeyFn> = {
   },
 }
 
-export default queryTransformers
+export default queryTransformers;

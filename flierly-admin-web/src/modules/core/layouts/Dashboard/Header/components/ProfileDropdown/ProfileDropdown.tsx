@@ -18,7 +18,7 @@ const ProfileDropdown: React.FC = () => {
     }
   }
 
-  const { translate } = useLocale()
+  const { translate: t } = useLocale()
   const { logout, loading, refresh } = useAuth()
 
   const items: MenuProps['items'] = [
@@ -32,12 +32,12 @@ const ProfileDropdown: React.FC = () => {
     {
       icon: <UserOutlined />,
       key: 'profile-settings',
-      label: translate('profile_settings'),
+      label: t('label.profile_settings'),
     },
     {
       icon: <ToolOutlined />,
       key: 'app-settings',
-      label: <Link to="/settings">{translate('app_settings')}</Link>,
+      label: <Link to="/settings">{t('label.app_settings')}</Link>,
     },
     {
       type: 'divider',
@@ -45,13 +45,13 @@ const ProfileDropdown: React.FC = () => {
     {
       icon: <ReloadOutlined spin={loading === 'refreshing'} />,
       key: 'refresh-authentication',
-      label: translate('refresh_auth'),
+      label: t('label.refresh_auth'),
       onClick: () => refresh(),
     },
     {
       icon: <LogoutOutlined />,
       key: 'logout',
-      label: translate('logout'),
+      label: t('label.logout'),
       onClick: () => logout(),
     },
   ]

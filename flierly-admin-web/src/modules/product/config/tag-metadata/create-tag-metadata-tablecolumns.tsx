@@ -2,57 +2,57 @@ import { createDescriptionColumn, createEntityColumn, createIdColumn, createName
 import { ProColumns } from '@ant-design/pro-components'
 import { Tag } from 'antd'
 
-const createTagMetadataTableColumns = (translate: (value: string) => string): ProColumns<TagMetadata>[] => {
+const createTagMetadataTableColumns = (t: (value: string) => string): ProColumns<TagMetadata>[] => {
     return [
         // id
-        createIdColumn(translate),
+        createIdColumn(t),
         // name
-        createNameColumn(translate, { width: 200 }),
+        createNameColumn(t, { width: 200 }),
         // entity
-        createEntityColumn(translate),
+        createEntityColumn(t),
         // access
         {
-            title: translate('TagMetadata.datatype'),
+            title: t('TagMetadata.datatype'),
             dataIndex: 'datatype',
             key: 'datatype',
             width: 100,
             align: 'center',
-            render: (_dom, entity) => {
-                switch (entity.datatype) {
+            render: (_dom, record) => {
+                switch (record.datatype) {
                     case 'string':
-                        return <Tag color="#50C878">{entity.datatype}</Tag>
+                        return <Tag color="#50C878">{record.datatype}</Tag>
                     case 'boolean':
-                        return <Tag color="#008080">{entity.datatype}</Tag>
+                        return <Tag color="#008080">{record.datatype}</Tag>
                     case 'enum':
-                        return <Tag color="#FF7F50">{entity.datatype}</Tag>
+                        return <Tag color="#FF7F50">{record.datatype}</Tag>
                     case 'number':
-                        return <Tag color="#191970">{entity.datatype}</Tag>
+                        return <Tag color="#191970">{record.datatype}</Tag>
                     default:
-                        return <Tag>{entity.datatype}</Tag>
+                        return <Tag>{record.datatype}</Tag>
                 }
             },
         },
         // description
-        createDescriptionColumn(translate, { width: 250 }),
+        createDescriptionColumn(t, { width: 250 }),
         // updatedAt
-        createTimeStampColumn(translate,
+        createTimeStampColumn(t,
             {
                 dataIndex: 'updatedAt',
-                title: translate('updated_at')
+                title: t('record.updated_at')
             }
         ),
         // createdAt
-        createTimeStampColumn(translate,
+        createTimeStampColumn(t,
             {
                 dataIndex: 'createdAt',
-                title: translate('created_at')
+                title: t('record.created_at')
             }
         ),
         // deletedAt
-        createTimeStampColumn(translate,
+        createTimeStampColumn(t,
             {
                 dataIndex: 'deletedAt',
-                title: translate('deleted_at')
+                title: t('record.deleted_at')
             }
         ),
     ]

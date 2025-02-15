@@ -60,7 +60,7 @@ const ResizableDrawer: React.FC<ResizableDrawerProps> = ({
         React.cloneElement(trigger as React.ReactElement, { onClick: onOpen })
       ) : (
         <Button type="primary" onClick={onOpen}>
-          {t('action.button.open')}
+          {t('button.open')}
         </Button>
       )}
       <Drawer
@@ -71,7 +71,7 @@ const ResizableDrawer: React.FC<ResizableDrawerProps> = ({
         extra={
           <Space>
             <Button danger type="primary" onClick={onClose}>
-              {t('action.button.close')}
+              {t('button.close')}
             </Button>
           </Space>
         }

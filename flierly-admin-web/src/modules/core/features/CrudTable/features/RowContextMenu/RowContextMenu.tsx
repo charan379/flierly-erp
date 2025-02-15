@@ -38,38 +38,38 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record
     const menuItemStyle = { fontSize: '12px' }
     const baseItems = [
       {
-        label: t('rowMenu.label.view'),
+        label: t('row_menu.label.view'),
         key: 'view',
         icon: <FontAwesomeIcon icon={faEye} style={menuItemStyle} />,
         style: { color: '#2196F3', ...menuItemStyle },
       },
       {
-        label: t('rowMenu.label.edit'),
+        label: t('row_menu.label.edit'),
         key: 'edit',
         icon: <FontAwesomeIcon icon={faPenToSquare} style={menuItemStyle} />,
         style: { color: '#FF9800', ...menuItemStyle },
       },
       record?.isActive
         ? {
-          label: t('rowMenu.label.inactivate'),
+          label: t('row_menu.label.inactivate'),
           key: 'inactivate',
           icon: <StopOutlined style={menuItemStyle} />,
           style: { color: '#9E9E9E', ...menuItemStyle },
         }
         : {
-          label: t('rowMenu.label.activate'),
+          label: t('row_menu.label.activate'),
           key: 'activate',
           icon: <CheckCircleOutlined style={menuItemStyle} />,
           style: { color: '#4CAF50', ...menuItemStyle },
         },
       {
-        label: t('rowMenu.label.delete'),
+        label: t('row_menu.label.delete'),
         key: 'delete',
         icon: <FontAwesomeIcon icon={faTrashCan} style={menuItemStyle} />,
         danger: true,
       },
       {
-        label: `${t('rowMenu.label.close')} (${countdown}s)`,
+        label: `${t('row_menu.label.close')} (${countdown}s)`,
         key: 'close',
         icon: <FontAwesomeIcon icon={faCircleXmark} style={menuItemStyle} />,
         danger: true,
@@ -78,19 +78,19 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record
 
     const binModeItems = [
       {
-        label: t('rowMenu.label.view'),
+        label: t('row_menu.label.view'),
         key: 'view',
         icon: <FontAwesomeIcon icon={faEye} style={menuItemStyle} />,
         style: { color: '#2196F3', ...menuItemStyle },
       },
       {
-        label: t('rowMenu.label.restore'),
+        label: t('row_menu.label.restore'),
         key: 'restore',
         icon: <FontAwesomeIcon icon={faTrashCanArrowUp} style={menuItemStyle} />,
         style: { color: '#009688', ...menuItemStyle },
       },
       {
-        label: `${t('rowMenu.label.close')} (${countdown}s)`,
+        label: `${t('row_menu.label.close')} (${countdown}s)`,
         key: 'close',
         icon: <FontAwesomeIcon icon={faCircleXmark} style={menuItemStyle} />,
         danger: true,
@@ -233,8 +233,8 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record
       id="row-popover-menu"
       title={
         <Flex justify="space-between" align="center" wrap="nowrap" gap="large">
-          <Typography.Text>{record[recordTitleKey] ?? t('rowMenu.title')}</Typography.Text>
-          <Tooltip title={t('tooltip.menu.close')}>
+          <Typography.Text>{record[recordTitleKey] ?? t('title.row_menu')}</Typography.Text>
+          <Tooltip title={t('tooltip.close')}>
             <Button size='small' shape="default" danger icon={<FontAwesomeIcon icon={faXmark} size="xl" />} onClick={close} />
           </Tooltip>
         </Flex>

@@ -21,17 +21,17 @@ const Delete: React.FC<DeleteProps> = ({ entity, actions, rows, render }) => {
   if (!render || !actions || !rows.selectedRowKeys) return null
 
   return (
-    <Tooltip title={`${t('tooltip.delete.selected')}`}>
+    <Tooltip title={`${t('tooltip.delete_selected')}`}>
       <Badge color="blue" count={rows.selectedRowKeys.length} overflowCount={99}>
         <Popconfirm
-          title={t('action.title.delete')}
-          description={`${t('confirm.delete.message')}: ${rows.selectedRowKeys.length}`}
+          title={t('title.delete_selected')}
+          description={`${t('message.confirm_delete_selected')}: ${rows.selectedRowKeys.length}`}
           icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
           okButtonProps={{ danger: true }}
-          okText={t('action.button.confirm')}
-          cancelText={t('action.button.cancel')}
+          okText={t('button.confirm')}
+          cancelText={t('button.cancel')}
           cancelButtonProps={{ type: 'primary' }}
-          onCancel={() => message.warning(t('action.message.cancelled'))}
+          onCancel={() => message.warning(t('message.cancelled'))}
           onConfirm={async () => {
             const { success } = await crudService.delete({
               entity: entity,

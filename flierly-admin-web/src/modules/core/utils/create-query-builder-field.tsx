@@ -8,39 +8,39 @@ export const createTextQueryBuilderField = <T,>(params: { label: string, name: k
         field: { label, namePath: name },
         conditions: [
             {
-                condition: { label: t('equals_to'), namePath: 'equalTo' },
+                condition: { label: t('label.query_equals_to'), namePath: 'equalTo' },
                 queryFieldConfig: { input: { type: 'Text' } },
             },
             {
-                condition: { label: t('contains'), namePath: 'contains' },
+                condition: { label: t('label.query_contains'), namePath: 'contains' },
                 queryFieldConfig: { input: { type: 'Text' } },
             },
             {
-                condition: { label: t('notContains'), namePath: 'notContains' },
+                condition: { label: t('label.query_not_contains'), namePath: 'notContains' },
                 queryFieldConfig: { input: { type: 'Text' } },
             },
             {
-                condition: { label: t('iContains'), namePath: 'iContains' },
+                condition: { label: t('label.query_icontains'), namePath: 'iContains' },
                 queryFieldConfig: { input: { type: 'Text' } },
             },
             {
-                condition: { label: t('notIContains'), namePath: 'notIContains' },
+                condition: { label: t('label.query_not_icontains'), namePath: 'notIContains' },
                 queryFieldConfig: { input: { type: 'Text' } },
             },
             {
-                condition: { label: t('regex'), namePath: 'regex' },
+                condition: { label: t('label.query_regex'), namePath: 'regex' },
                 queryFieldConfig: { input: { type: 'Text' }, rules: [{ type: 'regexp' }] },
             },
             {
-                condition: { label: t('regexi'), namePath: 'regexi' },
+                condition: { label: t('label.query_regexi'), namePath: 'regexi' },
                 queryFieldConfig: { input: { type: 'Text' }, rules: [{ type: 'regexp' }] },
             },
             {
-                condition: { label: t('starts_with'), namePath: 'startsWith' },
+                condition: { label: t('label.query_starts_with'), namePath: 'startsWith' },
                 queryFieldConfig: { input: { type: 'Text' }, rules: [{ type: 'string' }] },
             },
             {
-                condition: { label: t('ends_with'), namePath: 'endsWith' },
+                condition: { label: t('label.query_ends_with'), namePath: 'endsWith' },
                 queryFieldConfig: { input: { type: 'Text' }, rules: [{ type: 'string' }] },
             },
         ],
@@ -53,19 +53,19 @@ export const createNumberQueryBuilderField = <T,>(params: { label: string, name:
         field: { label, namePath: name },
         conditions: [
             {
-                condition: { label: t('equals_to'), namePath: 'equalTo' },
+                condition: { label: t('label.query_equals_to'), namePath: 'equalTo' },
                 queryFieldConfig: { input: { type: 'Number' } },
             },
             {
-                condition: { label: t('between'), namePath: 'between' },
+                condition: { label: t('label.query_between'), namePath: 'between' },
                 queryFieldConfig: { input: { type: 'NumberRange' } },
             },
             {
-                condition: { label: t('greater_than'), namePath: 'greaterThan' },
+                condition: { label: t('label.query_greater_than'), namePath: 'greaterThan' },
                 queryFieldConfig: { input: { type: 'Number' } },
             },
             {
-                condition: { label: t('less_than'), namePath: 'lessThan' },
+                condition: { label: t('label.query_less_than'), namePath: 'lessThan' },
                 queryFieldConfig: { input: { type: 'Number' } },
             },
         ],
@@ -78,19 +78,19 @@ export const createSelectQueryBuilderField = <T,>(params: { label: string, name:
         field: { label, namePath: name },
         conditions: [
             {
-                condition: { label: t('equals_to'), namePath: 'equalTo' },
+                condition: { label: t('label.query_equals_to'), namePath: 'equalTo' },
                 queryFieldConfig: { input: { type: 'Select', options }, rules: [{ type: 'string' }] },
             },
             {
-                condition: { label: t('not_equals_to'), namePath: 'notEqualTo' },
+                condition: { label: t('label.query_not_equals_to'), namePath: 'notEqualTo' },
                 queryFieldConfig: { input: { type: 'Select', options }, rules: [{ type: 'string' }] },
             },
             {
-                condition: { label: t('in'), namePath: 'inArray' },
+                condition: { label: t('label.query_in'), namePath: 'inArray' },
                 queryFieldConfig: { input: { type: 'Select', options, mode: 'multiple' }, rules: [{ type: 'array' }] },
             },
             {
-                condition: { label: t('not_in'), namePath: 'notInArray' },
+                condition: { label: t('label.query_not_in'), namePath: 'notInArray' },
                 queryFieldConfig: { input: { type: 'Select', options, mode: 'multiple' }, rules: [{ type: 'array' }] },
             },
         ],
@@ -103,7 +103,7 @@ export const createBooleanQueryBuilderField = <T,>(params: { label: string, name
         field: { label, namePath: name },
         conditions: [
             {
-                condition: { label: t('equals_to'), namePath: 'equalTo' },
+                condition: { label: t('label.query_equals_to'), namePath: 'equalTo' },
                 queryFieldConfig: { input: { type: 'Select', options: [{ label: optionLabels[0], value: 'true' }, { label: optionLabels[1], value: 'false' }] }, rules: [{ type: 'string' }] },
             },
         ],
@@ -116,19 +116,19 @@ export const createSelectRemoteOptionsQueryBuilderField = <T,>(params: { label: 
         field: { label, namePath: name },
         conditions: [
             {
-                condition: { label: t('equals_to'), namePath: 'equalTo' },
+                condition: { label: t('label.query_equals_to'), namePath: 'equalTo' },
                 queryFieldConfig: { input: { type: 'SelectRemoteOptions', asyncOptionsFetcher, debounceTimeout: 300 } },
             },
             {
-                condition: { label: t('not_equals_to'), namePath: 'notEqualTo' },
+                condition: { label: t('label.query_not_equals_to'), namePath: 'notEqualTo' },
                 queryFieldConfig: { input: { type: 'SelectRemoteOptions', asyncOptionsFetcher, debounceTimeout: 300 } },
             },
             {
-                condition: { label: t('in'), namePath: 'inArray' },
+                condition: { label: t('label.query_in'), namePath: 'inArray' },
                 queryFieldConfig: { input: { type: 'SelectRemoteOptions', asyncOptionsFetcher, debounceTimeout: 300, mode: 'multiple' }, rules: [{ type: 'array' }] },
             },
             {
-                condition: { label: t('not_in'), namePath: 'notInArray' },
+                condition: { label: t('label.query_not_in'), namePath: 'notInArray' },
                 queryFieldConfig: { input: { type: 'SelectRemoteOptions', asyncOptionsFetcher, debounceTimeout: 300, mode: 'multiple' }, rules: [{ type: 'array' }] },
             },
         ],
@@ -150,19 +150,19 @@ export const createAssociatedEntityRowQueryBuilderFiled = <T, AE>(params: { name
         field: { label, namePath: name },
         conditions: [
             {
-                condition: { label: t('equals_to'), namePath: 'equalTo' },
+                condition: { label: t('label.query_equals_to'), namePath: 'equalTo' },
                 queryFieldConfig: { input: { type: 'SelectRemoteOptions', asyncOptionsFetcher, debounceTimeout: 300 } },
             },
             {
-                condition: { label: t('not_equals_to'), namePath: 'notEqualTo' },
+                condition: { label: t('label.query_not_equals_to'), namePath: 'notEqualTo' },
                 queryFieldConfig: { input: { type: 'SelectRemoteOptions', asyncOptionsFetcher, debounceTimeout: 300 } },
             },
             {
-                condition: { label: t('in'), namePath: 'inArray' },
+                condition: { label: t('label.query_in'), namePath: 'inArray' },
                 queryFieldConfig: { input: { type: 'SelectRemoteOptions', asyncOptionsFetcher, debounceTimeout: 300, mode: 'multiple' }, rules: [{ type: 'array' }] },
             },
             {
-                condition: { label: t('not_in'), namePath: 'notInArray' },
+                condition: { label: t('label.query_not_in'), namePath: 'notInArray' },
                 queryFieldConfig: { input: { type: 'SelectRemoteOptions', asyncOptionsFetcher, debounceTimeout: 300, mode: 'multiple' }, rules: [{ type: 'array' }] },
             },
         ],
@@ -174,15 +174,15 @@ export const createDateQueryBuilderField = <T,>(params: { label: string, name: k
         field: { label, namePath: name },
         conditions: [
             {
-                condition: { label: t('between'), namePath: 'between' },
+                condition: { label: t('label.query_between'), namePath: 'between' },
                 queryFieldConfig: { input: { type: 'DateRange' } },
             },
             {
-                condition: { label: t('greater_than'), namePath: 'greaterThan' },
+                condition: { label: t('label.query_greater_than'), namePath: 'greaterThan' },
                 queryFieldConfig: { input: { type: 'DatePicker' } },
             },
             {
-                condition: { label: t('less_than'), namePath: 'lessThan' },
+                condition: { label: t('label.query_less_than'), namePath: 'lessThan' },
                 queryFieldConfig: { input: { type: 'DatePicker' } },
             },
         ],

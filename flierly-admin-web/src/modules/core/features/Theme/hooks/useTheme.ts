@@ -4,7 +4,7 @@ import { CHANGE_THEME_MODE, CHANGE_THEME_PREFERENCE, TOGGLE_THEME_COMPACTIBILITY
 import throttle from '@/modules/core/utils/throttle'
 import darkTheme from '../config/dark'
 import lightTheme from '../config/light'
-import { RootState } from '@/modules/core/redux/store' // Adjust based on your project structure
+import { RootState } from '@/redux/store'
 
 // Custom hook to access the typed Redux state
 const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector

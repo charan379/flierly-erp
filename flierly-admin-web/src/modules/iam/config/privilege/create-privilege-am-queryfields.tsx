@@ -2,40 +2,40 @@ import { accessOptions } from '@/modules/core/constants/select-options.constant'
 import fetchEntityOptions from '@/modules/core/features/SelectRemoteOptions/utils/fetch-entity-options'
 import { AMQueryBuilderFieldConfig, createBooleanAMQueryField, createNumericAMQueryField, createSelectAMQueryField, createSelectRemoteOptionsAMQueryField, createTextAMQueryField } from '@/modules/core/utils/create-assignment-manager-queryfield'
 
-const createPrivilegeAMQueryBuilderFields = (translate: (value: string) => string): AMQueryBuilderFieldConfig<Privilege>[] => {
+const createPrivilegeAMQueryBuilderFields = (t: (value: string) => string): AMQueryBuilderFieldConfig<Privilege>[] => {
   return [
     // id
     createNumericAMQueryField({
-      label: translate('id'),
+      label: t('record.id'),
       name: 'id'
     }),
     // isActive
     createBooleanAMQueryField({
-      label: translate('status'),
+      label: t('record.is_active'),
       name: 'isActive',
-      optionLabels: [translate('active'), translate('inactive')]
+      optionLabels: [t('option.active'), t('option.active')]
     }),
     // name
     createTextAMQueryField({
-      label: translate('name'),
+      label: t('record.name'),
       name: 'name',
     }),
     // access
     createSelectAMQueryField({
-      label: translate('access'),
+      label: t('privilege.access'),
       name: 'access',
       options: accessOptions
     }),
     // entity
     createSelectRemoteOptionsAMQueryField({
-      label: translate('entity'),
+      label: t('privilege.entity'),
       name: 'entity',
       rules: [{ type: 'regexp', message: 'sdsd' }],
       asyncOptionsFetcher: fetchEntityOptions
     }),
     // code
     createTextAMQueryField({
-      label: translate('code'),
+      label: t('record.code'),
       name: 'code'
     }),
   ]

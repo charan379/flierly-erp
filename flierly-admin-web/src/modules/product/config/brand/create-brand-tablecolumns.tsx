@@ -1,20 +1,20 @@
 import { createDescriptionColumn, createIdColumn, createNameColumn, createTimeStampColumn } from '@/modules/core/utils/create-tablecolumn'
 import { ProColumns } from '@ant-design/pro-components'
 
-const createBrandTableColumns = (translate: (value: string) => string): ProColumns<Brand>[] => {
+const createBrandTableColumns = (t: (value: string) => string): ProColumns<Brand>[] => {
   return [
     // id
-    createIdColumn(translate),
+    createIdColumn(t),
     // name
-    createNameColumn(translate, { width: 100 }),
+    createNameColumn(t, { width: 100 }),
     // description
-    createDescriptionColumn(translate, { width: 180 }),
+    createDescriptionColumn(t, { width: 180 }),
     // updatedAt
-    createTimeStampColumn(translate, { dataIndex: 'updatedAt', title: translate('updated_at') }),
+    createTimeStampColumn(t, { dataIndex: 'updatedAt', title: t('record.updated_at') }),
     // createdAt
-    createTimeStampColumn(translate, { dataIndex: 'createdAt', title: translate('created_at') }),
+    createTimeStampColumn(t, { dataIndex: 'createdAt', title: t('record.created_at') }),
     // deletedAt
-    createTimeStampColumn(translate, { dataIndex: 'deletedAt', title: translate('deleted_at') }),
+    createTimeStampColumn(t, { dataIndex: 'deletedAt', title: t('record.deleted_at') }),
   ]
 }
 

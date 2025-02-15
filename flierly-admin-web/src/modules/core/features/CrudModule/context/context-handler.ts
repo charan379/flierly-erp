@@ -1,7 +1,7 @@
 import { ActionTypes } from './action-types.enum'
 import { Dispatch } from 'react'
 import { Action } from './reducer'
-import { QueryCondition } from '@/features/QueryBuilder/QueryBuilder'
+import { QueryCondition } from '../../QueryBuilder/QueryBuilder';
 
 /**
  * Creates a handler for managing CRUD module state and dispatcher actions.

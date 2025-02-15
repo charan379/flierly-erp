@@ -69,7 +69,7 @@ const Create = <T extends Record<string, any>>({
       loading={isLoading}
       open={isDrawerOpen}
       trigger={
-        <Tooltip title={`${t('tooltip.createRecord')} ${entity}`}>
+        <Tooltip title={`${t('tooltip.create_record')} ${entity}`}>
           <Button
             type="primary"
             icon={<PlusOutlined />}
@@ -91,7 +91,7 @@ const Create = <T extends Record<string, any>>({
         extra: (
           <Space>
             <Button danger type="primary" onClick={handleOnClose}>
-              {t('action.button.close')}
+              {t('button.close')}
             </Button>
           </Space>
         ),
@@ -101,8 +101,8 @@ const Create = <T extends Record<string, any>>({
       }}
       submitter={{
         searchConfig: {
-          resetText: t('action.button.cancel'),
-          submitText: t('action.button.submit'),
+          resetText: t('button.cancel'),
+          submitText: t('button.submit'),
         },
       }}
     >

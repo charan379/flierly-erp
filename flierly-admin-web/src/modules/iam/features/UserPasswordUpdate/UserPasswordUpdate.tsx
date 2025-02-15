@@ -5,6 +5,7 @@ import userService from '../../service/user.service'
 import { LockTwoTone } from '@ant-design/icons'
 import useLocale from '@/modules/core/features/Locale/hooks/useLocale'
 import Loading from '@/modules/core/components/Loading'
+import vr from '@/modules/core/utils/get-validation-regex.util'
 
 interface UserPasswordUpdateProps {
   userId: number,
@@ -12,7 +13,7 @@ interface UserPasswordUpdateProps {
 }
 
 const UserPasswordUpdate: React.FC<UserPasswordUpdateProps> = ({ userId, username }) => {
-  const { translate } = useLocale()
+  const { translate: t } = useLocale()
   const [isLoading, setIsLoading] = useState(false);
 
   const [form] = Form.useForm<{ userId: string; password: string, username: string }>();
@@ -37,10 +38,10 @@ const UserPasswordUpdate: React.FC<UserPasswordUpdateProps> = ({ userId, usernam
     validator(_: any, value: string) {
       return new Promise<void>((resolve, reject) => {
         if (!value) resolve()
-        if (/((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).*)$/.test(value)) {
+        if (vr("password").test(value)) {
           resolve()
         } else {
-          reject(new Error(translate('password_is_not_valid')))
+          reject(new Error(t('auth.password.invalid')))
         }
       })
     },
@@ -51,10 +52,10 @@ const UserPasswordUpdate: React.FC<UserPasswordUpdateProps> = ({ userId, usernam
     validator(_: any, value: string) {
       return new Promise<void>((resolve, reject) => {
         if (!value) resolve()
-        if (/\d$/.test(value)) {
+        if (vr("userId").test(value)) {
           resolve()
         } else {
-          reject(new Error(translate('user_id_is_not_valid')))
+          reject(new Error(t('auth.user_id.invalid')))
         }
       })
     },
@@ -63,7 +64,7 @@ const UserPasswordUpdate: React.FC<UserPasswordUpdateProps> = ({ userId, usernam
   return (
     <div onContextMenu={handleContextMenu}>
       <ModalForm
-        title={translate('update_user_password')}
+        title={t('title.update_user_password')}
         form={form}
         loading={isLoading}
         initialValues={{ userId, username }}
@@ -73,13 +74,13 @@ const UserPasswordUpdate: React.FC<UserPasswordUpdateProps> = ({ userId, usernam
         }}
         trigger={
           <Button type="link" icon={<LockTwoTone />}>
-            {translate('update_password')}
+            {t('button.update_password')}
           </Button>
         }
         submitter={{
           searchConfig: {
-            resetText: translate('reset'),
-            submitText: translate('update'),
+            resetText: t('button.reset'),
+            submitText: t('button.update'),
           },
           resetButtonProps: {
             danger: true
@@ -94,41 +95,41 @@ const UserPasswordUpdate: React.FC<UserPasswordUpdateProps> = ({ userId, usernam
         <Loading isLoading={isLoading}>
           <ProFormText
             name="userId"
-            label={translate('user_id')}
+            label={t('user.userId')}
             disabled
             hidden
             rules={[{ required: true, type: 'string' }, userIdValidator]}
-            placeholder={translate('enter_user_id')}
+            placeholder={t('user.userId')}
           />
           <ProFormText
             name="username"
-            label={translate('username')}
+            label={t('user.username')}
             disabled
             hidden
             rules={[{ required: true, type: 'string' }]}
-            placeholder={translate('enter_username')}
+            placeholder={t('user.username')}
           />
           <ProFormText.Password
             name="password"
-            label={translate('new_password')}
+            label={t('auth.new_password')}
             rules={[{ required: true, min: 8, max: 26 }, passwordRegex]}
-            placeholder={translate('enter_new_password')}
+            placeholder={t('auth.new_password')}
           />
           <ProFormText.Password
             name="confirm"
-            label={translate('confirm_password')}
+            label={t('auth.confirm_password')}
             rules={[
-              { required: true, message: translate('confirm_password_required') },
+              { required: true, message: t('auth.confirm_password.required') },
               ({ getFieldValue }) => ({
                 validator(_: any, value: string) {
                   if (!value || getFieldValue('password') === value) {
                     return Promise.resolve()
                   }
-                  return Promise.reject(new Error(translate('passwords_do_not_match')))
+                  return Promise.reject(new Error(t('auth.confirm_password.mismatch')))
                 },
               }),
             ]}
-            placeholder={translate('confirm_new_password')}
+            placeholder={t('auth.confirm_password')}
           />
         </Loading>
       </ModalForm>

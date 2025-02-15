@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { LoadingTypes } from '../@types/loading'
+import { LoadingTypes } from '../constants/loading.enum'
 import statePersist from '@/redux/state-persist'
 
 // Initial state

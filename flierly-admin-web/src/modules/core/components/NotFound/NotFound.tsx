@@ -11,8 +11,8 @@ const NotFound: React.FC = () => {
     // Ant Design's Result component for 404 error page
     <Result
       status="404" // HTTP status for not found
-      title={t('error.title.404')} // Display translated title
-      subTitle={t('error.message.404')} // Display translated subtitle
+      title={t('title.error.404')} // Display translated title
+      subTitle={t('message.error.404')} // Display translated subtitle
       extra={
         <Button
           type="primary" // Button styling as primary
@@ -21,7 +21,7 @@ const NotFound: React.FC = () => {
             navigate(-1) // Navigate to the previous page on click
           }}
         >
-          {t('navigate.back')} {/* Translated button text */}
+          {t('button.navigate_back')} {/* Translated button text */}
         </Button>
       }
     />

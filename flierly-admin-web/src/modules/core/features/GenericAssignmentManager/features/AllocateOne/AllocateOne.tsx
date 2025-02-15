@@ -39,7 +39,7 @@ const AllocateOne = <E,>(props: AllocateOneProps<E>) => {
   }
 
   return (
-    <Tooltip title={t('tooltip.assign')}>
+    <Tooltip title={t('tooltip.allocate')}>
       <Button
         onClick={handleAllocate}
         loading={isLoding}

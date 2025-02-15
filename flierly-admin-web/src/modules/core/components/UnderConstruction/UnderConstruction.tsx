@@ -13,8 +13,8 @@ const UnderConstruction: React.FC = () => {
     <Result
       icon={<LayoutFilled />} // Displaying an icon
       status={'info'}
-      title={t('info.title.UnderConstruction')} // Translated title
-      subTitle={t('info.message.UnderConstruction')} // Translated subtitle
+      title={t('title.info.under_construction')} // Translated title
+      subTitle={t('message.info.under_construction')} // Translated subtitle
       extra={
         <Button
           type="primary" // Primary type button
@@ -23,7 +23,7 @@ const UnderConstruction: React.FC = () => {
             navigate(-1) // Navigate back on button click
           }}
         >
-          {t('navigate.back')} {/* Translated button text */}
+          {t('button.navigate_back')} {/* Translated button text */}
         </Button>
       }
     />

@@ -4,9 +4,9 @@ import { Button, Checkbox, Flex, Form, Input } from 'antd'
 import Loading from '@/modules/core/components/Loading'
 import { useAuth } from '../../hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
-import { LoadingTypes } from '../../@types/loading'
-import regexConstants from '@/modules/core/constants/validations.regex'
+import { LoadingTypes } from '../../constants/loading.enum'
 import useLocale from '@/modules/core/features/Locale/hooks/useLocale'
+import vr from '@/modules/core/utils/get-validation-regex.util'
 
 interface LoginFormProps {
   redirectOnLogin?: boolean
@@ -52,38 +52,39 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false, isForPop
       >
         <div style={{ direction: langDirection }}>
           <Form.Item
-            label={t('username')}
+            label={t('auth.username')}
             name="username"
-            rules={[{ required: true, message: t('username_is_required') }, { pattern: regexConstants.username }, { min: 5, max: 20 },
+            rules={[
+              { required: true, message: t('auth.username.required') },
+              { pattern: vr('username'), message: t('auth.username.invalid') }
             ]}
             tooltip={{
-              title: t('username_is_required'),
+              title: t('auth.username.required'),
               icon: <InfoCircleOutlined />,
             }}
           >
-            <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder={t('username')} />
+            <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder={t('auth.username')} />
           </Form.Item>
 
           <Form.Item
-            label={t('password')}
+            label={t('auth.password')}
             name="password"
             rules={[
-              { required: true, message: t('password_is_required') },
-              { pattern: regexConstants.password, message: 'invalid_password' },
-              { max: 28, min: 8 },
+              { required: true, message: t('auth.password.required') },
+              { pattern: vr('password'), message: 'auth.password.invalid' },
             ]}
             tooltip={{
-              title: t('password_is_required'),
+              title: t('auth.password.required'),
               icon: <InfoCircleOutlined />,
             }}
           >
-            <Input.Password prefix={<LockOutlined className="site-form-item-icon" />} placeholder={t('password')} />
+            <Input.Password prefix={<LockOutlined className="site-form-item-icon" />} placeholder={t('auth.password')} />
           </Form.Item>
 
           {!isForPopup ? (
             <Flex justify="space-between">
               <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox>{t('remember_me')}</Checkbox>
+                <Checkbox>{t('text.remember_me')}</Checkbox>
               </Form.Item>
               <a
                 id="login-form-forgot"
@@ -92,7 +93,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false, isForPop
                   marginLeft: langDirection === 'rtl' ? '220px' : undefined,
                 }}
               >
-                {t('forgot_password')}
+                {t('link.forgot_password')}
               </a>
             </Flex>
           ) : null}
@@ -100,12 +101,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false, isForPop
 
         <Form.Item style={{ margin: '5px 0px 5px 0px' }}>
           <Button type="primary" htmlType="submit" className="auth-form-button" loading={loading === LoadingTypes.PENDING}>
-            {t('sign_in')}
+            {t('button.signin')}
           </Button>
 
           {!isForPopup ? (
             <>
-              {t('or')} <a href="/register">{t('register_now')}</a>
+              {t('text.or')} <a href="/register">{t('link.signup')}</a>
             </>
           ) : null}
         </Form.Item>

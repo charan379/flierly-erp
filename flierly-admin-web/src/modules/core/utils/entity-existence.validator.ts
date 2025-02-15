@@ -1,5 +1,4 @@
 import crudService from '../features/CrudModule/service/crud-module.service'
-import { translate } from '../features/Locale/service/locale-state.service'
 import debouncePromise from './debounce-promise'
 
 // Define the type for the parameters passed to the validator function
@@ -29,19 +28,19 @@ function isExistsResult(result: any): result is ExistsResult {
  * @returns {Promise} - Resolves if the entity does not exist, rejects if the entity exists or if there is an error.
  */
 const entityExistenceValidator = debouncePromise(
-  async <T>({ entity, filters, rejectionMessage = 'entity_already_exists' }: EntityExistenceParams<T>): Promise<void> => {
+  async <T>({ entity, filters, rejectionMessage = 'validation.entity_already_exists' }: EntityExistenceParams<T>): Promise<void> => {
     try {
       // Call the exists method from crudService with the provided entity and filters
       const { result } = await crudService.isExists({ entity, filters })
 
       // Use the type guard to check if the result is valid
       if (!isExistsResult(result)) {
-        return Promise.reject('Invalid response format.')
+        return Promise.reject('Invalid response format from server.')
       }
 
       // If the result indicates the entity exists, reject the promise with the custom message
       if (result.exists) {
-        return Promise.reject(translate(rejectionMessage))
+        return Promise.reject(rejectionMessage)
       }
 
       // Resolve if the entity does not exist

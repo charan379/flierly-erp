@@ -37,14 +37,14 @@ const UomFormFields: React.FC<UomFormFieldsProps> = ({ disabledFields, formInsta
                     { pattern: vr('record.name'), message: t('record.name.pattern') },
                     ({ getFieldValue }) => ({
                         validator(_, value) {
-                            if (!value || !vr('name').test(value)) return Promise.resolve();
+                            if (!value || !vr('record.name').test(value)) return Promise.resolve();
                             return entityExistenceValidator(`record-name-validation`, {
                                 entity: "uom",
                                 filters: {
                                     ...(isEditForm && getFieldValue('id') ? { id: { $notEqualTo: getFieldValue('id') } } : {}),
                                     name: { "$iContains": value }
                                 },
-                                rejectionMessage: t('record.name.alreadyExists')
+                                rejectionMessage: t('record.name.already_exists')
                             });
                         },
                     })
@@ -55,21 +55,21 @@ const UomFormFields: React.FC<UomFormFieldsProps> = ({ disabledFields, formInsta
             {/* short name - required field */}
             <ProFormText
                 name={'shortName'}
-                label={t('uom.shortName')}
+                label={t('uom.short_name')}
                 hasFeedback
                 rules={[
-                    { required: true, message: t('uom.shortName.required') },
-                    { pattern: vr('uom.shortName'), message: t('uom.shortName.pattern') },
+                    { required: true, message: t('uom.short_name.required') },
+                    { pattern: vr('uom.shortName'), message: t('uom.short_name.pattern') },
                     ({ getFieldValue }) => ({
                         validator(_, value) {
-                            if (!value || !vr('shortName').test(value)) return Promise.resolve();
+                            if (!value || !vr('uom.shortName').test(value)) return Promise.resolve();
                             return entityExistenceValidator(`record-shortName-validation`, {
                                 entity: "uom",
                                 filters: {
                                     ...(isEditForm && getFieldValue('id') ? { id: { $notEqualTo: getFieldValue('id') } } : {}),
                                     shortName: { "$iContains": value }
                                 },
-                                rejectionMessage: t('record.name.alreadyExists')
+                                rejectionMessage: t('record.name.already_exists')
                             });
                         },
                     })

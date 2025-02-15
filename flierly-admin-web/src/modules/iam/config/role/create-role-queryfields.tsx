@@ -1,41 +1,41 @@
 import { QueryBuilderFieldConfig } from '@/modules/core/features/QueryBuilder/QueryBuilder'
 import { createBooleanQueryBuilderField, createDateQueryBuilderField, createNumberQueryBuilderField, createTextQueryBuilderField } from '@/modules/core/utils/create-query-builder-field'
 
-const createRoleQueryBuilderFields = (translate: (value: string) => string): QueryBuilderFieldConfig<Role>[] => [
+const createRoleQueryBuilderFields = (t: (value: string) => string): QueryBuilderFieldConfig<Role>[] => [
   // id
   createNumberQueryBuilderField({
-    label: translate('id'),
+    label: t('record.id'),
     name: 'id'
   }),
   // isActive
   createBooleanQueryBuilderField({
-    label: translate('status'),
+    label: t('record.is_active'),
     name: 'isActive',
-    optionLabels: [translate('active'), translate('inactive')]
+    optionLabels: [t('option.active'), t('option.inactive')]
   }),
   // name
   createTextQueryBuilderField({
-    label: translate('name'),
+    label: t('record.name'),
     name: 'name'
   }),
   // code
   createTextQueryBuilderField({
-    label: translate('code'),
+    label: t('record.code'),
     name: 'code'
   }),
   // createdAt
   createDateQueryBuilderField({
-    label: translate('created_at'),
+    label: t('record.created_at'),
     name: 'createdAt'
   }),
   // updatedAt
   createDateQueryBuilderField({
-    label: translate('updated_at'),
+    label: t('record.updated_at'),
     name: 'updatedAt'
   }),
   // deletedAt
   createDateQueryBuilderField({
-    label: translate('deleted_at'),
+    label: t('record.deleted_at'),
     name: 'deletedAt'
   }),
 ]

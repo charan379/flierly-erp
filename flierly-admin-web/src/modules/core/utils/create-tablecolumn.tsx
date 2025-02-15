@@ -5,7 +5,7 @@ import formatDateToLocaleTimezone from "./format-date-time-to-locale-timezone";
 export const createIdColumn = (translate: (value: string) => string, config?: { width?: number }): ProColumns => {
 
     return {
-        title: translate("id"),
+        title: translate("record.id"),
         dataIndex: 'id',
         key: 'id',
         valueType: 'digit',
@@ -19,7 +19,7 @@ export const createIdColumn = (translate: (value: string) => string, config?: { 
 export const createNameColumn = (translate: (value: string) => string, config?: { width?: number }): ProColumns => {
 
     return {
-        title: translate('name'),
+        title: translate('record.name'),
         dataIndex: 'name',
         key: 'name',
         valueType: 'text',
@@ -31,7 +31,7 @@ export const createNameColumn = (translate: (value: string) => string, config?: 
 export const createDescriptionColumn = (translate: (value: string) => string, config?: { width?: number }): ProColumns => {
 
     return {
-        title: translate('description'),
+        title: translate('record.description'),
         dataIndex: 'description',
         key: 'description',
         valueType: 'text',
@@ -43,7 +43,7 @@ export const createDescriptionColumn = (translate: (value: string) => string, co
 export const createEntityColumn = (translate: (value: string) => string, config?: { width?: number }): ProColumns => {
 
     return {
-        title: translate('entity'),
+        title: translate('column.entity'),
         dataIndex: 'entity',
         key: 'entity',
         valueType: 'text',
@@ -55,7 +55,7 @@ export const createEntityColumn = (translate: (value: string) => string, config?
 export const createCodeColumn = (translate: (value: string) => string, config?: { width?: number }): ProColumns => {
 
     return {
-        title: translate('code'),
+        title: translate('record.code'),
         dataIndex: 'code',
         key: 'code',
         valueType: 'text',
@@ -67,7 +67,7 @@ export const createCodeColumn = (translate: (value: string) => string, config?: 
 export const createMobileColumn = (translate: (value: string) => string, config?: { width?: number }): ProColumns => {
 
     return {
-        title: translate('mobile'),
+        title: translate('record.mobile'),
         dataIndex: 'mobile',
         key: 'mobile',
         valueType: 'text',
@@ -80,7 +80,7 @@ export const createMobileColumn = (translate: (value: string) => string, config?
 export const createEmailColumn = (translate: (value: string) => string, config?: { width?: number }): ProColumns => {
 
     return {
-        title: translate('email'),
+        title: translate('record.email'),
         dataIndex: 'email',
         key: 'email',
         valueType: 'text',
@@ -92,11 +92,11 @@ export const createEmailColumn = (translate: (value: string) => string, config?:
 
 export const createBooleanColumn = (translate: (value: string) => string, config?: { width?: number, title?: string, dataIndex?: string }): ProColumns => {
     return {
-        title: config?.title ?? translate('is_active'),
+        title: config?.title ?? translate('record.is_active'),
         dataIndex: config?.dataIndex ?? 'isActive',
         key: config?.dataIndex ?? 'isActive',
         valueType: 'checkbox',
-        width: config?.width ?? 55,
+        width: config?.width ?? 80,
         align: 'center',
         render: (_text, entity) => {
             return <Checkbox checked={entity[config?.dataIndex ? config.dataIndex : 'isActive']} />
@@ -108,7 +108,7 @@ export const createBooleanColumn = (translate: (value: string) => string, config
 export const createTimeStampColumn = (translate: (value: string) => string, config?: { width?: number, title: string, dataIndex: string }): ProColumns => {
 
     return {
-        title: config?.title ?? translate('time_stamp'),
+        title: config?.title ?? translate('record.time_stamp'),
         dataIndex: config?.dataIndex ?? 'timeStamp',
         key: config?.dataIndex ?? 'timeStamp',
         valueType: 'text',

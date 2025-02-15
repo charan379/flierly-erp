@@ -22,7 +22,7 @@ const genricAssignmentService = {
     limit,
     page,
     filters = {},
-    sort = {},
+    sort,
     signal,
   }: EntityRecordsPageRequest<T>) => {
     const promise = api.post<ApiResponse<PageData<T>>>(`/${entity}/page`, { filters, page, limit, sort, loadRelations, binMode }, { signal })
@@ -41,7 +41,7 @@ const genricAssignmentService = {
     limit,
     page,
     filters = {},
-    sort = {},
+    sort,
     type,
     signal,
   }: AssociatedEntityRecordsPageRequest<E, AE>) => {

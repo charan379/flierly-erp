@@ -1,7 +1,7 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { logout, setAuth, setLoading, setExpiredTrue } from '../redux/auth.slice'
 import authService from '../service/auth.service'
-import { LoadingTypes } from '../@types/loading'
+import { LoadingTypes } from '../constants/loading.enum'
 import getPermissionRegex from '../utils/get-permission-regex.util'
 import { AppDispatch, RootState } from '@/redux/store'
 

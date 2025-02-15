@@ -7,9 +7,9 @@ import useLocale from '@/modules/core/features/Locale/hooks/useLocale'
 
 const SearchableMenu: React.FC = () => {
   const [options, setOptions] = useState<{ label: JSX.Element; value: string }[]>([])
-  const { translate } = useLocale()
+  const { translate: t } = useLocale()
   const { hasPermission } = useAuth();
-  const siteMapItems = createSiteMapItems(translate, hasPermission);
+  const siteMapItems = createSiteMapItems(t, hasPermission);
 
   const handleSearch = (value: string) => {
     if (!value) {

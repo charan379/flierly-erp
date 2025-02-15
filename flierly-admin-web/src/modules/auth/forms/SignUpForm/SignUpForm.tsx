@@ -2,8 +2,8 @@ import React from 'react'
 import { InfoCircleOutlined, LockOutlined, MailOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Checkbox, Flex, Form, Input } from 'antd'
 import Loading from '@/modules/core/components/Loading'
-import regexConstants from '@/modules/core/constants/validations.regex'
 import useLocale from '@/modules/core/features/Locale/hooks/useLocale'
+import vr from '@/modules/core/utils/get-validation-regex.util'
 
 interface FormValues {
   username: string
@@ -38,82 +38,79 @@ const SignUpForm: React.FC = () => {
         <div style={{ direction: langDirection }}>
           {/* Username */}
           <Form.Item
-            label={t('username')}
+            label={t('auth.username')}
             name="username"
             rules={[
-              { required: true, message: t('username_is_required') },
-              { pattern: regexConstants.username, message: t('username_is_invalid') },
-              { min: 5, max: 20 },
+              { required: true, message: t('auth.username.required') },
+              { pattern: vr("username"), message: t('auth.username.invalid') },
             ]}
             tooltip={{
-              title: t('username_is_required'),
+              title: t('auth.username.required'),
               icon: <InfoCircleOutlined />,
             }}
             hasFeedback
           >
-            <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder={t('username')} />
+            <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder={t('auth.username')} />
           </Form.Item>
 
           {/* Email */}
           <Form.Item
-            label={t('email')}
+            label={t('auth.email')}
             name="email"
-            rules={[{ required: true, message: t('email_is_required') }, { type: 'email' }]}
+            rules={[{ required: true, message: t('auth.email.required') }, { type: 'email', message: t('auth.email.invalid') }]}
             hasFeedback
           >
-            <Input prefix={<MailOutlined className="site-form-item-icon" />} placeholder={t('email')} type="email" />
+            <Input prefix={<MailOutlined className="site-form-item-icon" />} placeholder={t('auth.email')} type="email" />
           </Form.Item>
 
           {/* Email */}
           <Form.Item
-            label={t('mobile')}
+            label={t('auth.mobile')}
             name="mobile"
             rules={[
-              { required: true, message: t('mobile_is_required') },
+              { required: true, message: t('auth.mobile.required') },
               { type: 'string' },
-              { pattern: regexConstants.mobile, message: t('mobile_is_invalid') },
+              { pattern: vr('mobile'), message: t('auth.mobile.invalid') },
             ]}
             hasFeedback
           >
-            <Input prefix={<PhoneOutlined className="site-form-item-icon" />} placeholder={t('mobile')} type="string" />
+            <Input prefix={<PhoneOutlined className="site-form-item-icon" />} placeholder={t('auth.mobile')} type="string" />
           </Form.Item>
 
           {/* Password */}
           <Form.Item
-            label={t('password')}
+            label={t('auth.password')}
             name="password"
             rules={[
-              { required: true, message: t('password_is_required') },
-              { pattern: regexConstants.password, message: t('password_is_invalid') },
-              { max: 28, min: 8 },
+              { required: true, message: t('auth.password.required') },
+              { pattern: vr("password"), message: t('auth.password.invalid') },
             ]}
             tooltip={{
-              title: t('password_is_required'),
+              title: t('auth.password.required'),
               icon: <InfoCircleOutlined />,
             }}
             hasFeedback
           >
-            <Input.Password prefix={<LockOutlined className="site-form-item-icon" />} placeholder={t('password')} />
+            <Input.Password prefix={<LockOutlined className="site-form-item-icon" />} placeholder={t('auth.password')} />
           </Form.Item>
 
           {/* Confirm Password */}
           <Form.Item
-            label={t('confirm_password')}
+            label={t('auth.confirm_password')}
             name="confirm_password"
             dependencies={['password']}
             rules={[
-              { required: true, message: t('confirm_password_is_required') },
-              { pattern: regexConstants.password, message: t('confirm_password_is_invalid') },
-              { max: 28, min: 8 },
+              { required: true, message: t('auth.confirm_password.required') },
+              { pattern: vr('password'), message: t('auth.confirm_password.invalid') },
               ({ getFieldValue }) => ({
                 async validator(_, value) {
-                  return !value || getFieldValue('password') === value ? Promise.resolve() : Promise.reject(new Error(t('passwords_doesnt_match')))
+                  return !value || getFieldValue('password') === value ? Promise.resolve() : Promise.reject(new Error(t('auth.confirm_password.mismatch')))
                 },
               }),
             ]}
             hasFeedback
           >
-            <Input.Password prefix={<LockOutlined className="site-form-item-icon" />} placeholder={t('confirm_password')} />
+            <Input.Password prefix={<LockOutlined className="site-form-item-icon" />} placeholder={t('auth.confirm_password')} />
           </Form.Item>
 
           {/* Accept Terms and Conditions */}
@@ -124,14 +121,14 @@ const SignUpForm: React.FC = () => {
               noStyle
               rules={[
                 {
-                  validator: async (_, value) => (value ? Promise.resolve() : Promise.reject(new Error(t('terms_and_conditions_must_be_accepted')))),
+                  validator: async (_, value) => (value ? Promise.resolve() : Promise.reject(new Error(t('text.terms_and_conditions_must_be_accepted')))),
                 },
               ]}
             >
-              <Checkbox>{t('accept_terms_conditions')}</Checkbox>
+              <Checkbox>{t('text.accept_terms_conditions')}</Checkbox>
             </Form.Item>
             <a id="sign-up-form-terms" href="/terms-conditions-and-usage-policy" style={{ marginLeft: langDirection === 'rtl' ? '220px' : undefined }}>
-              {t('terms_and_conditions')}
+              {t('link.terms_and_conditions')}
             </a>
           </Flex>
         </div>
@@ -139,9 +136,9 @@ const SignUpForm: React.FC = () => {
         {/* Form Submission */}
         <Form.Item style={{ margin: '5px 0px 5px 0px' }}>
           <Button type="primary" htmlType="submit" className="auth-form-button" loading={false}>
-            {t('sign_up')}
+            {t('button.signin')}
           </Button>
-          {t('or')} <a href="/login">{t('login')}</a>
+          {t('text.or')} <a href="/login">{t('link.signin')}</a>
         </Form.Item>
       </Form>
     </Loading>

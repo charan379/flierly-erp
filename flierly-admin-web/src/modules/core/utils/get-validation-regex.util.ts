@@ -1,5 +1,5 @@
 import validationsRegex from "@/modules/core/constants/validations.regex";
 
-const getValidationRegex = (key: string): RegExp => validationsRegex[key] || /.*/;
+const getValidationRegex = (key: keyof typeof validationsRegex): RegExp => validationsRegex[key] || /.*/;
 
 export default getValidationRegex;

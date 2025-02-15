@@ -11,8 +11,8 @@ const UnAuthorized: React.FC = () => {
     // Ant Design's Result component for 403 error page
     <Result
       status="403" // HTTP status for forbidden access
-      title={t('error.title.403')} // Display translated title
-      subTitle={t('error.message.403')} // Display translated subtitle
+      title={t('title.error.403')} // Display translated title
+      subTitle={t('message.error.403')} // Display translated subtitle
       extra={
         <Button
           type="primary" // Button styling as primary
@@ -21,7 +21,7 @@ const UnAuthorized: React.FC = () => {
             navigate(-1) // Navigate to home on click
           }}
         >
-          {t('navigate.back')} {/* Translated button text */}
+          {t('button.navigate_back')} {/* Translated button text */}
         </Button>
       }
     />

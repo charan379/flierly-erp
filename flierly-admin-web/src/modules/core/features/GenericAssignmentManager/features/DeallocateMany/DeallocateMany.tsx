@@ -50,7 +50,7 @@ const DeallocateMany = <E,>(props: DeallocateManyProps<E>) => {
       style={buttonStyle}
       type="primary"
     >
-      {t('action.button.allocateSelected')} ({idsToDisassociate.length})
+      {t('button.allocate_selected')} ({idsToDisassociate.length})
     </Button>
   )
 }

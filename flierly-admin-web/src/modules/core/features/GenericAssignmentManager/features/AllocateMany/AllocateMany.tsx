@@ -51,7 +51,7 @@ const AllocateMany = <E,>(props: AllocateManyProps<E>) => {
       style={buttonStyle}
       type="primary"
     >
-      {t('action.button.deallocateSelected')} ({idsToAssociate.length})
+      {t('button.deallocate_selected')} ({idsToAssociate.length})
     </Button>
   )
 }

@@ -7,50 +7,50 @@ const createPrivilegeBuilderQueryFields = (t: (value: string) => string): QueryB
   return [
     // id
     createNumberQueryBuilderField({
-      label: t('id'),
+      label: t('record.id'),
       name: 'id'
     }),
     // isActive
     createBooleanQueryBuilderField({
-      label: t('status'),
+      label: t('record.is_active'),
       name: 'isActive',
-      optionLabels: [t('active'), t('inactive')]
+      optionLabels: [t('option.active'), t('option.inactive')]
     }),
     // name
     createTextQueryBuilderField({
-      label: t('name'),
+      label: t('record.name'),
       name: 'name'
     }),
     // access
     createSelectQueryBuilderField({
-      label: t('access'),
+      label: t('privilege.access'),
       name: 'access',
       options: accessOptions
     }),
     // entity
     createSelectRemoteOptionsQueryBuilderField({
-      label: t('entity'),
+      label: t('privilege.entity'),
       name: 'entity',
       asyncOptionsFetcher: fetchEntityOptions
     }),
     // code
     createTextQueryBuilderField({
-      label: t('code'),
+      label: t('record.code'),
       name: 'code'
     }),
     // createdAt
     createDateQueryBuilderField({
-      label: t('created_at'),
+      label: t('record.created_at'),
       name: 'createdAt'
     }),
     // updatedAt
     createDateQueryBuilderField({
-      label: t('updated_at'),
+      label: t('record.updated_at'),
       name: 'updatedAt'
     }),
     // deletedAt
     createDateQueryBuilderField({
-      label: t('deleted_at'),
+      label: t('record.deleted_at'),
       name: 'deletedAt'
     }),
   ]

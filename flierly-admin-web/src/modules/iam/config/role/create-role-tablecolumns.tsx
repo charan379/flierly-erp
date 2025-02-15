@@ -6,56 +6,56 @@ import createPrivilegeAMQueryBuilderFields from '../privilege/create-privilege-a
 import { createBooleanColumn, createCodeColumn, createDescriptionColumn, createIdColumn, createNameColumn, createTimeStampColumn } from '@/modules/core/utils/create-tablecolumn'
 import AssociationManager from '@/modules/core/features/GenericAssignmentManager'
 
-const createRoleTableColumns = (translate: (value: string) => string, hasPermission: (requiredPermissionRegex: RegExp) => boolean): ProColumns<Role>[] => {
+const createRoleTableColumns = (t: (value: string) => string, hasPermission: (requiredPermissionRegex: RegExp) => boolean): ProColumns<Role>[] => {
   return [
     // id
-    createIdColumn(translate),
+    createIdColumn(t),
     // isActive
-    createBooleanColumn(translate, { dataIndex: 'isActive', width: 80 }),
+    createBooleanColumn(t, { dataIndex: 'isActive', width: 110 }),
     // name
-    createNameColumn(translate),
+    createNameColumn(t),
     // code
-    createCodeColumn(translate),
+    createCodeColumn(t),
     // description
-    createDescriptionColumn(translate),
+    createDescriptionColumn(t),
     // privileges
     {
-      title: translate('privileges'),
+      title: t('title.privileges'),
       dataIndex: 'privileges',
       key: 'privileges',
-      width: 150,
+      width: 200,
       align: 'center',
-      render: (_, entity) => {
+      render: (_, record) => {
         return (
           <ResizableDrawer
-            title={<span style={{ padding: 0, textAlign: 'left' }}>{`Edit privileges for Role: ${entity.name}`}</span>}
+            title={<span style={{ padding: 0, textAlign: 'left' }}>{`${t("title.manage_privileges")}: ${record.name}`}</span>}
             initialWidth={1200}
             destroyOnClose
             styles={{
               footer: { padding: '15px 15px 15px 15px' },
               header: { padding: '10px 10px 10px 10px', textAlign: 'left' },
             }}
-            trigger={<Button type="link">Manage Privileges</Button>}
+            trigger={<Button type="link">{t("button.manage_privileges")}</Button>}
           >
             <AssociationManager<Role, Privilege>
               entity="role"
-              entityRecord={entity}
+              entityRecord={record}
               entitySideField="privileges"
               associatedEntity="privilege"
               associatedSideField="roles"
-              associatedEntityColumns={createPrivilegeTableColumns(translate, hasPermission).filter((column) => ['id', 'name', 'code', 'entity', 'access', 'isActive'].includes(column.dataIndex as string))}
-              associatedEntityQueryConfig={createPrivilegeAMQueryBuilderFields(translate)}
+              associatedEntityColumns={createPrivilegeTableColumns(t, hasPermission).filter((column) => ['id', 'name', 'code', 'entity', 'access', 'isActive'].includes(column.dataIndex as string))}
+              associatedEntityQueryConfig={createPrivilegeAMQueryBuilderFields(t)}
             />
           </ResizableDrawer>
         )
       },
     },
     // updatedAt
-    createTimeStampColumn(translate, { title: translate('updated_at'), dataIndex: 'updatedAt' }),
+    createTimeStampColumn(t, { title: t('record.updated_at'), dataIndex: 'updatedAt' }),
     // createdAt
-    createTimeStampColumn(translate, { title: translate('created_at'), dataIndex: 'createdAt' }),
+    createTimeStampColumn(t, { title: t('record.created_at'), dataIndex: 'createdAt' }),
     // deletedAt
-    createTimeStampColumn(translate, { title: translate('deleted_at'), dataIndex: 'deletedAt' }),
+    createTimeStampColumn(t, { title: t('record.deleted_at'), dataIndex: 'deletedAt' }),
   ]
 }
 

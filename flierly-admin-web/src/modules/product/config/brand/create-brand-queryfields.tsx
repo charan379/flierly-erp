@@ -1,31 +1,31 @@
 import { QueryBuilderFieldConfig } from "@/modules/core/features/QueryBuilder/QueryBuilder";
 import { createDateQueryBuilderField, createNumberQueryBuilderField, createTextQueryBuilderField } from "@/modules/core/utils/create-query-builder-field";
 
-const createBrandQueryFields = (translate: (value: string) => string): QueryBuilderFieldConfig<Brand>[] => {
+const createBrandQueryFields = (t: (value: string) => string): QueryBuilderFieldConfig<Brand>[] => {
     return [
         // id
         createNumberQueryBuilderField({
-            label: translate('id'),
+            label: t('record.id'),
             name: 'id'
         }),
         // name
         createTextQueryBuilderField({
-            label: translate('name'),
+            label: t('record.name'),
             name: 'name'
         }),
         // createdAt
         createDateQueryBuilderField({
-            label: translate('created_at'),
+            label: t('record.created_at'),
             name: 'createdAt'
         }),
         // updatedAt
         createDateQueryBuilderField({
-            label: translate('updated_at'),
+            label: t('record.updated_at'),
             name: 'updatedAt'
         }),
         // deletedAt
         createDateQueryBuilderField({
-            label: translate('deleted_at'),
+            label: t('record.deleted_at'),
             name: 'deletedAt'
         }),
     ]

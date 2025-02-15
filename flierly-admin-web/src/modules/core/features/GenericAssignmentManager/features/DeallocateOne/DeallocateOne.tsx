@@ -40,7 +40,7 @@ const DeallocateOne = <E,>(props: DeallocateOneProps<E>) => {
   }
 
   return (
-    <Tooltip title={t('tooltip.remove')}>
+    <Tooltip title={t('tooltip.deallocate')}>
       <Button
         onClick={handleDeallocate}
         loading={isLoding}

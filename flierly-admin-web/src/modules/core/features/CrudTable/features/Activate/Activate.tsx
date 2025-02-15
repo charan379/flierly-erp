@@ -41,17 +41,17 @@ const Activate: React.FC<ActivateProps> = ({ entity, actions, rows, render }) =>
   }
 
   return (
-    <Tooltip title={t(activate ? 'tooltip.activate.selected' : 'tooltip.inactivate.selected')}>
+    <Tooltip title={t(activate ? 'tooltip.activate_selected' : 'tooltip.inactivate_selected')}>
       <Badge count={rows.selectedRowKeys.length} overflowCount={99}>
         <Popconfirm
-          title={t(activate ? 'action.title.activate' : 'action.title.inactivate')}
-          description={`${t(activate ? 'confirm.activate.message' : 'confirm.inactivate.message')}: ${rows.selectedRowKeys.length}`}
+          title={t(activate ? 'title.activate_selected' : 'title.inactivate_selected')}
+          description={`${t(activate ? 'message.confirm_activate_selected' : 'message.confirm_inactivate_selected')}: ${rows.selectedRowKeys.length}`}
           icon={<QuestionCircleOutlined style={{ color: activate ? '#4CAF50' : '#9E9E9E' }} />}
           okButtonProps={{ style: { backgroundColor: activate ? '#4CAF50' : '#9E9E9E' } }}
-          okText={t('action.button.confirm')}
-          cancelText={t('action.button.cancel')}
+          okText={t('button.confirm')}
+          cancelText={t('button.cancel')}
           cancelButtonProps={{ type: 'primary' }}
-          onCancel={() => message.warning(t('action.message.cancelled'))}
+          onCancel={() => message.warning(t('message.cancelled'))}
           onConfirm={handleConfirm}
         >
           <Button

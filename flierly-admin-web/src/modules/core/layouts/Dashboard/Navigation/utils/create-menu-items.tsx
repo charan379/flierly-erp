@@ -13,7 +13,7 @@ export type NavMenuItemType = {
 } & ItemType<MenuItemType>
 
 // Must be called in a react component only
-const createMenuItems = (translate: (value: string) => string, hasPermission: (requiredPermissionRegex: RegExp) => boolean): NavMenuItemType[] => {
+const createMenuItems = (t: (value: string) => string, hasPermission: (requiredPermissionRegex: RegExp) => boolean): NavMenuItemType[] => {
 
   const getLinkStyle = (permissionRegex?: RegExp): React.CSSProperties => {
     if (permissionRegex) {
@@ -30,7 +30,7 @@ const createMenuItems = (translate: (value: string) => string, hasPermission: (r
 
   const items: NavMenuItemType[] = [];
 
-  const siteMapItems = createSiteMapItems(translate, hasPermission);
+  const siteMapItems = createSiteMapItems(t, hasPermission);
 
   for (const siteMapItem of siteMapItems) {
     if (siteMapItem.parentItemId) continue;

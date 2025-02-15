@@ -1,14 +1,14 @@
 import ProtectedRoute from '@/modules/core/features/ProtectedRoute/ProtectedRoute'
 import Dashboard from '@/modules/core/layouts/Dashboard'
-import Login from '@/modules/auth/pages/Login'
-import SignUp from '@/modules/auth/pages/SignUp'
+import LoginPage from '@/modules/auth/pages/LoginPage'
+import SignUp from '@/modules/auth/pages/SignUpPage'
 import IamRoutes from '@/modules/iam/router/IamRoutes'
 import ProductRouter from '@/modules/product/router/ProductRouter'
-import PageNotFound from '@/modules/core/pages/PageNotFound'
-import PageUnderConstruction from '@/modules/core/pages/PageUnderConstruction'
+import UnderConstructionPage from '@/modules/core/pages/UnderConstructionPage'
 import { Route, Routes } from 'react-router-dom'
 import AppsPage from '@/modules/core/pages/AppsPage'
 import InventoryRouter from '@/modules/inventory/router/InventoryRouter'
+import NotFoundPage from '@/modules/core/pages/NotFoundPage'
 
 const AppRouter = () => {
   return (
@@ -17,17 +17,17 @@ const AppRouter = () => {
       <Route path="/" element={<AppsPage />} />
 
       <Route path="/erp" element={<ProtectedRoute element={<Dashboard />} />}>
-        <Route path="" element={<PageUnderConstruction />} />
+        <Route path="" element={<UnderConstructionPage />} />
         <Route path="iam/*" element={<IamRoutes />} />
         <Route path="product/*" element={<ProductRouter />} />
         <Route path='inventory/*' element={<InventoryRouter />} />
       </Route>
       {/* Login and Register routes */}
-      <Route path="/login" element={<Login />} />
+      <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<SignUp />} />
 
       {/* Catch-all for 404 */}
-      <Route path="*" element={<PageNotFound />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   )
 }

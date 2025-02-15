@@ -1,26 +1,26 @@
 import { AMQueryBuilderFieldConfig, createBooleanAMQueryField, createNumericAMQueryField, createTextAMQueryField } from "@/modules/core/utils/create-assignment-manager-queryfield";
 
-const createRoleAMQueryBuilderFields = (translate: (value: string) => string): AMQueryBuilderFieldConfig<Role>[] => {
+const createRoleAMQueryBuilderFields = (t: (value: string) => string): AMQueryBuilderFieldConfig<Role>[] => {
     return [
         // id
         createNumericAMQueryField({
-            label: translate('id'),
+            label: t('record.id'),
             name: 'id'
         }),
         // isActive
         createBooleanAMQueryField({
-            label: translate('status'),
+            label: t('record.is_active'),
             name: 'isActive',
-            optionLabels: [translate('active'), translate('inactive')]
+            optionLabels: [t('option.active'), t('option.inactive')]
         }),
         // name
         createTextAMQueryField({
-            label: translate('name'),
+            label: t('record.name'),
             name: 'name'
         }),
         // code
         createTextAMQueryField({
-            label: translate('code'),
+            label: t('record.code'),
             name: 'code'
         }),
     ]

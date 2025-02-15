@@ -35,7 +35,7 @@ const SideContent: React.FC = () => {
       <div style={{ width: '100%', background: 'inherit' }}>
         <img src="/vite.svg" alt="Flierly" style={{ margin: '0 auto 40px', display: 'block' }} height={63} width={220} />
 
-        <Title level={3}>{t('manage_your_company_with')}:</Title>
+        <Title level={3}>{t('title.manage_your_company_with')}:</Title>
 
         <ul className="list-checked" style={{ paddingRight: 0 }}>
           {listItems.map(({ line1, line2 }, index) => (

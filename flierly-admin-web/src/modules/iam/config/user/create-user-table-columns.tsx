@@ -9,15 +9,15 @@ import { createBooleanColumn, createEmailColumn, createIdColumn, createMobileCol
 import createRoleAMQueryBuilderFields from '../role/create-role-am-queryfields'
 import AssociationManager from '@/modules/core/features/GenericAssignmentManager'
 
-const createUserTableColumns = (translate: (value: string) => string, _hasPermission: (requiredPermissionRegex: RegExp) => boolean): ProColumns<User>[] => {
+const createUserTableColumns = (t: (value: string) => string, _hasPermission: (requiredPermissionRegex: RegExp) => boolean): ProColumns<User>[] => {
   return [
     // id
-    createIdColumn(translate),
+    createIdColumn(t),
     // isActive
-    createBooleanColumn(translate, { dataIndex: 'isActive', width: 100 }),
+    createBooleanColumn(t, { dataIndex: 'isActive', width: 110 }),
     // username
     {
-      title: translate('username'),
+      title: t('record.username'),
       dataIndex: 'username',
       key: 'username',
       valueType: 'text',
@@ -25,36 +25,36 @@ const createUserTableColumns = (translate: (value: string) => string, _hasPermis
       width: 200,
     },
     // email
-    createEmailColumn(translate),
+    createEmailColumn(t),
     // mobile
-    createMobileColumn(translate),
+    createMobileColumn(t),
     // Additional Privileges
     {
-      title: `${translate('additional')} ${translate('privileges')}`,
+      title: `${t('title.additional_privileges')}`,
       dataIndex: 'additionalPrivileges',
       key: 'additionalPrivileges',
       align: 'center',
-      width: 150,
-      render: (_, entity) => {
+      width: 250,
+      render: (_, record) => {
         return (
           <ResizableDrawer
-            title={<span style={{ padding: 0, textAlign: 'left' }}>{`Edit additional privileges for : ${entity.username}`}</span>}
+            title={<span style={{ padding: 0, textAlign: 'left' }}>{`${t("title.manage_additional_privileges")}: ${record.username}`}</span>}
             initialWidth={1200}
             destroyOnClose
             styles={{
               footer: { padding: '15px 15px 15px 15px' },
               header: { padding: '10px 10px 10px 10px', textAlign: 'left' },
             }}
-            trigger={<Button type="link">Manage</Button>}
+            trigger={<Button type="link">{t("button.manage_additional_privileges")}</Button>}
           >
             <AssociationManager<User, Privilege>
               entity="user"
-              entityRecord={entity}
+              entityRecord={record}
               entitySideField="additionalPrivileges"
               associatedEntity="privilege"
               associatedSideField='usersWithAdditionalPrivileges'
-              associatedEntityColumns={createPrivilegeTableColumns(translate, _hasPermission).filter((column) => ['id', 'name', 'code', 'entity', 'access', 'isActive'].includes(column.dataIndex as string))}
-              associatedEntityQueryConfig={createPrivilegeAMQueryBuilderFields(translate)}
+              associatedEntityColumns={createPrivilegeTableColumns(t, _hasPermission).filter((column) => ['id', 'name', 'code', 'entity', 'access', 'isActive'].includes(column.dataIndex as string))}
+              associatedEntityQueryConfig={createPrivilegeAMQueryBuilderFields(t)}
             />
           </ResizableDrawer>
         )
@@ -62,31 +62,31 @@ const createUserTableColumns = (translate: (value: string) => string, _hasPermis
     },
     // Restricted Privileges
     {
-      title: `${translate('restricted')} ${translate('privileges')}`,
+      title: `${t('title.restricted_privileges')}`,
       dataIndex: 'restrictedPrivileges',
       key: 'restrictedPrivileges',
       align: 'center',
-      width: 150,
-      render: (_, entity) => {
+      width: 250,
+      render: (_, record) => {
         return (
           <ResizableDrawer
-            title={<span style={{ padding: 0, textAlign: 'left' }}>{`Edit restricted privileges for : ${entity.username}`}</span>}
+            title={<span style={{ padding: 0, textAlign: 'left' }}>{`${t("title.manage_restricted_privileges")} : ${record.username}`}</span>}
             initialWidth={1200}
             destroyOnClose
             styles={{
               footer: { padding: '15px 15px 15px 15px' },
               header: { padding: '10px 10px 10px 10px', textAlign: 'left' },
             }}
-            trigger={<Button type="link">Manage</Button>}
+            trigger={<Button type="link">{t("button.manage_restricted_privileges")}</Button>}
           >
             <AssociationManager<User, Privilege>
               entity="user"
-              entityRecord={entity}
+              entityRecord={record}
               entitySideField="restrictedPrivileges"
               associatedEntity="privilege"
               associatedSideField="usersWithRestrictedPrivileges"
-              associatedEntityColumns={createPrivilegeTableColumns(translate, _hasPermission).filter((column) => ['id', 'name', 'code', 'entity', 'access', 'isActive'].includes(column.dataIndex as string))}
-              associatedEntityQueryConfig={createPrivilegeAMQueryBuilderFields(translate)}
+              associatedEntityColumns={createPrivilegeTableColumns(t, _hasPermission).filter((column) => ['id', 'name', 'code', 'entity', 'access', 'isActive'].includes(column.dataIndex as string))}
+              associatedEntityQueryConfig={createPrivilegeAMQueryBuilderFields(t)}
             />
           </ResizableDrawer>
         )
@@ -94,31 +94,31 @@ const createUserTableColumns = (translate: (value: string) => string, _hasPermis
     },
     // Roles
     {
-      title: translate('roles'),
+      title: t('title.roles'),
       dataIndex: 'roles',
       key: 'roles',
       align: 'center',
-      width: 100,
-      render: (_, entity) => {
+      width: 180,
+      render: (_, record) => {
         return (
           <ResizableDrawer
-            title={<span style={{ padding: 0, textAlign: 'left' }}>{`Manage roles for : ${entity.username}`}</span>}
+            title={<span style={{ padding: 0, textAlign: 'left' }}>{`${t("title.manage_roles")} : ${record.username}`}</span>}
             initialWidth={1200}
             destroyOnClose
             styles={{
               footer: { padding: '15px 15px 15px 15px' },
               header: { padding: '10px 10px 10px 10px', textAlign: 'left' },
             }}
-            trigger={<Button type="link">Manage</Button>}
+            trigger={<Button type="link">{t("button.manage_roles")}</Button>}
           >
             <AssociationManager<User, Role>
               entity="user"
-              entityRecord={entity}
+              entityRecord={record}
               entitySideField="roles"
               associatedEntity="role"
               associatedSideField="users"
-              associatedEntityColumns={createRoleTableColumns(translate, _hasPermission).filter((column) => ['id', 'name', 'code', 'isActive'].includes(column.dataIndex as string))}
-              associatedEntityQueryConfig={createRoleAMQueryBuilderFields(translate)}
+              associatedEntityColumns={createRoleTableColumns(t, _hasPermission).filter((column) => ['id', 'name', 'code', 'isActive'].includes(column.dataIndex as string))}
+              associatedEntityQueryConfig={createRoleAMQueryBuilderFields(t)}
             />
           </ResizableDrawer>
         )
@@ -126,20 +126,20 @@ const createUserTableColumns = (translate: (value: string) => string, _hasPermis
     },
     // password
     {
-      title: translate('password'),
+      title: t('title.password'),
       key: 'password',
       align: 'center',
-      width: 180,
-      render: (_dom, entity, _index, _action, _schema) => {
-        return <UserPasswordUpdate userId={entity.id} username={entity.username} />
+      width: 200,
+      render: (_dom, record, _index, _action, _schema) => {
+        return <UserPasswordUpdate userId={record.id} username={record.username} />
       },
     },
     // updatedAt
-    createTimeStampColumn(translate, { title: translate('updated_at'), dataIndex: 'updatedAt' }),
+    createTimeStampColumn(t, { title: t('record.updated_at'), dataIndex: 'updatedAt' }),
     // createdAt
-    createTimeStampColumn(translate, { title: translate('created_at'), dataIndex: 'createdAt' }),
+    createTimeStampColumn(t, { title: t('record.created_at'), dataIndex: 'createdAt' }),
     // deletedAt
-    createTimeStampColumn(translate, { title: translate('deleted_at'), dataIndex: 'deletedAt' }),
+    createTimeStampColumn(t, { title: t('record.deleted_at'), dataIndex: 'deletedAt' }),
   ]
 }
 

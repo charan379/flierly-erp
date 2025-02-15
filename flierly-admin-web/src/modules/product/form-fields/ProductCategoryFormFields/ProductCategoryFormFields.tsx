@@ -20,7 +20,7 @@ const ProductCategoryFormFields: React.FC<ProductCategoryFormFieldsProps> = ({ f
             {/* id - Hidden field for edit form */}
             <ProFormDigit
                 name={'id'}
-                label={t('entity.id')}
+                label={t('record.id')}
                 hidden={!isEditForm}
                 disabled={true}
             />
@@ -28,21 +28,21 @@ const ProductCategoryFormFields: React.FC<ProductCategoryFormFieldsProps> = ({ f
             {/* name - Input for category name */}
             <ProFormText
                 name={'name'}
-                label={t('entity.name')}
+                label={t('record.name')}
                 hasFeedback
                 rules={[
-                    { required: true, message: t('entity.nameRequired') },
-                    { pattern: vr('name'), message: t('entity.namePattern') },
+                    { required: true, message: t('record.name.required') },
+                    { pattern: vr('record.name'), message: t('record.name.invalid') },
                     ({ getFieldValue }) => ({
                         validator(_, value) {
-                            if (!value || !vr('name').test(value)) return Promise.resolve();
-                            return entityExistenceValidator(`entity-name-validation`, {
+                            if (!value || !vr('record.name').test(value)) return Promise.resolve();
+                            return entityExistenceValidator(`record-name-validation`, {
                                 entity: "product-category",
                                 filters: {
                                     ...(isEditForm && getFieldValue('id') ? { id: { $notEqualTo: getFieldValue('id') } } : {}),
-                                    name: value
+                                    name: { $iContains: value }
                                 },
-                                rejectionMessage: t('entity.nameAlreadyExists')
+                                rejectionMessage: t('record.name.already_exists')
                             });
                         },
                     })
@@ -53,10 +53,10 @@ const ProductCategoryFormFields: React.FC<ProductCategoryFormFieldsProps> = ({ f
             {/* description - Textarea for category description */}
             <ProFormTextArea
                 name={'description'}
-                label={t('entity.description')}
+                label={t('record.description')}
                 rules={[
-                    { required: true, message: t('entity.descriptionRequired') },
-                    { pattern: vr('description'), message: t('entity.descriptionPattern') },
+                    { required: true, message: t('record.description.required') },
+                    { pattern: vr('record.description'), message: t('record.description.invalid') },
                 ]}
                 disabled={(isEditForm && !hasPermission(pr('productCategory.update'))) || disabledFields?.includes('description')}
             />

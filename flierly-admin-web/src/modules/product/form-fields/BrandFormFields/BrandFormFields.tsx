@@ -40,9 +40,9 @@ const BrandFormFields: React.FC<BrandFormFieldsProps> = ({ disabledFields, formI
                                 entity: "brand",
                                 filters: {
                                     ...(isEditForm && getFieldValue('id') ? { id: { $notEqualTo: getFieldValue('id') } } : {}),
-                                    name: value
+                                    name: { $iContains: value }
                                 },
-                                rejectionMessage: t('record.name.alreadyExists')
+                                rejectionMessage: t('record.name.already_exists')
                             });
                         },
                     })
@@ -56,12 +56,12 @@ const BrandFormFields: React.FC<BrandFormFieldsProps> = ({ disabledFields, formI
                 label={t('record.description')}
                 rules={[
                     { required: true, message: t('record.description.required') },
-                    { pattern: vr('description'), message: t('entity.description.pattern') },
+                    { pattern: vr('record.description'), message: t('record.description.pattern') },
                 ]}
                 disabled={(isEditForm && !hasPermission(pr('brand.update'))) || disabledFields?.includes('description')}
             />
         </>
     )
-}
+};
 
 export default BrandFormFields

@@ -43,7 +43,7 @@ const PrivilegeFormFields: React.FC<PrivilegeFormFieldsProps> = ({ disabledField
                 hasFeedback
                 rules={[
                     { required: true, message: t('entity.nameRequired') },
-                    { pattern: vr('name'), message: t('entity.namePattern') },
+                    { pattern: vr("record.name"), message: t('entity.namePattern') },
                     ({ getFieldValue }) => ({
                         validator(_, value) {
                             if (!value || !vr('name').test(value)) return Promise.resolve();
