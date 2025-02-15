@@ -4,7 +4,7 @@ import { Button } from 'antd'
 import createPrivilegeTableColumns from '../privilege/create-privilege-tablecolumns'
 import createPrivilegeAMQueryBuilderFields from '../privilege/create-privilege-am-queryfields'
 import { createBooleanColumn, createCodeColumn, createDescriptionColumn, createIdColumn, createNameColumn, createTimeStampColumn } from '@/modules/core/utils/create-tablecolumn'
-import AssociationManager from '@/modules/core/features/GenericAssignmentManager'
+import GenericAssociationManager from '@/modules/core/features/GenericAssociationManager'
 
 const createRoleTableColumns = (t: (value: string) => string, hasPermission: (requiredPermissionRegex: RegExp) => boolean): ProColumns<Role>[] => {
   return [
@@ -37,12 +37,12 @@ const createRoleTableColumns = (t: (value: string) => string, hasPermission: (re
             }}
             trigger={<Button type="link">{t("button.manage_privileges")}</Button>}
           >
-            <AssociationManager<Role, Privilege>
+            <GenericAssociationManager<Role, Privilege>
               entity="role"
               entityRecord={record}
               entitySideField="privileges"
               associatedEntity="privilege"
-              associatedSideField="roles"
+              associatedEntitySideField="roles"
               associatedEntityColumns={createPrivilegeTableColumns(t, hasPermission).filter((column) => ['id', 'name', 'code', 'entity', 'access', 'isActive'].includes(column.dataIndex as string))}
               associatedEntityQueryConfig={createPrivilegeAMQueryBuilderFields(t)}
             />

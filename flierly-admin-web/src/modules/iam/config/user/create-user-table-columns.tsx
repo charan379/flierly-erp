@@ -7,7 +7,7 @@ import createRoleTableColumns from '../role/create-role-tablecolumns'
 import UserPasswordUpdate from '../../features/UserPasswordUpdate'
 import { createBooleanColumn, createEmailColumn, createIdColumn, createMobileColumn, createTimeStampColumn } from '@/modules/core/utils/create-tablecolumn'
 import createRoleAMQueryBuilderFields from '../role/create-role-am-queryfields'
-import AssociationManager from '@/modules/core/features/GenericAssignmentManager'
+import GenericAssociationManager from '@/modules/core/features/GenericAssociationManager'
 
 const createUserTableColumns = (t: (value: string) => string, _hasPermission: (requiredPermissionRegex: RegExp) => boolean): ProColumns<User>[] => {
   return [
@@ -47,12 +47,12 @@ const createUserTableColumns = (t: (value: string) => string, _hasPermission: (r
             }}
             trigger={<Button type="link">{t("button.manage_additional_privileges")}</Button>}
           >
-            <AssociationManager<User, Privilege>
+            <GenericAssociationManager<User, Privilege>
               entity="user"
               entityRecord={record}
               entitySideField="additionalPrivileges"
               associatedEntity="privilege"
-              associatedSideField='usersWithAdditionalPrivileges'
+              associatedEntitySideField='usersWithAdditionalPrivileges'
               associatedEntityColumns={createPrivilegeTableColumns(t, _hasPermission).filter((column) => ['id', 'name', 'code', 'entity', 'access', 'isActive'].includes(column.dataIndex as string))}
               associatedEntityQueryConfig={createPrivilegeAMQueryBuilderFields(t)}
             />
@@ -79,12 +79,12 @@ const createUserTableColumns = (t: (value: string) => string, _hasPermission: (r
             }}
             trigger={<Button type="link">{t("button.manage_restricted_privileges")}</Button>}
           >
-            <AssociationManager<User, Privilege>
+            <GenericAssociationManager<User, Privilege>
               entity="user"
               entityRecord={record}
               entitySideField="restrictedPrivileges"
               associatedEntity="privilege"
-              associatedSideField="usersWithRestrictedPrivileges"
+              associatedEntitySideField="usersWithRestrictedPrivileges"
               associatedEntityColumns={createPrivilegeTableColumns(t, _hasPermission).filter((column) => ['id', 'name', 'code', 'entity', 'access', 'isActive'].includes(column.dataIndex as string))}
               associatedEntityQueryConfig={createPrivilegeAMQueryBuilderFields(t)}
             />
@@ -111,12 +111,12 @@ const createUserTableColumns = (t: (value: string) => string, _hasPermission: (r
             }}
             trigger={<Button type="link">{t("button.manage_roles")}</Button>}
           >
-            <AssociationManager<User, Role>
+            <GenericAssociationManager<User, Role>
               entity="user"
               entityRecord={record}
               entitySideField="roles"
               associatedEntity="role"
-              associatedSideField="users"
+              associatedEntitySideField="users"
               associatedEntityColumns={createRoleTableColumns(t, _hasPermission).filter((column) => ['id', 'name', 'code', 'isActive'].includes(column.dataIndex as string))}
               associatedEntityQueryConfig={createRoleAMQueryBuilderFields(t)}
             />

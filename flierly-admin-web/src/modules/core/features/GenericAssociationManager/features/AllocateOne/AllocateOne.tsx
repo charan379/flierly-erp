@@ -1,35 +1,34 @@
-import { CloseOutlined } from '@ant-design/icons'
+import { PlusOutlined } from '@ant-design/icons'
 import { Button, Tooltip } from 'antd'
 import React, { useState } from 'react'
-import genricAssignmentService from '../../service/genricAssignmentService'
+import genricAssociationService from '../../service/genricAssociationService'
 import { ActionType } from '@ant-design/pro-components'
 import useLocale from '@/modules/core/features/Locale/hooks/useLocale'
 
-interface DeallocateOneProps<E> {
+interface AllocateOneProps<E> {
   entity: string
   entityRecordId: number
   entitySideField: keyof E
-  idToDisassociate: number
+  idToAssociate: number
   tableActionRef: React.MutableRefObject<ActionType | undefined>
 }
 
-const DeallocateOne = <E,>(props: DeallocateOneProps<E>) => {
-  const { entity, entityRecordId, entitySideField, idToDisassociate, tableActionRef } = props
+const AllocateOne = <E,>(props: AllocateOneProps<E>) => {
+  const { entity, entityRecordId, entitySideField, idToAssociate, tableActionRef } = props
 
   const { translate: t } = useLocale();
-
   const [isLoding, setIsLoading] = useState(false)
 
-  const handleDeallocate: React.MouseEventHandler = async (event) => {
+  const handleAllocate: React.MouseEventHandler = async (event) => {
     event.preventDefault()
     event.stopPropagation()
     setIsLoading(true)
 
-    const { success } = await genricAssignmentService.updateAssociatedRecords({
-      entity: entity,
+    const { success } = await genricAssociationService.updateAssociatedRecords({
+      entity,
       entityRecordId,
       entitySideField,
-      removeOne: idToDisassociate,
+      addOne: idToAssociate,
     })
 
     if (success) {
@@ -40,14 +39,14 @@ const DeallocateOne = <E,>(props: DeallocateOneProps<E>) => {
   }
 
   return (
-    <Tooltip title={t('tooltip.deallocate')}>
+    <Tooltip title={t('tooltip.allocate')}>
       <Button
-        onClick={handleDeallocate}
+        onClick={handleAllocate}
         loading={isLoding}
         disabled={isLoding}
-        icon={<CloseOutlined />}
+        icon={<PlusOutlined />}
         type="link" />
-    </Tooltip>)
+    </Tooltip>
+  )
 }
-
-export default DeallocateOne
+export default AllocateOne

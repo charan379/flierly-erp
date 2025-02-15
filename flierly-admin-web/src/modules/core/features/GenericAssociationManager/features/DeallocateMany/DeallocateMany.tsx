@@ -1,7 +1,7 @@
 import { CloseOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
 import React, { useState } from 'react'
-import genricAssignmentService from '../../service/genricAssignmentService'
+import genricAssociationService from '../../service/genricAssociationService'
 import { ActionType } from '@ant-design/pro-components'
 import useLocale from '@/modules/core/features/Locale/hooks/useLocale'
 
@@ -26,7 +26,7 @@ const DeallocateMany = <E,>(props: DeallocateManyProps<E>) => {
     event.stopPropagation();
     setIsLoading(true);
 
-    const { success } = await genricAssignmentService.updateAssociatedRecords({
+    const { success } = await genricAssociationService.updateAssociatedRecords({
       entity,
       entityRecordId,
       entitySideField,

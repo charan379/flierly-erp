@@ -35,9 +35,9 @@ interface EntityRecordsPageRequest<E> {
 interface AssociatedEntityRecordsPageRequest<E, AE> {
   entity: string
   entityRecordId: number
-  associatedEntity: string
+  associatedEntityCode: string
   entitySideField: keyof E
-  associatedSideField: keyof AE
+  associatedEntitySideField: keyof AE
   limit: number
   page: number
   filters?: Record<string, any>

@@ -11,7 +11,7 @@ const api = axios.create({
   },
 })
 
-const genricAssignmentService = {
+const genricAssociationService = {
   /**
    * Fetch paginated data
    */
@@ -33,8 +33,8 @@ const genricAssignmentService = {
    * Fetch related entity paginated data
    */
   associatedEntityPage: async <E, AE>({
-    associatedEntity,
-    associatedSideField,
+    associatedEntityCode,
+    associatedEntitySideField,
     entity,
     entityRecordId,
     entitySideField,
@@ -46,8 +46,8 @@ const genricAssignmentService = {
     signal,
   }: AssociatedEntityRecordsPageRequest<E, AE>) => {
     const promise = api.post<ApiResponse<PageData<AE>>>(
-      `/${associatedEntity}/associated-entity-records-page`,
-      { entity, entityRecordId, associatedSideField, entitySideField, filters, page, limit, sort, type },
+      `/${entity}/associated-entity-records-page`,
+      { associatedEntityCode, entityRecordId, associatedEntitySideField, entitySideField, filters, page, limit, sort, type },
       { signal },
     )
     return handleApiResponse<PageData<AE>>({ promise })
@@ -84,4 +84,4 @@ listenToAuthChanges((newState) => {
   }
 })
 
-export default genricAssignmentService
+export default genricAssociationService

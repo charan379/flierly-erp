@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Tabs, Button } from 'antd'
 import { ActionType, ProColumns } from '@ant-design/pro-components'
 import useLocale from '../Locale/hooks/useLocale'
-import genricAssignmentService from './service/genricAssignmentService'
+import genricAssociationService from './service/genricAssociationService'
 import { ClearOutlined, SettingTwoTone } from '@ant-design/icons'
 import AllocateOne from './features/AllocateOne'
 import DeallocateOne from './features/DeallocateOne'
@@ -17,7 +17,7 @@ interface AssociatedEntitiesManagerProps<E extends { id: number }, AE extends { 
   entity: string
   associatedEntity: string
   associatedEntityColumns: ProColumns<AE>[]
-  associatedSideField: keyof AE
+  associatedEntitySideField: keyof AE
   entitySideField: keyof E
   associatedEntityQueryConfig: {
     label: string
@@ -31,7 +31,7 @@ const GenericAssociationManager = <E extends { id: number }, AE extends { id: nu
   entity,
   associatedEntity,
   associatedEntityColumns,
-  associatedSideField,
+  associatedEntitySideField,
   entitySideField,
   associatedEntityQueryConfig,
 }: AssociatedEntitiesManagerProps<E, AE>) => {
@@ -141,8 +141,16 @@ const GenericAssociationManager = <E extends { id: number }, AE extends { id: nu
   useEffect(() => {
     // Wait for a short delay after tab change to ensure the content is rendered
     const timeout = setTimeout(() => {
-      allocatedTableTableRef.current?.reload()
-      availableTableRef.current?.reload()
+      switch (tabKey) {
+        case 'allocatedItems':
+          allocatedTableTableRef.current?.reload?.();
+          break;
+        case 'availableItems':
+          availableTableRef.current?.reload?.();
+          break;
+        default:
+          break;
+      }
     }, 10) // Adjust the delay as needed
 
     return () => clearTimeout(timeout)
@@ -166,12 +174,12 @@ const GenericAssociationManager = <E extends { id: number }, AE extends { id: nu
               dataSource={allocatedItems}
               columns={tableColumns}
               request={async (params, sort, _filter) => {
-                const { result, success } = await genricAssignmentService.associatedEntityPage<E, AE>({
+                const { result, success } = await genricAssociationService.associatedEntityPage<E, AE>({
                   entity,
                   entityRecordId: entityRecord.id,
-                  associatedEntity,
+                  associatedEntityCode: associatedEntity,
                   entitySideField,
-                  associatedSideField,
+                  associatedEntitySideField,
                   limit: params?.pageSize ?? 10,
                   page: params?.current ?? 1,
                   sort: {
@@ -179,6 +187,7 @@ const GenericAssociationManager = <E extends { id: number }, AE extends { id: nu
                     order: Object.values(sort)[0] === 'ascend' ? 'asc' : 'desc',
                   },
                   filters: allocatedItemsFilter,
+                  type: "allocated"
                 })
 
                 return {
@@ -236,12 +245,12 @@ const GenericAssociationManager = <E extends { id: number }, AE extends { id: nu
               dataSource={availableItems}
               columns={tableColumns}
               request={async (params, sort, _filter) => {
-                const { result, success } = await genricAssignmentService.associatedEntityPage<E, AE>({
+                const { result, success } = await genricAssociationService.associatedEntityPage<E, AE>({
                   entity,
                   entityRecordId: entityRecord.id,
-                  associatedEntity,
+                  associatedEntityCode: associatedEntity,
                   entitySideField,
-                  associatedSideField,
+                  associatedEntitySideField,
                   limit: params?.pageSize ?? 10,
                   page: params?.current ?? 1,
                   sort: {
