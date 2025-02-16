@@ -39,7 +39,9 @@ const updateAssociatedEntityRecords = async (entity: EntityTarget<ObjectLiteral>
         const queryBuilder = entityRepository.createQueryBuilder();
         const entityRecord = await queryBuilder.where('id = :id', { id: entityRecordId }).loadAllRelationIds().getOneOrFail();
 
-        const existingArray: number[] = entityRecord[entitySideField] ?? [];
+        let existingArray: number[] = entityRecord[entitySideField] ?? [];
+
+        existingArray = existingArray.map(Number);
 
         // Compute additions and removals based on request
         let idsToAdd: number[] = [];
