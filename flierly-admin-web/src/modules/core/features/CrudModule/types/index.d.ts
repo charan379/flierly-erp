@@ -31,6 +31,14 @@ interface EntityRecordsPageRequest<E> {
   signal?: AbortSignal
 }
 
+interface EntityRecordReadRequest {
+  entity: string
+  entityRecordId: number
+  withDeleted: boolean
+  loadRelations: string[];
+  signal?: AbortSignal
+};
+
 // Props type for the page function
 interface AssociatedEntityRecordsPageRequest<E, AE> {
   entity: string

@@ -10,6 +10,7 @@ import { useLocation } from 'react-router-dom'
 import SearchableMenu from '../Navigation/components/SearchableMenu'
 import ThemeDropdown from '@/modules/core/features/Theme/components/ThemeDropdown'
 import LangSelector from '@/modules/core/features/Locale/components/LangSelector'
+import BranchSelector from '@/modules/organization/features/BranchSelector/components/BranchSelector'
 
 const AntHeader = Layout.Header
 
@@ -91,6 +92,7 @@ const Header: React.FC = () => {
       <div className="dashboard-header-section" id="dashboard-header-right-section">
         <ThemeDropdown />
         <LangSelector />
+        <BranchSelector />
         <ProfileDropdown />
       </div>
     </AntHeader>

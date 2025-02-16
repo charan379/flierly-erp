@@ -3,6 +3,7 @@ import { localStorageHealthCheck } from './state-persist'
 import { authReducer } from '@/modules/auth/redux/auth.slice'
 import { localeReducer } from '@/modules/core/features/Locale/redux/locale.slice'
 import { themeReducer } from '@/modules/core/features/Theme/redux/theme.slice'
+import { branchSelectorReducer } from '@/modules/organization/features/BranchSelector/redux/branch-selector.slice'
 
 // Performing a health check for localStorage state persistence
 localStorageHealthCheck()
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   locale: localeReducer,
   auth: authReducer,
   theme: themeReducer,
+  branch: branchSelectorReducer,
 })
 
 /**

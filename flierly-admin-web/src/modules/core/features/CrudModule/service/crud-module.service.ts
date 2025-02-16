@@ -21,6 +21,14 @@ const crudService = {
   },
 
   /**
+   * React Entity Record
+   */
+  read: async <E>({ entity, withDeleted, signal, entityRecordId, loadRelations }: EntityRecordReadRequest) => {
+    const promise = api.post<ApiResponse<E>>(`/${entity}/read`, { withDeleted, entityRecordId, loadRelations }, { signal })
+    return handleApiResponse<E>({ promise })
+  },
+
+  /**
    * Create a new entity record
    */
   create: async <E>({ entity, data, signal }: CreateEntityRecordRequest<E>) => {

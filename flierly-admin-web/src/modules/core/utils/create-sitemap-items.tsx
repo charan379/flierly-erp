@@ -1,6 +1,6 @@
 import pr from "@/modules/auth/utils/get-permission-regex.util";
 import { DashboardOutlined } from "@ant-design/icons";
-import { faAddressBook, faUsersLine, faTags, faChartBar, faRulerCombined, faExchangeAlt, faIdBadge, faMapLocationDot, faFingerprint, faUsersGear, faUserTag, faKey, faBoxArchive, faBoxOpen, faThList, faSitemap, faBoxesPacking, faBuilding, faCity } from "@fortawesome/free-solid-svg-icons";
+import { faAddressBook, faUsersLine, faTags, faChartBar, faRulerCombined, faExchangeAlt, faIdBadge, faMapLocationDot, faFingerprint, faUsersGear, faUserTag, faKey, faBoxArchive, faBoxOpen, faThList, faSitemap, faBoxesPacking, faBuildingColumns, faStore } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
@@ -38,13 +38,13 @@ const createSiteMapItems = (t: (value: string) => string, hasPermission: (requir
             keywords: ['account', t('nav.organization')],
             permission: pr("organization.*"),
             resourcePath: '/erp/organization',
-            icon: <FontAwesomeIcon icon={faBuilding} style={menuIconStyle} />,
+            icon: <FontAwesomeIcon icon={faBuildingColumns} style={menuIconStyle} />,
         },
         {
             id: 'branches',
             name: t('nav.branches'),
             isDisabled: !hasPermission(pr("branch.*")),
-            icon: <FontAwesomeIcon icon={faCity} style={menuIconStyle} />,
+            icon: <FontAwesomeIcon icon={faStore} style={menuIconStyle} />,
             keywords: ['branches', t('nav.branches')],
             permission: pr("branch.*"),
             resourcePath: '/erp/organization/branches',

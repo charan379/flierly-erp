@@ -45,10 +45,10 @@ export const statePersist = {
    * Stores a JavaScript object in the local storage.
    *
    * @param key - The key under which to store the object.
-   * @param state - The object to store.
+   * @param state - The JSON String object to store.
    */
-  set: (key: string, state: Record<string, unknown>): void => {
-    window.localStorage.setItem(key, JSON.stringify(state))
+  set: (key: string, state: string): void => {
+    window.localStorage.setItem(key, state)
   },
 
   /**

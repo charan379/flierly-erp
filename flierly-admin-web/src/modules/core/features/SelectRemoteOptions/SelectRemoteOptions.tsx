@@ -1,10 +1,10 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import debounce from '@/modules/core/utils/debounce';
-import { Empty, FormInstance, Select, Spin } from 'antd';
+import { Empty, FormInstance, Select, SelectProps, Spin } from 'antd';
 import Create from './forms/Create/Create';
 import Loading from '@/modules/core/components/Loading';
 
-export interface SelectRemoteOptionsProps<T> {
+export interface SelectRemoteOptionsProps<T> extends SelectProps {
   asyncOptionsFetcher: (
     value: string | "focus",
     signal?: AbortSignal
@@ -110,10 +110,14 @@ const SelectRemoteOptions = <T,>({
         )
       }}
       onSearch={handleSearch}
-      style={{ width }}
       dropdownStyle={{ textAlign: 'left' }}
       onFocus={handleFocus}
-      {...(fetching ? { suffixIcon: <Spin spinning size='small' /> } : {})}
+      {...(fetching ? { suffixIcon: <Spin spinning size='small' /> } : { suffixIcon: props?.suffixIcon })}
+      {...(props.onChange ? { onChange: props.onChange } : {})}
+      {...(props.labelInValue && props.labelRender ? { labelInValue: props.labelInValue, labelRender: props.labelRender } : {})}
+      {...(props.size ? { size: props.size } : {})}
+      {...(props.style ? { style: { width, ...props.style } } : { width })}
+      {...(props.value ? { value: props.value } : {})}
     />
   );
 };
