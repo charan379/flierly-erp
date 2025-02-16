@@ -73,6 +73,7 @@ const TagMetadataFormFields: React.FC<TagMetadataFormFieldsProps> = ({ disabledF
             {/* datatype - Select for datatype */}
             <ProFormSelect
                 name="datatype"
+                showSearch
                 label={t('tagMetadata.datatype')}
                 options={[
                     { label: t('open.datatype.string'), value: 'string' },

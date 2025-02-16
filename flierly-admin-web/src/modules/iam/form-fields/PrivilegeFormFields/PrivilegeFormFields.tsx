@@ -7,6 +7,7 @@ import vr from '@/modules/core/utils/get-validation-regex.util';
 import entityExistenceValidator from '@/modules/core/utils/entity-existence.validator';
 import SelectRemoteOptions from '@/modules/core/features/SelectRemoteOptions';
 import fetchEntityOptions from '@/modules/core/features/SelectRemoteOptions/utils/fetch-entity-options';
+import { accessOptions } from '@/modules/iam/constants/access-type-options.constant';
 
 export interface PrivilegeFormFieldsProps {
     formInstance?: FormInstance<Privilege>;
@@ -23,15 +24,15 @@ const PrivilegeFormFields: React.FC<PrivilegeFormFieldsProps> = ({ disabledField
             {/* id - Hidden field for edit form */}
             <ProFormDigit
                 name="id"
-                label={t('entity.id')}
+                label={t('record.id')}
                 hidden={!isEditForm}
                 disabled
             />
-            
+
             {/* isActive - Switch for active status */}
             <ProFormSwitch
                 name="isActive"
-                label={t('entity.isActive')}
+                label={t('record.is_active')}
                 hasFeedback
                 disabled={(isEditForm && !hasPermission(pr('privilege.manage'))) || disabledFields?.includes('isActive')}
             />
@@ -39,21 +40,21 @@ const PrivilegeFormFields: React.FC<PrivilegeFormFieldsProps> = ({ disabledField
             {/* name - Input for privilege name */}
             <ProFormText
                 name="name"
-                label={t('entity.name')}
+                label={t('record.name')}
                 hasFeedback
                 rules={[
-                    { required: true, message: t('entity.nameRequired') },
-                    { pattern: vr("record.name"), message: t('entity.namePattern') },
+                    { required: true, message: t('record.name.required') },
+                    { pattern: vr("record.name"), message: t('record.name.invalid') },
                     ({ getFieldValue }) => ({
                         validator(_, value) {
-                            if (!value || !vr('name').test(value)) return Promise.resolve();
+                            if (!value || !vr('record.name').test(value)) return Promise.resolve();
                             return entityExistenceValidator('entity-name-validation', {
                                 entity: 'privilege',
                                 filters: {
                                     ...(isEditForm && getFieldValue('id') ? { id: { $notEqualTo: getFieldValue('id') } } : {}),
                                     name: value,
                                 },
-                                rejectionMessage: t('entity.nameAlreadyExists'),
+                                rejectionMessage: t('record.name.already_exists'),
                             });
                         },
                     }),
@@ -66,14 +67,9 @@ const PrivilegeFormFields: React.FC<PrivilegeFormFieldsProps> = ({ disabledField
                 name="access"
                 label={t('privilege.access')}
                 hasFeedback
-                options={[
-                    { label: t('privilege.access.create'), value: 'create' },
-                    { label: t('privilege.access.read'), value: 'read' },
-                    { label: t('privilege.access.update'), value: 'update' },
-                    { label: t('privilege.access.delete'), value: 'delete' },
-                    { label: t('privilege.access.manage'), value: 'manage' },
-                ]}
-                rules={[{ required: true, message: t('entity.accessRequired') }]}
+                showSearch
+                options={accessOptions.map(option => ({ label: t(option.label), value: option.value }))}
+                rules={[{ required: true, message: t('record.access.required') }]}
                 disabled={(isEditForm && !hasPermission(pr('privilege.manage'))) || disabledFields?.includes('access')}
             />
 
@@ -81,7 +77,7 @@ const PrivilegeFormFields: React.FC<PrivilegeFormFieldsProps> = ({ disabledField
             <ProFormItem
                 name={'entity'}
                 label={t('privilege.entity')}
-                rules={[{ required: true, message: t('privilege.entityRequired') }]}
+                rules={[{ required: true, message: t('privilege.entity.required') }]}
             >
                 <SelectRemoteOptions<EntityDetails>
                     name={'entity'}
@@ -97,11 +93,11 @@ const PrivilegeFormFields: React.FC<PrivilegeFormFieldsProps> = ({ disabledField
             {/* code - Input for privilege code */}
             <ProFormText
                 name="code"
-                label={t('entity.code')}
+                label={t('record.code')}
                 hasFeedback
                 rules={[
-                    { required: true, message: t('entity.codeRequired') },
-                    { pattern: vr('code'), message: t('entity.codePattern') },
+                    { required: true, message: t('record.code.required') },
+                    { pattern: vr('code'), message: t('record.code.invalid') },
                 ]}
                 disabled={(isEditForm && !hasPermission(pr('privilege.manage'))) || disabledFields?.includes('code')}
             />

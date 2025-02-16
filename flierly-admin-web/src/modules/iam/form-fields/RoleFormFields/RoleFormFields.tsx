@@ -21,16 +21,15 @@ const RoleFormFields: React.FC<RoleFormFieldsProps> = ({ disabledFields, formIns
             {/* id - Hidden field for edit form */}
             <ProFormDigit
                 name="id"
-                label={t('entity.id')}
+                label={t('record.id')}
                 hidden={!isEditForm}
                 disabled
             />
 
-
             {/* isActive - Switch for active status */}
             <ProFormSwitch
                 name="isActive"
-                label={t('entity.isActive')}
+                label={t('record.is_active')}
                 hasFeedback
                 disabled={(isEditForm && !hasPermission(pr('role.manage'))) || disabledFields?.includes('isActive')}
             />
@@ -38,21 +37,21 @@ const RoleFormFields: React.FC<RoleFormFieldsProps> = ({ disabledFields, formIns
             {/* name - Input for role name */}
             <ProFormText
                 name="name"
-                label={t('entity.name')}
+                label={t('record.name')}
                 hasFeedback
                 rules={[
-                    { required: true, message: t('entity.nameRequired') },
-                    { pattern: vr('name'), message: t('entity.namePattern') },
+                    { required: true, message: t('record.name.required') },
+                    { pattern: vr('record.name'), message: t('record.name.invalid') },
                     ({ getFieldValue }) => ({
                         validator(_, value) {
-                            if (!value || !vr('name').test(value)) return Promise.resolve();
-                            return entityExistenceValidator('entity-name-validation', {
+                            if (!value || !vr('record.name').test(value)) return Promise.resolve();
+                            return entityExistenceValidator('record-name-validation', {
                                 entity: 'role',
                                 filters: {
                                     ...(isEditForm && getFieldValue('id') ? { id: { $notEqualTo: getFieldValue('id') } } : {}),
                                     name: value,
                                 },
-                                rejectionMessage: t('entity.nameAlreadyExists'),
+                                rejectionMessage: t('record.name.already_exists'),
                             });
                         },
                     }),
@@ -63,11 +62,11 @@ const RoleFormFields: React.FC<RoleFormFieldsProps> = ({ disabledFields, formIns
             {/* code - Input for role code */}
             <ProFormText
                 name="code"
-                label={t('entity.code')}
+                label={t('record.code')}
                 hasFeedback
                 rules={[
-                    { required: true, message: t('entity.codeRequired') },
-                    { pattern: vr('code'), message: t('entity.codePattern') },
+                    { required: true, message: t('record.code.required') },
+                    { pattern: vr('code'), message: t('record.code.invalid') },
                     ({ getFieldValue }) => ({
                         validator(_, value) {
                             if (!value || !vr('code').test(value)) return Promise.resolve();
@@ -77,7 +76,7 @@ const RoleFormFields: React.FC<RoleFormFieldsProps> = ({ disabledFields, formIns
                                     ...(isEditForm && getFieldValue('id') ? { id: { $notEqualTo: getFieldValue('id') } } : {}),
                                     code: value,
                                 },
-                                rejectionMessage: t('entity.codeAlreadyExists'),
+                                rejectionMessage: t('record.code.already_exists'),
                             });
                         },
                     }),
@@ -88,10 +87,10 @@ const RoleFormFields: React.FC<RoleFormFieldsProps> = ({ disabledFields, formIns
             {/* description - Textarea for description */}
             <ProFormTextArea
                 name="description"
-                label={t('entity.description')}
+                label={t('record.description')}
                 rules={[
-                    { required: true, message: t('entity.descriptionRequired') },
-                    { pattern: vr('description'), message: t('entity.descriptionPattern') },
+                    { required: true, message: t('record.description.required') },
+                    { pattern: vr('record.description'), message: t('record.description.invalid') },
                 ]}
                 disabled={(isEditForm && !hasPermission(pr('role.update'))) || disabledFields?.includes('description')}
             />

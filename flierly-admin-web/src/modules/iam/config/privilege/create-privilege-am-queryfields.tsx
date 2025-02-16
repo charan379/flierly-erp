@@ -1,4 +1,4 @@
-import { accessOptions } from '@/modules/core/constants/select-options.constant'
+import { accessOptions } from '@/modules/iam/constants/access-type-options.constant'
 import fetchEntityOptions from '@/modules/core/features/SelectRemoteOptions/utils/fetch-entity-options'
 import { AMQueryBuilderFieldConfig, createBooleanAMQueryField, createNumericAMQueryField, createSelectAMQueryField, createSelectRemoteOptionsAMQueryField, createTextAMQueryField } from '@/modules/core/utils/create-assignment-manager-queryfield'
 

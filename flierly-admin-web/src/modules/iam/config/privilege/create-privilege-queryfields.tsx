@@ -1,4 +1,4 @@
-import { accessOptions } from '@/modules/core/constants/select-options.constant'
+import { accessOptions } from '@/modules/iam/constants/access-type-options.constant'
 import { QueryBuilderFieldConfig } from '@/modules/core/features/QueryBuilder/QueryBuilder'
 import fetchEntityOptions from '@/modules/core/features/SelectRemoteOptions/utils/fetch-entity-options'
 import { createBooleanQueryBuilderField, createDateQueryBuilderField, createNumberQueryBuilderField, createSelectQueryBuilderField, createSelectRemoteOptionsQueryBuilderField, createTextQueryBuilderField } from '@/modules/core/utils/create-query-builder-field'

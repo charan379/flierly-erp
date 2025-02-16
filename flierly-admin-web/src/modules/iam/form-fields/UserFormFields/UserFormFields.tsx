@@ -21,7 +21,7 @@ const UserFormFields: React.FC<UserFormFieldsProps> = ({ disabledFields, formIns
             {/* id - Hidden field for edit form */}
             <ProFormDigit
                 name="id"
-                label={t('entity.id')}
+                label={t('record.id')}
                 hidden={!isEditForm}
                 disabled
             />
@@ -29,7 +29,7 @@ const UserFormFields: React.FC<UserFormFieldsProps> = ({ disabledFields, formIns
             {/* isActive - Switch for active status */}
             <ProFormSwitch
                 name="isActive"
-                label={t('entity.isActive')}
+                label={t('record.is_active')}
                 hasFeedback
                 disabled={(isEditForm && !hasPermission(pr('user.manage'))) || disabledFields?.includes('isActive')}
             />
@@ -40,8 +40,8 @@ const UserFormFields: React.FC<UserFormFieldsProps> = ({ disabledFields, formIns
                 label={t('user.username')}
                 hasFeedback
                 rules={[
-                    { required: true, message: t('user.usernameRequired') },
-                    { pattern: vr('username'), message: t('user.usernamePattern') },
+                    { required: true, message: t('user.username.required') },
+                    { pattern: vr('username'), message: t('user.username.invalid') },
                     ({ getFieldValue }) => ({
                         validator(_, value) {
                             if (!value || !vr('username').test(value)) return Promise.resolve();
@@ -51,7 +51,7 @@ const UserFormFields: React.FC<UserFormFieldsProps> = ({ disabledFields, formIns
                                     ...(isEditForm && getFieldValue('id') ? { id: { $notEqualTo: getFieldValue('id') } } : {}),
                                     username: value,
                                 },
-                                rejectionMessage: t('user.usernameAlreadyExists'),
+                                rejectionMessage: t('user.username.already_exists'),
                             });
                         },
                     }),
@@ -65,8 +65,8 @@ const UserFormFields: React.FC<UserFormFieldsProps> = ({ disabledFields, formIns
                 label={t('user.email')}
                 hasFeedback
                 rules={[
-                    { required: true, message: t('user.emailRequired') },
-                    { pattern: vr('email'), message: t('user.emialPattern') },
+                    { required: true, message: t('user.email.required') },
+                    { pattern: vr('email'), message: t('user.emial.invalid') },
                     ({ getFieldValue }) => ({
                         validator(_, value) {
                             if (!value) return Promise.resolve();
@@ -76,7 +76,7 @@ const UserFormFields: React.FC<UserFormFieldsProps> = ({ disabledFields, formIns
                                     ...(isEditForm && getFieldValue('id') ? { id: { $notEqualTo: getFieldValue('id') } } : {}),
                                     email: value,
                                 },
-                                rejectionMessage: t('user.emailAlreadyExists'),
+                                rejectionMessage: t('user.email.already_exists'),
                             });
                         },
                     }),
@@ -90,8 +90,8 @@ const UserFormFields: React.FC<UserFormFieldsProps> = ({ disabledFields, formIns
                 label={t('user.mobile')}
                 hasFeedback
                 rules={[
-                    { required: true, message: t('user.mobileRequired') },
-                    { pattern: vr('mobile'), message: t('user.mobilePattern') },
+                    { required: true, message: t('user.mobile.required') },
+                    { pattern: vr('mobile'), message: t('user.mobile.invalid') },
                     ({ getFieldValue }) => ({
                         validator(_, value) {
                             if (!value || !vr('mobile').test(value)) return Promise.resolve();
@@ -101,7 +101,7 @@ const UserFormFields: React.FC<UserFormFieldsProps> = ({ disabledFields, formIns
                                     ...(isEditForm && getFieldValue('id') ? { id: { $notEqualTo: getFieldValue('id') } } : {}),
                                     mobile: value,
                                 },
-                                rejectionMessage: t('user.mobileAlreadyExists'),
+                                rejectionMessage: t('user.mobile.already_exists'),
                             });
                         },
                     }),
