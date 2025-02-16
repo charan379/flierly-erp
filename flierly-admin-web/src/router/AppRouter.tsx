@@ -9,6 +9,7 @@ import { Route, Routes } from 'react-router-dom'
 import AppsPage from '@/modules/core/pages/AppsPage'
 import InventoryRouter from '@/modules/inventory/router/InventoryRouter'
 import NotFoundPage from '@/modules/core/pages/NotFoundPage'
+import OrganizationRouter from '@/modules/organization/router/OrganizationRouter'
 
 const AppRouter = () => {
   return (
@@ -21,6 +22,7 @@ const AppRouter = () => {
         <Route path="iam/*" element={<IamRoutes />} />
         <Route path="product/*" element={<ProductRouter />} />
         <Route path='inventory/*' element={<InventoryRouter />} />
+        <Route path='organization/*' element={<OrganizationRouter />} />
       </Route>
       {/* Login and Register routes */}
       <Route path="/login" element={<LoginPage />} />

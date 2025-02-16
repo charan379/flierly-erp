@@ -17,6 +17,30 @@ const createInventoryTableColumns = (t: (value: string) => string): ProColumns<I
             copyable: true,
             width: 180,
         },
+        // branchId
+        {
+            title: t('inventory.branch_id'),
+            dataIndex: 'branchId',
+            key: 'branchId',
+            valueType: 'text',
+            copyable: true,
+            width: 150,
+        },
+        // branchName
+        {
+            title: t('inventory.branch'),
+            dataIndex: 'branch',
+            key: 'branch',
+            valueType: 'text',
+            copyable: true,
+            width: 180,
+            render: (_text, record) => {
+                if (typeof record.branch === 'object' && record.branch !== null && 'name' in record.branch) {
+                    return record.branch.name;
+                }
+                return null;
+            },
+        },
         // remarks
         createRemarksColumn(t, { width: 250 }),
         // updatedAt

@@ -1,5 +1,12 @@
 const permissionRegexMap = {
     "*": /.*/,
+    "organization.*": /.*/,
+    // branch
+    "branch.*": /^branch\.[a-z]+$/,
+    "branch.update": /^branch\.update$/,
+    "branch.read": /^branch\.read$/,
+    "branch.manage": /^branch\.manage$/,
+    "branch.create": /^branch\.create$/,
     // product
     "product.*": /^product\.[a-z]+$/,
     "product.update": /^product\.update$/,

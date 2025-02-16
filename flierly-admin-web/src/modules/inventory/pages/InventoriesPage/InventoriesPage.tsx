@@ -23,6 +23,7 @@ const InventoriesPage: React.FC = () => {
                     entity="inventory"
                     columns={createInventoryTableColumns(t)}
                     dataSource={[]}
+                    loadRelations={["branch"]}
                     render={{
                         activate: true,
                         bin: true,
