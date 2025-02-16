@@ -69,7 +69,7 @@ const Create = <T,>({ entity, formFields, title, initialValues, permissionCode, 
           type="primary"
           icon={<PlusOutlined />}
           size="middle"
-          style={{ backgroundColor: 'teal', width: "100%", marginTop: "2px" }}
+          style={{ backgroundColor: 'teal', width: "100%", marginTop: "5px" }}
           disabled={permissionCode && !hasPermission(permissionCode)}
         >
           {title !== undefined ? title : t("button.create_new_record")}

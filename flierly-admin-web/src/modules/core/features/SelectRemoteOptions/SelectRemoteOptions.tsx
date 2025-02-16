@@ -3,6 +3,7 @@ import debounce from '@/modules/core/utils/debounce';
 import { Empty, FormInstance, Select, SelectProps, Spin } from 'antd';
 import Create from './forms/Create/Create';
 import Loading from '@/modules/core/components/Loading';
+import { Rule } from 'antd/es/form';
 
 export interface SelectRemoteOptionsProps<T> extends SelectProps {
   asyncOptionsFetcher: (
@@ -25,7 +26,7 @@ export interface SelectRemoteOptionsProps<T> extends SelectProps {
     permissionCode: RegExp;
   };
   name?: keyof any;
-  [key: string]: any; // Additional props passed to Select
+  rules?: Rule[]
 }
 
 const SelectRemoteOptions = <T,>({

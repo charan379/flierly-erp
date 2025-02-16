@@ -226,7 +226,7 @@ const QueryBuilder = forwardRef<QueryBuilderRef, QueryBuilderProps>(({ config, i
               <Col span={conditionCardWidth > 500 ? 8 : 24}>
                 {cond.queryFieldConfig && (
                   <Form>
-                    <QueryField
+                    <QueryField<any>
                       key={`${cond.id}-${cond.condition?.namePath}`} // Ensure re-render on condition change
                       fieldKey={`component-${cond.field?.namePath}-${cond.condition?.namePath}`}
                       config={{

@@ -21,7 +21,7 @@ const LangSelector: React.FC = () => {
       filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
       filterSort={(optionA, optionB) => (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())}
       style={{
-        width: isMobile ? '90px' : '110px',
+        width: isMobile ? '110px' : '140px',
         float: 'right',
         cursor: 'pointer',
         direction: 'ltr',
