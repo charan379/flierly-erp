@@ -40,6 +40,18 @@ export const createDescriptionColumn = (translate: (value: string) => string, co
     };
 };
 
+export const createRemarksColumn = (translate: (value: string) => string, config?: { width?: number }): ProColumns => {
+
+    return {
+        title: translate('record.remarks'),
+        dataIndex: 'remarks',
+        key: 'remarks',
+        valueType: 'text',
+        ellipsis: true,
+        width: config?.width ?? 250,
+    };
+};
+
 export const createEntityColumn = (translate: (value: string) => string, config?: { width?: number }): ProColumns => {
 
     return {

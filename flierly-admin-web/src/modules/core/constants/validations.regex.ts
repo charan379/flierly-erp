@@ -11,6 +11,7 @@ const validationRegex = {
     "uom.shortName": /^[a-zA-Z0-9]{1,10}$/,
     "product.hsn": /^\d{4}(\d{2})?(\d{2})?$/,
     "record.description": /^[a-zA-Z0-9](?:[a-zA-Z0-9 \n.,+\-()&:;/!|[\]?@#$%^*_~]{1,498}[a-zA-Z0-9.!])?$/,
+    "record.remarks": /^[a-zA-Z0-9](?:[a-zA-Z0-9 \n.,+\-()&:;/!|[\]?@#$%^*_~]{10,250}[a-zA-Z0-9.!])?$/,
 } satisfies { [key: string]: RegExp };
 
 export default validationRegex;

@@ -25,6 +25,9 @@ const permissionRegexMap = {
     "address.*": /^address\.[a-z]+$/,
     // inventory
     "inventory.*": /^inventory\.[a-z]+$/,
+    "inventory.update": /^inventory\.update$/,
+    "inventory.manage": /^inventory\.manage$/,
+    "inventory.read": /^inventory\.read$/,
     // uom
     "uom.*": /^uom\.[a-z]+$/,
     "uom.update": /^uom\.update$/,
@@ -46,11 +49,19 @@ const permissionRegexMap = {
     "iam": /^(user|privilege|role)\.[a-z]+$/,
     // user
     "user.*": /^user\.[a-z]+$/,
-    "user.manage": /^user\.(create|update|delete)$/,
+    "user.manage": /^user\.manage$/,
+    "user.update": /^user\.update$/,
+    "user.create": /^user\.create$/,
     // role
     "role.*": /^role\.[a-z]+$/,
+    "role.manage": /^role\.manage$/,
+    "role.update": /^role\.update$/,
+    "role.create": /^role\.create$/,
     // privilege
     "privilege.*": /^privilege\.[a-z]+$/,
+    "privilege.manage": /^privilege\.manage$/,
+    "privilege.update": /^privilege\.update$/,
+    "privilege.create": /^privilege\.create$/,
 
 
 } satisfies { [key: string]: RegExp };

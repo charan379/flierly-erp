@@ -80,6 +80,16 @@ const createSiteMapItems = (t: (value: string) => string, hasPermission: (requir
             resourcePath: '/erp/inventory',
         },
         {
+            id: 'inventories',
+            name: t('nav.inventories'),
+            isDisabled: !hasPermission(pr("inventory.read")),
+            icon: <FontAwesomeIcon icon={faChartBar} style={menuIconStyle} />,
+            keywords: ['inventory','inventories', t('nav.inventories')],
+            permission: pr("inventory.read"),
+            resourcePath: '/erp/inventory/inventories',
+            parentItemId: 'inventory'
+        },
+        {
             id: 'prodcut-stocks',
             name: t('nav.product_stocks'),
             isDisabled: !hasPermission(pr("productStock.*")),
