@@ -1,8 +1,8 @@
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import PageNotFound from '@/modules/core/pages/404NotFoundPage'
 import LoginPage from '../pages/LoginPage'
 import SignUp from '../pages/SignUpPage'
+import NotFoundPage from '@/modules/core/pages/NotFoundPage'
 
 /**
  * AuthRouter component to define the routes for authentication-related pages.
@@ -19,7 +19,7 @@ const AuthRouter: React.FC = () => {
       {/* Route for the /register path, rendering the SignUp component */}
       <Route path="/register" element={<SignUp />} />
       {/* Route for any undefined paths, rendering the PageNotFound component */}
-      <Route path="*" element={<PageNotFound />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   )
 }
