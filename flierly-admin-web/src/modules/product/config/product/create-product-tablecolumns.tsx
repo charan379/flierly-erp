@@ -77,7 +77,6 @@ const createProductTableColumns = (t: (value: string) => string): ProColumns<Pro
       },
     },
     // baseUom
-    // category
     {
       title: t('product.base_uom'),
       dataIndex: "baseUOM",
