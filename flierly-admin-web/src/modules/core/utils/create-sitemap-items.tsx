@@ -1,6 +1,6 @@
 import pr from "@/modules/auth/utils/get-permission-regex.util";
 import { DashboardOutlined } from "@ant-design/icons";
-import { faAddressBook, faUsersLine, faTags, faChartBar, faRulerCombined, faExchangeAlt, faIdBadge, faMapLocationDot, faFingerprint, faUsersGear, faUserTag, faKey, faBoxArchive, faBoxOpen, faThList, faSitemap, faBoxesPacking, faBuildingColumns, faStore } from "@fortawesome/free-solid-svg-icons";
+import { faAddressBook, faUsersLine, faTags, faChartBar, faRulerCombined, faExchangeAlt, faIdBadge, faMapLocationDot, faFingerprint, faUsersGear, faUserTag, faKey, faBoxArchive, faBoxOpen, faThList, faSitemap, faBoxesPacking, faBuildingColumns, faStore, faIndianRupeeSign, faMagnifyingGlassDollar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
@@ -18,7 +18,7 @@ export type SiteMapItem = {
 
 const createSiteMapItems = (t: (value: string) => string, hasPermission: (requiredPermissionRegex: RegExp) => boolean): SiteMapItem[] => {
 
-    const menuIconStyle: React.CSSProperties = { fontSize: '16px' }
+    const menuIconStyle: React.CSSProperties = { fontSize: '18px' }
 
 
     const siteMapItems: SiteMapItem[] = [
@@ -155,6 +155,26 @@ const createSiteMapItems = (t: (value: string) => string, hasPermission: (requir
             keywords: ['products', t('nav.products')],
             permission: pr("product.*"),
             resourcePath: '/erp/product/products',
+            parentItemId: 'product'
+        },
+        {
+            id: 'product-prices',
+            name: t('nav.product_prices'),
+            isDisabled: !hasPermission(pr("productPrice.*")),
+            icon: <FontAwesomeIcon icon={faIndianRupeeSign} style={menuIconStyle} />,
+            keywords: ['products', "product_prices", "prices", t('nav.product_prices')],
+            permission: pr("productPrice.*"),
+            resourcePath: '/erp/product/product-prices',
+            parentItemId: 'product'
+        },
+        {
+            id: 'product-lastest-prices-view',
+            name: t('nav.product_latest_prices_view'),
+            isDisabled: !hasPermission(pr("productLatestPricesView")),
+            icon: <FontAwesomeIcon icon={faMagnifyingGlassDollar} style={menuIconStyle} />,
+            keywords: ['products', "product_latest_prices_view", "latest", "prices", t('nav.product_latest_prices_view')],
+            permission: pr("productPrice.*"),
+            resourcePath: '/erp/product/product-latest-prices',
             parentItemId: 'product'
         },
         {

@@ -1,12 +1,12 @@
 import { DecimalTransformer } from '@/lib/database/typeorm/utils/DecimalTransformer';
-import { PrimaryGeneratedColumn, Column, ViewEntity, DataSource } from 'typeorm';
+import { Column, ViewEntity, DataSource } from 'typeorm';
 
 @ViewEntity({
     name: "product_latest_prices_view",
-    expression: (dataSource: DataSource) => 
+    expression: (dataSource: DataSource) =>
         dataSource
             .createQueryBuilder()
-            .select('p.id', 'id')
+            .select('p.id', 'product_id')
             .addSelect('p.name', 'product_name')
             .addSelect('p.sku', 'sku')
             .addSelect('p.hsn', 'hsn')
@@ -26,7 +26,7 @@ import { PrimaryGeneratedColumn, Column, ViewEntity, DataSource } from 'typeorm'
                         .from('product_prices', 'pp')
                         .groupBy('pp.product_id, pp.type');
                 },
-                'latest_prices', 
+                'latest_prices',
                 'latest_prices.product_id = p.id'
             )
             // Joining product_prices with subquery results
@@ -37,9 +37,10 @@ import { PrimaryGeneratedColumn, Column, ViewEntity, DataSource } from 'typeorm'
             )
             .where('p.is_active = true'), // Optional filter for active products
 })
-export default class ProductLatestPricesViewEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
+export default class ProductLatestPricesView {
+
+    @Column({ name: 'product_id' })
+    productId: number;
 
     @Column({ name: 'product_name' })
     productName: string;

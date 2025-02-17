@@ -55,7 +55,8 @@ export interface CrudTableProps<T = Record<string, any>> {
     update: boolean
     view: boolean
     menu: boolean
-  }
+  };
+  disableContextMenuItems?: CurdTableContextMenuKey[]
 }
 
 const CrudTable = <T extends Record<string, any>>({
@@ -70,6 +71,7 @@ const CrudTable = <T extends Record<string, any>>({
   editFormProps,
   queryFormFields,
   render,
+  disableContextMenuItems,
 }: CrudTableProps<T>) => {
   const tableHeight = useElementHeightByClassName('crud-data-table-flierly-1')
   const tableHeadHeight = useElementHeightByClassName('ant-table-thead')
@@ -181,7 +183,7 @@ const CrudTable = <T extends Record<string, any>>({
             order: Object.values(sort)[0] === 'ascend' ? 'asc' : 'desc',
           };
         }
-        
+
         const { result, success } = await crudService.page<T>(pageRequest)
 
         return {
@@ -240,6 +242,7 @@ const CrudTable = <T extends Record<string, any>>({
           binMode={binMode}
           key={'row-context-menu'}
           render={render.menu}
+          disableMenuItems={disableContextMenuItems}
           entity={entity}
           recordTitleKey={rowTitleKey as string}
           actions={actionRef.current}

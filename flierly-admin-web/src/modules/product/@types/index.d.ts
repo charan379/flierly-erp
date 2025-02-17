@@ -41,6 +41,29 @@ interface Product extends EntityTimeStamps {
     taxRates?: TaxRate[];
 };
 
+type ProductPriceType = "purchase" | "sale" | "minimun_sale" | "maximum_sale" | "maximum_purchase";
+
+interface ProductLatestPricesView {
+    productId: number;
+    productName: string;
+    sku: string;
+    hsn: number;
+    isSerialized: boolean;
+    isComposite: boolean;
+    priceType: ProductPriceType;
+    price: number;
+    effectiveDate: Date;
+};
+
+interface ProductPrice extends EntityTimeStamps {
+    id: number;
+    type: ProductPriceType;
+    productId: number;
+    product?: Product;
+    price: number;
+    effectiveDate: Date;
+    updatedAt: never;
+};
 
 type ProductComponent = {
     compositeProductId: number;

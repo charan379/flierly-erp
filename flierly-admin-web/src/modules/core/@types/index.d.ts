@@ -8,6 +8,8 @@ interface ApiResponse<T> {
   httpCode: number
 }
 
+type CurdTableContextMenuKey = 'view' | 'edit' | 'inactivate' | 'activate' | 'delete' | 'close' | 'restore';
+
 interface PageData<T> {
   data: T[]
   page: number

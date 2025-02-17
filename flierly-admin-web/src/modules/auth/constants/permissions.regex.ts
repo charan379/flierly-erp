@@ -22,6 +22,13 @@ const permissionRegexMap = {
     "productSubCategory.update": /^product-sub-category\.update$/,
     // productStock
     "productStock.*": /^product-stock\.[a-z]+$/,
+    // product price
+    "productPrice.*": /^product-price\.[a-z]+$/,
+    "productPrice.update": /^product-price\.update$/,
+    "productPrice.create": /^product-price\.create$/,
+    "productPrice.manage": /^product-price\.manage$/,
+    "productPrice.read": /^product-price\.read$/,
+    "productLatestPricesView": /^product-latest-prices-view\.[a-z]+$/,
     // account
     "account.*": /^account(-[a-z]+)?\.[a-z]+$/,
     // accountType

@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from 'react'
+import { useState, useEffect, useMemo, useCallback, ReactNode } from 'react'
 import { Button, Flex, Menu, Popover, Tooltip, Typography } from 'antd'
 import { CheckCircleOutlined, StopOutlined } from '@ant-design/icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -15,6 +15,7 @@ import useEscapeKey from '@/modules/core/hooks/useEscapeKey'
 interface RowContextMenuProps {
   entity: string
   actions: ActionType | undefined
+  disableMenuItems?: CurdTableContextMenuKey[]
   record: Record<string, any>
   recordTitleKey: string
   open: boolean
@@ -22,9 +23,17 @@ interface RowContextMenuProps {
   close: () => void
   render: boolean,
   binMode: boolean,
+};
+
+interface CrudTableContextMenuItem {
+  label: string;
+  key: CurdTableContextMenuKey;
+  icon: ReactNode;
+  style?: React.CSSProperties;
+  danger?: boolean;
 }
 
-const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record, recordTitleKey, open, position, close, render, binMode }) => {
+const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record, recordTitleKey, disableMenuItems, open, position, close, render, binMode }) => {
 
   const { theme } = useTheme()
   const { translate: t } = useLocale()
@@ -36,7 +45,7 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record
 
   const items = useMemo(() => {
     const menuItemStyle = { fontSize: '12px' }
-    const baseItems = [
+    const baseItems: CrudTableContextMenuItem[] = [
       {
         label: t('row_menu.label.view'),
         key: 'view',
@@ -76,7 +85,7 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record
       },
     ]
 
-    const binModeItems = [
+    const binModeItems: CrudTableContextMenuItem[] = [
       {
         label: t('row_menu.label.view'),
         key: 'view',
@@ -98,10 +107,11 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record
     ];
 
     if (binMode) {
-      return binModeItems;
+      return binModeItems.filter((item) => !disableMenuItems?.includes(item.key));
     } else {
-      return baseItems;
+      return baseItems.filter((item) => !disableMenuItems?.includes(item.key));
     }
+
 
   }, [record, t, countdown, binMode])
 

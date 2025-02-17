@@ -219,8 +219,8 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({ formInstance, isE
 
                         const getLabel = (r: ProductCategory) => r.name;
                         const getValue = (r: ProductCategory) => r.id;
-                        const processBrandsAsOptions = (categories: ProductCategory[]) => categories.map((category) => ({ label: getLabel(category), value: getValue(category) }));
-                        return fetchEntityRecordsAsOptions('product-category', filters, 10, processBrandsAsOptions);
+                        const processCategoriesAsOptions = (categories: ProductCategory[]) => categories.map((category) => ({ label: getLabel(category), value: getValue(category) }));
+                        return fetchEntityRecordsAsOptions('product-category', filters, 10, processCategoriesAsOptions);
                     }}
                 />
             </ProFormItem>
@@ -283,10 +283,10 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({ formInstance, isE
                                     const getLabel = (record: ProductSubCategory) => record.name;
                                     const getValue = (record: ProductSubCategory) => record.id;
 
-                                    const processBrandsAsOptions: ProcessResultFunction<ProductSubCategory> = (productSubCategories: ProductSubCategory[]) =>
+                                    const processSubcategoriesAsOptions: ProcessResultFunction<ProductSubCategory> = (productSubCategories: ProductSubCategory[]) =>
                                         productSubCategories.map((productSubCategory) => ({ label: getLabel(productSubCategory), value: getValue(productSubCategory) }));
 
-                                    return fetchEntityRecordsAsOptions<ProductSubCategory>('product-sub-category', filters, 10, processBrandsAsOptions);
+                                    return fetchEntityRecordsAsOptions<ProductSubCategory>('product-sub-category', filters, 10, processSubcategoriesAsOptions);
                                 }}
                             />
                         </ProFormItem>
@@ -332,8 +332,8 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({ formInstance, isE
 
                         const getLabel = (r: UOM) => r.name;
                         const getValue = (r: UOM) => r.id;
-                        const processBrandsAsOptions: ProcessResultFunction<UOM> = (uom: UOM[]) => uom.map((brand) => ({ label: getLabel(brand), value: getValue(brand) }));
-                        return fetchEntityRecordsAsOptions<UOM>('uom', filters, 10, processBrandsAsOptions);
+                        const processUomsAsOptions: ProcessResultFunction<UOM> = (uom: UOM[]) => uom.map((brand) => ({ label: getLabel(brand), value: getValue(brand) }));
+                        return fetchEntityRecordsAsOptions<UOM>('uom', filters, 10, processUomsAsOptions);
                     }}
                 />
             </ProFormItem>
