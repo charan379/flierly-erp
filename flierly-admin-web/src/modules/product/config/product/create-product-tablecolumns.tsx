@@ -7,6 +7,15 @@ const createProductTableColumns = (t: (value: string) => string): ProColumns<Pro
     createIdColumn(t),
     // name
     createNameColumn(t, { width: 200 }),
+    // product-type
+    {
+      title: t('product.type'),
+      dataIndex: 'type',
+      key: 'type',
+      valueType: 'text',
+      copyable: true,
+      width: 180,
+    },
     // sku 
     {
       title: t('product.sku'),

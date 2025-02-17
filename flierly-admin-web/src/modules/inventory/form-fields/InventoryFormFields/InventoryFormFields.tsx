@@ -5,7 +5,7 @@ import entityExistenceValidator from '@/modules/core/utils/entity-existence.vali
 import { ProFormDigit, ProFormItem, ProFormSelect, ProFormText, ProFormTextArea } from "@ant-design/pro-components";
 import { Form, FormInstance } from "antd";
 import React from "react";
-import { inventoryTypeOptions } from "../../constants/inventory-type-oprions.constant";
+import { inventoryTypeOptions } from "../../constants/inventory-type-options.constant";
 import SelectRemoteOptions from "@/modules/core/features/SelectRemoteOptions";
 import BranchFormFields from "@/modules/organization/form-fields/BranchFormFields";
 import fetchEntityRecordsAsOptions, { ProcessResultFunction } from "@/modules/core/features/SelectRemoteOptions/utils/fetch-entity-rows-as-options";

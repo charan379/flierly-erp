@@ -2,7 +2,7 @@ import useLocale from '@/modules/core/features/Locale/hooks/useLocale';
 import { useAuth } from '@/modules/auth/hooks/useAuth';
 import entityExistenceValidator from '@/modules/core/utils/entity-existence.validator';
 import vr from '@/modules/core/utils/get-validation-regex.util';
-import { ProFormDependency, ProFormDigit, ProFormItem, ProFormSwitch, ProFormText, ProFormTextArea } from '@ant-design/pro-components';
+import { ProFormDependency, ProFormDigit, ProFormItem, ProFormSelect, ProFormSwitch, ProFormText, ProFormTextArea } from '@ant-design/pro-components';
 import { Form, FormInstance } from 'antd';
 import React from 'react';
 import ProductCategoryFormFields from '../ProductCategoryFormFields';
@@ -11,6 +11,7 @@ import SelectRemoteOptions from '@/modules/core/features/SelectRemoteOptions';
 import fetchEntityRecordsAsOptions, { ProcessResultFunction } from '@/modules/core/features/SelectRemoteOptions/utils/fetch-entity-rows-as-options';
 import BrandFormFields from '../BrandFormFields/BrandFormFields';
 import UomFormFields from '@/modules/inventory/form-fields/UomFormFields';
+import { productTypeOptions } from '../../constants/product-type-options.constats';
 
 export interface ProductFormFieldsProps {
     formInstance?: FormInstance<Product>;
@@ -60,6 +61,16 @@ const ProductFormFields: React.FC<ProductFormFieldsProps> = ({ formInstance, isE
                 disabled={(isEditForm && !hasPermission(pr('product.update'))) || disabledFields?.includes('name')}
             />
 
+            {/* product type */}
+            <ProFormSelect
+                name="type"
+                label={t('product.type')}
+                hasFeedback
+                showSearch
+                options={productTypeOptions.map(option => ({ label: t(option.label), value: option.value }))}
+                rules={[{ required: true, message: t('product.type.required') }]}
+                disabled={(isEditForm && !hasPermission(pr('product.manage'))) || disabledFields?.includes('type')}
+            />
             {/* sku - Input for product SKU */}
             <ProFormText
                 name={'sku'}
