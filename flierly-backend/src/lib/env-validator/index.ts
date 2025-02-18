@@ -11,6 +11,7 @@ const validateEnv = (): void => {
     DB_NAME: str(),
     DB_USERNAME: str(),
     DB_PASSWORD: str(),
+    DB_SCHEMA: str(),
     JWT_SECRET: str(),
     DOMAIN_NAME: url(),
     CORS_ORIGINS: urlArray(),

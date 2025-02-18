@@ -22,6 +22,8 @@ const EnvConfig = Object.freeze({
   DB_PORT: process.env.DB_PORT ?? 5432,
   //
   DB_NAME: process.env.DB_NAME ?? 'flierly',
+  // 
+  DB_SCHEMA: process.env.DB_SCHEMA ?? 'public',
   //
   DB_USERNAME: process.env.DB_USERNAME ?? 'postgres',
   //
