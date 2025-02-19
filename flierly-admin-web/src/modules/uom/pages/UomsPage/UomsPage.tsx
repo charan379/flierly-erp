@@ -15,7 +15,7 @@ const UomsPage: React.FC = () => {
     const [editFormInstace] = Form.useForm<UOM>();
 
     return (
-        <CrudModule header title={t('title.uoms')}>
+        <CrudModule header title={t('title.uoms')} menuKeys={['uom']} >
             <Suspense fallback={<PageLoader />}>
                 <CrudTable
                     tableKey="uom-table"

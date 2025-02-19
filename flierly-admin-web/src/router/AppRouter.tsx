@@ -10,6 +10,7 @@ import AppsPage from '@/modules/core/pages/AppsPage'
 import InventoryRouter from '@/modules/inventory/router/InventoryRouter'
 import NotFoundPage from '@/modules/core/pages/NotFoundPage'
 import OrganizationRouter from '@/modules/organization/router/OrganizationRouter'
+import UomRouter from '@/modules/uom/router/UomRouter'
 
 const AppRouter = () => {
   return (
@@ -23,6 +24,7 @@ const AppRouter = () => {
         <Route path="product/*" element={<ProductRouter />} />
         <Route path='inventory/*' element={<InventoryRouter />} />
         <Route path='organization/*' element={<OrganizationRouter />} />
+        <Route path='uom/*' element={<UomRouter />} />
       </Route>
       {/* Login and Register routes */}
       <Route path="/login" element={<LoginPage />} />

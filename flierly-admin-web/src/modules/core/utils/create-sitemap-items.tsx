@@ -1,6 +1,6 @@
 import pr from "@/modules/auth/utils/get-permission-regex.util";
 import { DashboardOutlined } from "@ant-design/icons";
-import { faAddressBook, faUsersLine, faTags, faChartBar, faRulerCombined, faExchangeAlt, faIdBadge, faMapLocationDot, faFingerprint, faUsersGear, faUserTag, faKey, faBoxArchive, faBoxOpen, faThList, faSitemap, faBoxesPacking, faBuildingColumns, faIndianRupeeSign, faMagnifyingGlassDollar, faBuilding } from "@fortawesome/free-solid-svg-icons";
+import { faAddressBook, faUsersLine, faTags, faChartBar, faRulerCombined, faExchangeAlt, faIdBadge, faMapLocationDot, faFingerprint, faUsersGear, faUserTag, faKey, faBoxArchive, faBoxOpen, faThList, faSitemap, faBoxesPacking, faBuildingColumns, faIndianRupeeSign, faMagnifyingGlassDollar, faBuilding, faRuler } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
@@ -119,14 +119,22 @@ const createSiteMapItems = (t: (value: string) => string, hasPermission: (requir
             parentItemId: 'inventory'
         },
         {
+            id: 'uom',
+            name: t('nav.uom'),
+            isDisabled: !hasPermission(pr("uom.*")),
+            icon: <span role="img" aria-label="uom" style={menuIconWrapperStyle}><FontAwesomeIcon icon={faRulerCombined} style={menuIconStyle} /></span>,
+            keywords: ['uom', t('nav.uom')],
+            permission: pr("uom.*"),
+        },
+        {
             id: 'uoms',
             name: t('nav.uoms'),
             isDisabled: !hasPermission(pr("uom.*")),
-            icon: <span role="img" aria-label="uoms" style={menuIconWrapperStyle}><FontAwesomeIcon icon={faRulerCombined} style={menuIconStyle} /></span>,
+            icon: <span role="img" aria-label="uoms" style={menuIconWrapperStyle}><FontAwesomeIcon icon={faRuler} style={menuIconStyle} /></span>,
             keywords: ['uoms', t('nav.uoms')],
             permission: pr("uom.*"),
-            resourcePath: '/erp/inventory/uoms',
-            parentItemId: 'inventory'
+            resourcePath: '/erp/uom/uoms',
+            parentItemId: 'uom'
         },
         {
             id: 'uom-conversions',
@@ -135,8 +143,8 @@ const createSiteMapItems = (t: (value: string) => string, hasPermission: (requir
             icon: <span role="img" aria-label="uom-conversions" style={menuIconWrapperStyle}><FontAwesomeIcon icon={faExchangeAlt} style={menuIconStyle} /></span>,
             keywords: ['uom-conversions', t('nav.uom_conversions'), "conversions", "uom"],
             permission: pr("uomConversion.*"),
-            resourcePath: '/erp/inventory/uom-conversions',
-            parentItemId: 'inventory'
+            resourcePath: '/erp/uom/uom-conversions',
+            parentItemId: 'uom'
         },
         {
             id: 'product',

@@ -10,7 +10,7 @@ import ProductSubCategoryFormFields from '../ProductSubCategoryFormFields';
 import SelectRemoteOptions from '@/modules/core/features/SelectRemoteOptions';
 import fetchEntityRecordsAsOptions, { ProcessResultFunction } from '@/modules/core/features/SelectRemoteOptions/utils/fetch-entity-rows-as-options';
 import BrandFormFields from '../BrandFormFields/BrandFormFields';
-import UomFormFields from '@/modules/inventory/form-fields/UomFormFields';
+import UomFormFields from '@/modules/uom/form-fields/UomFormFields';
 import { productTypeOptions } from '../../constants/product-type-options.constant';
 
 export interface ProductFormFieldsProps {
