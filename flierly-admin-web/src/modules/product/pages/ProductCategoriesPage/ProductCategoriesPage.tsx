@@ -16,7 +16,7 @@ const ProductCategoriesPage: React.FC = () => {
     const [editFormInstance] = Form.useForm<ProductCategory>();
 
     return (
-        <CrudModule header title={'product-categories'} menuKeys={['product']}>
+        <CrudModule header title={t('title.product-categories')} menuKeys={['product']}>
             <Suspense fallback={<PageLoader />}>
                 <CrudTable
                     entity="product-category"

@@ -19,7 +19,7 @@ const RolesPage: React.FC = () => {
   const [editFormInstace] = Form.useForm<Role>();
 
   return (
-    <CrudModule header title={'roles'} menuKeys={['iam']}>
+    <CrudModule header title={t('title.roles')} menuKeys={['iam']}>
       <Suspense fallback={<PageLoader />}>
         <CrudTable
           entity="role"

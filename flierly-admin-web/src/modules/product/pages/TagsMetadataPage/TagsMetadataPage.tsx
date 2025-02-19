@@ -15,7 +15,7 @@ const TagsMetadataPage: React.FC = () => {
     const [editFormInstance] = Form.useForm<TagMetadata>();
 
     return (
-        <CrudModule header title={'tags-metadata'} menuKeys={['product']}>
+        <CrudModule header title={t('title.tags-metadata')} menuKeys={['product']}>
             <Suspense fallback={<PageLoader />}>
                 <CrudTable
                     entity="tag-metadata"

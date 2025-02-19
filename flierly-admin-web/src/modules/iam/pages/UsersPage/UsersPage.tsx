@@ -13,17 +13,17 @@ import CrudModule from '@/modules/core/features/CrudModule'
 const CrudTable: LazyExoticComponent<ComponentType<CrudTableProps<User>>> = React.lazy(() => import('@/modules/core/features/CrudTable'))
 
 const UsersPage: React.FC = () => {
-  const { translate } = useLocale();
+  const { translate: t } = useLocale();
   const { hasPermission } = useAuth();
   const [addFormInstance] = Form.useForm<User>();
   const [editFormInstace] = Form.useForm<User>();
 
   return (
-    <CrudModule header title={'users'} menuKeys={['iam']}>
+    <CrudModule header title={t("title.users")} menuKeys={['iam']}>
       <Suspense fallback={<PageLoader />}>
         <CrudTable
           entity="user"
-          columns={createUserTableColumns(translate, hasPermission)}
+          columns={createUserTableColumns(t, hasPermission)}
           dataSource={[]}
           tableKey="user-table"
           rowKey="id"
@@ -56,7 +56,7 @@ const UsersPage: React.FC = () => {
             formFields: <UserFormFields formInstance={editFormInstace} isEditForm />,
             formInstance: editFormInstace
           }}
-          queryFormFields={createUserQueryBuilderFields(translate)}
+          queryFormFields={createUserQueryBuilderFields(t)}
         />
       </Suspense>
     </CrudModule>

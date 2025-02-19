@@ -18,7 +18,7 @@ const PrivilegesPage: React.FC = () => {
   const [editFormInstance] = Form.useForm<Privilege>();
 
   return (
-    <CrudModule header title={'privileges'} menuKeys={['iam']}>
+    <CrudModule header title={t("title.privileges")} menuKeys={['iam']}>
       <Suspense fallback={<PageLoader />}>
         <CrudTable
           entity="privilege"

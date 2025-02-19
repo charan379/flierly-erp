@@ -15,7 +15,7 @@ const BranchesPage: React.FC = () => {
     const [editFormInstance] = Form.useForm<Branch>();
 
     return (
-        <CrudModule header title={t('branches')} menuKeys={['organization']}>
+        <CrudModule header title={t('titile.branches')} menuKeys={['organization']}>
             <Suspense fallback={<PageLoader />}>
                 <CrudTable
                     entity="branch"

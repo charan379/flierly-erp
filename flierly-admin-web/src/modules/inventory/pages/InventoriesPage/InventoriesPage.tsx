@@ -15,7 +15,7 @@ const InventoriesPage: React.FC = () => {
     const [editFormInstace] = Form.useForm<Inventory>();
 
     return (
-        <CrudModule header title={t('inventories')}>
+        <CrudModule header title={t('title.inventories')}>
             <Suspense fallback={<PageLoader />}>
                 <CrudTable
                     tableKey="inventory-table"

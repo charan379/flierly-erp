@@ -15,7 +15,7 @@ const ProductsPage: React.FC = () => {
     const [editFormInstace] = Form.useForm<Product>();
 
     return (
-        <CrudModule header title={t('products')} menuKeys={['product']}>
+        <CrudModule header title={t('title.products')} menuKeys={['product']}>
             <Suspense fallback={<PageLoader />}>
                 <CrudTable
                     tableKey="product-table"
