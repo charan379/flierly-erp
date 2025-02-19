@@ -41,6 +41,15 @@ interface Product extends EntityTimeStamps {
     taxRates?: TaxRate[];
 };
 
+interface ProductStock extends EntityTimeStamps {
+    id: number;
+    productId: number;
+    product?: Product;
+    inventoryId: number;
+    inventory?: Inventory;
+    balance: number;
+}
+
 type ProductPriceType = "purchase" | "sale" | "minimun_sale" | "maximum_sale" | "maximum_purchase";
 
 interface ProductLatestPricesView {
