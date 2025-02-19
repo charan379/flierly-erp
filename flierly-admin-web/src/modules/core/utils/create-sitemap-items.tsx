@@ -1,6 +1,6 @@
 import pr from "@/modules/auth/utils/get-permission-regex.util";
 import { DashboardOutlined } from "@ant-design/icons";
-import { faAddressBook, faUsersLine, faTags, faChartBar, faRulerCombined, faExchangeAlt, faIdBadge, faMapLocationDot, faFingerprint, faUsersGear, faUserTag, faKey, faBoxArchive, faBoxOpen, faThList, faSitemap, faBoxesPacking, faBuildingColumns, faStore, faIndianRupeeSign, faMagnifyingGlassDollar } from "@fortawesome/free-solid-svg-icons";
+import { faAddressBook, faUsersLine, faTags, faChartBar, faRulerCombined, faExchangeAlt, faIdBadge, faMapLocationDot, faFingerprint, faUsersGear, faUserTag, faKey, faBoxArchive, faBoxOpen, faThList, faSitemap, faBoxesPacking, faBuildingColumns, faIndianRupeeSign, faMagnifyingGlassDollar, faBuilding } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
@@ -44,7 +44,7 @@ const createSiteMapItems = (t: (value: string) => string, hasPermission: (requir
             id: 'branches',
             name: t('nav.branches'),
             isDisabled: !hasPermission(pr("branch.*")),
-            icon: <span role="img" aria-label="branches" style={menuIconWrapperStyle}><FontAwesomeIcon icon={faStore} style={menuIconStyle} /></span>,
+            icon: <span role="img" aria-label="branches" style={menuIconWrapperStyle}><FontAwesomeIcon icon={faBuilding} style={menuIconStyle} /></span>,
             keywords: ['branches', t('nav.branches')],
             permission: pr("branch.*"),
             resourcePath: '/erp/organization/branches',

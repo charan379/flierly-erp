@@ -22,6 +22,7 @@ const InventoriesPage: React.FC = () => {
                     rowKey="id"
                     entity="inventory"
                     columns={createInventoryTableColumns(t)}
+                    filterRowsWithBranchId
                     dataSource={[]}
                     loadRelations={["branch"]}
                     render={{

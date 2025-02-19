@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import useBranchSelector from "../../hooks/useBranchSelector";
 import SelectRemoteOptions from "@/modules/core/features/SelectRemoteOptions";
 import fetchEntityRecordsAsOptions, {
@@ -7,7 +7,7 @@ import fetchEntityRecordsAsOptions, {
 import crudService from "@/modules/core/features/CrudModule/service/crud-module.service";
 import useResponsive from "@/modules/core/hooks/useResponsive";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStore } from "@fortawesome/free-solid-svg-icons";
+import { faBuilding } from "@fortawesome/free-solid-svg-icons";
 import BranchFormFields from "@/modules/organization/form-fields/BranchFormFields";
 import pr from "@/modules/auth/utils/get-permission-regex.util";
 import { Form } from "antd";
@@ -21,34 +21,29 @@ const BranchSelector: React.FC = React.memo(() => {
     const { translate: t } = useLocale();
 
     // Memoize async fetch function
-    const asyncOptionsFetcher = useCallback(
-        (v: string) => {
-            let filters;
+    const asyncOptionsFetcher = (v: string) => {
+        let filters;
 
-            const selectedBranchId = selectedBranch?.id;
+        const selectedBranchId = selectedBranch?.id;
 
-            // Filters logic based on input value
-            if (v === "focus") {
-                filters = selectedBranchId
-                    ? { id: { $in: [selectedBranchId, ...Array.from({ length: 9 }, (_, i) => i + 1)] } }
-                    : { name: { $iContains: `%` } };
-            } else {
-                filters =
-                    selectedBranchId && !v
-                        ? { id: { $equalTo: selectedBranchId } }
-                        : { name: { $iContains: `%${v}%` } };
-            }
+        // Filters logic based on input value
+        if (v === "focus") {
+            filters = selectedBranchId
+                ? { id: { $in: [selectedBranchId, ...Array.from({ length: 9 }, (_, i) => i + 1)] } }
+                : { name: { $iContains: `%` } };
+        } else {
+            filters =
+                v ? { name: { $iContains: `%${v}%` } } : { name: { $iContains: `` } };
+        }
 
-            const processBranchesAsOptions: ProcessResultFunction<Branch> = (branches: Branch[]) =>
-                branches.map((branch) => ({
-                    label: branch.name,
-                    value: branch.id,
-                }));
+        const processBranchesAsOptions: ProcessResultFunction<Branch> = (branches: Branch[]) =>
+            branches.map((branch) => ({
+                label: branch.name,
+                value: branch.id,
+            }));
 
-            return fetchEntityRecordsAsOptions<Branch>("branch", filters, 10, processBranchesAsOptions);
-        },
-        [selectedBranch]
-    );
+        return fetchEntityRecordsAsOptions<Branch>("branch", filters, 10, processBranchesAsOptions);
+    };
 
     // Memoize onChange function
     const handleChange = async (value: string) => {
@@ -89,9 +84,9 @@ const BranchSelector: React.FC = React.memo(() => {
                 },
             }}
             asyncOptionsFetcher={asyncOptionsFetcher}
-            suffixIcon={<FontAwesomeIcon icon={faStore} size="2x" />}
+            suffixIcon={<FontAwesomeIcon icon={faBuilding} size="2x" />}
         />
     );
 });
 
-export default BranchSelector;
+export default React.memo(BranchSelector);

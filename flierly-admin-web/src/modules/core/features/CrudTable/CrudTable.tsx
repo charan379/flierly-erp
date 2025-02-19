@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { ProTable, ProColumns, ActionType, FormInstance } from '@ant-design/pro-components'
 import Create from './forms/Create'
 import Delete from './features/Delete'
@@ -13,6 +13,7 @@ import crudService from '../CrudModule/service/crud-module.service'
 import Search from './forms/Search'
 import useElementHeightByClassName from '../../hooks/useElementHeightByClassName'
 import { QueryBuilderFieldConfig } from '../QueryBuilder/QueryBuilder'
+import useBranchSelector from '@/modules/organization/features/BranchSelector/hooks/useBranchSelector'
 
 export interface CrudTableProps<T = Record<string, any>> {
   entity: string
@@ -21,6 +22,7 @@ export interface CrudTableProps<T = Record<string, any>> {
   rowTitleKey?: keyof T
   columns: ProColumns<T>[]
   dataSource?: T[]
+  filterRowsWithBranchId?: boolean
   addFormProps?: {
     title?: string | React.ReactNode
     formFields?: React.ReactNode;
@@ -71,6 +73,7 @@ const CrudTable = <T extends Record<string, any>>({
   editFormProps,
   queryFormFields,
   render,
+  filterRowsWithBranchId,
   disableContextMenuItems,
 }: CrudTableProps<T>) => {
   const tableHeight = useElementHeightByClassName('crud-data-table-flierly-1')
@@ -81,6 +84,8 @@ const CrudTable = <T extends Record<string, any>>({
   const [data, setData] = useState<T[]>(dataSource)
 
   const { CrudModuleContextHandler } = useCrudModuleContext()
+
+  const { selectedBranch } = useBranchSelector();
 
   const binMode = CrudModuleContextHandler.binMode.isActive();
 
@@ -111,6 +116,21 @@ const CrudTable = <T extends Record<string, any>>({
       return data; // Fallback to original data
     }
   };
+
+  // reload table data when branch changes if filterRowsWithBranchId is true
+  useEffect(() => {
+
+    if (selectedBranch?.id && filterRowsWithBranchId) {
+      CrudModuleContextHandler.filters.update({
+        branchId: { $equalTo: selectedBranch?.id }
+      })
+      actionRef.current?.reload()
+    }
+
+    return () => {
+
+    }
+  }, [selectedBranch?.id])
 
   return (
     <ProTable<T>
