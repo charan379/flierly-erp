@@ -22,6 +22,7 @@ export const initialState: CrudModuleState = {
 export type Action =
   | { type: ActionTypes.RESET_STATE }
   | { type: ActionTypes.UPDATE_FILTERS; payload: Record<string, any> }
+  | { type: ActionTypes.REPLACE_FILTERS; payload: Record<string, any> }
   | { type: ActionTypes.RESET_FILTERS }
   | { type: ActionTypes.OPEN_UPDATE_FORM; payload: { data: any; id: number } }
   | { type: ActionTypes.CLOSE_UPDATE_FORM }
@@ -40,10 +41,16 @@ export function reducer(state: CrudModuleState, action: Action): CrudModuleState
     case ActionTypes.RESET_STATE:
       return initialState
     // Update filters with the provided payload
-    case ActionTypes.UPDATE_FILTERS:
+    case ActionTypes.REPLACE_FILTERS:
       return {
         ...state,
         filters: action.payload,
+      }
+    // Update filters with the provided payload
+    case ActionTypes.UPDATE_FILTERS:
+      return {
+        ...state,
+        filters: { ...state.filters, ...action.payload },
       }
     case ActionTypes.RESET_FILTERS:
       return {

@@ -33,7 +33,7 @@ const Search: React.FC<SearchProps> = ({ title = 'filter_data', render, actions,
       const query = queryBuilderRef.current.getQuery()
       const currentConditions = queryBuilderRef.current.getConditions()
       CrudModuleContextHandler.conditions.set(currentConditions)
-      CrudModuleContextHandler.filters.set(query)
+      CrudModuleContextHandler.filters.replace(query)
       actions?.setPageInfo?.({ current: 1, total: 0 })
       actions.reload()
       setDrawerOpen(false) // Close the drawer after applying filters

@@ -1,6 +1,6 @@
 import { useContext, useMemo } from 'react'
 import CrudModuleContext from '../../context/CrudModuleContext'
-import contextHandler from '../../context/context-handler'
+import crudModuleContextHandler from '../../context/crud-module-context-handler'
 
 // Custom hook to handle context state and dispatch actions in the CrudModuleContext
 function useCrudModuleContext() {
@@ -18,7 +18,7 @@ function useCrudModuleContext() {
   const { state, dispatcher } = context
 
   // Use useMemo to create a stable handler that will only be recalculated if state or dispatch changes
-  const CrudModuleContextHandler = useMemo(() => contextHandler(state, dispatcher), [state, dispatcher])
+  const CrudModuleContextHandler = useMemo(() => crudModuleContextHandler(state, dispatcher), [state, dispatcher])
 
   // Return the handler which contains functions for interacting with context state
   return { CrudModuleContextHandler }

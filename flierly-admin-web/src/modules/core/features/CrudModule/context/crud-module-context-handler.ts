@@ -11,17 +11,23 @@ import { QueryCondition } from '../../QueryBuilder/QueryBuilder';
  * @param dispatcher - Function to dispatch actions to the reducer.
  * @returns Object containing utility methods for state management.
  */
-const contextHandler = (state: CrudModuleState, dispatcher: Dispatch<Action>) => ({
+const crudModuleContextHandler = (state: CrudModuleState, dispatcher: Dispatch<Action>) => ({
   /** Resets the state to its initial value */
   reset: () => dispatcher({ type: ActionTypes.RESET_STATE }),
 
   /** Handlers for managing filters */
   filters: {
     /**
-     * Updates the filters in the state.
+     * Replaces the filters in the state.
      * @param data - New filter data to set.
      */
-    set: (data: Record<string, any>) => dispatcher({ type: ActionTypes.UPDATE_FILTERS, payload: data }),
+    replace: (data: Record<string, any>) => dispatcher({ type: ActionTypes.REPLACE_FILTERS, payload: data }),
+
+    /**
+     * Updates or add the filters int he state
+     * @param data - filters data to be updated or to be added 
+     */
+    update: (data: Record<string, any>) => dispatcher({ type: ActionTypes.UPDATE_FILTERS, payload: data }),
 
     /**
      * Reset the filters to initial state
@@ -148,4 +154,4 @@ const contextHandler = (state: CrudModuleState, dispatcher: Dispatch<Action>) =>
   },
 })
 
-export default contextHandler
+export default crudModuleContextHandler
