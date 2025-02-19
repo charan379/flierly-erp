@@ -8,6 +8,8 @@ interface ApiResponse<T> {
   httpCode: number
 }
 
+type TypeHasKey<T, K extends string> = K extends keyof T ? true : false;
+
 type CurdTableContextMenuKey = 'view' | 'edit' | 'inactivate' | 'activate' | 'delete' | 'close' | 'restore';
 
 interface PageData<T> {
