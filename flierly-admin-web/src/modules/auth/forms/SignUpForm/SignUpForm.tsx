@@ -4,6 +4,7 @@ import { Button, Checkbox, Flex, Form, Input } from 'antd'
 import Loading from '@/modules/core/components/Loading'
 import useLocale from '@/modules/core/features/Locale/hooks/useLocale'
 import vr from '@/modules/core/utils/get-validation-regex.util'
+import { Link } from 'react-router-dom'
 
 interface FormValues {
   username: string
@@ -138,7 +139,7 @@ const SignUpForm: React.FC = () => {
           <Button type="primary" htmlType="submit" className="auth-form-button" loading={false}>
             {t('button.signin')}
           </Button>
-          {t('text.or')} <a href="/login">{t('link.signin')}</a>
+          {t('text.or')} <Link to={"/auth/login"}>{t('link.signin')}</Link>
         </Form.Item>
       </Form>
     </Loading>

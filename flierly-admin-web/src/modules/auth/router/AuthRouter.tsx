@@ -15,7 +15,7 @@ const AuthRouter: React.FC = () => {
       {/* Route for the /login path, rendering the Login component */}
       <Route path="/login" element={<LoginPage />} />
       {/* Route for the /logout path, redirecting to the /login path */}
-      <Route path="/logout" element={<Navigate to="/login" replace />} />
+      <Route path="/logout" element={<Navigate to="../login" replace />} />
       {/* Route for the /register path, rendering the SignUp component */}
       <Route path="/register" element={<SignUp />} />
       {/* Route for any undefined paths, rendering the PageNotFound component */}

@@ -42,7 +42,7 @@ const Dashboard: React.FC = () => {
       >
         {/* outlet */}
         <Outlet />
-        <ReAuthenticate tokenExpiresAt={tokenExpiresAt} onExpiryNavigateToURL={`/login?callback=${encodeURIComponent(JSON.stringify(callback))}`} />
+        <ReAuthenticate tokenExpiresAt={tokenExpiresAt} onExpiryNavigateToURL={`/auth/login?callback=${encodeURIComponent(JSON.stringify(callback))}`} />
       </Content>
       <Footer
         id="dashboard-footer"

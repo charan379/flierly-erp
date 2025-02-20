@@ -1,25 +1,31 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import SideContent from '../../components/SideContent'
-import { Layout, Typography, Col, Divider, Row } from 'antd'
+import { Layout, Col, Row } from 'antd'
 import { ErrorBoundary } from 'react-error-boundary'
 import ErrorFallback from '@/modules/core/components/ErrorFallback'
 import useLocale from '@/modules/core/features/Locale/hooks/useLocale'
 import LangSelector from '@/modules/core/features/Locale/components/LangSelector'
 import ThemeToggler from '@/modules/core/features/Theme/components/ThemeToggler'
+import { Outlet, useLocation } from 'react-router-dom'
 
-const { Content, Header } = Layout
-const { Title } = Typography
-
+const { Header, Footer } = Layout;
 /**
  * AuthLayout component to display authentication forms with layout and localization.
  *
  */
-const AuthLayout: React.FC<{
-  children: React.ReactNode
-  title: string
-  isForSignUp?: boolean
-}> = ({ children, title, isForSignUp = false }) => {
+const AuthLayout: React.FC = () => {
   const { langDirection } = useLocale()
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+    return () => {
+
+    }
+  }, [pathname])
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
@@ -27,67 +33,67 @@ const AuthLayout: React.FC<{
         style={{
           textAlign: langDirection === 'rtl' ? 'right' : 'left',
           direction: langDirection,
+          minHeight: '100vh',
         }}
       >
-        <Row>
+        {/* Header */}
+        <Header
+          style={{
+            padding: '15px',
+            display: 'flex',
+            flexDirection: langDirection === 'rtl' ? 'row' : 'row-reverse',
+            alignItems: 'center',
+            gap: '15px',
+            background: 'var(--bg-color-secondary-flierly) !important',
+            position: "sticky",
+            top: 0,
+            zIndex: 1,
+          }}
+        >
+          <LangSelector />
+          <ThemeToggler />
+        </Header>
+        <Row
+          style={{
+            minHeight: '100vh',
+          }}
+        >
           {/* Right-side content */}
           <Col
             xs={0}
             sm={0}
-            md={11}
-            lg={12}
+            md={12}
+            lg={14}
             style={{
-              minHeight: '100vh',
-              background: 'var(--bg-color-secondary-flierly) !important',
+              borderRight: '1px solid rgba(5, 5, 5, 0.06)',
+              minHeight: "100dvh",
+
             }}
           >
             <SideContent />
           </Col>
-
           {/* Main authentication content */}
           <Col
             xs={24}
             sm={24}
-            md={13}
-            lg={12}
+            md={12}
+            lg={10}
             style={{
-              minHeight: '100vh',
-              background: 'var(--bg-color-primary-lite-flierly) !important',
+              padding: "10px",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-around"
+
             }}
           >
-            {/* Header */}
-            <Header
-              style={{
-                padding: '15px',
-                background: 'var(--bg-color-primary-lite-flierly)',
-                display: 'flex',
-                flexDirection: langDirection === 'rtl' ? 'row' : 'row-reverse',
-                alignItems: 'center',
-                gap: '15px',
-              }}
-            >
-              <LangSelector />
-              <ThemeToggler />
-            </Header>
-
             {/* Main Content */}
-            <Content
-              style={{
-                padding: isForSignUp ? '40px 30px 30px' : '100px 30px 30px',
-                maxWidth: '440px',
-                margin: '0 auto',
-              }}
-            >
-              <Col xs={24} sm={24} md={0}>
-                <img src="/vite.svg" alt="Flierly" style={{ margin: '0 auto 20px', display: 'block' }} height={63} width={220} />
-                <div className="space10" />
-              </Col>
-              <Title level={1}>{title}</Title>
-              <Divider />
-              <div className="site-layout-content">{children}</div>
-            </Content>
+            <Outlet />
           </Col>
         </Row>
+        <Footer style={{ textAlign: 'center' }}>
+          Flierly ©2024 Created by Flierly Team
+        </Footer>
       </Layout>
     </ErrorBoundary>
   )

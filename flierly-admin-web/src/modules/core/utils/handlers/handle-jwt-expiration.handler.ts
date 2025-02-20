@@ -14,7 +14,7 @@ function handleJwtExpiration(error: ErrorDetails): void {
     url: window.location.href, // Current full URL
   }
   // Redirect to login page with the current URL as the callback
-  window.location.href = `/login?callback=${encodeURIComponent(JSON.stringify(callback))}`
+  window.location.href = `/auth/login?callback=${encodeURIComponent(JSON.stringify(callback))}`
 }
 
 export default handleJwtExpiration

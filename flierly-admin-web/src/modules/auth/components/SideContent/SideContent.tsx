@@ -25,14 +25,18 @@ const SideContent: React.FC = () => {
   return (
     <Content
       style={{
-        padding: '100px 15px 15px',
         width: '100%',
-        maxWidth: '580px',
+        height: "100%",
         margin: '0 auto',
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-around",
+        padding: "20px",
       }}
       className="side-content"
     >
-      <div style={{ width: '100%', background: 'inherit' }}>
+      <div style={{ width: '100%', background: 'inherit', padding: "20px", height: "100%", borderRadius: "10px" }}>
         <img src="/vite.svg" alt="Flierly" style={{ margin: '0 auto 40px', display: 'block' }} height={63} width={220} />
 
         <Title level={3}>{t('title.manage_your_company_with')}:</Title>

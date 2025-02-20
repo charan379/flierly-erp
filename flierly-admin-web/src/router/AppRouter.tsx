@@ -1,7 +1,5 @@
 import ProtectedRoute from '@/modules/core/features/ProtectedRoute/ProtectedRoute'
 import Dashboard from '@/modules/core/layouts/Dashboard'
-import LoginPage from '@/modules/auth/pages/LoginPage'
-import SignUp from '@/modules/auth/pages/SignUpPage'
 import IamRoutes from '@/modules/iam/router/IamRoutes'
 import ProductRouter from '@/modules/product/router/ProductRouter'
 import UnderConstructionPage from '@/modules/core/pages/UnderConstructionPage'
@@ -11,6 +9,8 @@ import InventoryRouter from '@/modules/inventory/router/InventoryRouter'
 import NotFoundPage from '@/modules/core/pages/NotFoundPage'
 import OrganizationRouter from '@/modules/organization/router/OrganizationRouter'
 import UomRouter from '@/modules/uom/router/UomRouter'
+import AuthRouter from '@/modules/auth/router/AuthRouter'
+import AuthLayout from '@/modules/auth/layout/AuthLayout/AuthLayout'
 
 const AppRouter = () => {
   return (
@@ -26,10 +26,10 @@ const AppRouter = () => {
         <Route path='organization/*' element={<OrganizationRouter />} />
         <Route path='uom/*' element={<UomRouter />} />
       </Route>
-      {/* Login and Register routes */}
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<SignUp />} />
-
+      {/* auth routes */}
+      <Route path="auth/*" element={<AuthLayout />}>
+        <Route path="*" element={<AuthRouter />} />
+      </Route>
       {/* Catch-all for 404 */}
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

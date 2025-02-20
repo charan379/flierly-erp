@@ -19,7 +19,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ element, requiredPermis
 
   // If the user is not logged in, redirect to login page
   if (!isLoggedIn || isTokenExpiryDatePast) {
-    return <Navigate to={`/login?callback=${encodeURIComponent(JSON.stringify(callback))}`} replace />
+    return <Navigate to={`/auth/login?callback=${encodeURIComponent(JSON.stringify(callback))}`} replace />
   }
 
   // Check for required permissions

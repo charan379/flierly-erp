@@ -3,7 +3,7 @@ import { InfoCircleOutlined, LockOutlined, UserOutlined } from '@ant-design/icon
 import { Button, Checkbox, Flex, Form, Input } from 'antd'
 import Loading from '@/modules/core/components/Loading'
 import { useAuth } from '../../hooks/useAuth'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { LoadingTypes } from '../../constants/loading.enum'
 import useLocale from '@/modules/core/features/Locale/hooks/useLocale'
 import vr from '@/modules/core/utils/get-validation-regex.util'
@@ -106,7 +106,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ redirectOnLogin = false, isForPop
 
           {!isForPopup ? (
             <>
-              {t('text.or')} <a href="/register">{t('link.signup')}</a>
+              {t('text.or')} <Link to={"/auth/register"}>{t('link.signup')}</Link>
             </>
           ) : null}
         </Form.Item>
