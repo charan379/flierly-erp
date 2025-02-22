@@ -1,17 +1,13 @@
-import moduleAlias from 'module-alias';
-moduleAlias.addAliases({
-  '@': `${__dirname}`,
-});
 import 'reflect-metadata';
-import './lib/di-ioc-container';
+import '../../lib/di-ioc-container';
 import dotenv from 'dotenv';
-import generateSuperAdmin from './setup/generate-super-admin';
-import generatePrivileges from './setup/generate-privileges';
-import validateEnv from './lib/env-validator';
-import DatabaseService from './lib/database/database-service/DatabaseService';
-import BeanTypes from './lib/di-ioc-container/bean.types';
-import iocContainer from './lib/di-ioc-container';
-import LoggerService from './modules/core/services/logger-service/LoggerService';
+import generateSuperAdmin from './generate-super-admin';
+import generatePrivileges from './generate-privileges';
+import validateEnv from '../../lib/env-validator';
+import DatabaseService from '../../lib/database/database-service/DatabaseService';
+import BeanTypes from '../../lib/di-ioc-container/bean.types';
+import iocContainer from '../../lib/di-ioc-container';
+import LoggerService from '../../modules/core/services/logger-service/LoggerService';
 
 dotenv.config();
 
