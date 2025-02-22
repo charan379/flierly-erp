@@ -4,7 +4,6 @@ import {
     CreateDateColumn,
     ManyToOne,
     JoinColumn,
-    DeleteDateColumn,
     Index,
     PrimaryColumn,
 } from 'typeorm';
@@ -52,7 +51,7 @@ export default class ProductPrice {
     @Type(() => Number)
     price: number;
 
-    @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP', name: "effective_date" })
+    @Column({ type: 'date', default: () => 'CURRENT_DATE', name: "effective_date" })
     @IsOptional()
     @IsDate()
     @Type(() => Date)
@@ -60,7 +59,4 @@ export default class ProductPrice {
 
     @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
     createdAt: Date;
-
-    @DeleteDateColumn({ name: 'deleted_at', type: 'timestamptz' })
-    deletedAt: Date | null;
 }

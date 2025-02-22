@@ -12,30 +12,35 @@ import { Column, ViewEntity, DataSource } from 'typeorm';
             .addSelect('p.hsn', 'hsn')
             .addSelect('p.is_serialized', 'is_serialized')
             .addSelect('p.is_composite', 'is_composite')
-            .addSelect('pp.type', 'price_type')
-            .addSelect('pp.price', 'price')
-            .addSelect('pp.effective_date', 'effective_date')
+            .addSelect('MAX(CASE WHEN pp.type = \'sale\' THEN pp.price END)', 'sale_price')
+            .addSelect('MAX(CASE WHEN pp.type = \'maximum_sale\' THEN pp.price END)', 'maximum_sale_price')
+            .addSelect('MAX(CASE WHEN pp.type = \'minimun_sale\' THEN pp.price END)', 'minimun_sale_price')
+            .addSelect('MAX(CASE WHEN pp.type = \'purchase\' THEN pp.price END)', 'purchase_price')
+            .addSelect('MAX(CASE WHEN pp.type = \'maximum_purchase\' THEN pp.price END)', 'maximum_purchase_price')
             .from('products', 'p')
             // Subquery for latest prices
-            .innerJoin(
+            .leftJoin(
                 (subQuery) => {
                     return subQuery
                         .select('pp.product_id', 'product_id')
                         .addSelect('pp.type', 'type')
                         .addSelect('MAX(pp.effective_date)', 'latest_effective_date')
+                        .addSelect('MAX(pp.created_at)', 'latest_created_at')
                         .from('product_prices', 'pp')
+                        .where('pp.effective_date <= CURRENT_DATE')
                         .groupBy('pp.product_id, pp.type');
                 },
                 'latest_prices',
                 'latest_prices.product_id = p.id'
             )
             // Joining product_prices with subquery results
-            .innerJoin(
+            .leftJoin(
                 'product_prices',
                 'pp',
-                'pp.product_id = latest_prices.product_id AND pp.type = latest_prices.type AND pp.effective_date = latest_prices.latest_effective_date'
+                'pp.product_id = latest_prices.product_id AND pp.type = latest_prices.type AND pp.effective_date = latest_prices.latest_effective_date AND pp.created_at = latest_prices.latest_created_at'
             )
-            .where('p.is_active = true'), // Optional filter for active products
+            .where('p.is_active = true') // Optional filter for active products
+            .groupBy('p.id')
 })
 export default class ProductLatestPricesView {
 
@@ -57,12 +62,18 @@ export default class ProductLatestPricesView {
     @Column({ name: 'is_composite' })
     isComposite: boolean;
 
-    @Column({ name: 'price_type' })
-    priceType: string;
+    @Column({ name: 'sale_price', type: 'decimal', precision: 10, scale: 2, transformer: DecimalTransformer })
+    salePrice: number;
 
-    @Column({ name: 'price', type: 'decimal', precision: 10, scale: 2, transformer: DecimalTransformer })
-    price: number;
+    @Column({ name: 'maximum_sale_price', type: 'decimal', precision: 10, scale: 2, transformer: DecimalTransformer })
+    maximumSalePrice: number;
 
-    @Column({ name: 'effective_date', type: 'timestamptz' })
-    effectiveDate: Date;
-}
+    @Column({ name: 'minimun_sale_price', type: 'decimal', precision: 10, scale: 2, transformer: DecimalTransformer })
+    minimunSalePrice: number;
+
+    @Column({ name: 'purchase_price', type: 'decimal', precision: 10, scale: 2, transformer: DecimalTransformer })
+    purchasePrice: number;
+
+    @Column({ name: 'maximum_purchase_price', type: 'decimal', precision: 10, scale: 2, transformer: DecimalTransformer })
+    maximumPurchasePrice: number;
+};
