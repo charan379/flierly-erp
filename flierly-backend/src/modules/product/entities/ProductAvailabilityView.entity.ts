@@ -1,8 +1,10 @@
+import { EnvConfig } from '@/config/env';
 import { DecimalTransformer } from '@/lib/database/typeorm/utils/DecimalTransformer';
 import { Column, ViewEntity, DataSource } from 'typeorm';
 
 @ViewEntity({
     name: "product_availability_view",
+    schema: EnvConfig.DB_SCHEMA,
     expression: (dataSource: DataSource) =>
         dataSource
             .createQueryBuilder()
@@ -19,18 +21,38 @@ import { Column, ViewEntity, DataSource } from 'typeorm';
             .addSelect('i.inventory_type', 'inventory_type')
             .addSelect('b.id', 'branch_id')
             .addSelect('b.name', 'branch_name')
-            .addSelect('MAX(CASE WHEN pp.type::text = \'sale\' THEN pp.price END)', 'sale_price')
-            .addSelect('MAX(CASE WHEN pp.type::text = \'maximum_sale\' THEN pp.price END)', 'maximum_sale_price')
-            .addSelect('MAX(CASE WHEN pp.type::text = \'minimun_sale\' THEN pp.price END)', 'minimun_sale_price')
-            .addSelect('MAX(CASE WHEN pp.type::text = \'purchase\' THEN pp.price END)', 'purchase_price')
-            .addSelect('MAX(CASE WHEN pp.type::text = \'maximum_purchase\' THEN pp.price END)', 'maximum_purchase_price')
+            .addSelect('MAX(CASE WHEN pp.type = \'sale\' THEN pp.price END)', 'sale_price')
+            .addSelect('MAX(CASE WHEN pp.type = \'maximum_sale\' THEN pp.price END)', 'maximum_sale_price')
+            .addSelect('MAX(CASE WHEN pp.type = \'minimun_sale\' THEN pp.price END)', 'minimun_sale_price')
+            .addSelect('MAX(CASE WHEN pp.type = \'purchase\' THEN pp.price END)', 'purchase_price')
+            .addSelect('MAX(CASE WHEN pp.type = \'maximum_purchase\' THEN pp.price END)', 'maximum_purchase_price')
             .from('products', 'p')
             .innerJoin('product_categories', 'pc', 'p.category_id = pc.id')
             .innerJoin('product_sub_categories', 'psc', 'p.sub_category_id = psc.id')
             .leftJoin('product_stocks', 'ps', 'p.id = ps.product_id')
             .innerJoin('inventories', 'i', 'ps.inventory_id = i.id')
             .innerJoin('branches', 'b', 'i.branch_id = b.id')
-            .leftJoin('product_prices', 'pp', 'p.id = pp.product_id AND pp.effective_date <= CURRENT_DATE AND (pp.effective_date, pp.created_at) = (SELECT pp2.effective_date, MAX(pp2.created_at) FROM product_prices pp2 WHERE pp2.product_id = pp.product_id AND pp2.type::text = pp.type::text AND pp2.effective_date <= CURRENT_DATE GROUP BY pp2.effective_date)')
+            // Subquery for latest prices
+            .leftJoin(
+                (subQuery) => {
+                    return subQuery
+                        .select('pp.product_id', 'product_id')
+                        .addSelect('pp.type', 'type')
+                        .addSelect('MAX(pp.effective_date)', 'latest_effective_date')
+                        .addSelect('MAX(pp.created_at)', 'latest_created_at')
+                        .from('product_prices', 'pp')
+                        .where('pp.effective_date <= CURRENT_DATE')
+                        .groupBy('pp.product_id, pp.type');
+                },
+                'latest_prices',
+                'latest_prices.product_id = p.id'
+            )
+            // Joining product_prices with subquery results
+            .leftJoin(
+                'product_prices',
+                'pp',
+                'pp.product_id = latest_prices.product_id AND pp.type = latest_prices.type AND pp.effective_date = latest_prices.latest_effective_date AND pp.created_at = latest_prices.latest_created_at'
+            )
             .groupBy('p.id, p.name, p.type, pc.id, pc.name, psc.id, psc.name, ps.id, ps.balance, i.id, i.inventory_type, b.id, b.name')
 })
 export default class ProductAvailabilityView {

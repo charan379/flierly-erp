@@ -39,7 +39,6 @@ import { Column, ViewEntity, DataSource } from 'typeorm';
                 'pp',
                 'pp.product_id = latest_prices.product_id AND pp.type = latest_prices.type AND pp.effective_date = latest_prices.latest_effective_date AND pp.created_at = latest_prices.latest_created_at'
             )
-            .where('p.is_active = true') // Optional filter for active products
             .groupBy('p.id')
 })
 export default class ProductLatestPricesView {
