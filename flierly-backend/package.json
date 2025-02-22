@@ -9,10 +9,15 @@
     "build": "npx tsc && copyfiles -u 1 src/**/*.sql dist/",
     "test": "jest --runInBand",
     "test:coverage": "jest --coverage",
-    "setup": "cross-env NODE_ENV=production node dist/setup.js",
+    "setup": "ts-node --files -r tsconfig-paths/register src/scripts/setup",
     "lint": "eslint .",
     "format": "prettier --write src/**/*.ts",
-    "format-check": "prettier --check src/**/*.ts"
+    "format-check": "prettier --check src/**/*.ts",
+    "typeorm": "typeorm-ts-node-commonjs -d src/lib/database/typeorm/app-datasource.ts",
+    "migration:create": "ts-node src/scripts/typeorm-db-migration/create-migration.ts --name",
+    "migration:show": "npm run typeorm migration:show",
+    "migration:run": "npm run typeorm migration:run",
+    "migration:revert": "npm run typeorm migration:revert"
   },
   "keywords": [],
   "author": "",
@@ -64,6 +69,7 @@
     "@types/node": "^20.17.10",
     "@types/prompts": "^2.4.9",
     "@types/uuid": "^10.0.0",
+    "@types/yargs": "^17.0.33",
     "@typescript-eslint/eslint-plugin": "^8.18.1",
     "@typescript-eslint/parser": "^8.18.1",
     "concurrently": "^8.2.2",
@@ -79,6 +85,8 @@
     "prettier": "^3.4.2",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.2"
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.7.2",
+    "yargs": "^17.7.2"
   }
 }
