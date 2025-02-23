@@ -187,10 +187,10 @@ const createSiteMapItems = (t: (value: string) => string, hasPermission: (requir
         },
         {
             id: 'product-availability-view',
-            name: t('nav.product-availability-view'),
+            name: t('nav.product_availability_view'),
             isDisabled: !hasPermission(pr("productAvailabilityView")),
             icon: <span role="img" aria-label="product-availability-view" style={menuIconWrapperStyle}><FontAwesomeIcon icon={faMagnifyingGlassDollar} style={menuIconStyle} /></span>,
-            keywords: ['products', "product-availability-view", t('nav.product-availability-view')],
+            keywords: ['products', "product_availability_view", t('nav.product_availability_view')],
             permission: pr("productAvailabilityView"),
             resourcePath: '/erp/product/product-availability',
             parentItemId: 'product'
