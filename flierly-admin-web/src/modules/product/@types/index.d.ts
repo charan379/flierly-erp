@@ -59,9 +59,11 @@ interface ProductLatestPricesView {
     hsn: number;
     isSerialized: boolean;
     isComposite: boolean;
-    priceType: ProductPriceType;
-    price: number;
-    effectiveDate: Date;
+    salePrice: number | null;
+    maximumSalePrice: number | null;
+    minimunSalePrice: number | null;
+    purchasePrice: number | null;
+    maximumPurchasePrice: number | null;
 };
 
 interface ProductPrice extends EntityTimeStamps {

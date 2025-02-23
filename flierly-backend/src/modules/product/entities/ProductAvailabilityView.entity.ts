@@ -21,40 +21,26 @@ import { Column, ViewEntity, DataSource } from 'typeorm';
             .addSelect('i.inventory_type', 'inventory_type')
             .addSelect('b.id', 'branch_id')
             .addSelect('b.name', 'branch_name')
-            .addSelect('MAX(CASE WHEN pp.type = \'sale\' THEN pp.price END)', 'sale_price')
-            .addSelect('MAX(CASE WHEN pp.type = \'maximum_sale\' THEN pp.price END)', 'maximum_sale_price')
-            .addSelect('MAX(CASE WHEN pp.type = \'minimun_sale\' THEN pp.price END)', 'minimun_sale_price')
-            .addSelect('MAX(CASE WHEN pp.type = \'purchase\' THEN pp.price END)', 'purchase_price')
-            .addSelect('MAX(CASE WHEN pp.type = \'maximum_purchase\' THEN pp.price END)', 'maximum_purchase_price')
+            .addSelect(
+                `(SELECT pp_1.price
+                  FROM ${EnvConfig.DB_SCHEMA}.product_prices pp_1
+                  WHERE pp_1.product_id = p.id
+                    AND pp_1.type = 'sale'
+                    AND pp_1.effective_date = (
+                        SELECT MAX(pp_2.effective_date)
+                        FROM ${EnvConfig.DB_SCHEMA}.product_prices pp_2
+                        WHERE pp_2.effective_date <= CURRENT_DATE
+                          AND pp_2.type = pp_1.type
+                          AND pp_2.product_id = pp_1.product_id
+                    )
+                  ORDER BY pp_1.created_at DESC
+                  LIMIT 1)`, 'sale_price')
             .from('products', 'p')
             .innerJoin('product_categories', 'pc', 'p.category_id = pc.id')
             .innerJoin('product_sub_categories', 'psc', 'p.sub_category_id = psc.id')
             .leftJoin('product_stocks', 'ps', 'p.id = ps.product_id')
             .innerJoin('inventories', 'i', 'ps.inventory_id = i.id')
             .innerJoin('branches', 'b', 'i.branch_id = b.id')
-            // Subquery for latest prices
-            .leftJoin(
-                (subQuery) => {
-                    return subQuery
-                        .select('pp_1.product_id', 'product_id')
-                        .addSelect('pp_1.type', 'type')
-                        .addSelect('pp_1.effective_date', 'effective_date')
-                        .addSelect('pp_1.created_at', 'created_at')
-                        .from('product_prices', 'pp_1')
-                        .where('(pp_1.product_id, pp_1.type, pp_1.effective_date, pp_1.created_at) IN (' +
-                            'SELECT pp_2.product_id, pp_2.type, MAX(pp_2.effective_date) AS effective_date, MAX(pp_2.created_at) AS created_at ' +
-                            'FROM product_prices pp_2 ' +
-                            'WHERE pp_2.effective_date = (' +
-                                'SELECT MAX(effective_date) ' +
-                                'FROM product_prices ' +
-                                'WHERE effective_date <= CURRENT_DATE' +
-                            ') ' +
-                            'GROUP BY pp_2.product_id, pp_2.type' +
-                        ')')
-                },
-                'pp',
-                'pp.product_id = p.id'
-            )
             .where('p.deleted_at IS NULL')
             .groupBy('p.id, p.name, p.type, pc.id, pc.name, psc.id, psc.name, ps.id, ps.balance, i.id, i.inventory_type, b.id, b.name')
 })
@@ -101,16 +87,4 @@ export default class ProductAvailabilityView {
 
     @Column({ name: 'sale_price', type: 'decimal', precision: 10, scale: 2, transformer: DecimalTransformer })
     salePrice: number;
-
-    @Column({ name: 'maximum_sale_price', type: 'decimal', precision: 10, scale: 2, transformer: DecimalTransformer })
-    maximumSalePrice: number;
-
-    @Column({ name: 'minimun_sale_price', type: 'decimal', precision: 10, scale: 2, transformer: DecimalTransformer })
-    minimunSalePrice: number;
-
-    @Column({ name: 'purchase_price', type: 'decimal', precision: 10, scale: 2, transformer: DecimalTransformer })
-    purchasePrice: number;
-
-    @Column({ name: 'maximum_purchase_price', type: 'decimal', precision: 10, scale: 2, transformer: DecimalTransformer })
-    maximumPurchasePrice: number;
 }

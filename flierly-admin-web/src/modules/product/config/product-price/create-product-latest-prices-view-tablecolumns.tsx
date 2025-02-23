@@ -13,15 +13,6 @@ const createProductLatestPricesViewTableColumns = (t: (v: string) => string): Pr
             width: 120,
             sorter: true,
         },
-        // price type 
-        {
-            title: t('product_price.type'),
-            dataIndex: 'priceType',
-            key: 'priceType',
-            valueType: 'text',
-            copyable: true,
-            width: 120,
-        },
         // product name
         {
             title: t('product.name'),
@@ -31,11 +22,11 @@ const createProductLatestPricesViewTableColumns = (t: (v: string) => string): Pr
             copyable: true,
             width: 160,
         },
-        // price
+        // salePrice
         {
-            title: t('product_price.price'),
-            dataIndex: 'price',
-            key: 'price',
+            title: t('product_price.salePrice'),
+            dataIndex: 'salePrice',
+            key: 'salePrice',
             valueType: {
                 type: "money",
                 moneySymbol: false,
@@ -43,17 +34,63 @@ const createProductLatestPricesViewTableColumns = (t: (v: string) => string): Pr
                 locale: "en-Us",
             },
             copyable: true,
-            width: 140,
+            width: 160,
         },
-        // effectiveDate
+        // maximumSalePrice
         {
-            title: t('product_price.evfective_date'),
-            dataIndex: 'effectiveDate',
-            key: 'effectiveDate',
-            valueType: 'date',
+            title: t('product_price.maximumSalePrice'),
+            dataIndex: 'maximumSalePrice',
+            key: 'maximumSalePrice',
+            valueType: {
+                type: "money",
+                moneySymbol: false,
+                showSymbol: true,
+                locale: "en-Us",
+            },
+            copyable: true,
+            width: 220,
+        },
+        // minimunSalePrice
+        {
+            title: t('product_price.minimunSalePrice'),
+            dataIndex: 'minimunSalePrice',
+            key: 'minimunSalePrice',
+            valueType: {
+                type: "money",
+                moneySymbol: false,
+                showSymbol: true,
+                locale: "en-Us",
+            },
+            copyable: true,
+            width: 200,
+        },
+        // purchasePrice
+        {
+            title: t('product_price.purchasePrice'),
+            dataIndex: 'purchasePrice',
+            key: 'purchasePrice',
+            valueType: {
+                type: "money",
+                moneySymbol: false,
+                showSymbol: true,
+                locale: "en-Us",
+            },
             copyable: true,
             width: 180,
-            sorter: true,
+        },
+        // maximumPurchasePrice
+        {
+            title: t('product_price.maximumPurchasePrice'),
+            dataIndex: 'maximumPurchasePrice',
+            key: 'maximumPurchasePrice',
+            valueType: {
+                type: "money",
+                moneySymbol: false,
+                showSymbol: true,
+                locale: "en-Us",
+            },
+            copyable: true,
+            width: 240,
         },
         createBooleanColumn(t, { dataIndex: "isSerialized", title: t('product.is_serialized'), width: 140 }),
         createBooleanColumn(t, { dataIndex: "isComposite", title: t('product.is_composite'), width: 140 }),
@@ -64,7 +101,7 @@ const createProductLatestPricesViewTableColumns = (t: (v: string) => string): Pr
             key: 'sku',
             valueType: 'text',
             copyable: true,
-            width: 80,
+            width: 90,
         },
         // hsn 
         {
@@ -73,7 +110,7 @@ const createProductLatestPricesViewTableColumns = (t: (v: string) => string): Pr
             key: 'hsn',
             valueType: 'text',
             copyable: true,
-            width: 80,
+            width: 90,
         },
     ];
 };
