@@ -47,7 +47,7 @@ const InventoryFormFields: React.FC<InventoryFormFieldsProps> = ({ disabledField
                                 entity: "inventory",
                                 filters: {
                                     ...(isEditForm && getFieldValue('id') ? { id: { $notEqualTo: getFieldValue('id') } } : {}),
-                                    name: { "$iContains": value }
+                                    name: { "$regexi": `${value}$` }
                                 },
                                 rejectionMessage: t('record.name.already_exists')
                             });

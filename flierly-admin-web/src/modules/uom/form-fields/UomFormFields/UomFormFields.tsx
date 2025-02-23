@@ -42,7 +42,7 @@ const UomFormFields: React.FC<UomFormFieldsProps> = ({ disabledFields, formInsta
                                 entity: "uom",
                                 filters: {
                                     ...(isEditForm && getFieldValue('id') ? { id: { $notEqualTo: getFieldValue('id') } } : {}),
-                                    name: { "$iContains": value }
+                                    name: { "$regexi": `${value}$` }
                                 },
                                 rejectionMessage: t('record.name.already_exists')
                             });
@@ -67,7 +67,7 @@ const UomFormFields: React.FC<UomFormFieldsProps> = ({ disabledFields, formInsta
                                 entity: "uom",
                                 filters: {
                                     ...(isEditForm && getFieldValue('id') ? { id: { $notEqualTo: getFieldValue('id') } } : {}),
-                                    shortName: { "$iContains": value }
+                                    shortName: { "$regexi": `${value}$` }
                                 },
                                 rejectionMessage: t('record.name.already_exists')
                             });
