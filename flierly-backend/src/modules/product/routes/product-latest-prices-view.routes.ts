@@ -1,8 +1,6 @@
 import CRUDController from "@/modules/core/controllers/crud-controller";
 import { Router } from "express";
-import { requestValidator } from "@/middlewares/request-validator.middleware";
 import { authorize } from "@/middlewares/authorization.middleware";
-import ProductCategory from "../entities/ProductCategory.entity";
 import ProductLatestPricesView from "../entities/ProductLatestPricesView.entity";
 
 

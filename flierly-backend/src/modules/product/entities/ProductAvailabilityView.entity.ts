@@ -36,23 +36,26 @@ import { Column, ViewEntity, DataSource } from 'typeorm';
             .leftJoin(
                 (subQuery) => {
                     return subQuery
-                        .select('pp.product_id', 'product_id')
-                        .addSelect('pp.type', 'type')
-                        .addSelect('MAX(pp.effective_date)', 'latest_effective_date')
-                        .addSelect('MAX(pp.created_at)', 'latest_created_at')
-                        .from('product_prices', 'pp')
-                        .where('pp.effective_date <= CURRENT_DATE')
-                        .groupBy('pp.product_id, pp.type');
+                        .select('pp_1.product_id', 'product_id')
+                        .addSelect('pp_1.type', 'type')
+                        .addSelect('pp_1.effective_date', 'effective_date')
+                        .addSelect('pp_1.created_at', 'created_at')
+                        .from('product_prices', 'pp_1')
+                        .where('(pp_1.product_id, pp_1.type, pp_1.effective_date, pp_1.created_at) IN (' +
+                            'SELECT pp_2.product_id, pp_2.type, MAX(pp_2.effective_date) AS effective_date, MAX(pp_2.created_at) AS created_at ' +
+                            'FROM product_prices pp_2 ' +
+                            'WHERE pp_2.effective_date = (' +
+                                'SELECT MAX(effective_date) ' +
+                                'FROM product_prices ' +
+                                'WHERE effective_date <= CURRENT_DATE' +
+                            ') ' +
+                            'GROUP BY pp_2.product_id, pp_2.type' +
+                        ')')
                 },
-                'latest_prices',
-                'latest_prices.product_id = p.id'
-            )
-            // Joining product_prices with subquery results
-            .leftJoin(
-                'product_prices',
                 'pp',
-                'pp.product_id = latest_prices.product_id AND pp.type = latest_prices.type AND pp.effective_date = latest_prices.latest_effective_date AND pp.created_at = latest_prices.latest_created_at'
+                'pp.product_id = p.id'
             )
+            .where('p.deleted_at IS NULL')
             .groupBy('p.id, p.name, p.type, pc.id, pc.name, psc.id, psc.name, ps.id, ps.balance, i.id, i.inventory_type, b.id, b.name')
 })
 export default class ProductAvailabilityView {
