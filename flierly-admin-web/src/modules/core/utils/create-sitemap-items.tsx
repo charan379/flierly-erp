@@ -186,6 +186,16 @@ const createSiteMapItems = (t: (value: string) => string, hasPermission: (requir
             parentItemId: 'product'
         },
         {
+            id: 'product-availability-view',
+            name: t('nav.product-availability-view'),
+            isDisabled: !hasPermission(pr("productAvailabilityView")),
+            icon: <span role="img" aria-label="product-availability-view" style={menuIconWrapperStyle}><FontAwesomeIcon icon={faMagnifyingGlassDollar} style={menuIconStyle} /></span>,
+            keywords: ['products', "product-availability-view", t('nav.product-availability-view')],
+            permission: pr("productAvailabilityView"),
+            resourcePath: '/erp/product/product-availability',
+            parentItemId: 'product'
+        },
+        {
             id: 'tags-metadata',
             name: t('nav.tags_metadata'),
             isDisabled: !hasPermission(pr("tagMetadata.*")),

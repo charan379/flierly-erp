@@ -29,6 +29,7 @@ const permissionRegexMap = {
     "productPrice.manage": /^product-price\.manage$/,
     "productPrice.read": /^product-price\.read$/,
     "productLatestPricesView": /^product-latest-prices-view\.[a-z]+$/,
+    "productAvailabilityView": /^product-availability-view\.[a-z]+$/,
     // account
     "account.*": /^account(-[a-z]+)?\.[a-z]+$/,
     // accountType

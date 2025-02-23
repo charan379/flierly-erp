@@ -66,6 +66,23 @@ interface ProductLatestPricesView {
     maximumPurchasePrice: number | null;
 };
 
+interface ProductAvailabilityView {
+    productId: number;
+    productName: string;
+    productType: string;
+    categoryId: number;
+    categoryName: string;
+    subcategoryId: number;
+    subcategoryName: string;
+    stockId: number;
+    stockBalance: number;
+    inventoryId: number;
+    inventoryType: string;
+    branchId: number;
+    branchName: string;
+    salePrice: number | null;
+};
+
 interface ProductPrice extends EntityTimeStamps {
     id: number;
     type: ProductPriceType;
