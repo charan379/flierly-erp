@@ -19,4 +19,6 @@ export default interface InventoryService {
      * @param update
      */
     updateInventory(inventoryId: number, update: Partial<Inventory>): Promise<Partial<Inventory>>;
+
+    statistics(req: { byBranch?: number, byProduct?: number }): Promise<any>;
 }

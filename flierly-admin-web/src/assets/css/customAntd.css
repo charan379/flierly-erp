@@ -174,10 +174,6 @@ h6 {
   height: 36px !important;
 }
 
-.ant-menu-vertical .ant-menu-submenu-title,
-.ant-menu-vertical .ant-menu-item  {
-  display: flex !important;
-}
 
 .ant-menu-horizontal .ant-menu-submenu-title,
 .ant-menu-horizontal .ant-menu-item  {

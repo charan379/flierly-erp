@@ -257,7 +257,7 @@ const RowContextMenu: React.FC<RowContextMenuProps> = ({ entity, actions, record
       destroyTooltipOnHide={true}
       content={
         <Loading isLoading={isLoading}>
-          <Menu theme={theme} items={items} onClick={onMenuItemClick} selectable={false} />
+          <Menu theme={theme} items={items} onClick={onMenuItemClick} selectable={false} mode='vertical' />
         </Loading>
       }
       overlayStyle={{

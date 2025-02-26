@@ -9,6 +9,7 @@ import validateClassInstance from "@/lib/class-validator/utils/validate-entity.u
 import { error } from "console";
 import FlierlyException from "@/lib/errors/flierly.exception";
 import HttpCodes from "@/constants/http-codes.enum";
+import ProductAvailabilityView from "@/modules/product/entities/ProductAvailabilityView.entity";
 
 @injectable()
 export default class InventoryServiceImpl implements InventoryService {
@@ -57,4 +58,42 @@ export default class InventoryServiceImpl implements InventoryService {
         }
     }
 
+    public async statistics(req: { byBranch?: number, byProduct?: number }): Promise<any> {
+        try {
+            const productAvailabilityViewRepository = this.DatabaseService.getRepository(ProductAvailabilityView);
+
+            const qb = productAvailabilityViewRepository.createQueryBuilder("pav")
+                .select([
+                    "pav.inventoryType",
+                    "COUNT(DISTINCT pav.inventoryId) AS total_inventories",
+                    "COALESCE(SUM(pav.stockBalance), 0) AS total_balance"
+                ]);
+
+            qb.groupBy("pav.inventoryType");
+
+            if (req.byBranch) {
+                qb.addSelect([
+                    "pav.branchId",
+                    "pav.branchName"
+                ])
+                qb.addGroupBy("pav.branchId")
+                qb.addGroupBy("pav.branchName");
+                qb.andWhere("pav.branchId = :branchId", { branchId: req.byBranch });
+            }
+
+            if (req.byProduct) {
+                qb.addSelect([
+                    "pav.productId",
+                    "pav.productName"
+                ])
+                    .addGroupBy("pav.productId")
+                    .addGroupBy("pav.productName");
+            }
+
+            return await qb.getRawMany();
+
+        } catch (error) {
+            throw error;
+        }
+    }
 }
