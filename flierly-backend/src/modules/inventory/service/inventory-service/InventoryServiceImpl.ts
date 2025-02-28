@@ -1,28 +1,26 @@
-import { EntityManager } from "typeorm";
 import Inventory from "../../entities/Inventory.entity";
 import InventoryService from "./InventoryService";
 import { inject, injectable } from "inversify";
 import DatabaseService from "@/lib/database/database-service/DatabaseService";
 import BeanTypes from "@/lib/di-ioc-container/bean.types";
-import ProductStockService from "@/modules/product/service/product-stock-service/ProductStockService";
 import validateClassInstance from "@/lib/class-validator/utils/validate-entity.util";
 import { error } from "console";
 import FlierlyException from "@/lib/errors/flierly.exception";
 import HttpCodes from "@/constants/http-codes.enum";
-import ProductAvailabilityView from "@/modules/product/entities/ProductAvailabilityView.entity";
+import ProductStock from "@/modules/product/entities/ProductStock.entity";
 
 @injectable()
 export default class InventoryServiceImpl implements InventoryService {
 
     constructor(
-        @inject(BeanTypes.DatabaseService) private readonly DatabaseService: DatabaseService,
+        @inject(BeanTypes.DatabaseService) private readonly databaseService: DatabaseService,
     ) {
 
     };
 
     async createInventory(inventory: Partial<Inventory>): Promise<Partial<Inventory>> {
         try {
-            const inventoryRepository = this.DatabaseService.getRepository(Inventory);
+            const inventoryRepository = this.databaseService.getRepository(Inventory);
 
             const newInventory = inventoryRepository.create(inventory);
 
@@ -36,7 +34,7 @@ export default class InventoryServiceImpl implements InventoryService {
 
     async updateInventory(inventoryId: number, update: Partial<Inventory>): Promise<Partial<Inventory>> {
         try {
-            const inventoryRepository = this.DatabaseService.getRepository(Inventory);
+            const inventoryRepository = this.databaseService.getRepository(Inventory);
 
             // get inventory by id
             const inventory = await inventoryRepository.findOne({ where: { id: inventoryId } });
@@ -60,35 +58,26 @@ export default class InventoryServiceImpl implements InventoryService {
 
     public async statistics(req: { byBranch?: number, byProduct?: number }): Promise<any> {
         try {
-            const productAvailabilityViewRepository = this.DatabaseService.getRepository(ProductAvailabilityView);
+            const qb = this.databaseService.getQueryBuilder(Inventory, "inventory");
 
-            const qb = productAvailabilityViewRepository.createQueryBuilder("pav")
-                .select([
-                    "pav.inventoryType",
-                    "COUNT(DISTINCT pav.inventoryId) AS total_inventories",
-                    "COALESCE(SUM(pav.stockBalance), 0) AS total_balance"
-                ]);
-
-            qb.groupBy("pav.inventoryType");
+            qb.select("inventory.inventoryType", "inventoryType")
+                .addSelect("COUNT(DISTINCT inventory.id) as inventoriesCount")
+                .addSelect("COALESCE(SUM(ps.balance), 0) as stockBalance")
+                .leftJoin(ProductStock, "ps", "inventory.id = ps.inventoryId")
+                .groupBy("inventory.inventoryType")
 
             if (req.byBranch) {
-                qb.addSelect([
-                    "pav.branchId",
-                    "pav.branchName"
-                ])
-                qb.addGroupBy("pav.branchId")
-                qb.addGroupBy("pav.branchName");
-                qb.andWhere("pav.branchId = :branchId", { branchId: req.byBranch });
-            }
+                qb.addSelect("inventory.branchId", "branchId")
+                    .andWhere("inventory.branchId = :branchId", { branchId: req.byBranch })
+                    .addGroupBy("inventory.branchId")
+
+            };
 
             if (req.byProduct) {
-                qb.addSelect([
-                    "pav.productId",
-                    "pav.productName"
-                ])
-                    .addGroupBy("pav.productId")
-                    .addGroupBy("pav.productName");
-            }
+                qb.addSelect("ps.productId", "productId")
+                    .andWhere("ps.productId = :productId", { productId: req.byProduct })
+                    .addGroupBy("ps.productId")
+            };
 
             return await qb.getRawMany();
 
