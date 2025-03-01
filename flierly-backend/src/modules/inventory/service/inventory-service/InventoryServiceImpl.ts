@@ -56,30 +56,40 @@ export default class InventoryServiceImpl implements InventoryService {
         }
     }
 
-    public async statistics(req: { byBranch?: number, byProduct?: number }): Promise<any> {
+    public async statistics(req: { byBranch?: number, byProduct?: number }): Promise<InventoryStatistics[]> {
         try {
             const qb = this.databaseService.getQueryBuilder(Inventory, "inventory");
 
-            qb.select("inventory.inventoryType", "inventoryType")
-                .addSelect("COUNT(DISTINCT inventory.id) as inventoriesCount")
-                .addSelect("COALESCE(SUM(ps.balance), 0) as stockBalance")
+            qb.select("inventory.inventoryType", "inventory_type")
+                .addSelect("COUNT(DISTINCT inventory.id) as inventories_count")
+                .addSelect("COALESCE(SUM(ps.balance), 0) as stock_balance")
+                .addSelect("COUNT(DISTINCT ps.productId) as products_count")
                 .leftJoin(ProductStock, "ps", "inventory.id = ps.inventoryId")
                 .groupBy("inventory.inventoryType")
 
             if (req.byBranch) {
-                qb.addSelect("inventory.branchId", "branchId")
+                qb.addSelect("inventory.branchId", "branch_id")
                     .andWhere("inventory.branchId = :branchId", { branchId: req.byBranch })
                     .addGroupBy("inventory.branchId")
 
             };
 
             if (req.byProduct) {
-                qb.addSelect("ps.productId", "productId")
+                qb.addSelect("ps.productId", "product_id")
                     .andWhere("ps.productId = :productId", { productId: req.byProduct })
                     .addGroupBy("ps.productId")
             };
 
-            return await qb.getRawMany();
+            const results = await qb.getRawMany();
+
+            return results.map((result) => ({
+                inventoryType: result?.inventory_type,
+                inventoriesCount: result?.inventories_count,
+                stockBalance: result?.stock_balance,
+                productsCount: result?.products_count,
+                branchId: result?.branch_id,
+                productId: result?.product_id
+            }))
 
         } catch (error) {
             throw error;
