@@ -2,7 +2,14 @@ import statePersist from "@/redux/state-persist";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const INITIAL_STATE: BranchSelectorState = {
-    selectedBranch: null,
+    selectedBranch: {
+        id: 0,
+        name: "all",
+        description: "",
+        createdAt: new Date(),
+        deletedAt: new Date(),
+        updatedAt: new Date(),
+    },
 };
 
 const PERSISTING_STATE: BranchSelectorState | null = statePersist.get<BranchSelectorState>('branch') || null;
@@ -20,9 +27,9 @@ const BranchSelectorSlice = createSlice({
             persistBranchSelectorState(state) // Persist to localStorage
         },
 
-        RESET: () => {
+        RESET: (state) => {
+            state.selectedBranch = INITIAL_STATE.selectedBranch;
             persistBranchSelectorState(INITIAL_STATE) // Persist reset state
-            return INITIAL_STATE // Return initial state
         },
     }
 });

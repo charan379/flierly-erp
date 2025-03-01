@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { ProTable, ProColumns, ActionType, FormInstance } from '@ant-design/pro-components'
 import Create from './forms/Create'
 import Delete from './features/Delete'
@@ -85,7 +85,7 @@ const CrudTable = <T extends Record<string, any>>({
 
   const { CrudModuleContextHandler } = useCrudModuleContext()
 
-  const { selectedBranch } = useBranchSelector();
+  const { selectedBranchId } = useBranchSelector();
 
   const binMode = CrudModuleContextHandler.binMode.isActive();
 
@@ -117,20 +117,28 @@ const CrudTable = <T extends Record<string, any>>({
     }
   };
 
-  // reload table data when branch changes if filterRowsWithBranchId is true
+  const handleBranchIdChange = useCallback(() => {
+    if (!filterRowsWithBranchId) return;
+
+    const filters = { ...CrudModuleContextHandler.filters.get() }; // Clone to avoid mutation issues
+
+    if (selectedBranchId === 0) {
+      delete filters.branchId;
+    } else if (typeof selectedBranchId === 'number') {
+      filters.branchId = { $equalTo: selectedBranchId };
+    }
+
+    CrudModuleContextHandler.filters.replace({ ...filters });
+    console.log("realoading", filters)
+    actionRef.current?.reload(); // Reload table data
+
+  }, [filterRowsWithBranchId, selectedBranchId]);
+
+  // Reload table data when branch changes if filterRowsWithBranchId is true
   useEffect(() => {
+    handleBranchIdChange();
+  }, [handleBranchIdChange]);
 
-    if (selectedBranch?.id && filterRowsWithBranchId) {
-      CrudModuleContextHandler.filters.update({
-        branchId: { $equalTo: selectedBranch?.id }
-      })
-      actionRef.current?.reload()
-    }
-
-    return () => {
-
-    }
-  }, [selectedBranch?.id])
 
   return (
     <ProTable<T>
@@ -187,7 +195,7 @@ const CrudTable = <T extends Record<string, any>>({
       dataSource={data}
       // data request
       request={async (params, sort) => {
-
+        console.log(CrudModuleContextHandler.filters.get())
         const pageRequest: EntityRecordsPageRequest<T> = {
           entity,
           filters: CrudModuleContextHandler.filters.get(),

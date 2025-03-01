@@ -1,6 +1,6 @@
 import pr from "@/modules/auth/utils/get-permission-regex.util";
 import { DashboardOutlined } from "@ant-design/icons";
-import { faAddressBook, faUsersLine, faTags, faChartBar, faRulerCombined, faExchangeAlt, faIdBadge, faMapLocationDot, faFingerprint, faUsersGear, faUserTag, faKey, faBoxArchive, faBoxOpen, faThList, faSitemap, faBoxesPacking, faBuildingColumns, faIndianRupeeSign, faMagnifyingGlassDollar, faBuilding, faRuler } from "@fortawesome/free-solid-svg-icons";
+import { faAddressBook, faUsersLine, faTags, faChartBar, faRulerCombined, faExchangeAlt, faIdBadge, faMapLocationDot, faFingerprint, faUsersGear, faUserTag, faKey, faBoxArchive, faBoxOpen, faThList, faSitemap, faBoxesPacking, faBuildingColumns, faIndianRupeeSign, faMagnifyingGlassDollar, faBuilding, faRuler, faPieChart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
@@ -116,6 +116,16 @@ const createSiteMapItems = (t: (value: string) => string, hasPermission: (requir
             keywords: ['stocks', t('nav.product_stocks')],
             permission: pr("productStock.*"),
             resourcePath: '/erp/inventory/prodcut-stocks',
+            parentItemId: 'inventory'
+        },
+        {
+            id: 'inventory-statistics',
+            name: t('nav.inventory_statistics'),
+            isDisabled: !hasPermission(pr("inventory.*")),
+            icon: <span role="img" aria-label="inventory-statistics" style={menuIconWrapperStyle}><FontAwesomeIcon icon={faPieChart} style={menuIconStyle} /></span>,
+            keywords: ['statistics', "inventory", t('nav.inventory_statistics')],
+            permission: pr("inventory.*"),
+            resourcePath: '/erp/inventory/statistics',
             parentItemId: 'inventory'
         },
         {

@@ -1,6 +1,6 @@
 import { AppDispatch, RootState } from "@/redux/store";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import { CHANGE_BRANCH } from "../redux/branch-selector.slice";
+import { CHANGE_BRANCH, RESET } from "../redux/branch-selector.slice";
 
 export default function useBranchSelector() {
 
@@ -11,8 +11,13 @@ export default function useBranchSelector() {
 
     return {
         selectedBranch: branch.selectedBranch,
+        selectedBranchId: branch.selectedBranch?.id,
         setSelectedBranch: (branch: Branch): void => {
             dispatch(CHANGE_BRANCH(branch))
+        },
+        resetSelectedBranch: (): void => {
+            dispatch(RESET())
         }
+
     }
 }

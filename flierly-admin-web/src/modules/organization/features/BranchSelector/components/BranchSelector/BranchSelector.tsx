@@ -15,8 +15,8 @@ import useLocale from "@/modules/core/features/Locale/hooks/useLocale";
 
 const BranchSelector: React.FC = React.memo(() => {
     const { isMobile } = useResponsive();
-    const { selectedBranch, setSelectedBranch } = useBranchSelector();
-    const [selectedBranchId, setSelectedBranchId] = useState(selectedBranch?.id);
+    const { selectedBranch, setSelectedBranch, resetSelectedBranch } = useBranchSelector();
+    const [selectedBranchId, setSelectedBranchId] = useState<number>(selectedBranch?.id);
     const [branchFormInstance] = Form.useForm<Branch>();
     const { translate: t } = useLocale();
 
@@ -36,27 +36,34 @@ const BranchSelector: React.FC = React.memo(() => {
                 v ? { name: { $iContains: `%${v}%` } } : { name: { $iContains: `` } };
         }
 
-        const processBranchesAsOptions: ProcessResultFunction<Branch> = (branches: Branch[]) =>
-            branches.map((branch) => ({
+        const processBranchesAsOptions: ProcessResultFunction<Branch> = (branches: Branch[]) => [
+            { label: t("option.all"), value: 0 },
+            ...branches.map((branch) => ({
                 label: branch.name,
                 value: branch.id,
-            }));
+            }))
+        ];
 
         return fetchEntityRecordsAsOptions<Branch>("branch", filters, 10, processBranchesAsOptions);
     };
 
     // Memoize onChange function
     const handleChange = async (value: string) => {
-        const response = await crudService.read<Branch>({
-            entity: "branch",
-            entityRecordId: Number(value),
-            loadRelations: [],
-            withDeleted: true,
-        });
+        if (value && value !== "all") {
+            const response = await crudService.read<Branch>({
+                entity: "branch",
+                entityRecordId: Number(value),
+                loadRelations: [],
+                withDeleted: true,
+            });
 
-        if (response.success && response.result) {
-            setSelectedBranchId(response.result.id)
-            setSelectedBranch(response.result);
+            if (response.success && response.result) {
+                setSelectedBranchId(response.result.id)
+                setSelectedBranch(response.result);
+            }
+        } else {
+            resetSelectedBranch();
+            setSelectedBranchId(0);
         }
     };
 
@@ -69,6 +76,7 @@ const BranchSelector: React.FC = React.memo(() => {
                 cursor: "pointer",
                 direction: "ltr",
             }}
+            defaultValue={"all"}
             value={selectedBranchId}
             onChange={handleChange}
             optionCreatorConfig={{

@@ -44,7 +44,7 @@ export function reducer(state: CrudModuleState, action: Action): CrudModuleState
     case ActionTypes.REPLACE_FILTERS:
       return {
         ...state,
-        filters: action.payload,
+        filters: { ...action.payload },
       }
     // Update filters with the provided payload
     case ActionTypes.UPDATE_FILTERS:

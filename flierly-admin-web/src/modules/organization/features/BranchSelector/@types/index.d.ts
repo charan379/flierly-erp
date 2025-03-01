@@ -1,3 +1,3 @@
 interface BranchSelectorState {
-    selectedBranch: Branch | null;
+    selectedBranch: Branch;
 }

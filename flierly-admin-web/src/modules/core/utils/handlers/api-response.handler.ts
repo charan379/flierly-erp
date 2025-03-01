@@ -166,9 +166,11 @@ const handleApiResponse = async <T>({
         message: 'The request was cancelled.',
       }
 
-      if (notifyOnFailed) {
-        showErrorNotification(notifyType, errorDetails.httpCode, errorDetails.message)
-      }
+      // if (notifyOnFailed) {
+      //   showErrorNotification(notifyType, errorDetails.httpCode, errorDetails.message)
+      // }
+
+      console.log(errorDetails)
 
       return {
         success: false,
