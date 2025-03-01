@@ -6,9 +6,6 @@ const INITIAL_STATE: BranchSelectorState = {
         id: 0,
         name: "all",
         description: "",
-        createdAt: new Date(),
-        deletedAt: new Date(),
-        updatedAt: new Date(),
     },
 };
 

@@ -16,7 +16,7 @@ import useLocale from "@/modules/core/features/Locale/hooks/useLocale";
 const BranchSelector: React.FC = React.memo(() => {
     const { isMobile } = useResponsive();
     const { selectedBranch, setSelectedBranch, resetSelectedBranch } = useBranchSelector();
-    const [selectedBranchId, setSelectedBranchId] = useState<number>(selectedBranch?.id);
+    const [selectedBranchId, setSelectedBranchId] = useState<number>(selectedBranch?.id ?? 0);
     const [branchFormInstance] = Form.useForm<Branch>();
     const { translate: t } = useLocale();
 

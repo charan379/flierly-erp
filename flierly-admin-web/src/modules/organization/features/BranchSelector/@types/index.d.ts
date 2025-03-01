@@ -1,3 +1,3 @@
 interface BranchSelectorState {
-    selectedBranch: Branch;
+    selectedBranch: Partial<Branch>;
 }
