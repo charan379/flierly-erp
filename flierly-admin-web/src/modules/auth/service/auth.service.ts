@@ -1,0 +1,39 @@
+import axios, { AxiosInstance } from 'axios'
+import { serverConfig } from '@/config/server.config'
+import handleApiResponse from '@/modules/core/utils/handlers/api-response.handler'
+
+// Create an axios instance with the base URL from server configuration
+const api: AxiosInstance = axios.create({
+  baseURL: serverConfig.BASE_API_URL,
+})
+
+const authService = {
+  /**
+   * Function to handle user login
+   */
+  login: async (credentials: LoginCredentials, signal?: AbortSignal): Promise<ApiResponse<UserAuth>> => {
+    const response: ApiResponse<UserAuth> = await handleApiResponse({
+      promise: api.post<ApiResponse<UserAuth>>(`/user/authenticate`, credentials, { signal }),
+      notifyOnFailed: true,
+      notifyOnSuccess: true,
+      notifyType: 'message',
+    })
+    return response
+  },
+
+  /**
+   * Function to handle user refresh token
+   */
+  refreshToken: async (currentToken: string, signal?: AbortSignal): Promise<ApiResponse<UserAuth>> => {
+    api.defaults.headers['Authorization'] = `Bearer ${currentToken}`
+    const response: ApiResponse<UserAuth> = await handleApiResponse({
+      promise: api.get<ApiResponse<UserAuth>>(`/user/refresh-access-token`, { signal }),
+      notifyOnFailed: true,
+      notifyOnSuccess: true,
+      notifyType: 'message',
+    })
+    return response
+  },
+}
+
+export default authService

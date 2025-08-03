@@ -1,0 +1,1 @@
+type SelectRemoteOptionType = { label: string | JSX.Element; value: string | number }

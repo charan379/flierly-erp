@@ -1,0 +1,72 @@
+/* appsPage.css */
+
+/* General styles for the apps page */
+.apps-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f5f5;
+  padding: 20px;
+}
+
+.apps-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 40px;
+  text-align: center;
+  color: #333;
+}
+
+/* Grid layout for the app cards */
+.app-grid {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* Wrapper around each app card */
+.app-card-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 280px;
+  height: 280px;
+}
+
+/* App card styles */
+.app-card {
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.app-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Icon container within the card */
+.app-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #050708;
+  padding: 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* App title */
+.app-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #d7d4d4;
+}
+
+/* App description */
+.app-description {
+  font-size: 0.9rem;
+  color: #8b8a8a;
+  margin-top: 10px;
+}

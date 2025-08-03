@@ -1,36 +1,38 @@
-import express, { Express } from "express";
-import createHttpError from "http-errors";
-import router from "@/routes";
-import HttpCodes from "@/constants/httpCodes";
-import errorHandler from "@/middlewares/error-handler.middleware";
+import express, { Express } from 'express';
+import createHttpError from 'http-errors';
+import HttpCodes from '@/constants/http-codes.enum';
+import errorHandler from '@/middlewares/error-handler.middleware';
 import dotenv from 'dotenv';
-import cors from "cors";
-import CorsOptions from "@/utils/cors.options";
-import Config from "./config";
-import ReqResLogger from "./middlewares/req-res-logger.middlerware";
+import cors from 'cors';
+import { EnvConfig } from '@/config/env';
+import { CorsConfig } from '@/config/cors';
+import appRoutes from './router';
+import apiRequestResponseLogger from './middlewares/api-request-response-logger.middleware';
 
 dotenv.config();
 
 // create express application instance
 const app: Express = express();
 
+app.use(apiRequestResponseLogger);
+
 // set app environment
-app.set('env', Config.NODE_ENV);
+app.set('env', EnvConfig.NODE_ENV);
 
 // Cros
-app.use(cors(CorsOptions));
+app.use(cors(CorsConfig));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use(ReqResLogger);
+// pino logger
+// app.use(ReqResLogger);
 
-app.use(router);
+app.use(appRoutes);
 
-app.all("/*", (req, res, next) => {
-    // console.debug(req.path);
-    next(createHttpError(HttpCodes.NOT_FOUND));
-})
+app.all('/*', (req, res, next) => {
+  next(createHttpError(HttpCodes.NOT_FOUND));
+});
 
 app.use(errorHandler);
 

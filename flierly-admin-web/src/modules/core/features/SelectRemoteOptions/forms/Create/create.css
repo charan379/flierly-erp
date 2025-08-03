@@ -1,0 +1,8 @@
+#select-remote-options-create-form>.ant-row .ant-skeleton-active {
+    margin-bottom: 15px;
+}
+
+#select-remote-options-create-form>.ant-row .ant-col {
+    padding-left: 0px;
+    padding-right: 0px;
+}
